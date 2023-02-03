@@ -1,4 +1,4 @@
-define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"], function (require, exports, city_1, icons_1, citydialogshop_1) {
+define(["require", "exports", "game/city", "game/icons", "game/citydialogshop", "game/routedialog"], function (require, exports, city_1, icons_1, citydialogshop_1, routedialog_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CityDialog = void 0;
@@ -41,6 +41,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                 ` + this.productFilter() + `
             </select>
             <input type="checkbox" id="hide-busy" name="vehicle1">hide busy
+            <button id="update-all-routes" title="update all routes" class="mybutton">` + icons_1.Icons.route + `</button>
           </div>
             <div id="citydialog-tabs">
                 <ul>
@@ -280,6 +281,10 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                 }
                 _this.nextCity();
             });
+            document.getElementById("update-all-routes").addEventListener("click", (e) => {
+                _this.loadFillAllConsumtion();
+                //  _this.update();
+            });
             for (var x = 0; x < 5; x++) {
                 document.getElementById("new-factory_" + x).addEventListener("click", (evt) => {
                     var sid = evt.target.id;
@@ -386,6 +391,60 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                 });
             }
             citydialogshop_1.CityDialogShop.getInstance().bindActions();
+        }
+        loadFillAllConsumtion() {
+            var routes = [];
+            var posCity = this.city.world.cities.indexOf(this.city);
+            for (var a = 0; a < this.city.world.airplanes.length; a++) {
+                var ap = this.city.world.airplanes[a];
+                var found = false;
+                for (var x = 0; x < ap.route.length; x++) {
+                    if (ap.route[x].cityid === posCity) { //this.city.id) {
+                        found = true;
+                    }
+                }
+                for (var x = 0; x < ap.route.length; x++) {
+                    if (found) {
+                        routes.push(ap.route[x]);
+                    }
+                    /*if (ap.route[x].loadShopAmount[0] !== undefined) {
+                        RouteDialog.loadFillConsumtion(ap.route[x], true);
+                    }
+                    if (this.route.airplane.route[x].loadShopUntilAmount[0] !== undefined) {
+                        RouteDialog.loadFillConsumtion(ap.route[x], false);
+                    }*/
+                }
+            }
+            var money = 20000 * routes.length / 2;
+            if (routes.length > 2 || this.city.world.game.getMoney() < 1000000) {
+                if (!confirm("Update conumtion in all routes for " + money + "?")) {
+                    return;
+                }
+            }
+            this.city.world.game.changeMoney(-money, "update routes", this.city);
+            for (var x = 0; x < routes.length; x++) {
+                if (routes[x].loadShopAmount[0] !== undefined) {
+                    routedialog_1.RouteDialog.loadFillConsumtion(routes[x], true);
+                }
+                if (routes[x].loadShopUntilAmount[0] !== undefined) {
+                    routedialog_1.RouteDialog.loadFillConsumtion(routes[x], false);
+                }
+            }
+            /*    var money = 20000 * this.route.airplane.world.cities.length;
+                if (confirm("Update conumtion in all routes for " + money + "?")) {
+                    this.route.airplane.world.game.changeMoney(-money,"update routes");
+                    for (var a = 0; a < this.route.airplane.world.airplanes.length; a++) {
+                        var ap=this.route.airplane.world.airplanes[a];
+                        for (var x = 0; x < ap.route.length; x++) {
+                            if (ap.route[x].loadShopAmount[0] !== undefined) {
+                                RouteDialog.loadFillConsumtion(ap.route[x], true);
+                            }
+                            if (this.route.airplane.route[x].loadShopUntilAmount[0] !== undefined) {
+                                RouteDialog.loadFillConsumtion(ap.route[x], false);
+                            }
+                        }
+                    }
+                }*/
         }
         deleteFactory(id) {
             var _this = this;

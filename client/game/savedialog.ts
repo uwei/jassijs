@@ -193,6 +193,7 @@ export class SaveDialog {
                 Object.assign(ret, value);
                 delete ret.world;
                 delete ret.domProductNeeded;
+                (<City>ret).shopMinStock=this.packArray((<City>ret).shopMinStock);
                 return ret;
             }
             if (value?.constructor?.name === "Company") {
@@ -203,6 +204,9 @@ export class SaveDialog {
             if (value?.constructor?.name === "Route") {
 
                 Object.assign(ret, value);
+                (<Route>ret).loadShopAmount=this.packArray((<Route>ret).loadShopAmount);
+                (<Route>ret).loadShopUntilAmount=this.packArray((<Route>ret).loadShopUntilAmount);
+                (<Route>ret).unloadShopAmount=this.packArray((<Route>ret).unloadShopAmount);
                 delete ret.airplane;
                 return ret;
             }
@@ -214,6 +218,23 @@ export class SaveDialog {
         console.log(sdata);
         this.game.resume();
 
+    }
+    packArray(arr:number[]):any{
+        var test=arr[0];
+        for(var x=1;x<arr.length;x++){
+            if(arr[x]!==test)
+                return arr;
+        }
+        return test;
+    }
+    unpackArray(value){
+        if(Array.isArray(value))
+            return value;
+        var ret=[];
+        for(var x=0;x<parameter.allProducts.length;x++){
+            ret.push(value);
+        }
+        return ret;
     }
     load(filename: string) {
         this.game.pause();
@@ -253,12 +274,16 @@ export class SaveDialog {
                 r = new City();
                 
                 Object.assign(r, value);
+                r.shopMinStock=this.unpackArray(r.shopMinStock);
                 return r;
             }
             if (value?.type === "Route") {
                 r = new Route();
-             
+              
                 Object.assign(r, value);
+                r.loadShopAmount=this.unpackArray(r.loadShopAmount);
+                r.loadShopUntilAmount=this.unpackArray(r.loadShopUntilAmount);
+                r.unloadShopAmount=this.unpackArray(r.unloadShopAmount);
                 return r;
             }
             return r;

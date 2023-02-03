@@ -30,7 +30,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             var sdom = `
           <div>
           <div>
-            <button id="update-all-routes" title="update all routes" class="mybutton">` + icons_1.Icons.food + `</button>
             <input id="routedialog-airplane-prev" type="button" value="<" class="mybutton"/>
             <div id="routedialog-airplane-name" style="display:inline;width:50px"></div>
             <input id="routedialog-airplane-next" type="button" value=">" class="mybutton"/>
@@ -163,10 +162,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                 RouteDialog.loadFillConsumtion(this.route, false);
                 _this.update();
             });
-            document.getElementById("update-all-routes").addEventListener("click", (e) => {
-                _this.loadFillAllConsumtion();
-                _this.update();
-            });
             document.getElementById("routedialog-airplane-prev").addEventListener("click", (e) => {
                 _this.prevAirplane();
             });
@@ -231,23 +226,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                 this.route.unloadShopAmount[x] = source.unloadShopAmount[x];
             }
             this.update();
-        }
-        loadFillAllConsumtion() {
-            var money = 20000 * this.route.airplane.world.cities.length;
-            if (confirm("Update conumtion in all routes for " + money + "?")) {
-                this.route.airplane.world.game.changeMoney(-money, "update routes");
-                for (var a = 0; a < this.route.airplane.world.airplanes.length; a++) {
-                    var ap = this.route.airplane.world.airplanes[a];
-                    for (var x = 0; x < ap.route.length; x++) {
-                        if (ap.route[x].loadShopAmount[0] !== undefined) {
-                            RouteDialog.loadFillConsumtion(ap.route[x], true);
-                        }
-                        if (this.route.airplane.route[x].loadShopUntilAmount[0] !== undefined) {
-                            RouteDialog.loadFillConsumtion(ap.route[x], false);
-                        }
-                    }
-                }
-            }
         }
         static loadFillConsumtion(route, allCities) {
             var _this = this;

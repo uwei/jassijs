@@ -5,6 +5,8 @@ import { Airplane } from "game/airplane";
 import { AirplaneDialog } from "game/airplanedialog";
 import { Company } from "game/company";
 import { CityDialogShop } from "game/citydialogshop";
+import { Route } from "game/route";
+import { RouteDialog } from "game/routedialog";
 
 //@ts-ignore
 window.city = function () {
@@ -53,6 +55,7 @@ export class CityDialog {
                 `+ this.productFilter() + `
             </select>
             <input type="checkbox" id="hide-busy" name="vehicle1">hide busy
+            <button id="update-all-routes" title="update all routes" class="mybutton">`+ Icons.route + `</button>
           </div>
             <div id="citydialog-tabs">
                 <ul>
@@ -243,8 +246,8 @@ export class CityDialog {
         var id = Number(sid.split("_")[1]);
         var comp = _this.city.companies[id];
         for (var i = 0; i < parameter.numberBuildWithContextMenu; i++) {
-               if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building",false))
-                 return;
+            if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building", false))
+                return;
             _this.city.buildBuilding(comp.productid);
 
 
@@ -261,6 +264,7 @@ export class CityDialog {
         document.getElementById("citydialog-prev").addEventListener("click", (ev) => {
             _this.prevCity();
         });
+
         document.getElementById("citydialog-filter").addEventListener("change", (ev) => {
             var sel = (<HTMLSelectElement>document.getElementById("citydialog-filter")).value;
             var hide_busy = (<HTMLInputElement>document.getElementById("hide-busy")).checked;
@@ -280,8 +284,8 @@ export class CityDialog {
                         }
                     }
                 }
-                if(this.filteredCities.length===0){
-                    this.filteredCities=[_this.city];
+                if (this.filteredCities.length === 0) {
+                    this.filteredCities = [_this.city];
                 }
                 this.filteredCities.sort((a, b) => {
                     var a1, b1;
@@ -301,7 +305,11 @@ export class CityDialog {
             }
             _this.nextCity();
         });
+        document.getElementById("update-all-routes").addEventListener("click", (e) => {
+            _this.loadFillAllConsumtion();
+            //  _this.update();
 
+        });
         for (var x = 0; x < 5; x++) {
             document.getElementById("new-factory_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
@@ -317,7 +325,7 @@ export class CityDialog {
                 _this.update();
             });
             document.getElementById("new-factoryX_" + x).addEventListener("click", (evt) => {
-               _this.buildCompanies(evt);
+                _this.buildCompanies(evt);
             });
             document.getElementById("new-factory_" + x).addEventListener("contextmenu", (evt) => {
                 evt.preventDefault();
@@ -384,13 +392,13 @@ export class CityDialog {
         document.getElementById("buy-buildingplace").addEventListener("click", (evt) => {
             if (!_this.city.commitBuildingCosts(1000000, [], "buy buildingplace"))
                 return;
-            if(_this.city.buildingplaces===0)
-                _this.city.buildingplaces=0;
-            _this.city.buildingplaces++; 
+            if (_this.city.buildingplaces === 0)
+                _this.city.buildingplaces = 0;
+            _this.city.buildingplaces++;
             //_this.city.buildBuilding(10000);
             _this.update();
         });
-       
+
         document.getElementById("delete-buildingplace").addEventListener("click", (evt) => {
             if (!_this.city.buildingplaces)
                 return;
@@ -402,7 +410,7 @@ export class CityDialog {
             _this.update();
 
         });
-       
+
         for (var x = 0; x < 1; x++) {
             document.getElementById("new-airplane_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
@@ -420,7 +428,60 @@ export class CityDialog {
         }
         CityDialogShop.getInstance().bindActions();
     }
-
+    loadFillAllConsumtion() {
+        var routes: Route[] = [];
+        var posCity = this.city.world.cities.indexOf(this.city);
+        for (var a = 0; a < this.city.world.airplanes.length; a++) {
+            var ap = this.city.world.airplanes[a];
+            var found = false;
+            for (var x = 0; x < ap.route.length; x++) {
+                if (ap.route[x].cityid === posCity) {//this.city.id) {
+                    found = true;
+                }
+            }
+            for (var x = 0; x < ap.route.length; x++) {
+                if (found) {
+                    routes.push(ap.route[x]);
+                }
+                /*if (ap.route[x].loadShopAmount[0] !== undefined) {
+                    RouteDialog.loadFillConsumtion(ap.route[x], true);
+                }
+                if (this.route.airplane.route[x].loadShopUntilAmount[0] !== undefined) {
+                    RouteDialog.loadFillConsumtion(ap.route[x], false);
+                }*/
+            }
+        }
+        var money = 20000 * routes.length / 2;
+        if (routes.length > 2 || this.city.world.game.getMoney() < 1000000) {
+            if (!confirm("Update conumtion in all routes for " + money + "?")) {
+                return;
+            }
+        }
+        this.city.world.game.changeMoney(-money, "update routes", this.city);
+        for (var x = 0; x < routes.length; x++) {
+            if (routes[x].loadShopAmount[0] !== undefined) {
+                RouteDialog.loadFillConsumtion(routes[x], true);
+            }
+            if (routes[x].loadShopUntilAmount[0] !== undefined) {
+                RouteDialog.loadFillConsumtion(routes[x], false);
+            }
+        }
+        /*    var money = 20000 * this.route.airplane.world.cities.length;
+            if (confirm("Update conumtion in all routes for " + money + "?")) {
+                this.route.airplane.world.game.changeMoney(-money,"update routes");
+                for (var a = 0; a < this.route.airplane.world.airplanes.length; a++) {
+                    var ap=this.route.airplane.world.airplanes[a];
+                    for (var x = 0; x < ap.route.length; x++) {
+                        if (ap.route[x].loadShopAmount[0] !== undefined) {
+                            RouteDialog.loadFillConsumtion(ap.route[x], true);
+                        }
+                        if (this.route.airplane.route[x].loadShopUntilAmount[0] !== undefined) {
+                            RouteDialog.loadFillConsumtion(ap.route[x], false);
+                        }
+                    }
+                }
+            }*/
+    }
     deleteFactory(id: number) {
         var _this = this;
         var comp = _this.city.companies[id];
@@ -462,12 +523,12 @@ export class CityDialog {
                 s = s + "<br/>" + inprogr + Icons.hammer + "";
             }
             tr.children[2].innerHTML = s;
-            tr.children[3].innerHTML =""+ comp.workers + "/<br/>" + comp.getMaxWorkers();
-            if(comp.workers>10000)
-              tr.children[3].innerHTML=(Math.round(comp.workers/1000)).toLocaleString() + "K";
-            if(comp.workers>10000000)
-              tr.children[3].innerHTML=(Math.round(comp.workers/1000000)).toLocaleString() + "M";
-       
+            tr.children[3].innerHTML = "" + comp.workers + "/<br/>" + comp.getMaxWorkers();
+            if (comp.workers > 10000)
+                tr.children[3].innerHTML = (Math.round(comp.workers / 1000)).toLocaleString() + "K";
+            if (comp.workers > 10000000)
+                tr.children[3].innerHTML = (Math.round(comp.workers / 1000000)).toLocaleString() + "M";
+
 
             var needs1 = "";
             var needs2 = "";

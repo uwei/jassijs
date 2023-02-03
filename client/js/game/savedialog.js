@@ -170,6 +170,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                     Object.assign(ret, value);
                     delete ret.world;
                     delete ret.domProductNeeded;
+                    ret.shopMinStock = this.packArray(ret.shopMinStock);
                     return ret;
                 }
                 if (((_d = value === null || value === void 0 ? void 0 : value.constructor) === null || _d === void 0 ? void 0 : _d.name) === "Company") {
@@ -179,6 +180,9 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                 }
                 if (((_e = value === null || value === void 0 ? void 0 : value.constructor) === null || _e === void 0 ? void 0 : _e.name) === "Route") {
                     Object.assign(ret, value);
+                    ret.loadShopAmount = this.packArray(ret.loadShopAmount);
+                    ret.loadShopUntilAmount = this.packArray(ret.loadShopUntilAmount);
+                    ret.unloadShopAmount = this.packArray(ret.unloadShopAmount);
                     delete ret.airplane;
                     return ret;
                 }
@@ -189,6 +193,23 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
             //this.load();
             console.log(sdata);
             this.game.resume();
+        }
+        packArray(arr) {
+            var test = arr[0];
+            for (var x = 1; x < arr.length; x++) {
+                if (arr[x] !== test)
+                    return arr;
+            }
+            return test;
+        }
+        unpackArray(value) {
+            if (Array.isArray(value))
+                return value;
+            var ret = [];
+            for (var x = 0; x < parameter.allProducts.length; x++) {
+                ret.push(value);
+            }
+            return ret;
         }
         load(filename) {
             this.game.pause();
@@ -227,11 +248,15 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                 if ((value === null || value === void 0 ? void 0 : value.type) === "City") {
                     r = new city_1.City();
                     Object.assign(r, value);
+                    r.shopMinStock = this.unpackArray(r.shopMinStock);
                     return r;
                 }
                 if ((value === null || value === void 0 ? void 0 : value.type) === "Route") {
                     r = new route_1.Route();
                     Object.assign(r, value);
+                    r.loadShopAmount = this.unpackArray(r.loadShopAmount);
+                    r.loadShopUntilAmount = this.unpackArray(r.loadShopUntilAmount);
+                    r.unloadShopAmount = this.unpackArray(r.unloadShopAmount);
                     return r;
                 }
                 return r;
