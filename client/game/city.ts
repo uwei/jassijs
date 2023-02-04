@@ -599,7 +599,7 @@ export class City {
                 this.domStar.style.display = "initial";
                 setTimeout(() => {
                     _this.domStar.style.display = "none";
-                }, 3000);
+                }, 5000);
             }
         }
     }
