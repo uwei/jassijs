@@ -291,12 +291,12 @@ export class CityDialog {
                     var a1, b1;
                     for (var y = 0; y < a.companies.length; y++) {
                         if (a.companies[y].productid === Number(sel)) {
-                            a1 = a.companies[y].buildings;
+                            a1 = a.companies[y].buildings-a.companies[y].buildingsWithoutCosts;
                         }
                     }
                     for (var y = 0; y < b.companies.length; y++) {
                         if (b.companies[y].productid === Number(sel)) {
-                            b1 = b.companies[y].buildings;
+                            b1 = b.companies[y].buildings-b.companies[y].buildingsWithoutCosts;
                         }
                     }
                     return a1 - b1;
