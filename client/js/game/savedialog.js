@@ -1,4 +1,4 @@
-define(["require", "exports", "game/product", "game/airplane", "game/route", "game/city", "game/world", "game/company", "game/citydialog"], function (require, exports, product_1, airplane_1, route_1, city_1, world_1, company_1, citydialog_1) {
+define(["require", "exports", "game/product", "game/airplane", "game/route", "game/city", "game/world", "game/game", "game/company", "game/citydialog"], function (require, exports, product_1, airplane_1, route_1, city_1, world_1, game_1, company_1, citydialog_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SaveDialog = void 0;
@@ -344,6 +344,14 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                     //game.world.cities[x].people=game.world.cities[x].shops*2);
                 }
                 game.version = "1.5";
+            }
+            if (parseFloat(ret.version) < 1.7) {
+                game.statistic.successfulLoad = new game_1.Statistic().successfulLoad;
+                game.statistic.unsuccessfulLoad = new game_1.Statistic().unsuccessfulLoad;
+                for (var x = 1; x < game.world.cities.length; x++) {
+                    game.world.cities[x].buildingplaces = 0;
+                }
+                game.version = "1.7";
             }
             game.render(this.game.dom);
             game.resume();

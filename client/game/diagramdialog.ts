@@ -108,9 +108,9 @@ export class DiagramDialog {
                         <tr>
                             <th>Name</th>
                             <th> </th>
-                            <th>count Buildings</th>
-                            <th>Consumtion</th>
-                            <th>Rate</th>
+                            <th>Buildings</th>
+                            <th align=right>Rate Load</th>
+                            <th style="align:right">Rate</th>
                             <th>Advertise</th>
                         </tr>
                        ${(function fun() {
@@ -120,8 +120,8 @@ export class DiagramDialog {
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
                     ret = ret + "<td>0</td>";
-                    ret = ret + "<td>0</td>";
-                    ret = ret + "<td>0</td>";
+                    ret = ret + '<td align=right>100,00</td>';
+                    ret = ret + '<td align=right>0</td>';
                     ret = ret + "<td>" + '<button id="diagram-advertise_' + x + '" class="mybutton"></button>' + "</td>";
                     ret = ret + "</tr>";
                 }
@@ -166,12 +166,21 @@ export class DiagramDialog {
                 sh = sh + "(" + inprogr + Icons.hammer + ")";
             }
             tr.children[2].innerHTML = sh;
-            tr.children[3].innerHTML = parameter.allProducts[x].dailyConsumtion.toLocaleString();
+            var suc=0;
+            var unsuc=0;
+            for(var t=0;t<7;t++){
+                suc+=this.world.game.statistic.successfulLoad[t][x];
+                unsuc+=this.world.game.statistic.unsuccessfulLoad[t][x];
+            }
+            var ges=unsuc+suc;
+            var dif=ges-unsuc;
+            tr.children[3].innerHTML=(Math.round(10000*dif/ges)/100).toLocaleString(undefined,{minimumFractionDigits:2});
+            //tr.children[3].innerHTML = parameter.allProducts[x].dailyConsumtion.toLocaleString();
             
             var test1=parameter.allProducts[x].getAmountForPeople()/(parameter.workerInCompany*parameter.allProducts.length);
             var abw1=Math.round(1000*(parameter.allProducts[x].dailyConsumtion-test1)/parameter.allProducts[x].dailyConsumtion)/10;
             
-            tr.children[4].innerHTML = abw1.toLocaleString();
+            tr.children[4].innerHTML = abw1.toLocaleString(undefined,{minimumFractionDigits:2});
             var but = <HTMLButtonElement>document.getElementById("diagram-advertise_" + x);
             if (this.world.advertising[x]) {
                 but.innerHTML = "until " + new Date(this.world.advertising[x]).toLocaleDateString();

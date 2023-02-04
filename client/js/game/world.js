@@ -124,11 +124,25 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                     ges += Math.round(this.airplanes[x].getDailyCosts() * parameter.rateCostsAirplaine);
                 }
                 this.game.changeMoney(-ges, "daily costs airplane");
-                this.game.statistic.yesterday = this.game.statistic.today;
-                this.game.statistic.today = {};
+                this.updateStatistics();
                 diagramdialog_1.DiagramDialog.getInstance().update();
             }
             this.lastUpdate = this.game.date.getTime();
+        }
+        updateStatistics() {
+            var stat = this.game.statistic;
+            stat.yesterday = stat.today;
+            stat.today = {};
+            var data1 = [];
+            var data2 = [];
+            for (var x = 0; x < parameter.allProducts.length; x++) {
+                data1.push(0);
+                data2.push(0);
+            }
+            stat.successfulLoad.splice(0, 0, data1);
+            stat.unsuccessfulLoad.splice(0, 0, data2);
+            stat.successfulLoad.splice(7, 1);
+            stat.unsuccessfulLoad.splice(7, 1);
         }
         addCity(hasAirport = true) {
             var city = (0, city_1.createCities)(this, 1)[0];

@@ -28,7 +28,7 @@ export class World {
         this.cities = [];
         this.airplanes = [];
         this.advertising = [];
-       
+
         for (var x = 0; x < parameter.allProducts.length; x++) {
             this.advertising.push(undefined);
         }
@@ -146,11 +146,25 @@ export class World {
                 ges += Math.round(this.airplanes[x].getDailyCosts() * parameter.rateCostsAirplaine);
             }
             this.game.changeMoney(-ges, "daily costs airplane");
-            this.game.statistic.yesterday = this.game.statistic.today;
-            this.game.statistic.today = {};
+            this.updateStatistics();
             DiagramDialog.getInstance().update();
         }
         this.lastUpdate = this.game.date.getTime();
+    }
+    updateStatistics() {
+        var stat = this.game.statistic;
+        stat.yesterday = stat.today;
+        stat.today = {};
+        var data1 = [];
+        var data2 = [];
+        for (var x = 0; x < parameter.allProducts.length; x++) {
+            data1.push(0);
+            data2.push(0);
+        }
+        stat.successfulLoad.splice(0, 0, data1);
+        stat.unsuccessfulLoad.splice(0, 0, data2);
+        stat.successfulLoad.splice(7, 1);
+        stat.unsuccessfulLoad.splice(7, 1);
     }
     addCity(hasAirport = true) {
         var city: City = createCities(this, 1)[0];
@@ -164,8 +178,8 @@ export class World {
         createCities(this, 15);
         this.cities[0].shops = 1;
         this.cities[0].houses = 1;
-      
-        
+
+
         createCities(this, 1);
         this.cities[this.cities.length - 1].hasAirport = false;
         for (var x = 0; x < 1; x++) {

@@ -145,7 +145,7 @@ export class CityDialog {
                         <button id="delete-shop"  class="mybutton">-`+ Icons.shop + `</button>` +
             `<div id="city-buildingplaces">Increase construction speed: <span id="count-buildingplaces">0</span>  
                         `  + Icons.money + `  
-                        <button id="buy-buildingplace"  class="mybutton">+`+ Icons.wrench + ` for 10.000k` + Icons.money + `</button> 
+                        <button id="buy-buildingplace"  class="mybutton">+`+ Icons.wrench + ` for 50.000k` + Icons.money + `</button> 
                         <button id="delete-buildingplace"  class="mybutton">-`+ Icons.home + `</button>` +
             '</div>'
     }
@@ -390,7 +390,7 @@ export class CityDialog {
         });
 
         document.getElementById("buy-buildingplace").addEventListener("click", (evt) => {
-            if (!_this.city.commitBuildingCosts(1000000, [], "buy buildingplace"))
+            if (!_this.city.commitBuildingCosts(50000000, [], "buy buildingplace"))
                 return;
             if (_this.city.buildingplaces === 0)
                 _this.city.buildingplaces = 0;

@@ -5,7 +5,7 @@ import { Icons } from "game/icons";
 import { Route } from "game/route";
 import { City } from "game/city";
 import { World } from "game/world";
-import { Game } from "game/game";
+import { Game, Statistic } from "game/game";
 import { Company } from "game/company";
 import { CityDialog } from "game/citydialog";
 
@@ -193,7 +193,7 @@ export class SaveDialog {
                 Object.assign(ret, value);
                 delete ret.world;
                 delete ret.domProductNeeded;
-                (<City>ret).shopMinStock=this.packArray((<City>ret).shopMinStock);
+                (<City>ret).shopMinStock = this.packArray((<City>ret).shopMinStock);
                 return ret;
             }
             if (value?.constructor?.name === "Company") {
@@ -204,9 +204,9 @@ export class SaveDialog {
             if (value?.constructor?.name === "Route") {
 
                 Object.assign(ret, value);
-                (<Route>ret).loadShopAmount=this.packArray((<Route>ret).loadShopAmount);
-                (<Route>ret).loadShopUntilAmount=this.packArray((<Route>ret).loadShopUntilAmount);
-                (<Route>ret).unloadShopAmount=this.packArray((<Route>ret).unloadShopAmount);
+                (<Route>ret).loadShopAmount = this.packArray((<Route>ret).loadShopAmount);
+                (<Route>ret).loadShopUntilAmount = this.packArray((<Route>ret).loadShopUntilAmount);
+                (<Route>ret).unloadShopAmount = this.packArray((<Route>ret).unloadShopAmount);
                 delete ret.airplane;
                 return ret;
             }
@@ -219,19 +219,19 @@ export class SaveDialog {
         this.game.resume();
 
     }
-    packArray(arr:number[]):any{
-        var test=arr[0];
-        for(var x=1;x<arr.length;x++){
-            if(arr[x]!==test)
+    packArray(arr: number[]): any {
+        var test = arr[0];
+        for (var x = 1; x < arr.length; x++) {
+            if (arr[x] !== test)
                 return arr;
         }
         return test;
     }
-    unpackArray(value){
-        if(Array.isArray(value))
+    unpackArray(value) {
+        if (Array.isArray(value))
             return value;
-        var ret=[];
-        for(var x=0;x<parameter.allProducts.length;x++){
+        var ret = [];
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             ret.push(value);
         }
         return ret;
@@ -272,18 +272,18 @@ export class SaveDialog {
             }
             if (value?.type === "City") {
                 r = new City();
-                
+
                 Object.assign(r, value);
-                r.shopMinStock=this.unpackArray(r.shopMinStock);
+                r.shopMinStock = this.unpackArray(r.shopMinStock);
                 return r;
             }
             if (value?.type === "Route") {
                 r = new Route();
-              
+
                 Object.assign(r, value);
-                r.loadShopAmount=this.unpackArray(r.loadShopAmount);
-                r.loadShopUntilAmount=this.unpackArray(r.loadShopUntilAmount);
-                r.unloadShopAmount=this.unpackArray(r.unloadShopAmount);
+                r.loadShopAmount = this.unpackArray(r.loadShopAmount);
+                r.loadShopUntilAmount = this.unpackArray(r.loadShopUntilAmount);
+                r.unloadShopAmount = this.unpackArray(r.unloadShopAmount);
                 return r;
             }
             return r;
@@ -318,22 +318,22 @@ export class SaveDialog {
             //  this.world.cities[x].companies[y].
             //}
         }
-      /*  if (game.world.cities[1].people > 0) {
-            //migration
-            for (var x = 1; x < game.world.cities.length; x++) {
-                game.world.cities[0].people += game.world.cities[x].people;
-                game.world.cities[x].people = 0;
-            }
-            for (var x = 1; x < parameter.allProducts.length; x++) {
-                game.world.cities[0].score[x] = 50;
-
-            }
-            game.world.cities[0].people = Math.round(game.world.cities[0].people);
-            game.world.cities[0].shops = game.world.cities[0].shops * 7;
-            game.world.cities[0].houses = Math.round(game.world.cities[0].people / parameter.peopleInHouse);
-        }
-        console.log("People: " + game.world.cities[0].people.toLocaleString());
-*/
+        /*  if (game.world.cities[1].people > 0) {
+              //migration
+              for (var x = 1; x < game.world.cities.length; x++) {
+                  game.world.cities[0].people += game.world.cities[x].people;
+                  game.world.cities[x].people = 0;
+              }
+              for (var x = 1; x < parameter.allProducts.length; x++) {
+                  game.world.cities[0].score[x] = 50;
+  
+              }
+              game.world.cities[0].people = Math.round(game.world.cities[0].people);
+              game.world.cities[0].shops = game.world.cities[0].shops * 7;
+              game.world.cities[0].houses = Math.round(game.world.cities[0].people / parameter.peopleInHouse);
+          }
+          console.log("People: " + game.world.cities[0].people.toLocaleString());
+  */
 
         if (ret.version === undefined) {
             //migration
@@ -349,7 +349,7 @@ export class SaveDialog {
                 delete game.world.cities[x]["shopSellingPrice"];
             }
             for (var x = 0; x < game.world.airplanes.length; x++) {
-                for(var y=0;y< game.world.airplanes[x].route.length;y++){
+                for (var y = 0; y < game.world.airplanes[x].route.length; y++) {
                     delete game.world.airplanes[x].route[y]["loadMarketAmount"];
                     delete game.world.airplanes[x].route[y]["loadMarketPrice"];
                     delete game.world.airplanes[x].route[y]["unloadMarketPrice"];
@@ -358,23 +358,31 @@ export class SaveDialog {
             }
         }
         if (parseFloat(ret.version) < 1.4) {
-           
+
             for (var x = 1; x < game.world.cities.length; x++) {
-               game.world.cities[x].shops=Math.round( game.world.cities[x].shops*2);
+                game.world.cities[x].shops = Math.round(game.world.cities[x].shops * 2);
             }
-            game.version="1.4";
+            game.version = "1.4";
         }
-         if (parseFloat(ret.version) < 1.5) {
-           
+        if (parseFloat(ret.version) < 1.5) {
+
             for (var x = 1; x < game.world.cities.length; x++) {
-               var max=0;
-               for(var y =0;y<5;y++){
-                   max+=game.world.cities[x].companies[y].buildings*parameter.workerInCompany;
-               }
-               game.world.cities[x].people=max;
-               //game.world.cities[x].people=game.world.cities[x].shops*2);
+                var max = 0;
+                for (var y = 0; y < 5; y++) {
+                    max += game.world.cities[x].companies[y].buildings * parameter.workerInCompany;
+                }
+                game.world.cities[x].people = max;
+                //game.world.cities[x].people=game.world.cities[x].shops*2);
             }
-            game.version="1.5";
+            game.version = "1.5";
+        }
+        if (parseFloat(ret.version) < 1.7) {
+            game.statistic.successfulLoad = new Statistic().successfulLoad;
+            game.statistic.unsuccessfulLoad = new Statistic().unsuccessfulLoad;
+            for (var x = 1; x < game.world.cities.length; x++) {
+                game.world.cities[x].buildingplaces=0;
+            }
+            game.version = "1.7";
         }
         game.render(this.game.dom);
         game.resume();

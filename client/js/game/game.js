@@ -1,8 +1,8 @@
 define(["require", "exports", "game/citydialog", "game/world", "game/airplanedialog", "game/icons", "game/product", "game/diagramdialog", "game/savedialog"], function (require, exports, citydialog_1, world_1, airplanedialog_1, icons_1, product_1, diagramdialog_1, savedialog_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Game = exports.Parameter = void 0;
-    var gameversion = "1.6";
+    exports.test = exports.Game = exports.Parameter = exports.Statistic = void 0;
+    var gameversion = "1.7";
     window.onbeforeunload = function () {
         return "Do you want to exit?";
     };
@@ -10,8 +10,21 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
         constructor() {
             this.today = {};
             this.yesterday = {};
+            this.successfulLoad = [];
+            this.unsuccessfulLoad = [];
+            for (var x = 0; x < 7; x++) {
+                var data1 = [];
+                var data2 = [];
+                for (var y = 0; y < parameter.allProducts.length; y++) {
+                    data1.push(0);
+                    data2.push(0);
+                }
+                this.successfulLoad.push(data1);
+                this.unsuccessfulLoad.push(data2);
+            }
         }
     }
+    exports.Statistic = Statistic;
     class Parameter {
         constructor() {
             this.ratePurchase = 1.125;
@@ -76,10 +89,9 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
     //global.parameter=new Parametetr();
     class Game {
         constructor() {
-            this.version = "1.6";
+            this.version = "1.7";
             this.mapWidth = 1000;
             this.mapHeight = 600;
-            this.statistic = new Statistic();
             var _this = this;
             Game.instance = this;
             this.parameter = createParameter();
@@ -87,6 +99,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.lastUpdate = Date.now();
             this.date = new Date("Sat Jan 01 2000 00:00:00");
             citydialog_1.CityDialog.instance = undefined;
+            this.statistic = new Statistic();
             this.nevercallthisfunction();
         }
         updateTitle() {
