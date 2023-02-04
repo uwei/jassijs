@@ -96,7 +96,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                             <th> </th>
                             <th>Buildings</th>
                             <th align=right>Rate Load</th>
-                            <th style="align:right">Rate</th>
+                            <th style="align:right">Consum.</th>
                             <th>Advertise</th>
                         </tr>
                        ${(function fun() {
@@ -196,8 +196,8 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                 var k = allKeys[x];
                 content += `<tr>
                         <td>` + k + `</td>
-                        <td style="text-align: right">` + (this.world.game.statistic.yesterday[k] === undefined ? "" : this.world.game.statistic.yesterday[k]) + `</td>
-                        <td style="text-align: right">` + (this.world.game.statistic.today[k] === undefined ? "" : this.world.game.statistic.today[k]) + `</td>
+                        <td style="text-align: right">` + (this.world.game.statistic.yesterday[k] === undefined ? "" : this.world.game.statistic.yesterday[k].toLocaleString()) + `</td>
+                        <td style="text-align: right">` + (this.world.game.statistic.today[k] === undefined ? "" : this.world.game.statistic.today[k].toLocaleString()) + `</td>
                       </tr>`;
             }
             table.innerHTML = content;
