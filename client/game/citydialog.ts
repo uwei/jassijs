@@ -525,9 +525,9 @@ export class CityDialog {
             tr.children[2].innerHTML = s;
             tr.children[3].innerHTML = "" + comp.workers + "/<br/>" + comp.getMaxWorkers();
             if (comp.workers > 10000)
-                tr.children[3].innerHTML = (Math.round(comp.workers / 1000)).toLocaleString() + "K";
+                tr.children[3].innerHTML = (Math.round(comp.workers / 1000)).toLocaleString() + "K" + "/<br/>" + Math.round(comp.getMaxWorkers()/1000).toLocaleString()+"K";
             if (comp.workers > 10000000)
-                tr.children[3].innerHTML = (Math.round(comp.workers / 1000000)).toLocaleString() + "M";
+                tr.children[3].innerHTML = (Math.round(comp.workers / 1000000)).toLocaleString() + "M" + "/<br/>" + Math.round(comp.getMaxWorkers()/1000000).toLocaleString()+"M";
 
 
             var needs1 = "";
