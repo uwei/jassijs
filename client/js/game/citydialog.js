@@ -126,7 +126,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop", 
                         <button id="delete-shop"  class="mybutton">-` + icons_1.Icons.shop + `</button>` +
                 `<div id="city-buildingplaces">Increase construction speed: <span id="count-buildingplaces">0</span>  
                         ` + icons_1.Icons.money + `  
-                        <button id="buy-buildingplace"  class="mybutton">+` + icons_1.Icons.wrench + ` for 50.000k` + icons_1.Icons.money + `</button> 
+                        <button id="buy-buildingplace"  class="mybutton">+` + icons_1.Icons.wrench + ` for 20.000k` + icons_1.Icons.money + `</button> 
                         <button id="delete-buildingplace"  class="mybutton">-` + icons_1.Icons.home + `</button>` +
                 '</div>';
         }
@@ -358,7 +358,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop", 
                 _this.update();
             });
             document.getElementById("buy-buildingplace").addEventListener("click", (evt) => {
-                if (!_this.city.commitBuildingCosts(50000000, [], "buy buildingplace"))
+                if (!_this.city.commitBuildingCosts(20000000, [], "buy buildingplace"))
                     return;
                 if (_this.city.buildingplaces === 0)
                     _this.city.buildingplaces = 0;
