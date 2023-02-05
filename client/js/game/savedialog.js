@@ -187,7 +187,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                     return ret;
                 }
                 return value;
-            }, "\t");
+            });
             window.localStorage.setItem("save" + filename, sdata);
             window.localStorage.setItem("lastgame", filename);
             //this.load();

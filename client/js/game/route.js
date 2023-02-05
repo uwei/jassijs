@@ -71,18 +71,20 @@ define(["require", "exports"], function (require, exports) {
                 var minStock = city.shopMinStock[x] ? city.shopMinStock[x] : 0;
                 var max = this.loadShopUntilAmount[x];
                 if (max === undefined) {
-                    max = this.loadShopAmount[x];
-                    if (x === 17)
-                        console.log(city.name + " " + city.shop[x] + "  min" + minStock);
-                    var tt = city.shop[x] - minStock;
-                    if (max !== 0 && max !== undefined && (max > tt)) {
-                        if (x === 17)
-                            max = max;
-                        max = city.shop[x] - minStock;
+                    if (this.loadShopAmount[x]) {
+                        max = this.loadShopAmount[x];
+                        //                  if (x === 17)
+                        //                    console.log(city.name + " " + city.shop[x] + "  min" + minStock);
+                        var tt = city.shop[x] - minStock;
+                        if (max !== 0 && max !== undefined && (max > tt)) {
+                            if (x === 17)
+                                max = max;
+                            max = city.shop[x] - minStock;
+                        }
+                        var notAvailable = this.loadShopAmount[x] - max;
+                        this.airplane.world.game.statistic.successfulLoad[0][x] += max;
+                        this.airplane.world.game.statistic.unsuccessfulLoad[0][x] += notAvailable;
                     }
-                    var notAvailable = this.loadShopAmount[x] - max;
-                    this.airplane.world.game.statistic.successfulLoad[0][x] += max;
-                    this.airplane.world.game.statistic.unsuccessfulLoad[0][x] += notAvailable;
                 }
                 else {
                     max = city.shop[x] - (this.loadShopUntilAmount[x] + minStock);

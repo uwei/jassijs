@@ -211,7 +211,7 @@ export class SaveDialog {
                 return ret;
             }
             return value;
-        }, "\t");
+        });
         window.localStorage.setItem("save" + filename, sdata);
         window.localStorage.setItem("lastgame", filename);
         //this.load();
