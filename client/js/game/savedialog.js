@@ -221,6 +221,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                     return undefined;
                 if (key === "parameter") {
                     Object.assign(parameter, value);
+                    return parameter;
                     /*  for (var x = 0; x < parameter.allProducts.length; x++) {
                           parameter.allProducts[x] = new Product(parameter.allProducts[x]);
                       }*/
