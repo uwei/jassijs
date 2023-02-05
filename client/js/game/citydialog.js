@@ -267,12 +267,12 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop", 
                         var a1, b1;
                         for (var y = 0; y < a.companies.length; y++) {
                             if (a.companies[y].productid === Number(sel)) {
-                                a1 = a.companies[y].buildings - a.companies[y].buildingsWithoutCosts;
+                                a1 = a.companies[y].buildings - (a.companies[y].buildingsWithoutCosts ? a.companies[y].buildingsWithoutCosts : 0);
                             }
                         }
                         for (var y = 0; y < b.companies.length; y++) {
                             if (b.companies[y].productid === Number(sel)) {
-                                b1 = b.companies[y].buildings - b.companies[y].buildingsWithoutCosts;
+                                b1 = b.companies[y].buildings - (b.companies[y].buildingsWithoutCosts ? b.companies[y].buildingsWithoutCosts : 0);
                             }
                         }
                         return a1 - b1;

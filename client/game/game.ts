@@ -11,7 +11,7 @@ import { Route } from "game/route";
 import { Product } from "game/product";
 import { DiagramDialog } from "game/diagramdialog";
 import { SaveDialog } from "game/savedialog";
-var gameversion = "2.0";
+var gameversion = "2.1";
 window.onbeforeunload = function () {
   return "Do you want to exit?";
 
@@ -110,7 +110,7 @@ export class Game {
   domHeader: HTMLDivElement;
   domWorld: HTMLDivElement;
   _money;
-  version = "2.0";
+  version = "2.1";
   date: Date;
   lastUpdate: number;
   speed: number;
