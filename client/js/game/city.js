@@ -542,7 +542,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                     this.domStar.style.display = "initial";
                     setTimeout(() => {
                         _this.domStar.style.display = "none";
-                    }, 5000);
+                    }, 7000);
                 }
             }
         }
