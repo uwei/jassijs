@@ -117,6 +117,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.domDesc.appendChild(document.createRange().createContextualFragment('<br/>').children[0]);
             this.domPeople = document.createRange().createContextualFragment('<span>0</span>').children[0];
             this.domDesc.appendChild(this.domPeople);
+            this.domDesc.appendChild(document.createRange().createContextualFragment("<br/>").children[0]);
             this.domWarning = document.createRange().createContextualFragment("<span></span>").children[0];
             this.renderWarningIcons();
             this.domDesc.appendChild(this.domWarning);

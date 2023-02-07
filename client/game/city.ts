@@ -152,6 +152,7 @@ export class City {
         this.domDesc.appendChild(<any>document.createRange().createContextualFragment('<br/>').children[0]);
         this.domPeople = <any>document.createRange().createContextualFragment('<span>0</span>').children[0];
         this.domDesc.appendChild(this.domPeople);
+         this.domDesc.appendChild(<any>document.createRange().createContextualFragment("<br/>").children[0]);
         this.domWarning = <any>document.createRange().createContextualFragment("<span></span>").children[0];
         this.renderWarningIcons();
         this.domDesc.appendChild(this.domWarning);
