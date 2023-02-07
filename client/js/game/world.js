@@ -114,7 +114,7 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 product_1.Product.randomUpdateConsumtion();
             }
             if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
-                if (getRandomInt(100) === 0)
+                if (getRandomInt(120) === 0)
                     this.showMoveIcon();
                 for (var y = 0; y < parameter.allProducts.length; y++) {
                     if (this.game.world.advertising[y] && this.game.date.getTime() > this.game.world.advertising[y]) {
@@ -219,6 +219,21 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
         destroy() {
             clearInterval(this._intervall);
         }
+        makeCityMovable(sel) {
+            var _this = this;
+            $(sel).draggable({
+                stop: function (event, ui) {
+                    $(sel).draggable("destroy");
+                    var city = event.target.city;
+                    setTimeout(() => {
+                        _this.makeCityMovable(city.dom);
+                    }, 400);
+                    var x = parseInt(event.target.style.left.replace("px", ""));
+                    var y = parseInt(event.target.style.top.replace("px", ""));
+                    city.move(x, y);
+                },
+            });
+        }
         showMoveIcon() {
             var _this = this;
             var x = getRandomInt(this.game.mapWidth);
@@ -227,17 +242,9 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 'px;left:' + (x) + 'px;font-size:40px;color:orange;animation: animate   0.5s linear infinite;" >' + icons_1.Icons.move + '</span>').children[0];
             this.dom.appendChild(domStar);
             domStar.addEventListener("click", (ev) => {
-                _this.dom.removeChild(domStar);
+                domStar.style.visibility = "hidden";
                 if (confirm("Do you want to move a city (drag and drop)")) {
-                    $(".city").draggable({
-                        stop: function (event, ui) {
-                            $(".city").draggable("destroy");
-                            var city = event.target.city;
-                            var x = parseInt(event.target.style.left.replace("px", ""));
-                            var y = parseInt(event.target.style.top.replace("px", ""));
-                            city.move(x, y);
-                        },
-                    });
+                    _this.makeCityMovable(".city");
                 }
                 return undefined;
             });
