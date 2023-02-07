@@ -147,10 +147,10 @@ export class City {
         this.dom.style.zIndex = "1";
         this.domDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
             'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
-        this.domName = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
+        this.domName = <any>document.createRange().createContextualFragment('<span>' + this.name.substring(0,10) + '</span>').children[0];
         this.domDesc.appendChild(this.domName);
         this.domDesc.appendChild(<any>document.createRange().createContextualFragment('<br/>').children[0]);
-        this.domPeople = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
+        this.domPeople = <any>document.createRange().createContextualFragment('<span>0</span>').children[0];
         this.domDesc.appendChild(this.domPeople);
         this.domWarning = <any>document.createRange().createContextualFragment("<span></span>").children[0];
         this.renderWarningIcons();

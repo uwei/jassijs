@@ -112,10 +112,10 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.dom.style.zIndex = "1";
             this.domDesc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
                 'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
-            this.domName = document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
+            this.domName = document.createRange().createContextualFragment('<span>' + this.name.substring(0, 10) + '</span>').children[0];
             this.domDesc.appendChild(this.domName);
             this.domDesc.appendChild(document.createRange().createContextualFragment('<br/>').children[0]);
-            this.domPeople = document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
+            this.domPeople = document.createRange().createContextualFragment('<span>0</span>').children[0];
             this.domDesc.appendChild(this.domPeople);
             this.domWarning = document.createRange().createContextualFragment("<span></span>").children[0];
             this.renderWarningIcons();
