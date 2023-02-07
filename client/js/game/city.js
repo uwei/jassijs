@@ -326,10 +326,10 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
         getRating(people) {
             var score = this.getScore();
             var maxpeople = Math.max(parameter.neutralStartPeople, (score + 1) * 200);
-            if (people === maxpeople)
-                return 0;
             if (score === 19)
                 return 1;
+            if (people === maxpeople)
+                return 0;
             if (people > maxpeople) {
                 return -1;
             }

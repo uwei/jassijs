@@ -370,10 +370,10 @@ export class City {
     getRating(people: number) {
         var score = this.getScore();
         var maxpeople = Math.max(parameter.neutralStartPeople, (score + 1) * 200);
-        if (people === maxpeople)
-            return 0;
         if (score === 19)
             return 1;
+        if (people === maxpeople)
+            return 0;
         if (people > maxpeople) {
             return -1;
         } else
