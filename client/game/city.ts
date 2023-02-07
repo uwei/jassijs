@@ -122,8 +122,8 @@ export class City {
         this.y=y;
         this.dom.style.left = x + "px";
         this.dom.style.top = y + "px";
-        this.domAirport.style.top = (y - 16) + "px";
-        this.domAirport.style.left = (x - 40) + "px";
+        this.domAirport.style.top = (y ) + "px";
+        this.domAirport.style.left = (x - 20) + "px";
         this.domDesc.style.top = (y+30) + "px";
         this.domDesc.style.left = (x+ 0) + "px";
          this.domStar.style.top = (y-16) + "px";
@@ -157,8 +157,8 @@ export class City {
         this.domDesc.appendChild(this.domWarning);
         this.world.dom.appendChild(this.domDesc);
         this.domDesc.style.zIndex = "2";
-        this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
-            'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + Icons.airport + '</span>').children[0];
+        this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y ) +
+            'px;left:' + (this.x - 20) + 'px;font-size:20px;color:white;">' + Icons.airport + '</span>').children[0];
         this.world.dom.appendChild(this.domAirport);
         this.domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
             'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + Icons.stare + '</span>').children[0];

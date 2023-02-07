@@ -192,7 +192,7 @@ export class Airplane {
         }
         this.lastUpdate = this.world.game.date.getTime();
         this.dom.style.top = this.y + "px";
-        this.dom.style.left = (this.x - 35) + "px";
+        this.dom.style.left = (this.x - 18) + "px";
         if (this.activeRoute !== -1 && this.route.length > 1) {
             if (this.action === "unload" && (this.lastUpdate - this.lastAction) > (3 * 1000 * 60 * 60)) {
                 // console.log("load now");

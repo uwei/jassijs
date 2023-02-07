@@ -137,7 +137,7 @@ export class World {
             Product.randomUpdateConsumtion();
         }
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
-            if(getRandomInt(150)===0)
+            if(getRandomInt(100)===0)
                 this.showMoveIcon();
             for (var y = 0; y < parameter.allProducts.length; y++) {
                 if (this.game.world.advertising[y] && this.game.date.getTime() > this.game.world.advertising[y]) {
