@@ -1,4 +1,4 @@
-define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "game/airplanedialog", "game/routedialog", "game/squadrondialog", "game/diagramdialog", "game/product"], function (require, exports, city_1, airplane_1, citydialog_1, airplanedialog_1, routedialog_1, squadrondialog_1, diagramdialog_1, product_1) {
+define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "game/airplanedialog", "game/routedialog", "game/squadrondialog", "game/diagramdialog", "game/product", "game/icons"], function (require, exports, city_1, airplane_1, citydialog_1, airplanedialog_1, routedialog_1, squadrondialog_1, diagramdialog_1, product_1, icons_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.World = void 0;
@@ -114,6 +114,8 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 product_1.Product.randomUpdateConsumtion();
             }
             if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
+                if (getRandomInt(150) === 0)
+                    this.showMoveIcon();
                 for (var y = 0; y < parameter.allProducts.length; y++) {
                     if (this.game.world.advertising[y] && this.game.date.getTime() > this.game.world.advertising[y]) {
                         this.game.world.advertising[y] = undefined;
@@ -216,6 +218,32 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
         }
         destroy() {
             clearInterval(this._intervall);
+        }
+        showMoveIcon() {
+            var _this = this;
+            var x = getRandomInt(this.game.mapWidth);
+            var y = getRandomInt(this.game.mapHeight);
+            var domStar = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (y) +
+                'px;left:' + (x) + 'px;font-size:40px;color:orange;animation: animate   0.5s linear infinite;" >' + icons_1.Icons.move + '</span>').children[0];
+            this.dom.appendChild(domStar);
+            domStar.addEventListener("click", (ev) => {
+                _this.dom.removeChild(domStar);
+                if (confirm("Do you want to move a city (drag and drop)")) {
+                    $(".city").draggable({
+                        stop: function (event, ui) {
+                            $(".city").draggable("destroy");
+                            var city = event.target.city;
+                            var x = parseInt(event.target.style.left.replace("px", ""));
+                            var y = parseInt(event.target.style.top.replace("px", ""));
+                            city.move(x, y);
+                        },
+                    });
+                }
+                return undefined;
+            });
+            setTimeout(() => {
+                _this.dom.removeChild(domStar);
+            }, 8000);
         }
     }
     exports.World = World;

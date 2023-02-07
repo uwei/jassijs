@@ -2,7 +2,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Game = exports.Parameter = exports.Statistic = void 0;
-    var gameversion = "2.1";
+    var gameversion = "2.2";
     window.onbeforeunload = function () {
         return "Do you want to exit?";
     };
@@ -89,7 +89,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
     //global.parameter=new Parametetr();
     class Game {
         constructor() {
-            this.version = "2.1";
+            this.version = "2.2";
             this.mapWidth = 1000;
             this.mapHeight = 600;
             var _this = this;
@@ -164,6 +164,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             <button id="game-faster"  class="mybutton">` + icons_1.Icons.plus + `</button> 
             Money:<span id="gamemoney"></span>` + icons_1.Icons.money + `
             <button id="save-game"  class="mybutton">` + icons_1.Icons.save + `</button> 
+            <!--button id="debug-game"  class="mybutton">` + icons_1.Icons.debug + `</button--> 
             <button id="show-diagram"  class="mybutton">` + icons_1.Icons.diagram + `</button> 
           </div>  
         `;
@@ -192,15 +193,8 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 savedialog_1.SaveDialog.getInstance().game = this;
                 savedialog_1.SaveDialog.getInstance().show();
             });
-            /*
-             document.getElementById("debug-game").addEventListener("click", () => {
-              for(var x=0;x<this.world.airplanes.length;x++){
-                this.world.airplanes[x].costs=parameter.allAirplaneTypes[0].costs;
-                this.world.airplanes[x].speed=parameter.allAirplaneTypes[0].speed;
-                this.world.airplanes[x].typeid=0;
-                this.world.airplanes[x].capacity=parameter.allAirplaneTypes[0].capacity;
-                
-              }
+            /* document.getElementById("debug-game").addEventListener("click", () => {
+              _this.world.showMoveIcon();
              });*/
             document.getElementById("show-diagram").addEventListener("click", () => {
                 diagramdialog_1.DiagramDialog.getInstance().world = this.world;

@@ -23,6 +23,10 @@ export class City {
     dom: HTMLElement;
     domAirport: HTMLElement;
     domStar: HTMLElement;
+    domRating: HTMLSpanElement;
+    domProductNeeded: HTMLSpanElement[] = [];
+    domWarning: HTMLSpanElement;
+    domDesc:HTMLSpanElement;
     world: World;
     people: number;
     market: number[];
@@ -34,15 +38,12 @@ export class City {
     shop: number[] = [];
     shops = 0;
     houses = 0;
-    buildingplaces=0;
+    buildingplaces = 0;
     shopMinStock: number[];
     //shopSellingPrice: number[];
     queueAirplane: QueueItem[] = [];
     queueBuildings: QueueItem[] = [];
     domShopfull: HTMLSpanElement;
-    domRating: HTMLSpanElement;
-    domProductNeeded: HTMLSpanElement[] = [];
-    domWarning: HTMLSpanElement;
     type = "City";
     domName: HTMLSpanElement;
     domPeople: HTMLSpanElement;
@@ -116,6 +117,21 @@ export class City {
         }
 
     }
+    move(x: number, y: number) {
+        this.x=x;
+        this.y=y;
+        this.dom.style.left = x + "px";
+        this.dom.style.top = y + "px";
+        this.domAirport.style.top = (y - 16) + "px";
+        this.domAirport.style.left = (x - 40) + "px";
+        this.domDesc.style.top = (y+30) + "px";
+        this.domDesc.style.left = (x+ 0) + "px";
+         this.domStar.style.top = (y-16) + "px";
+        this.domStar.style.left = (x+ 40) + "px";
+          this.domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
+            'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + Icons.stare + '</span>').children[0];
+      
+    }
     render(cityid: number) {
         var _this = this;
         this.dom = <any>document.createElement("img");
@@ -124,23 +140,23 @@ export class City {
         this.dom.setAttribute("cityid", cityid.toString())
         this.dom.style.position = "absolute";
         this.dom.classList.add("city");
-
+        this.dom["city"] = this;
         this.dom.style.top = this.y.toString() + "px";
         this.dom.style.left = this.x.toString() + "px";
         this.world.dom.appendChild(this.dom);
         this.dom.style.zIndex = "1";
-        var spanDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
+        this.domDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
             'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
         this.domName = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
-        spanDesc.appendChild(this.domName);
-        spanDesc.appendChild(<any>document.createRange().createContextualFragment('<br/>').children[0]);
+        this.domDesc.appendChild(this.domName);
+        this.domDesc.appendChild(<any>document.createRange().createContextualFragment('<br/>').children[0]);
         this.domPeople = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
-        spanDesc.appendChild(this.domPeople);
+        this.domDesc.appendChild(this.domPeople);
         this.domWarning = <any>document.createRange().createContextualFragment("<span></span>").children[0];
         this.renderWarningIcons();
-        spanDesc.appendChild(this.domWarning);
-        this.world.dom.appendChild(spanDesc);
-        spanDesc.style.zIndex = "2";
+        this.domDesc.appendChild(this.domWarning);
+        this.world.dom.appendChild(this.domDesc);
+        this.domDesc.style.zIndex = "2";
         this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
             'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + Icons.airport + '</span>').children[0];
         this.world.dom.appendChild(this.domAirport);
@@ -180,13 +196,13 @@ export class City {
             this.companies[x].buildingsWithoutCosts = this.companies[x].buildings;
         }
 
-        alert("Congratulations. All building costs "+this.name+" are reset.")
+        alert("Congratulations. All building costs " + this.name + " are reset.")
     }
     buildBuilding(typeid: number) {
         var last = this.world.game.date.getTime();
         if (this.queueBuildings.length > 0)
             last = this.queueBuildings[this.queueBuildings.length - 1].ready;
-        last += (parameter.daysBuildBuilding * 1000 * 60 * 60 * 24)/(!this.buildingplaces?1:(this.buildingplaces+1));
+        last += (parameter.daysBuildBuilding * 1000 * 60 * 60 * 24) / (!this.buildingplaces ? 1 : (this.buildingplaces + 1));
         this.queueBuildings.push({ ready: last, typeid: typeid, name: "" });
         //shop should create at first
         if (typeid === 10000) {
@@ -609,9 +625,9 @@ export class City {
             this.lastUpdate = this.world.game.date.getTime();
         }
         //  setTimeout(()=>{
-        var s =(this.people === 0 ? "" : this.people.toLocaleString());
-        if (_this.domPeople.textContent !== s){
-       
+        var s = (this.people === 0 ? "" : this.people.toLocaleString());
+        if (_this.domPeople.textContent !== s) {
+
             _this.domPeople.textContent = s;
 
         }

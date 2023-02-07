@@ -9,6 +9,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
     }
     class City {
         constructor() {
+            this.domProductNeeded = [];
             this.lastUpdate = undefined;
             this.score = [];
             this.shop = [];
@@ -18,7 +19,6 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             //shopSellingPrice: number[];
             this.queueAirplane = [];
             this.queueBuildings = [];
-            this.domProductNeeded = [];
             this.type = "City";
             this.hasAirport = true;
             this.people = parameter.neutralStartPeople;
@@ -83,6 +83,20 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 this.domProductNeeded.push(dom);
             }
         }
+        move(x, y) {
+            this.x = x;
+            this.y = y;
+            this.dom.style.left = x + "px";
+            this.dom.style.top = y + "px";
+            this.domAirport.style.top = (y - 16) + "px";
+            this.domAirport.style.left = (x - 40) + "px";
+            this.domDesc.style.top = (y + 30) + "px";
+            this.domDesc.style.left = (x + 0) + "px";
+            this.domStar.style.top = (y - 16) + "px";
+            this.domStar.style.left = (x + 40) + "px";
+            this.domStar = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
+                'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + icons_1.Icons.stare + '</span>').children[0];
+        }
         render(cityid) {
             var _this = this;
             this.dom = document.createElement("img");
@@ -91,22 +105,23 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.dom.setAttribute("cityid", cityid.toString());
             this.dom.style.position = "absolute";
             this.dom.classList.add("city");
+            this.dom["city"] = this;
             this.dom.style.top = this.y.toString() + "px";
             this.dom.style.left = this.x.toString() + "px";
             this.world.dom.appendChild(this.dom);
             this.dom.style.zIndex = "1";
-            var spanDesc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
+            this.domDesc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
                 'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
             this.domName = document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
-            spanDesc.appendChild(this.domName);
-            spanDesc.appendChild(document.createRange().createContextualFragment('<br/>').children[0]);
+            this.domDesc.appendChild(this.domName);
+            this.domDesc.appendChild(document.createRange().createContextualFragment('<br/>').children[0]);
             this.domPeople = document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
-            spanDesc.appendChild(this.domPeople);
+            this.domDesc.appendChild(this.domPeople);
             this.domWarning = document.createRange().createContextualFragment("<span></span>").children[0];
             this.renderWarningIcons();
-            spanDesc.appendChild(this.domWarning);
-            this.world.dom.appendChild(spanDesc);
-            spanDesc.style.zIndex = "2";
+            this.domDesc.appendChild(this.domWarning);
+            this.world.dom.appendChild(this.domDesc);
+            this.domDesc.style.zIndex = "2";
             this.domAirport = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
                 'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + icons_1.Icons.airport + '</span>').children[0];
             this.world.dom.appendChild(this.domAirport);

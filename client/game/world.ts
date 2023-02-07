@@ -10,6 +10,7 @@ import { SquadronDialog } from "game/squadrondialog";
 import { Company } from "game/company";
 import { DiagramDialog } from "game/diagramdialog";
 import { Product } from "game/product";
+import { Icons } from "game/icons";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -136,6 +137,8 @@ export class World {
             Product.randomUpdateConsumtion();
         }
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
+            if(getRandomInt(150)===0)
+                this.showMoveIcon();
             for (var y = 0; y < parameter.allProducts.length; y++) {
                 if (this.game.world.advertising[y] && this.game.date.getTime() > this.game.world.advertising[y]) {
                     this.game.world.advertising[y] = undefined;
@@ -245,6 +248,32 @@ export class World {
     }
     destroy() {
         clearInterval(this._intervall);
+    }
+    showMoveIcon() {
+        var _this = this;
+        var x = getRandomInt(this.game.mapWidth);
+        var y = getRandomInt(this.game.mapHeight);
+        var domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (y) +
+            'px;left:' + (x) + 'px;font-size:40px;color:orange;animation: animate   0.5s linear infinite;" >' + Icons.move + '</span>').children[0];
+        this.dom.appendChild(domStar);
+        domStar.addEventListener("click", (ev: MouseEvent) => {
+            _this.dom.removeChild(domStar);
+            if(confirm("Do you want to move a city (drag and drop)")){
+            $(".city").draggable({
+                    stop: function (event, ui) {
+                        $(".city").draggable("destroy");
+                        var city: City = (<any>event.target).city;
+                        var x = parseInt((<any>event.target).style.left.replace("px", ""));
+                        var y = parseInt((<any>event.target).style.top.replace("px", ""));
+                        city.move(x, y);
+                    },
+                });
+            }
+            return undefined;
+        });
+        setTimeout(() => {
+            _this.dom.removeChild(domStar);
+        }, 8000);
     }
 }
 

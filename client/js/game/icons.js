@@ -35,5 +35,6 @@ define(["require", "exports"], function (require, exports) {
     Icons.store = "<span  class='mdi  mdi-store'></span>";
     Icons.stare = "<span  class='mdi  mdi-star'></span>";
     Icons.wrench = "<span  class='mdi mdi-wrench-outline'></span>";
+    Icons.move = "<span  class='mdi mdi-arrow-expand-all'></span>";
 });
 //# sourceMappingURL=icons.js.map

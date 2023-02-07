@@ -11,7 +11,7 @@ import { Route } from "game/route";
 import { Product } from "game/product";
 import { DiagramDialog } from "game/diagramdialog";
 import { SaveDialog } from "game/savedialog";
-var gameversion = "2.1";
+var gameversion = "2.2";
 window.onbeforeunload = function () {
   return "Do you want to exit?";
 
@@ -35,7 +35,7 @@ export class Statistic {
       this.unsuccessfulLoad.push(data2);
     }
   }
- 
+
 }
 
 declare global {
@@ -110,7 +110,7 @@ export class Game {
   domHeader: HTMLDivElement;
   domWorld: HTMLDivElement;
   _money;
-  version = "2.1";
+  version = "2.2";
   date: Date;
   lastUpdate: number;
   speed: number;
@@ -118,7 +118,7 @@ export class Game {
   timer;
   mapWidth = 1000;
   mapHeight = 600;
-  statistic:Statistic;
+  statistic: Statistic;
   static temposcale = [0.01, 0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256]
   constructor() {
     var _this = this;
@@ -128,7 +128,7 @@ export class Game {
     this.lastUpdate = Date.now();
     this.date = new Date("Sat Jan 01 2000 00:00:00");
     CityDialog.instance = undefined;
-    this.statistic= new Statistic()
+    this.statistic = new Statistic()
     this.nevercallthisfunction();
   }
   public updateTitle() {
@@ -195,6 +195,7 @@ export class Game {
             <button id="game-faster"  class="mybutton">`+ Icons.plus + `</button> 
             Money:<span id="gamemoney"></span>`+ Icons.money + `
             <button id="save-game"  class="mybutton">`+ Icons.save + `</button> 
+            <!--button id="debug-game"  class="mybutton">`+ Icons.debug + `</button--> 
             <button id="show-diagram"  class="mybutton">`+ Icons.diagram + `</button> 
           </div>  
         `;
@@ -226,16 +227,10 @@ export class Game {
       SaveDialog.getInstance().game = this;
       SaveDialog.getInstance().show();
     });
-    /*
-     document.getElementById("debug-game").addEventListener("click", () => {
-      for(var x=0;x<this.world.airplanes.length;x++){
-        this.world.airplanes[x].costs=parameter.allAirplaneTypes[0].costs;
-        this.world.airplanes[x].speed=parameter.allAirplaneTypes[0].speed;
-        this.world.airplanes[x].typeid=0;
-        this.world.airplanes[x].capacity=parameter.allAirplaneTypes[0].capacity;
-        
-      }
-     });*/
+
+   /* document.getElementById("debug-game").addEventListener("click", () => {
+     _this.world.showMoveIcon();
+    });*/
     document.getElementById("show-diagram").addEventListener("click", () => {
       DiagramDialog.getInstance().world = this.world;
       DiagramDialog.getInstance().show();
