@@ -58,11 +58,12 @@ export class SaveDialog {
                       
                     </td>
                     <td>
+                        <input type="file" id="save-import" name="files[]" accept="application/json" style="display: none;"  />
                         <button id="save-save" title="save" style="width:100%" class="mybutton">Save</button>
                         <button id="save-load" title="save" style="width:100%" class="mybutton">Load</button>
                         <button id="save-delete" title="save" style="width:100%" class="mybutton">Delete</button>
                         <button id="save-export" title="save" style="width:100%" class="mybutton">Export</button>
-                        <button id="save-import" title="save" style="width:100%" class="mybutton">Import</button>
+                        <button id="save-doupload" title="save" style="width:100%" class="mybutton" onclick="document.getElementById('save-import').click();">Import</button>
                         <button id="save-cancel" title="save" style="width:100%" class="mybutton">Cancel</button>
             
                     </td>
@@ -123,11 +124,38 @@ export class SaveDialog {
             _this.update();
 
         });
+        document.getElementById("save-export").addEventListener("click", (ev) => {
+            var text = _this.toJson();
+
+            var fileBlob = new Blob([text], { type: "application/json" });
+            var link = document.createElement("a");
+            link.setAttribute("href", URL.createObjectURL(fileBlob));
+            link.setAttribute("download", "export.json");
+            link.appendChild(document.createTextNode("Save file"));
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        });
+        document.getElementById("save-import").addEventListener("change", function (evt) {
+            var files: FileList = evt.target["files"];
+            var data: { [file: string]: string | ArrayBuffer } = {};
+            var downloaded = 0;
+            var file = files[0];
+            var reader = new FileReader();
+            reader.addEventListener("load", function () {
+                var s = <string>reader.result;
+                _this.loadContent(s);
+                //alert(s);
+            }, false);
+
+            reader.readAsText(file);
+        });
+
     }
 
     update() {
         var list = [];
-        var ret = ""
+        var ret = "";
         for (var key in window.localStorage) {
             if (key.startsWith("save")) {
                 ret += '<li value="' + key.substring(4) + '">' + key.substring(4) + '</li>';
@@ -168,8 +196,7 @@ export class SaveDialog {
     close() {
         $(this.dom).dialog("close");
     }
-    save(filename: string) {
-        this.game.pause();
+    toJson() {
         var sdata = JSON.stringify(this.game, (key: string, value: any) => {
             var ret: any = {};
             if (value instanceof HTMLElement) {
@@ -212,6 +239,11 @@ export class SaveDialog {
             }
             return value;
         });
+        return sdata;
+    }
+    save(filename: string) {
+        this.game.pause();
+        var sdata = this.toJson();
         window.localStorage.setItem("save" + filename, sdata);
         window.localStorage.setItem("lastgame", filename);
         //this.load();
@@ -236,10 +268,7 @@ export class SaveDialog {
         }
         return ret;
     }
-    load(filename: string) {
-        this.game.pause();
-        CityDialog.getInstance().filteredCities = undefined;
-        var data = window.localStorage.getItem("save" + filename);
+    private loadContent(data: string) {
         var ret = JSON.parse(data, (key, value) => {
             var r: any = value;
             if (value === null)
@@ -381,14 +410,14 @@ export class SaveDialog {
             game.statistic.successfulLoad = new Statistic().successfulLoad;
             game.statistic.unsuccessfulLoad = new Statistic().unsuccessfulLoad;
             for (var x = 1; x < game.world.cities.length; x++) {
-                game.world.cities[x].buildingplaces=0;
+                game.world.cities[x].buildingplaces = 0;
             }
             game.version = "1.7";
         }
         if (parseFloat(ret.version) < 1.9) {
-           for (var x = 0; x < game.world.cities.length; x++) {
+            for (var x = 0; x < game.world.cities.length; x++) {
                 for (var y = 0; y < 5; y++) {
-                     game.world.cities[x].companies[y].workers=game.world.cities[x].companies[y].buildings * parameter.workerInCompany;
+                    game.world.cities[x].companies[y].workers = game.world.cities[x].companies[y].buildings * parameter.workerInCompany;
                 }
                 //game.world.cities[x].people=game.world.cities[x].shops*2);
             }
@@ -396,11 +425,18 @@ export class SaveDialog {
         }
         game.render(this.game.dom);
         game.resume();
+    }
+    load(filename: string) {
+        this.game.pause();
+        CityDialog.getInstance().filteredCities = undefined;
+        var data = window.localStorage.getItem("save" + filename);
+        this.loadContent(data);
         window.localStorage.setItem("lastgame", filename);
 
     }
 }
 
 export function test() {
+
     SaveDialog.getInstance().show();
 }
