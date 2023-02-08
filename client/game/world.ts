@@ -137,7 +137,7 @@ export class World {
             Product.randomUpdateConsumtion();
         }
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
-            if (getRandomInt(120) === 0)
+            if (getRandomInt(90) === 0)
                 this.showMoveIcon();
             for (var y = 0; y < parameter.allProducts.length; y++) {
                 if (this.game.world.advertising[y] && this.game.date.getTime() > this.game.world.advertising[y]) {
@@ -273,6 +273,7 @@ export class World {
                 _this.game.mapHeight = Math.min(_this.game.mapHeight, h);
                 _this.game.mapWidth = Math.min(_this.game.mapWidth, w);
                 _this.game.updateSize();
+            }
             });
     }
     showMoveIcon() {
