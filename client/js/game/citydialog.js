@@ -34,6 +34,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop", 
             var sdom = `
           <div>
           <div>
+            <button id="citydialog-capital" title="goto Capital" class="mybutton">` + icons_1.Icons.capital + `</button>
             <input style="width:30px" id="citydialog-prev" type="button" value="<"  class="mybutton"/>
             <input style="width:30px" id="citydialog-next" type="button" value=">"  class="mybutton"/>
             
@@ -235,6 +236,16 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop", 
         }
         bindActions() {
             var _this = this;
+            document.getElementById("citydialog-capital").addEventListener("click", (ev) => {
+                var max = 0;
+                for (var x = 0; x < _this.city.world.cities.length; x++) {
+                    if (_this.city.world.cities[x].shops > _this.city.world.cities[max].shops) {
+                        max = x;
+                    }
+                }
+                _this.city = _this.city.world.cities[max];
+                _this.update(true);
+            });
             document.getElementById("citydialog-next").addEventListener("click", (ev) => {
                 _this.nextCity();
             });

@@ -32,6 +32,8 @@ export class Icons {
      static stare="<span  class='mdi  mdi-star'></span>";
      static wrench="<span  class='mdi mdi-wrench-outline'></span>";
      static move="<span  class='mdi mdi-arrow-expand-all'></span>";
+     static capital="<span  class='mdi mdi-city-variant-outline'></span>";
+     
      
     
 

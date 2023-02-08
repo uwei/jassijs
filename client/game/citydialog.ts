@@ -48,6 +48,7 @@ export class CityDialog {
         var sdom = `
           <div>
           <div>
+            <button id="citydialog-capital" title="goto Capital" class="mybutton">`+ Icons.capital + `</button>
             <input style="width:30px" id="citydialog-prev" type="button" value="<"  class="mybutton"/>
             <input style="width:30px" id="citydialog-next" type="button" value=">"  class="mybutton"/>
             
@@ -258,6 +259,16 @@ export class CityDialog {
     }
     bindActions() {
         var _this = this;
+        document.getElementById("citydialog-capital").addEventListener("click", (ev) => {
+            var max = 0;
+            for (var x = 0; x < _this.city.world.cities.length; x++) {
+                if (_this.city.world.cities[x].shops > _this.city.world.cities[max].shops) {
+                    max = x;
+                }
+            }
+            _this.city = _this.city.world.cities[max];
+            _this.update(true);
+        });
         document.getElementById("citydialog-next").addEventListener("click", (ev) => {
             _this.nextCity();
         });
@@ -291,14 +302,14 @@ export class CityDialog {
                     var a1, b1;
                     for (var y = 0; y < a.companies.length; y++) {
                         if (a.companies[y].productid === Number(sel)) {
-                            
-                            a1 = a.companies[y].buildings-(a.companies[y].buildingsWithoutCosts?a.companies[y].buildingsWithoutCosts:0);
+
+                            a1 = a.companies[y].buildings - (a.companies[y].buildingsWithoutCosts ? a.companies[y].buildingsWithoutCosts : 0);
                         }
                     }
                     for (var y = 0; y < b.companies.length; y++) {
                         if (b.companies[y].productid === Number(sel)) {
-                          
-                            b1 = b.companies[y].buildings-(b.companies[y].buildingsWithoutCosts?b.companies[y].buildingsWithoutCosts:0);
+
+                            b1 = b.companies[y].buildings - (b.companies[y].buildingsWithoutCosts ? b.companies[y].buildingsWithoutCosts : 0);
                         }
                     }
                     return a1 - b1;
@@ -527,9 +538,9 @@ export class CityDialog {
             tr.children[2].innerHTML = s;
             tr.children[3].innerHTML = "" + comp.workers + "/<br/>" + comp.getMaxWorkers();
             if (comp.workers > 10000)
-                tr.children[3].innerHTML = (Math.round(comp.workers / 1000)).toLocaleString() + "K" + "/<br/>" + Math.round(comp.getMaxWorkers()/1000).toLocaleString()+"K";
+                tr.children[3].innerHTML = (Math.round(comp.workers / 1000)).toLocaleString() + "K" + "/<br/>" + Math.round(comp.getMaxWorkers() / 1000).toLocaleString() + "K";
             if (comp.workers > 10000000)
-                tr.children[3].innerHTML = (Math.round(comp.workers / 1000000)).toLocaleString() + "M" + "/<br/>" + Math.round(comp.getMaxWorkers()/1000000).toLocaleString()+"M";
+                tr.children[3].innerHTML = (Math.round(comp.workers / 1000000)).toLocaleString() + "M" + "/<br/>" + Math.round(comp.getMaxWorkers() / 1000000).toLocaleString() + "M";
 
 
             var needs1 = "";
