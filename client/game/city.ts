@@ -26,7 +26,7 @@ export class City {
     domRating: HTMLSpanElement;
     domProductNeeded: HTMLSpanElement[] = [];
     domWarning: HTMLSpanElement;
-    domDesc:HTMLSpanElement;
+    domDesc: HTMLSpanElement;
     world: World;
     people: number;
     market: number[];
@@ -118,19 +118,19 @@ export class City {
 
     }
     move(x: number, y: number) {
-        this.x=x;
-        this.y=y;
+        this.x = x;
+        this.y = y;
         this.dom.style.left = x + "px";
         this.dom.style.top = y + "px";
-        this.domAirport.style.top = (y ) + "px";
+        this.domAirport.style.top = (y) + "px";
         this.domAirport.style.left = (x - 20) + "px";
-        this.domDesc.style.top = (y+30) + "px";
-        this.domDesc.style.left = (x+ 0) + "px";
-         this.domStar.style.top = (y-16) + "px";
-        this.domStar.style.left = (x+ 40) + "px";
-          this.domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
+        this.domDesc.style.top = (y + 30) + "px";
+        this.domDesc.style.left = (x - 20) + "px";
+        this.domStar.style.top = (y ) + "px";
+        this.domStar.style.left = (x+16) + "px";
+        this.domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
             'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + Icons.stare + '</span>').children[0];
-      
+
     }
     render(cityid: number) {
         var _this = this;
@@ -145,28 +145,29 @@ export class City {
         this.dom.style.left = this.x.toString() + "px";
         this.world.dom.appendChild(this.dom);
         this.dom.style.zIndex = "1";
+        this.domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y + 16) +
+            'px;left:' + (this.x) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + Icons.stare + '</span>').children[0];
+        this.domStar.addEventListener("click", (ev: MouseEvent) => {
+            _this.resetBuildingsWithoutCosts();
+        });
+        this.domStar.style.zIndex = "3";
+        this.world.dom.appendChild(this.domStar);
         this.domDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
-            'px;left:' + (this.x-20) + 'px;font-size:12px;"></span>').children[0];
-        this.domName = <any>document.createRange().createContextualFragment('<span>' + this.name.substring(0,14) + '</span>').children[0];
+            'px;left:' + (this.x - 20) + 'px;font-size:12px;"></span>').children[0];
+        this.domName = <any>document.createRange().createContextualFragment('<span>' + this.name.substring(0, 12) + '</span>').children[0];
         this.domPeople = <any>document.createRange().createContextualFragment('<span>0</span>').children[0];
         this.domDesc.appendChild(this.domName);
-         this.domDesc.appendChild(<any>document.createRange().createContextualFragment("<br/>").children[0]);
+        this.domDesc.appendChild(<any>document.createRange().createContextualFragment("<br/>").children[0]);
         this.domWarning = <any>document.createRange().createContextualFragment('<span style="font-size:14px"></span>').children[0];
         this.renderWarningIcons();
         this.domDesc.appendChild(this.domWarning);
         this.domDesc.appendChild(this.domPeople);
         this.world.dom.appendChild(this.domDesc);
         this.domDesc.style.zIndex = "2";
-        this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y ) +
+        this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y) +
             'px;left:' + (this.x - 20) + 'px;font-size:20px;color:white;">' + Icons.airport + '</span>').children[0];
         this.world.dom.appendChild(this.domAirport);
-        this.domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
-            'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + Icons.stare + '</span>').children[0];
-        this.domStar.addEventListener("click", (ev: MouseEvent) => {
-            _this.resetBuildingsWithoutCosts();
-        });
 
-        this.world.dom.appendChild(this.domStar);
 
         if (!this.hasAirport) {
             this.domAirport.style.visibility = "hidden";

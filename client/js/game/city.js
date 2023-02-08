@@ -91,9 +91,9 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.domAirport.style.top = (y) + "px";
             this.domAirport.style.left = (x - 20) + "px";
             this.domDesc.style.top = (y + 30) + "px";
-            this.domDesc.style.left = (x + 0) + "px";
-            this.domStar.style.top = (y - 16) + "px";
-            this.domStar.style.left = (x + 40) + "px";
+            this.domDesc.style.left = (x - 20) + "px";
+            this.domStar.style.top = (y) + "px";
+            this.domStar.style.left = (x + 16) + "px";
             this.domStar = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
                 'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + icons_1.Icons.stare + '</span>').children[0];
         }
@@ -110,9 +110,16 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.dom.style.left = this.x.toString() + "px";
             this.world.dom.appendChild(this.dom);
             this.dom.style.zIndex = "1";
+            this.domStar = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y + 16) +
+                'px;left:' + (this.x) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + icons_1.Icons.stare + '</span>').children[0];
+            this.domStar.addEventListener("click", (ev) => {
+                _this.resetBuildingsWithoutCosts();
+            });
+            this.domStar.style.zIndex = "3";
+            this.world.dom.appendChild(this.domStar);
             this.domDesc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
                 'px;left:' + (this.x - 20) + 'px;font-size:12px;"></span>').children[0];
-            this.domName = document.createRange().createContextualFragment('<span>' + this.name.substring(0, 14) + '</span>').children[0];
+            this.domName = document.createRange().createContextualFragment('<span>' + this.name.substring(0, 12) + '</span>').children[0];
             this.domPeople = document.createRange().createContextualFragment('<span>0</span>').children[0];
             this.domDesc.appendChild(this.domName);
             this.domDesc.appendChild(document.createRange().createContextualFragment("<br/>").children[0]);
@@ -125,12 +132,6 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.domAirport = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y) +
                 'px;left:' + (this.x - 20) + 'px;font-size:20px;color:white;">' + icons_1.Icons.airport + '</span>').children[0];
             this.world.dom.appendChild(this.domAirport);
-            this.domStar = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
-                'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + icons_1.Icons.stare + '</span>').children[0];
-            this.domStar.addEventListener("click", (ev) => {
-                _this.resetBuildingsWithoutCosts();
-            });
-            this.world.dom.appendChild(this.domStar);
             if (!this.hasAirport) {
                 this.domAirport.style.visibility = "hidden";
             }
