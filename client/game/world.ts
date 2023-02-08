@@ -270,7 +270,7 @@ export class World {
         var x = getRandomInt(this.game.mapWidth);
         var y = getRandomInt(this.game.mapHeight);
         var domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (y) +
-            'px;left:' + (x) + 'px;font-size:40px;color:orange;animation: animate   0.5s linear infinite;" >' + Icons.move + '</span>').children[0];
+            'px;left:' + (x) + 'px;font-size:40px;color:orange;animation: animate   0.5s linear infinite;z-index:4" >' + Icons.move + '</span>').children[0];
         this.dom.appendChild(domStar);
         domStar.addEventListener("click", (ev: MouseEvent) => {
             domStar.style.visibility="hidden"; 

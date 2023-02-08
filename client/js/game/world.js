@@ -239,7 +239,7 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
             var x = getRandomInt(this.game.mapWidth);
             var y = getRandomInt(this.game.mapHeight);
             var domStar = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (y) +
-                'px;left:' + (x) + 'px;font-size:40px;color:orange;animation: animate   0.5s linear infinite;" >' + icons_1.Icons.move + '</span>').children[0];
+                'px;left:' + (x) + 'px;font-size:40px;color:orange;animation: animate   0.5s linear infinite;z-index:4" >' + icons_1.Icons.move + '</span>').children[0];
             this.dom.appendChild(domStar);
             domStar.addEventListener("click", (ev) => {
                 domStar.style.visibility = "hidden";
