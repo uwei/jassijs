@@ -223,15 +223,25 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
             var _this = this;
             $(sel).draggable({
                 stop: function (event, ui) {
-                    //   $(sel).draggable("destroy");
+                    $(sel).draggable("destroy");
                     var city = event.target.city;
                     setTimeout(() => {
-                        //_this.makeCityMovable(city.dom);
+                        _this.makeCityMovable(city.dom);
                     }, 400);
                     var x = parseInt(event.target.style.left.replace("px", ""));
                     var y = parseInt(event.target.style.top.replace("px", ""));
                     city.move(x, y);
-                },
+                    //shrink map
+                    var w = 0;
+                    var h = 0;
+                    for (var x = 0; x < _this.cities.length; x++) {
+                        w = Math.max(w, _this.cities[x].x);
+                        h = Math.max(h, _this.cities[x].y);
+                    }
+                    _this.game.mapHeight = Math.min(_this.game.mapHeight, h);
+                    _this.game.mapWidth = Math.min(_this.game.mapWidth, w);
+                    _this.game.updateSize();
+                }
             });
         }
         showMoveIcon() {

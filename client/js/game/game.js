@@ -107,7 +107,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 var m = this.getMoney();
                 document.getElementById("gamemoney").textContent = new Number(m).toLocaleString();
                 if (m >= 10000000)
-                    document.getElementById("gamemoney").textContent = (m / 1000000).toLocaleString() + "M";
+                    document.getElementById("gamemoney").textContent = Math.round(m / 1000000).toLocaleString() + "M";
                 document.getElementById("gamedate").textContent = this.date.toLocaleDateString();
                 this.world.update();
             }

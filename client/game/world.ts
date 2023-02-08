@@ -250,20 +250,30 @@ export class World {
         clearInterval(this._intervall);
     }
     private makeCityMovable(sel: any) {
-        var _this=this;
+        var _this = this;
         $(sel).draggable({
             stop: function (event, ui) {
-             //   $(sel).draggable("destroy");
+                $(sel).draggable("destroy");
                 var city: City = (<any>event.target).city;
-                setTimeout(()=>{
-                //_this.makeCityMovable(city.dom);
+                setTimeout(() => {
+                    _this.makeCityMovable(city.dom);
 
-                },400);
+                }, 400);
                 var x = parseInt((<any>event.target).style.left.replace("px", ""));
                 var y = parseInt((<any>event.target).style.top.replace("px", ""));
                 city.move(x, y);
-            },
-        });
+                //shrink map
+                var w = 0;
+                var h = 0;
+                for (var x = 0; x < _this.cities.length; x++) {
+                    w = Math.max(w, _this.cities[x].x);
+                    h = Math.max(h, _this.cities[x].y);
+                }
+
+                _this.game.mapHeight = Math.min(_this.game.mapHeight, h);
+                _this.game.mapWidth = Math.min(_this.game.mapWidth, w);
+                _this.game.updateSize();
+            });
     }
     showMoveIcon() {
         var _this = this;
@@ -273,7 +283,7 @@ export class World {
             'px;left:' + (x) + 'px;font-size:40px;color:orange;animation: animate   0.5s linear infinite;z-index:4" >' + Icons.move + '</span>').children[0];
         this.dom.appendChild(domStar);
         domStar.addEventListener("click", (ev: MouseEvent) => {
-            domStar.style.visibility="hidden"; 
+            domStar.style.visibility = "hidden";
             if (confirm("Do you want to move a city (drag and drop)")) {
                 _this.makeCityMovable(".city");
             }
