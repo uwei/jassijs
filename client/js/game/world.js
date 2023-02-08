@@ -223,10 +223,10 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
             var _this = this;
             $(sel).draggable({
                 stop: function (event, ui) {
-                    $(sel).draggable("destroy");
+                    //   $(sel).draggable("destroy");
                     var city = event.target.city;
                     setTimeout(() => {
-                        _this.makeCityMovable(city.dom);
+                        //_this.makeCityMovable(city.dom);
                     }, 400);
                     var x = parseInt(event.target.style.left.replace("px", ""));
                     var y = parseInt(event.target.style.top.replace("px", ""));

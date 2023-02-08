@@ -111,16 +111,15 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.world.dom.appendChild(this.dom);
             this.dom.style.zIndex = "1";
             this.domDesc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
-                'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
-            this.domName = document.createRange().createContextualFragment('<span>' + this.name.substring(0, 10) + '</span>').children[0];
-            this.domDesc.appendChild(this.domName);
-            this.domDesc.appendChild(document.createRange().createContextualFragment('<br/>').children[0]);
+                'px;left:' + (this.x - 20) + 'px;font-size:12px;"></span>').children[0];
+            this.domName = document.createRange().createContextualFragment('<span>' + this.name.substring(0, 14) + '</span>').children[0];
             this.domPeople = document.createRange().createContextualFragment('<span>0</span>').children[0];
-            this.domDesc.appendChild(this.domPeople);
+            this.domDesc.appendChild(this.domName);
             this.domDesc.appendChild(document.createRange().createContextualFragment("<br/>").children[0]);
-            this.domWarning = document.createRange().createContextualFragment("<span></span>").children[0];
+            this.domWarning = document.createRange().createContextualFragment('<span style="font-size:14px"></span>').children[0];
             this.renderWarningIcons();
             this.domDesc.appendChild(this.domWarning);
+            this.domDesc.appendChild(this.domPeople);
             this.world.dom.appendChild(this.domDesc);
             this.domDesc.style.zIndex = "2";
             this.domAirport = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y) +
@@ -717,7 +716,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
         var y = getRandomInt(world.game.mapHeight - 12) + 12;
         for (var i = 0; i < world.cities.length; i++) {
             var ct = world.cities[i];
-            if (x > (ct.x - 100) && x < (ct.x + 100) && y > (ct.y - 100) && (y < ct.y + 100)) {
+            if (x > (ct.x - 70) && x < (ct.x + 70) && y > (ct.y - 68) && (y < ct.y + 68)) {
                 //conflict
                 if (deep > 0) {
                     deep--;

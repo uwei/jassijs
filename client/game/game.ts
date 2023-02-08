@@ -6,7 +6,7 @@ import { AirplaneDialog } from "game/airplanedialog";
 import { Icons } from "game/icons";
 import { Company } from "game/company";
 import { Airplane } from "game/airplane";
-import { City } from "game/city";
+import { City, createCities } from "game/city";
 import { Route } from "game/route";
 import { Product } from "game/product";
 import { DiagramDialog } from "game/diagramdialog";
@@ -133,8 +133,11 @@ export class Game {
   }
   public updateTitle() {
     try {
-      document.getElementById("gamemoney").innerHTML = new Number(this.getMoney()).toLocaleString();
-      document.getElementById("gamedate").innerHTML = this.date.toLocaleDateString();
+      var m=this.getMoney();
+      document.getElementById("gamemoney").textContent = new Number(m).toLocaleString();
+      if (m >= 10000000)
+            document.getElementById("gamemoney").textContent=(m / 1000000).toLocaleString() + "M";
+      document.getElementById("gamedate").textContent = this.date.toLocaleDateString();
       this.world.update();
     } catch {
       console.log("stop game");
@@ -189,13 +192,13 @@ export class Game {
     this.dom = dom;
     var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
-            Traffics V`+ gameversion + ` 
+            Traffics `+ gameversion + ` 
             <button id="game-slower"  class="mybutton">`+ Icons.minus + `</button> 
             <span id="gamedate"></span>   
             <button id="game-faster"  class="mybutton">`+ Icons.plus + `</button> 
-            Money:<span id="gamemoney"></span>`+ Icons.money + `
+            <span id="gamemoney"></span>`+ Icons.money + `
             <button id="save-game"  class="mybutton">`+ Icons.save + `</button> 
-            <!--button id="debug-game"  class="mybutton">`+ Icons.debug + `</button--> 
+            <button id="debug-game"  class="mybutton">`+ Icons.debug + `</button> 
             <button id="show-diagram"  class="mybutton">`+ Icons.diagram + `</button> 
           </div>  
         `;
@@ -228,9 +231,12 @@ export class Game {
       SaveDialog.getInstance().show();
     });
 
-   /* document.getElementById("debug-game").addEventListener("click", () => {
-     _this.world.showMoveIcon();
-    });*/
+    document.getElementById("debug-game").addEventListener("click", () => {
+      for(var x=this.world.cities.length;x<193){
+        this.world.addCity(true);
+      }
+     
+    });
     document.getElementById("show-diagram").addEventListener("click", () => {
       DiagramDialog.getInstance().world = this.world;
       DiagramDialog.getInstance().show();

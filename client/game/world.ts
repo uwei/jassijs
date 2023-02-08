@@ -253,10 +253,10 @@ export class World {
         var _this=this;
         $(sel).draggable({
             stop: function (event, ui) {
-                $(sel).draggable("destroy");
+             //   $(sel).draggable("destroy");
                 var city: City = (<any>event.target).city;
                 setTimeout(()=>{
-                _this.makeCityMovable(city.dom);
+                //_this.makeCityMovable(city.dom);
 
                 },400);
                 var x = parseInt((<any>event.target).style.left.replace("px", ""));

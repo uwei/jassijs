@@ -104,8 +104,11 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
         }
         updateTitle() {
             try {
-                document.getElementById("gamemoney").innerHTML = new Number(this.getMoney()).toLocaleString();
-                document.getElementById("gamedate").innerHTML = this.date.toLocaleDateString();
+                var m = this.getMoney();
+                document.getElementById("gamemoney").textContent = new Number(m).toLocaleString();
+                if (m >= 10000000)
+                    document.getElementById("gamemoney").textContent = (m / 1000000).toLocaleString() + "M";
+                document.getElementById("gamedate").textContent = this.date.toLocaleDateString();
                 this.world.update();
             }
             catch (_a) {
@@ -158,13 +161,13 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.dom = dom;
             var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
-            Traffics V` + gameversion + ` 
+            Traffics ` + gameversion + ` 
             <button id="game-slower"  class="mybutton">` + icons_1.Icons.minus + `</button> 
             <span id="gamedate"></span>   
             <button id="game-faster"  class="mybutton">` + icons_1.Icons.plus + `</button> 
-            Money:<span id="gamemoney"></span>` + icons_1.Icons.money + `
+            <span id="gamemoney"></span>` + icons_1.Icons.money + `
             <button id="save-game"  class="mybutton">` + icons_1.Icons.save + `</button> 
-            <!--button id="debug-game"  class="mybutton">` + icons_1.Icons.debug + `</button--> 
+            <button id="debug-game"  class="mybutton">` + icons_1.Icons.debug + `</button> 
             <button id="show-diagram"  class="mybutton">` + icons_1.Icons.diagram + `</button> 
           </div>  
         `;
@@ -193,9 +196,11 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 savedialog_1.SaveDialog.getInstance().game = this;
                 savedialog_1.SaveDialog.getInstance().show();
             });
-            /* document.getElementById("debug-game").addEventListener("click", () => {
-              _this.world.showMoveIcon();
-             });*/
+            document.getElementById("debug-game").addEventListener("click", () => {
+                for (var x = this.world.cities.length; x < 193;) {
+                    this.world.addCity(true);
+                }
+            });
             document.getElementById("show-diagram").addEventListener("click", () => {
                 diagramdialog_1.DiagramDialog.getInstance().world = this.world;
                 diagramdialog_1.DiagramDialog.getInstance().show();
