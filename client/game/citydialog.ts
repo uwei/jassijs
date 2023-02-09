@@ -55,8 +55,9 @@ export class CityDialog {
             <select id="citydialog-filter" style="width:80px">
                 `+ this.productFilter() + `
             </select>
-            <input type="checkbox" id="hide-busy" name="vehicle1">hide busy
+            <input type="checkbox" id="hide-busy" name="vehicle1">hide busy</input>
             <button id="update-all-routes" title="update all routes" class="mybutton">`+ Icons.route + `</button>
+            <input type="checkbox" id="citydialog-shopinfo" title="show shop info beside the city" class="mybutton">info</input>
           </div>
             <div id="citydialog-tabs">
                 <ul>
@@ -323,6 +324,14 @@ export class CityDialog {
             //  _this.update();
 
         });
+        document.getElementById("citydialog-shopinfo").addEventListener("click", (e) => {
+           var en=(<HTMLInputElement>document.getElementById("citydialog-shopinfo")).checked;
+           _this.city.cityShowShopInfo=en;
+           _this.city.renderShopinfo(en);
+            //  _this.update();
+
+        });
+        
         for (var x = 0; x < 5; x++) {
             document.getElementById("new-factory_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
@@ -690,7 +699,8 @@ export class CityDialog {
             this.updateConstruction();
         if (document.getElementById("citydialog-score-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
             this.updateScore();
-
+            if((<HTMLInputElement>document.getElementById("citydialog-shopinfo")).checked!==this.city.cityShowShopInfo)
+                (<HTMLInputElement>document.getElementById("citydialog-shopinfo")).checked=this.city.cityShowShopInfo;
         return;
     }
     updateTitle() {

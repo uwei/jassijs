@@ -41,8 +41,9 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop", 
             <select id="citydialog-filter" style="width:80px">
                 ` + this.productFilter() + `
             </select>
-            <input type="checkbox" id="hide-busy" name="vehicle1">hide busy
+            <input type="checkbox" id="hide-busy" name="vehicle1">hide busy</input>
             <button id="update-all-routes" title="update all routes" class="mybutton">` + icons_1.Icons.route + `</button>
+            <input type="checkbox" id="citydialog-shopinfo" title="show shop info beside the city" class="mybutton">info</input>
           </div>
             <div id="citydialog-tabs">
                 <ul>
@@ -294,6 +295,12 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop", 
             });
             document.getElementById("update-all-routes").addEventListener("click", (e) => {
                 _this.loadFillAllConsumtion();
+                //  _this.update();
+            });
+            document.getElementById("citydialog-shopinfo").addEventListener("click", (e) => {
+                var en = document.getElementById("citydialog-shopinfo").checked;
+                _this.city.cityShowShopInfo = en;
+                _this.city.renderShopinfo(en);
                 //  _this.update();
             });
             for (var x = 0; x < 5; x++) {
@@ -645,6 +652,8 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop", 
                 this.updateConstruction();
             if ((_m = (_l = (_k = document.getElementById("citydialog-score-tab")) === null || _k === void 0 ? void 0 : _k.parentElement) === null || _l === void 0 ? void 0 : _l.classList) === null || _m === void 0 ? void 0 : _m.contains("ui-tabs-active"))
                 this.updateScore();
+            if (document.getElementById("citydialog-shopinfo").checked !== this.city.cityShowShopInfo)
+                document.getElementById("citydialog-shopinfo").checked = this.city.cityShowShopInfo;
             return;
         }
         updateTitle() {

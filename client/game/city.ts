@@ -27,6 +27,7 @@ export class City {
     domProductNeeded: HTMLSpanElement[] = [];
     domWarning: HTMLSpanElement;
     domDesc: HTMLSpanElement;
+    domShopinfo: HTMLTableElement;
     world: World;
     people: number;
     market: number[];
@@ -48,6 +49,7 @@ export class City {
     domName: HTMLSpanElement;
     domPeople: HTMLSpanElement;
     hasAirport;
+    cityShowShopInfo: boolean;
     constructor() {
         this.hasAirport = true;
         this.people = parameter.neutralStartPeople;
@@ -126,11 +128,32 @@ export class City {
         this.domAirport.style.left = (x - 20) + "px";
         this.domDesc.style.top = (y + 30) + "px";
         this.domDesc.style.left = (x - 20) + "px";
-        this.domStar.style.top = (y ) + "px";
-        this.domStar.style.left = (x+16) + "px";
+        this.domStar.style.top = (y) + "px";
+        this.domStar.style.left = (x + 16) + "px";
         this.domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
             'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + Icons.stare + '</span>').children[0];
+        this.renderShopinfo(false);
+        this.renderShopinfo(this.cityShowShopInfo);
+    }
+   
+    renderShopinfo(enable) {
+        if (enable) {
+            var s = `<table style="position:absolute;top:` + (this.y - 4) +
+                `px;left:` + (this.x + 40) + `px;font-size:12px;">
+            <tr><td product="1">` + parameter.allProducts[0].getIcon() + `</td><td>100.000</td></tr>
+            <tr><td product="2">` + parameter.allProducts[1].getIcon() + `</td><td>100.000</td></tr>
+            <tr><td product="3">` + parameter.allProducts[2].getIcon() + `</td><td>100.000</td></tr>
+            <tr><td product="4">` + parameter.allProducts[3].getIcon() + `</td><td>100.000</td></tr>
+            </table>`;
 
+            this.domShopinfo = <any>document.createRange().createContextualFragment(s).children[0];
+            this.world.dom.appendChild(this.domShopinfo);
+        } else {
+            if (this.domShopinfo !== undefined) {
+                this.world.dom.removeChild(this.domShopinfo);
+                this.domShopinfo = undefined;
+            }
+        }
     }
     render(cityid: number) {
         var _this = this;
@@ -168,7 +191,7 @@ export class City {
             'px;left:' + (this.x - 20) + 'px;font-size:20px;color:white;">' + Icons.airport + '</span>').children[0];
         this.world.dom.appendChild(this.domAirport);
 
-
+        this.renderShopinfo(this.cityShowShopInfo);
         if (!this.hasAirport) {
             this.domAirport.style.visibility = "hidden";
         }
@@ -620,6 +643,25 @@ export class City {
             }
         }
     }
+     updateShopinfo(){
+        var arr=[];
+        var _this=this;
+        for(var x=0;x<parameter.allProducts.length;x++){
+            arr.push(x);
+        }
+        var sorted:number[]=arr.sort((a, b) => {
+            return _this.shop[b]-_this.shop[a];
+                });
+        for(var x=0;x<4;x++){
+            var row=this.domShopinfo.children[0].children[x];
+            if(row.getAttribute("product")!==sorted[x].toString()){
+                row.children[0].innerHTML=parameter.allProducts[sorted[x]].getIcon();
+                row.setAttribute("product",sorted[x].toString());
+            }
+             row.children[1].textContent=this.shop[sorted[x]].toLocaleString();
+        }
+        
+    }
     update() {
         var _this = this;
         if (this.lastUpdate === undefined) {
@@ -645,6 +687,8 @@ export class City {
         this.updateAirplaneQueue();
         this.updateBuildingQueue();
         this.updateresetBuildingsWithoutCosts();
+        if(this.cityShowShopInfo)
+            this.updateShopinfo();
         // this.sellShopToMarket();
         if (this.world.game.date.getHours() % 1 === 0)
             this.updatePeople();

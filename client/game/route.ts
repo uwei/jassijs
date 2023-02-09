@@ -88,6 +88,7 @@ export class Route {
                         max = city.shop[x] - minStock;
                     }
                     var notAvailable = this.loadShopAmount[x] - max;
+                    
                     this.airplane.world.game.statistic.successfulLoad[0][x] += max;
                     this.airplane.world.game.statistic.unsuccessfulLoad[0][x] += notAvailable;
                 }
