@@ -2,7 +2,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Game = exports.Parameter = exports.Statistic = void 0;
-    var gameversion = "2.3";
+    var gameversion = "2.4";
     window.onbeforeunload = function () {
         return "Do you want to exit?";
     };
@@ -89,7 +89,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
     //global.parameter=new Parametetr();
     class Game {
         constructor() {
-            this.version = "2.3";
+            this.version = "2.4";
             this.mapWidth = 1000;
             this.mapHeight = 600;
             var _this = this;
@@ -197,9 +197,10 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 savedialog_1.SaveDialog.getInstance().show();
             });
             document.getElementById("debug-game").addEventListener("click", () => {
-                for (var x = this.world.cities.length; x < 193;) {
-                    this.world.addCity(true);
-                }
+                _this.world.showMoveIcon();
+                /*for(var x=this.world.cities.length;x<193){
+                  this.world.addCity(true);
+                }*/
             });
             document.getElementById("show-diagram").addEventListener("click", () => {
                 diagramdialog_1.DiagramDialog.getInstance().world = this.world;

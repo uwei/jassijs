@@ -11,7 +11,7 @@ import { Route } from "game/route";
 import { Product } from "game/product";
 import { DiagramDialog } from "game/diagramdialog";
 import { SaveDialog } from "game/savedialog";
-var gameversion = "2.3";
+var gameversion = "2.4";
 window.onbeforeunload = function () {
   return "Do you want to exit?";
 
@@ -110,7 +110,7 @@ export class Game {
   domHeader: HTMLDivElement;
   domWorld: HTMLDivElement;
   _money;
-  version = "2.3";
+  version = "2.4";
   date: Date;
   lastUpdate: number;
   speed: number;
@@ -232,9 +232,10 @@ export class Game {
     });
 
     document.getElementById("debug-game").addEventListener("click", () => {
-      for(var x=this.world.cities.length;x<193){
+      _this.world.showMoveIcon();
+      /*for(var x=this.world.cities.length;x<193){
         this.world.addCity(true);
-      }
+      }*/
      
     });
     document.getElementById("show-diagram").addEventListener("click", () => {
