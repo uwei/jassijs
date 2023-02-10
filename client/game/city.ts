@@ -646,8 +646,10 @@ export class City {
      updateShopinfo(){
         var arr=[];
         var _this=this;
+        var gesamount=0;
         for(var x=0;x<parameter.allProducts.length;x++){
             arr.push(x);
+            gesamount+=this.shop[x];
         }
         var sorted:number[]=arr.sort((a, b) => {
             return _this.shop[b]-_this.shop[a];
@@ -660,7 +662,11 @@ export class City {
             }
              row.children[1].textContent=this.shop[sorted[x]].toLocaleString();
         }
-        
+        var proz=gesamount/ (this.shops * parameter.capacityShop);
+        if(proz>0.75&&this.domShopinfo.style.backgroundColor!=="LightPink")
+            this.domShopinfo.style.backgroundColor="LightPink";
+        if(proz<=0.75&&this.domShopinfo.style.backgroundColor!=="white")
+            this.domShopinfo.style.backgroundColor="white";
     }
     update() {
         var _this = this;
