@@ -198,8 +198,8 @@ export class World {
             this.airplanes.push(ap);
         }
 
-        /*
          //Lastenausgleich   
+        parameter.neutralStartPeople=0;
            var anz=100;
            this.cities=[this.cities[0]];
            this.cities[0].companies=[];
@@ -213,7 +213,8 @@ export class World {
                this.cities[0].shop[x]=1000000;
            }
            this.cities[0].people=anz*19*20;
-           this.cities[0].houses=anz*19*20/100+1;*/
+           this.cities[0].shops=1000000;
+           this.cities[0].houses=anz*19*20/100+1;
     }
     render(dom: HTMLElement) {
         var _this = this;

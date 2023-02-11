@@ -423,6 +423,13 @@ export class SaveDialog {
             }
             game.version = "1.9";
         }
+         if (parseFloat(ret.version) < 2.5) {
+           parameter.allProducts[2]["amountForPeople"]=3;
+           parameter.allProducts[3]["amountForPeople"]=4;
+           parameter.allProducts[5]["amountForPeople"]=2;
+           
+            game.version = "2.5";
+        }
         game.render(this.game.dom);
         game.resume();
     }

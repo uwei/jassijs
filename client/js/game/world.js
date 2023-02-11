@@ -1,4 +1,4 @@
-define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "game/airplanedialog", "game/routedialog", "game/squadrondialog", "game/diagramdialog", "game/product", "game/icons"], function (require, exports, city_1, airplane_1, citydialog_1, airplanedialog_1, routedialog_1, squadrondialog_1, diagramdialog_1, product_1, icons_1) {
+define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "game/airplanedialog", "game/routedialog", "game/squadrondialog", "game/company", "game/diagramdialog", "game/product", "game/icons"], function (require, exports, city_1, airplane_1, citydialog_1, airplanedialog_1, routedialog_1, squadrondialog_1, company_1, diagramdialog_1, product_1, icons_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.World = void 0;
@@ -170,22 +170,23 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 ap.world = this;
                 this.airplanes.push(ap);
             }
-            /*
-             //Lastenausgleich
-               var anz=100;
-               this.cities=[this.cities[0]];
-               this.cities[0].companies=[];
-               for(var x=0;x<19;x++){
-                   var comp=new Company();
-                   comp.city=this.cities[0];
-                   comp.productid=x;
-                   comp.workers=20*anz;
-                   comp.buildings=anz;
-                   this.cities[0].companies.push(comp);
-                   this.cities[0].shop[x]=1000000;
-               }
-               this.cities[0].people=anz*19*20;
-               this.cities[0].houses=anz*19*20/100+1;*/
+            //Lastenausgleich   
+            parameter.neutralStartPeople = 0;
+            var anz = 100;
+            this.cities = [this.cities[0]];
+            this.cities[0].companies = [];
+            for (var x = 0; x < 19; x++) {
+                var comp = new company_1.Company();
+                comp.city = this.cities[0];
+                comp.productid = x;
+                comp.workers = 20 * anz;
+                comp.buildings = anz;
+                this.cities[0].companies.push(comp);
+                this.cities[0].shop[x] = 1000000;
+            }
+            this.cities[0].people = anz * 19 * 20;
+            this.cities[0].shops = 1000000;
+            this.cities[0].houses = anz * 19 * 20 / 100 + 1;
         }
         render(dom) {
             var _this = this;
