@@ -111,7 +111,7 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 this.cities[x].update();
             }
             if (this.game.date.getMonth() !== new Date(this.lastUpdate).getMonth()) {
-                product_1.Product.randomUpdateConsumtion();
+                product_1.Product.randomUpdateConsumtion(this);
             }
             if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
                 if (getRandomInt(90) === 0)

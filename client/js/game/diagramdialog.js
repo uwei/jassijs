@@ -113,7 +113,8 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                 }
                 return ret;
             })()}
-                    </table>`;
+                    </table>
+                    <span id="diagramdialog-buildings-last-change"></span>`;
         }
         update() {
             if (document.activeElement !== document.getElementById("buildWithOneClick"))
@@ -158,11 +159,11 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                 }
                 var ges = unsuc + suc;
                 var dif = ges - unsuc;
-                tr.children[3].innerHTML = (Math.round(10000 * dif / ges) / 100).toLocaleString(undefined, { minimumFractionDigits: 2 });
+                tr.children[3].innerHTML = (Math.round(10000 * dif / ges) / 100).toLocaleString(undefined, { maximumFractionDigits: 2 });
                 //tr.children[3].innerHTML = parameter.allProducts[x].dailyConsumtion.toLocaleString();
-                var test1 = parameter.allProducts[x].getAmountForPeople() / (parameter.workerInCompany * parameter.allProducts.length);
-                var abw1 = Math.round(1000 * (parameter.allProducts[x].dailyConsumtion - test1) / parameter.allProducts[x].dailyConsumtion) / 10;
-                tr.children[4].innerHTML = abw1.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                //var test1=parameter.allProducts[x].getAmountForPeople()/(parameter.workerInCompany*parameter.allProducts.length);
+                //var abw1=Math.round(1000*(parameter.allProducts[x].dailyConsumtion-test1)/parameter.allProducts[x].dailyConsumtion)/10;
+                tr.children[4].innerHTML = (parameter.allProducts[x].getDiffConsumtion() * 100).toLocaleString(undefined, { maximumFractionDigits: 1 });
                 var but = document.getElementById("diagram-advertise_" + x);
                 if (this.world.advertising[x]) {
                     but.innerHTML = "until " + new Date(this.world.advertising[x]).toLocaleDateString();
@@ -201,6 +202,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                       </tr>`;
             }
             table.innerHTML = content;
+            document.getElementById("diagramdialog-buildings-last-change").textContent = this.world.game.statistic.lastPriceChange;
         }
         show() {
             var _this = this;

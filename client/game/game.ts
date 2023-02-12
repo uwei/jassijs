@@ -35,7 +35,7 @@ export class Statistic {
       this.unsuccessfulLoad.push(data2);
     }
   }
-
+  lastPriceChange:string;
 }
 
 declare global {
@@ -160,7 +160,7 @@ export class Game {
             document.getElementById("gamemoney").textContent=Math.round(m / 1000000).toLocaleString() + "M";
       document.getElementById("gamedate").textContent = this.date.toLocaleDateString();
       this.world.update();
-    } catch {
+    } catch(ex) {
       console.log("stop game");
       return;
     }

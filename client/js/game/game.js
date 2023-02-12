@@ -132,7 +132,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 document.getElementById("gamedate").textContent = this.date.toLocaleDateString();
                 this.world.update();
             }
-            catch (_a) {
+            catch (ex) {
                 console.log("stop game");
                 return;
             }
