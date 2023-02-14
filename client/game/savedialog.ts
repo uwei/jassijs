@@ -423,12 +423,52 @@ export class SaveDialog {
             }
             game.version = "1.9";
         }
-         if (parseFloat(ret.version) < 2.5) {
-           parameter.allProducts[2]["amountForPeople"]=3;
-           parameter.allProducts[3]["amountForPeople"]=4;
-           parameter.allProducts[5]["amountForPeople"]=2;
-           
+        if (parseFloat(ret.version) < 2.5) {
+            parameter.allProducts[2]["amountForPeople"] = 3;
+            parameter.allProducts[3]["amountForPeople"] = 4;
+            parameter.allProducts[5]["amountForPeople"] = 2;
+
             game.version = "2.5";
+        }
+        if (parseFloat(ret.version) < 2.6) {
+            var test = [
+                new Product({ id: 0, name: "Stein", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 5 }),
+                new Product({ id: 1, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 4.5 }),
+                new Product({ id: 2, name: "Getreide", dailyProduce: 7, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 23, distribution: 3, amountForPeople: 3 }),
+                new Product({ id: 3, name: "Eisen", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 4 }),
+                new Product({ id: 4, name: "Wolle", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 2.5 }),
+                new Product({ id: 5, name: "Öl", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 2 }),
+                new Product({ id: 6, name: "Brot", dailyProduce: 6, input1: 2, input1Amount: 3, input2: undefined, input2Amount: 0, priceProduction: 49, distribution: 2, amountForPeople: 5 }),
+                new Product({ id: 7, name: "Plaste", dailyProduce: 6, input1: 5, input1Amount: 3, input2: undefined, input2Amount: 0, priceProduction: 57, distribution: 2, amountForPeople: 5 }),
+                new Product({ id: 8, name: "Fleisch", dailyProduce: 2, input1: 2, input1Amount: 1, input2: undefined, input2Amount: 0, priceProduction: 109, distribution: 2, amountForPeople: 2 }),
+                new Product({ id: 9, name: "Möbel", dailyProduce: 2, input1: 1, input1Amount: 0.5, input2: 3, input2Amount: 0.5, priceProduction: 117, distribution: 2, amountForPeople: 2 }),
+                new Product({ id: 10, name: "Kleidung", dailyProduce: 1, input1: 4, input1Amount: 2, input2: undefined, input2Amount: 0, priceProduction: 286, distribution: 2, amountForPeople: 1 }),
+                new Product({ id: 11, name: "Fisch", dailyProduce: 3, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0, priceProduction: 60, distribution: 2, amountForPeople: 2 }),
+                new Product({ id: 12, name: "Apfel", dailyProduce: 4, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0, priceProduction: 45, distribution: 2, amountForPeople: 3 }),
+                new Product({ id: 13, name: "Saft", dailyProduce: 3, input1: 12, input1Amount: 1, input2: undefined, input2Amount: 0, priceProduction: 85, distribution: 1, amountForPeople: 3 }),
+                new Product({ id: 14, name: "Gold", dailyProduce: 2, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 100, distribution: 1, amountForPeople: 1 }),
+                new Product({ id: 15, name: "Schmuck", dailyProduce: 2, input1: 14, input1Amount: 1, input2: undefined, input2Amount: 0, priceProduction: 184, distribution: 1, amountForPeople: 2 }),
+                new Product({ id: 16, name: "Spielzeug", dailyProduce: 1, input1: 4, input1Amount: 0.5, input2: 7, input2Amount: 0.5, priceProduction: 274, distribution: 1, amountForPeople: 1 }),
+                new Product({ id: 17, name: "Fahrrad", dailyProduce: 1, input1: 3, input1Amount: 0.5, input2: 7, input2Amount: 0.5, priceProduction: 274, distribution: 1, amountForPeople: 1 }),
+                new Product({ id: 18, name: "Fischbrot", dailyProduce: 1, input1: 11, input1Amount: 1, input2: 6, input2Amount: 1, priceProduction: 382, distribution: 1, amountForPeople: 1 })
+            ];
+            for (var x = 0; x < test.length; x++) {
+                parameter.allProducts[x].dailyProduce = test[x].dailyProduce;
+                parameter.allProducts[x].input1 = test[x].input1;
+                parameter.allProducts[x].input1Amount = test[x].input1Amount;
+                parameter.allProducts[x].input2 = test[x].input2;
+                parameter.allProducts[x].input2Amount = test[x].input2Amount;
+                parameter.allProducts[x]["amountForPeople"] = test[x].getAmountForPeople();
+
+                if(parameter.allProducts[x].getDiffConsumtion()>0.3){
+                    parameter.allProducts[x].dailyConsumtion=1.3*parameter.allProducts[x].getAmountForPeople() / (parameter.workerInCompany * parameter.allProducts.length);
+                }
+                if(parameter.allProducts[x].getDiffConsumtion()<-0.3){
+                    parameter.allProducts[x].dailyConsumtion=0.7*parameter.allProducts[x].getAmountForPeople() / (parameter.workerInCompany * parameter.allProducts.length);
+                }
+            }
+
+            game.version = "2.6";
         }
         game.render(this.game.dom);
         game.resume();

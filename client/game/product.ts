@@ -40,40 +40,63 @@ export class Product {
     getDiffConsumtion() {
 
         var test1 = this.getAmountForPeople() / (parameter.workerInCompany * parameter.allProducts.length);
-        var abw1 = (this.dailyConsumtion - test1) / this.dailyConsumtion;
+        var abw1 = (this.dailyConsumtion - test1) / test1;
         return abw1;
     }
-     private getBuildings(world:World){
-        var ges=0;
-        for(var x=0;x<world.cities.length;x++){
-             for(var c=0;c<world.cities[x].companies.length;c++){
-                if(world.cities[x].companies[c].productid===this.id){
-                    ges+=(world.cities[x].companies[c].buildings);
+    private getBuildings(world: World) {
+        var ges = 0;
+        for (var x = 0; x < world.cities.length; x++) {
+            for (var c = 0; c < world.cities[x].companies.length; c++) {
+                if (world.cities[x].companies[c].productid === this.id) {
+                    ges += (world.cities[x].companies[c].buildings);
                 }
             }
         }
         return ges;
-     }
-    private getAverageBuildingCosts(world:World){
-        var ges=0;
-        var count=0;
-        for(var x=0;x<world.cities.length;x++){
-            for(var c=0;c<world.cities[x].companies.length;c++){
-                if(world.cities[x].companies[c].productid===this.id){
+    }
+    private getAverageBuildingCosts(world: World) {
+        var ges = 0;
+        var count = 0;
+        for (var x = 0; x < world.cities.length; x++) {
+            for (var c = 0; c < world.cities[x].companies.length; c++) {
+                if (world.cities[x].companies[c].productid === this.id) {
                     count++;
-                    ges+=(world.cities[x].companies[c].buildings-(world.cities[x].companies[c].buildingsWithoutCosts?world.cities[x].companies[c].buildingsWithoutCosts:0);
+                    ges += (world.cities[x].companies[c].buildings - (world.cities[x].companies[c].buildingsWithoutCosts ? world.cities[x].companies[c].buildingsWithoutCosts : 0);
                 }
             }
         }
-        var comp=new Company();
-        comp.productid=this.id;
-        comp.buildings=Math.round(ges/count);
-        comp.city=world.cities[0];
+        var comp = new Company();
+        comp.productid = this.id;
+        comp.buildings = Math.round(ges / count);
+        comp.city = world.cities[0];
         return comp.getBuildingCosts();
     }
-    static randomUpdateConsumtion(world:World) {
+    /**
+     * -40% stone and +40% fishburger is a problem, because there are also worker for fish and bred needed
+     */
+    private static getFactor(prod: Product) {
+        var ret = 0;
+        if (prod.input1) {
+            var f = prod.input1Amount / parameter.allProducts[prod.input1].dailyProduce;
+            ret += f;
+            ret += f * Product.getFactor(parameter.allProducts[prod.input1]);
+        }
+        if (prod.input2) {
+            ret += prod.input2Amount / parameter.allProducts[prod.input2].dailyProduce;
+            ret += f;
+            ret += f * Product.getFactor(parameter.allProducts[prod.input2]);
+        }
+        return ret;
+    }
+    static randomUpdateConsumtion(world: World) {
+
+
         var prod1 = parameter.allProducts[getRandomInt(parameter.allProducts.length)];
         var prod2 = parameter.allProducts[getRandomInt(parameter.allProducts.length)];
+        if (prod1 === prod2) {
+            Product.randomUpdateConsumtion(world);
+            return;
+        }
         if (getRandomInt(2) === 0) {//The Biggest diff should be smaller
             var varprod1 = parameter.allProducts[getRandomInt(parameter.allProducts.length)];
             if (prod1.getDiffConsumtion() < varprod1.getDiffConsumtion())
@@ -85,21 +108,42 @@ export class Product {
         var proz = Math.round(getRandomInt(50)) / 10;//Prozent
         var proz1 = prod1.dailyConsumtion * (1 - (proz / 100));
 
+
+
+
         //on lately game the prozent is smaller
-        var costs=prod1.getAverageBuildingCosts(world);
-        var profit=Game.instance.statistic.yesterday["people buy from the shop"];
-        var diffbuildings=Math.round(1/100*prod1.getBuildings(world));
-        var faktor=1;
-        if(diffbuildings*costs>profit*7){ //the eliminated buildings by -1% should be buy back in 7 days
-            faktor=(profit*5)/(diffbuildings*costs);
-            proz=proz*faktor;
-        }
-        var ges = 0;
-        for (var x = 0; x < parameter.allProducts.length; x++) {
-            ges += parameter.allProducts[x].getDiffConsumtion();
+        var costs = prod1.getAverageBuildingCosts(world);
+        var profit = Game.instance.statistic.yesterday["people buy from the shop"];
+        var diffbuildings = Math.round(1 / 100 * prod1.getBuildings(world));
+        var faktor = 1;
+        if (diffbuildings * costs > profit * 7) { //the eliminated buildings by -1% should be buy back in 7 days
+            faktor = (profit * 5) / (diffbuildings * costs);
+            proz = proz * faktor;
         }
 
-        var proz2 = prod2.dailyConsumtion * (1 + (proz / 100) - ges);
+        var diff = 0;
+        var oldp2=0;
+        for (var x = 0; x < parameter.allProducts.length; x++) {
+            var test = (x === prod1.id ? proz1 : parameter.allProducts[x].dailyConsumtion) / parameter.allProducts[x].getAmountForPeople();
+            var norm = 1 / (parameter.workerInCompany * parameter.allProducts.length);
+            var d = test - norm;
+            d = d * (1 + Product.getFactor(parameter.allProducts[x]));
+            if (x === prod2.id)
+                oldp2=parameter.allProducts[x].dailyConsumtion;
+            else
+                diff += d;
+        }
+
+        var org = prod2.getAmountForPeople() / (parameter.workerInCompany * 19);
+        var proz2 = org - diff * prod2.getAmountForPeople() / (1 + Product.getFactor(prod2));
+
+
+        /*        var ges = 0;
+                for (var x = 0; x < parameter.allProducts.length; x++) {
+                    ges += parameter.allProducts[x].getDiffConsumtion();
+                }
+        
+                var proz2 = prod2.dailyConsumtion * (1 + (proz / 100) - ges);*/
 
 
         //change should not be greater then 40%
@@ -112,7 +156,7 @@ export class Product {
             Product.randomUpdateConsumtion(world);
             return;
         }
-        world.game.statistic.lastPriceChange="change price " + prod1.name + " -" + proz + "% and " + prod2.name + " +" + proz;
+        world.game.statistic.lastPriceChange = "change price " + prod1.name + " -" + proz + "% and " + prod2.name + " +" + (100*(oldp2-proz2)/oldp2);
         console.log(world.game.statistic.lastPriceChange);
         prod1.dailyConsumtion = proz1;
         prod2.dailyConsumtion = proz2;
