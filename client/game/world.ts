@@ -197,7 +197,7 @@ export class World {
             ap.world = this;
             this.airplanes.push(ap);
         }
-
+/*
         //Lastenausgleich   
         parameter.neutralStartPeople = 0;
         var anz = 100;
@@ -219,7 +219,7 @@ export class World {
         var p1 = 0;
         var p2 = 14;
 
-       /* parameter.allProducts[p1].dailyConsumtion = parameter.allProducts[p1].dailyConsumtion * (1 - proz);
+*/       /* parameter.allProducts[p1].dailyConsumtion = parameter.allProducts[p1].dailyConsumtion * (1 - proz);
         var diff = 0;
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var test = parameter.allProducts[x].dailyConsumtion / parameter.allProducts[x].getAmountForPeople();
