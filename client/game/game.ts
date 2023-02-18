@@ -11,7 +11,7 @@ import { Route } from "game/route";
 import { Product } from "game/product";
 import { DiagramDialog } from "game/diagramdialog";
 import { SaveDialog } from "game/savedialog";
-var gameversion = "2.6";
+var gameversion = "2.7";
 window.onbeforeunload = function () {
   return "Do you want to exit?";
 
@@ -78,7 +78,7 @@ function createParameter() {
   window.parameter = new Parameter();
   globalThis.parameter = new Parameter();
 
-  /*parameter.allProducts = [
+  parameter.allProducts = [
     new Product({ id: 0, name: "Stein", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 5 }),
     new Product({ id: 1, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 4.5 }),
     new Product({ id: 2, name: "Getreide", dailyProduce: 7, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 23, distribution: 3, amountForPeople: 3 }),
@@ -98,8 +98,8 @@ function createParameter() {
     new Product({ id: 16, name: "Spielzeug", dailyProduce: 1, input1: 4, input1Amount: 0.5, input2: 7, input2Amount: 0.5, priceProduction: 274, distribution: 1, amountForPeople: 1 }),
     new Product({ id: 17, name: "Fahrrad", dailyProduce: 1, input1: 3, input1Amount: 0.5, input2: 7, input2Amount: 0.5, priceProduction: 274, distribution: 1, amountForPeople: 1 }),
     new Product({ id: 18, name: "Fischbrot", dailyProduce: 1, input1: 11, input1Amount: 1, input2: 6, input2Amount: 1, priceProduction: 382, distribution: 1, amountForPeople: 1 })
-  ];*/
-  parameter.allProducts = [
+  ];
+  /*parameter.allProducts = [
       new Product({ id: 0, name: "Stein", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 5 }),
     new Product({ id: 1, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 4.5 }),
     new Product({ id: 2, name: "Getreide", dailyProduce: 7, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 23, distribution: 3, amountForPeople: 4 }),
@@ -119,7 +119,7 @@ function createParameter() {
     new Product({ id: 16, name: "Spielzeug", dailyProduce: 1, input1: 4, input1Amount: 0.5, input2: 7, input2Amount: 0.5, priceProduction: 274, distribution: 1, amountForPeople: 1 }),
     new Product({ id: 17, name: "Fahrrad", dailyProduce: 1, input1: 3, input1Amount: 1, input2: 7, input2Amount: 0.5, priceProduction: 274, distribution: 1, amountForPeople: 1 }),
     new Product({ id: 18, name: "Fischbrot", dailyProduce: 1, input1: 11, input1Amount: 1, input2: 6, input2Amount: 1, priceProduction: 382, distribution: 1, amountForPeople: 1 })
-  ];:
+  ];:*/
   return parameter;
 };
 //global.parameter=new Parametetr();
@@ -131,7 +131,7 @@ export class Game {
   domHeader: HTMLDivElement;
   domWorld: HTMLDivElement;
   _money;
-  version = "2.6";
+  version = "2.7";
   date: Date;
   lastUpdate: number;
   speed: number;
@@ -253,7 +253,8 @@ export class Game {
     });
 
     document.getElementById("debug-game").addEventListener("click", () => {
-      _this.world.showMoveIcon();
+     // _this.world.showMoveIcon();
+     Product.randomUpdateConsumtion(_this.world,undefined,undefined,undefined,true);
       /*for(var x=this.world.cities.length;x<193){
         this.world.addCity(true);
       }*/

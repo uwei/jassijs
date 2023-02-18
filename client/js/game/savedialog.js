@@ -395,7 +395,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                 parameter.allProducts[5]["amountForPeople"] = 2;
                 game.version = "2.5";
             }
-            if (parseFloat(ret.version) < 2.6) {
+            if (parseFloat(ret.version) < 2.7) {
                 var test = [
                     new product_1.Product({ id: 0, name: "Stein", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 5 }),
                     new product_1.Product({ id: 1, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 4.5 }),
@@ -431,7 +431,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                         parameter.allProducts[x].dailyConsumtion = 0.7 * parameter.allProducts[x].getAmountForPeople() / (parameter.workerInCompany * parameter.allProducts.length);
                     }
                 }
-                game.version = "2.6";
+                game.version = "2.7";
             }
             game.render(this.game.dom);
             game.resume();

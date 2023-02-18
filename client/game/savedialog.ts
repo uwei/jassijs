@@ -430,7 +430,7 @@ export class SaveDialog {
 
             game.version = "2.5";
         }
-        if (parseFloat(ret.version) < 2.6) {
+        if (parseFloat(ret.version) < 2.7) {
             var test = [
                 new Product({ id: 0, name: "Stein", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 5 }),
                 new Product({ id: 1, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 4.5 }),
@@ -468,7 +468,7 @@ export class SaveDialog {
                 }
             }
 
-            game.version = "2.6";
+            game.version = "2.7";
         }
         game.render(this.game.dom);
         game.resume();

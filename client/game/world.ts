@@ -134,10 +134,12 @@ export class World {
             this.cities[x].update();
         }
         if (this.game.date.getMonth() !== new Date(this.lastUpdate).getMonth()) {
-            Product.randomUpdateConsumtion(this);
+            //Product.randomUpdateConsumtion(this);
         }
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
-            if (getRandomInt(90) === 0)
+            var i=getRandomInt(90);
+            console.log("rand "+i);
+            if (i === 0)
                 this.showMoveIcon();
             for (var y = 0; y < parameter.allProducts.length; y++) {
                 if (this.game.world.advertising[y] && this.game.date.getTime() > this.game.world.advertising[y]) {
@@ -197,7 +199,8 @@ export class World {
             ap.world = this;
             this.airplanes.push(ap);
         }
-/*
+        
+
         //Lastenausgleich   
         parameter.neutralStartPeople = 0;
         var anz = 100;
@@ -213,13 +216,13 @@ export class World {
             this.cities[0].shop[x] = 1000000;
         }
         this.cities[0].people = anz * 19 * 20;
-        this.cities[0].shops = 1000000;
+        this.cities[0].shops = 100000;
         this.cities[0].houses = anz * 19 * 20 / 100 + 1;
         var proz = 0.114;
         var p1 = 0;
         var p2 = 14;
-
-*/       /* parameter.allProducts[p1].dailyConsumtion = parameter.allProducts[p1].dailyConsumtion * (1 - proz);
+        Product.randomUpdateConsumtion(this,0,1,0,true);
+      /* parameter.allProducts[p1].dailyConsumtion = parameter.allProducts[p1].dailyConsumtion * (1 - proz);
         var diff = 0;
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var test = parameter.allProducts[x].dailyConsumtion / parameter.allProducts[x].getAmountForPeople();

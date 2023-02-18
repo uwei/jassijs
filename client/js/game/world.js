@@ -1,4 +1,4 @@
-define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "game/airplanedialog", "game/routedialog", "game/squadrondialog", "game/diagramdialog", "game/product", "game/icons"], function (require, exports, city_1, airplane_1, citydialog_1, airplanedialog_1, routedialog_1, squadrondialog_1, diagramdialog_1, product_1, icons_1) {
+define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "game/airplanedialog", "game/routedialog", "game/squadrondialog", "game/company", "game/diagramdialog", "game/product", "game/icons"], function (require, exports, city_1, airplane_1, citydialog_1, airplanedialog_1, routedialog_1, squadrondialog_1, company_1, diagramdialog_1, product_1, icons_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.World = void 0;
@@ -111,10 +111,12 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 this.cities[x].update();
             }
             if (this.game.date.getMonth() !== new Date(this.lastUpdate).getMonth()) {
-                product_1.Product.randomUpdateConsumtion(this);
+                //Product.randomUpdateConsumtion(this);
             }
             if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
-                if (getRandomInt(90) === 0)
+                var i = getRandomInt(90);
+                console.log("rand " + i);
+                if (i === 0)
                     this.showMoveIcon();
                 for (var y = 0; y < parameter.allProducts.length; y++) {
                     if (this.game.world.advertising[y] && this.game.date.getTime() > this.game.world.advertising[y]) {
@@ -170,46 +172,45 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 ap.world = this;
                 this.airplanes.push(ap);
             }
-            /*
-                    //Lastenausgleich
-                    parameter.neutralStartPeople = 0;
-                    var anz = 100;
-                    this.cities = [this.cities[0]];
-                    this.cities[0].companies = [];
-                    for (var x = 0; x < 19; x++) {
-                        var comp = new Company();
-                        comp.city = this.cities[0];
-                        comp.productid = x;
-                        comp.workers = 20 * anz;
-                        comp.buildings = anz;
-                        this.cities[0].companies.push(comp);
-                        this.cities[0].shop[x] = 1000000;
-                    }
-                    this.cities[0].people = anz * 19 * 20;
-                    this.cities[0].shops = 1000000;
-                    this.cities[0].houses = anz * 19 * 20 / 100 + 1;
-                    var proz = 0.114;
-                    var p1 = 0;
-                    var p2 = 14;
-            
-            */ /* parameter.allProducts[p1].dailyConsumtion = parameter.allProducts[p1].dailyConsumtion * (1 - proz);
-                    var diff = 0;
-                    for (var x = 0; x < parameter.allProducts.length; x++) {
-                        var test = parameter.allProducts[x].dailyConsumtion / parameter.allProducts[x].getAmountForPeople();
-                        var norm = 1 / (parameter.workerInCompany * parameter.allProducts.length);
-                        var d = test - norm;
-            
-                        d = d * (1 + this.getFact(parameter.allProducts[x]));
-                        if (x !== p2)
-                            diff += d;
-                    }
-            
-                    var org = parameter.allProducts[p2].getAmountForPeople() / (parameter.workerInCompany * 19);
-                    parameter.allProducts[p2].dailyConsumtion = org - diff * parameter.allProducts[p2].getAmountForPeople() / (1 + this.getFact(parameter.allProducts[p2]));
-                    for (var x = 0; x < parameter.allProducts.length; x++) {
-                        this.cities[0].companies[p1].buildings = Math.round(this.cities[0].companies[p1].buildings * (1 + proz));
-                        this.cities[0].companies[p1].workers = Math.round(this.cities[0].companies[p1].workers * (1 + proz));
-                    }*/
+            //Lastenausgleich   
+            parameter.neutralStartPeople = 0;
+            var anz = 100;
+            this.cities = [this.cities[0]];
+            this.cities[0].companies = [];
+            for (var x = 0; x < 19; x++) {
+                var comp = new company_1.Company();
+                comp.city = this.cities[0];
+                comp.productid = x;
+                comp.workers = 20 * anz;
+                comp.buildings = anz;
+                this.cities[0].companies.push(comp);
+                this.cities[0].shop[x] = 1000000;
+            }
+            this.cities[0].people = anz * 19 * 20;
+            this.cities[0].shops = 100000;
+            this.cities[0].houses = anz * 19 * 20 / 100 + 1;
+            var proz = 0.114;
+            var p1 = 0;
+            var p2 = 14;
+            product_1.Product.randomUpdateConsumtion(this, 0, 1, 0, true);
+            /* parameter.allProducts[p1].dailyConsumtion = parameter.allProducts[p1].dailyConsumtion * (1 - proz);
+              var diff = 0;
+              for (var x = 0; x < parameter.allProducts.length; x++) {
+                  var test = parameter.allProducts[x].dailyConsumtion / parameter.allProducts[x].getAmountForPeople();
+                  var norm = 1 / (parameter.workerInCompany * parameter.allProducts.length);
+                  var d = test - norm;
+      
+                  d = d * (1 + this.getFact(parameter.allProducts[x]));
+                  if (x !== p2)
+                      diff += d;
+              }
+      
+              var org = parameter.allProducts[p2].getAmountForPeople() / (parameter.workerInCompany * 19);
+              parameter.allProducts[p2].dailyConsumtion = org - diff * parameter.allProducts[p2].getAmountForPeople() / (1 + this.getFact(parameter.allProducts[p2]));
+              for (var x = 0; x < parameter.allProducts.length; x++) {
+                  this.cities[0].companies[p1].buildings = Math.round(this.cities[0].companies[p1].buildings * (1 + proz));
+                  this.cities[0].companies[p1].workers = Math.round(this.cities[0].companies[p1].workers * (1 + proz));
+              }*/
             // parameter.allProducts[p2].dailyConsumtion= org-diff*parameter.allProducts[p2].getAmountForPeople();
             //        var x =(proz * (this.getFactorWorker(parameter.allProducts[p2]) + (3 / 7)));
             //     var t1 =ges*(1/this.getFactorWorker(parameter.allProducts[p2])+gesworker);
