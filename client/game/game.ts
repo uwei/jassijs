@@ -219,7 +219,7 @@ export class Game {
             <button id="game-faster"  class="mybutton">`+ Icons.plus + `</button> 
             <span id="gamemoney"></span>`+ Icons.money + `
             <button id="save-game"  class="mybutton">`+ Icons.save + `</button> 
-            <button id="debug-game"  class="mybutton">`+ Icons.debug + `</button> 
+            <!--button id="debug-game"  class="mybutton">`+ Icons.debug + `</button--> 
             <button id="show-diagram"  class="mybutton">`+ Icons.diagram + `</button> 
           </div>  
         `;
@@ -252,14 +252,11 @@ export class Game {
       SaveDialog.getInstance().show();
     });
 
-    document.getElementById("debug-game").addEventListener("click", () => {
+   /* document.getElementById("debug-game").addEventListener("click", () => {
      // _this.world.showMoveIcon();
      Product.randomUpdateConsumtion(_this.world,undefined,undefined,undefined,true);
-      /*for(var x=this.world.cities.length;x<193){
-        this.world.addCity(true);
-      }*/
      
-    });
+    });*/
     document.getElementById("show-diagram").addEventListener("click", () => {
       DiagramDialog.getInstance().world = this.world;
       DiagramDialog.getInstance().show();

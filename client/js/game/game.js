@@ -188,7 +188,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             <button id="game-faster"  class="mybutton">` + icons_1.Icons.plus + `</button> 
             <span id="gamemoney"></span>` + icons_1.Icons.money + `
             <button id="save-game"  class="mybutton">` + icons_1.Icons.save + `</button> 
-            <button id="debug-game"  class="mybutton">` + icons_1.Icons.debug + `</button> 
+            <!--button id="debug-game"  class="mybutton">` + icons_1.Icons.debug + `</button--> 
             <button id="show-diagram"  class="mybutton">` + icons_1.Icons.diagram + `</button> 
           </div>  
         `;
@@ -217,13 +217,11 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 savedialog_1.SaveDialog.getInstance().game = this;
                 savedialog_1.SaveDialog.getInstance().show();
             });
-            document.getElementById("debug-game").addEventListener("click", () => {
-                // _this.world.showMoveIcon();
-                product_1.Product.randomUpdateConsumtion(_this.world, undefined, undefined, undefined, true);
-                /*for(var x=this.world.cities.length;x<193){
-                  this.world.addCity(true);
-                }*/
-            });
+            /* document.getElementById("debug-game").addEventListener("click", () => {
+              // _this.world.showMoveIcon();
+              Product.randomUpdateConsumtion(_this.world,undefined,undefined,undefined,true);
+              
+             });*/
             document.getElementById("show-diagram").addEventListener("click", () => {
                 diagramdialog_1.DiagramDialog.getInstance().world = this.world;
                 diagramdialog_1.DiagramDialog.getInstance().show();
