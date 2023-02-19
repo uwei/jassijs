@@ -137,7 +137,7 @@ export class World {
             //Product.randomUpdateConsumtion(this);
         }
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
-            var i=getRandomInt(90);
+            var i=getRandomInt(80);
             console.log("rand "+i);
             if (i === 0)
                 this.showMoveIcon();
@@ -290,7 +290,7 @@ export class World {
         var x = getRandomInt(this.game.mapWidth);
         var y = getRandomInt(this.game.mapHeight);
         var domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (y) +
-            'px;left:' + (x) + 'px;font-size:40px;color:orange;animation: animate   0.5s linear infinite;z-index:4" >' + Icons.move + '</span>').children[0];
+            'px;left:' + (x) + 'px;font-size:48px;color:yellow;animation: animate   0.5s linear infinite;z-index:4" >' + Icons.move + '</span>').children[0];
         this.dom.appendChild(domStar);
         domStar.addEventListener("click", (ev: MouseEvent) => {
             domStar.style.visibility = "hidden";
