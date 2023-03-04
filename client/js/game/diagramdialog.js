@@ -193,14 +193,27 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     allKeys.push(key);
             }
             allKeys.sort((a, b) => a.localeCompare(b));
+            var gest = 0;
+            var gesy = 0;
             for (var x = 0; x < allKeys.length; x++) {
                 var k = allKeys[x];
+                if (this.world.game.statistic.yesterday[k] != 0)
+                    gesy += this.world.game.statistic.yesterday[k];
+                if (this.world.game.statistic.today[k] != 0)
+                    gest += this.world.game.statistic.today[k];
                 content += `<tr>
                         <td>` + k + `</td>
-                        <td style="text-align: right">` + (this.world.game.statistic.yesterday[k] === undefined ? "" : this.world.game.statistic.yesterday[k].toLocaleString()) + `</td>
-                        <td style="text-align: right">` + (this.world.game.statistic.today[k] === undefined ? "" : this.world.game.statistic.today[k].toLocaleString()) + `</td>
+                        <td style="text-align: right">` + "&nbsp;" + (this.world.game.statistic.yesterday[k] === undefined ? "" : this.world.game.statistic.yesterday[k].toLocaleString()) + `</td>
+                        <td style="text-align: right">` + "&nbsp;" + (this.world.game.statistic.today[k] === undefined ? "" : this.world.game.statistic.today[k].toLocaleString()) + `</td>
                       </tr>`;
             }
+            content += `<tr>
+                        <td>Total</td>
+                        <td style="text-align: right">` + "&nbsp;" + gesy.toLocaleString();
+            +`</td>
+                        <td style="text-align: right">` + "&nbsp;" + gest.toLocaleString();
+            +`</td>
+                      </tr>`;
             table.innerHTML = content;
             document.getElementById("diagramdialog-buildings-last-change").textContent = this.world.game.statistic.lastPriceChange;
         }
