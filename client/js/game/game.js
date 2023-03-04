@@ -126,11 +126,11 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
         updateTitle() {
             try {
                 var m = this.getMoney();
-                document.getElementById("gamemoney").textContent = new Number(m).toLocaleString();
                 if (m >= 10000000)
                     document.getElementById("gamemoney").textContent = Math.round(m / 1000000).toLocaleString() + "M";
+                else
+                    document.getElementById("gamemoney").textContent = new Number(m).toLocaleString();
                 document.getElementById("gamedate").textContent = this.date.toLocaleDateString();
-                this.world.update();
             }
             catch (ex) {
                 console.log("stop game");
@@ -151,6 +151,8 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             var diff = 1000 * 60 * 60; //update always at full clock//((Date.now() - this.lastUpdate)) * 60 * 60 * this.speed;
             this.date = new Date(this.date.getTime() + diff);
             this.updateTitle();
+            if (this.world)
+                this.world.update();
             this.lastUpdate = Date.now();
             this.timer = setTimeout(() => {
                 _this.nevercallthisfunction();
