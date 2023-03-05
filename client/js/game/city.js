@@ -609,16 +609,22 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             if (proz <= 0.75 && this.domShopinfo.style.backgroundColor !== "white")
                 this.domShopinfo.style.backgroundColor = "white";
         }
-        update() {
+        updateUI() {
             var _this = this;
-            if (this.lastUpdate === undefined) {
-                this.lastUpdate = this.world.game.date.getTime();
-            }
             //  setTimeout(()=>{
             var s = (this.people === 0 ? "" : this.people.toLocaleString());
             if (_this.domPeople.textContent !== s) {
                 _this.domPeople.textContent = s;
             }
+            if (this.cityShowShopInfo)
+                this.updateShopinfo();
+        }
+        update() {
+            var _this = this;
+            if (this.lastUpdate === undefined) {
+                this.lastUpdate = this.world.game.date.getTime();
+            }
+            //  _this.updateUI();
             //  },1);
             //this.updateNeutralCompanies();
             for (var x = 0; x < this.companies.length; x++) {
@@ -629,8 +635,6 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.updateAirplaneQueue();
             this.updateBuildingQueue();
             this.updateresetBuildingsWithoutCosts();
-            if (this.cityShowShopInfo)
-                this.updateShopinfo();
             // this.sellShopToMarket();
             if (this.world.game.date.getHours() % 1 === 0)
                 this.updatePeople();

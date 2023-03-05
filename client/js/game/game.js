@@ -122,6 +122,9 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             citydialog_1.CityDialog.instance = undefined;
             this.statistic = new Statistic();
             this.nevercallthisfunction();
+            this.updateUIID = setInterval(() => {
+                _this.updateUI();
+            }, 500);
         }
         updateTitle() {
             try {
@@ -137,6 +140,13 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 return;
             }
         }
+        updateUI() {
+            this.updateTitle();
+            this.world.updateUI();
+            //console.log("tooks"+(new Date().getTime()-t));
+            citydialog_1.CityDialog.getInstance().update();
+            airplanedialog_1.AirplaneDialog.getInstance().update();
+        }
         updateSize() {
             this.domWorld.style.width = (this.mapWidth + 80) + "px";
             this.domWorld.style.height = (this.mapHeight + 100) + "px";
@@ -150,16 +160,12 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             var _this = this;
             var diff = 1000 * 60 * 60; //update always at full clock//((Date.now() - this.lastUpdate)) * 60 * 60 * this.speed;
             this.date = new Date(this.date.getTime() + diff);
-            this.updateTitle();
             if (this.world)
                 this.world.update();
             this.lastUpdate = Date.now();
             this.timer = setTimeout(() => {
                 _this.nevercallthisfunction();
             }, intervall);
-            //console.log("tooks"+(new Date().getTime()-t));
-            citydialog_1.CityDialog.getInstance().update();
-            airplanedialog_1.AirplaneDialog.getInstance().update();
         }
         newGame() {
             this.world = new world_1.World();
@@ -272,6 +278,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
         destroy() {
             this.world.destroy();
             clearTimeout(this.timer);
+            clearInterval(this.updateUIID);
         }
     }
     exports.Game = Game;

@@ -35,7 +35,7 @@ export class Statistic {
       this.unsuccessfulLoad.push(data2);
     }
   }
-  lastPriceChange:string;
+  lastPriceChange: string;
 }
 
 declare global {
@@ -84,7 +84,7 @@ function createParameter() {
     new Product({ id: 2, name: "Getreide", dailyProduce: 7, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 23, distribution: 3, amountForPeople: 3 }),
     new Product({ id: 3, name: "Eisen", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 4 }),
     new Product({ id: 4, name: "Wolle", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 2.5 }),
-    new Product({ id: 5, name: "Öl", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople:2 }),
+    new Product({ id: 5, name: "Öl", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, priceProduction: 32, distribution: 3, amountForPeople: 2 }),
     new Product({ id: 6, name: "Brot", dailyProduce: 6, input1: 2, input1Amount: 3, input2: undefined, input2Amount: 0, priceProduction: 49, distribution: 2, amountForPeople: 5 }),
     new Product({ id: 7, name: "Plaste", dailyProduce: 6, input1: 5, input1Amount: 3, input2: undefined, input2Amount: 0, priceProduction: 57, distribution: 2, amountForPeople: 5 }),
     new Product({ id: 8, name: "Fleisch", dailyProduce: 2, input1: 2, input1Amount: 1, input2: undefined, input2Amount: 0, priceProduction: 109, distribution: 2, amountForPeople: 2 }),
@@ -139,6 +139,7 @@ export class Game {
   timer;
   mapWidth = 1000;
   mapHeight = 600;
+  updateUIID;
   statistic: Statistic;
   static temposcale = [0.01, 0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256]
   constructor() {
@@ -151,21 +152,33 @@ export class Game {
     CityDialog.instance = undefined;
     this.statistic = new Statistic()
     this.nevercallthisfunction();
+    this.updateUIID = setInterval(() => {
+      _this.updateUI();
+    }, 500);
   }
   public updateTitle() {
     try {
-      var m=this.getMoney();
+      var m = this.getMoney();
       if (m >= 10000000)
-            document.getElementById("gamemoney").textContent=Math.round(m / 1000000).toLocaleString() + "M";
+        document.getElementById("gamemoney").textContent = Math.round(m / 1000000).toLocaleString() + "M";
       else
         document.getElementById("gamemoney").textContent = new Number(m).toLocaleString();
       document.getElementById("gamedate").textContent = this.date.toLocaleDateString();
-      
-    } catch(ex) {
+
+    } catch (ex) {
       console.log("stop game");
       return;
     }
   }
+
+  updateUI() {
+    this.updateTitle();
+    this.world.updateUI();
+    //console.log("tooks"+(new Date().getTime()-t));
+    CityDialog.getInstance().update();
+    AirplaneDialog.getInstance().update();
+  }
+
   updateSize() {
     this.domWorld.style.width = (this.mapWidth + 80) + "px";
     this.domWorld.style.height = (this.mapHeight + 100) + "px";
@@ -180,19 +193,17 @@ export class Game {
     var _this = this;
     var diff = 1000 * 60 * 60;//update always at full clock//((Date.now() - this.lastUpdate)) * 60 * 60 * this.speed;
     this.date = new Date(this.date.getTime() + diff);
-    this.updateTitle();
-    if(this.world)
+
+    if (this.world)
       this.world.update();
     this.lastUpdate = Date.now();
     this.timer = setTimeout(() => {
       _this.nevercallthisfunction();
 
     }, intervall);
-    //console.log("tooks"+(new Date().getTime()-t));
-    CityDialog.getInstance().update();
-    AirplaneDialog.getInstance().update();
 
   }
+
   newGame() {
     this.world = new World();
     this.world.game = this;
@@ -255,11 +266,11 @@ export class Game {
       SaveDialog.getInstance().show();
     });
 
-   /* document.getElementById("debug-game").addEventListener("click", () => {
-     // _this.world.showMoveIcon();
-     Product.randomUpdateConsumtion(_this.world,undefined,undefined,undefined,true);
-     
-    });*/
+    /* document.getElementById("debug-game").addEventListener("click", () => {
+      // _this.world.showMoveIcon();
+      Product.randomUpdateConsumtion(_this.world,undefined,undefined,undefined,true);
+      
+     });*/
     document.getElementById("show-diagram").addEventListener("click", () => {
       DiagramDialog.getInstance().world = this.world;
       DiagramDialog.getInstance().show();
@@ -310,6 +321,7 @@ export class Game {
   destroy() {
     this.world.destroy();
     clearTimeout(this.timer);
+    clearInterval(this.updateUIID);
   }
 }
 

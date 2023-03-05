@@ -119,7 +119,12 @@ export class World {
             }
         }
     }
-
+    updateUI(){
+        DiagramDialog.getInstance().update();
+          for (var x = 0; x < this.cities?.length; x++) {
+            this.cities[x].updateUI();
+        }
+    }
     update() {
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.game.date.getTime();
@@ -152,7 +157,7 @@ export class World {
             }
             this.game.changeMoney(-ges, "daily costs airplane");
             this.updateStatistics();
-            DiagramDialog.getInstance().update();
+            
         }
         this.lastUpdate = this.game.date.getTime();
     }

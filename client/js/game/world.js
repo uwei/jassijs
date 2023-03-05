@@ -97,6 +97,13 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 }
             }
         }
+        updateUI() {
+            var _a;
+            diagramdialog_1.DiagramDialog.getInstance().update();
+            for (var x = 0; x < ((_a = this.cities) === null || _a === void 0 ? void 0 : _a.length); x++) {
+                this.cities[x].updateUI();
+            }
+        }
         update() {
             var _a;
             if (this.lastUpdate === undefined) {
@@ -129,7 +136,6 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 }
                 this.game.changeMoney(-ges, "daily costs airplane");
                 this.updateStatistics();
-                diagramdialog_1.DiagramDialog.getInstance().update();
             }
             this.lastUpdate = this.game.date.getTime();
         }
