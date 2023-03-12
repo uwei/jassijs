@@ -120,7 +120,12 @@ define(["require", "exports", "game/game", "game/company"], function (require, e
                 proz = proz * faktor;
             }
             var proz1 = prod1.dailyConsumtion * (1 - ((proz) / 100));
-            var companycount = 1000;
+            var companycount = 0; //1000;
+            for (var x = 0; x < world.cities.length; x++) {
+                for (var y = 0; y < world.cities[x].companies.length; y++) {
+                    companycount += world.cities[x].companies[y].buildings;
+                }
+            }
             var people = parameter.workerInCompany * parameter.allProducts.length * companycount; //10000companies
             class ProductCalc {
                 constructor() {
@@ -134,7 +139,7 @@ define(["require", "exports", "game/game", "game/company"], function (require, e
                 allCalc.push(new ProductCalc());
             }
             var proz2 = parameter.allProducts[product2].dailyConsumtion;
-            for (var recurse = 0; recurse < 20; recurse++) {
+            for (var recurse = 0; recurse < 50; recurse++) {
                 var allBuildings = 0;
                 for (var x = 0; x < parameter.allProducts.length; x++) {
                     allCalc[x].neededInProduction = 0;

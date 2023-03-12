@@ -139,7 +139,7 @@ export class World {
             this.cities[x].update();
         }
         if (this.game.date.getMonth() !== new Date(this.lastUpdate).getMonth()) {
-            //Product.randomUpdateConsumtion(this);
+            Product.randomUpdateConsumtion(this);
         }
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             var i=getRandomInt(80);

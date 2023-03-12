@@ -227,7 +227,8 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             });
             /* document.getElementById("debug-game").addEventListener("click", () => {
               // _this.world.showMoveIcon();
-              Product.randomUpdateConsumtion(_this.world,undefined,undefined,undefined,true);
+              debugger;
+              Product.randomUpdateConsumtion(_this.world,9,18,3,false);
               
              });*/
             document.getElementById("show-diagram").addEventListener("click", () => {
