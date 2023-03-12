@@ -100,14 +100,14 @@ define(["require", "exports", "game/game", "game/company"], function (require, e
                 Product.randomUpdateConsumtion(world);
                 return;
             }
-            if (getRandomInt(2) === 0) { //The Biggest diff should be smaller
-                var varprod1 = parameter.allProducts[getRandomInt(parameter.allProducts.length)];
-                if (prod1.getDiffConsumtion() < varprod1.getDiffConsumtion())
-                    prod1 = varprod1;
-                var varprod2 = parameter.allProducts[getRandomInt(parameter.allProducts.length)];
-                if (prod2.getDiffConsumtion() > varprod2.getDiffConsumtion())
-                    prod2 = varprod2;
-            }
+            /*   if (getRandomInt(2) === 0) {//The Biggest diff should be smaller
+                   var varprod1 = parameter.allProducts[getRandomInt(parameter.allProducts.length)];
+                   if (prod1.getDiffConsumtion() < varprod1.getDiffConsumtion())
+                       prod1 = varprod1;
+                   var varprod2 = parameter.allProducts[getRandomInt(parameter.allProducts.length)];
+                   if (prod2.getDiffConsumtion() > varprod2.getDiffConsumtion())
+                       prod2 = varprod2;
+               }*/
             if (proz === undefined)
                 proz = Math.round(getRandomInt(50)) / 10; //Prozent
             //on lately game the prozent is smaller
@@ -126,7 +126,10 @@ define(["require", "exports", "game/game", "game/company"], function (require, e
                     companycount += world.cities[x].companies[y].buildings;
                 }
             }
+            // companycount=100000;//Math.round(companycount/parameter.allProducts.length);//each agerage of companies
             var people = parameter.workerInCompany * parameter.allProducts.length * companycount; //10000companies
+            if (people == 0)
+                return;
             class ProductCalc {
                 constructor() {
                     this.neededInProduction = 0;

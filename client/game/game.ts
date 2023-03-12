@@ -266,11 +266,10 @@ export class Game {
       SaveDialog.getInstance().show();
     });
 
-    /* document.getElementById("debug-game").addEventListener("click", () => {
+  /*  document.getElementById("debug-game").addEventListener("click", () => {
       // _this.world.showMoveIcon();
-      debugger;
-      Product.randomUpdateConsumtion(_this.world,9,18,3,false);
-      
+      //Product.randomUpdateConsumtion(_this.world,9,18,3,false);
+     Product.randomUpdateConsumtion(this.world);
      });*/
     document.getElementById("show-diagram").addEventListener("click", () => {
       DiagramDialog.getInstance().world = this.world;

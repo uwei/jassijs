@@ -143,7 +143,6 @@ export class World {
         }
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             var i=getRandomInt(80);
-            console.log("rand "+i);
             if (i === 0)
                 this.showMoveIcon();
             for (var y = 0; y < parameter.allProducts.length; y++) {
@@ -204,10 +203,10 @@ export class World {
             ap.world = this;
             this.airplanes.push(ap);
         }
-        /*
+        
 
         //Lastenausgleich   
-        parameter.neutralStartPeople = 0;
+      /*  parameter.neutralStartPeople = 0;
         var anz = 100;
         this.cities = [this.cities[0]];
         this.cities[0].companies = [];
@@ -218,7 +217,7 @@ export class World {
             comp.workers = 20 * anz;
             comp.buildings = anz;
             this.cities[0].companies.push(comp);
-            this.cities[0].shop[x] = 1000000;
+            this.cities[0].shop[x] = 10000000;
         }
         this.cities[0].people = anz * 19 * 20;
         this.cities[0].shops = 100000;
@@ -226,7 +225,11 @@ export class World {
         var proz = 0.114;
         var p1 = 0;
         var p2 = 14;
-        Product.randomUpdateConsumtion(this,0,1,0,true);*/
+        var ps=JSON.parse('[{"type":"Product","id":0,"name":"Stein","dailyProduce":5,"input1Amount":0,"input2Amount":0,"priceProduction":32,"distribution":3,"amountForPeople":5,"dailyConsumtion":0.013372576177285319,"pricePurchase":36,"priceSelling":40},{"type":"Product","id":1,"name":"Holz","dailyProduce":5,"input1Amount":0,"input2Amount":0,"priceProduction":32,"distribution":3,"amountForPeople":4.5,"dailyConsumtion":0.0117,"pricePurchase":36,"priceSelling":40},{"type":"Product","id":2,"name":"Getreide","dailyProduce":7,"input1Amount":0,"input2Amount":0,"priceProduction":23,"distribution":3,"amountForPeople":3,"dailyConsumtion":0.007788088642659279,"pricePurchase":26,"priceSelling":29},{"type":"Product","id":3,"name":"Eisen","dailyProduce":5,"input1Amount":0,"input2Amount":0,"priceProduction":32,"distribution":3,"amountForPeople":4,"dailyConsumtion":0.009632053894736842,"pricePurchase":36,"priceSelling":40},{"type":"Product","id":4,"name":"Wolle","dailyProduce":5,"input1Amount":0,"input2Amount":0,"priceProduction":32,"distribution":3,"amountForPeople":2.5,"dailyConsumtion":0.006578947368421052,"pricePurchase":36,"priceSelling":40},{"type":"Product","id":5,"name":"Öl","dailyProduce":5,"input1Amount":0,"input2Amount":0,"priceProduction":32,"distribution":3,"amountForPeople":2,"dailyConsumtion":0.005023836842105263,"pricePurchase":36,"priceSelling":40},{"type":"Product","id":6,"name":"Brot","dailyProduce":6,"input1":2,"input1Amount":3,"input2Amount":0,"priceProduction":49,"distribution":2,"amountForPeople":5,"dailyConsumtion":0.013349030470914127,"pricePurchase":55,"priceSelling":61},{"type":"Product","id":7,"name":"Plaste","dailyProduce":6,"input1":5,"input1Amount":3,"input2Amount":0,"priceProduction":57,"distribution":2,"amountForPeople":5,"dailyConsumtion":0.01281578947368421,"pricePurchase":64,"priceSelling":71},{"type":"Product","id":8,"name":"Fleisch","dailyProduce":2,"input1":2,"input1Amount":1,"input2Amount":0,"priceProduction":109,"distribution":2,"amountForPeople":2,"dailyConsumtion":0.005356742382271468,"pricePurchase":123,"priceSelling":136},{"type":"Product","id":9,"name":"Möbel","dailyProduce":2,"input1":1,"input1Amount":0.5,"input2":3,"input2Amount":0.5,"priceProduction":117,"distribution":2,"amountForPeople":2,"dailyConsumtion":0.005490304709141274,"pricePurchase":132,"priceSelling":146},{"type":"Product","id":10,"name":"Kleidung","dailyProduce":1,"input1":4,"input1Amount":2,"input2Amount":0,"priceProduction":286,"distribution":2,"amountForPeople":1,"dailyConsumtion":0.002576698060941828,"pricePurchase":322,"priceSelling":358},{"type":"Product","id":11,"name":"Fisch","dailyProduce":3,"input2Amount":0,"priceProduction":60,"distribution":2,"amountForPeople":2,"dailyConsumtion":0.005263157894736842,"pricePurchase":68,"priceSelling":75},{"type":"Product","id":12,"name":"Apfel","dailyProduce":4,"input2Amount":0,"priceProduction":45,"distribution":2,"amountForPeople":3,"dailyConsumtion":0.00821606648199446,"pricePurchase":51,"priceSelling":56},{"type":"Product","id":13,"name":"Saft","dailyProduce":3,"input1":12,"input1Amount":1,"input2Amount":0,"priceProduction":85,"distribution":1,"amountForPeople":3,"dailyConsumtion":0.007531578947368421,"pricePurchase":96,"priceSelling":106},{"type":"Product","id":14,"name":"Gold","dailyProduce":2,"input1Amount":0,"input2Amount":0,"priceProduction":100,"distribution":1,"amountForPeople":1,"dailyConsumtion":0.002727157894736842,"pricePurchase":113,"priceSelling":125},{"type":"Product","id":15,"name":"Schmuck","dailyProduce":2,"input1":14,"input1Amount":1,"input2Amount":0,"priceProduction":184,"distribution":1,"amountForPeople":2,"dailyConsumtion":0.005263157894736842,"pricePurchase":207,"priceSelling":230},{"type":"Product","id":16,"name":"Spielzeug","dailyProduce":1,"input1":4,"input1Amount":0.5,"input2":7,"input2Amount":0.5,"priceProduction":274,"distribution":1,"amountForPeople":1,"dailyConsumtion":0.00275207756232687,"pricePurchase":308,"priceSelling":343},{"type":"Product","id":17,"name":"Fahrrad","dailyProduce":1,"input1":3,"input1Amount":0.5,"input2":7,"input2Amount":0.5,"priceProduction":274,"distribution":1,"amountForPeople":1,"dailyConsumtion":0.002657894736842105,"pricePurchase":308,"priceSelling":343},{"type":"Product","id":18,"name":"Fischbrot","dailyProduce":1,"input1":11,"input1Amount":1,"input2":6,"input2Amount":1,"priceProduction":382,"distribution":1,"amountForPeople":1,"dailyConsumtion":0.002631578947368421,"pricePurchase":430,"priceSelling":478}]');
+        for(var x=0;x<ps.length;x++){
+            parameter.allProducts[x].dailyConsumtion=ps[x].dailyConsumtion;
+        }
+        Product.randomUpdateConsumtion(this,7,18,4.6,true);*/
 
     }
     render(dom: HTMLElement) {
