@@ -433,6 +433,14 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                 }
                 game.version = "2.7";
             }
+            if (parseFloat(ret.version) < 2.9) {
+                for (var x = 0; x < parameter.allProducts.length; x++) {
+                    if (parameter.allProducts[x].getDiffConsumtion() > 0.4) {
+                        parameter.allProducts[x].dailyConsumtion = 1.4 * parameter.allProducts[x].getAmountForPeople() / (parameter.workerInCompany * parameter.allProducts.length);
+                    }
+                }
+                game.version = "2.9";
+            }
             game.render(this.game.dom);
             game.resume();
         }

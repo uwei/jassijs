@@ -194,8 +194,10 @@ define(["require", "exports", "game/game", "game/company"], function (require, e
             //change should not be greater then 40%
             var test1 = prod1.amountForPeople / (parameter.workerInCompany * parameter.allProducts.length);
             var test2 = prod2.amountForPeople / (parameter.workerInCompany * parameter.allProducts.length);
-            var abw1 = (proz1 - test1) / proz1;
-            var abw2 = (proz2 - test2) / proz2;
+            //var abw1 = (proz1 - test1) / proz1;
+            //var abw2 = (proz2 - test2) / proz2;
+            var abw1 = (test1 - proz1) / test1;
+            var abw2 = (test2 - proz2) / test2;
             if (Math.abs(abw1) > 0.4 || Math.abs(abw2) > 0.4 || prod1 === prod2) {
                 console.log("change price " + prod1.name + " -" + proz + "% and " + prod2.name + " +" + proz + "% failed. Diff is Prod1 " + Math.abs(abw1) + " Prod2 " + Math.abs(abw2));
                 Product.randomUpdateConsumtion(world);
