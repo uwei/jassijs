@@ -154,7 +154,7 @@ export class Game {
     this.nevercallthisfunction();
     this.updateUIID = setInterval(() => {
       _this.updateUI();
-    }, 300);
+    }, 100);
   }
   public updateTitle() {
     try {

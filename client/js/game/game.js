@@ -124,7 +124,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.nevercallthisfunction();
             this.updateUIID = setInterval(() => {
                 _this.updateUI();
-            }, 300);
+            }, 100);
         }
         updateTitle() {
             try {
