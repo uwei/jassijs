@@ -43,7 +43,7 @@ export class World {
                 }*/
                 _this.airplanes[x].update();
             }
-        }, 100);
+        }, 300);
 
 
     }

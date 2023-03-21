@@ -386,7 +386,7 @@ export class City {
     getScore(): number {
         var ret = 0;
         for (var x = 0; x < this.score.length; x++) {
-            if (this.score[x] > 50)
+            if (this.score[x] > 70)
                 ret++;
         }
         return ret;

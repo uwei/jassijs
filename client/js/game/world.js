@@ -26,7 +26,7 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                     }*/
                     _this.airplanes[x].update();
                 }
-            }, 100);
+            }, 300);
         }
         getElementOffset(el) {
             let top = 0;

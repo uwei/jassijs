@@ -63,7 +63,7 @@ export class Airplane {
     }
     upgrade(){
         this.typeid++;
-        this.speed=Math.round(this.speed*1.04);
+        this.speed=Math.round(this.speed*1.02);
         this.capacity=Math.round(this.capacity*1.5);
         this.world.game.changeMoney(-this.typeid*10000,"upgrade airplane");
         this.costs=Math.round(this.costs*1.5);

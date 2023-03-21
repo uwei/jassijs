@@ -7,12 +7,6 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
     }
     //
     class Airplane {
-        get squadron() {
-            return []; //Geschwader
-        }
-        set squadron(val) {
-            //Geschwader
-        }
         constructor(world) {
             this.status = "";
             this.loadedCount = 0;
@@ -32,6 +26,12 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
                   this.route.push(rt);
               }*/
         }
+        get squadron() {
+            return []; //Geschwader
+        }
+        set squadron(val) {
+            //Geschwader
+        }
         getCurrentCity() {
             for (var x = 0; x < this.world.cities.length; x++) {
                 if (this.world.cities[x].x === this.x && this.world.cities[x].y === this.y) {
@@ -42,7 +42,7 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
         }
         upgrade() {
             this.typeid++;
-            this.speed = Math.round(this.speed * 1.04);
+            this.speed = Math.round(this.speed * 1.02);
             this.capacity = Math.round(this.capacity * 1.5);
             this.world.game.changeMoney(-this.typeid * 10000, "upgrade airplane");
             this.costs = Math.round(this.costs * 1.5);
