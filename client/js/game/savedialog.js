@@ -241,6 +241,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
             return ret;
         }
         loadContent(data) {
+            this.game.close();
             var ret = JSON.parse(data, (key, value) => {
                 var r = value;
                 if (value === null)
@@ -268,6 +269,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                     return r;
                 }
                 if ((value === null || value === void 0 ? void 0 : value.type) === "World") {
+                    delete value._intervall;
                     r = new world_1.World();
                     Object.assign(r, value);
                     return r;

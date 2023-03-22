@@ -222,7 +222,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 console.log("down");
             });
             document.getElementById("save-game").addEventListener("click", () => {
-                savedialog_1.SaveDialog.getInstance().game = this;
+                savedialog_1.SaveDialog.getInstance().game = _this;
                 savedialog_1.SaveDialog.getInstance().show();
             });
             /*  document.getElementById("debug-game").addEventListener("click", () => {
@@ -279,6 +279,12 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.world.destroy();
             clearTimeout(this.timer);
             clearInterval(this.updateUIID);
+        }
+        close() {
+            //clearInterval(this.updateUIID);
+            //  clearTimeout(this.timer);
+            console.log("clearIntervall " + this.world._intervall);
+            clearInterval(this.world._intervall);
         }
     }
     exports.Game = Game;

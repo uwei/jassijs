@@ -35,6 +35,7 @@ export class World {
         }
 
         this._intervall = setInterval(() => {
+            console.log(this._intervall);
             for (var x = 0; x < _this.airplanes?.length; x++) {
                 /*if (this.airplanes[x].x < 500)
                     this.airplanes[x].x = this.airplanes[x].x + 1;
@@ -44,7 +45,7 @@ export class World {
                 _this.airplanes[x].update();
             }
         }, 100);
-
+       // console.log("CreateIntervall"+ this._intervall );
 
     }
     private getElementOffset(el) {

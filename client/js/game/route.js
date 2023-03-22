@@ -73,8 +73,8 @@ define(["require", "exports"], function (require, exports) {
                 if (max === undefined) {
                     if (this.loadShopAmount[x]) {
                         max = this.loadShopAmount[x];
-                        //                  if (x === 17)
-                        //                    console.log(city.name + " " + city.shop[x] + "  min" + minStock);
+                        //  if (x === 2)
+                        //    console.log(city.name + " " + city.shop[x] + "  min" + minStock);
                         var tt = city.shop[x] - minStock;
                         if (max !== 0 && max !== undefined && (max > tt)) {
                             if (x === 17)

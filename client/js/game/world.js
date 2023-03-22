@@ -18,6 +18,7 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
             }
             this._intervall = setInterval(() => {
                 var _a;
+                console.log(this._intervall);
                 for (var x = 0; x < ((_a = _this.airplanes) === null || _a === void 0 ? void 0 : _a.length); x++) {
                     /*if (this.airplanes[x].x < 500)
                         this.airplanes[x].x = this.airplanes[x].x + 1;
@@ -27,6 +28,7 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                     _this.airplanes[x].update();
                 }
             }, 100);
+            // console.log("CreateIntervall"+ this._intervall );
         }
         getElementOffset(el) {
             let top = 0;

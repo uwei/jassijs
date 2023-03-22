@@ -262,7 +262,7 @@ export class Game {
       console.log("down");
     });
     document.getElementById("save-game").addEventListener("click", () => {
-      SaveDialog.getInstance().game = this;
+      SaveDialog.getInstance().game = _this;
       SaveDialog.getInstance().show();
     });
 
@@ -322,6 +322,12 @@ export class Game {
     this.world.destroy();
     clearTimeout(this.timer);
     clearInterval(this.updateUIID);
+  }
+  close(){
+    //clearInterval(this.updateUIID);
+  //  clearTimeout(this.timer);
+  console.log("clearIntervall "+this.world._intervall);
+    clearInterval(this.world._intervall);
   }
 }
 

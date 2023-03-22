@@ -269,6 +269,7 @@ export class SaveDialog {
         return ret;
     }
     private loadContent(data: string) {
+        this.game.close();
         var ret = JSON.parse(data, (key, value) => {
             var r: any = value;
             if (value === null)
@@ -296,6 +297,7 @@ export class SaveDialog {
                 return r;
             }
             if (value?.type === "World") {
+                delete value._intervall;
                 r = new World();
                 Object.assign(r, value);
                 return r;
@@ -330,6 +332,7 @@ export class SaveDialog {
             }
         }
         var game = this.game;
+        
         Object.assign(this.game, ret);
         game.world.game = game;
         game.date = new Date(game.date);
