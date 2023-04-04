@@ -3,39 +3,39 @@ define("jassijs/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs/base/ActionNode.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.base.ActionNode": {}
 	},
 	"jassijs/base/Actions.ts": {
-		"date": 1658347729695,
+		"date": 1658347730000,
 		"jassijs.base.Actions": {}
 	},
 	"jassijs/base/CurrentSettings.ts": {
-		"date": 1655740038147
+		"date": 1655740040000
 	},
 	"jassijs/base/DatabaseSchema.ts": {
-		"date": 1656075270127,
+		"date": 1656075272000,
 		"jassijs.base.DatabaseSchema": {}
 	},
 	"jassijs/base/Errors.ts": {
-		"date": 1655726578383
+		"date": 1655726580000
 	},
 	"jassijs/base/Extensions.ts": {
-		"date": 1655549182897
+		"date": 1655549184000
 	},
 	"jassijs/base/LoginDialog.ts": {
-		"date": 1655806951272
+		"date": 1655806952000
 	},
 	"jassijs/base/PropertyEditorService.ts": {
-		"date": 1657571266414,
+		"date": 1657571268000,
 		"jassijs.base.PropertyEditorService": {}
 	},
 	"jassijs/base/Router.ts": {
-		"date": 1655556795175,
+		"date": 1655556796000,
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Tests.ts": {
-		"date": 1656077155254,
+		"date": 1656077156000,
 		"jassijs.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -52,35 +52,35 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/base/Windows.ts": {
-		"date": 1657655074508,
+		"date": 1657655076000,
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/modul.ts": {
-		"date": 1670062127376
+		"date": 1680631777544
 	},
 	"jassijs/remote/Classes.ts": {
-		"date": 1655556496250,
+		"date": 1655556498000,
 		"jassijs.remote.JassiError": {},
 		"jassijs.remote.Classes": {}
 	},
 	"jassijs/remote/ClientError.ts": {
-		"date": 1655556929876,
+		"date": 1655556930000,
 		"jassijs.remote.ClientError": {}
 	},
 	"jassijs/remote/Database.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.remote.Database": {}
 	},
 	"jassijs/remote/DatabaseTools.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.remote.DatabaseTools": {}
 	},
 	"jassijs/remote/DBArray.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1656597031023,
+		"date": 1656597032000,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -90,34 +90,34 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1626209336000
 	},
 	"jassijs/remote/FileNode.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.remote.FileNode": {}
 	},
 	"jassijs/remote/hallo.ts": {
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1655761747851
+		"date": 1655761748000
 	},
 	"jassijs/remote/jassijsGlobal.ts": {
-		"date": 1655549781561
+		"date": 1655549782000
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1655578863869
+		"date": 1655578864000
 	},
 	"jassijs/remote/RemoteObject.ts": {
-		"date": 1655556864382,
+		"date": 1655556866000,
 		"jassijs.remote.RemoteObject": {}
 	},
 	"jassijs/remote/RemoteProtocol.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
-		"date": 1656072577818,
+		"date": 1656072578000,
 		"jassijs.security.Group": {
 			"$DBObject": [
 				{
@@ -155,7 +155,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/security/ParentRight.ts": {
-		"date": 1656072587816,
+		"date": 1656072588000,
 		"jassijs.security.ParentRight": {
 			"$DBObject": [
 				{
@@ -210,7 +210,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/security/Right.ts": {
-		"date": 1656072606665,
+		"date": 1656072608000,
 		"jassijs.security.Right": {
 			"$DBObject": [
 				{
@@ -234,11 +234,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/security/Rights.ts": {
-		"date": 1655556795285,
+		"date": 1655556796000,
 		"jassijs.security.Rights": {}
 	},
 	"jassijs/remote/security/Setting.ts": {
-		"date": 1656072619915,
+		"date": 1656072620000,
 		"jassijs.security.Setting": {
 			"$DBObject": [
 				{
@@ -260,7 +260,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/security/User.ts": {
-		"date": 1656072625720,
+		"date": 1656072626000,
 		"jassijs.security.User": {
 			"$DBObject": [
 				{
@@ -299,23 +299,23 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1671231018271,
+		"date": 1671231020000,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
-		"date": 1656075891180,
+		"date": 1656075892000,
 		"jassijs.remote.Settings": {}
 	},
 	"jassijs/remote/Test.ts": {
-		"date": 1655556929865,
+		"date": 1655556930000,
 		"jassijs.remote.Test": {}
 	},
 	"jassijs/remote/Transaction.ts": {
-		"date": 1655556864382,
+		"date": 1655556866000,
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/security/GroupView.ts": {
-		"date": 1656073224967,
+		"date": 1656073226000,
 		"jassijs/security/GroupView": {
 			"$DBObjectView": [
 				{
@@ -326,7 +326,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/security/UserView.ts": {
-		"date": 1656073212739,
+		"date": 1656073214000,
 		"jassijs/UserView": {
 			"$DBObjectView": [
 				{
@@ -337,7 +337,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/template/TemplateDBDialog.ts": {
-		"date": 1656021386094,
+		"date": 1656021388000,
 		"jassijs.template.TemplateDBDialogProperties": {
 			"@members": {}
 		},
@@ -358,7 +358,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/template/TemplateDBObject.ts": {
-		"date": 1656072493826,
+		"date": 1656072494000,
 		"jassijs.template.TemplateDBObjectProperties": {
 			"@members": {}
 		},
@@ -379,7 +379,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/template/TemplateEmptyDialog.ts": {
-		"date": 1655556795277,
+		"date": 1655556796000,
 		"jassijs.template.TemplateEmptyDialog": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -397,7 +397,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/template/TemplateRemoteObject.ts": {
-		"date": 1655556795277,
+		"date": 1655556796000,
 		"jassijs.template.TemplateRemoteObject": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -415,11 +415,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/ActionNodeMenu.ts": {
-		"date": 1655556795277,
+		"date": 1655556796000,
 		"jassijs/ui/ActionNodeMenu": {}
 	},
 	"jassijs/ui/BoxPanel.ts": {
-		"date": 1657715386950,
+		"date": 1657715388000,
 		"jassijs.ui.BoxPanel": {
 			"$UIComponent": [
 				{
@@ -441,7 +441,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Button.ts": {
-		"date": 1657569477636,
+		"date": 1657569478000,
 		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
@@ -456,7 +456,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Calendar.ts": {
-		"date": 1656016859058,
+		"date": 1656016860000,
 		"jassijs.ui.Calendar": {
 			"$UIComponent": [
 				{
@@ -473,7 +473,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Checkbox.ts": {
-		"date": 1655587865981,
+		"date": 1655587866000,
 		"jassijs.ui.Checkbox": {
 			"$UIComponent": [
 				{
@@ -485,17 +485,17 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1664898172813,
+		"date": 1664898174000,
 		"jassijs.ui.Component": {
 			"@members": {}
 		}
 	},
 	"jassijs/ui/ComponentDescriptor.ts": {
-		"date": 1655556864382,
+		"date": 1655556866000,
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/ComponentSpy.ts": {
-		"date": 1655556864382,
+		"date": 1655556866000,
 		"jassijs.ui.ComponentSpy": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -521,11 +521,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1656417347591,
+		"date": 1656417348000,
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {
-		"date": 1655797617321,
+		"date": 1655797618000,
 		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{
@@ -540,7 +540,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/converters/DefaultConverter.ts": {
-		"date": 1657922211289,
+		"date": 1657922212000,
 		"jassijs.ui.converters.DefaultConverterProperties": {
 			"@members": {}
 		},
@@ -560,7 +560,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/converters/NumberConverter.ts": {
-		"date": 1658334940375,
+		"date": 1658334942000,
 		"jassijs.ui.converters.NumberConverterProperies": {
 			"@members": {}
 		},
@@ -580,7 +580,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/converters/StringConverter.ts": {
-		"date": 1657129812942,
+		"date": 1657129814000,
 		"jassijs.ui.converters.StringConverterProperies": {
 			"@members": {}
 		},
@@ -600,13 +600,13 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/CSSProperties.ts": {
-		"date": 1656016871555,
+		"date": 1656016872000,
 		"jassijs.ui.CSSProperties": {
 			"@members": {}
 		}
 	},
 	"jassijs/ui/DatabaseDesigner.ts": {
-		"date": 1656075082525,
+		"date": 1656075084000,
 		"jassijs/ui/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -624,7 +624,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Databinder.ts": {
-		"date": 1655843328772,
+		"date": 1655843330000,
 		"jassijs.ui.Databinder": {
 			"$UIComponent": [
 				{
@@ -635,13 +635,13 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DataComponent.ts": {
-		"date": 1655843335457,
+		"date": 1655843336000,
 		"jassijs.ui.DataComponent": {
 			"@members": {}
 		}
 	},
 	"jassijs/ui/DBObjectDialog.ts": {
-		"date": 1656681977508,
+		"date": 1656681978000,
 		"jassijs.ui.DBObjectDialog": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -654,7 +654,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectExplorer.ts": {
-		"date": 1655556795277,
+		"date": 1655556796000,
 		"jassijs.ui.DBObjectNode": {},
 		"jassijs.ui.DBFileActions": {
 			"$ActionProvider": [
@@ -725,7 +725,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1656683378469,
+		"date": 1656683380000,
 		"jassijs/ui/DBObjectView": {
 			"$UIComponent": [
 				{
@@ -744,15 +744,15 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DesignDummy.ts": {
-		"date": 1655755335528,
+		"date": 1655755336000,
 		"jassijs.ui.DesignDummy": {}
 	},
 	"jassijs/ui/DockingContainer.ts": {
-		"date": 1657658906918,
+		"date": 1657658908000,
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
-		"date": 1656073499033,
+		"date": 1656073500000,
 		"jassijs.ui.ErrorPanel": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -770,7 +770,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/FileExplorer.ts": {
-		"date": 1655589453702,
+		"date": 1655589454000,
 		"jassijs.ui.FileActions": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -857,11 +857,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/HTMLEditorPanel.ts": {
-		"date": 1655641681290,
+		"date": 1655641682000,
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1657572160680,
+		"date": 1657572162000,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
@@ -873,7 +873,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Image.ts": {
-		"date": 1655672423292,
+		"date": 1655672424000,
 		"jassijs.ui.Image": {
 			"$UIComponent": [
 				{
@@ -885,7 +885,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/InvisibleComponent.ts": {
-		"date": 1655843345124,
+		"date": 1655843346000,
 		"jassijs.ui.InvisibleComponent": {
 			"$Property": [
 				{
@@ -895,7 +895,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Menu.ts": {
-		"date": 1655753278734,
+		"date": 1655753280000,
 		"jassijs.ui.Menu": {
 			"$UIComponent": [
 				{
@@ -910,7 +910,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/MenuItem.ts": {
-		"date": 1656016937055,
+		"date": 1656016938000,
 		"jassijs.ui.MenuItem": {
 			"$UIComponent": [
 				{
@@ -928,10 +928,10 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Notify.ts": {
-		"date": 1655585211781
+		"date": 1655585212000
 	},
 	"jassijs/ui/ObjectChooser.ts": {
-		"date": 1656506101900,
+		"date": 1656506102000,
 		"jassijs.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -943,7 +943,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/OptionDialog.ts": {
-		"date": 1656067783625,
+		"date": 1656067784000,
 		"jassijs.ui.OptionDialog": {
 			"@members": {}
 		},
@@ -952,7 +952,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1655672401984,
+		"date": 1655672402000,
 		"jassijs.ui.PanelCreateProperties": {
 			"@members": {}
 		},
@@ -977,11 +977,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Property.ts": {
-		"date": 1658347723535,
+		"date": 1658347724000,
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1658349763762,
+		"date": 1658349764000,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {}
@@ -991,7 +991,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/BooleanEditor.ts": {
-		"date": 1655556864382,
+		"date": 1655556866000,
 		"jassijs.ui.PropertyEditors.BooleanEditor": {
 			"$PropertyEditor": [
 				[
@@ -1001,7 +1001,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ClassSelectorEditor.ts": {
-		"date": 1657571441149,
+		"date": 1657571442000,
 		"jassijs.ui.PropertyEditors.ClassSelectorEditor": {
 			"$PropertyEditor": [
 				[
@@ -1011,7 +1011,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ColorEditor.ts": {
-		"date": 1656017116729,
+		"date": 1656017118000,
 		"jassijs.ui.PropertyEditors.ColorEditor": {
 			"$PropertyEditor": [
 				[
@@ -1021,7 +1021,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ComponentSelectorEditor.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.ui.PropertyEditors.ComponentSelectorEditor": {
 			"$PropertyEditor": [
 				[
@@ -1031,7 +1031,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-		"date": 1656506935134,
+		"date": 1656506936000,
 		"jassijs.ui.PropertyEditors.DatabinderEditor": {
 			"$PropertyEditor": [
 				[
@@ -1041,7 +1041,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DBObjectEditor.ts": {
-		"date": 1655556864382,
+		"date": 1655556866000,
 		"jassijs.ui.PropertyEditors.DBObjectEditor": {
 			"$PropertyEditor": [
 				[
@@ -1051,7 +1051,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DefaultEditor.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.ui.PropertyEditors.DefaultEditor": {
 			"$PropertyEditor": [
 				[
@@ -1064,11 +1064,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/Editor.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.ui.PropertyEditors.Editor": {}
 	},
 	"jassijs/ui/PropertyEditors/FontEditor.ts": {
-		"date": 1655556864383,
+		"date": 1655556866000,
 		"jassijs.ui.PropertyEditors.FontEditor": {
 			"$PropertyEditor": [
 				[
@@ -1078,7 +1078,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/FunctionEditor.ts": {
-		"date": 1655556864383,
+		"date": 1655556866000,
 		"jassijs.ui.PropertyEditors.FunctionEditor": {
 			"$PropertyEditor": [
 				[
@@ -1088,7 +1088,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/HTMLEditor.ts": {
-		"date": 1655556864383,
+		"date": 1655556866000,
 		"jassijs.ui.PropertyEditors.HTMLEditor": {
 			"$PropertyEditor": [
 				[
@@ -1098,7 +1098,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ImageEditor.ts": {
-		"date": 1656189491184,
+		"date": 1656189492000,
 		"jassijs.ui.PropertyEditors.ImageEditor": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -1129,7 +1129,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/JsonEditor.ts": {
-		"date": 1658349511725,
+		"date": 1658349512000,
 		"jassijs.ui.PropertyEditors.JsonEditor": {
 			"$PropertyEditor": [
 				[
@@ -1145,7 +1145,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/NameEditor.ts": {
-		"date": 1655556795284,
+		"date": 1655556796000,
 		"jassijs.ui.PropertyEditors.NameEditor": {
 			"$PropertyEditor": [
 				[
@@ -1155,7 +1155,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Repeater.ts": {
-		"date": 1655843352860,
+		"date": 1655843354000,
 		"jassijs.ui.RepeaterDesignPanel": {
 			"$UIComponent": [
 				{
@@ -1180,7 +1180,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/SearchExplorer.ts": {
-		"date": 1655847269616,
+		"date": 1655847270000,
 		"jassijs.ui.SearchExplorer": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -1198,7 +1198,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Select.ts": {
-		"date": 1655847538605,
+		"date": 1655847540000,
 		"jassijs.ui.SelectCreateProperties": {
 			"@members": {}
 		},
@@ -1220,7 +1220,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/SettingsDialog.ts": {
-		"date": 1655737915130,
+		"date": 1655737916000,
 		"jassijs.ui.SettingsObject": {},
 		"jassijs.ui.SettingsDialog": {
 			"$ActionProvider": [
@@ -1239,7 +1239,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Style.ts": {
-		"date": 1655847590205,
+		"date": 1655847592000,
 		"jassijs.ui.Style": {
 			"$UIComponent": [
 				{
@@ -1251,7 +1251,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1670084418238,
+		"date": 1680631551248,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},
@@ -1273,7 +1273,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textarea.ts": {
-		"date": 1655757393636,
+		"date": 1655757394000,
 		"jassijs.ui.Textarea": {
 			"$UIComponent": [
 				{
@@ -1290,7 +1290,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1657920923611,
+		"date": 1657920924000,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -1308,7 +1308,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Tree.ts": {
-		"date": 1656079000084,
+		"date": 1656079002000,
 		"jassijs.ui.TreeEditorPropertiesMulti": {
 			"@members": {}
 		},
@@ -1333,7 +1333,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Upload.ts": {
-		"date": 1655847945522,
+		"date": 1655847946000,
 		"jassijs.ui.Upload": {
 			"$UIComponent": [
 				{
@@ -1345,14 +1345,14 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/VariablePanel.ts": {
-		"date": 1656066841763,
+		"date": 1656066842000,
 		"jassijs.ui.VariablePanel": {}
 	},
 	"jassijs/util/Cookies.ts": {
-		"date": 1655668836579
+		"date": 1655668838000
 	},
 	"jassijs/util/CSVImport.ts": {
-		"date": 1657658972678,
+		"date": 1657658974000,
 		"jassijs.util.CSVImport": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -1373,23 +1373,23 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622984214000
 	},
 	"jassijs/util/Numberformatter.ts": {
-		"date": 1657046807454,
+		"date": 1657046808000,
 		"jassijs.util.Numberformatter": {}
 	},
 	"jassijs/util/Reloader.ts": {
-		"date": 1656075172876,
+		"date": 1656075174000,
 		"jassijs.util.Reloader": {}
 	},
 	"jassijs/util/Runlater.ts": {
-		"date": 1655556795228,
+		"date": 1655556796000,
 		"jassi.util.Runlater": {}
 	},
 	"jassijs/util/Tools.ts": {
-		"date": 1657655418217,
+		"date": 1657655420000,
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/ui/PropertyEditors/JsonArrayEditor.ts": {
-		"date": 1656960819948,
+		"date": 1656960820000,
 		"jassijs.ui.PropertyEditors.JsonArrayEditor": {
 			"$PropertyEditor": [
 				[
@@ -1405,7 +1405,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/TableColumnImport.ts": {
-		"date": 1657048998005,
+		"date": 1657049000000,
 		"jassijs/ui/PropertyEditors/TableColumnImport": {}
 	},
 	"jassijs/ext/Goldenlayout.ts": {
@@ -1427,25 +1427,25 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1657658560377
 	},
 	"jassijs/ext/goldenlayout.ts": {
-		"date": 1657655068257
+		"date": 1657655070000
 	},
 	"jassijs/ext/jquerylib.ts": {
-		"date": 1657655348617
+		"date": 1657655350000
 	},
 	"jassijs/ext/papaparse.ts": {
-		"date": 1657656070445
+		"date": 1657656072000
 	},
 	"jassijs/ext/spectrum.ts": {
-		"date": 1657656777955
+		"date": 1657656778000
 	},
 	"jassijs/ext/tabulator.ts": {
-		"date": 1657657498568
+		"date": 1680631126650
 	},
 	"jassijs/ext/tinymce.ts": {
-		"date": 1657658560377
+		"date": 1657658562000
 	},
 	"jassijs/ui/converters/DateTimeConverter.ts": {
-		"date": 1658001075770,
+		"date": 1658001076000,
 		"jassijs.ui.converters.DateTimeConverterProperies": {
 			"@members": {}
 		},
@@ -1464,6 +1464,9 @@ define("jassijs/registry",["require"], function(require) {
 			],
 			"@members": {}
 		}
+	},
+	"jassijs/remote/Validator.ts": {
+		"date": 1680637658333
 	}
 }
  }

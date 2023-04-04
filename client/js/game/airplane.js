@@ -7,6 +7,12 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
     }
     //
     class Airplane {
+        get squadron() {
+            return []; //Geschwader
+        }
+        set squadron(val) {
+            //Geschwader
+        }
         constructor(world) {
             this.status = "";
             this.loadedCount = 0;
@@ -25,12 +31,6 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
                   rt.cityid=x;
                   this.route.push(rt);
               }*/
-        }
-        get squadron() {
-            return []; //Geschwader
-        }
-        set squadron(val) {
-            //Geschwader
         }
         getCurrentCity() {
             for (var x = 0; x < this.world.cities.length; x++) {

@@ -6,7 +6,7 @@ define("local/registry",["require"], function(require) {
 		"date": 1625396400000
 	},
 	"local/remote/Book.ts": {
-		"date": 1656073087553,
+		"date": 1656073088000,
 		"local.Book": {
 			"$DBObject": [],
 			"@members": {

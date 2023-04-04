@@ -23,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
             "node_modules/jquery.fancytree/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/jquery.fancytree/index.d.ts",
             "node_modules/requirejs/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/requirejs/index.d.ts",
             "node_modules/sizzle/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/sizzle/index.d.ts",
+            //"node_modules/@types/tabulator-tables/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/tabulator-tables@5.1.4/index.d.ts",
             "tabulator-tables.ts": "https://cdn.jsdelivr.net/npm/@types/tabulator-tables@5.1.4/index.d.ts",
             "node_modules/typescript/typescriptServices.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-3.7/lib/typescriptServices.d.ts"
         },
@@ -51,7 +52,7 @@ define(["require", "exports"], function (require, exports) {
                 'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
                 //'tabulatorlib': '//unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator',
-                'tabulatorlib': '//unpkg.com/tabulator-tables@5.1.4/dist/js/tabulator',
+                'tabulatorlib': '//cdnjs.cloudflare.com/ajax/libs/tabulator/5.4.4/js/tabulator.min',
                 'tinymcelib': tinyurl + '/tinymce.min',
                 'tabulator-tables': "jassijs/ext/tabulator",
                 //"tabulatorext":'jassijs/ext/tabulator',

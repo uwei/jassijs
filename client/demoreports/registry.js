@@ -3,64 +3,64 @@ define("demoreports/registry",["require"], function(require) {
  return {
   default: {
 	"demoreports/01-Simpledata.ts": {
-		"date": 1656184584484
+		"date": 1656184586000
 	},
 	"demoreports/10-Foreach.ts": {
-		"date": 1655407641261
+		"date": 1655407642000
 	},
 	"demoreports/11-Foreach.ts": {
-		"date": 1656025255234
+		"date": 1656025256000
 	},
 	"demoreports/12-Foreach.ts": {
 		"date": 1634336976000
 	},
 	"demoreports/21-Datatable.ts": {
-		"date": 1655407847485
+		"date": 1655407848000
 	},
 	"demoreports/22-Datatable.ts": {
-		"date": 1655407875091
+		"date": 1655407876000
 	},
 	"demoreports/23-Datatable.ts": {
-		"date": 1656024793633
+		"date": 1656024794000
 	},
 	"demoreports/30-Format.ts": {
-		"date": 1655407998923
+		"date": 1655408000000
 	},
 	"demoreports/Empty.ts": {
-		"date": 1655408032703
+		"date": 1655408034000
 	},
 	"demoreports/Invoice.ts": {
-		"date": 1655408066557
+		"date": 1655408068000
 	},
 	"demoreports/modul.ts": {
-		"date": 1655641244993
+		"date": 1655641246000
 	},
 	"demoreports/pdfmake-playground/Basics.ts": {
-		"date": 1655408093593
+		"date": 1655408094000
 	},
 	"demoreports/pdfmake-playground/Columns.ts": {
-		"date": 1655408107807
+		"date": 1655408108000
 	},
 	"demoreports/pdfmake-playground/Images.ts": {
-		"date": 1655408119438
+		"date": 1655408120000
 	},
 	"demoreports/pdfmake-playground/Lists.ts": {
-		"date": 1655408133565
+		"date": 1655408134000
 	},
 	"demoreports/pdfmake-playground/Margin.ts": {
-		"date": 1655408161243
+		"date": 1655408162000
 	},
 	"demoreports/pdfmake-playground/Styles1.ts": {
-		"date": 1655408172956
+		"date": 1655408174000
 	},
 	"demoreports/pdfmake-playground/Styles2.ts": {
-		"date": 1655408180437
+		"date": 1655408182000
 	},
 	"demoreports/pdfmake-playground/Styles3.ts": {
-		"date": 1655408187427
+		"date": 1655408188000
 	},
 	"demoreports/pdfmake-playground/Tables.ts": {
-		"date": 1655408197639
+		"date": 1655408198000
 	}
 }
  }

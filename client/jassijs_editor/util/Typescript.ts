@@ -25,9 +25,10 @@ export class Typescript {
         sourceMap: true,
         outDir: "./js",
         allowJs: true,
-        moduleResolution: "node",
+        moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
+        typeRoots:["./node_modules/@types"]
     }
     public isInited(file) {
 
@@ -80,9 +81,8 @@ export class Typescript {
             "target": monaco.languages.typescript.ScriptTarget.Latest,
             "baseUrl": "./",
             "module": monaco.languages.typescript.ModuleKind.AMD,
-            //@ts-ignore
-            "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.node,
-
+            "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
+            typeRoots:["./node_modules/@types"],
             rootDir: "./",
             "sourceMap": true,
             "outDir": "./js",

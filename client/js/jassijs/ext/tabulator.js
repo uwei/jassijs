@@ -5,6 +5,6 @@ define("tabulator-tables", ["require", "exports", "tabulatorlib", "jassijs/modul
     var Tabulator = tabulator;
     exports.Tabulator = Tabulator;
     var path = modul_1.default.require.paths["tabulatorlib"];
-    jassijs.myRequire(path.replace("js", "css") + ".min.css");
+    jassijs.myRequire(path.replace("/js/", "/css/") + ".css");
 });
 //# sourceMappingURL=tabulator.js.map

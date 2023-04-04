@@ -3,18 +3,18 @@ define("demo/registry",["require"], function(require) {
  return {
   default: {
 	"demo/DelTest.ts": {
-		"date": 1656074244413
+		"date": 1656074246000
 	},
 	"demo/Dialog.ts": {
-		"date": 1655851715726,
+		"date": 1655851716000,
 		"demo/Dialog": {}
 	},
 	"demo/Dialog2.ts": {
-		"date": 1657715413559,
+		"date": 1657715414000,
 		"demo/Dialog2": {}
 	},
 	"demo/EmptyDialog.ts": {
-		"date": 1655556795283,
+		"date": 1655556796000,
 		"demo.EmptyDialog": {}
 	},
 	"demo/LargeReport.ts": {
@@ -27,37 +27,37 @@ define("demo/registry",["require"], function(require) {
 		"date": 1612818334000
 	},
 	"demo/MyTest.ts": {
-		"date": 1655757461754
+		"date": 1655757462000
 	},
 	"demo/Report1.ts": {
-		"date": 1656018450105
+		"date": 1656018452000
 	},
 	"demo/ReportInvoice.ts": {
-		"date": 1655843275065,
+		"date": 1655843276000,
 		"demo.ReportInvoice": {}
 	},
 	"demo/ReportInvoice2.ts": {
-		"date": 1655843265068,
+		"date": 1655843266000,
 		"demo.ReportInvoice": {}
 	},
 	"demo/ReportKunden.ts": {
-		"date": 1655556795176,
+		"date": 1655556796000,
 		"de.ReportKunde": {
 			"@members": {}
 		}
 	},
 	"demo/ReportStyle.ts": {
-		"date": 1655843280145
+		"date": 1655843282000
 	},
 	"demo/StyleDialog.ts": {
-		"date": 1655556793964,
+		"date": 1655556794000,
 		"demo/StyleDialog": {}
 	},
 	"demo/TableContextmenu.ts": {
-		"date": 1656676744798
+		"date": 1656676746000
 	},
 	"demo/TestComponent.ts": {
-		"date": 1655843269124,
+		"date": 1655843270000,
 		"demo.TestComponent": {
 			"$UIComponent": [
 				{
@@ -71,20 +71,20 @@ define("demo/registry",["require"], function(require) {
 		}
 	},
 	"demo/Testcontextmenu.ts": {
-		"date": 1655843286580,
+		"date": 1655843288000,
 		"demo.Testcontextmenu": {}
 	},
 	"demo/Testdatatable.ts": {
-		"date": 1655843290844
+		"date": 1655843292000
 	},
 	"demo/Testdatatable1.ts": {
-		"date": 1655843295823
+		"date": 1655843296000
 	},
 	"demo/Testdatatable2.ts": {
-		"date": 1655843302183
+		"date": 1655843304000
 	},
 	"demo/Testdatatable3.ts": {
-		"date": 1655843306600
+		"date": 1655843308000
 	},
 	"demo/TestImage.ts": {
 		"date": 1633792454000
@@ -93,32 +93,32 @@ define("demo/registry",["require"], function(require) {
 		"date": 1635803026000
 	},
 	"demo/Testmenu.ts": {
-		"date": 1655726455896,
+		"date": 1655726456000,
 		"demo.Testmenu": {}
 	},
 	"demo/Testtable.ts": {
-		"date": 1655843313498
+		"date": 1655843314000
 	},
 	"demo/TestTree.ts": {
-		"date": 1655843317921,
+		"date": 1655843318000,
 		"demo.TestTree": {}
 	},
 	"demo/TestUpload.ts": {
-		"date": 1657656093199,
+		"date": 1657656094000,
 		"demo/TestUpload": {}
 	},
 	"demo/TreeContextmenu.ts": {
 		"date": 1634384688000
 	},
 	"demo/TreeTable.ts": {
-		"date": 1656676469598,
+		"date": 1656676470000,
 		"demo.TreeTable": {}
 	},
 	"demo/TestProTable.ts": {
-		"date": 1656621988396
+		"date": 1656621990000
 	},
 	"demo/_test1.ts": {
-		"date": 1670673958420
+		"date": 1670673960000
 	}
 }
  }

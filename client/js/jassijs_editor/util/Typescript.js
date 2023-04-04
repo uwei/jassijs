@@ -59,8 +59,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 "target": monaco.languages.typescript.ScriptTarget.Latest,
                 "baseUrl": "./",
                 "module": monaco.languages.typescript.ModuleKind.AMD,
-                //@ts-ignore
-                "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.node,
+                "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
+                typeRoots: ["./node_modules/@types"],
                 rootDir: "./",
                 "sourceMap": true,
                 "outDir": "./js",
@@ -409,9 +409,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
         sourceMap: true,
         outDir: "./js",
         allowJs: true,
-        moduleResolution: "node",
+        moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
+        typeRoots: ["./node_modules/@types"]
     };
     Typescript = Typescript_1 = __decorate([
         (0, Registry_1.$Class)("jassijs_editor.util.Typescript"),

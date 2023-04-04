@@ -9,7 +9,7 @@ import { Databinder } from "jassijs/ui/Databinder";
 import { classes } from "jassijs/remote/Classes";
 import { Tabulator } from "tabulator-tables"; 
 import { DateTimeConverter, DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
-import { Numberformatter } from "jassijs/util/Numberformatter";
+import { Numberformatter } from "jassijs/util/Numberformatter";   
 interface LazyLoadOption {
     classname: string;
     loadFunc: string;
