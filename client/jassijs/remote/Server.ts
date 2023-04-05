@@ -3,8 +3,10 @@ import { $Class } from "jassijs/remote/Registry";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { FileNode } from "jassijs/remote/FileNode";
 import { classes, JassiError } from "./Classes";
+import { serverservices } from "./Serverservice";
+ 
 
-
+ 
 
 
 @$Class("jassijs.remote.Server")
@@ -115,9 +117,7 @@ export class Server extends RemoteObject {
             let r = this._convertFileNode(ret);
             return r;
         } else {
-            //@ts-ignore
-            var fs = await import("jassijs/server/Filesystem");
-            var rett: FileNode = await new fs.default().dir("", withDate);
+            var rett: FileNode = (await serverservices.filesystem).dir("", withDate);
             return rett;
             // return ["jassijs/base/ChromeDebugger.ts"];
         }
@@ -126,9 +126,7 @@ export class Server extends RemoteObject {
         if (!context?.isServer) {
             return <{ [id: string]: string }>await this.call(this, this.zip, directoryname, serverdir, context);
         } else {
-            //@ts-ignore
-            var fs = await import("jassijs/server/Filesystem");
-            return await new fs.default().zip(directoryname, serverdir);
+          return (await serverservices.filesystem).zip(directoryname, serverdir);
             // return ["jassijs/base/ChromeDebugger.ts"];
         }
     }
@@ -141,9 +139,7 @@ export class Server extends RemoteObject {
         if (!context?.isServer) {
             return <{ [id: string]: string }>await this.call(this, this.loadFiles, fileNames, context);
         } else {
-            //@ts-ignore
-            var fs = await import("jassijs/server/Filesystem");
-            return new fs.default().loadFiles(fileNames);
+            return  (await serverservices.filesystem).loadFiles(fileNames);
             // return ["jassijs/base/ChromeDebugger.ts"];
         }
     }
@@ -181,10 +177,7 @@ export class Server extends RemoteObject {
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can loadFile from Serverdirectory");
-            //@ts-ignore
-
-            var fs = await import("jassijs/server/Filesystem");
-            var rett: string = new fs.default().loadFile(fileName);
+            var rett: string =  (await serverservices.filesystem).loadFile(fileName);
             return rett;
         }
     }
@@ -239,9 +232,7 @@ export class Server extends RemoteObject {
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can saveFiles");
-            //@ts-ignore
-            var fs: any = await import("jassijs/server/Filesystem");
-            var ret = await new fs.default().saveFiles(fileNames, contents, true);
+            var ret =  (await serverservices.filesystem).saveFiles(fileNames, contents, true);
             return ret;
         }
     }
@@ -304,10 +295,7 @@ export class Server extends RemoteObject {
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can delete");
-            //@ts-ignore
-            var fs: any = await import("jassijs/server/Filesystem");
-
-            return await new fs.default().removeServerModul(name);
+            return  (await serverservices.filesystem).removeServerModul(name);
         }
     }
     /**
@@ -322,10 +310,7 @@ export class Server extends RemoteObject {
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can delete");
-            //@ts-ignore
-            var fs: any = await import("jassijs/server/Filesystem");
-
-            return await new fs.default().remove(name);
+            return  (await serverservices.filesystem).remove(name);
         }
     }
     /**
@@ -340,10 +325,7 @@ export class Server extends RemoteObject {
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can rename");
-            //@ts-ignore
-            var fs: any = await import("jassijs/server/Filesystem");
-
-            return await new fs.default().rename(oldname, newname);;
+            return  (await serverservices.filesystem).rename(oldname, newname);;
         }
     }
     /**
@@ -379,10 +361,8 @@ export class Server extends RemoteObject {
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can createFile");
-            //@ts-ignore
-            var fs: any = await import("jassijs/server/Filesystem");
-
-            return await new fs.default().createFile(filename, content);
+          
+            return  (await serverservices.filesystem).createFile(filename, content);
         }
     }
     /**
@@ -397,10 +377,7 @@ export class Server extends RemoteObject {
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can createFolder");
-            //@ts-ignore
-            var fs: any = await import("jassijs/server/Filesystem");
-
-            return await new fs.default().createFolder(foldername);
+             return (await serverservices.filesystem).createFolder(foldername);
         }
     }
     async createModule(modulname: string, context: Context = undefined): Promise<string> {
@@ -412,10 +389,7 @@ export class Server extends RemoteObject {
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can createFolder");
-            //@ts-ignore
-            var fs: any = await import("jassijs/server/Filesystem");
-
-            return await new fs.default().createModule(modulname);
+            return  (await serverservices.filesystem).createModule(modulname);
         }
     }
     static async mytest(context: Context = undefined) {

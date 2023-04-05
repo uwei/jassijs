@@ -24,7 +24,7 @@ exports.default={
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1656597032000,
+		"date": 1680707316822,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -242,10 +242,6 @@ exports.default={
 			}
 		}
 	},
-	"jassijs/remote/Server.ts": {
-		"date": 1671231020000,
-		"jassijs.remote.Server": {}
-	},
 	"jassijs/remote/Settings.ts": {
 		"date": 1656075892000,
 		"jassijs.remote.Settings": {}
@@ -269,13 +265,20 @@ exports.default={
 		"date": 1624297018000
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1656323690000
+		"date": 1680722040517,
+		"jassijs.server.Filesystem": {
+			"$Serverservice": [
+				{
+					"name": "filesystem"
+				}
+			]
+		}
 	},
 	"jassijs/server/Indexer.ts": {
 		"date": 1656244790000
 	},
 	"jassijs/server/JassiServer.ts": {
-		"date": 1670062844000
+		"date": 1680722219857
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
 		"date": 1622984046000
@@ -299,6 +302,13 @@ exports.default={
 		"date": 1611490792000
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1680637658333
+		"date": 1680723591109
+	},
+	"jassijs/remote/Server.ts": {
+		"date": 1680723039681,
+		"jassijs.remote.Server": {}
+	},
+	"jassijs/remote/Serverservice.ts": {
+		"date": 1680722076544
 	}
 }

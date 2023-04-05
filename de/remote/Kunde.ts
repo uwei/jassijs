@@ -6,6 +6,7 @@ import { ExtensionProvider } from "jassijs/remote/Extensions";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { $ParentRights } from "jassijs/remote/security/Rights";
 import { Context } from "jassijs/remote/RemoteObject";
+import { ValidateIsInt } from "jassijs/remote/Validator";
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 @$ParentRights([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
         description: {
@@ -18,6 +19,7 @@ import { Context } from "jassijs/remote/RemoteObject";
 export class Kunde extends DBObject implements ExtensionProvider {
     @PrimaryColumn()
     declare id: number;
+    @ValidateIsInt()
     @Column()
     vorname: string;
     @Column()
@@ -97,18 +99,23 @@ export class Kunde extends DBObject implements ExtensionProvider {
     land: string;
 }
 export async function test() {
-    let test=new Kunde();
     //var g=test.extFunc2();   
     //var h=test.extFunc();
     
     //await Kunde.sample();
     var k = <Kunde>await Kunde.findOne({ id: 1 });
+    if(k===undefined)
+        k=new Kunde();
+    k.id=1;
     k.vorname = "Ella";
     k.land="Deutschland";
     k.nachname = "Klotz";
     k.ort = "Mainz";
     k.PLZ = "99992";
+    var tt=await k.validate(k);
+    debugger;
     k.save();
+
     //	new de.Kunde().generate();
     //jassijs.db.uploadType(de.Kunde);
 }

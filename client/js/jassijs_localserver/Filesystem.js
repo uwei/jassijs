@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/server/DBManager", "jassijs/remote/Registry", "jassijs/remote/Server"], function (require, exports, Registry_1, Reloader_1, DBManager_1, Registry_2, Server_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/server/DBManager", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Serverservice"], function (require, exports, Registry_1, Reloader_1, DBManager_1, Registry_2, Server_1, Serverservice_1) {
     "use strict";
     var Filessystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -381,6 +381,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader"
         }
     };
     Filessystem = Filessystem_1 = __decorate([
+        (0, Serverservice_1.$Serverservice)({ name: "filesystem" }),
         (0, Registry_1.$Class)("jassijs_localserver.Filessystem")
     ], Filessystem);
     exports.default = Filessystem;

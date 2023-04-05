@@ -18,6 +18,7 @@ const Registry_2 = require("jassijs/remote/Registry");
 let cl = Classes_1.classes; //force Classes
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Database_1 = require("jassijs/remote/Database");
+const Validator_1 = require("jassijs/remote/Validator");
 function $DBObject(options) {
     return function (pclass, ...params) {
         var classname = Classes_1.classes.getClassName(pclass);
@@ -58,6 +59,10 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
         if (!DBObject_1.cache[classname])
             return undefined;
         return DBObject_1.cache[classname][id.toString()];
+    }
+    async validate(options) {
+        var ret = (0, Validator_1.validate)(this, options);
+        return ret;
     }
     static addToCache(ob) {
         if (ob === undefined)

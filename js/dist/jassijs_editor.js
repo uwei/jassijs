@@ -1439,10 +1439,10 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             //@ts-ignore 
             var tss = await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); });
             //@ts-ignore 
-            var settings = Typescript_2.Typescript.compilerSettings;
+            var settings = Object.assign({}, Typescript_2.Typescript.compilerSettings);
             settings["inlineSourceMap"] = true;
             settings["inlineSources"] = true;
-            var files = await tss.default.transpile(file + ".ts", code);
+            var files = await tss.default.transpile(file + ".ts", code, settings);
             var codets = -1;
             var codemap = -1;
             var codejs = -1;
@@ -3206,6 +3206,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
             }, 100);
         });
         //implement go to definition
+        //TODO FIX deprecrated in new Version s. monaco.editor.registerEditorOpener
         const editorService = editor["_codeEditorService"];
         const openEditorBase = editorService.openCodeEditor.bind(editorService);
         editorService.openCodeEditor = async (input, source) => {
@@ -3530,19 +3531,19 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1657651682167,
+                "date": 1657651684000,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1657651671767,
+                "date": 1657651672000,
                 "jassijs.ui.AcePanelSimple": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
-                "date": 1655584741932,
+                "date": 1655584742000,
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1656337058050,
+                "date": 1671231420000,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -3552,64 +3553,64 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1655928743384,
+                "date": 1655928744000,
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
-                "date": 1655661688870,
+                "date": 1655661690000,
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1656185726677,
+                "date": 1656185728000,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1656022470991,
+                "date": 1656022472000,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1656017272626,
+                "date": 1656017274000,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/Debugger.ts": {
-                "date": 1656019585644,
+                "date": 1656019586000,
                 "jassijs_editor.Debugger": {}
             },
             "jassijs_editor/modul.ts": {
-                "date": 1654273312166
+                "date": 1654273314000
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1656073118850,
+                "date": 1680707721289,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
                 "date": 1623098600000
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1657925426664,
+                "date": 1657925428000,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1657715196680,
+                "date": 1657715198000,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1656018239890,
+                "date": 1656018240000,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
-                "date": 1655556792363,
+                "date": 1655556794000,
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1657659009951,
+                "date": 1680631609556,
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/ext/Monaco.ts": {
                 "date": 1657653558211
             },
             "jassijs_editor/ext/monaco.ts": {
-                "date": 1657653558211
+                "date": 1657653560000
             }
         }
     };
@@ -3657,13 +3658,13 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DragAndDropper = void 0;
     let DragAndDropper = class DragAndDropper {
+        ;
         constructor() {
             this.onpropertychanged = undefined;
             this.onpropertyadded = undefined;
             this.lastDropCanceled = false;
             this.allIDs = "";
         }
-        ;
         /**
          * could be override to block dragging
          */
@@ -4175,9 +4176,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     left = node1.getText(); // this.code.substring(node1.pos, node1.end).trim();
                     var params = [];
                     node.arguments.forEach((arg) => {
-                        var _a, _b, _c;
+                        var _a, _b;
                         params.push(arg.getText());
-                        if (((_c = (_b = (_a = arg) === null || _a === void 0 ? void 0 : _a.expression) === null || _b === void 0 ? void 0 : _b.name) === null || _c === void 0 ? void 0 : _c.getText()) === "config") {
+                        if (((_b = (_a = arg === null || arg === void 0 ? void 0 : arg.expression) === null || _a === void 0 ? void 0 : _a.name) === null || _b === void 0 ? void 0 : _b.getText()) === "config") {
                             _this.parseConfig(arg);
                         }
                         //arg.getText().indexOf(".config(")
@@ -5310,11 +5311,6 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Typescript = void 0;
     let Typescript = Typescript_5 = class Typescript {
-        constructor() {
-            this.initInIdle = true;
-            if (Typescript_5._isInited === undefined)
-                this.waitForInited = this.initService();
-        }
         isInited(file) {
             return Typescript_5._isInited === true;
         }
@@ -5347,6 +5343,11 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
             }
             return ret;
         }
+        constructor() {
+            this.initInIdle = true;
+            if (Typescript_5._isInited === undefined)
+                this.waitForInited = this.initService();
+        }
         static initMonaco() {
             /* monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
                  "baseUrl": "./",
@@ -5356,8 +5357,8 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 "target": monaco.languages.typescript.ScriptTarget.Latest,
                 "baseUrl": "./",
                 "module": monaco.languages.typescript.ModuleKind.AMD,
-                //@ts-ignore
-                "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.node,
+                "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
+                typeRoots: ["./node_modules/@types"],
                 rootDir: "./",
                 "sourceMap": true,
                 "outDir": "./js",
@@ -5706,9 +5707,10 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
         sourceMap: true,
         outDir: "./js",
         allowJs: true,
-        moduleResolution: "node",
+        moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
+        typeRoots: ["./node_modules/@types"]
     };
     Typescript = Typescript_5 = __decorate([
         (0, Registry_20.$Class)("jassijs_editor.util.Typescript"),

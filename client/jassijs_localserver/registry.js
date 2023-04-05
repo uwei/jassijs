@@ -11,7 +11,13 @@ define("jassijs_localserver/registry",["require"], function(require) {
 	},
 	"jassijs_localserver/Filesystem.ts": {
 		"date": 1625946455001,
-		"jassijs_localserver.Filessystem": {}
+		"jassijs_localserver.Filessystem": {
+			"$Serverservice": [
+				{
+					"name": "filesystem"
+				}
+			]
+		}
 	},
 	"jassijs_localserver/Indexer.ts": {
 		"date": 1627585602318

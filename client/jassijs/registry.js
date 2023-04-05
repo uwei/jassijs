@@ -80,7 +80,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1656597032000,
+		"date": 1680707316822,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -299,7 +299,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1671231020000,
+		"date": 1680723039681,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
@@ -725,7 +725,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1656683380000,
+		"date": 1680708467637,
 		"jassijs/ui/DBObjectView": {
 			"$UIComponent": [
 				{
@@ -981,7 +981,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1658349764000,
+		"date": 1680716272077,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {}
@@ -1466,7 +1466,10 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1680637658333
+		"date": 1680723591109
+	},
+	"jassijs/remote/Serverservice.ts": {
+		"date": 1680722076544
 	}
 }
  }

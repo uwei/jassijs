@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes"], function (require, exports, Registry_1, RemoteObject_1, FileNode_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes", "./Serverservice"], function (require, exports, Registry_1, RemoteObject_1, FileNode_1, Classes_1, Serverservice_1) {
     "use strict";
     var Server_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -113,9 +113,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return r;
             }
             else {
-                //@ts-ignore
-                var fs = await new Promise((resolve_1, reject_1) => { require(["jassijs/server/Filesystem"], resolve_1, reject_1); });
-                var rett = await new fs.default().dir("", withDate);
+                var rett = (await Serverservice_1.serverservices.filesystem).dir("", withDate);
                 return rett;
                 // return ["jassijs/base/ChromeDebugger.ts"];
             }
@@ -125,9 +123,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return await this.call(this, this.zip, directoryname, serverdir, context);
             }
             else {
-                //@ts-ignore
-                var fs = await new Promise((resolve_2, reject_2) => { require(["jassijs/server/Filesystem"], resolve_2, reject_2); });
-                return await new fs.default().zip(directoryname, serverdir);
+                return (await Serverservice_1.serverservices.filesystem).zip(directoryname, serverdir);
                 // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
@@ -141,9 +137,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return await this.call(this, this.loadFiles, fileNames, context);
             }
             else {
-                //@ts-ignore
-                var fs = await new Promise((resolve_3, reject_3) => { require(["jassijs/server/Filesystem"], resolve_3, reject_3); });
-                return new fs.default().loadFiles(fileNames);
+                return (await Serverservice_1.serverservices.filesystem).loadFiles(fileNames);
                 // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
@@ -182,9 +176,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can loadFile from Serverdirectory");
-                //@ts-ignore
-                var fs = await new Promise((resolve_4, reject_4) => { require(["jassijs/server/Filesystem"], resolve_4, reject_4); });
-                var rett = new fs.default().loadFile(fileName);
+                var rett = (await Serverservice_1.serverservices.filesystem).loadFile(fileName);
                 return rett;
             }
         }
@@ -204,7 +196,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                     var content = contents[f];
                     if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                         //@ts-ignore
-                        var tss = await new Promise((resolve_5, reject_5) => { require(["jassijs_editor/util/Typescript"], resolve_5, reject_5); });
+                        var tss = await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); });
                         var rets = await tss.default.transpile(fileName, content);
                         allfileNames = allfileNames.concat(rets.fileNames);
                         allcontents = allcontents.concat(rets.contents);
@@ -218,7 +210,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
                 if (res === "") {
                     //@ts-ignore
-                    new Promise((resolve_6, reject_6) => { require(["jassijs/ui/Notify"], resolve_6, reject_6); }).then((el) => {
+                    new Promise((resolve_2, reject_2) => { require(["jassijs/ui/Notify"], resolve_2, reject_2); }).then((el) => {
                         el.notify(fileName + " saved", "info", { position: "bottom right" });
                     });
                     //if (!fromServerdirectory) {
@@ -229,7 +221,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 }
                 else {
                     //@ts-ignore
-                    new Promise((resolve_7, reject_7) => { require(["jassijs/ui/Notify"], resolve_7, reject_7); }).then((el) => {
+                    new Promise((resolve_3, reject_3) => { require(["jassijs/ui/Notify"], resolve_3, reject_3); }).then((el) => {
                         el.notify(fileName + " not saved", "error", { position: "bottom right" });
                     });
                     throw new Classes_1.JassiError(res);
@@ -239,9 +231,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can saveFiles");
-                //@ts-ignore
-                var fs = await new Promise((resolve_8, reject_8) => { require(["jassijs/server/Filesystem"], resolve_8, reject_8); });
-                var ret = await new fs.default().saveFiles(fileNames, contents, true);
+                var ret = (await Serverservice_1.serverservices.filesystem).saveFiles(fileNames, contents, true);
                 return ret;
             }
         }
@@ -286,7 +276,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                     throw new Classes_1.JassiError("only admins can delete");
                 }
                 //@ts-ignore
-                var test = (await new Promise((resolve_9, reject_9) => { require([name.replaceAll("$serverside/", "")], resolve_9, reject_9); })).test;
+                var test = (await new Promise((resolve_4, reject_4) => { require([name.replaceAll("$serverside/", "")], resolve_4, reject_4); })).test;
                 if (test)
                     Server_1.lastTestServersideFileResult = await test();
                 return Server_1.lastTestServersideFileResult;
@@ -305,9 +295,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can delete");
-                //@ts-ignore
-                var fs = await new Promise((resolve_10, reject_10) => { require(["jassijs/server/Filesystem"], resolve_10, reject_10); });
-                return await new fs.default().removeServerModul(name);
+                return (await Serverservice_1.serverservices.filesystem).removeServerModul(name);
             }
         }
         /**
@@ -323,9 +311,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can delete");
-                //@ts-ignore
-                var fs = await new Promise((resolve_11, reject_11) => { require(["jassijs/server/Filesystem"], resolve_11, reject_11); });
-                return await new fs.default().remove(name);
+                return (await Serverservice_1.serverservices.filesystem).remove(name);
             }
         }
         /**
@@ -341,9 +327,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can rename");
-                //@ts-ignore
-                var fs = await new Promise((resolve_12, reject_12) => { require(["jassijs/server/Filesystem"], resolve_12, reject_12); });
-                return await new fs.default().rename(oldname, newname);
+                return (await Serverservice_1.serverservices.filesystem).rename(oldname, newname);
                 ;
             }
         }
@@ -383,9 +367,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can createFile");
-                //@ts-ignore
-                var fs = await new Promise((resolve_13, reject_13) => { require(["jassijs/server/Filesystem"], resolve_13, reject_13); });
-                return await new fs.default().createFile(filename, content);
+                return (await Serverservice_1.serverservices.filesystem).createFile(filename, content);
             }
         }
         /**
@@ -401,9 +383,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can createFolder");
-                //@ts-ignore
-                var fs = await new Promise((resolve_14, reject_14) => { require(["jassijs/server/Filesystem"], resolve_14, reject_14); });
-                return await new fs.default().createFolder(foldername);
+                return (await Serverservice_1.serverservices.filesystem).createFolder(foldername);
             }
         }
         async createModule(modulname, context = undefined) {
@@ -416,9 +396,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can createFolder");
-                //@ts-ignore
-                var fs = await new Promise((resolve_15, reject_15) => { require(["jassijs/server/Filesystem"], resolve_15, reject_15); });
-                return await new fs.default().createModule(modulname);
+                return (await Serverservice_1.serverservices.filesystem).createModule(modulname);
             }
         }
         static async mytest(context = undefined) {

@@ -1,4 +1,11 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var Filesystem_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.staticsecurefiles = exports.staticfiles = exports.syncRemoteFiles = void 0;
 const fs = require("fs");
@@ -8,12 +15,13 @@ const DBManager_1 = require("jassijs/server/DBManager");
 const JSZip = require("jszip");
 const RegistryIndexer_1 = require("./RegistryIndexer");
 const Registry_1 = require("jassijs/remote/Registry");
+const Serverservice_1 = require("../remote/Serverservice");
 let resolve = require('path').resolve;
 const passport = require("passport");
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
-class Filesystem {
+let Filesystem = Filesystem_1 = class Filesystem {
     _pathForFile(fileName, fromServerdirectory = undefined) {
-        var path = Filesystem.path + "/" + fileName;
+        var path = Filesystem_1.path + "/" + fileName;
         if (fromServerdirectory)
             path = "./" + fileName.replace("$serverside/", "");
         return path;
@@ -31,7 +39,7 @@ class Filesystem {
            }
            return parent;
        }*/
-    dir(curdir = "", appendDate = false, parentPath = Filesystem.path, parent = undefined) {
+    dir(curdir = "", appendDate = false, parentPath = Filesystem_1.path, parent = undefined) {
         var _this = this;
         if (parent === undefined) {
             parent = { name: "", files: [] };
@@ -133,11 +141,11 @@ class Filesystem {
         });
     }
     async zip(directoryname, serverdir = undefined) {
-        var root = Filesystem.path;
+        var root = Filesystem_1.path;
         if (serverdir) {
             root = ".";
         }
-        let filename = directoryname.split("/")[directoryname.split("/").length - 1] + Filesystem.zipid++;
+        let filename = directoryname.split("/")[directoryname.split("/").length - 1] + Filesystem_1.zipid++;
         await this.zipFolder(root + "/" + directoryname, "/tmp/" + filename + ".zip");
         var data = fs.readFileSync("/tmp/" + filename + ".zip"); //,'binary');
         fs.unlinkSync("/tmp/" + filename + ".zip");
@@ -419,13 +427,13 @@ class Filesystem {
                             }
                             p = p.substring(0, p.length - 3);
                             //console.log(jfile+"->"+p);
-                            if (Filesystem.allModules[p] === undefined) {
-                                Filesystem.allModules[p] = [];
+                            if (Filesystem_1.allModules[p] === undefined) {
+                                Filesystem_1.allModules[p] = [];
                             }
                             //save all modules
                             var mod = await Promise.resolve().then(() => require.main.require(p));
-                            if (Filesystem.allModules[p].indexOf(mod) === -1)
-                                Filesystem.allModules[p].push(mod);
+                            if (Filesystem_1.allModules[p].indexOf(mod) === -1)
+                                Filesystem_1.allModules[p].push(mod);
                             jfiles.push(jfile);
                         }
                     }
@@ -440,8 +448,8 @@ class Filesystem {
         }
         ;
         try {
-            for (var key in Filesystem.allModules) { //load and migrate modules
-                var all = Filesystem.allModules[key];
+            for (var key in Filesystem_1.allModules) { //load and migrate modules
+                var all = Filesystem_1.allModules[key];
                 var mod = await Promise.resolve().then(() => require.main.require(key));
                 for (var a = 0; a < all.length; a++) {
                     for (key in mod) {
@@ -478,7 +486,7 @@ class Filesystem {
         }
         catch (err) {
         }
-        fs.writeFileSync(Filesystem.path + "/" + fileName, content);
+        fs.writeFileSync(Filesystem_1.path + "/" + fileName, content);
         /*
         if(fileName.endsWith(".ts")){
             new Compile().transpile(fileName,function(done){
@@ -495,11 +503,15 @@ class Filesystem {
         await new RegistryIndexer_1.ServerIndexer().updateRegistry();
         //TODO $this->updateRegistry();
     }
-}
-exports.default = Filesystem;
+};
 Filesystem.allModules = {};
 Filesystem.path = "./client";
 Filesystem.zipid = 0;
+Filesystem = Filesystem_1 = __decorate([
+    (0, Serverservice_1.$Serverservice)({ name: "filesystem" }),
+    (0, Registry_1.$Class)("jassijs.server.Filesystem")
+], Filesystem);
+exports.default = Filesystem;
 function copyFile(f1, f2) {
     try {
         if (fs.existsSync(f1) && f1.endsWith(".ts") && !fs.statSync(f1).isDirectory()) {

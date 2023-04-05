@@ -273,7 +273,6 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             return retob;
         }
         async save(context, entity, options) {
-            var _a;
             await this._checkParentRightsForSave(context, entity);
             if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
                 if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
@@ -295,7 +294,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             //delete entity.password;
             //delete ret["password"];
             //@ts-ignore
-            return (_a = ret) === null || _a === void 0 ? void 0 : _a.id;
+            return ret === null || ret === void 0 ? void 0 : ret.id;
         }
         async _checkParentRightsForSave(context, entity) {
             var _a;
@@ -883,7 +882,7 @@ define("jassijs_localserver/DatabaseSchema", ["require", "exports", "jassijs/rem
 });
 //export function Entity(options?: EntityOptions): Function;
 //export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
-define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/server/DBManager", "jassijs/remote/Registry", "jassijs/remote/Server"], function (require, exports, Registry_3, Reloader_1, DBManager_2, Registry_4, Server_1) {
+define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/server/DBManager", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Serverservice"], function (require, exports, Registry_3, Reloader_1, DBManager_2, Registry_4, Server_1, Serverservice_1) {
     "use strict";
     var Filessystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1260,6 +1259,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
         }
     };
     Filessystem = Filessystem_1 = __decorate([
+        (0, Serverservice_1.$Serverservice)({ name: "filesystem" }),
         (0, Registry_3.$Class)("jassijs_localserver.Filessystem")
     ], Filessystem);
     exports.default = Filessystem;
@@ -2015,7 +2015,13 @@ define("jassijs_localserver/registry", ["require"], function (require) {
             },
             "jassijs_localserver/Filesystem.ts": {
                 "date": 1625946455001,
-                "jassijs_localserver.Filessystem": {}
+                "jassijs_localserver.Filessystem": {
+                    "$Serverservice": [
+                        {
+                            "name": "filesystem"
+                        }
+                    ]
+                }
             },
             "jassijs_localserver/Indexer.ts": {
                 "date": 1627585602318

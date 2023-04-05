@@ -10,6 +10,7 @@ import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Style } from "jassijs/ui/Style";
 import windows from "jassijs/base/Windows";
 import { FileExplorer } from "jassijs/ui/FileExplorer";
+import { serverservices } from "jassijs/remote/Serverservice";
 //test
 type Me = {
     htmlpanel1?: HTMLPanel;
@@ -73,6 +74,11 @@ export class Dialog extends Panel {
     }
 }
 export async function test() {
+    var h=serverservices.filesystem;
+
+    return;
+
+
    var md:string=await $.ajax({
        type:"get",
        url:"https://uwei.github.io/jassijs-reporteditor/README.md"

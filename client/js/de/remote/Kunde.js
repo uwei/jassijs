@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObjectQuery", "jassijs/remote/security/Rights"], function (require, exports, DBObject_1, AR_1, Registry_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObjectQuery", "jassijs/remote/security/Rights", "jassijs/remote/Validator"], function (require, exports, DBObject_1, AR_1, Registry_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1, Validator_1) {
     "use strict";
     var Kunde_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -79,6 +79,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
         __metadata("design:type", Number)
     ], Kunde.prototype, "id", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsInt)(),
         (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Kunde.prototype, "vorname", void 0);
@@ -135,16 +136,20 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
     ], Kunde);
     exports.Kunde = Kunde;
     async function test() {
-        let test = new Kunde();
         //var g=test.extFunc2();   
         //var h=test.extFunc();
         //await Kunde.sample();
         var k = await Kunde.findOne({ id: 1 });
+        if (k === undefined)
+            k = new Kunde();
+        k.id = 1;
         k.vorname = "Ella";
         k.land = "Deutschland";
         k.nachname = "Klotz";
         k.ort = "Mainz";
         k.PLZ = "99992";
+        var tt = await k.validate(k);
+        debugger;
         k.save();
         //	new de.Kunde().generate();
         //jassijs.db.uploadType(de.Kunde);

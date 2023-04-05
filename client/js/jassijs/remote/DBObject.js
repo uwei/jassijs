@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database"], function (require, exports, Registry_1, Classes_1, RemoteObject_1, Registry_2, DatabaseSchema_1, Database_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database", "jassijs/remote/Validator"], function (require, exports, Registry_1, Classes_1, RemoteObject_1, Registry_2, DatabaseSchema_1, Database_1, Validator_1) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -53,6 +53,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
             if (!DBObject_1.cache[classname])
                 return undefined;
             return DBObject_1.cache[classname][id.toString()];
+        }
+        async validate(options) {
+            var ret = (0, Validator_1.validate)(this, options);
+            return ret;
         }
         static addToCache(ob) {
             if (ob === undefined)

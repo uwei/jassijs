@@ -41,6 +41,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
             }, 100);
         });
         //implement go to definition
+        //TODO FIX deprecrated in new Version s. monaco.editor.registerEditorOpener
         const editorService = editor["_codeEditorService"];
         const openEditorBase = editorService.openCodeEditor.bind(editorService);
         editorService.openCodeEditor = async (input, source) => {

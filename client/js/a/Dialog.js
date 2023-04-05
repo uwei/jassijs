@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/base/Windows"], function (require, exports, MenuItem_1, Checkbox_1, Textbox_1, Button_1, BoxPanel_1, Registry_1, Panel_1, HTMLPanel_1, Windows_1) {
+define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/base/Windows", "jassijs/remote/Serverservice"], function (require, exports, MenuItem_1, Checkbox_1, Textbox_1, Button_1, BoxPanel_1, Registry_1, Panel_1, HTMLPanel_1, Windows_1, Serverservice_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog = void 0;
@@ -60,6 +60,8 @@ define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Checkbox", "jas
     ], Dialog);
     exports.Dialog = Dialog;
     async function test() {
+        var h = Serverservice_1.serverservices.filesystem;
+        return;
         var md = await $.ajax({
             type: "get",
             url: "https://uwei.github.io/jassijs-reporteditor/README.md"

@@ -25,6 +25,7 @@ import { zip } from "jassijs/server/Zip";
 import { rawbody } from "jassijs/server/RawBody";
 import { ServerIndexer } from "./RegistryIndexer";
 import { DoServerreport } from "jassijs_report/DoServerreport";
+import { serverservices } from "../remote/Serverservice";
 
 
 class JassiConnectionProperties {
@@ -41,7 +42,7 @@ class JassiConnectionProperties {
 }
 /**
  * starts jassi server
- * @param properties 
+ * @param properties  
  * @param expressApp 
  * @returns expressApp
  */
@@ -70,6 +71,9 @@ export default function JassiServer(properties: JassiConnectionProperties={}, ex
     app.use(staticsecurefiles, passport.authenticate("jwt", { session: false }));
    
     app.post('/remoteprotocol', passport.authenticate("jwt", { session: false }), remoteProtocol);
+
+
+
    /* if (properties.allowDownloadAsZip!==false)
         app.get('/zip', passport.authenticate("jwt", { session: false }), zip);*/
     const PORT=(process.env.PORT || 5000)

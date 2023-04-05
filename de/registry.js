@@ -85,7 +85,7 @@ exports.default={
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1656077076000,
+		"date": 1680707608306,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -106,6 +106,7 @@ exports.default={
 					"PrimaryColumn": []
 				},
 				"vorname": {
+					"ValidateIsInt": [],
 					"Column": []
 				},
 				"nachname": {

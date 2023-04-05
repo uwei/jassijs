@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Test } from "jassijs/remote/Test";
 
 const paramMetadataKey = Symbol("paramMetadataKey");

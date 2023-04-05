@@ -51,7 +51,7 @@ export class KundeView extends DBObjectView {
             children: [
                 me.textbox2.config({
                     x: 5,
-                    y: 5,
+                    y: 0,
                     label: "Id",
                     width: 50,
                     bind: [me.databinder, "id"],
@@ -59,7 +59,7 @@ export class KundeView extends DBObjectView {
                 }),
                 me.textbox1.config({
                     x: 5,
-                    y: 45,
+                    y: 40,
                     label: "Vorname",
                     width: 95,
                     bind: [me.databinder, "vorname"],
@@ -69,35 +69,35 @@ export class KundeView extends DBObjectView {
                 }),
                 me.textbox3.config({
                     x: 110,
-                    y: 45,
+                    y: 40,
                     label: "Nachname",
                     width: 120,
                     bind: [me.databinder, "nachname"]
                 }),
                 me.textbox4.config({
                     x: 5,
-                    y: 95,
+                    y: 100,
                     bind: [me.databinder, "strasse"],
                     label: "Straße",
                     width: 145
                 }),
                 me.textbox6.config({
                     x: 160,
-                    y: 95,
+                    y: 100,
                     label: "Hausnummer",
                     width: 70,
                     bind: [me.databinder, "hausnummer"]
                 }),
                 me.textbox5.config({
                     x: 5,
-                    y: 145,
+                    y: 155,
                     width: 55,
                     bind: [me.databinder, "PLZ"],
                     label: "PLZ"
                 }),
                 me.textbox7.config({
                     x: 75,
-                    y: 145,
+                    y: 155,
                     label: "Ort",
                     bind: [me.databinder, "ort"],
                     height: 15,
@@ -110,6 +110,7 @@ export class KundeView extends DBObjectView {
 export async function test() {
     var v = new KundeView();
     var test = await Kunde.findOne(1);
+    
     v.value = <Kunde>test;
     return v;
 }

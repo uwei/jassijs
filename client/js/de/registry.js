@@ -37,7 +37,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/KundeView.ts": {
-		"date": 1655556796000,
+		"date": 1680709479415,
 		"de.KundeView": {
 			"$DBObjectView": [
 				{
@@ -148,7 +148,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1656077076000,
+		"date": 1680707608306,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -169,6 +169,7 @@ define("de/registry",["require"], function(require) {
 					"PrimaryColumn": []
 				},
 				"vorname": {
+					"ValidateIsInt": [],
 					"Column": []
 				},
 				"nachname": {

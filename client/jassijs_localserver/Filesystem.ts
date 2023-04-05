@@ -5,6 +5,7 @@ import { Reloader } from "jassijs/util/Reloader";
 import { DBManager } from "jassijs/server/DBManager";
 import registry from "jassijs/remote/Registry";
 import { Server } from "jassijs/remote/Server";
+import { $Serverservice } from "jassijs/remote/Serverservice";
 
 
 class FileEntry {
@@ -13,6 +14,13 @@ class FileEntry {
     isDirectory?: boolean;
     data: any;
 }
+declare global{
+    export interface Serverservice{
+        filesystem:Promise<Filessystem>;
+    }
+}
+
+@$Serverservice({name:"filesystem"})  
 @$Class("jassijs_localserver.Filessystem")
 export default class Filessystem {
     private static db: IDBDatabase;

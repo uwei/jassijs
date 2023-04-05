@@ -6,12 +6,21 @@ import { DBManager } from 'jassijs/server/DBManager';
 import { FileNode } from 'jassijs/remote/FileNode';
 import JSZip = require("jszip");
 import { ServerIndexer } from './RegistryIndexer';
-import registry from 'jassijs/remote/Registry';
+import registry, { $Class } from 'jassijs/remote/Registry';
 import { JassiError } from 'jassijs/remote/Classes';
+import { $Serverservice } from '../remote/Serverservice';
 let resolve = require('path').resolve;
 const passport = require("passport");
 
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"]
+declare global{
+    export interface Serverservice{
+        filesystem:Promise<Filesystem>;
+    }
+}
+
+@$Serverservice({name:"filesystem"}) 
+@$Class("jassijs.server.Filesystem")
 export default class Filesystem {
     static allModules: { [name: string]: any[] } = {};
     public static path = "./client";
@@ -649,3 +658,4 @@ export function staticsecurefiles(req, res, next) {
     }
     var s = 1;
 }
+

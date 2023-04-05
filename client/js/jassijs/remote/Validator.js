@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "reflect-metadata"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.validate = exports.ValidateFunctionParameter = exports.ValidationError = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.registerValidation = exports.ValidationOptions = void 0;

@@ -13,6 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.validate = exports.ValidateFunctionParameter = exports.ValidationError = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.registerValidation = exports.ValidationOptions = void 0;
+require("reflect-metadata");
 const paramMetadataKey = Symbol("paramMetadataKey");
 class ValidationOptions {
 }

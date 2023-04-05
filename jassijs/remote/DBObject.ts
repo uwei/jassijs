@@ -6,6 +6,7 @@ let cl = classes;//force Classes
 import { Entity, EntityOptions } from "jassijs/util/DatabaseSchema";
 import { db } from "jassijs/remote/Database";
 import { Transaction } from "jassijs/remote/Transaction";
+import { validate, ValidationError } from "jassijs/remote/Validator";
 
 export function $DBObject(options?: EntityOptions): Function {
     return function (pclass, ...params) {
@@ -75,6 +76,10 @@ export class DBObject extends RemoteObject {
         if (!DBObject.cache[classname])
             return undefined;
         return DBObject.cache[classname][id.toString()];
+    }
+    public async validate(options):ValidationError[]{
+        var ret=validate(this,options);
+        return ret;
     }
     private static addToCache(ob) {
         if (ob === undefined)

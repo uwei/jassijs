@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Button_1, BoxPanel_1, Registry_1, Panel_1, Databinder_1, Component_1, Registry_2, Classes_1, Property_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ui/Notify"], function (require, exports, Button_1, BoxPanel_1, Registry_1, Panel_1, Databinder_1, Component_1, Registry_2, Classes_1, Property_1, Notify_1) {
     "use strict";
     var DBObjectView_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -50,14 +50,29 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         oncreated(handler) {
             this.addEvent("created", handler);
         }
+        doSave(ob) {
+            ob.save().then((obj) => {
+                this["value"] = typeof obj === "object" ? obj : ob;
+                this.callEvent("saved", ob);
+            });
+        }
+        async doValidation(ob) {
+            if (ob.validate) {
+                var validationerrors = await ob.validate();
+                if (validationerrors.length > 0) {
+                    (0, Notify_1.notify)("Could not save", "error", { position: "bottom right" });
+                    return false;
+                }
+            }
+            return true;
+        }
         /**
          * saves the object
          */
         saveObject() {
             var ob = this.me.databinder.fromForm();
-            ob.save().then((obj) => {
-                this["value"] = typeof obj === "object" ? obj : ob;
-                this.callEvent("saved", ob);
+            this.doValidation(ob).then((success) => {
+                this.doSave(ob);
             });
         }
         onsaved(handler) {

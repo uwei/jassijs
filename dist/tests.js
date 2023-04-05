@@ -370,11 +370,11 @@ define("tests/registry", ["require"], function (require) {
                 "date": 1624296374000
             },
             "tests/remote/T.ts": {
-                "date": 1655556792356,
+                "date": 1655556794000,
                 "tests.remote.T": {}
             },
             "tests/remote/TestCustomer.ts": {
-                "date": 1656073034029,
+                "date": 1656073036000,
                 "tests.TestCustomer": {
                     "$ParentRights": [
                         [
@@ -411,7 +411,7 @@ define("tests/registry", ["require"], function (require) {
                 }
             },
             "tests/remote/TestOrder.ts": {
-                "date": 1656073023813,
+                "date": 1656073024000,
                 "tests.TestOrder": {
                     "$DBObject": [],
                     "@members": {
@@ -434,7 +434,7 @@ define("tests/registry", ["require"], function (require) {
                 }
             },
             "tests/remote/TestOrderDetails.ts": {
-                "date": 1656073236783,
+                "date": 1656073238000,
                 "tests.TestOrderDetails": {
                     "$DBObject": [],
                     "@members": {
@@ -455,20 +455,20 @@ define("tests/registry", ["require"], function (require) {
                 "date": 1624999038000
             },
             "tests/RemoteModulTests.ts": {
-                "date": 1655556792356
+                "date": 1655556794000
             },
             "tests/ServerTests.ts": {
-                "date": 1656077953224
+                "date": 1656077954000
             },
             "tests/TestDialog.ts": {
-                "date": 1656079687883,
+                "date": 1656079688000,
                 "tests/TestDialog": {}
             },
             "tests/TestReport.ts": {
                 "date": 1623864074000
             },
             "tests/remote/TestBigData.ts": {
-                "date": 1656620693167,
+                "date": 1656620694000,
                 "tests.TestBigData": {
                     "$DBObject": [],
                     "@members": {
@@ -507,7 +507,7 @@ define("tests/registry", ["require"], function (require) {
                 }
             },
             "tests/BigDataTest.ts": {
-                "date": 1659171561228
+                "date": 1659171562000
             }
         }
     };
