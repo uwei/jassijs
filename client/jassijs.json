@@ -14,8 +14,7 @@
 		"de": "de",
 		"tests": "tests",
 		"jassijs_report": "jassijs_report",
-		"demoreports": "demoreports",
-		"jassijs_localserver":"jassijs_localserver"
+		"demoreports": "demoreports"
 
 	},
 	"require": {

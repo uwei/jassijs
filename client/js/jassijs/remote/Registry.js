@@ -266,7 +266,7 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
                         var m = modul;
                         all[modul] = new Promise((resolve, reject) => {
                             //@ts-ignore
-                            require([m + "/registry"], function (ret, r2) {
+                            require([m + "/registry"], function (ret) {
                                 resolve(ret.default);
                             });
                         });

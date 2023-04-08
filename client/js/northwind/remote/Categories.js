@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema"], function (require, exports, Products_1, DBObject_1, Registry_1, DatabaseSchema_1) {
     "use strict";
+    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Categories = void 0;
     let Categories = class Categories extends DBObject_1.DBObject {
@@ -34,7 +35,7 @@ define(["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObj
     ], Categories.prototype, "Picture", void 0);
     __decorate([
         (0, DatabaseSchema_1.OneToMany)(type => Products_1.Products, e => e.Category),
-        __metadata("design:type", Products_1.Products)
+        __metadata("design:type", typeof (_a = typeof Products_1.Products !== "undefined" && Products_1.Products) === "function" ? _a : Object)
     ], Categories.prototype, "Products", void 0);
     Categories = __decorate([
         (0, DBObject_1.$DBObject)(),

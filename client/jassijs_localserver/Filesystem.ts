@@ -222,9 +222,9 @@ export default class Filesystem {
         if (rollbackonerror) {
             try {
                 await Reloader.instance.reloadJSAll(jsToReload);
-                if (dbschemaHasChanged) {
+                /*if (dbschemaHasChanged) { //happens in reloadJS
                     await(await serverservices.db).renewConnection();
-                }
+                }*/
             } catch (err) {
                 console.error(err);
                 if (dbschemaHasChanged) {

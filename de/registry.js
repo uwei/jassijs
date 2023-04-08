@@ -214,5 +214,9 @@ exports.default={
 				}
 			}
 		}
+	},
+	"de/remote/MyRemoteObject.ts": {
+		"date": 1680980491170,
+		"de.remote.MyRemoteObject": {}
 	}
 }

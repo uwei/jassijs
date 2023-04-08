@@ -6,7 +6,7 @@ define("jassijs_localserver/registry",["require"], function(require) {
 		"date": 1622984214000
 	},
 	"jassijs_localserver/DBManager.ts": {
-		"date": 1680950724073,
+		"date": 1680958168208,
 		"jassijs_localserver.DBManager": {
 			"$Serverservice": [
 				{
@@ -64,7 +64,7 @@ define("jassijs_localserver/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_localserver/DBManagerExt.ts": {
-		"date": 1680952472756
+		"date": 1680956657331
 	},
 	"jassijs_localserver/ext/jzip.ts": {
 		"date": 1657714030000

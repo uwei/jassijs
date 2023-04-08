@@ -211,9 +211,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader"
             if (rollbackonerror) {
                 try {
                     await Reloader_1.Reloader.instance.reloadJSAll(jsToReload);
-                    if (dbschemaHasChanged) {
-                        await (await Serverservice_1.serverservices.db).renewConnection();
-                    }
+                    /*if (dbschemaHasChanged) { //happens in reloadJS
+                        await(await serverservices.db).renewConnection();
+                    }*/
                 }
                 catch (err) {
                     console.error(err);

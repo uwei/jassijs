@@ -118,7 +118,15 @@ let DBManager = DBManager_1 = class DBManager {
             }
         }
         try {
-            await _instance.mySync();
+            var con = (0, typeorm_1.getConnection)();
+            for (var x = 0; x < 500; x++) { //sometimes on reconnect the connection is not ready
+                if (con.isConnected)
+                    break;
+                else
+                    await new Promise((resolve) => setTimeout(() => resolve(undefined), 10));
+            }
+            console.log(con.isConnected);
+            await this.mySync();
         }
         catch (err) {
             console.log("DB Schema could not be saved");
@@ -194,6 +202,8 @@ let DBManager = DBManager_1 = class DBManager {
         DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().uniques);
     }
     async renewConnection() {
+        if (this.waitForConnection !== undefined)
+            await this.waitForConnection;
         this.waitForConnection = new Promise((resolve) => { }); //never resolve
         await this.destroyConnection(false);
         this.waitForConnection = this.open();
@@ -202,11 +212,13 @@ let DBManager = DBManager_1 = class DBManager {
         if (waitForCompleteOpen)
             await this.waitForConnection;
         try {
-            await (0, typeorm_1.getConnection)().close();
+            var con = await (0, typeorm_1.getConnection)();
+            await con.close();
         }
-        catch (_a) {
+        catch (err) {
+            debugger;
         }
-        DBManager_1.clearMetadata();
+        await DBManager_1.clearMetadata();
     }
     static clearArray(arr) {
         while (arr.length > 0) {

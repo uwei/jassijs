@@ -118,6 +118,14 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
                 }
             }
             try {
+                var con = (0, typeorm_1.getConnection)();
+                for (var x = 0; x < 500; x++) { //sometimes on reconnect the connection is not ready
+                    if (con.isConnected)
+                        break;
+                    else
+                        await new Promise((resolve) => setTimeout(() => resolve(undefined), 10));
+                }
+                console.log(con.isConnected);
                 await this.mySync();
             }
             catch (err) {
@@ -194,6 +202,8 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().uniques);
         }
         async renewConnection() {
+            if (this.waitForConnection !== undefined)
+                await this.waitForConnection;
             this.waitForConnection = new Promise((resolve) => { }); //never resolve
             await this.destroyConnection(false);
             this.waitForConnection = this.open();
@@ -202,11 +212,13 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             if (waitForCompleteOpen)
                 await this.waitForConnection;
             try {
-                await (0, typeorm_1.getConnection)().close();
+                var con = await (0, typeorm_1.getConnection)();
+                await con.close();
             }
-            catch (_a) {
+            catch (err) {
+                debugger;
             }
-            DBManager_1.clearMetadata();
+            await DBManager_1.clearMetadata();
         }
         static clearArray(arr) {
             while (arr.length > 0) {
@@ -1293,9 +1305,9 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             if (rollbackonerror) {
                 try {
                     await Reloader_2.Reloader.instance.reloadJSAll(jsToReload);
-                    if (dbschemaHasChanged) {
-                        await (await Serverservice_3.serverservices.db).renewConnection();
-                    }
+                    /*if (dbschemaHasChanged) { //happens in reloadJS
+                        await(await serverservices.db).renewConnection();
+                    }*/
                 }
                 catch (err) {
                     console.error(err);
@@ -2031,7 +2043,7 @@ define("jassijs_localserver/registry", ["require"], function (require) {
                 "date": 1622984214000
             },
             "jassijs_localserver/DBManager.ts": {
-                "date": 1680950724073,
+                "date": 1680958168208,
                 "jassijs_localserver.DBManager": {
                     "$Serverservice": [
                         {
@@ -2089,7 +2101,7 @@ define("jassijs_localserver/registry", ["require"], function (require) {
                 }
             },
             "jassijs_localserver/DBManagerExt.ts": {
-                "date": 1680952472756
+                "date": 1680956657331
             },
             "jassijs_localserver/ext/jzip.ts": {
                 "date": 1657714030000

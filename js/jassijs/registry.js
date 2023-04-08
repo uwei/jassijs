@@ -50,7 +50,7 @@ exports.default={
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1680817383805
+		"date": 1680975011688
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1655556866000,
@@ -258,7 +258,7 @@ exports.default={
 		"date": 1680803766537
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1680951212516,
+		"date": 1680982331732,
 		"jassijs/server/DBManager": {
 			"$Serverservice": [
 				{
@@ -317,6 +317,6 @@ exports.default={
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Serverservice.ts": {
-		"date": 1680952917750
+		"date": 1680954695071
 	}
 }

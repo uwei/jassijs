@@ -207,7 +207,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985414000
             },
             "jassijs/remote/Registry.ts": {
-                "date": 1680817383805
+                "date": 1680975011688
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1655556866000,
@@ -1570,7 +1570,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1680723591109
             },
             "jassijs/remote/Serverservice.ts": {
-                "date": 1680951746952
+                "date": 1680954695071
             }
         }
     };
@@ -4502,7 +4502,7 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
                         var m = modul;
                         all[modul] = new Promise((resolve, reject) => {
                             //@ts-ignore
-                            require([m + "/registry"], function (ret, r2) {
+                            require([m + "/registry"], function (ret) {
                                 resolve(ret.default);
                             });
                         });

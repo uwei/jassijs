@@ -182,7 +182,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 if (code.indexOf("@$") > -1) {
                     await Registry_2.default.reload();
                 }
-                Reloader_1.Reloader.instance.reloadJS(f);
+                await Reloader_1.Reloader.instance.reloadJS(f);
             }
         }
         /**

@@ -1089,7 +1089,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 if (code.indexOf("@$") > -1) {
                     await Registry_6.default.reload();
                 }
-                Reloader_2.Reloader.instance.reloadJS(f);
+                await Reloader_2.Reloader.instance.reloadJS(f);
             }
         }
         /**
@@ -3532,7 +3532,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1671231420000,
+                "date": 1680978169530,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}

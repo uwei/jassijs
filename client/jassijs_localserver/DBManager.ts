@@ -36,7 +36,6 @@ declare global{
 export class DBManager {
   waitForConnection: Promise<DBManager> = undefined;
   static async getConOpts(): Promise<ConnectionOptions> {
-
     var stype: string = "postgres";
     var shost = "localhost";
     var suser = "postgres";
@@ -99,7 +98,7 @@ export class DBManager {
 
     return opt;
   }
- 
+
   private static async _get(): Promise<DBManager> {
     if (_instance === undefined) {
       _instance = new DBManager();
@@ -108,7 +107,7 @@ export class DBManager {
     return _instance;
   }
   private async open() {
-    var _initrunning = undefined;
+    var _initrunning: Promise<Connection> = undefined;
     var test = getMetadataArgsStorage();
     try {
       var opts = await DBManager.getConOpts();
@@ -141,7 +140,16 @@ export class DBManager {
         }
       }
     }
+
     try {
+      var con = getConnection();
+      for (var x = 0; x < 500; x++) {//sometimes on reconnect the connection is not ready
+        if (con.isConnected)
+          break;
+        else
+          await new Promise((resolve) => setTimeout(() => resolve(undefined), 10));
+      }
+      console.log(con.isConnected);
       await this.mySync();
     } catch (err) {
       console.log("DB Schema could not be saved");
@@ -221,22 +229,24 @@ export class DBManager {
     DBManager.clearArray(getMetadataArgsStorage().trees);
     DBManager.clearArray(getMetadataArgsStorage().uniques);
   }
-  public async renewConnection(){
-    this.waitForConnection=new Promise((resolve)=>{});//never resolve
-    await this.destroyConnection(false);
-    this.waitForConnection=this.open();
-  }
-  public async destroyConnection(waitForCompleteOpen=true) {
-    if(waitForCompleteOpen)
+  public async renewConnection() {
+    if(this.waitForConnection!==undefined)
       await this.waitForConnection;
-   
-      try {
-        await getConnection().close();
-      } catch {
-
-      }
-
-    DBManager.clearMetadata();
+    this.waitForConnection = new Promise((resolve) => { });//never resolve
+    await this.destroyConnection(false);
+    this.waitForConnection = this.open();
+  }
+  public async destroyConnection(waitForCompleteOpen = true) {
+    if (waitForCompleteOpen)
+      await this.waitForConnection;
+    try {
+      var con=await getConnection();
+      await con.close();
+     
+    } catch(err) {
+      debugger;
+    }
+    await DBManager.clearMetadata();
   }
   private static clearArray(arr: any[]) {
     while (arr.length > 0) {
@@ -245,14 +255,14 @@ export class DBManager {
   }
   private constructor() {
     Object.freeze(_instance);
-    this.waitForConnection=this.open();
+    this.waitForConnection = this.open();
   }
   connection() {
     return getConnection();
   }
   async runSQL(context: Context, sql: string, parameters: any[] = undefined) {
 
-    var ret =  (await this.waitForConnection).connection().query(sql, parameters);
+    var ret = (await this.waitForConnection).connection().query(sql, parameters);
     return ret;
   }
   async remove<Entity>(context: Context, entity: Entity) {

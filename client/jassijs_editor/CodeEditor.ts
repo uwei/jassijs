@@ -234,7 +234,7 @@ export class CodeEditor extends Panel {
             if (code.indexOf("@$") > -1) {
                 await registry.reload();
             }
-            Reloader.instance.reloadJS(f);
+            await Reloader.instance.reloadJS(f);
         }
 
     }

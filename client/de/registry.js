@@ -307,6 +307,10 @@ define("de/registry",["require"], function(require) {
 	},
 	"de/TestEmployees.ts": {
 		"date": 1657973728000
+	},
+	"de/remote/MyRemoteObject.ts": {
+		"date": 1680980491170,
+		"de.remote.MyRemoteObject": {}
 	}
 }
  }
