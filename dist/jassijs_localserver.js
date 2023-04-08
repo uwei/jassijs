@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Registry_2) {
+define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Registry_2, Serverservice_1) {
     "use strict";
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -16,9 +16,6 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
     const passwordIteration = 10000;
     var _instance = undefined;
     var _initrunning = undefined;
-    /**
-     * Database access with typeorm
-     */
     let DBManager = DBManager_1 = class DBManager {
         static async getConOpts() {
             var stype = "postgres";
@@ -36,6 +33,8 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             if (test !== undefined) {
                 var all = test.split(":");
                 stype = all[0];
+                if (stype === "postgresql")
+                    stype = "postgres";
                 var h = all[2].split("@");
                 shost = h[1];
                 iport = Number(all[3].split("/")[0]);
@@ -72,50 +71,53 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             };
             return opt;
         }
-        static async get() {
+        static async _get() {
             if (_instance === undefined) {
                 _instance = new DBManager_1();
-                var test = (0, typeorm_1.getMetadataArgsStorage)();
+            }
+            await _instance.waitForConnection;
+            return _instance;
+        }
+        async open() {
+            var _initrunning = undefined;
+            var test = (0, typeorm_1.getMetadataArgsStorage)();
+            try {
+                var opts = await DBManager_1.getConOpts();
+                _initrunning = (0, typeorm_1.createConnection)(opts);
+                await _initrunning;
+            }
+            catch (err1) {
                 try {
-                    var opts = await DBManager_1.getConOpts();
-                    Object.freeze(DBManager_1);
+                    _initrunning = undefined;
+                    //@ts-ignore //heroku need this
+                    opts.ssl = {
+                        rejectUnauthorized: false
+                    };
+                    //          opts["ssl"] = true; 
                     _initrunning = (0, typeorm_1.createConnection)(opts);
                     await _initrunning;
                 }
-                catch (err1) {
-                    try {
-                        _initrunning = undefined;
-                        //@ts-ignore //heroku need this
-                        opts.ssl = {
-                            rejectUnauthorized: false
-                        };
-                        //          opts["ssl"] = true;
-                        _initrunning = (0, typeorm_1.createConnection)(opts);
-                        await _initrunning;
-                    }
-                    catch (err) {
-                        console.log("DB corrupt - revert the last change");
-                        console.error(err);
-                        _instance = undefined;
-                        _initrunning = undefined;
-                        if (err.message === "The server does not support SSL connections") {
-                            throw err1;
-                            console.error(err1);
-                        }
-                        else {
-                            throw err;
-                            console.error(err);
-                        }
-                    }
-                }
-                try {
-                    await _instance.mySync();
-                }
                 catch (err) {
-                    console.log("DB Schema could not be saved");
-                    throw err;
+                    console.log("DB corrupt - revert the last change");
+                    console.error(err);
+                    _instance = undefined;
+                    _initrunning = undefined;
+                    if (err.message === "The server does not support SSL connections") {
+                        throw err1;
+                        console.error(err1);
+                    }
+                    else {
+                        throw err;
+                        console.error(err);
+                    }
                 }
-                await _instance.hasLoaded();
+            }
+            try {
+                await this.mySync();
+            }
+            catch (err) {
+                console.log("DB Schema could not be saved");
+                throw err;
             }
             //wait for connection ready
             await _initrunning;
@@ -132,12 +134,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
                 catch (_a) {
                 }
             }
-            return _instance;
-        }
-        /**
-         * loading is finished
-         */
-        async hasLoaded() {
+            return this;
         }
         async mySync() {
             var con = (0, typeorm_1.getConnection)();
@@ -191,16 +188,19 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().trees);
             DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().uniques);
         }
-        static async destroyConnection() {
-            if (_instance !== undefined) {
-                try {
-                    await DBManager_1.get();
-                    await (0, typeorm_1.getConnection)().close();
-                }
-                catch (_a) {
-                }
+        async renewConnection() {
+            this.waitForConnection = new Promise((resolve) => { }); //never resolve
+            await this.destroyConnection(false);
+            this.waitForConnection = this.open();
+        }
+        async destroyConnection(waitForCompleteOpen = true) {
+            if (waitForCompleteOpen)
+                await this.waitForConnection;
+            try {
+                await (0, typeorm_1.getConnection)().close();
             }
-            _instance = undefined;
+            catch (_a) {
+            }
             DBManager_1.clearMetadata();
         }
         static clearArray(arr) {
@@ -209,22 +209,25 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             }
         }
         constructor() {
+            this.waitForConnection = undefined;
             Object.freeze(_instance);
+            this.waitForConnection = this.open();
         }
         connection() {
             return (0, typeorm_1.getConnection)();
         }
         async runSQL(context, sql, parameters = undefined) {
-            var ret = await (await DBManager_1.get()).connection().query(sql, parameters);
+            var ret = (await this.waitForConnection).connection().query(sql, parameters);
             return ret;
         }
         async remove(context, entity) {
-            var test = await (await DBManager_1.get()).checkParentRight(context, entity, [entity["id"]]);
+            var test = await (await this.waitForConnection).checkParentRight(context, entity, [entity["id"]]);
             if (test === false)
                 throw new Classes_1.JassiError("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
             await this.connection().manager.remove(entity);
         }
         async addSaveTransaction(context, entity) {
+            await this.waitForConnection;
             if (context.objecttransaction) {
                 let ot = context.objecttransaction;
                 if (!ot.savelist) {
@@ -252,6 +255,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
        * @param obj - the object to insert
        */
         async insert(context, obj) {
+            (await this.waitForConnection);
             await this._checkParentRightsForSave(context, obj);
             if (context.objecttransaction) {
                 return this.addSaveTransaction(context, obj);
@@ -268,6 +272,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             return retob;
         }
         async save(context, entity, options) {
+            await this.waitForConnection;
             await this._checkParentRightsForSave(context, entity);
             if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
                 if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
@@ -293,6 +298,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         }
         async _checkParentRightsForSave(context, entity) {
             var _a;
+            await this.waitForConnection;
             if ((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)
                 return;
             //Check if the object self has restrictions
@@ -368,6 +374,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         async find(context, entityClass, p1) {
             //return this.connection().manager.findOne(entityClass,id,options);
             // else
+            await this.waitForConnection;
             var options = p1;
             var onlyColumns = options === null || options === void 0 ? void 0 : options.onlyColumns;
             var clname = Classes_1.classes.getClassName(entityClass);
@@ -434,6 +441,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             return ret;
         }
         async createUser(context, username, password) {
+            await this.waitForConnection;
             //var hh=getConnection().manager.findOne(User,{ email: username });
             if (await (0, typeorm_1.getConnection)().manager.findOne(User_1.User, { email: username }) !== undefined) {
                 throw new Error("User already exists");
@@ -442,7 +450,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             user.email = username;
             user.password = password;
             //first user would be admin
-            if (await (await DBManager_1.get()).connection().manager.findOne(User_1.User) === undefined) {
+            if (await this.connection().manager.findOne(User_1.User) === undefined) {
                 user.isAdmin = true;
             }
             //password is encrypted when saving
@@ -455,11 +463,12 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
                 resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
               });
             })*/
-            await (await DBManager_1.get()).save(context, user);
+            await this.save(context, user);
             delete user.password;
             return user;
         }
         async login(context, user, password) {
+            await this.waitForConnection;
             /* const users = await this.connection().getRepository(User)
              .createQueryBuilder()
              .select("user.id", "id")
@@ -498,6 +507,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             return undefined;
         }
         async checkParentRight(context, entityClass, ids) {
+            await this.waitForConnection;
             var clname = Classes_1.classes.getClassName(entityClass);
             var cl = Classes_1.classes.getClass(clname);
             var relations = new RelationInfo(context, clname, this);
@@ -513,7 +523,8 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         }
     };
     DBManager = DBManager_1 = __decorate([
-        (0, Registry_2.$Class)("jassi_localserver.DBManager"),
+        (0, Serverservice_1.$Serverservice)({ name: "db", getInstance: async () => { return DBManager_1._get(); } }),
+        (0, Registry_2.$Class)("jassijs_localserver.DBManager"),
         __metadata("design:paramtypes", [])
     ], DBManager);
     exports.DBManager = DBManager;
@@ -819,84 +830,277 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         }
     }
 });
-define("jassijs_localserver/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_2, Database_1, typeorm_2) {
+define("jassijs_localserver/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs_localserver/Filesystem", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, Registry_3, typeorm_2, Filesystem_1, Reloader_1, Registry_4, Serverservice_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TypeORMListener = void 0;
+    //listener for code changes
+    Reloader_1.Reloader.instance.addEventCodeReloaded(async function (files) {
+        var dbobjects = await Registry_4.default.getJSONData("$DBObject");
+        var reload = false;
+        for (var x = 0; x < files.length; x++) {
+            var file = files[x];
+            dbobjects.forEach((data) => {
+                if (data.filename === file + ".ts")
+                    reload = true;
+            });
+        }
+        if (reload) {
+            (await Serverservice_2.serverservices.db).renewConnection();
+        }
+    });
+    let TypeORMListener = class TypeORMListener {
+        saveDB(event) {
+            if (this.savetimer) {
+                clearTimeout(this.savetimer);
+                this.savetimer = undefined;
+            }
+            this.savetimer = setTimeout(() => {
+                var data = event.connection.driver.export();
+                new Filesystem_1.default().saveFile("__default.db", data);
+                console.log("save DB");
+            }, 300);
+        }
+        /**
+         * Called after entity is loaded.
+         */
+        afterLoad(entity) {
+            // console.log(`AFTER ENTITY LOADED: `, entity);
+        }
+        /**
+         * Called before post insertion.
+         */
+        beforeInsert(event) {
+            //console.log(`BEFORE POST INSERTED: `, event.entity);
+        }
+        /**
+         * Called after entity insertion.
+         */
+        afterInsert(event) {
+            this.saveDB(event);
+            //console.log(`AFTER ENTITY INSERTED: `, event.entity);
+        }
+        /**
+         * Called before entity update.
+         */
+        beforeUpdate(event) {
+            //console.log(`BEFORE ENTITY UPDATED: `, event.entity);
+        }
+        /**
+         * Called after entity update.
+         */
+        afterUpdate(event) {
+            this.saveDB(event);
+            //console.log(`AFTER ENTITY UPDATED: `, event.entity);
+        }
+        /**
+         * Called before entity removal.
+         */
+        beforeRemove(event) {
+            // console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+        }
+        /**
+         * Called after entity removal.
+         */
+        afterRemove(event) {
+            //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+            this.saveDB(event);
+        }
+        /**
+         * Called before transaction start.
+         */
+        beforeTransactionStart(event) {
+            // console.log(`BEFORE TRANSACTION STARTED: `, event);
+        }
+        /**
+         * Called after transaction start.
+         */
+        afterTransactionStart(event /*: TransactionStartEvent*/) {
+            //console.log(`AFTER TRANSACTION STARTED: `, event);
+        }
+        /**
+         * Called before transaction commit.
+         */
+        beforeTransactionCommit(event /*: TransactionCommitEvent*/) {
+            // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
+        }
+        /**
+         * Called after transaction commit.
+         */
+        afterTransactionCommit(event /*: TransactionCommitEvent*/) {
+            //console.log(`AFTER TRANSACTION COMMITTED: `, event);
+        }
+        /**
+         * Called before transaction rollback.
+         */
+        beforeTransactionRollback(event /*: TransactionRollbackEvent*/) {
+            //   console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
+        }
+        /**
+         * Called after transaction rollback.
+         */
+        afterTransactionRollback(event /*: TransactionRollbackEvent*/) {
+            // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
+        }
+    };
+    TypeORMListener = __decorate([
+        (0, typeorm_2.EventSubscriber)(),
+        (0, Registry_3.$Class)("jassijs_localserver.TypeORMListener")
+    ], TypeORMListener);
+    exports.TypeORMListener = TypeORMListener;
+});
+define("jassijs_localserver/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs_localserver/DBManager", "jassijs_localserver/TypeORMListener", "typeorm"], function (require, exports, Classes_2, Database_1, Registry_5, DBManager_2, TypeORMListener_1, typeorm_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.extendDBManager = void 0;
+    function extendDBManager() {
+        //create Admin User if doesn't a user exists 
+        DBManager_2.DBManager.prototype["hasLoaded"] = async function () {
+            var User = await Classes_2.classes.loadClass("jassijs.security.User");
+            var us = User.findOne();
+            if (us) {
+                us = new User();
+                us.email = "admin";
+                us.password = "jassi";
+                us.isAdmin = true;
+                await us.save();
+            }
+        };
+        DBManager_2.DBManager.prototype["login"] = async function (context, user, password) {
+            try {
+                var User = await Classes_2.classes.loadClass("jassijs.security.User");
+                var ret = await this.connection().manager.createQueryBuilder().
+                    select("me").from(User, "me").addSelect("me.password").
+                    andWhere("me.email=:email", { email: user });
+                var auser = await ret.getOne();
+                if (!auser || !password)
+                    return undefined;
+                if (auser.password === password) {
+                    delete auser.password;
+                    return auser;
+                }
+            }
+            catch (err) {
+                err = err;
+            }
+            return undefined;
+        };
+        DBManager_2.DBManager["getConOpts"] = async function () {
+            var dbclasses = [];
+            const initSqlJs = window["SQL"];
+            const SQL = await window["SQL"]({
+                // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+                // You can omit locateFile completely when running in node
+                locateFile: file => `https://sql.js.org/dist/${file}`
+            });
+            var dbobjects = await Registry_5.default.getJSONData("$DBObject");
+            var dbfiles = [];
+            for (var o = 0; o < dbobjects.length; o++) {
+                var clname = dbobjects[o].classname;
+                try {
+                    dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
+                    dbclasses.push(await Classes_2.classes.loadClass(clname));
+                }
+                catch (err) {
+                    console.log(err);
+                    throw err;
+                }
+            }
+            DBManager_2.DBManager.clearMetadata();
+            Database_1.db.fillDecorators();
+            var tcl = await Classes_2.classes.loadClass("jassijs_localserver.TypeORMListener");
+            new typeorm_3.EventSubscriber()(tcl);
+            var Filesystem = await Classes_2.classes.loadClass("jassijs_localserver.Filesystem");
+            var data = await new Filesystem().loadFile("__default.db");
+            var opt = {
+                database: data,
+                type: "sqljs",
+                subscribers: [TypeORMListener_1.TypeORMListener],
+                "entities": dbclasses
+            };
+            return opt;
+        };
+    }
+    exports.extendDBManager = extendDBManager;
+});
+define("jassijs_localserver/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_3, Database_2, typeorm_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
     function addDecorater(decoratername, delegate, ...args) {
         return function (...fargs) {
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
-            var clname = Classes_2.classes.getClassName(con);
+            var clname = Classes_3.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
-            Database_1.db._setMetadata(con, field, decoratername, args, fargs, delegate);
+            Database_2.db._setMetadata(con, field, decoratername, args, fargs, delegate);
             if (delegate)
                 delegate(...args)(...fargs);
         };
     }
     function Entity(...param) {
         //DEntity(param)(pclass, ...params);
-        return addDecorater("Entity", typeorm_2.Entity, ...param);
+        return addDecorater("Entity", typeorm_4.Entity, ...param);
     }
     exports.Entity = Entity;
     function PrimaryGeneratedColumn(...param) {
-        return addDecorater("PrimaryGeneratedColumn", typeorm_2.PrimaryGeneratedColumn, ...param);
+        return addDecorater("PrimaryGeneratedColumn", typeorm_4.PrimaryGeneratedColumn, ...param);
     }
     exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
     function JoinColumn(...param) {
-        return addDecorater("JoinColumn", typeorm_2.JoinColumn, ...param);
+        return addDecorater("JoinColumn", typeorm_4.JoinColumn, ...param);
     }
     exports.JoinColumn = JoinColumn;
     function JoinTable(...param) {
-        return addDecorater("JoinTable", typeorm_2.JoinTable, ...param);
+        return addDecorater("JoinTable", typeorm_4.JoinTable, ...param);
     }
     exports.JoinTable = JoinTable;
     function Column(...param) {
-        return addDecorater("Column", typeorm_2.Column, ...param);
+        return addDecorater("Column", typeorm_4.Column, ...param);
     }
     exports.Column = Column;
     function PrimaryColumn(...param) {
-        return addDecorater("PrimaryColumn", typeorm_2.PrimaryColumn, ...param);
+        return addDecorater("PrimaryColumn", typeorm_4.PrimaryColumn, ...param);
     }
     exports.PrimaryColumn = PrimaryColumn;
     function OneToOne(...param) {
-        return addDecorater("OneToOne", typeorm_2.OneToOne, ...param);
+        return addDecorater("OneToOne", typeorm_4.OneToOne, ...param);
     }
     exports.OneToOne = OneToOne;
     function OneToMany(...param) {
-        return addDecorater("OneToMany", typeorm_2.OneToMany, ...param);
+        return addDecorater("OneToMany", typeorm_4.OneToMany, ...param);
     }
     exports.OneToMany = OneToMany;
     function ManyToOne(...param) {
-        return addDecorater("ManyToOne", typeorm_2.ManyToOne, ...param);
+        return addDecorater("ManyToOne", typeorm_4.ManyToOne, ...param);
     }
     exports.ManyToOne = ManyToOne;
     function ManyToMany(...param) {
-        return addDecorater("ManyToMany", typeorm_2.ManyToMany, ...param);
+        return addDecorater("ManyToMany", typeorm_4.ManyToMany, ...param);
     }
     exports.ManyToMany = ManyToMany;
 });
 //export function Entity(options?: EntityOptions): Function;
 //export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
-define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/server/DBManager", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Serverservice"], function (require, exports, Registry_3, Reloader_1, DBManager_2, Registry_4, Server_1, Serverservice_1) {
+define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Serverservice"], function (require, exports, Registry_6, Reloader_2, Registry_7, Server_1, Serverservice_3) {
     "use strict";
-    var Filessystem_1;
+    var Filesystem_2;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = void 0;
     class FileEntry {
     }
-    let Filessystem = Filessystem_1 = class Filessystem {
+    let Filesystem = Filesystem_2 = class Filesystem {
         static async getDB() {
-            if (Filessystem_1.db)
-                return Filessystem_1.db;
+            if (Filesystem_2.db)
+                return Filesystem_2.db;
             var req = window.indexedDB.open("jassi", 1);
             req.onupgradeneeded = function (event) {
                 var db = event.target["result"];
                 var objectStore = db.createObjectStore("files", { keyPath: "id" });
             };
-            Filessystem_1.db = await new Promise((resolve) => {
+            Filesystem_2.db = await new Promise((resolve) => {
                 req.onsuccess = (ev) => { resolve(ev.target["result"]); };
             });
-            return Filessystem_1.db;
+            return Filesystem_2.db;
         }
         /**
          * exists a directory?
@@ -936,7 +1140,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             return ret;
         }
         async dirEntry(curdir = "") {
-            var db = await Filessystem_1.getDB();
+            var db = await Filesystem_2.getDB();
             let transaction = db.transaction('files', 'readonly');
             const store = transaction.objectStore('files');
             var ret = await store.openCursor();
@@ -1042,7 +1246,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 fileNames = allfileNames;
                 contents = allcontents;
             }
-            var db = await Filessystem_1.getDB();
+            var db = await Filesystem_2.getDB();
             var rollbackcontents = [];
             var jsToReload = [];
             var dbschemaHasChanged = false;
@@ -1080,23 +1284,22 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 return;
             var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassijs_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
-            await Registry_4.default.reload();
+            await Registry_7.default.reload();
             if (rollbackonerror) {
                 try {
-                    await Reloader_1.Reloader.instance.reloadJSAll(jsToReload);
+                    await Reloader_2.Reloader.instance.reloadJSAll(jsToReload);
                     if (dbschemaHasChanged) {
-                        var man = await DBManager_2.DBManager.destroyConnection();
-                        await DBManager_2.DBManager.get();
+                        await (await Serverservice_3.serverservices.db).renewConnection();
                     }
                 }
                 catch (err) {
                     console.error(err);
                     if (dbschemaHasChanged) {
-                        await DBManager_2.DBManager.destroyConnection();
+                        await await (await Serverservice_3.serverservices.db).destroyConnection();
                     }
                     var restore = await this.saveFiles(fileNames, rollbackcontents, false);
                     if (dbschemaHasChanged) {
-                        await DBManager_2.DBManager.get();
+                        await (await Serverservice_3.serverservices.db).renewConnection();
                     }
                     return err + "DB corrupt changes are reverted " + restore;
                 }
@@ -1104,7 +1307,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             return "";
         }
         async loadFileEntry(fileName) {
-            var db = await Filessystem_1.getDB();
+            var db = await Filesystem_2.getDB();
             let transaction = db.transaction('files', 'readonly');
             const store = transaction.objectStore('files');
             var ret = await store.get(fileName);
@@ -1132,7 +1335,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             var test = await this.loadFileEntry(filename);
             if (test)
                 return filename + " allready exists";
-            var db = await Filessystem_1.getDB();
+            var db = await Filesystem_2.getDB();
             let transaction = db.transaction('files', 'readwrite');
             const store = transaction.objectStore('files');
             var el = {
@@ -1189,7 +1392,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             if (entr.length === 0) {
                 return file + " not exists";
             }
-            var db = await Filessystem_1.getDB();
+            var db = await Filesystem_2.getDB();
             for (let i = 0; i < entr.length; i++) {
                 let transaction = db.transaction('files', 'readwrite');
                 const store = transaction.objectStore('files');
@@ -1253,13 +1456,13 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             return "";
         }
     };
-    Filessystem = Filessystem_1 = __decorate([
-        (0, Serverservice_1.$Serverservice)({ name: "filesystem" }),
-        (0, Registry_3.$Class)("jassijs_localserver.Filessystem")
-    ], Filessystem);
-    exports.default = Filessystem;
+    Filesystem = Filesystem_2 = __decorate([
+        (0, Serverservice_3.$Serverservice)({ name: "filesystem", getInstance: async () => new Filesystem_2() }),
+        (0, Registry_6.$Class)("jassijs_localserver.Filesystem")
+    ], Filesystem);
+    exports.default = Filesystem;
     async function test2() {
-        var fs = new Filessystem();
+        var fs = new Filesystem();
         var hh = await fs.dir("local");
         /*await fs.createFolder("demo");
         await fs.createFile("demo/hallo", "");
@@ -1268,18 +1471,18 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
         var hh=await fs.dirEntry();
         await fs.remove("demo1");*/
         return;
-        await new Filessystem().saveFiles(["hallo.js"], ["alert(2)"]);
-        var s1 = await new Filessystem().remove("hallo.js");
-        var test = await new Filessystem().loadFile("hallo.js");
-        var s2 = await new Filessystem().remove("hallo.js");
-        var s = await new Filessystem().createFolder("demo");
-        var s3 = await new Filessystem().remove("demo");
-        await new Filessystem().saveFiles(["local/modul.ts"], [`export default {
+        await new Filesystem().saveFiles(["hallo.js"], ["alert(2)"]);
+        var s1 = await new Filesystem().remove("hallo.js");
+        var test = await new Filesystem().loadFile("hallo.js");
+        var s2 = await new Filesystem().remove("hallo.js");
+        var s = await new Filesystem().createFolder("demo");
+        var s3 = await new Filesystem().remove("demo");
+        await new Filesystem().saveFiles(["local/modul.ts"], [`export default {
     "require":{ 
         
     }
 }`]);
-        await new Filessystem().saveFiles(["local/registry.js"], [`//this file is autogenerated don't modify
+        await new Filesystem().saveFiles(["local/registry.js"], [`//this file is autogenerated don't modify
 define("local/registry",["require"], function(require) {
  return {
   default: {
@@ -1292,7 +1495,7 @@ define("local/registry",["require"], function(require) {
     }
     exports.test2 = test2;
 });
-define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/server/Filesystem", "jassijs/remote/Classes", "jassijs_editor/util/Typescript"], function (require, exports, Filesystem_1, Classes_3) {
+define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs_editor/util/Typescript"], function (require, exports, Classes_4, Serverservice_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -1361,8 +1564,9 @@ define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/server/Fil
                     ' }\n' +
                     '});';
                 var jsdir = "js/" + path;
-                if (Filesystem_1.default.path !== undefined)
-                    jsdir = path.replace(Filesystem_1.default.path, Filesystem_1.default.path + "/js");
+                var fpath = (await (Serverservice_4.serverservices.filesystem)).path;
+                if (fpath !== undefined)
+                    jsdir = path.replace(fpath, fpath + "/js");
                 if (!(await this.fileExists(jsdir)))
                     await this.createDirectory(jsdir);
                 await this.writeFile(jsdir + "/registry.js", text);
@@ -1426,7 +1630,7 @@ define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/server/Fil
             else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
                 return "function";
             }
-            throw new Classes_3.JassiError("Error typ not found");
+            throw new Classes_4.JassiError("Error typ not found");
         }
         collectAnnotations(node, outDecorations, depth = 0) {
             var _a;
@@ -1498,7 +1702,12 @@ define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/server/Fil
     }
     exports.Indexer = Indexer;
 });
-define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema"], function (Filesystem, schema) {
+define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema", "jassijs/remote/Serverservice", "jassijs_localserver/DBManagerExt"], function (Filesystem, schema, serverservice, dbmanext) {
+    serverservice.beforeServiceLoad((name, service) => {
+        if (name === "db") {
+            dbmanext.extendDBManager(service);
+        }
+    });
     return {
         //search for file in local-DB and undefine this files 
         //so this files could be loaded from local-DB
@@ -1525,80 +1734,13 @@ define("jassijs/server/DoRemoteProtocol", ["jassijs_localserver/LocalProtocol"],
         }
     };
 });
+/*
 define("jassijs/server/Filesystem", ["jassijs_localserver/Filesystem"], function (fs) {
-    return fs;
-});
-define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs_localserver/DBManager", "jassijs_localserver/TypeORMListener", "typeorm", "jassijs/remote/Database"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
-    //create Admin User if doesn't a user exists 
-    db.DBManager.prototype["hasLoaded"] = async function () {
-        var User = await Classes_1.classes.loadClass("jassijs.security.User");
-        var us = User.findOne();
-        if (us) {
-            us = new User();
-            us.email = "admin";
-            us.password = "jassi";
-            us.isAdmin = true;
-            await us.save();
-        }
-    };
-    db.DBManager.prototype["login"] = async function (context, user, password) {
-        try {
-            var User = await Classes_1.classes.loadClass("jassijs.security.User");
-            var ret = await this.connection().manager.createQueryBuilder().
-                select("me").from(User, "me").addSelect("me.password").
-                andWhere("me.email=:email", { email: user });
-            var auser = await ret.getOne();
-            if (!auser || !password)
-                return undefined;
-            if (auser.password === password) {
-                delete auser.password;
-                return auser;
-            }
-        }
-        catch (err) {
-            err = err;
-        }
-        return undefined;
-    };
-    db.DBManager["getConOpts"] = async function () {
-        var dbclasses = [];
-        const initSqlJs = window["SQL"];
-        const SQL = await window["SQL"]({
-            // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-            // You can omit locateFile completely when running in node
-            locateFile: file => `https://sql.js.org/dist/${file}`
-        });
-        var dbobjects = await Registry_1.default.getJSONData("$DBObject");
-        var dbfiles = [];
-        for (var o = 0; o < dbobjects.length; o++) {
-            var clname = dbobjects[o].classname;
-            try {
-                dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
-                dbclasses.push(await Classes_1.classes.loadClass(clname));
-            }
-            catch (err) {
-                console.log(err);
-                throw err;
-            }
-        }
-        db.DBManager.clearMetadata();
-        Database.db.fillDecorators();
-        var tcl = await Classes_1.classes.loadClass("jassijs_localserver.TypeORMListener");
-        to.EventSubscriber()(tcl);
-        var Filessystem = await Classes_1.classes.loadClass("jassijs_localserver.Filessystem");
-        var data = await new Filessystem().loadFile("__default.db");
-        var opt = {
-            database: data,
-            type: "sqljs",
-            subscribers: [TypeORMListener.TypeORMListener],
-            "entities": dbclasses
-        };
-        return opt;
-    };
-    return db;
-});
+    return fs
+
+})*/
 //DatabaseSchema
-define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol"], function (require, exports, RemoteProtocol_1) {
+define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Serverservice"], function (require, exports, RemoteProtocol_1, Serverservice_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.localExec = void 0;
@@ -1673,8 +1815,7 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
             };
             var Cookies = (await new Promise((resolve_10, reject_10) => { require(["jassijs/util/Cookies"], resolve_10, reject_10); })).Cookies;
             if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
-                var DBManager = await classes.loadClass("jassi_localserver.DBManager");
-                var man = await DBManager.get();
+                var man = await Serverservice_5.serverservices.db;
                 var user = await man.login(context, Cookies.get("simulateUser"), Cookies.get("simulateUserPassword"));
                 if (user === undefined) {
                     throw Error("simulated login failed");
@@ -1739,7 +1880,7 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
     }
     exports.localExec = localExec;
 });
-define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Server", "jassijs_localserver/Filesystem", "jassijs/remote/Registry"], function (require, exports, Indexer_1, Server_2, Filesystem_2, Registry_5) {
+define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Server", "jassijs_localserver/Filesystem", "jassijs/remote/Registry"], function (require, exports, Indexer_1, Server_2, Filesystem_3, Registry_8) {
     "use strict";
     var RegistryIndexer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1754,7 +1895,7 @@ define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_lo
             var data = await new Server_2.Server().loadFile("jassijs.json");
             var modules = JSON.parse(data).modules;
             for (var m in modules) {
-                if (await new Filesystem_2.default().existsDirectory(modules[m]) || await new Filesystem_2.default().existsDirectory(m)) {
+                if (await new Filesystem_3.default().existsDirectory(modules[m]) || await new Filesystem_3.default().existsDirectory(m)) {
                     if (modules[m].indexOf(".js") === -1) { //.js are internet modules
                         await this.updateModul("", m, false);
                     }
@@ -1766,7 +1907,7 @@ define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_lo
             return;
         }
         async dirFiles(modul, path, extensions, ignore = []) {
-            var tsfiles = await new Filesystem_2.default().dirFiles(path, extensions, ignore);
+            var tsfiles = await new Filesystem_3.default().dirFiles(path, extensions, ignore);
             //add files from map
             if (this.mapcache[modul] === undefined && jassijs.modules[modul] !== undefined && jassijs.modules[modul].indexOf(".js") > 0) { //read webtsfiles
                 let ret = {};
@@ -1792,14 +1933,14 @@ define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_lo
             return tsfiles;
         }
         async writeFile(name, content) {
-            await new Filesystem_2.default().saveFile(name, content);
+            await new Filesystem_3.default().saveFile(name, content);
         }
         async createDirectory(name) {
-            await new Filesystem_2.default().createFolder(name);
+            await new Filesystem_3.default().createFolder(name);
             return;
         }
         async getFileTime(filename) {
-            var entry = await new Filesystem_2.default().loadFileEntry(filename);
+            var entry = await new Filesystem_3.default().loadFileEntry(filename);
             if (entry !== undefined)
                 return RegistryIndexer_1.version;
             for (var modul in this.mapcache) {
@@ -1815,11 +1956,11 @@ define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_lo
                     return true;
                 }
             }
-            var test = await new Filesystem_2.default().loadFileEntry(filename);
+            var test = await new Filesystem_3.default().loadFileEntry(filename);
             return test !== undefined;
         }
         async readFile(filename) {
-            var ret = await new Filesystem_2.default().loadFile(filename);
+            var ret = await new Filesystem_3.default().loadFile(filename);
             if (ret !== undefined)
                 return ret;
             for (var modul in this.mapcache) {
@@ -1832,11 +1973,11 @@ define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_lo
     };
     RegistryIndexer.version = Math.floor(Math.random() * 100000);
     RegistryIndexer = RegistryIndexer_1 = __decorate([
-        (0, Registry_5.$Class)("jassijs_localserver.RegistryIndexer")
+        (0, Registry_8.$Class)("jassijs_localserver.RegistryIndexer")
     ], RegistryIndexer);
     exports.RegistryIndexer = RegistryIndexer;
 });
-define("jassijs_localserver/Testuser", ["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Registry"], function (require, exports, DatabaseSchema_1, DBObject_1, Registry_6) {
+define("jassijs_localserver/Testuser", ["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Registry"], function (require, exports, DatabaseSchema_1, DBObject_1, Registry_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testuser = void 0;
@@ -1856,129 +1997,9 @@ define("jassijs_localserver/Testuser", ["require", "exports", "jassijs/util/Data
     ], Testuser.prototype, "lastname", void 0);
     Testuser = __decorate([
         (0, DBObject_1.$DBObject)(),
-        (0, Registry_6.$Class)("Testuser")
+        (0, Registry_9.$Class)("Testuser")
     ], Testuser);
     exports.Testuser = Testuser;
-});
-define("jassijs_localserver/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs_localserver/Filesystem", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs_localserver/DBManager"], function (require, exports, Registry_7, typeorm_3, Filesystem_3, Reloader_2, Registry_8, DBManager_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TypeORMListener = void 0;
-    //listener for code changes
-    Reloader_2.Reloader.instance.addEventCodeReloaded(async function (files) {
-        var dbobjects = await Registry_8.default.getJSONData("$DBObject");
-        var reload = false;
-        for (var x = 0; x < files.length; x++) {
-            var file = files[x];
-            dbobjects.forEach((data) => {
-                if (data.filename === file + ".ts")
-                    reload = true;
-            });
-        }
-        if (reload) {
-            await DBManager_3.DBManager.destroyConnection();
-            await DBManager_3.DBManager.get();
-        }
-    });
-    let TypeORMListener = class TypeORMListener {
-        saveDB(event) {
-            if (this.savetimer) {
-                clearTimeout(this.savetimer);
-                this.savetimer = undefined;
-            }
-            this.savetimer = setTimeout(() => {
-                var data = event.connection.driver.export();
-                new Filesystem_3.default().saveFile("__default.db", data);
-                console.log("save DB");
-            }, 300);
-        }
-        /**
-         * Called after entity is loaded.
-         */
-        afterLoad(entity) {
-            // console.log(`AFTER ENTITY LOADED: `, entity);
-        }
-        /**
-         * Called before post insertion.
-         */
-        beforeInsert(event) {
-            //console.log(`BEFORE POST INSERTED: `, event.entity);
-        }
-        /**
-         * Called after entity insertion.
-         */
-        afterInsert(event) {
-            this.saveDB(event);
-            //console.log(`AFTER ENTITY INSERTED: `, event.entity);
-        }
-        /**
-         * Called before entity update.
-         */
-        beforeUpdate(event) {
-            //console.log(`BEFORE ENTITY UPDATED: `, event.entity);
-        }
-        /**
-         * Called after entity update.
-         */
-        afterUpdate(event) {
-            this.saveDB(event);
-            //console.log(`AFTER ENTITY UPDATED: `, event.entity);
-        }
-        /**
-         * Called before entity removal.
-         */
-        beforeRemove(event) {
-            // console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
-        }
-        /**
-         * Called after entity removal.
-         */
-        afterRemove(event) {
-            //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
-            this.saveDB(event);
-        }
-        /**
-         * Called before transaction start.
-         */
-        beforeTransactionStart(event) {
-            // console.log(`BEFORE TRANSACTION STARTED: `, event);
-        }
-        /**
-         * Called after transaction start.
-         */
-        afterTransactionStart(event /*: TransactionStartEvent*/) {
-            //console.log(`AFTER TRANSACTION STARTED: `, event);
-        }
-        /**
-         * Called before transaction commit.
-         */
-        beforeTransactionCommit(event /*: TransactionCommitEvent*/) {
-            // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
-        }
-        /**
-         * Called after transaction commit.
-         */
-        afterTransactionCommit(event /*: TransactionCommitEvent*/) {
-            //console.log(`AFTER TRANSACTION COMMITTED: `, event);
-        }
-        /**
-         * Called before transaction rollback.
-         */
-        beforeTransactionRollback(event /*: TransactionRollbackEvent*/) {
-            //   console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
-        }
-        /**
-         * Called after transaction rollback.
-         */
-        afterTransactionRollback(event /*: TransactionRollbackEvent*/) {
-            // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
-        }
-    };
-    TypeORMListener = __decorate([
-        (0, typeorm_3.EventSubscriber)(),
-        (0, Registry_7.$Class)("jassijs_localserver.TypeORMListener")
-    ], TypeORMListener);
-    exports.TypeORMListener = TypeORMListener;
 });
 define("jassijs_localserver/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -2002,37 +2023,45 @@ define("jassijs_localserver/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_localserver/DatabaseSchema.ts": {
-                "date": 1622984213677
+                "date": 1622984214000
             },
             "jassijs_localserver/DBManager.ts": {
-                "date": 1624103920275,
-                "jassi_localserver.DBManager": {}
-            },
-            "jassijs_localserver/Filesystem.ts": {
-                "date": 1625946455001,
-                "jassijs_localserver.Filessystem": {
+                "date": 1680950724073,
+                "jassijs_localserver.DBManager": {
                     "$Serverservice": [
                         {
-                            "name": "filesystem"
+                            "name": "db",
+                            "getInstance": "function"
+                        }
+                    ]
+                }
+            },
+            "jassijs_localserver/Filesystem.ts": {
+                "date": 1680948933087,
+                "jassijs_localserver.Filesystem": {
+                    "$Serverservice": [
+                        {
+                            "name": "filesystem",
+                            "getInstance": "function"
                         }
                     ]
                 }
             },
             "jassijs_localserver/Indexer.ts": {
-                "date": 1627585602318
+                "date": 1680806174434
             },
             "jassijs_localserver/LocalProtocol.ts": {
-                "date": 1624139285542
+                "date": 1680946908251
             },
             "jassijs_localserver/modul.ts": {
-                "date": 1622998474045
+                "date": 1622998476000
             },
             "jassijs_localserver/RegistryIndexer.ts": {
-                "date": 1624137198480,
+                "date": 1680949036749,
                 "jassijs_localserver.RegistryIndexer": {}
             },
             "jassijs_localserver/Testuser.ts": {
-                "date": 1622984213666,
+                "date": 1655556794000,
                 "Testuser": {
                     "$DBObject": [],
                     "@members": {
@@ -2049,10 +2078,16 @@ define("jassijs_localserver/registry", ["require"], function (require) {
                 }
             },
             "jassijs_localserver/TypeORMListener.ts": {
-                "date": 1622998616949,
+                "date": 1680949085543,
                 "jassijs_localserver.TypeORMListener": {
                     "EventSubscriber": []
                 }
+            },
+            "jassijs_localserver/DBManagerExt.ts": {
+                "date": 1680952472756
+            },
+            "jassijs_localserver/ext/jzip.ts": {
+                "date": 1657714030000
             }
         }
     };

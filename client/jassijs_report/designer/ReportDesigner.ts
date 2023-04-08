@@ -31,8 +31,6 @@ export class ReportDesigner extends ComponentDesigner {
     constructor() {
         super();
 
-        this.editButton.tooltip = "pdf preview";
-        this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
 
     }
     set codeEditor(value) {
@@ -63,6 +61,9 @@ export class ReportDesigner extends ComponentDesigner {
         this.dom.style.overflow = "scroll";
         this.dom.style.width = "";
         this.registerKeys();
+            this.editButton.tooltip = "pdf preview";
+            this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
+
     }
 
     connectParser(parser) {
@@ -77,15 +78,15 @@ export class ReportDesigner extends ComponentDesigner {
             var rep = new PDFReport();
             //rep.content=this.designedComponent["design];
             if (this._codeEditor?.file?.startsWith("$serverside/")) {
-                    this._codeEditor.evalServerside().then((data) => {
-                        if(!data)
-                            return;
-                        ServerReport.getBase64LastTestResult().then((base64) => {
-                            this.pdfviewer.report = rep;
-                            _this.pdfviewer.value = base64
-                        });
+                this._codeEditor.evalServerside().then((data) => {
+                    if (!data)
+                        return;
+                    ServerReport.getBase64LastTestResult().then((base64) => {
+                        this.pdfviewer.report = rep;
+                        _this.pdfviewer.value = base64
                     });
-        
+                });
+
             } else {
                 var data;
                 try {

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database", "jassijs/remote/Validator"], function (require, exports, Registry_1, Classes_1, RemoteObject_1, Registry_2, DatabaseSchema_1, Database_1, Validator_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database", "jassijs/remote/Validator", "jassijs/remote/Serverservice"], function (require, exports, Registry_1, Classes_1, RemoteObject_1, Registry_2, DatabaseSchema_1, Database_1, Validator_1, Serverservice_1) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -166,10 +166,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
                 }
             }
             else {
-                //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
-                return man.save(context, this);
-                // return ["jassijs/base/ChromeDebugger.ts"];
+                return (await Serverservice_1.serverservices.db).save(context, this);
             }
         }
         async _createObjectInDB(context = undefined) {
@@ -177,9 +174,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
                 throw new Classes_1.JassiError("createObject could oly be called on server");
             }
             else {
-                //@ts-ignore
-                var man = await (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
-                return man.insert(context, this);
+                return (await Serverservice_1.serverservices.db).insert(context, this);
             }
         }
         static async findOne(options = undefined, context = undefined) {
@@ -187,9 +182,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
                 return await this.call(this.findOne, options, context);
             }
             else {
-                //@ts-ignore
-                var man = await (await new Promise((resolve_3, reject_3) => { require(["jassijs/server/DBManager"], resolve_3, reject_3); })).DBManager.get();
-                return man.findOne(context, this, options);
+                return (await Serverservice_1.serverservices.db).findOne(context, this, options);
             }
         }
         static async find(options = undefined, context = undefined) {
@@ -197,9 +190,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
                 return await this.call(this.find, options, context);
             }
             else {
-                //@ts-ignore
-                var man = await (await new Promise((resolve_4, reject_4) => { require(["jassijs/server/DBManager"], resolve_4, reject_4); })).DBManager.get();
-                return man.find(context, this, options);
+                return (await Serverservice_1.serverservices.db).find(context, this, options);
             }
         }
         /**
@@ -216,8 +207,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_5, reject_5) => { require(["jassijs/server/DBManager"], resolve_5, reject_5); })).DBManager.get();
-                await man.remove(context, this);
+                return (await Serverservice_1.serverservices.db).remove(context, this);
             }
         }
         _getObjectProperty(dummy) {

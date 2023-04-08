@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
             this.pageNum = 1;
             this.pageRendering = false;
             this.pageNumPending = null;
-            this.scale = 0.8;
+            this.scale = 1;
             this.me = {};
             this.layout(this.me);
         }
@@ -55,11 +55,10 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
                 _this.updatePages();
                 //_this.renderPage(_this._page);
             });
-            me.plus.width = 25;
+            me.plus.width = 20;
+            me.plus.height = 20;
             me.minus.text = "-";
             me.minus.onclick(function (event) {
-                _this.value = _this.value;
-                return;
                 _this.scale = _this.scale / 1.25;
                 _this.updatePages();
             });
@@ -76,10 +75,12 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
             // Using promise to fetch the page
             var _this = this;
             this.pdfDoc.getPage(num).then(function (page) {
-                var viewport = page.getViewport({ scale: _this.scale });
+                var quality = 5;
+                var viewport = page.getViewport({ scale: _this.scale * quality });
                 var can = _this.canavasPanels[page._pageIndex].dom;
                 can.height = viewport.height;
                 can.width = viewport.width;
+                can.style.width = Math.round(viewport.width / quality) + ".px";
                 // Render PDF page into canvas context
                 var renderContext = {
                     canvasContext: can.getContext('2d'),

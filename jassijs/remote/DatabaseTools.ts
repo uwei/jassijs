@@ -1,9 +1,10 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { JassiError } from "jassijs/remote/Classes";
+import { serverservices } from "./Serverservice";
 
 @$Class("jassijs.remote.DatabaseTools")
-export class DatabaseTools extends RemoteObject {
+export class DatabaseTools extends RemoteObject { 
     //this is a sample remote function
     public static async runSQL(sql: string, parameter: any[] = undefined, context: Context = undefined) {
         if (!context?.isServer) {
@@ -11,9 +12,7 @@ export class DatabaseTools extends RemoteObject {
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError( "only admins can delete");
-            //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
-            return man.runSQL(context, sql, parameter);
+            return (await serverservices.db).runSQL(context, sql, parameter); 
         }
     }
     public static async dropTables(tables: string[]): Promise<string> {

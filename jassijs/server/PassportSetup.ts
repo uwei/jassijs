@@ -1,8 +1,8 @@
 
 import { User } from "jassijs/remote/security/User";
-import { DBManager } from "./DBManager";
 import { UserModel } from "jassijs/UserModel";
 import { Context } from "jassijs/remote/RemoteObject";
+import { serverservices } from "jassijs/remote/Serverservice";
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -22,7 +22,7 @@ passport.use(new LocalStrategy({
     var context:Context={
       isServer:true
   }
-    const userDocument = await (await DBManager.get()).login(context,username,password); //UserModel.findOne({username: username});
+    const userDocument = await (await serverservices.db).login(context,username,password); //UserModel.findOne({username: username});
     if (userDocument) {
       return done(null, userDocument);
     } else {

@@ -17,6 +17,7 @@ const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Rights_1 = require("jassijs/remote/security/Rights");
 const AR_1 = require("de/remote/AR");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 let ARZeile = ARZeile_1 = class ARZeile extends DBObject_1.DBObject {
     constructor() {
         super();
@@ -26,9 +27,7 @@ let ARZeile = ARZeile_1 = class ARZeile extends DBObject_1.DBObject {
             return await this.call(this.find, options, context);
         }
         else {
-            //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
-            return man.find(context, this, options);
+            return (await Serverservice_1.serverservices.db).find(context, this, options);
         }
     }
     get oo2() {

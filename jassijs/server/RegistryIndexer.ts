@@ -1,16 +1,17 @@
 import { Indexer } from "./Indexer";
 import fs = require('fs');
-import Filesystem from "jassijs/server/Filesystem";
+import { serverservices } from "jassijs/remote/Serverservice";
+
 
 export class ServerIndexer extends Indexer {
     public async updateRegistry() {
         //client modules
-
-        var data = fs.readFileSync(Filesystem.path + "/jassijs.json", 'utf-8');
+        var path=(await serverservices.filesystem).path
+        var data = fs.readFileSync(path + "/jassijs.json", 'utf-8');
         var modules = JSON.parse(data).modules;
         for (var m in modules) {
             if (!modules[m].endsWith(".js")&&modules[m].indexOf(".js?")===-1) //.js are internet modules
-                await this.updateModul(Filesystem.path, m, false);
+                await this.updateModul(path, m, false);
         } 
         //server modules
         data = fs.readFileSync("./jassijs.json", 'utf-8');
@@ -22,7 +23,7 @@ export class ServerIndexer extends Indexer {
         return;
     }
     async dirFiles(modul:string,path: string, extensions: string[], ignore: string[] = []): Promise<string[]> {
-        var jsFiles: string[] =await  new Filesystem().dirFiles(path, extensions, ignore);
+        var jsFiles: string[] =await (await  serverservices.filesystem).dirFiles(path, extensions, ignore);
         return jsFiles;
     }
     async writeFile(name:string,content:string){
@@ -31,7 +32,7 @@ export class ServerIndexer extends Indexer {
     async createDirectory(name:string){
         fs.mkdirSync(name);
         return;
-    }
+    } 
     async getFileTime(filename):Promise<number>{
         var stats = fs.statSync(filename);
         return stats.mtime.getTime();

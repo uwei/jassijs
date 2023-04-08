@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/RemoteProtocol"], function (require, exports, RemoteProtocol_1) {
+define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Serverservice"], function (require, exports, RemoteProtocol_1, Serverservice_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.localExec = void 0;
@@ -73,8 +73,7 @@ define(["require", "exports", "jassijs/remote/RemoteProtocol"], function (requir
             };
             var Cookies = (await new Promise((resolve_3, reject_3) => { require(["jassijs/util/Cookies"], resolve_3, reject_3); })).Cookies;
             if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
-                var DBManager = await classes.loadClass("jassi_localserver.DBManager");
-                var man = await DBManager.get();
+                var man = await Serverservice_1.serverservices.db;
                 var user = await man.login(context, Cookies.get("simulateUser"), Cookies.get("simulateUserPassword"));
                 if (user === undefined) {
                     throw Error("simulated login failed");

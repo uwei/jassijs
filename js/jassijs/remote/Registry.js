@@ -420,8 +420,10 @@ exports.Registry = Registry;
 var registry = new Registry();
 exports.default = registry;
 function migrateModul(oldModul, newModul) {
-    newModul.registry._nextID = oldModul.registry._nextID;
-    newModul.registry.entries = oldModul.registry.entries;
+    if (newModul.registry) {
+        newModul.registry._nextID = oldModul.registry._nextID;
+        newModul.registry.entries = oldModul.registry.entries;
+    }
 }
 exports.migrateModul = migrateModul;
 //jassijs.registry=registry;

@@ -16,7 +16,7 @@ exports.default={
 		"jassijs.remote.Database": {}
 	},
 	"jassijs/remote/DatabaseTools.ts": {
-		"date": 1655556796000,
+		"date": 1680946799456,
 		"jassijs.remote.DatabaseTools": {}
 	},
 	"jassijs/remote/DBArray.ts": {
@@ -24,7 +24,7 @@ exports.default={
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1680707316822,
+		"date": 1680809099251,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -50,7 +50,7 @@ exports.default={
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1655578864000
+		"date": 1680817383805
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1655556866000,
@@ -243,7 +243,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Settings.ts": {
-		"date": 1656075892000,
+		"date": 1680946807085,
 		"jassijs.remote.Settings": {}
 	},
 	"jassijs/remote/Test.ts": {
@@ -255,42 +255,50 @@ exports.default={
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1625397512000
+		"date": 1680803766537
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1670673438000,
-		"jassi_localserver.DBManager": {}
+		"date": 1680951212516,
+		"jassijs/server/DBManager": {
+			"$Serverservice": [
+				{
+					"name": "db",
+					"getInstance": "function"
+				}
+			]
+		}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
-		"date": 1624297018000
+		"date": 1680946638753
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1680722040517,
+		"date": 1680946644898,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
-					"name": "filesystem"
+					"name": "filesystem",
+					"getInstance": "function"
 				}
 			]
 		}
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1656244790000
+		"date": 1680806099946
 	},
 	"jassijs/server/JassiServer.ts": {
 		"date": 1680722219857
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
-		"date": 1622984046000
+		"date": 1680946666516
 	},
 	"jassijs/server/PassportSetup.ts": {
-		"date": 1623702076000
+		"date": 1680946687665
 	},
 	"jassijs/server/RawBody.ts": {
 		"date": 1654195782000
 	},
 	"jassijs/server/RegistryIndexer.ts": {
-		"date": 1624137154000
+		"date": 1680805467362
 	},
 	"jassijs/server/Zip.ts": {
 		"date": 1622984046000
@@ -305,10 +313,10 @@ exports.default={
 		"date": 1680723591109
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1680723039681,
+		"date": 1680948998750,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Serverservice.ts": {
-		"date": 1680722076544
+		"date": 1680952917750
 	}
 }

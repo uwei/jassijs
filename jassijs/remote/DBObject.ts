@@ -7,6 +7,7 @@ import { Entity, EntityOptions } from "jassijs/util/DatabaseSchema";
 import { db } from "jassijs/remote/Database";
 import { Transaction } from "jassijs/remote/Transaction";
 import { validate, ValidationError } from "jassijs/remote/Validator";
+import { serverservices } from "jassijs/remote/Serverservice";
 
 export function $DBObject(options?: EntityOptions): Function {
     return function (pclass, ...params) {
@@ -77,7 +78,7 @@ export class DBObject extends RemoteObject {
             return undefined;
         return DBObject.cache[classname][id.toString()];
     }
-    public async validate(options):ValidationError[]{
+    public async validate(options):Promise<ValidationError[]>{
         var ret=validate(this,options);
         return ret;
     }
@@ -187,10 +188,7 @@ export class DBObject extends RemoteObject {
                 }
             }
         } else {
-            //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
-            return man.save(context, this);
-            // return ["jassijs/base/ChromeDebugger.ts"];
+            return (await serverservices.db).save(context, this);
         }
     }
     async _createObjectInDB(context: Context = undefined) {
@@ -198,27 +196,21 @@ export class DBObject extends RemoteObject {
             throw new JassiError("createObject could oly be called on server");
 
         } else {
-            //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
-            return man.insert(context, this);
+            return (await serverservices.db).insert(context, this);
         }
     }
     static async findOne(options = undefined, context: Context = undefined): Promise<DBObject> {
         if (!context?.isServer) {
             return await this.call(this.findOne, options, context);
         } else {
-            //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
-            return man.findOne(context, this, options);
+            return (await serverservices.db).findOne(context, this, options);
         }
     }
     static async find(options: MyFindManyOptions = undefined, context: Context = undefined): Promise<DBObject[]> {
         if (!context?.isServer) {
             return await this.call(this.find, options, context);
         } else {
-            //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
-            return man.find(context, this, options);
+            return (await serverservices.db).find(context, this, options);
         }
     }
     /**
@@ -235,8 +227,7 @@ export class DBObject extends RemoteObject {
             return await this.call({ id: this.id }, this.remove, context);
         } else {
             //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
-            await man.remove(context, this);
+            return (await serverservices.db).remove(context, this);
         }
     }
 

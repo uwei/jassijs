@@ -7,6 +7,8 @@ import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { $ParentRights } from "jassijs/remote/security/Rights";
 import { Context } from "jassijs/remote/RemoteObject";
 import { ValidateIsInt } from "jassijs/remote/Validator";
+import { serverservices } from "jassijs/remote/Serverservice";
+
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 @$ParentRights([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
         description: {
@@ -15,7 +17,7 @@ import { ValidateIsInt } from "jassijs/remote/Validator";
             i2: "bis"
         } }])
 @$DBObject()
-@$Class("de.Kunde") 
+@$Class("de.Kunde")  
 export class Kunde extends DBObject implements ExtensionProvider {
     @PrimaryColumn()
     declare id: number;
@@ -58,7 +60,7 @@ export class Kunde extends DBObject implements ExtensionProvider {
                 for (var x = 0; x < kunden.length; x++) {
                     // notify("bewerte..." + kunden[x].vorname, "info", { position: "right" });
                     //	alert("bewerten..."+kunden[x].vorname);
-                }
+                } 
             }
         });
     }
@@ -75,9 +77,7 @@ export class Kunde extends DBObject implements ExtensionProvider {
             return await this.call(this.find, options,context);
         } 
         else {
-            //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
-            return man.find(context,this, options);
+            return await (await serverservices.db).find(context,this, options);
         }
     }
     static async sample() {

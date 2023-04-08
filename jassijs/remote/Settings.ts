@@ -6,12 +6,13 @@ import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { Setting } from "jassijs/remote/security/Setting";
 import { Server } from "./Server";
 import { Test } from "./Test";
+import { serverservices } from "jassijs/remote/Serverservice";
  
 
 
 declare global {
     export interface KnownSettings {
-
+ 
     }
 }
 const proxyhandler = {
@@ -52,7 +53,7 @@ export class Settings extends RemoteObject {
 
         } else {
             //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
+            var man = await serverservices.db;
             var id = context.request.user.user;
             return {
                 user: await man.findOne(context, Setting, { "id": 1 }),
@@ -97,7 +98,7 @@ export class Settings extends RemoteObject {
 
             } else {
                 //@ts-ignore
-                var man = await (await import("jassijs/server/DBManager")).DBManager.get();
+                var man =  await serverservices.db;
                 var id = context.request.user.user;
                 //first load
                 let entr = await man.findOne(context, Setting, { "id": (scope === "user" ? id : 0) });
@@ -152,7 +153,7 @@ export class Settings extends RemoteObject {
                 return await this.call(this.saveAll, props, scope, removeOtherKeys, context);
             } else {
                 //@ts-ignore
-                var man = await (await import("jassijs/server/DBManager")).DBManager.get();
+                var man = await serverservices.db;
                 var id = context.request.user.user;
                 //first load
                 let entr = await man.findOne(context, Setting, { "id": (scope === "user" ? id : 0) });

@@ -1,6 +1,7 @@
 
 import { Context } from "jassijs/remote/RemoteObject";
 import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
+import { serverservices } from "jassijs/remote/Serverservice";
 
 RemoteProtocol.prototype.exec = async function (config, ob) {
     var clname = JSON.parse(config.data).classname;
@@ -74,8 +75,7 @@ export async function localExec(prot: RemoteProtocol, context: Context = undefin
         };
         var Cookies = (await import("jassijs/util/Cookies")).Cookies;
         if(Cookies.get("simulateUser")&&Cookies.get("simulateUserPassword")){
-            var DBManager:any = await classes.loadClass("jassi_localserver.DBManager");
-            var man=await DBManager.get();
+            var man=await serverservices.db;
             var user=await man.login(context,Cookies.get("simulateUser"),Cookies.get("simulateUserPassword"));
             if(user===undefined){
                 throw Error("simulated login failed")

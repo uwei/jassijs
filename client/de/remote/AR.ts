@@ -6,6 +6,7 @@ import { $Class } from "jassijs/remote/Registry";
 import { JoinColumn, JoinTable, Entity, PrimaryColumn, Column, ManyToMany, ManyToOne, OneToMany, OneToOne } from "jassijs/util/DatabaseSchema";
 import { $CheckParentRight, $Rights } from "jassijs/remote/security/Rights";
 import { Context } from "jassijs/remote/RemoteObject";
+import { serverservices } from "jassijs/remote/Serverservice";
 /** 
 * Ausgangsrechnung 
 * @class de.AR  
@@ -43,7 +44,7 @@ export class AR extends DBObject {
             //@ts-ignore
             var Brackets = (await import("typeorm")).Brackets;
             //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
+            var man = await serverservices.db;
             var man2 = man;
             var ret = await man.connection().manager.createQueryBuilder().
                 select("me").from(AR, "me").

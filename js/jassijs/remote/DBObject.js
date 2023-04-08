@@ -19,6 +19,7 @@ let cl = Classes_1.classes; //force Classes
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Database_1 = require("jassijs/remote/Database");
 const Validator_1 = require("jassijs/remote/Validator");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 function $DBObject(options) {
     return function (pclass, ...params) {
         var classname = Classes_1.classes.getClassName(pclass);
@@ -172,10 +173,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
             }
         }
         else {
-            //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
-            return man.save(context, this);
-            // return ["jassijs/base/ChromeDebugger.ts"];
+            return (await Serverservice_1.serverservices.db).save(context, this);
         }
     }
     async _createObjectInDB(context = undefined) {
@@ -183,9 +181,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
             throw new Classes_1.JassiError("createObject could oly be called on server");
         }
         else {
-            //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
-            return man.insert(context, this);
+            return (await Serverservice_1.serverservices.db).insert(context, this);
         }
     }
     static async findOne(options = undefined, context = undefined) {
@@ -193,9 +189,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
             return await this.call(this.findOne, options, context);
         }
         else {
-            //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
-            return man.findOne(context, this, options);
+            return (await Serverservice_1.serverservices.db).findOne(context, this, options);
         }
     }
     static async find(options = undefined, context = undefined) {
@@ -203,9 +197,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
             return await this.call(this.find, options, context);
         }
         else {
-            //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
-            return man.find(context, this, options);
+            return (await Serverservice_1.serverservices.db).find(context, this, options);
         }
     }
     /**
@@ -222,8 +214,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
         }
         else {
             //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
-            await man.remove(context, this);
+            return (await Serverservice_1.serverservices.db).remove(context, this);
         }
     }
     _getObjectProperty(dummy) {

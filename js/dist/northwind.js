@@ -1619,7 +1619,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1656072708000,
+                "date": 1680946839370,
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
@@ -2309,7 +2309,7 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
     exports.test = test;
     ;
 });
-define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction"], function (require, exports, DBObject_3, Registry_15, DatabaseSchema_3, Transaction_2) {
+define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice"], function (require, exports, DBObject_3, Registry_15, DatabaseSchema_3, Transaction_2, Serverservice_1) {
     "use strict";
     var Employees_2;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2326,7 +2326,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await (await Serverservice_1.serverservices.db);
                 return man.find(context, this, options);
             }
         }

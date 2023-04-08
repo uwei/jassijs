@@ -109,6 +109,7 @@ export class ComponentDesigner extends Panel {
             _this.editDialog(!_this.editMode);
 
         });
+
         this._designToolbar.add(this.editButton);
 
         this.saveButton = new Button();
@@ -165,14 +166,7 @@ export class ComponentDesigner extends Panel {
         });
         this._designToolbar.add(this.cutButton);
 
-        this.editButton = new Button();
-        this.editButton.icon = "mdi mdi-run mdi-18px";
-        this.editButton.tooltip = "Test Dialog";
-        this.editButton.onclick(function () {
-            _this.editDialog(!_this.editMode);
-
-        });
-
+      
         this.copyButton = new Button();
         this.copyButton.icon = "mdi mdi-content-copy mdi-18px";
         this.copyButton.tooltip = "Copy (Ctrl+Shift+C)";

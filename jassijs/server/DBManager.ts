@@ -8,24 +8,33 @@ import { ParentRightProperties } from "jassijs/remote/security/Rights";
 import { User } from "jassijs/remote/security/User";
 import { Context } from "jassijs/remote/RemoteObject";
 import { $Class } from "jassijs/remote/Registry";
+import { $Serverservice } from "jassijs/remote/Serverservice";
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 
 export interface MyFindManyOptions<Entity = any> extends FindManyOptions {
   whereParams?: any,
   onlyColumns?: string[];
-  order:{[field: string]: "ASC"|"DESC"};
+  order: { [field: string]: "ASC" | "DESC" };
 }
 
 
 
 var _instance: DBManager = undefined;
-var _initrunning = undefined;
+
 /**
  * Database access with typeorm
  */
-@$Class("jassi_localserver.DBManager")
+declare global {
+  export interface Serverservice {
+    db: Promise<DBManager>;
+  }
+}
+
+@$Serverservice({ name: "db", getInstance: async () => { return DBManager._get()} })
+@$Class("jassijs/server/DBManager")
 export class DBManager {
+  waitForConnection: Promise<DBManager> = undefined;
   static async getConOpts(): Promise<ConnectionOptions> {
     var stype: string = "postgres";
     var shost = "localhost";
@@ -43,8 +52,8 @@ export class DBManager {
 
       var all = test.split(":");
       stype = all[0];
-      if(stype==="postgresql")
-        stype="postgres";
+      if (stype === "postgresql")
+        stype = "postgres";
       var h = all[2].split("@");
       shost = h[1];
       iport = Number(all[3].split("/")[0]);
@@ -75,7 +84,7 @@ export class DBManager {
       //"synchronize": true,
       "logging": false,
       "entities": dbclasses
-    
+
       //"js/client/remote/de/**/*.js"
 
       // "migrations": [
@@ -89,52 +98,53 @@ export class DBManager {
 
     return opt;
   }
-  public static async get(): Promise<DBManager> {
-
+ 
+  private static async _get(): Promise<DBManager> {
     if (_instance === undefined) {
-
       _instance = new DBManager();
+    }
+    await _instance.waitForConnection;
+    return _instance;
+  }
+  private async open() {
+    var _initrunning = undefined;
+    var test = getMetadataArgsStorage();
+    try {
+      var opts = await DBManager.getConOpts();
+      _initrunning = createConnection(opts);
+      await _initrunning;
 
-      var test = getMetadataArgsStorage();
+    } catch (err1) {
       try {
-        var opts = await DBManager.getConOpts();
-        Object.freeze(DBManager);
+        _initrunning = undefined;
+        //@ts-ignore //heroku need this
+        opts.ssl = {
+          rejectUnauthorized: false
+        }
+        //          opts["ssl"] = true; 
         _initrunning = createConnection(opts);
         await _initrunning;
 
-      } catch (err1) {
-        try {
-          _initrunning = undefined;
-          //@ts-ignore //heroku need this
-         opts.ssl={
-          rejectUnauthorized: false
-       }
-//          opts["ssl"] = true; 
-          _initrunning = createConnection(opts);
-          await _initrunning;
-
-        } catch (err) {
-          console.log("DB corrupt - revert the last change");
+      } catch (err) {
+        console.log("DB corrupt - revert the last change");
+        console.error(err);
+        _instance = undefined;
+        _initrunning = undefined;
+        if (err.message === "The server does not support SSL connections") {
+          throw err1;
+          console.error(err1);
+        }
+        else {
+          throw err;
           console.error(err);
-          _instance = undefined;
-          _initrunning = undefined;
-          if (err.message === "The server does not support SSL connections") {
-            throw err1;
-            console.error(err1);
-          }
-          else {
-            throw err;
-            console.error(err);
-          }
         }
       }
-      try {
-        await _instance.mySync();
-      } catch (err) {
-        console.log("DB Schema could not be saved");
-        throw err;
-      }
-      await _instance.hasLoaded();
+    }
+    try {
+      await _instance.mySync();
+    } catch (err) {
+      console.log("DB Schema could not be saved");
+      throw err;
     }
     //wait for connection ready
     await _initrunning;
@@ -151,13 +161,7 @@ export class DBManager {
 
       }
     }
-    return _instance;
-  }
-  /**
-   * loading is finished
-   */
-  public async hasLoaded() {
-
+    return this;
   }
 
 
@@ -191,7 +195,7 @@ export class DBManager {
 
     //con.driver.
   }
-  public static async clearMetadata() {
+  private static async clearMetadata() {
     DBManager.clearArray(getMetadataArgsStorage().checks);
     DBManager.clearArray(getMetadataArgsStorage().columns);
     DBManager.clearArray(getMetadataArgsStorage().discriminatorValues);
@@ -216,20 +220,22 @@ export class DBManager {
     DBManager.clearArray(getMetadataArgsStorage().trees);
     DBManager.clearArray(getMetadataArgsStorage().uniques);
   }
-
-  public static async destroyConnection() {
-    
-    if (_instance !== undefined){
-      try{
-        await DBManager.get();
-      await getConnection().close();
-      }catch {
+  public async renewConnection(){
+    this.waitForConnection=new Promise((resolve)=>{});//never resolve
+    await this.destroyConnection(false);
+    this.waitForConnection=this.open();
+  }
+  public async destroyConnection(waitForCompleteOpen=true) {
+    if(waitForCompleteOpen)
+      await this.waitForConnection;
+   
+      try {
+        await getConnection().close();
+      } catch {
 
       }
-    }
-    _instance = undefined;
-    DBManager.clearMetadata();
 
+    DBManager.clearMetadata();
   }
   private static clearArray(arr: any[]) {
     while (arr.length > 0) {
@@ -238,22 +244,25 @@ export class DBManager {
   }
   private constructor() {
     Object.freeze(_instance);
+    this.waitForConnection=this.open();
   }
   connection() {
     return getConnection();
   }
-  async runSQL(context: Context,sql:string,parameters:any[]=undefined){
-    var ret=await (await DBManager.get()).connection().query(sql,parameters);
+  async runSQL(context: Context, sql: string, parameters: any[] = undefined) {
+
+    var ret =  (await this.waitForConnection).connection().query(sql, parameters);
     return ret;
   }
   async remove<Entity>(context: Context, entity: Entity) {
-    var test = await (await DBManager.get()).checkParentRight(context, entity, [entity["id"]]);
+    var test = await (await this.waitForConnection).checkParentRight(context, entity, [entity["id"]]);
     if (test === false)
       throw new JassiError("you are not allowed to delete " + classes.getClassName(entity) + " with id " + entity["id"]);
     await this.connection().manager.remove(entity);
   }
 
   private async addSaveTransaction(context: Context, entity) {
+    await this.waitForConnection;
     if (context.objecttransaction) {
       let ot = context.objecttransaction;
       if (!ot.savelist) {
@@ -280,7 +289,7 @@ export class DBManager {
  * @param obj - the object to insert
  */
   async insert(context: Context, obj: DBObject) {
-
+    (await this.waitForConnection);
     await this._checkParentRightsForSave(context, obj);
     if (context.objecttransaction) {
       return this.addSaveTransaction(context, obj);
@@ -307,6 +316,7 @@ export class DBManager {
    */
   async save<Entity>(context: Context, entity: Entity, options?: SaveOptions): Promise<Entity>;
   async save<Entity>(context: Context, entity, options) {
+    await this.waitForConnection;
     await this._checkParentRightsForSave(context, entity);
     if ((window?.document === undefined)) {//crypt password only in nodes
       if (classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
@@ -331,6 +341,7 @@ export class DBManager {
     return (<DBObject>ret)?.id;
   }
   private async _checkParentRightsForSave<Entity>(context: Context, entity: Entity) {
+    await this.waitForConnection;
     if (context.request.user?.isAdmin)
       return;
     //Check if the object self has restrictions
@@ -428,7 +439,7 @@ export class DBManager {
     //return this.connection().manager.findOne(entityClass,id,options);
     // else
 
-
+    await this.waitForConnection;
     var options: MyFindManyOptions<Entity> = p1;
     var onlyColumns = options?.onlyColumns;
     var clname = classes.getClassName(entityClass);
@@ -449,19 +460,19 @@ export class DBManager {
     ret = relations.join(ret);
     if (!context.request.user.isAdmin)
       ret = await relations.addParentRightDestriction(context, ret);
-    if(options?.skip){
+    if (options?.skip) {
       ret.skip(options.skip);
       delete options.skip;
     }
-    if(options?.take){
+    if (options?.take) {
       ret.take(options.take);
       delete options.take;
     }
-    if(options?.order){
-      for(var key in options?.order){
-        ret.addOrderBy("\"me_"+key+"\"",options.order[key]);
+    if (options?.order) {
+      for (var key in options?.order) {
+        ret.addOrderBy("\"me_" + key + "\"", options.order[key]);
       }
-      
+
       delete options.order;
     }
     var test = ret.getSql();
@@ -495,6 +506,7 @@ export class DBManager {
     return ret;
   }
   public async createUser(context: Context, username: string, password: string): Promise<User> {
+    await this.waitForConnection;
     //var hh=getConnection().manager.findOne(User,{ email: username });
     if (await getConnection().manager.findOne(User, { email: username }) !== undefined) {
       throw new Error("User already exists");
@@ -505,7 +517,7 @@ export class DBManager {
     user.password = password;
     //first user would be admin
 
-    if (await (await DBManager.get()).connection().manager.findOne(User) === undefined) {
+    if (await this.connection().manager.findOne(User) === undefined) {
       user.isAdmin = true;
     }
     //password is encrypted when saving
@@ -518,13 +530,13 @@ export class DBManager {
         resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
       });
     })*/
-    await (await DBManager.get()).save(context, user);
+    await this.save(context, user);
     delete user.password;
     return user;
   }
 
   async login(context: Context, user: string, password) {
-
+    await this.waitForConnection;
     /* const users = await this.connection().getRepository(User)
      .createQueryBuilder()
      .select("user.id", "id")
@@ -563,7 +575,7 @@ export class DBManager {
     return undefined;
   }
   async checkParentRight(context: Context, entityClass, ids: any[]): Promise<boolean> {
-
+    await this.waitForConnection;
     var clname = classes.getClassName(entityClass);
     var cl = classes.getClass(clname);
     var relations = new RelationInfo(context, clname, this);
@@ -673,7 +685,7 @@ class RelationInfo {
 
     return ret;
   }
- 
+
   /**
    * add an andWhere to the sql-Query to check the parent rights
    * @param builder 
@@ -786,22 +798,22 @@ class RelationInfo {
     }
   }
   private _parseNode(context: Context, node) {
-   /* if (node.operator !== undefined) {
-      var left = node.left;
-      var right = node.right;
-      this._checkExpression(context, left);
-      this._checkExpression(context, right);
-    }*/
+    /* if (node.operator !== undefined) {
+       var left = node.left;
+       var right = node.right;
+       this._checkExpression(context, left);
+       this._checkExpression(context, right);
+     }*/
     var left = node.left;
-      var right = node.right;
-      if (node.left !== undefined) {
-          this._checkExpression(context, left);
-      }
-      if (node.right !== undefined) {
-          this._checkExpression(context, right);
-      }
-        
-  
+    var right = node.right;
+    if (node.left !== undefined) {
+      this._checkExpression(context, left);
+    }
+    if (node.right !== undefined) {
+      this._checkExpression(context, right);
+    }
+
+
 
   }
   addWhereBySample<Entity>(context: Context, param: any, builder: SelectQueryBuilder<Entity>): SelectQueryBuilder<Entity> {
@@ -841,12 +853,12 @@ class RelationInfo {
       return ret;
     var dummyselect = "select * from k where ";
     //we must replace because parsing Exception
-    var fullSQL=dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams");
-    fullSQL=fullSQL.replaceAll("\" AS TEXT"," AS_TEXT\"");
+    var fullSQL = dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams");
+    fullSQL = fullSQL.replaceAll("\" AS TEXT", " AS_TEXT\"");
     var ast = parser.parse(fullSQL);
     this._parseNode(context, ast.value.where);
-    var newsql:string = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
-    newsql=newsql.replaceAll(" AS_TEXT\"","\" AS TEXT");
+    var newsql: string = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
+    newsql = newsql.replaceAll(" AS_TEXT\"", "\" AS TEXT");
     ret.andWhere(newsql.substring(dummyselect.length), whereParams);
     return ret;
   }

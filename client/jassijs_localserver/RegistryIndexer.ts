@@ -3,7 +3,7 @@ import { Indexer } from "jassijs_localserver/Indexer";
 
 
 import { Server } from "jassijs/remote/Server";
-import Filessystem from "jassijs_localserver/Filesystem";
+import Filesystem from "jassijs_localserver/Filesystem";
 import { $Class } from "jassijs/remote/Registry";
 
 @$Class("jassijs_localserver.RegistryIndexer")
@@ -15,7 +15,7 @@ export class RegistryIndexer extends Indexer {
         var data = await new Server().loadFile("jassijs.json");
         var modules = JSON.parse(data).modules;
         for (var m in modules) {
-            if (await new Filessystem().existsDirectory(modules[m]) || await new Filessystem().existsDirectory(m)) {
+            if (await new Filesystem().existsDirectory(modules[m]) || await new Filesystem().existsDirectory(m)) {
                 if (modules[m].indexOf(".js") === -1) {//.js are internet modules
 
                     await this.updateModul("", m, false);
@@ -30,7 +30,7 @@ export class RegistryIndexer extends Indexer {
         return;
     }
     async dirFiles(modul: string, path: string, extensions: string[], ignore: string[] = []): Promise<string[]> {
-        var tsfiles: string[] = await new Filessystem().dirFiles(path, extensions, ignore);
+        var tsfiles: string[] = await new Filesystem().dirFiles(path, extensions, ignore);
         //add files from map
         if (this.mapcache[modul] === undefined && jassijs.modules[modul]!==undefined&&jassijs.modules[modul].indexOf(".js") > 0) {//read webtsfiles
             let ret = {};
@@ -57,14 +57,14 @@ export class RegistryIndexer extends Indexer {
         return tsfiles;
     }
     async writeFile(name: string, content: string) {
-        await new Filessystem().saveFile(name, content);
+        await new Filesystem().saveFile(name, content);
     }
     async createDirectory(name: string) {
-        await new Filessystem().createFolder(name);
+        await new Filesystem().createFolder(name);
         return;
     }
     async getFileTime(filename): Promise<number> {
-        var entry = await new Filessystem().loadFileEntry(filename);
+        var entry = await new Filesystem().loadFileEntry(filename);
         if (entry !== undefined)
             return RegistryIndexer.version;
         for (var modul in this.mapcache) {
@@ -81,11 +81,11 @@ export class RegistryIndexer extends Indexer {
                 return true;
             }
         }
-        var test = await new Filessystem().loadFileEntry(filename);
+        var test = await new Filesystem().loadFileEntry(filename);
         return test !== undefined;
     }
     async readFile(filename): Promise<any> {
-        var ret = await new Filessystem().loadFile(filename);
+        var ret = await new Filesystem().loadFile(filename);
         if (ret !== undefined)
             return ret;
         for (var modul in this.mapcache) {

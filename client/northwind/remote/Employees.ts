@@ -4,6 +4,7 @@ import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMa
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { Transaction } from "jassijs/remote/Transaction";
 import { Context } from "jassijs/remote/RemoteObject";
+import { serverservices } from "jassijs/remote/Serverservice";
 @$DBObject()
 @$Class("northwind.Employees")
 export class Employees extends DBObject {
@@ -57,10 +58,10 @@ export class Employees extends DBObject {
         }
         else {
             //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
+            var man = await (await serverservices.db);
             return man.find(context,this, options);
         }
-    }
+    } 
     async hallo(num) {
         if (!jassijs.isServer) {
             var ret = await this.call(this, this.hallo, num);

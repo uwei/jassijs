@@ -3,7 +3,7 @@ define("jassijs_report/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_report/designer/ReportDesigner.ts": {
-		"date": 1656337134000,
+		"date": 1680803515410,
 		"jassijs_report.designer.ReportDesigner": {}
 	},
 	"jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -21,7 +21,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.PDFReport": {}
 	},
 	"jassijs_report/PDFViewer.ts": {
-		"date": 1656015024000,
+		"date": 1680797793349,
 		"jassijs_report.PDFViewer": {}
 	},
 	"jassijs_report/RColumns.ts": {

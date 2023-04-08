@@ -2045,12 +2045,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 _this.cutComponent();
             });
             this._designToolbar.add(this.cutButton);
-            this.editButton = new Button_3.Button();
-            this.editButton.icon = "mdi mdi-run mdi-18px";
-            this.editButton.tooltip = "Test Dialog";
-            this.editButton.onclick(function () {
-                _this.editDialog(!_this.editMode);
-            });
             this.copyButton = new Button_3.Button();
             this.copyButton.icon = "mdi mdi-content-copy mdi-18px";
             this.copyButton.tooltip = "Copy (Ctrl+Shift+C)";
@@ -3556,7 +3550,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1656185728000,
+                "date": 1680803470863,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {

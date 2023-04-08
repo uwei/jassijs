@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.manageToken = exports.loginRegister = void 0;
-const DBManager_1 = require("./DBManager");
 const PassportSetup_1 = require("./PassportSetup");
 const UserModel_1 = require("jassijs/UserModel");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
             isServer: true,
             request: req
         };
-        await (await DBManager_1.DBManager.get()).createUser(context, username, password);
+        await (await Serverservice_1.serverservices.db).createUser(context, username, password);
         console.log("user created");
         /*const user= new User();
         user.email=username;

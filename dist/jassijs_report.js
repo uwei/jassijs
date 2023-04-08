@@ -194,7 +194,7 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
             this.pageNum = 1;
             this.pageRendering = false;
             this.pageNumPending = null;
-            this.scale = 0.8;
+            this.scale = 1;
             this.me = {};
             this.layout(this.me);
         }
@@ -224,11 +224,10 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
                 _this.updatePages();
                 //_this.renderPage(_this._page);
             });
-            me.plus.width = 25;
+            me.plus.width = 20;
+            me.plus.height = 20;
             me.minus.text = "-";
             me.minus.onclick(function (event) {
-                _this.value = _this.value;
-                return;
                 _this.scale = _this.scale / 1.25;
                 _this.updatePages();
             });
@@ -245,10 +244,12 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
             // Using promise to fetch the page
             var _this = this;
             this.pdfDoc.getPage(num).then(function (page) {
-                var viewport = page.getViewport({ scale: _this.scale });
+                var quality = 5;
+                var viewport = page.getViewport({ scale: _this.scale * quality });
                 var can = _this.canavasPanels[page._pageIndex].dom;
                 can.height = viewport.height;
                 can.width = viewport.width;
+                can.style.width = Math.round(viewport.width / quality) + ".px";
                 // Render PDF page into canvas context
                 var renderContext = {
                     canvasContext: can.getContext('2d'),
@@ -4729,7 +4730,7 @@ define("jassijs_report/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1656337134000,
+                "date": 1680803515410,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -4747,7 +4748,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
-                "date": 1656015024000,
+                "date": 1680797793349,
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
@@ -5124,8 +5125,6 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             this.pdfviewer = new PDFViewer_3.PDFViewer();
             this._codeChanger = undefined;
             this.mainLayout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
-            this.editButton.tooltip = "pdf preview";
-            this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
         }
         set codeEditor(value) {
             var _this = this;
@@ -5154,6 +5153,8 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             this.dom.style.overflow = "scroll";
             this.dom.style.width = "";
             this.registerKeys();
+            this.editButton.tooltip = "pdf preview";
+            this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
         }
         connectParser(parser) {
             this._propertyEditor.parser = parser;

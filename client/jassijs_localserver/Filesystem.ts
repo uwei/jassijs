@@ -1,11 +1,9 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Context } from "jassijs/remote/RemoteObject";
 import { Reloader } from "jassijs/util/Reloader";
-//@ts-ignore force load this class
-import { DBManager } from "jassijs/server/DBManager";
 import registry from "jassijs/remote/Registry";
 import { Server } from "jassijs/remote/Server";
-import { $Serverservice } from "jassijs/remote/Serverservice";
+import { $Serverservice, serverservices } from "jassijs/remote/Serverservice";
 
 
 class FileEntry {
@@ -16,27 +14,28 @@ class FileEntry {
 }
 declare global{
     export interface Serverservice{
-        filesystem:Promise<Filessystem>;
+        filesystem:Promise<Filesystem>;
     }
 }
 
-@$Serverservice({name:"filesystem"})  
-@$Class("jassijs_localserver.Filessystem")
-export default class Filessystem {
+@$Serverservice({name:"filesystem",getInstance:async ()=>new Filesystem()})  
+@$Class("jassijs_localserver.Filesystem")
+export default class Filesystem {
+    path:undefined;
     private static db: IDBDatabase;
     private static async getDB() {
-        if (Filessystem.db)
-            return Filessystem.db;
+        if (Filesystem.db)
+            return Filesystem.db;
         var req = window.indexedDB.open("jassi", 1);
         req.onupgradeneeded = function (event) {
             var db = event.target["result"];
             var objectStore = db.createObjectStore("files", { keyPath: "id" });
         }
-        Filessystem.db = await new Promise((resolve) => {
+        Filesystem.db = await new Promise((resolve) => {
             req.onsuccess = (ev) => { resolve(ev.target["result"]) };
         })
 
-        return Filessystem.db;
+        return Filesystem.db;
     }
     /**
      * exists a directory?
@@ -76,7 +75,7 @@ export default class Filessystem {
         return ret;
     }
     async dirEntry(curdir = "") {
-        var db = await Filessystem.getDB();
+        var db = await Filesystem.getDB();
         let transaction = db.transaction('files', 'readonly');
         const store = transaction.objectStore('files');
         var ret = await store.openCursor();
@@ -180,7 +179,7 @@ export default class Filessystem {
             contents = allcontents;
         }
 
-        var db = await Filessystem.getDB();
+        var db = await Filesystem.getDB();
         var rollbackcontents: string[] = [];
         var jsToReload = [];
         var dbschemaHasChanged = false;
@@ -224,17 +223,16 @@ export default class Filessystem {
             try {
                 await Reloader.instance.reloadJSAll(jsToReload);
                 if (dbschemaHasChanged) {
-                    var man = await DBManager.destroyConnection();
-                    await DBManager.get();
+                    await(await serverservices.db).renewConnection();
                 }
             } catch (err) {
                 console.error(err);
                 if (dbschemaHasChanged) {
-                    await DBManager.destroyConnection();
+                    await await(await serverservices.db).destroyConnection()
                 }
                 var restore = await this.saveFiles(fileNames, rollbackcontents, false);
                 if (dbschemaHasChanged) {
-                    await DBManager.get();
+                    await(await serverservices.db).renewConnection();
                 }
                 return err + "DB corrupt changes are reverted " + restore;
             }
@@ -242,7 +240,7 @@ export default class Filessystem {
         return "";
     }
     async loadFileEntry(fileName: string): Promise<FileEntry> {
-        var db = await Filessystem.getDB();
+        var db = await Filesystem.getDB();
         let transaction = db.transaction('files', 'readonly');
         const store = transaction.objectStore('files');
         var ret = await store.get(fileName);
@@ -271,7 +269,7 @@ export default class Filessystem {
         var test = await this.loadFileEntry(filename);
         if (test)
             return filename + " allready exists";
-        var db = await Filessystem.getDB();
+        var db = await Filesystem.getDB();
         let transaction = db.transaction('files', 'readwrite');
         const store = transaction.objectStore('files');
         var el: FileEntry = {
@@ -332,7 +330,7 @@ export default class Filessystem {
         if (entr.length === 0) {
             return file + " not exists";
         }
-        var db = await Filessystem.getDB();
+        var db = await Filesystem.getDB();
         for (let i = 0; i < entr.length; i++) {
             let transaction = db.transaction('files', 'readwrite');
             const store = transaction.objectStore('files');
@@ -400,7 +398,7 @@ export default class Filessystem {
 }
 
 export async function test2() {
-    var fs = new Filessystem();
+    var fs = new Filesystem();
     var hh = await fs.dir("local");
     /*await fs.createFolder("demo");
     await fs.createFile("demo/hallo", "");
@@ -410,18 +408,18 @@ export async function test2() {
     await fs.remove("demo1");*/
     return;
 
-    await new Filessystem().saveFiles(["hallo.js"], ["alert(2)"]);
-    var s1 = await new Filessystem().remove("hallo.js");
-    var test = await new Filessystem().loadFile("hallo.js")
-    var s2 = await new Filessystem().remove("hallo.js");
-    var s = await new Filessystem().createFolder("demo");
-    var s3 = await new Filessystem().remove("demo");
-    await new Filessystem().saveFiles(["local/modul.ts"], [`export default {
+    await new Filesystem().saveFiles(["hallo.js"], ["alert(2)"]);
+    var s1 = await new Filesystem().remove("hallo.js");
+    var test = await new Filesystem().loadFile("hallo.js")
+    var s2 = await new Filesystem().remove("hallo.js");
+    var s = await new Filesystem().createFolder("demo");
+    var s3 = await new Filesystem().remove("demo");
+    await new Filesystem().saveFiles(["local/modul.ts"], [`export default {
     "require":{ 
         
     }
 }`]);
-    await new Filessystem().saveFiles(["local/registry.js"], [`//this file is autogenerated don't modify
+    await new Filesystem().saveFiles(["local/registry.js"], [`//this file is autogenerated don't modify
 define("local/registry",["require"], function(require) {
  return {
   default: {

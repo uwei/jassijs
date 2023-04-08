@@ -18,6 +18,7 @@ const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const DBObjectQuery_1 = require("jassijs/remote/DBObjectQuery");
 const Rights_1 = require("jassijs/remote/security/Rights");
 const Validator_1 = require("jassijs/remote/Validator");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
     initExtensions() {
@@ -59,9 +60,7 @@ let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
             return await this.call(this.find, options, context);
         }
         else {
-            //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
-            return man.find(context, this, options);
+            return await (await Serverservice_1.serverservices.db).find(context, this, options);
         }
     }
     static async sample() {

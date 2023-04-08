@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Classes"], function (require, exports, Registry_1, RemoteObject_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Classes", "./Serverservice"], function (require, exports, Registry_1, RemoteObject_1, Classes_1, Serverservice_1) {
     "use strict";
     var DatabaseTools_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18,9 +18,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can delete");
-                //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
-                return man.runSQL(context, sql, parameter);
+                return (await Serverservice_1.serverservices.db).runSQL(context, sql, parameter);
             }
         }
         static async dropTables(tables) {

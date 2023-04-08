@@ -6,11 +6,17 @@ import registry from "jassijs/remote/Registry";
 
 class ServerserviceProperties {
     name: string;
+    getInstance:(()=>Promise<any>) 
 }
-var allServices = {};
-var serverservices: Serverservice = <any>new Proxy(allServices, {
+var runningServerservices = {};
+var beforeServiceLoadHandler=[];
+export function beforeServiceLoad(func:(name:string,props:ServerserviceProperties)=>void){
+    beforeServiceLoadHandler.push(func);
+}
+var serverservices: Serverservice = <any>new Proxy(runningServerservices, {
     get(target, prop, receiver) {
         return new Promise(async (resolve, reject) => {
+            var khsdf=runningServerservices;
             if (target[prop]) {
                 resolve(target[prop]);
             } else {
@@ -18,36 +24,48 @@ var serverservices: Serverservice = <any>new Proxy(allServices, {
                 for (var x = 0; x < all.length; x++) { 
                     var serv = all[x];
                     var name = serv.params[0].name;
-                    if (name === prop) {
+                    if (name === prop) { 
                         var classname = serv.classname;
                         var cl = await registry.getJSONData("$Class", classname);
                         if (require.main) {//nodes load project class from module
+                            /*for (var jfile in require.cache) {
+                                if(jfile.replaceAll("\\","/").endsWith(serv.filename.substring(0,serv.filename.length-2)+"js")){
+                                    delete require.cache[jfile];
+                                }
+                            }*/
                             //@ts-ignore
                             await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                         } else {
-                            //is loaded
-                            //await import(classname.replaceAll(".", "/"));
+                            await import(classname.replaceAll(".", "/"));
+                        } 
+                        var props:ServerserviceProperties=registry.getData("$Serverservice",classname)[0].params[0];
+                        for(var x=0;x<beforeServiceLoadHandler.length;x++){
+                            await beforeServiceLoadHandler[x](<string>prop,props);
                         }
+                        var instance= props.getInstance();
                        
+                        target[prop]=instance;
+                        resolve(instance);  
+                        return;
+                           
                     }
-                    var cls = classes.getClass(classname);
-                    target[prop] = new cls();
-                    resolve(target[prop]);
-                    return;
+                   
                 }
             }
 
             reject("serverservice not found:" + <string>prop);
         });
     }
-});
+});  
 
 export function $Serverservice(properties: ServerserviceProperties): Function {
     return function (pclass) {
         registry.register("$Serverservice", pclass, properties);
     }
 }
+ 
 
-export { serverservices };
+var doNotReloadModule=true;
+export { serverservices,doNotReloadModule,runningServerservices};
 
 

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._execute = exports.remoteProtocol = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
 const Classes_1 = require("jassijs/remote/Classes");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 function remoteProtocol(request, response) {
     execute(request, response);
 }
@@ -11,7 +12,7 @@ async function checkSimulateUser(context, request) {
     var rights = (await Promise.resolve().then(() => require("jassijs/remote/security/Rights"))).default;
     var test = request.cookies["simulateUser"];
     if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
-        var db = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
+        var db = await Serverservice_1.serverservices.db;
         var user = await db.login(context, context.request.cookies["simulateUser"], context.request.cookies["simulateUserPassword"]);
         if (!user) {
             console.log("simulateUser not found");

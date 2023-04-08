@@ -13,6 +13,7 @@ const Registry_2 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Setting_1 = require("jassijs/remote/security/Setting");
 const Server_1 = require("./Server");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 const proxyhandler = {
     get: function (target, prop, receiver) {
         return prop;
@@ -45,7 +46,7 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
         }
         else {
             //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
+            var man = await Serverservice_1.serverservices.db;
             var id = context.request.user.user;
             return {
                 user: await man.findOne(context, Setting_1.Setting, { "id": 1 }),
@@ -90,7 +91,7 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
             }
             else {
                 //@ts-ignore
-                var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
+                var man = await Serverservice_1.serverservices.db;
                 var id = context.request.user.user;
                 //first load
                 let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });
@@ -142,7 +143,7 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
             }
             else {
                 //@ts-ignore
-                var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
+                var man = await Serverservice_1.serverservices.db;
                 var id = context.request.user.user;
                 //first load
                 let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });

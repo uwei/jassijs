@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, ARZeile_1, Kunde_1, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1) {
+define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "jassijs/remote/Serverservice"], function (require, exports, ARZeile_1, Kunde_1, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1, Serverservice_1) {
     "use strict";
     var AR_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -32,7 +32,7 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/r
                 //@ts-ignore
                 var Brackets = (await new Promise((resolve_1, reject_1) => { require(["typeorm"], resolve_1, reject_1); })).Brackets;
                 //@ts-ignore
-                var man = await (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
+                var man = await Serverservice_1.serverservices.db;
                 var man2 = man;
                 var ret = await man.connection().manager.createQueryBuilder().
                     select("me").from(AR_1, "me").

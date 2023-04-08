@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/server/Filesystem", "jassijs/remote/Classes", "jassijs_editor/util/Typescript"], function (require, exports, Filesystem_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs_editor/util/Typescript"], function (require, exports, Classes_1, Serverservice_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -67,8 +67,9 @@ define(["require", "exports", "jassijs/server/Filesystem", "jassijs/remote/Class
                     ' }\n' +
                     '});';
                 var jsdir = "js/" + path;
-                if (Filesystem_1.default.path !== undefined)
-                    jsdir = path.replace(Filesystem_1.default.path, Filesystem_1.default.path + "/js");
+                var fpath = (await (Serverservice_1.serverservices.filesystem)).path;
+                if (fpath !== undefined)
+                    jsdir = path.replace(fpath, fpath + "/js");
                 if (!(await this.fileExists(jsdir)))
                     await this.createDirectory(jsdir);
                 await this.writeFile(jsdir + "/registry.js", text);

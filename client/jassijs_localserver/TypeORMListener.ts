@@ -1,10 +1,10 @@
 import { $Class } from "jassijs/remote/Registry";
 //@ts-ignore
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, RemoveEvent, UpdateEvent } from "typeorm";
-import Filessystem from "jassijs_localserver/Filesystem";
+import Filesystem from "jassijs_localserver/Filesystem";
 import { Reloader } from "jassijs/util/Reloader";
 import registry from "jassijs/remote/Registry";
-import { DBManager } from "./DBManager";
+import { serverservices } from "jassijs/remote/Serverservice";
 
 
 //listener for code changes
@@ -19,8 +19,7 @@ Reloader.instance.addEventCodeReloaded(async function (files: string[]) {
         });
     }
     if(reload){
-        await DBManager.destroyConnection();
-        await DBManager.get();
+        (await serverservices.db).renewConnection();
     }
 });
 
@@ -35,7 +34,7 @@ export class TypeORMListener implements EntitySubscriberInterface {
         }
         this.savetimer = setTimeout(() => {
             var data = event.connection.driver.export();
-            new Filessystem().saveFile("__default.db", data);
+            new Filesystem().saveFile("__default.db", data);
             console.log("save DB");
         }, 300);
 

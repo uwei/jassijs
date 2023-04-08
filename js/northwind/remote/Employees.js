@@ -15,6 +15,7 @@ const DBObject_1 = require("jassijs/remote/DBObject");
 const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Transaction_1 = require("jassijs/remote/Transaction");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
     constructor() {
         super();
@@ -27,7 +28,7 @@ let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
         }
         else {
             //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
+            var man = await (await Serverservice_1.serverservices.db);
             return man.find(context, this, options);
         }
     }

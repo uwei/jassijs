@@ -262,7 +262,7 @@ export class Registry {
 
             //@ts-ignore
             var fs = await import('fs');
-
+ 
             modultext = fs.readFileSync("./jassijs.json", 'utf-8');
             var modules = JSON.parse(modultext).modules;
             for (let modul in modules) {
@@ -462,7 +462,9 @@ export class Registry {
 var registry = new Registry();
 export default registry;
 export function migrateModul(oldModul, newModul) {
-    newModul.registry._nextID = oldModul.registry._nextID;
-    newModul.registry.entries = oldModul.registry.entries;
+    if(newModul.registry){
+        newModul.registry._nextID = oldModul.registry._nextID;
+        newModul.registry.entries = oldModul.registry.entries;
+    }
 }
 //jassijs.registry=registry;

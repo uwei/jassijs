@@ -5,6 +5,8 @@ import { PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, Prim
 import { $CheckParentRight } from "jassijs/remote/security/Rights";
 import { AR } from "de/remote/AR";
 import { Context } from "jassijs/remote/RemoteObject";
+import { serverservices } from "jassijs/remote/Serverservice";
+
 @$DBObject()
 @$Class("de.ARZeile")
 export class ARZeile extends DBObject {
@@ -12,7 +14,7 @@ export class ARZeile extends DBObject {
     declare id: number;
     @Column()
     public text: string;
-    @Column()
+    @Column() 
     public position: number;
     @Column({ nullable: true, type: "decimal" })
     public preis: number;
@@ -28,9 +30,7 @@ export class ARZeile extends DBObject {
             return await this.call(this.find, options, context);
         }
         else {
-            //@ts-ignore
-            var man = await (await import("jassijs/server/DBManager")).DBManager.get();
-            return man.find(context, this, options);
+            return (await serverservices.db).find(context, this, options);
         }
     }
     get oo2() {

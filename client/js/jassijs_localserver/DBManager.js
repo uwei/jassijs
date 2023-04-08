@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Registry_2) {
+define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Registry_2, Serverservice_1) {
     "use strict";
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -16,9 +16,6 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
     const passwordIteration = 10000;
     var _instance = undefined;
     var _initrunning = undefined;
-    /**
-     * Database access with typeorm
-     */
     let DBManager = DBManager_1 = class DBManager {
         static async getConOpts() {
             var stype = "postgres";
@@ -36,6 +33,8 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             if (test !== undefined) {
                 var all = test.split(":");
                 stype = all[0];
+                if (stype === "postgresql")
+                    stype = "postgres";
                 var h = all[2].split("@");
                 shost = h[1];
                 iport = Number(all[3].split("/")[0]);
@@ -72,50 +71,53 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             };
             return opt;
         }
-        static async get() {
+        static async _get() {
             if (_instance === undefined) {
                 _instance = new DBManager_1();
-                var test = (0, typeorm_1.getMetadataArgsStorage)();
+            }
+            await _instance.waitForConnection;
+            return _instance;
+        }
+        async open() {
+            var _initrunning = undefined;
+            var test = (0, typeorm_1.getMetadataArgsStorage)();
+            try {
+                var opts = await DBManager_1.getConOpts();
+                _initrunning = (0, typeorm_1.createConnection)(opts);
+                await _initrunning;
+            }
+            catch (err1) {
                 try {
-                    var opts = await DBManager_1.getConOpts();
-                    Object.freeze(DBManager_1);
+                    _initrunning = undefined;
+                    //@ts-ignore //heroku need this
+                    opts.ssl = {
+                        rejectUnauthorized: false
+                    };
+                    //          opts["ssl"] = true; 
                     _initrunning = (0, typeorm_1.createConnection)(opts);
                     await _initrunning;
                 }
-                catch (err1) {
-                    try {
-                        _initrunning = undefined;
-                        //@ts-ignore //heroku need this
-                        opts.ssl = {
-                            rejectUnauthorized: false
-                        };
-                        //          opts["ssl"] = true;
-                        _initrunning = (0, typeorm_1.createConnection)(opts);
-                        await _initrunning;
-                    }
-                    catch (err) {
-                        console.log("DB corrupt - revert the last change");
-                        console.error(err);
-                        _instance = undefined;
-                        _initrunning = undefined;
-                        if (err.message === "The server does not support SSL connections") {
-                            throw err1;
-                            console.error(err1);
-                        }
-                        else {
-                            throw err;
-                            console.error(err);
-                        }
-                    }
-                }
-                try {
-                    await _instance.mySync();
-                }
                 catch (err) {
-                    console.log("DB Schema could not be saved");
-                    throw err;
+                    console.log("DB corrupt - revert the last change");
+                    console.error(err);
+                    _instance = undefined;
+                    _initrunning = undefined;
+                    if (err.message === "The server does not support SSL connections") {
+                        throw err1;
+                        console.error(err1);
+                    }
+                    else {
+                        throw err;
+                        console.error(err);
+                    }
                 }
-                await _instance.hasLoaded();
+            }
+            try {
+                await this.mySync();
+            }
+            catch (err) {
+                console.log("DB Schema could not be saved");
+                throw err;
             }
             //wait for connection ready
             await _initrunning;
@@ -132,12 +134,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 catch (_a) {
                 }
             }
-            return _instance;
-        }
-        /**
-         * loading is finished
-         */
-        async hasLoaded() {
+            return this;
         }
         async mySync() {
             var con = (0, typeorm_1.getConnection)();
@@ -191,16 +188,19 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().trees);
             DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().uniques);
         }
-        static async destroyConnection() {
-            if (_instance !== undefined) {
-                try {
-                    await DBManager_1.get();
-                    await (0, typeorm_1.getConnection)().close();
-                }
-                catch (_a) {
-                }
+        async renewConnection() {
+            this.waitForConnection = new Promise((resolve) => { }); //never resolve
+            await this.destroyConnection(false);
+            this.waitForConnection = this.open();
+        }
+        async destroyConnection(waitForCompleteOpen = true) {
+            if (waitForCompleteOpen)
+                await this.waitForConnection;
+            try {
+                await (0, typeorm_1.getConnection)().close();
             }
-            _instance = undefined;
+            catch (_a) {
+            }
             DBManager_1.clearMetadata();
         }
         static clearArray(arr) {
@@ -209,22 +209,25 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             }
         }
         constructor() {
+            this.waitForConnection = undefined;
             Object.freeze(_instance);
+            this.waitForConnection = this.open();
         }
         connection() {
             return (0, typeorm_1.getConnection)();
         }
         async runSQL(context, sql, parameters = undefined) {
-            var ret = await (await DBManager_1.get()).connection().query(sql, parameters);
+            var ret = (await this.waitForConnection).connection().query(sql, parameters);
             return ret;
         }
         async remove(context, entity) {
-            var test = await (await DBManager_1.get()).checkParentRight(context, entity, [entity["id"]]);
+            var test = await (await this.waitForConnection).checkParentRight(context, entity, [entity["id"]]);
             if (test === false)
                 throw new Classes_1.JassiError("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
             await this.connection().manager.remove(entity);
         }
         async addSaveTransaction(context, entity) {
+            await this.waitForConnection;
             if (context.objecttransaction) {
                 let ot = context.objecttransaction;
                 if (!ot.savelist) {
@@ -252,6 +255,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
        * @param obj - the object to insert
        */
         async insert(context, obj) {
+            (await this.waitForConnection);
             await this._checkParentRightsForSave(context, obj);
             if (context.objecttransaction) {
                 return this.addSaveTransaction(context, obj);
@@ -268,6 +272,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             return retob;
         }
         async save(context, entity, options) {
+            await this.waitForConnection;
             await this._checkParentRightsForSave(context, entity);
             if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
                 if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
@@ -293,6 +298,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         }
         async _checkParentRightsForSave(context, entity) {
             var _a;
+            await this.waitForConnection;
             if ((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)
                 return;
             //Check if the object self has restrictions
@@ -368,6 +374,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         async find(context, entityClass, p1) {
             //return this.connection().manager.findOne(entityClass,id,options);
             // else
+            await this.waitForConnection;
             var options = p1;
             var onlyColumns = options === null || options === void 0 ? void 0 : options.onlyColumns;
             var clname = Classes_1.classes.getClassName(entityClass);
@@ -434,6 +441,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             return ret;
         }
         async createUser(context, username, password) {
+            await this.waitForConnection;
             //var hh=getConnection().manager.findOne(User,{ email: username });
             if (await (0, typeorm_1.getConnection)().manager.findOne(User_1.User, { email: username }) !== undefined) {
                 throw new Error("User already exists");
@@ -442,7 +450,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             user.email = username;
             user.password = password;
             //first user would be admin
-            if (await (await DBManager_1.get()).connection().manager.findOne(User_1.User) === undefined) {
+            if (await this.connection().manager.findOne(User_1.User) === undefined) {
                 user.isAdmin = true;
             }
             //password is encrypted when saving
@@ -455,11 +463,12 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
               });
             })*/
-            await (await DBManager_1.get()).save(context, user);
+            await this.save(context, user);
             delete user.password;
             return user;
         }
         async login(context, user, password) {
+            await this.waitForConnection;
             /* const users = await this.connection().getRepository(User)
              .createQueryBuilder()
              .select("user.id", "id")
@@ -498,6 +507,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             return undefined;
         }
         async checkParentRight(context, entityClass, ids) {
+            await this.waitForConnection;
             var clname = Classes_1.classes.getClassName(entityClass);
             var cl = Classes_1.classes.getClass(clname);
             var relations = new RelationInfo(context, clname, this);
@@ -513,7 +523,8 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         }
     };
     DBManager = DBManager_1 = __decorate([
-        (0, Registry_2.$Class)("jassi_localserver.DBManager"),
+        (0, Serverservice_1.$Serverservice)({ name: "db", getInstance: async () => { return DBManager_1._get(); } }),
+        (0, Registry_2.$Class)("jassijs_localserver.DBManager"),
         __metadata("design:paramtypes", [])
     ], DBManager);
     exports.DBManager = DBManager;

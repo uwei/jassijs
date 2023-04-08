@@ -152,8 +152,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 await this.fillFilesInMapIfNeeded();
                 if (!fromServerdirectory && Server_1.filesInMap[fileName]) {
                     //perhabs the files ar in localserver?
-                    var Filessystem = Classes_1.classes.getClass("jassijs_localserver.Filessystem");
-                    if (Filessystem && (await new Filessystem().loadFileEntry(fileName) !== undefined)) {
+                    var Filesystem = Classes_1.classes.getClass("jassijs_localserver.Filesystem");
+                    if (Filesystem && (await new Filesystem().loadFileEntry(fileName) !== undefined)) {
                         //use ajax
                     }
                     else {
@@ -248,16 +248,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return;
             }*/
             return await this.saveFiles([fileName], [content], context);
-            /* if (!jassijs.isServer) {
-                 var ret = await this.call(this, "saveFiles", fileNames, contents);
-                 //@ts-ignore
-                 //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                 return ret;
-             } else {
-                 //@ts-ignore
-                 var fs: any = await import("jassijs/server/Filesystem");
-                 return new fs.default().saveFiles(fileNames, contents);
-             }*/
         }
         /**
        * deletes a server modul

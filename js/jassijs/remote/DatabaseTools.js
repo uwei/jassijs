@@ -11,6 +11,7 @@ exports.test = exports.DatabaseTools = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Classes_1 = require("jassijs/remote/Classes");
+const Serverservice_1 = require("./Serverservice");
 let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1.RemoteObject {
     //this is a sample remote function
     static async runSQL(sql, parameter = undefined, context = undefined) {
@@ -20,9 +21,7 @@ let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1
         else {
             if (!context.request.user.isAdmin)
                 throw new Classes_1.JassiError("only admins can delete");
-            //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
-            return man.runSQL(context, sql, parameter);
+            return (await Serverservice_1.serverservices.db).runSQL(context, sql, parameter);
         }
     }
     static async dropTables(tables) {

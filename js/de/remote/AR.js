@@ -17,6 +17,7 @@ const DBObject_1 = require("jassijs/remote/DBObject");
 const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Rights_1 = require("jassijs/remote/security/Rights");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 /**
 * Ausgangsrechnung
 * @class de.AR
@@ -37,7 +38,7 @@ let AR = AR_1 = class AR extends DBObject_1.DBObject {
             //@ts-ignore
             var Brackets = (await Promise.resolve().then(() => require("typeorm"))).Brackets;
             //@ts-ignore
-            var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
+            var man = await Serverservice_1.serverservices.db;
             var man2 = man;
             var ret = await man.connection().manager.createQueryBuilder().
                 select("me").from(AR_1, "me").

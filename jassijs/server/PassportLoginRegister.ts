@@ -1,10 +1,10 @@
 
 import { type } from "os";
 import { User } from "jassijs/remote/security/User";
-import { DBManager } from "./DBManager";
 import { JWT_EXPIRATION_MS } from "./PassportSetup";
 import { UserModel } from "jassijs/UserModel";
 import { Context } from "jassijs/remote/RemoteObject";
+import { serverservices } from "jassijs/remote/Serverservice";
 
 const express = require('express');
 const passport = require('passport');
@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
             isServer:true,
             request:req
         }
-        await (await DBManager.get()).createUser(context,username, password);
+        await (await serverservices.db).createUser(context,username, password);
         console.log("user created");
         /*const user= new User();
         user.email=username;

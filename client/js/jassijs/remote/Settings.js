@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server"], function (require, exports, Registry_1, Registry_2, RemoteObject_1, Setting_1, Server_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server", "jassijs/remote/Serverservice"], function (require, exports, Registry_1, Registry_2, RemoteObject_1, Setting_1, Server_1, Serverservice_1) {
     "use strict";
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -41,7 +41,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await Serverservice_1.serverservices.db;
                 var id = context.request.user.user;
                 return {
                     user: await man.findOne(context, Setting_1.Setting, { "id": 1 }),
@@ -86,7 +86,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                 }
                 else {
                     //@ts-ignore
-                    var man = await (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
+                    var man = await Serverservice_1.serverservices.db;
                     var id = context.request.user.user;
                     //first load
                     let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });
@@ -138,7 +138,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                 }
                 else {
                     //@ts-ignore
-                    var man = await (await new Promise((resolve_3, reject_3) => { require(["jassijs/server/DBManager"], resolve_3, reject_3); })).DBManager.get();
+                    var man = await Serverservice_1.serverservices.db;
                     var id = context.request.user.user;
                     //first load
                     let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });

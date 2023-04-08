@@ -17,13 +17,10 @@ const Classes_1 = require("jassijs/remote/Classes");
 const Registry_1 = require("jassijs/remote/Registry");
 const User_1 = require("jassijs/remote/security/User");
 const Registry_2 = require("jassijs/remote/Registry");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 var _instance = undefined;
-var _initrunning = undefined;
-/**
- * Database access with typeorm
- */
 let DBManager = DBManager_1 = class DBManager {
     static async getConOpts() {
         var stype = "postgres";
@@ -79,50 +76,53 @@ let DBManager = DBManager_1 = class DBManager {
         };
         return opt;
     }
-    static async get() {
+    static async _get() {
         if (_instance === undefined) {
             _instance = new DBManager_1();
-            var test = (0, typeorm_1.getMetadataArgsStorage)();
+        }
+        await _instance.waitForConnection;
+        return _instance;
+    }
+    async open() {
+        var _initrunning = undefined;
+        var test = (0, typeorm_1.getMetadataArgsStorage)();
+        try {
+            var opts = await DBManager_1.getConOpts();
+            _initrunning = (0, typeorm_1.createConnection)(opts);
+            await _initrunning;
+        }
+        catch (err1) {
             try {
-                var opts = await DBManager_1.getConOpts();
-                Object.freeze(DBManager_1);
+                _initrunning = undefined;
+                //@ts-ignore //heroku need this
+                opts.ssl = {
+                    rejectUnauthorized: false
+                };
+                //          opts["ssl"] = true; 
                 _initrunning = (0, typeorm_1.createConnection)(opts);
                 await _initrunning;
             }
-            catch (err1) {
-                try {
-                    _initrunning = undefined;
-                    //@ts-ignore //heroku need this
-                    opts.ssl = {
-                        rejectUnauthorized: false
-                    };
-                    //          opts["ssl"] = true; 
-                    _initrunning = (0, typeorm_1.createConnection)(opts);
-                    await _initrunning;
-                }
-                catch (err) {
-                    console.log("DB corrupt - revert the last change");
-                    console.error(err);
-                    _instance = undefined;
-                    _initrunning = undefined;
-                    if (err.message === "The server does not support SSL connections") {
-                        throw err1;
-                        console.error(err1);
-                    }
-                    else {
-                        throw err;
-                        console.error(err);
-                    }
-                }
-            }
-            try {
-                await _instance.mySync();
-            }
             catch (err) {
-                console.log("DB Schema could not be saved");
-                throw err;
+                console.log("DB corrupt - revert the last change");
+                console.error(err);
+                _instance = undefined;
+                _initrunning = undefined;
+                if (err.message === "The server does not support SSL connections") {
+                    throw err1;
+                    console.error(err1);
+                }
+                else {
+                    throw err;
+                    console.error(err);
+                }
             }
-            await _instance.hasLoaded();
+        }
+        try {
+            await _instance.mySync();
+        }
+        catch (err) {
+            console.log("DB Schema could not be saved");
+            throw err;
         }
         //wait for connection ready
         await _initrunning;
@@ -139,12 +139,7 @@ let DBManager = DBManager_1 = class DBManager {
             catch (_a) {
             }
         }
-        return _instance;
-    }
-    /**
-     * loading is finished
-     */
-    async hasLoaded() {
+        return this;
     }
     async mySync() {
         var con = (0, typeorm_1.getConnection)();
@@ -198,16 +193,19 @@ let DBManager = DBManager_1 = class DBManager {
         DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().trees);
         DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().uniques);
     }
-    static async destroyConnection() {
-        if (_instance !== undefined) {
-            try {
-                await DBManager_1.get();
-                await (0, typeorm_1.getConnection)().close();
-            }
-            catch (_a) {
-            }
+    async renewConnection() {
+        this.waitForConnection = new Promise((resolve) => { }); //never resolve
+        await this.destroyConnection(false);
+        this.waitForConnection = this.open();
+    }
+    async destroyConnection(waitForCompleteOpen = true) {
+        if (waitForCompleteOpen)
+            await this.waitForConnection;
+        try {
+            await (0, typeorm_1.getConnection)().close();
         }
-        _instance = undefined;
+        catch (_a) {
+        }
         DBManager_1.clearMetadata();
     }
     static clearArray(arr) {
@@ -216,22 +214,25 @@ let DBManager = DBManager_1 = class DBManager {
         }
     }
     constructor() {
+        this.waitForConnection = undefined;
         Object.freeze(_instance);
+        this.waitForConnection = this.open();
     }
     connection() {
         return (0, typeorm_1.getConnection)();
     }
     async runSQL(context, sql, parameters = undefined) {
-        var ret = await (await DBManager_1.get()).connection().query(sql, parameters);
+        var ret = (await this.waitForConnection).connection().query(sql, parameters);
         return ret;
     }
     async remove(context, entity) {
-        var test = await (await DBManager_1.get()).checkParentRight(context, entity, [entity["id"]]);
+        var test = await (await this.waitForConnection).checkParentRight(context, entity, [entity["id"]]);
         if (test === false)
             throw new Classes_1.JassiError("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
         await this.connection().manager.remove(entity);
     }
     async addSaveTransaction(context, entity) {
+        await this.waitForConnection;
         if (context.objecttransaction) {
             let ot = context.objecttransaction;
             if (!ot.savelist) {
@@ -259,6 +260,7 @@ let DBManager = DBManager_1 = class DBManager {
    * @param obj - the object to insert
    */
     async insert(context, obj) {
+        (await this.waitForConnection);
         await this._checkParentRightsForSave(context, obj);
         if (context.objecttransaction) {
             return this.addSaveTransaction(context, obj);
@@ -275,6 +277,7 @@ let DBManager = DBManager_1 = class DBManager {
         return retob;
     }
     async save(context, entity, options) {
+        await this.waitForConnection;
         await this._checkParentRightsForSave(context, entity);
         if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
             if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
@@ -300,6 +303,7 @@ let DBManager = DBManager_1 = class DBManager {
     }
     async _checkParentRightsForSave(context, entity) {
         var _a;
+        await this.waitForConnection;
         if ((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)
             return;
         //Check if the object self has restrictions
@@ -375,6 +379,7 @@ let DBManager = DBManager_1 = class DBManager {
     async find(context, entityClass, p1) {
         //return this.connection().manager.findOne(entityClass,id,options);
         // else
+        await this.waitForConnection;
         var options = p1;
         var onlyColumns = options === null || options === void 0 ? void 0 : options.onlyColumns;
         var clname = Classes_1.classes.getClassName(entityClass);
@@ -441,6 +446,7 @@ let DBManager = DBManager_1 = class DBManager {
         return ret;
     }
     async createUser(context, username, password) {
+        await this.waitForConnection;
         //var hh=getConnection().manager.findOne(User,{ email: username });
         if (await (0, typeorm_1.getConnection)().manager.findOne(User_1.User, { email: username }) !== undefined) {
             throw new Error("User already exists");
@@ -449,7 +455,7 @@ let DBManager = DBManager_1 = class DBManager {
         user.email = username;
         user.password = password;
         //first user would be admin
-        if (await (await DBManager_1.get()).connection().manager.findOne(User_1.User) === undefined) {
+        if (await this.connection().manager.findOne(User_1.User) === undefined) {
             user.isAdmin = true;
         }
         //password is encrypted when saving
@@ -462,11 +468,12 @@ let DBManager = DBManager_1 = class DBManager {
             resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
           });
         })*/
-        await (await DBManager_1.get()).save(context, user);
+        await this.save(context, user);
         delete user.password;
         return user;
     }
     async login(context, user, password) {
+        await this.waitForConnection;
         /* const users = await this.connection().getRepository(User)
          .createQueryBuilder()
          .select("user.id", "id")
@@ -505,6 +512,7 @@ let DBManager = DBManager_1 = class DBManager {
         return undefined;
     }
     async checkParentRight(context, entityClass, ids) {
+        await this.waitForConnection;
         var clname = Classes_1.classes.getClassName(entityClass);
         var cl = Classes_1.classes.getClass(clname);
         var relations = new RelationInfo(context, clname, this);
@@ -520,7 +528,8 @@ let DBManager = DBManager_1 = class DBManager {
     }
 };
 DBManager = DBManager_1 = __decorate([
-    (0, Registry_2.$Class)("jassi_localserver.DBManager"),
+    (0, Serverservice_1.$Serverservice)({ name: "db", getInstance: async () => { return DBManager_1._get(); } }),
+    (0, Registry_2.$Class)("jassijs/server/DBManager"),
     __metadata("design:paramtypes", [])
 ], DBManager);
 exports.DBManager = DBManager;

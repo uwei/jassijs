@@ -40,24 +40,24 @@ export class PDFViewer extends Panel {
         this.pageNum = 1;
         this.pageRendering = false;
         this.pageNumPending = null;
-        this.scale = 0.8;
+        this.scale = 1;
         this.me = {};
         this.layout(this.me);
     }
     layout(me: Me) {
-        this.css={
+        this.css = {
             overflow: "auto"
         };
         me.toolbar = new BoxPanel();
-        me.toolbar.dom.style.position="fixed";
+        me.toolbar.dom.style.position = "fixed";
         me.mainpanel = new Panel();
         me.plus = new Button();
         me.minus = new Button();
         var _this = this;
         me.download = new Button();
         this.add(me.toolbar);
-        var placeholder=new Panel();
-        placeholder.height=20;
+        var placeholder = new Panel();
+        placeholder.height = 20;
         this.add(placeholder);
         this.add(me.mainpanel);
         me.toolbar.add(me.plus);
@@ -70,20 +70,19 @@ export class PDFViewer extends Panel {
             _this.updatePages();
             //_this.renderPage(_this._page);
         });
-        me.plus.width = 25;
+        me.plus.width = 20;
+        me.plus.height = 20;
         me.minus.text = "-";
         me.minus.onclick(function (event) {
-            _this.value=_this.value;
-            return;
             _this.scale = _this.scale / 1.25;
             _this.updatePages();
         });
-        me.download.icon="mdi mdi-folder-open-outline";
-       // me.download.text = "download";
+        me.download.icon = "mdi mdi-folder-open-outline";
+        // me.download.text = "download";
         me.download.onclick(function (event) {
             _this.report.open();
         });
-       // me.download.width = 75;
+        // me.download.width = 75;
     }
     renderPages(num) {
         // The workerSrc property shall be specified.
@@ -91,10 +90,12 @@ export class PDFViewer extends Panel {
         // Using promise to fetch the page
         var _this = this;
         this.pdfDoc.getPage(num).then(function (page) {
-            var viewport = page.getViewport({ scale: _this.scale });
+            var quality = 5;
+            var viewport = page.getViewport({ scale: _this.scale * quality });
             var can = <HTMLCanvasElement>_this.canavasPanels[page._pageIndex].dom;
             can.height = viewport.height;
             can.width = viewport.width;
+            can.style.width = Math.round(viewport.width / quality) + ".px";
             // Render PDF page into canvas context
             var renderContext = {
                 canvasContext: can.getContext('2d'),

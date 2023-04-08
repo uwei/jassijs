@@ -4,6 +4,7 @@ import { classes, JassiError } from "jassijs/remote/Classes";
 
 
 import { Context } from "jassijs/remote/RemoteObject";
+import { serverservices } from "jassijs/remote/Serverservice";
 
 export function remoteProtocol(request, response) {
 
@@ -14,7 +15,7 @@ async function checkSimulateUser(context: Context, request) {
     var rights = (await import("jassijs/remote/security/Rights")).default;
     var test = request.cookies["simulateUser"];
     if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
-        var db = await (await import("jassijs/server/DBManager")).DBManager.get();
+        var db = await serverservices.db;
 
         var user = await db.login(context, context.request.cookies["simulateUser"], context.request.cookies["simulateUserPassword"]);
         if (!user) {

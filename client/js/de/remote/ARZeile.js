@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "de/remote/AR"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1, AR_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "de/remote/AR", "jassijs/remote/Serverservice"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1, AR_1, Serverservice_1) {
     "use strict";
     var ARZeile_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -21,9 +21,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
                 return await this.call(this.find, options, context);
             }
             else {
-                //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
-                return man.find(context, this, options);
+                return (await Serverservice_1.serverservices.db).find(context, this, options);
             }
         }
         get oo2() {

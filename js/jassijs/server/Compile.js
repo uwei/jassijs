@@ -158,7 +158,7 @@ class Compile {
             fs.mkdirSync(pathname, { recursive: true });
         }
         if (!inServerdirectory)
-            fs.copyFileSync(Filesystem_1.default.path + "/" + fileName, fileName);
+            fs.copyFileSync(new Filesystem_1.default().path + "/" + fileName, fileName);
         fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
         fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
     }

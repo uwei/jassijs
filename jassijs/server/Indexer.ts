@@ -1,8 +1,8 @@
 import ts = require("typescript");
 //import "jassijs_editor/util/Typescript";
 //@ts-ignore
-import Filesystem from "jassijs/server/Filesystem";
 import { JassiError } from "jassijs/remote/Classes";
+import { serverservices } from "jassijs/remote/Serverservice";
 
 
 
@@ -21,7 +21,7 @@ export abstract class Indexer {
         var text = "{}";
         if (await this.fileExists(path + "/registry.js")) {
             text = await this.readFile(path + "/registry.js");
-
+ 
             if (!isserver) {
                 text = text.substring(text.indexOf("default:") + 8);
                 text = text.substring(0, text.lastIndexOf("}") - 1);
@@ -32,7 +32,7 @@ export abstract class Indexer {
         }
         try {
             var index = JSON.parse(text);
-        } catch {
+        } catch { 
             console.log("error read modul " + modul + "- create new");
             index = {};
         }
@@ -82,8 +82,9 @@ export abstract class Indexer {
                 ' }\n' +
                 '});';
             var jsdir = "js/" + path;
-            if (Filesystem.path !== undefined)
-                jsdir = path.replace(Filesystem.path, Filesystem.path + "/js");
+            var fpath=(await (serverservices.filesystem)).path;
+            if (fpath !== undefined)
+                jsdir = path.replace(fpath, fpath + "/js");
             if (!(await this.fileExists(jsdir)))
                 await this.createDirectory(jsdir);
             await this.writeFile(jsdir + "/registry.js", text);

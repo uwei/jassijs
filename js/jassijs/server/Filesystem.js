@@ -11,7 +11,6 @@ exports.staticsecurefiles = exports.staticfiles = exports.syncRemoteFiles = void
 const fs = require("fs");
 var fpath = require('path');
 const Compile_1 = require("jassijs/server/Compile");
-const DBManager_1 = require("jassijs/server/DBManager");
 const JSZip = require("jszip");
 const RegistryIndexer_1 = require("./RegistryIndexer");
 const Registry_1 = require("jassijs/remote/Registry");
@@ -20,8 +19,11 @@ let resolve = require('path').resolve;
 const passport = require("passport");
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
 let Filesystem = Filesystem_1 = class Filesystem {
+    constructor() {
+        this.path = "./client";
+    }
     _pathForFile(fileName, fromServerdirectory = undefined) {
-        var path = Filesystem_1.path + "/" + fileName;
+        var path = this.path + "/" + fileName;
         if (fromServerdirectory)
             path = "./" + fileName.replace("$serverside/", "");
         return path;
@@ -39,7 +41,7 @@ let Filesystem = Filesystem_1 = class Filesystem {
            }
            return parent;
        }*/
-    dir(curdir = "", appendDate = false, parentPath = Filesystem_1.path, parent = undefined) {
+    dir(curdir = "", appendDate = false, parentPath = this.path, parent = undefined) {
         var _this = this;
         if (parent === undefined) {
             parent = { name: "", files: [] };
@@ -141,7 +143,7 @@ let Filesystem = Filesystem_1 = class Filesystem {
         });
     }
     async zip(directoryname, serverdir = undefined) {
-        var root = Filesystem_1.path;
+        var root = this.path;
         if (serverdir) {
             root = ".";
         }
@@ -440,9 +442,14 @@ let Filesystem = Filesystem_1 = class Filesystem {
                 }
                 for (let k = 0; k < jfiles.length; k++) {
                     let jfile = jfiles[k];
-                    delete require.cache[jfile];
+                    if (require.cache[jfile].exports.doNotReloadModule) {
+                    }
+                    else
+                        delete require.cache[jfile];
                 }
-                var man = await DBManager_1.DBManager.destroyConnection();
+                if (Serverservice_1.runningServerservices["db"]) {
+                    (await Serverservice_1.serverservices.db).renewConnection();
+                }
                 // }
             }
         }
@@ -468,7 +475,7 @@ let Filesystem = Filesystem_1 = class Filesystem {
         }
         if (remotecodeincluded && rollbackonerror) { //verify DB-Schema
             try {
-                await DBManager_1.DBManager.get();
+                await Serverservice_1.serverservices.db;
             }
             catch (err) {
                 var restore = await this.saveFiles(fileNames, rollbackcontents, false);
@@ -486,7 +493,7 @@ let Filesystem = Filesystem_1 = class Filesystem {
         }
         catch (err) {
         }
-        fs.writeFileSync(Filesystem_1.path + "/" + fileName, content);
+        fs.writeFileSync(this.path + "/" + fileName, content);
         /*
         if(fileName.endsWith(".ts")){
             new Compile().transpile(fileName,function(done){
@@ -505,10 +512,9 @@ let Filesystem = Filesystem_1 = class Filesystem {
     }
 };
 Filesystem.allModules = {};
-Filesystem.path = "./client";
 Filesystem.zipid = 0;
 Filesystem = Filesystem_1 = __decorate([
-    (0, Serverservice_1.$Serverservice)({ name: "filesystem" }),
+    (0, Serverservice_1.$Serverservice)({ name: "filesystem", getInstance: async () => { return new Filesystem_1(); } }),
     (0, Registry_1.$Class)("jassijs.server.Filesystem")
 ], Filesystem);
 exports.default = Filesystem;
@@ -534,12 +540,13 @@ function copyFile(f1, f2) {
  *  each remote file on server and client should be the same
 */
 async function checkRemoteFiles() {
+    var path = new Filesystem().path;
     var modules = JSON.parse(fs.readFileSync("./jassijs.json", 'utf-8')).modules;
     for (var m in modules) {
         var files = await new Filesystem().dirFiles("./" + m + "/remote", [".ts"]);
         for (let x = 0; x < files.length; x++) {
             var file = files[x];
-            var clientfile = file.replace("./", Filesystem.path + "/");
+            var clientfile = file.replace("./", path + "/");
             if (!fs.existsSync(clientfile)) {
                 console.error(clientfile + " not exists");
             }
@@ -559,7 +566,8 @@ async function checkRemoteFiles() {
 function syncRemoteFiles() {
     /*await*/ checkRemoteFiles();
     //server remote
-    fs.watch(Filesystem.path, { recursive: true }, (eventType, filename) => {
+    var path = new Filesystem().path;
+    fs.watch(path, { recursive: true }, (eventType, filename) => {
         if (!filename)
             return;
         var file = filename.replaceAll("\\", "/");
@@ -567,7 +575,7 @@ function syncRemoteFiles() {
         if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
             setTimeout(() => {
                 var f2 = "./" + file;
-                var f1 = Filesystem.path + "/" + file;
+                var f1 = path + "/" + file;
                 copyFile(f1, f2);
             }, 200);
         }
@@ -581,7 +589,7 @@ function syncRemoteFiles() {
         if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
             setTimeout(() => {
                 var f1 = "./" + file;
-                var f2 = Filesystem.path + "/" + file;
+                var f2 = path + "/" + file;
                 copyFile(f1, f2);
             }, 200);
         }
@@ -589,14 +597,15 @@ function syncRemoteFiles() {
 }
 exports.syncRemoteFiles = syncRemoteFiles;
 function staticfiles(req, res, next) {
+    var path = new Filesystem().path;
     // console.log(req.path);
-    let sfile = Filesystem.path + "/" + req.path;
+    let sfile = path + "/" + req.path;
     if (sfile.indexOf("Settings.ts") > -1) { //&&!passport.authenticate("jwt", { session: false })){
         next();
         return;
     }
     if (fs.existsSync(sfile)) {
-        // let code=fs.readFileSync(Filesystem.path+"/"+req.path);
+        // let code=fs.readFileSync(this.path+"/"+req.path);
         let dat = fs.statSync(sfile).mtime.getTime();
         if (req.query.lastcachedate === dat.toString()) {
             res.set('X-Custom-UpToDate', 'true');
@@ -619,7 +628,7 @@ function staticfiles(req, res, next) {
 exports.staticfiles = staticfiles;
 function staticsecurefiles(req, res, next) {
     // console.log(req.path);
-    let sfile = Filesystem.path + "/" + req.path;
+    let sfile = new Filesystem().path + "/" + req.path;
     if (sfile.indexOf("Settings.ts") > -1) { //&&!passport.authenticate("jwt", { session: false })){
         if (!req.isAuthenticated()) {
             res.send(401, 'not logged in');
@@ -627,7 +636,7 @@ function staticsecurefiles(req, res, next) {
         }
     }
     if (fs.existsSync(sfile)) {
-        // let code=fs.readFileSync(Filesystem.path+"/"+req.path);
+        // let code=fs.readFileSync(this.path+"/"+req.path);
         let dat = fs.statSync(sfile).mtime.getTime();
         if (req.query.lastcachedate === dat.toString()) {
             res.set('X-Custom-UpToDate', 'true');

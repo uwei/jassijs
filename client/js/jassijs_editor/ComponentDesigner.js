@@ -108,12 +108,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 _this.cutComponent();
             });
             this._designToolbar.add(this.cutButton);
-            this.editButton = new Button_1.Button();
-            this.editButton.icon = "mdi mdi-run mdi-18px";
-            this.editButton.tooltip = "Test Dialog";
-            this.editButton.onclick(function () {
-                _this.editDialog(!_this.editMode);
-            });
             this.copyButton = new Button_1.Button();
             this.copyButton.icon = "mdi mdi-content-copy mdi-18px";
             this.copyButton.tooltip = "Copy (Ctrl+Shift+C)";

@@ -1,16 +1,23 @@
 "use strict";
 //@ts-ignore
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.serverservices = exports.$Serverservice = void 0;
+exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.$Serverservice = exports.beforeServiceLoad = void 0;
 require("jassijs/remote/Classes");
-const Classes_1 = require("jassijs/remote/Classes");
 const Registry_1 = require("jassijs/remote/Registry");
 class ServerserviceProperties {
 }
-var allServices = {};
-var serverservices = new Proxy(allServices, {
+var runningServerservices = {};
+exports.runningServerservices = runningServerservices;
+var beforeServiceLoadHandler = [];
+function beforeServiceLoad(func) {
+    beforeServiceLoadHandler.push(func);
+}
+exports.beforeServiceLoad = beforeServiceLoad;
+var serverservices = new Proxy(runningServerservices, {
     get(target, prop, receiver) {
         return new Promise(async (resolve, reject) => {
+            var _a;
+            var khsdf = runningServerservices;
             if (target[prop]) {
                 resolve(target[prop]);
             }
@@ -23,18 +30,26 @@ var serverservices = new Proxy(allServices, {
                         var classname = serv.classname;
                         var cl = await Registry_1.default.getJSONData("$Class", classname);
                         if (require.main) { //nodes load project class from module
+                            /*for (var jfile in require.cache) {
+                                if(jfile.replaceAll("\\","/").endsWith(serv.filename.substring(0,serv.filename.length-2)+"js")){
+                                    delete require.cache[jfile];
+                                }
+                            }*/
                             //@ts-ignore
                             await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                         }
                         else {
-                            //is loaded
-                            //await import(classname.replaceAll(".", "/"));
+                            await (_a = classname.replaceAll(".", "/"), Promise.resolve().then(() => require(_a)));
                         }
+                        var props = Registry_1.default.getData("$Serverservice", classname)[0].params[0];
+                        for (var x = 0; x < beforeServiceLoadHandler.length; x++) {
+                            await beforeServiceLoadHandler[x](prop, props);
+                        }
+                        var instance = props.getInstance();
+                        target[prop] = instance;
+                        resolve(instance);
+                        return;
                     }
-                    var cls = Classes_1.classes.getClass(classname);
-                    target[prop] = new cls();
-                    resolve(target[prop]);
-                    return;
                 }
             }
             reject("serverservice not found:" + prop);
@@ -48,4 +63,6 @@ function $Serverservice(properties) {
     };
 }
 exports.$Serverservice = $Serverservice;
+var doNotReloadModule = true;
+exports.doNotReloadModule = doNotReloadModule;
 //# sourceMappingURL=Serverservice.js.map

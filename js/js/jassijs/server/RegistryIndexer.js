@@ -3,15 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServerIndexer = void 0;
 const Indexer_1 = require("./Indexer");
 const fs = require("fs");
-const Filesystem_1 = require("jassijs/server/Filesystem");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 class ServerIndexer extends Indexer_1.Indexer {
     async updateRegistry() {
         //client modules
-        var data = fs.readFileSync(Filesystem_1.default.path + "/jassijs.json", 'utf-8');
+        var path = (await Serverservice_1.serverservices.filesystem).path;
+        var data = fs.readFileSync(path + "/jassijs.json", 'utf-8');
         var modules = JSON.parse(data).modules;
         for (var m in modules) {
             if (!modules[m].endsWith(".js") && modules[m].indexOf(".js?") === -1) //.js are internet modules
-                await this.updateModul(Filesystem_1.default.path, m, false);
+                await this.updateModul(path, m, false);
         }
         //server modules
         data = fs.readFileSync("./jassijs.json", 'utf-8');
@@ -23,7 +24,7 @@ class ServerIndexer extends Indexer_1.Indexer {
         return;
     }
     async dirFiles(modul, path, extensions, ignore = []) {
-        var jsFiles = await new Filesystem_1.default().dirFiles(path, extensions, ignore);
+        var jsFiles = await (await Serverservice_1.serverservices.filesystem).dirFiles(path, extensions, ignore);
         return jsFiles;
     }
     async writeFile(name, content) {

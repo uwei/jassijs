@@ -117,7 +117,7 @@ export class Server extends RemoteObject {
             let r = this._convertFileNode(ret);
             return r;
         } else {
-            var rett: FileNode = (await serverservices.filesystem).dir("", withDate);
+            var rett = (await serverservices.filesystem).dir("", withDate);
             return rett;
             // return ["jassijs/base/ChromeDebugger.ts"];
         }
@@ -154,8 +154,8 @@ export class Server extends RemoteObject {
             await this.fillFilesInMapIfNeeded();
             if (!fromServerdirectory && Server.filesInMap[fileName]) {
                 //perhabs the files ar in localserver?
-                var Filessystem = classes.getClass("jassijs_localserver.Filessystem");
-                if (Filessystem && (await new Filessystem().loadFileEntry(fileName) !== undefined)) {
+                var Filesystem = classes.getClass("jassijs_localserver.Filesystem");
+                if (Filesystem && (await new Filesystem().loadFileEntry(fileName) !== undefined)) {
                     //use ajax
                 } else {
                     var found = Server.filesInMap[fileName];
@@ -165,7 +165,7 @@ export class Server extends RemoteObject {
                     var code = await this.loadFile(mapname, context);
                     var data = JSON.parse(code).sourcesContent[found.id];
                     return data;
-                }
+                } 
 
             }
             if (fromServerdirectory) {
@@ -249,16 +249,6 @@ export class Server extends RemoteObject {
             return;
         }*/
         return await this.saveFiles([fileName], [content], context);
-        /* if (!jassijs.isServer) {
-             var ret = await this.call(this, "saveFiles", fileNames, contents);
-             //@ts-ignore
-             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-             return ret;
-         } else {
-             //@ts-ignore
-             var fs: any = await import("jassijs/server/Filesystem");
-             return new fs.default().saveFiles(fileNames, contents);
-         }*/
     }
     /**
    * deletes a server modul
