@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.validate = exports.ValidateFunctionParameter = exports.ValidationError = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.registerValidation = exports.ValidationOptions = void 0;
+exports.test = exports.validate = exports.ValidateFunctionParameter = exports.ValidationError = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateIsDate = exports.ValidationIsDateOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.registerValidation = exports.ValidationOptions = void 0;
 require("reflect-metadata");
 const paramMetadataKey = Symbol("paramMetadataKey");
 class ValidationOptions {
@@ -53,6 +53,18 @@ function ValidateMin(options) {
     });
 }
 exports.ValidateMin = ValidateMin;
+class ValidationIsDateOptions extends ValidationOptions {
+}
+exports.ValidationIsDateOptions = ValidationIsDateOptions;
+function ValidateIsDate(options) {
+    return registerValidation("ValidateIsDate", options, (target, propertyName, val) => {
+        if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+            return undefined;
+        if (!(val instanceof Date && !isNaN(val.valueOf())))
+            return "value {value} is not a date";
+    });
+}
+exports.ValidateIsDate = ValidateIsDate;
 class ValidationIsIntOptions extends ValidationOptions {
 }
 exports.ValidationIsIntOptions = ValidationIsIntOptions;
@@ -61,7 +73,7 @@ function ValidateIsInt(options) {
         if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
             return undefined;
         if (!Number.isInteger(val))
-            return "value {value} is not an Integer";
+            return propertyName + " is not an Integer";
     });
 }
 exports.ValidateIsInt = ValidateIsInt;
@@ -73,7 +85,7 @@ function ValidateIsString(options) {
         if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
             return undefined;
         if (typeof val !== 'string' && !(val instanceof String))
-            return "value {value} is not a String";
+            return propertyName + " is not a String";
     });
 }
 exports.ValidateIsString = ValidateIsString;

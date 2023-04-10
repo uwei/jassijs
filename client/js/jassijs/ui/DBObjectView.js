@@ -50,30 +50,20 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         oncreated(handler) {
             this.addEvent("created", handler);
         }
-        doSave(ob) {
-            ob.save().then((obj) => {
-                this["value"] = typeof obj === "object" ? obj : ob;
-                this.callEvent("saved", ob);
-            });
-        }
-        async doValidation(ob) {
-            if (ob.validate) {
-                var validationerrors = await ob.validate();
-                if (validationerrors.length > 0) {
-                    (0, Notify_1.notify)("Could not save", "error", { position: "bottom right" });
-                    return false;
-                }
-            }
-            return true;
+        async doSave(ob) {
+            var obj = await ob.save();
+            this["value"] = typeof obj === "object" ? obj : ob;
+            this.callEvent("saved", ob);
         }
         /**
          * saves the object
          */
-        saveObject() {
-            var ob = this.me.databinder.fromForm();
-            this.doValidation(ob).then((success) => {
-                this.doSave(ob);
-            });
+        async saveObject() {
+            var ob = await this.me.databinder.fromForm();
+            if (ob !== undefined) {
+                await this.doSave(ob);
+                (0, Notify_1.notify)("saved");
+            }
         }
         onsaved(handler) {
             this.addEvent("saved", handler);
@@ -93,6 +83,8 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
          **/
         deleteObject() {
             var ob = this.me.databinder.fromForm();
+            if (ob === undefined)
+                return;
             ob.remove();
             //set obj to null
             var clname = Registry_2.default.getData("$DBObjectView", Classes_1.classes.getClassName(this))[0].params[0].classname;

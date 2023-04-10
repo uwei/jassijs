@@ -28,16 +28,24 @@ br[data-mce-bogus="1"] {
 .jdesignmode > .Panel {
   border:1px solid #ccc;
 }
+.jinlinecomponent.invalid{
+  border: 1px solid red;
+}
+
 .ui-state-highlight> .jinlinecomponent{
   border: 1px solid #dad55e;
   background: #fffa90;
   color: #777620;
 }
+
+
 .jselected{
-  border-color: #C1E0FF; 
-  border:1px;
+  border-color: blue; 
   border-style:solid;
 }
+
+
+
 .jabsolutelayout{
   position:relative;
 }

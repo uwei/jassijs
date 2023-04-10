@@ -11,7 +11,7 @@ define("de/registry",["require"], function(require) {
 		"de/Dialog2": {}
 	},
 	"de/DialogKunde.ts": {
-		"date": 1656676578000,
+		"date": 1681114662568,
 		"de.DialogKunde": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

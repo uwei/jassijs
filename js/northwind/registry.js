@@ -3,14 +3,24 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     "northwind/remote/Categories.ts": {
-        "date": 1680982375659,
+        "date": 1681125000236,
         "northwind.Categories": {
             "$DBObject": [],
             "@members": {
                 "id": {
+                    "ValidateIsInt": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "PrimaryColumn": []
                 },
                 "CategoryName": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -18,6 +28,11 @@ exports.default = {
                     ]
                 },
                 "Description": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -37,29 +52,44 @@ exports.default = {
         }
     },
     "northwind/remote/Customer.ts": {
-        "date": 1656072704000,
+        "date": 1681125122612,
         "northwind.Customer": {
             "$DBObject": [],
             "@members": {
                 "id": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "PrimaryColumn": []
                 },
                 "CompanyName": {
+                    "ValidateIsString": [],
                     "Column": []
                 },
                 "ContactName": {
+                    "ValidateIsString": [],
                     "Column": []
                 },
                 "ContactTitle": {
+                    "ValidateIsString": [],
                     "Column": []
                 },
                 "Address": {
+                    "ValidateIsString": [],
                     "Column": []
                 },
                 "City": {
+                    "ValidateIsString": [],
                     "Column": []
                 },
                 "Region": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -67,6 +97,11 @@ exports.default = {
                     ]
                 },
                 "PostalCode": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -74,6 +109,11 @@ exports.default = {
                     ]
                 },
                 "Country": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -81,6 +121,11 @@ exports.default = {
                     ]
                 },
                 "Phone": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -88,6 +133,11 @@ exports.default = {
                     ]
                 },
                 "Fax": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -98,14 +148,24 @@ exports.default = {
         }
     },
     "northwind/remote/Employees.ts": {
-        "date": 1680956794345,
+        "date": 1681149916756,
         "northwind.Employees": {
             "$DBObject": [],
             "@members": {
                 "id": {
+                    "ValidateIsInt": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "PrimaryColumn": []
                 },
                 "LastName": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -113,6 +173,11 @@ exports.default = {
                     ]
                 },
                 "FirstName": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -120,6 +185,11 @@ exports.default = {
                     ]
                 },
                 "Title": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -127,6 +197,11 @@ exports.default = {
                     ]
                 },
                 "TitleOfCourtesy": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -134,6 +209,11 @@ exports.default = {
                     ]
                 },
                 "Address": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -141,6 +221,11 @@ exports.default = {
                     ]
                 },
                 "City": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -148,6 +233,11 @@ exports.default = {
                     ]
                 },
                 "Region": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -155,6 +245,11 @@ exports.default = {
                     ]
                 },
                 "PostalCode": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -162,6 +257,11 @@ exports.default = {
                     ]
                 },
                 "Country": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -169,6 +269,11 @@ exports.default = {
                     ]
                 },
                 "HomePhone": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -190,6 +295,11 @@ exports.default = {
                     ]
                 },
                 "Notes": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -197,6 +307,11 @@ exports.default = {
                     ]
                 },
                 "PhotoPath": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -210,6 +325,11 @@ exports.default = {
                     ]
                 },
                 "BirthDate": {
+                    "ValidateIsDate": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true
@@ -217,6 +337,11 @@ exports.default = {
                     ]
                 },
                 "HireDate": {
+                    "ValidateIsDate": [
+                        {
+                            "optional": true
+                        }
+                    ],
                     "Column": [
                         {
                             "nullable": true

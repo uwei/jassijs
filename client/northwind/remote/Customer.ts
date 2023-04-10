@@ -3,30 +3,53 @@ import { DBObject, $DBObject } from "jassijs/remote/DBObject";
 import { $Class } from "jassijs/remote/Registry";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
+import { ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
 @$DBObject()
 @$Class("northwind.Customer")
 export class Customer extends DBObject {
+
+    @ValidateIsString({optional:true})
     @PrimaryColumn()
     declare id: string;
+
+    @ValidateIsString()
     @Column()
     CompanyName: string;
+
+    @ValidateIsString()
     @Column()
     ContactName: string;
+
+    @ValidateIsString()
     @Column()
     ContactTitle: string;
+
+    @ValidateIsString()
     @Column()
     Address: string;
+
+    @ValidateIsString()
     @Column()
     City: string;
+
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     // @Column({default:""})
     Region: string; 
+
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     PostalCode: string;
+
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     Country: string;
+
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     Phone: string;
+
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     Fax: string;
     constructor() { 

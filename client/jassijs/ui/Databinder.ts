@@ -5,6 +5,8 @@ import { $Class } from "jassijs/remote/Registry";
 import { DataComponent } from "jassijs/ui/DataComponent";
 import { db, TypeDef } from "jassijs/remote/Database";
 import { classes } from "jassijs/remote/Classes";
+import { ValidationError } from "jassijs/remote/Validator";
+import { notify } from "jassijs/ui/Notify";
 
 
 
@@ -18,6 +20,7 @@ export class Databinder extends InvisibleComponent {
     private _onChange: string[];
     private _autocommit: any[];
     userObject;
+    rollbackObject;
     constructor() {//id connect to existing(not reqired)
         super();
         super.init('<span class="InvisibleComponent"></span>');
@@ -70,10 +73,10 @@ export class Databinder extends InvisibleComponent {
             this._onChange.push(onChange);
 
         if (this.userObject !== undefined) {
-            var acc=new PropertyAccessor();
-            acc.userObject=this.userObject;
-            let setter = this._setter[this._setter.length-1];
-            acc.setProperty(setter,component,property,undefined);
+            var acc = new PropertyAccessor();
+            acc.userObject = this.userObject;
+            let setter = this._setter[this._setter.length - 1];
+            acc.setProperty(setter, component, property, undefined);
             acc.finalizeSetProperty();
         }
         let _this = this;
@@ -153,12 +156,43 @@ export class Databinder extends InvisibleComponent {
             this.toForm(obj);
     }
 
+    async doValidation(ob) {
+        var allErr=[];
+        if (ob.validate) {
+            for(var c=0;c<this.components.length;c++){
+                    var comp=this.components[c];
+                    comp.__dom.classList.remove("invalid");
+                     
+                }
+            var validationerrors:ValidationError[] = await ob.validate();
+            for(var x=0;x<validationerrors.length;x++){
+                var err=validationerrors[x];
+                for(var c=0;c<this.components.length;c++){
+                    var comp=this.components[c];
+                    var prop = this._properties[c];
+                    if(err.property===prop){
+                         $(comp.__dom).notify(err.message,{position: 'bottom left', className: 'error'});
+                         comp.__dom.classList.add("invalid");
+                        //(<any>comp.__dom).setCustomValidity(err.message);
+                        //(<any>comp.__dom).reportValidity();
+                        allErr.push(err.message);
+                        break;
+                    }
+                }
+            }
+            if (validationerrors.length > 0) {
+                notify(allErr.join("\r\n"), "error", { position: "bottom right" });
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * binds the object to all added components
      * @param {object} obj - the object to bind
      */
     toForm(obj) {
-      
+
         this.userObject = obj;
         var setter = new PropertyAccessor();
         setter.userObject = obj;
@@ -185,15 +219,26 @@ export class Databinder extends InvisibleComponent {
         }
         setter.finalizeSetProperty();
     }
+    async validateObject() {
+
+    }
     /**
      * gets the objectproperties from all added components
      * @return {object}
      */
-    fromForm() {
+    async fromForm(): Promise<object> {
+        this.rollbackObject = {};
         if (this.userObject === undefined)
             return undefined;
         for (var x = 0; x < this.components.length; x++) {
             this._fromForm(x);
+        }
+        if (!await this.doValidation(this.userObject)) {//rollback
+            for (var x = 0; x < this.components.length; x++) {
+                var prop = this._properties[x];
+                 new PropertyAccessor().setNestedProperty(this.userObject, prop, this.rollbackObject[prop]);
+            }
+            return undefined;
         }
         return this.userObject;
     }
@@ -203,6 +248,7 @@ export class Databinder extends InvisibleComponent {
      * @param {number} x - the numer of the component
      */
     _fromForm(x) {
+
         var comp = this.components[x];
         var prop = this._properties[x];
         var sfunc = this._getter[x];
@@ -212,10 +258,11 @@ export class Databinder extends InvisibleComponent {
                 var val = test;
                 this.value = test;
             } else {
-               // if (comp["converter"] !== undefined) {
-               //     test = comp["converter"].stringToObject(test);
-               // }
-                new PropertyAccessor().setNestedProperty(this.userObject,prop, test);
+                // if (comp["converter"] !== undefined) {
+                //     test = comp["converter"].stringToObject(test);
+                // }
+                this.rollbackObject[prop] = new PropertyAccessor().getNestedProperty(this.userObject, prop);
+                new PropertyAccessor().setNestedProperty(this.userObject, prop, test);
             }
         }
     }
@@ -251,83 +298,83 @@ export class Databinder extends InvisibleComponent {
         super.destroy();
     }
 }
-  class PropertyAccessor {
-            relationsToResolve: string[] = [];
-            userObject;
-            todo: any[] = [];
-            getNestedProperty(obj, property: string) {
-                if (obj === undefined)
-                    return undefined;
-                var path = property.split(".");
-                var ret = obj[path[0]];
-                if (ret === undefined)
-                    return undefined;
-                if (path.length === 1)
-                    return ret;
-                else {
-                    path.splice(0, 1);
-                    return this.getNestedProperty(ret, path.join("."));
-                }
-            }
-            setNestedProperty(obj, property: string,value) {
-                var path = property.split(".");
-                path.splice(path.length-1, 1);
-                var ob=obj;
-                if(path.length>0)
-                    ob=this.getNestedProperty(ob,path.join("."));
-                ob[property.split(".")[0]]=value;
-            }
-            /**
-             * check if relation must be resolved and queue it
-             */
-            private testRelation(def:TypeDef,property:string,propertypath:string,setter,comp:Component){
-                var rel=def?.getRelation(property);
-                var ret=false;
-                if(this.getNestedProperty(this.userObject,propertypath)!==undefined)
-                    return ret;//the relation is resolved
-                if (rel) {
-                    //the relation should be resolved on finalize
-                    if (this.relationsToResolve.indexOf(propertypath) === -1)
-                        this.relationsToResolve.push(propertypath);
-                    ret=true;
-                }
-                if(setter&&(propertypath.indexOf(".")>-1||ret))
-                        this.todo.push(() => setter(comp, this.getNestedProperty(this.userObject,propertypath)));
-                return ret;
-            }
-            /**
-             * set a nested property and load the db relation if needed
-             */
-            setProperty(setter, comp: Component, property: string, oldValue) {
-                var _this = this;
-                var propValue = this.getNestedProperty( this.userObject,property);
-                if (oldValue !== propValue) {
-                    setter(comp, propValue);
-                }
-                let path=property.split(".");
-                let currenttype=this.userObject.constructor;
-                var def = db.getMetadata(currenttype);
-                if(def!==undefined){
-                    let propertypath="";
-                    for(let x=0;x<path.length;x++){
-                        propertypath+=(propertypath===""?"":".")+path[x];
-                        this.testRelation(def,path[x],propertypath,path.length-1===x?setter:undefined,comp);
-                        currenttype=def.getRelation(path[x])?.oclass;
-                        if(currenttype===undefined)
-                            break;
-                         def = db.getMetadata(currenttype);
-                    }
-                }
-
-            }
-            async finalizeSetProperty() {
-                if (this.relationsToResolve.length > 0) {
-                    await this.userObject.constructor.findOne({ onlyColumns: [], id: this.userObject.id, relations: this.relationsToResolve })
-                }
-                this.todo.forEach((func) => {
-                    func();
-                })
+class PropertyAccessor {
+    relationsToResolve: string[] = [];
+    userObject;
+    todo: any[] = [];
+    getNestedProperty(obj, property: string) {
+        if (obj === undefined)
+            return undefined;
+        var path = property.split(".");
+        var ret = obj[path[0]];
+        if (ret === undefined)
+            return undefined;
+        if (path.length === 1)
+            return ret;
+        else {
+            path.splice(0, 1);
+            return this.getNestedProperty(ret, path.join("."));
+        }
+    }
+    setNestedProperty(obj, property: string, value) {
+        var path = property.split(".");
+        path.splice(path.length - 1, 1);
+        var ob = obj;
+        if (path.length > 0)
+            ob = this.getNestedProperty(ob, path.join("."));
+        ob[property.split(".")[0]] = value;
+    }
+    /**
+     * check if relation must be resolved and queue it
+     */
+    private testRelation(def: TypeDef, property: string, propertypath: string, setter, comp: Component) {
+        var rel = def?.getRelation(property);
+        var ret = false;
+        if (this.getNestedProperty(this.userObject, propertypath) !== undefined)
+            return ret;//the relation is resolved
+        if (rel) {
+            //the relation should be resolved on finalize
+            if (this.relationsToResolve.indexOf(propertypath) === -1)
+                this.relationsToResolve.push(propertypath);
+            ret = true;
+        }
+        if (setter && (propertypath.indexOf(".") > -1 || ret))
+            this.todo.push(() => setter(comp, this.getNestedProperty(this.userObject, propertypath)));
+        return ret;
+    }
+    /**
+     * set a nested property and load the db relation if needed
+     */
+    setProperty(setter, comp: Component, property: string, oldValue) {
+        var _this = this;
+        var propValue = this.getNestedProperty(this.userObject, property);
+        if (oldValue !== propValue) {
+            setter(comp, propValue);
+        }
+        let path = property.split(".");
+        let currenttype = this.userObject.constructor;
+        var def = db.getMetadata(currenttype);
+        if (def !== undefined) {
+            let propertypath = "";
+            for (let x = 0; x < path.length; x++) {
+                propertypath += (propertypath === "" ? "" : ".") + path[x];
+                this.testRelation(def, path[x], propertypath, path.length - 1 === x ? setter : undefined, comp);
+                currenttype = def.getRelation(path[x])?.oclass;
+                if (currenttype === undefined)
+                    break;
+                def = db.getMetadata(currenttype);
             }
         }
+
+    }
+    async finalizeSetProperty() {
+        if (this.relationsToResolve.length > 0) {
+            await this.userObject.constructor.findOne({ onlyColumns: [], id: this.userObject.id, relations: this.relationsToResolve })
+        }
+        this.todo.forEach((func) => {
+            func();
+        })
+    }
+}
    // return CodeEditor.constructor;
 

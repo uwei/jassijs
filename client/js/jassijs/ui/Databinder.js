@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Database"], function (require, exports, InvisibleComponent_1, Component_1, Registry_1, Database_1) {
+define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Database", "jassijs/ui/Notify"], function (require, exports, InvisibleComponent_1, Component_1, Registry_1, Database_1, Notify_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Databinder = void 0;
@@ -141,6 +141,36 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
             else
                 this.toForm(obj);
         }
+        async doValidation(ob) {
+            var allErr = [];
+            if (ob.validate) {
+                for (var c = 0; c < this.components.length; c++) {
+                    var comp = this.components[c];
+                    comp.__dom.classList.remove("invalid");
+                }
+                var validationerrors = await ob.validate();
+                for (var x = 0; x < validationerrors.length; x++) {
+                    var err = validationerrors[x];
+                    for (var c = 0; c < this.components.length; c++) {
+                        var comp = this.components[c];
+                        var prop = this._properties[c];
+                        if (err.property === prop) {
+                            $(comp.__dom).notify(err.message, { position: 'bottom left', className: 'error' });
+                            comp.__dom.classList.add("invalid");
+                            //(<any>comp.__dom).setCustomValidity(err.message);
+                            //(<any>comp.__dom).reportValidity();
+                            allErr.push(err.message);
+                            break;
+                        }
+                    }
+                }
+                if (validationerrors.length > 0) {
+                    (0, Notify_1.notify)(allErr.join("\r\n"), "error", { position: "bottom right" });
+                    return false;
+                }
+            }
+            return true;
+        }
         /**
          * binds the object to all added components
          * @param {object} obj - the object to bind
@@ -172,15 +202,25 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
             }
             setter.finalizeSetProperty();
         }
+        async validateObject() {
+        }
         /**
          * gets the objectproperties from all added components
          * @return {object}
          */
-        fromForm() {
+        async fromForm() {
+            this.rollbackObject = {};
             if (this.userObject === undefined)
                 return undefined;
             for (var x = 0; x < this.components.length; x++) {
                 this._fromForm(x);
+            }
+            if (!await this.doValidation(this.userObject)) { //rollback
+                for (var x = 0; x < this.components.length; x++) {
+                    var prop = this._properties[x];
+                    new PropertyAccessor().setNestedProperty(this.userObject, prop, this.rollbackObject[prop]);
+                }
+                return undefined;
             }
             return this.userObject;
         }
@@ -202,6 +242,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
                     // if (comp["converter"] !== undefined) {
                     //     test = comp["converter"].stringToObject(test);
                     // }
+                    this.rollbackObject[prop] = new PropertyAccessor().getNestedProperty(this.userObject, prop);
                     new PropertyAccessor().setNestedProperty(this.userObject, prop, test);
                 }
             }

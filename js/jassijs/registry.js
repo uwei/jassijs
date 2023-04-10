@@ -24,7 +24,7 @@ exports.default={
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1680809099251,
+		"date": 1681113845409,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -310,7 +310,7 @@ exports.default={
 		"date": 1611490792000
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1680723591109
+		"date": 1681149380755
 	},
 	"jassijs/remote/Server.ts": {
 		"date": 1680948998750,

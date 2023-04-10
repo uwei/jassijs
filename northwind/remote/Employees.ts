@@ -5,49 +5,79 @@ import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { Transaction } from "jassijs/remote/Transaction";
 import { Context } from "jassijs/remote/RemoteObject";
 import { serverservices } from "jassijs/remote/Serverservice";
+import { ValidateIsDate, ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
 @$DBObject()
 @$Class("northwind.Employees")
 export class Employees extends DBObject {
+
+    @ValidateIsInt({optional:true})
     @PrimaryColumn()
     declare id: number;
 
     constructor() {
         super();
     }
-
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     LastName: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     FirstName: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     Title: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     TitleOfCourtesy: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     Address: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     City: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     Region: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     PostalCode: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     Country: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     HomePhone: string;
     @Column({ nullable: true })
     Extension: string;
     @Column({ nullable: true })
     Photo: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     Notes: string;
+    
+    @ValidateIsString({optional:true})
     @Column({ nullable: true })
     PhotoPath: string;
+
     @JoinColumn()
     @ManyToOne(type => Employees)
     ReportsTo: Employees;
+
+    @ValidateIsDate({optional:true})
     @Column({ nullable: true })
     BirthDate: Date;
+
+    @ValidateIsDate({optional:true})
     @Column({ nullable: true })
     HireDate: Date;
     static async find(options = undefined,context:Context=undefined): Promise<Employees[]> {
@@ -81,6 +111,7 @@ export async function test() {
 
 }
 export async function test2() {
+
     var em = new Employees();
     em.id = getRandomInt(100000);
     var em2 = new Employees();

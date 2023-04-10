@@ -135,8 +135,8 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             me.IDSave.x = 180;
             me.IDSave.y = 10;
             me.IDSave.text = "Save";
-            me.IDSave.onclick(function (event) {
-                var ob = me.binder.fromForm();
+            me.IDSave.onclick(async function (event) {
+                var ob = await me.binder.fromForm();
                 ob.save();
             });
             me.IDSave.icon = "mdi mdi-content-save";

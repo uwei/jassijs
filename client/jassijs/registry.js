@@ -80,7 +80,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1680809099251,
+		"date": 1681113845409,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -624,7 +624,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Databinder.ts": {
-		"date": 1655843330000,
+		"date": 1681149723611,
 		"jassijs.ui.Databinder": {
 			"$UIComponent": [
 				{
@@ -725,7 +725,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1680708467637,
+		"date": 1681124951985,
 		"jassijs/ui/DBObjectView": {
 			"$UIComponent": [
 				{
@@ -1466,7 +1466,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1680723591109
+		"date": 1681149380755
 	},
 	"jassijs/remote/Serverservice.ts": {
 		"date": 1680954695071

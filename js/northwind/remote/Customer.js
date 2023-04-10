@@ -13,6 +13,7 @@ exports.test = exports.Customer = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
 const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
+const Validator_1 = require("jassijs/remote/Validator");
 let Customer = class Customer extends DBObject_1.DBObject {
     constructor() {
         super();
@@ -31,48 +32,59 @@ let Customer = class Customer extends DBObject_1.DBObject {
     }
 };
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", String)
 ], Customer.prototype, "id", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)(),
     (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Customer.prototype, "CompanyName", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)(),
     (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Customer.prototype, "ContactName", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)(),
     (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Customer.prototype, "ContactTitle", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)(),
     (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Customer.prototype, "Address", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)(),
     (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Customer.prototype, "City", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true })
     // @Column({default:""})
     ,
     __metadata("design:type", String)
 ], Customer.prototype, "Region", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Customer.prototype, "PostalCode", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Customer.prototype, "Country", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Customer.prototype, "Phone", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Customer.prototype, "Fax", void 0);

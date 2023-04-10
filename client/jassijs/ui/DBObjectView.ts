@@ -91,30 +91,22 @@ export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isA
     oncreated(handler: (obj: DBObject) => void) {
         this.addEvent("created", handler);
     }
-    private doSave(ob) {
-        ob.save().then((obj) => {
-            this["value"] = typeof obj === "object" ? obj : ob;
-            this.callEvent("saved", ob);
-        });
+    private async doSave(ob) {
+        var obj = await ob.save()
+        this["value"] = typeof obj === "object" ? obj : ob;
+        this.callEvent("saved", ob);
+
     }
-    async doValidation(ob) {
-        if (ob.validate) {
-            var validationerrors = await ob.validate();
-            if (validationerrors.length > 0) {
-                notify("Could not save", "error", { position: "bottom right" });
-                return false;
-            }
-        }
-        return true;
-    }
+
     /**
      * saves the object
      */
-    saveObject() {
-        var ob = this.me.databinder.fromForm();
-        this.doValidation(ob).then((success) => {
-            this.doSave(ob);
-        });
+    async saveObject() {
+        var ob = await this.me.databinder.fromForm();
+        if(ob!==undefined){
+            await this.doSave(ob);
+            notify("saved");
+        }
     }
     @$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" })
     onsaved(handler: (obj: DBObject) => void) {
@@ -136,6 +128,8 @@ export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isA
      **/
     deleteObject() {
         var ob: DBObject = <DBObject>this.me.databinder.fromForm();
+        if(ob===undefined)
+            return;
         ob.remove();
 
         //set obj to null

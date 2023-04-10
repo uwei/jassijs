@@ -196,6 +196,7 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
         var em = (await Employees_1.Employees.find({ id: 4 }))[0];
         var ret = new EmployeesView;
         ret["value"] = em;
+        // ret.me.address
         return ret;
     }
     exports.test = test;

@@ -44,6 +44,20 @@ export function ValidateMin(options: ValidationMinOptions): Function {
     )
 }
 
+export class ValidationIsDateOptions extends ValidationOptions {
+    optional?: boolean;
+}
+export function ValidateIsDate(options?: ValidationIsDateOptions): Function {
+    return registerValidation("ValidateIsDate", options,
+        (target: any, propertyName: string, val: any) => {
+            if ((val === undefined || val === null) && options?.optional === true)
+                return undefined;
+            if (!(val instanceof Date && !isNaN(val.valueOf())))
+                return "value {value} is not a date"
+        }
+    )
+}
+
 export class ValidationIsIntOptions extends ValidationOptions {
     optional?: boolean;
 }
@@ -53,7 +67,7 @@ export function ValidateIsInt(options?: ValidationIsIntOptions): Function {
             if ((val === undefined || val === null) && options?.optional === true)
                 return undefined;
             if (!Number.isInteger(val))
-                return "value {value} is not an Integer"
+                return propertyName+" is not an Integer";
         }
     )
 }
@@ -67,7 +81,7 @@ export function ValidateIsString(options?: ValidationIsIntOptions): Function {
             if ((val === undefined || val === null) && options?.optional === true)
                 return undefined;
             if (typeof val !== 'string' && !(val instanceof String))
-                return "value {value} is not a String"
+                return propertyName+" is not a String";
         }
     )
 }

@@ -13,6 +13,7 @@ import { Employees } from "northwind/remote/Employees";
 import { Databinder } from "jassijs/ui/Databinder";
 import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
+import { notify } from "jassijs/ui/Notify";
 type Me = {
     firstName?: Textbox;
     lastName?: Textbox;
@@ -213,5 +214,7 @@ export async function test() {
     var em = (await Employees.find({ id: 4 }))[0];
     var ret = new EmployeesView;
     ret["value"] = em;
+   
+   // ret.me.address
     return ret;
 }

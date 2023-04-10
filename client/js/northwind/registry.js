@@ -40,7 +40,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1657926808000,
+                "date": 1681149053747,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -108,14 +108,24 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1680982375659,
+                "date": 1681125000236,
                 "northwind.Categories": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "CategoryName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -123,6 +133,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Description": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -142,29 +157,44 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Customer.ts": {
-                "date": 1656072704000,
+                "date": 1681125122612,
                 "northwind.Customer": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "ContactName": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "ContactTitle": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Address": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "City": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Region": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -172,6 +202,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -179,6 +214,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -186,6 +226,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -193,6 +238,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Fax": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -203,14 +253,24 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1680956794345,
+                "date": 1681149916756,
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "LastName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -218,6 +278,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "FirstName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -225,6 +290,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Title": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -232,6 +302,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "TitleOfCourtesy": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -239,6 +314,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Address": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -246,6 +326,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "City": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -253,6 +338,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Region": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -260,6 +350,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -267,6 +362,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -274,6 +374,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HomePhone": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -295,6 +400,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Notes": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -302,6 +412,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PhotoPath": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -315,6 +430,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "BirthDate": {
+                            "ValidateIsDate": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -322,6 +442,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HireDate": {
+                            "ValidateIsDate": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true

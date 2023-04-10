@@ -16,6 +16,7 @@ const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Transaction_1 = require("jassijs/remote/Transaction");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
+const Validator_1 = require("jassijs/remote/Validator");
 let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
     constructor() {
         super();
@@ -44,46 +45,57 @@ let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
     }
 };
 __decorate([
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
     (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Employees.prototype, "id", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "LastName", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "FirstName", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "Title", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "TitleOfCourtesy", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "Address", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "City", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "Region", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "PostalCode", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "Country", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "HomePhone", void 0);
@@ -96,10 +108,12 @@ __decorate([
     __metadata("design:type", String)
 ], Employees.prototype, "Photo", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "Notes", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Employees.prototype, "PhotoPath", void 0);
@@ -109,10 +123,12 @@ __decorate([
     __metadata("design:type", Employees)
 ], Employees.prototype, "ReportsTo", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsDate)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", Date)
 ], Employees.prototype, "BirthDate", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsDate)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", Date)
 ], Employees.prototype, "HireDate", void 0);
