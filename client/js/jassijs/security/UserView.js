@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/security/User", "jassijs/ui/DBObjectView", "jassijs/ui/Notify"], function (require, exports, NumberConverter_1, Textbox_1, Registry_1, Property_1, User_1, DBObjectView_1, Notify_1) {
+define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "jassijs/remote/security/User", "jassijs/ui/DBObjectView", "jassijs/ui/Notify", "jassijs/remote/security/Group"], function (require, exports, Select_1, Checkbox_1, NumberConverter_1, Textbox_1, Registry_1, Panel_1, Property_1, User_1, DBObjectView_1, Notify_1, Group_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.UserView = void 0;
@@ -23,20 +23,30 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
         layout(me) {
             me.IDID = new Textbox_1.Textbox();
             me.IDEmail = new Textbox_1.Textbox();
+            me.checkbox = new Checkbox_1.Checkbox();
+            me.panel = new Panel_1.Panel();
+            me.IDGroups = new Select_1.Select({ multiple: true });
             me.IDID.bind = [me.databinder, "id"];
             me.IDID.width = 40;
             me.IDID.converter = new NumberConverter_1.NumberConverter();
             me.IDID.label = "ID";
-            me.IDID.x = 10;
-            me.IDID.y = 5;
             me.IDEmail.bind = [me.databinder, "email"];
             me.IDEmail.label = "E-Mail";
-            me.IDEmail.x = 70;
-            me.IDEmail.y = 5;
-            this.me.main.isAbsolute = true;
             this.me.main.height = "100";
-            this.me.main.add(me.IDID);
-            this.me.main.add(me.IDEmail);
+            me.panel.add(me.IDID);
+            this.me.main.add(me.panel);
+            this.me.main.add(me.IDGroups);
+            me.panel.add(me.IDEmail);
+            me.panel.add(me.checkbox);
+            me.checkbox.bind = [this.me.databinder, "isAdmin"];
+            me.checkbox.width = 15;
+            me.checkbox.label = "IsAdmin";
+            me.IDGroups.width = "400";
+            me.IDGroups.display = "name";
+            me.IDGroups.bind = [this.me.databinder, "groups"];
+            Group_1.Group.find().then((data) => {
+                me.IDGroups.items = data;
+            });
         }
         createObject() {
             super.createObject();
@@ -50,14 +60,14 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
         __metadata("design:type", User_1.User)
     ], UserView.prototype, "value", void 0);
     UserView = __decorate([
-        (0, DBObjectView_1.$DBObjectView)({ classname: "jassijs.security.User" }),
-        (0, Registry_1.$Class)("jassijs/UserView"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "jassijs.security.User", actionname: "Administration/Security/Users", icon: "mdi mdi-account-key-outline", queryname: "findWithRelations" }),
+        (0, Registry_1.$Class)("jassijs/security/UserView"),
         __metadata("design:paramtypes", [])
     ], UserView);
     exports.UserView = UserView;
     async function test() {
         var ret = new UserView();
-        ret["value"] = await User_1.User.findOne();
+        ret["value"] = (await User_1.User.findWithRelations())[0];
         return ret;
     }
     exports.test = test;

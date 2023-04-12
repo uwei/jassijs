@@ -289,7 +289,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/User.ts": {
-		"date": 1681322774491,
+		"date": 1681329602964,
 		"jassijs.security.User": {
 			"$DBObject": [
 				{

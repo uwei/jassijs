@@ -60,12 +60,7 @@ export class DBObjectDialog extends Panel {
         var _this = this;
         //@ts-ignore
         // this.data = await cl.find();
-        this.me.table1.options = {
-            lazyLoad: {
-                classname: this._dbclassname,
-                loadFunc: "find"
-            }
-        }
+
 
         //this.me.table1.items = this.data;
         //DBView
@@ -76,10 +71,15 @@ export class DBObjectDialog extends Panel {
                 var cl = await classes.loadClass(data[x].classname);
                 this.me.IDDBView.removeAll();
                 this.view = new cl();
-
+                this.me.table1.options = {
+                    lazyLoad: {
+                        classname: this._dbclassname,
+                        loadFunc: (param.queryname===undefined?"find":param.queryname)
+                    }
+                }
                 this.me.IDDBView.add(this.view);
-                this.me.table1.onlazyloaded((data:any[]) => {
-                    if(data?.length>0&&this.view.value===undefined)
+                this.me.table1.onlazyloaded((data: any[]) => {
+                    if (data?.length > 0 && this.view.value === undefined)
                         this.view.value = data[0];
                 });
                 //@ts-ignore
@@ -88,7 +88,7 @@ export class DBObjectDialog extends Panel {
                     _this.me.table1.update();
                 });
                 this.view.oncreated((obj: DBObject) => {
-                   // _this.me.table1.insertItem(obj);
+                    // _this.me.table1.insertItem(obj);
                 });
                 this.view.onsaved((obj: DBObject) => {
                     _this.me.table1.updateOrInsertItem(obj);
@@ -104,7 +104,7 @@ export class DBObjectDialog extends Panel {
                 });
                 this.view.ondeleted((obj: DBObject) => {
                     this.me.table1.removeItem(obj);
-                    _this.view.value=this.me.table1.value;
+                    _this.view.value = this.me.table1.value;
                     /*var all = _this.me.table1.items;
                     var pos = all.indexOf(obj);
                     if (pos >= 0)
@@ -123,6 +123,7 @@ export class DBObjectDialog extends Panel {
                 this.me.table1.selectComponent = this.view;
             }
         }
+
     }
     private static createFunction(classname: string): any {
         return function () {

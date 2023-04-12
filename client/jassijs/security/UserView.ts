@@ -1,3 +1,5 @@
+import { Select } from "jassijs/ui/Select";
+import { Checkbox } from "jassijs/ui/Checkbox";
 import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 import { Textbox } from "jassijs/ui/Textbox";
 import { $Class } from "jassijs/remote/Registry";
@@ -8,12 +10,17 @@ import { Databinder } from "jassijs/ui/Databinder";
 import { DBObjectView, DBObjectViewMe, $DBObjectView } from "jassijs/ui/DBObjectView";
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
 import { notify } from "jassijs/ui/Notify";
+import { $ActionProvider } from "jassijs/base/Actions";
+import { Group } from "jassijs/remote/security/Group";
 type Me = {
     IDID?: Textbox;
     IDEmail?: Textbox;
+    checkbox?: Checkbox;
+    panel?: Panel;
+    IDGroups?: Select;
 } & DBObjectViewMe;
-@$DBObjectView({ classname: "jassijs.security.User" })
-@$Class("jassijs/UserView")
+@$DBObjectView({ classname: "jassijs.security.User", actionname: "Administration/Security/Users", icon: "mdi mdi-account-key-outline",queryname:"findWithRelations" })
+@$Class("jassijs/security/UserView")
 export class UserView extends DBObjectView {
     declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
@@ -29,20 +36,30 @@ export class UserView extends DBObjectView {
     layout(me: Me) {
         me.IDID = new Textbox();
         me.IDEmail = new Textbox();
+        me.checkbox = new Checkbox();
+        me.panel = new Panel();
+        me.IDGroups = new Select({ multiple: true });
         me.IDID.bind = [me.databinder, "id"];
         me.IDID.width = 40;
         me.IDID.converter = new NumberConverter();
         me.IDID.label = "ID";
-        me.IDID.x = 10;
-        me.IDID.y = 5;
         me.IDEmail.bind = [me.databinder, "email"];
         me.IDEmail.label = "E-Mail";
-        me.IDEmail.x = 70;
-        me.IDEmail.y = 5;
-        this.me.main.isAbsolute = true;
         this.me.main.height = "100";
-        this.me.main.add(me.IDID);
-        this.me.main.add(me.IDEmail);
+        me.panel.add(me.IDID);
+        this.me.main.add(me.panel);
+        this.me.main.add(me.IDGroups);
+        me.panel.add(me.IDEmail);
+        me.panel.add(me.checkbox);
+        me.checkbox.bind = [this.me.databinder, "isAdmin"];
+        me.checkbox.width = 15;
+        me.checkbox.label = "IsAdmin";
+        me.IDGroups.width = "400";
+        me.IDGroups.display = "name";
+        me.IDGroups.bind = [this.me.databinder,"groups"];
+        Group.find().then((data) => {
+            me.IDGroups.items = data;
+        });
     }
     createObject(): any {
         super.createObject();
@@ -53,6 +70,6 @@ export class UserView extends DBObjectView {
 }
 export async function test() {
     var ret = new UserView();
-    ret["value"] = <User>await User.findOne();
+    ret["value"] =<User>( await User.findWithRelations())[0];
     return ret;
 }

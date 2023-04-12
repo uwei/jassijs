@@ -3375,7 +3375,10 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
                 var ffile = monaco.Uri.from({ path: "/" + this.file, scheme: 'file' });
                 var mod = monaco.editor.getModel(ffile);
                 if (!mod) {
-                    mod = monaco.editor.createModel(value, "typescript", ffile);
+                    var stype = "typescript";
+                    if (this.file.toLocaleLowerCase().endsWith(".css"))
+                        stype = "css";
+                    mod = monaco.editor.createModel(value, stype, ffile);
                     this._editor.setModel(mod);
                     this._editor.setValue(value);
                 }
@@ -3569,7 +3572,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1654273314000
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1680707721289,
+                "date": 1681326032112,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {

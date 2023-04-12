@@ -17,6 +17,9 @@ const Group_1 = require("jassijs/remote/security/Group");
 const ParentRight_1 = require("jassijs/remote/security/ParentRight");
 const Validator_1 = require("jassijs/remote/Validator");
 let User = class User extends DBObject_1.DBObject {
+    static async findWithRelations() {
+        return this.find({ relations: ["*"] });
+    }
     /**
    * reload the object from jassijs.db
    */

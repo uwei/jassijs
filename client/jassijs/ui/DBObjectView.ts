@@ -27,6 +27,7 @@ export class DBObjectViewProperties {
     classname: string;
     actionname?: string;
     icon?: string;
+    queryname?:string;
 }
 export function $DBObjectView(properties: DBObjectViewProperties): Function {
     return function (pclass) {

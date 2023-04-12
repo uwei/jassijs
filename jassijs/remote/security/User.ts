@@ -33,6 +33,9 @@ export class User extends DBObject  {
 	@Column({nullable:true})
     isAdmin:boolean;
     
+	static async  findWithRelations(){
+		return this.find({relations:["*"]});
+	}
      /**
     * reload the object from jassijs.db
     */

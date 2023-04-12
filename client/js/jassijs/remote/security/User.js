@@ -12,6 +12,9 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.User = void 0;
     let User = class User extends DBObject_1.DBObject {
+        static async findWithRelations() {
+            return this.find({ relations: ["*"] });
+        }
         /**
        * reload the object from jassijs.db
        */

@@ -51,12 +51,6 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
             var _this = this;
             //@ts-ignore
             // this.data = await cl.find();
-            this.me.table1.options = {
-                lazyLoad: {
-                    classname: this._dbclassname,
-                    loadFunc: "find"
-                }
-            };
             //this.me.table1.items = this.data;
             //DBView
             var data = await Registry_2.default.getJSONData("$DBObjectView");
@@ -66,6 +60,12 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
                     var cl = await Classes_1.classes.loadClass(data[x].classname);
                     this.me.IDDBView.removeAll();
                     this.view = new cl();
+                    this.me.table1.options = {
+                        lazyLoad: {
+                            classname: this._dbclassname,
+                            loadFunc: (param.queryname === undefined ? "find" : param.queryname)
+                        }
+                    };
                     this.me.IDDBView.add(this.view);
                     this.me.table1.onlazyloaded((data) => {
                         if ((data === null || data === void 0 ? void 0 : data.length) > 0 && this.view.value === undefined)

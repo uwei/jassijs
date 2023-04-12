@@ -441,7 +441,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/User.ts": {
-                "date": 1681322774491,
+                "date": 1681329602964,
                 "jassijs.security.User": {
                     "$DBObject": [
                         {
@@ -572,22 +572,27 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Transaction": {}
             },
             "jassijs/security/GroupView.ts": {
-                "date": 1656073226000,
+                "date": 1681328190944,
                 "jassijs/security/GroupView": {
                     "$DBObjectView": [
                         {
-                            "classname": "{{dbfullclassname}}"
+                            "classname": "jassijs.security.Group",
+                            "icon": "mdi mdi-account-group",
+                            "actionname": "Administration/Security/Groups"
                         }
                     ],
                     "@members": {}
                 }
             },
             "jassijs/security/UserView.ts": {
-                "date": 1656073214000,
-                "jassijs/UserView": {
+                "date": 1681330005862,
+                "jassijs/security/UserView": {
                     "$DBObjectView": [
                         {
-                            "classname": "jassijs.security.User"
+                            "classname": "jassijs.security.User",
+                            "actionname": "Administration/Security/Users",
+                            "icon": "mdi mdi-account-key-outline",
+                            "queryname": "findWithRelations"
                         }
                     ],
                     "@members": {}
@@ -898,7 +903,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectDialog.ts": {
-                "date": 1656681978000,
+                "date": 1681329942417,
                 "jassijs.ui.DBObjectDialog": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -982,7 +987,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1681124951985,
+                "date": 1681329647464,
                 "jassijs/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -1634,7 +1639,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1656075174000,
+                "date": 1681327400102,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {
@@ -6660,6 +6665,9 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.User = void 0;
     let User = class User extends DBObject_6.DBObject {
+        static async findWithRelations() {
+            return this.find({ relations: ["*"] });
+        }
         /**
        * reload the object from jassijs.db
        */
@@ -6744,7 +6752,7 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
     }
     exports.test2 = test2;
 });
-define("jassijs/security/GroupView", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/security/Group", "jassijs/ui/DBObjectView"], function (require, exports, Registry_37, Property_1, Group_4, DBObjectView_1) {
+define("jassijs/security/GroupView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/security/Group", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_1, Registry_37, Property_1, Group_4, DBObjectView_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6759,6 +6767,23 @@ define("jassijs/security/GroupView", ["require", "exports", "jassijs/remote/Regi
             return this.value === undefined ? "GroupView" : "GroupView " + this.value.id;
         }
         layout(me) {
+            me.textbox = new Textbox_1.Textbox();
+            me.textbox2 = new Textbox_1.Textbox();
+            this.me.main.height = "100";
+            this.me.main.add(me.textbox);
+            this.me.main.isAbsolute = true;
+            this.me.main.add(me.textbox2);
+            me.textbox.x = 5;
+            me.textbox.y = 10;
+            me.textbox.width = 45;
+            me.textbox.autocommit = false;
+            me.textbox.converter = new NumberConverter_1.NumberConverter();
+            me.textbox.bind = [this.me.databinder, "id"];
+            me.textbox.label = "ID";
+            me.textbox2.x = 65;
+            me.textbox2.y = 10;
+            me.textbox2.bind = [this.me.databinder, "name"];
+            me.textbox2.label = "Name";
         }
     };
     __decorate([
@@ -6766,7 +6791,7 @@ define("jassijs/security/GroupView", ["require", "exports", "jassijs/remote/Regi
         __metadata("design:type", typeof (_a = typeof Group_4.Group !== "undefined" && Group_4.Group) === "function" ? _a : Object)
     ], GroupView.prototype, "value", void 0);
     GroupView = __decorate([
-        (0, DBObjectView_1.$DBObjectView)({ classname: "{{dbfullclassname}}" }),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "jassijs.security.Group", icon: "mdi mdi-account-group", actionname: "Administration/Security/Groups" }),
         (0, Registry_37.$Class)("jassijs/security/GroupView"),
         __metadata("design:paramtypes", [])
     ], GroupView);
@@ -6778,7 +6803,7 @@ define("jassijs/security/GroupView", ["require", "exports", "jassijs/remote/Regi
     }
     exports.test = test;
 });
-define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/security/User", "jassijs/ui/DBObjectView", "jassijs/ui/Notify"], function (require, exports, NumberConverter_1, Textbox_1, Registry_38, Property_2, User_2, DBObjectView_2, Notify_1) {
+define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "jassijs/remote/security/User", "jassijs/ui/DBObjectView", "jassijs/ui/Notify", "jassijs/remote/security/Group"], function (require, exports, Select_1, Checkbox_1, NumberConverter_2, Textbox_2, Registry_38, Panel_2, Property_2, User_2, DBObjectView_2, Notify_1, Group_5) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6793,14 +6818,32 @@ define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/converter
             return this.value === undefined ? "User" : "User " + this.value.email;
         }
         layout(me) {
-            me.textbox1 = new Textbox_1.Textbox();
-            me.textbox2 = new Textbox_1.Textbox();
-            this.add(me.textbox1);
-            this.add(me.textbox2);
-            me.textbox1.bind = [me.databinder, "id"];
-            me.textbox1.width = 40;
-            me.textbox1.converter = new NumberConverter_1.NumberConverter();
-            me.textbox2.bind = [me.databinder, "email"];
+            me.IDID = new Textbox_2.Textbox();
+            me.IDEmail = new Textbox_2.Textbox();
+            me.checkbox = new Checkbox_1.Checkbox();
+            me.panel = new Panel_2.Panel();
+            me.IDGroups = new Select_1.Select({ multiple: true });
+            me.IDID.bind = [me.databinder, "id"];
+            me.IDID.width = 40;
+            me.IDID.converter = new NumberConverter_2.NumberConverter();
+            me.IDID.label = "ID";
+            me.IDEmail.bind = [me.databinder, "email"];
+            me.IDEmail.label = "E-Mail";
+            this.me.main.height = "100";
+            me.panel.add(me.IDID);
+            this.me.main.add(me.panel);
+            this.me.main.add(me.IDGroups);
+            me.panel.add(me.IDEmail);
+            me.panel.add(me.checkbox);
+            me.checkbox.bind = [this.me.databinder, "isAdmin"];
+            me.checkbox.width = 15;
+            me.checkbox.label = "IsAdmin";
+            me.IDGroups.width = "400";
+            me.IDGroups.display = "name";
+            me.IDGroups.bind = [this.me.databinder, "groups"];
+            Group_5.Group.find().then((data) => {
+                me.IDGroups.items = data;
+            });
         }
         createObject() {
             super.createObject();
@@ -6814,14 +6857,14 @@ define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/converter
         __metadata("design:type", typeof (_a = typeof User_2.User !== "undefined" && User_2.User) === "function" ? _a : Object)
     ], UserView.prototype, "value", void 0);
     UserView = __decorate([
-        (0, DBObjectView_2.$DBObjectView)({ classname: "jassijs.security.User" }),
-        (0, Registry_38.$Class)("jassijs/UserView"),
+        (0, DBObjectView_2.$DBObjectView)({ classname: "jassijs.security.User", actionname: "Administration/Security/Users", icon: "mdi mdi-account-key-outline", queryname: "findWithRelations" }),
+        (0, Registry_38.$Class)("jassijs/security/UserView"),
         __metadata("design:paramtypes", [])
     ], UserView);
     exports.UserView = UserView;
     async function test() {
         var ret = new UserView();
-        ret["value"] = await User_2.User.findOne();
+        ret["value"] = (await User_2.User.findWithRelations())[0];
         return ret;
     }
     exports.test = test;
@@ -7095,11 +7138,11 @@ export async function test(){
     ], TemplateRemoteObject);
     exports.TemplateRemoteObject = TemplateRemoteObject;
 });
-define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/ActionNode", "jassijs/ui/MenuItem"], function (require, exports, Menu_1, Registry_43, Panel_2, Actions_6, ActionNode_1, MenuItem_1) {
+define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/ActionNode", "jassijs/ui/MenuItem"], function (require, exports, Menu_1, Registry_43, Panel_3, Actions_6, ActionNode_1, MenuItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ActionNodeMenu = void 0;
-    let ActionNodeMenu = class ActionNodeMenu extends Panel_2.Panel {
+    let ActionNodeMenu = class ActionNodeMenu extends Panel_3.Panel {
         constructor() {
             super();
             this.me = {};
@@ -7167,12 +7210,12 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Split, Panel_3, Registry_44, Component_4, Property_5, Classes_15) {
+define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Split, Panel_4, Registry_44, Component_4, Property_5, Classes_15) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.BoxPanel = void 0;
     /// <amd-dependency path="splitlib" name="Split"/>
-    let BoxPanel = class BoxPanel extends Panel_3.Panel {
+    let BoxPanel = class BoxPanel extends Panel_4.Panel {
         /**
         *
         * @param {object} properties - properties to init
@@ -7572,11 +7615,11 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Regist
     ], CSSProperties);
     exports.CSSProperties = CSSProperties;
 });
-define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ext/jquerylib"], function (require, exports, Textbox_2, Component_6, Registry_47, Property_8) {
+define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ext/jquerylib"], function (require, exports, Textbox_3, Component_6, Registry_47, Property_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Calendar = void 0;
-    let Calendar = class Calendar extends Textbox_2.Textbox {
+    let Calendar = class Calendar extends Textbox_3.Textbox {
         constructor(properties = undefined) {
             super(properties);
             $(this.dom).datepicker();
@@ -8402,13 +8445,13 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
     ], ComponentDescriptor);
     exports.ComponentDescriptor = ComponentDescriptor;
 });
-define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel", "jassijs/ui/Component"], function (require, exports, Registry_53, Panel_4, Table_1, Button_1, BoxPanel_2, Classes_18, Actions_7, Router_1, ErrorPanel_2, Component_9) {
+define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel", "jassijs/ui/Component"], function (require, exports, Registry_53, Panel_5, Table_1, Button_1, BoxPanel_2, Classes_18, Actions_7, Router_1, ErrorPanel_2, Component_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSpy = void 0;
     class Me {
     }
-    let ComponentSpy = class ComponentSpy extends Panel_4.Panel {
+    let ComponentSpy = class ComponentSpy extends Panel_5.Panel {
         constructor() {
             super();
             this.hook = undefined;
@@ -8929,12 +8972,12 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry
     }
     exports.test = test;
 });
-define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_2, Registry_56, Panel_5, Registry_57, Classes_20, BoxPanel_3, Actions_9, Windows_4) {
+define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_2, Registry_56, Panel_6, Registry_57, Classes_20, BoxPanel_3, Actions_9, Windows_4) {
     "use strict";
     var DBObjectDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectDialog = void 0;
-    let DBObjectDialog = DBObjectDialog_1 = class DBObjectDialog extends Panel_5.Panel {
+    let DBObjectDialog = DBObjectDialog_1 = class DBObjectDialog extends Panel_6.Panel {
         //data: DBObject[];
         constructor() {
             super();
@@ -8943,7 +8986,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
         }
         layout(me) {
             me.splitpanel1 = new BoxPanel_3.BoxPanel();
-            me.IDDBView = new Panel_5.Panel();
+            me.IDDBView = new Panel_6.Panel();
             me.table1 = new Table_2.Table();
             me.table1.height = "calc(100% - 300px)";
             me.table1.width = "calc(100% - 20px)";
@@ -8973,12 +9016,6 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
             var _this = this;
             //@ts-ignore
             // this.data = await cl.find();
-            this.me.table1.options = {
-                lazyLoad: {
-                    classname: this._dbclassname,
-                    loadFunc: "find"
-                }
-            };
             //this.me.table1.items = this.data;
             //DBView
             var data = await Registry_57.default.getJSONData("$DBObjectView");
@@ -8988,6 +9025,12 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
                     var cl = await Classes_20.classes.loadClass(data[x].classname);
                     this.me.IDDBView.removeAll();
                     this.view = new cl();
+                    this.me.table1.options = {
+                        lazyLoad: {
+                            classname: this._dbclassname,
+                            loadFunc: (param.queryname === undefined ? "find" : param.queryname)
+                        }
+                    };
                     this.me.IDDBView.add(this.view);
                     this.me.table1.onlazyloaded((data) => {
                         if ((data === null || data === void 0 ? void 0 : data.length) > 0 && this.view.value === undefined)
@@ -9091,7 +9134,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
     }
     exports.test = test;
 });
-define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs/ui/DBObjectDialog", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Registry_58, Actions_10, Panel_6, Registry_59, Router_2, DBObjectDialog_2, Windows_5) {
+define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs/ui/DBObjectDialog", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Registry_58, Actions_10, Panel_7, Registry_59, Router_2, DBObjectDialog_2, Windows_5) {
     "use strict";
     var DBObjectExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -9167,7 +9210,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
         (0, Registry_58.$Class)("jassijs.ui.DBObjectActions")
     ], DBObjectActions);
     exports.DBObjectActions = DBObjectActions;
-    let DBObjectExplorer = DBObjectExplorer_1 = class DBObjectExplorer extends Panel_6.Panel {
+    let DBObjectExplorer = DBObjectExplorer_1 = class DBObjectExplorer extends Panel_7.Panel {
         constructor() {
             super();
             this.me = {};
@@ -9252,7 +9295,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     }
     exports.test = test;
 });
-define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ui/Notify"], function (require, exports, Button_2, BoxPanel_4, Registry_60, Panel_7, Databinder_1, Component_12, Registry_61, Classes_21, Property_13, Notify_2) {
+define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ui/Notify"], function (require, exports, Button_2, BoxPanel_4, Registry_60, Panel_8, Databinder_1, Component_12, Registry_61, Classes_21, Property_13, Notify_2) {
     "use strict";
     var DBObjectView_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -9266,7 +9309,7 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
         };
     }
     exports.$DBObjectView = $DBObjectView;
-    let DBObjectView = DBObjectView_3 = class DBObjectView extends Panel_7.Panel {
+    let DBObjectView = DBObjectView_3 = class DBObjectView extends Panel_8.Panel {
         constructor() {
             super();
             this.me = {};
@@ -9348,7 +9391,7 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
             me.refresh = new Button_2.Button();
             me.create = new Button_2.Button();
             me.databinder = new Databinder_1.Databinder();
-            me.main = new Panel_7.Panel();
+            me.main = new Panel_8.Panel();
             me.databinder.definePropertyFor(this, "value");
             this.add(me.toolbar);
             this.add(me.main);
@@ -9492,11 +9535,11 @@ define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component"
     ], DataComponent);
     exports.DataComponent = DataComponent;
 });
-define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Databinder", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/DatabaseSchema", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, BoxPanel_5, Button_3, Databinder_2, Select_1, Table_3, Registry_63, Panel_8, DatabaseSchema_8, OptionDialog_6, Router_3, Actions_11, Windows_6) {
+define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Databinder", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/DatabaseSchema", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, BoxPanel_5, Button_3, Databinder_2, Select_2, Table_3, Registry_63, Panel_9, DatabaseSchema_8, OptionDialog_6, Router_3, Actions_11, Windows_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DatabaseDesigner = void 0;
-    let DatabaseDesigner = class DatabaseDesigner extends Panel_8.Panel {
+    let DatabaseDesigner = class DatabaseDesigner extends Panel_9.Panel {
         constructor(readShema = true) {
             super();
             this.allTypes = { values: [""] };
@@ -9538,7 +9581,7 @@ define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPane
                     }
                 ]
             });
-            me.select = new Select_1.Select();
+            me.select = new Select_2.Select();
             me.databinder = new Databinder_2.Databinder();
             this.add(me.databinder);
             me.table.width = 565;
@@ -10156,7 +10199,7 @@ define("jassijs/ui/DesignDummy", ["require", "exports", "jassijs/remote/Registry
     ], DesignDummy);
     exports.DesignDummy = DesignDummy;
 });
-define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ext/jquerylib", "jassijs/ext/intersection-observer"], function (require, exports, goldenlayout_2, Registry_66, Container_1, Button_4, Textbox_3) {
+define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ext/jquerylib", "jassijs/ext/intersection-observer"], function (require, exports, goldenlayout_2, Registry_66, Container_1, Button_4, Textbox_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DockingContainer = void 0;
@@ -10478,7 +10521,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
         var dock = new DockingContainer();
         var bt = new Button_4.Button();
         dock.add(bt, "Hallo1", "Hallo1");
-        var text = new Textbox_3.Textbox();
+        var text = new Textbox_4.Textbox();
         dock.add(text, "Hallo2", "Hallo2");
         // jassijs.windows.add(dock,"dock");
         //dock.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"stack","width":100,"height":80.99041533546327,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Hallo","type":"component","componentName":"Hallo","componentState":{"title":"Hallo","name":"Hallo"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.00958466453674,"content":[{"title":"Hallo2","type":"component","componentName":"Hallo2","componentState":{"title":"Hallo2","name":"Hallo2"},"isClosable":true,"reorderEnabled":true}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
@@ -10493,11 +10536,11 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
     }
     exports.test = test;
 });
-define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/Notify", "jassijs/ui/Component"], function (require, exports, Panel_9, Errors_2, Registry_67, Button_5, Router_4, Actions_12, Notify_4, Component_15) {
+define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/Notify", "jassijs/ui/Component"], function (require, exports, Panel_10, Errors_2, Registry_67, Button_5, Router_4, Actions_12, Notify_4, Component_15) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.ErrorPanel = void 0;
-    let ErrorPanel = class ErrorPanel extends Panel_9.Panel {
+    let ErrorPanel = class ErrorPanel extends Panel_10.Panel {
         /**
      * shows errors
      * @class jassijs.ui.ErrorPanel
@@ -10529,7 +10572,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
                 this.IDSearch.onclick(function () {
                     _this.search();
                 });
-                this.IDToolbar = new Panel_9.Panel();
+                this.IDToolbar = new Panel_10.Panel();
                 this.IDToolbar.width = "99%";
                 this.IDToolbar.add(this.IDClear);
                 this.IDToolbar.add(this.IDSearch);
@@ -10737,7 +10780,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
     };
     jassijs.ErrorPanel = ErrorPanel;
 });
-define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Registry_68, Tree_2, Panel_10, Textbox_4, Server_4, Router_5, Actions_13, OptionDialog_7, ContextMenu_2, Windows_7) {
+define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Registry_68, Tree_2, Panel_11, Textbox_5, Server_4, Router_5, Actions_13, OptionDialog_7, ContextMenu_2, Windows_7) {
     "use strict";
     var FileExplorer_5;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -10985,7 +11028,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Registr
         (0, Registry_68.$Class)("jassijs.ui.FileActions")
     ], FileActions);
     exports.FileActions = FileActions;
-    let FileExplorer = FileExplorer_5 = class FileExplorer extends Panel_10.Panel {
+    let FileExplorer = FileExplorer_5 = class FileExplorer extends Panel_11.Panel {
         constructor() {
             super();
             FileExplorer_5.instance = this;
@@ -10993,7 +11036,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Registr
             this.dom.style.width = "calc(100% - 8px)";
             this.dom.style.height = "calc(100% - 25px)"; //why 25????
             this.tree = new Tree_2.Tree();
-            this.search = new Textbox_4.Textbox();
+            this.search = new Textbox_5.Textbox();
             this.layout();
             this.tree.propStyle = node => { return this.getStyle(node); };
         }
@@ -11089,13 +11132,13 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Registr
     }
     exports.test = test;
 });
-define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_11, HTMLPanel_2, Button_6, Registry_69, tinymce_1, Registry_70) {
+define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_12, HTMLPanel_2, Button_6, Registry_69, tinymce_1, Registry_70) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.te = exports.HTMLEditorPanel = void 0;
     class Me {
     }
-    let HTMLEditorPanel = class HTMLEditorPanel extends Panel_11.Panel {
+    let HTMLEditorPanel = class HTMLEditorPanel extends Panel_12.Panel {
         constructor(id = undefined) {
             super();
             this.layout();
@@ -11856,7 +11899,7 @@ define("jassijs/ui/Notify", ["require", "exports", "jquery", "jquery.notify"], f
     }
     exports.notifyAddStyle = notifyAddStyle;
 });
-define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Registry_76, Table_4, Panel_12, Button_7, Textbox_5, Property_20, Component_21, Classes_22) {
+define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Registry_76, Table_4, Panel_13, Button_7, Textbox_6, Property_20, Component_21, Classes_22) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.ObjectChooser = void 0;
@@ -11909,10 +11952,10 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
             this.icon = "mdi mdi-glasses";
             this.width = 29;
             this.height = 21;
-            me.IDPanel = new Panel_12.Panel();
+            me.IDPanel = new Panel_13.Panel();
             me.IDCancel = new Button_7.Button();
             var _this = this;
-            me.IDSearch = new Textbox_5.Textbox();
+            me.IDSearch = new Textbox_6.Textbox();
             me.IDOK = new Button_7.Button();
             me.IDTable = new Table_4.Table();
             me.IDPanel.add(me.IDSearch);
@@ -12075,14 +12118,14 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_4, Button_8, Registry_77, Property_21, Textbox_6, Classes_23) {
+define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Panel_14, BoxPanel_6, HTMLPanel_4, Button_8, Registry_77, Property_21, Textbox_7, Classes_23) {
     "use strict";
     var OptionDialog_8;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.OptionDialog = void 0;
     class Me {
     }
-    let OptionDialog = OptionDialog_8 = class OptionDialog extends Panel_13.Panel {
+    let OptionDialog = OptionDialog_8 = class OptionDialog extends Panel_14.Panel {
         /**
         *
         * @param {object} properties - properties to init
@@ -12112,7 +12155,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
             me.boxpanel1.add(me.htmlpanel1);
             me.boxpanel1.width = "100%";
             me.boxpanel1.height = "calc(100% - 50px)";
-            me.inputText = new Textbox_6.Textbox();
+            me.inputText = new Textbox_7.Textbox();
             me.boxpanel1.add(me.inputText);
             for (var x = 0; x < this.options.length; x++) {
                 var button = new Button_8.Button();
@@ -12425,13 +12468,13 @@ define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Registry", 
     ], Property);
     exports.Property = Property;
 });
-define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ext/jquerylib", "jassijs/base/PropertyEditorService"], function (require, exports, Registry_81, Panel_14, Button_9, Image_2, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_23, Component_23) {
+define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ext/jquerylib", "jassijs/base/PropertyEditorService"], function (require, exports, Registry_81, Panel_15, Button_9, Image_2, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_23, Component_23) {
     "use strict";
     var PropertyEditor_1;
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.PropertyEditorTestSubProperties = exports.PropertyEditor = void 0;
-    let PropertyEditor = PropertyEditor_1 = class PropertyEditor extends Panel_14.Panel {
+    let PropertyEditor = PropertyEditor_1 = class PropertyEditor extends Panel_15.Panel {
         /**
         * edit object properties
         */
@@ -12439,8 +12482,8 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
             super();
             this.readPropertyValueFromDesign = false;
             this.codeChanges = {};
-            this.table = new Panel_14.Panel();
-            this.toolbar = new Panel_14.Panel();
+            this.table = new Panel_15.Panel();
+            this.toolbar = new Panel_15.Panel();
             this.parser = parser;
             this.table.init(`<table style="table-layout: fixed;font-size:11px">
                             <thead>
@@ -13279,17 +13322,17 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
     }
     exports.test = test;
 });
-define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Panel_15, Databinder_3, Component_24, Property_24, Registry_82) {
+define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Panel_16, Databinder_3, Component_24, Property_24, Registry_82) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Repeater = void 0;
-    let RepeaterDesignPanel = class RepeaterDesignPanel extends Panel_15.Panel {
+    let RepeaterDesignPanel = class RepeaterDesignPanel extends Panel_16.Panel {
     };
     RepeaterDesignPanel = __decorate([
         (0, Component_24.$UIComponent)({ editableChildComponents: ["databinder"] }),
         (0, Registry_82.$Class)("jassijs.ui.RepeaterDesignPanel")
     ], RepeaterDesignPanel);
-    let Repeater = class Repeater extends Panel_15.Panel {
+    let Repeater = class Repeater extends Panel_16.Panel {
         /**
         *
         * @param {object} properties - properties to init
@@ -13445,12 +13488,12 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
     ], Repeater);
     exports.Repeater = Repeater;
 });
-define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Registry_83, Tree_3, Panel_16, Textbox_7, Router_6, Actions_14, Windows_8) {
+define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Registry_83, Tree_3, Panel_17, Textbox_8, Router_6, Actions_14, Windows_8) {
     "use strict";
     var SearchExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SearchExplorer = void 0;
-    let SearchExplorer = SearchExplorer_1 = class SearchExplorer extends Panel_16.Panel {
+    let SearchExplorer = SearchExplorer_1 = class SearchExplorer extends Panel_17.Panel {
         constructor() {
             super();
             //@member - maximal hits which are found 
@@ -13459,7 +13502,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Regis
             this.dom.style.width = "calc(100% - 8px)";
             this.dom.style.height = "calc(100% - 25px)"; //why 25????
             this.tree = new Tree_3.Tree();
-            this.search = new Textbox_7.Textbox();
+            this.search = new Textbox_8.Textbox();
             this.layout();
         }
         static async show() {
@@ -13818,7 +13861,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_5, Select_2, Registry_85, Panel_17, PropertyEditor_2, Button_10, Settings_3, ComponentDescriptor_5, Registry_86, Actions_15, Windows_9) {
+define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_5, Select_3, Registry_85, Panel_18, PropertyEditor_2, Button_10, Settings_3, ComponentDescriptor_5, Registry_86, Actions_15, Windows_9) {
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -13841,7 +13884,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
     SettingsObject = __decorate([
         (0, Registry_85.$Class)("jassijs.ui.SettingsObject")
     ], SettingsObject);
-    let SettingsDialog = SettingsDialog_1 = class SettingsDialog extends Panel_17.Panel {
+    let SettingsDialog = SettingsDialog_1 = class SettingsDialog extends Panel_18.Panel {
         constructor() {
             super();
             this.me = {};
@@ -13883,7 +13926,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
             var _this = this;
             me.propertyeditor = new PropertyEditor_2.PropertyEditor();
             me.Save = new Button_10.Button();
-            me.Scope = new Select_2.Select();
+            me.Scope = new Select_3.Select();
             me.htmlpanel1 = new HTMLPanel_5.HTMLPanel();
             me.Scope.items = ["this browser", "current user", "all users"];
             me.Scope.value = "current user";
@@ -14019,7 +14062,7 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter"], function (require, exports, Registry_88, DataComponent_5, Property_27, Component_27, Textbox_8, Classes_26, tabulator_tables_1, DateTimeConverter_1, Numberformatter_1) {
+define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter"], function (require, exports, Registry_88, DataComponent_5, Property_27, Component_27, Textbox_9, Classes_26, tabulator_tables_1, DateTimeConverter_1, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -14330,7 +14373,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
                     this.height = "100%";
             }
             else {
-                this._searchbox = new Textbox_8.Textbox();
+                this._searchbox = new Textbox_9.Textbox();
                 this._searchbox.placeholder = "search table...";
                 this._searchbox.onkeydown(() => {
                     window.setTimeout(() => {
@@ -14720,11 +14763,11 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
     }
     exports.test = test;
 });
-define("jassijs/ui/Textarea", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Component_28, Registry_89, Property_28, Textbox_9) {
+define("jassijs/ui/Textarea", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Component_28, Registry_89, Property_28, Textbox_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Textarea = void 0;
-    let Textarea = class Textarea extends Textbox_9.Textbox {
+    let Textarea = class Textarea extends Textbox_10.Textbox {
         constructor() {
             super();
             super.init('<textarea  />');
@@ -15789,7 +15832,7 @@ define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Registry", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/ComponentDescriptor"], function (require, exports, Registry_95, Panel_18, Component_32, ComponentDescriptor_6) {
+define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/ComponentDescriptor"], function (require, exports, Registry_95, Panel_19, Component_32, ComponentDescriptor_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.VariablePanel = void 0;
@@ -15801,7 +15844,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Regist
     };
     // console.log(jassijs.d(9)?debug:0);
     // console.log(jassijs.d(9)?debug:0);
-    let VariablePanel = class VariablePanel extends Panel_18.Panel {
+    let VariablePanel = class VariablePanel extends Panel_19.Panel {
         constructor() {
             super();
             this._items = [];
@@ -16144,7 +16187,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Regist
     ], VariablePanel);
     exports.VariablePanel = VariablePanel;
 });
-define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Checkbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, Registry_96, Checkbox_1, Editor_1) {
+define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Checkbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, Registry_96, Checkbox_2, Editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BooleanEditor = void 0;
@@ -16152,7 +16195,7 @@ define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassi
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Checkbox_1.Checkbox();
+            this.component = new Checkbox_2.Checkbox();
             var _this = this;
             this.component.onclick(function (param) {
                 _this._onclick(param);
@@ -16194,7 +16237,7 @@ define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassi
     ], BooleanEditor);
     exports.BooleanEditor = BooleanEditor;
 });
-define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_3, Editor_2, JsonEditor_1, Tools_2, StringConverter_1, Registry_97, Panel_19, Textbox_10, Registry_98, ComponentDescriptor_7, Classes_27) {
+define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_4, Editor_2, JsonEditor_1, Tools_2, StringConverter_1, Registry_97, Panel_20, Textbox_11, Registry_98, ComponentDescriptor_7, Classes_27) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClassSelectorEditor = void 0;
@@ -16207,9 +16250,9 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
         constructor(property = undefined, propertyEditor = undefined) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Panel_19.Panel();
+            this.component = new Panel_20.Panel();
             this.component.width = "100%";
-            this.select = new Select_3.Select();
+            this.select = new Select_4.Select();
             this.select.width = "calc(100% - 26px)";
             this.property = Tools_2.Tools.copyObject(property);
             //  this.property.componentType="jassijs.ui.converters.StringConverterProperies";
@@ -16347,8 +16390,8 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
         }
         layout() {
             var me = this.me = {};
-            me.pan = new Panel_19.Panel();
-            me.tb = new Textbox_10.Textbox();
+            me.pan = new Panel_20.Panel();
+            me.tb = new Textbox_11.Textbox();
             me.pan.height = 15;
             me.pan.add(me.tb);
             me.tb.height = 15;
@@ -16373,7 +16416,7 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
         return t.me.pan;
     };
 });
-define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ext/jquerylib", "jassijs/ext/spectrum"], function (require, exports, PropertyEditor_3, Editor_3, Textbox_11, Registry_99, Select_4, BoxPanel_7) {
+define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ext/jquerylib", "jassijs/ext/spectrum"], function (require, exports, PropertyEditor_3, Editor_3, Textbox_12, Registry_99, Select_5, BoxPanel_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test3 = exports.ColorEditor = void 0;
@@ -16385,9 +16428,9 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
             /** @member - the renedering component **/
             this.component = new BoxPanel_7.BoxPanel();
             this.component.horizontal = true;
-            this.icon = new Textbox_11.Textbox();
+            this.icon = new Textbox_12.Textbox();
             this.icon.width = "10px";
-            this.select = new Select_4.Select();
+            this.select = new Select_5.Select();
             this.select.width = "85px";
             this.component.add(this.select);
             this.component.add(this.icon);
@@ -16487,15 +16530,15 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
     exports.ColorEditor = ColorEditor;
     function test3() {
         var prop = new PropertyEditor_3.PropertyEditor();
-        prop.value = new Textbox_11.Textbox();
+        prop.value = new Textbox_12.Textbox();
         return prop;
     }
     exports.test3 = test3;
     function test2() {
         var panel = new BoxPanel_7.BoxPanel();
         panel.horizontal = false;
-        var icon = new Textbox_11.Textbox();
-        var textbox = new Textbox_11.Textbox();
+        var icon = new Textbox_12.Textbox();
+        var textbox = new Textbox_12.Textbox();
         panel.add(textbox);
         panel.add(icon);
         var spec = $(icon.dom)["spectrum"]({
@@ -16507,7 +16550,7 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Editor_4, Select_5, Classes_28, Registry_100) {
+define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Editor_4, Select_6, Classes_28, Registry_100) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSelectorEditor = void 0;
@@ -16519,7 +16562,7 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Select_5.Select({
+            this.component = new Select_6.Select({
                 multiple: (property.componentType.indexOf("[") === 0)
             });
             this.component.width = "100%";
@@ -16587,7 +16630,7 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
     }
     exports.test = test;
 });
-define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_5, Registry_101, Panel_20, Textbox_12, ObjectChooser_1, Classes_29) {
+define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_5, Registry_101, Panel_21, Textbox_13, ObjectChooser_1, Classes_29) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectEditor = void 0;
@@ -16600,8 +16643,8 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Panel_20.Panel( /*{useSpan:true}*/);
-            this._textbox = new Textbox_12.Textbox();
+            this.component = new Panel_21.Panel( /*{useSpan:true}*/);
+            this._textbox = new Textbox_13.Textbox();
             this._objectchooser = new ObjectChooser_1.ObjectChooser();
             this._objectchooser.width = 24;
             this._textbox.width = "calc(100% - 34px)";
@@ -16692,7 +16735,7 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
     ], DBObjectEditor);
     exports.DBObjectEditor = DBObjectEditor;
 });
-define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Textbox"], function (require, exports, Editor_6, Databinder_4, Registry_102, Textbox_13) {
+define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Textbox"], function (require, exports, Editor_6, Databinder_4, Registry_102, Textbox_14) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabinderEditor = void 0;
@@ -16700,7 +16743,7 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Textbox_13.Textbox(); //Select();
+            this.component = new Textbox_14.Textbox(); //Select();
             this.component.width = "100%";
             var _this = this;
             this.component.onchange(function (param) {
@@ -16784,7 +16827,7 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
     ], DatabinderEditor);
     exports.DatabinderEditor = DatabinderEditor;
 });
-define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Select"], function (require, exports, Textbox_14, Editor_7, Registry_103, Select_6) {
+define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Select"], function (require, exports, Textbox_15, Editor_7, Registry_103, Select_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let DefaultEditor = class DefaultEditor extends Editor_7.Editor {
@@ -16792,24 +16835,24 @@ define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassi
             super(property, propertyEditor);
             if (property.chooseFrom !== undefined) {
                 if (typeof (property.chooseFrom) === "function") {
-                    this.component = new Textbox_14.Textbox();
+                    this.component = new Textbox_15.Textbox();
                     this.component.autocompleter = function () {
                         return property.chooseFrom(_this.ob);
                     };
                 }
                 else {
                     if (property.chooseFromStrict) {
-                        this.component = new Select_6.Select();
+                        this.component = new Select_7.Select();
                         this.component.items = property.chooseFrom;
                     }
                     else {
-                        this.component = new Textbox_14.Textbox();
+                        this.component = new Textbox_15.Textbox();
                         this.component.autocompleter = property.chooseFrom;
                     }
                 }
             }
             else {
-                this.component = new Textbox_14.Textbox();
+                this.component = new Textbox_15.Textbox();
             }
             this.component.width = "100%";
             var _this = this;
@@ -16989,7 +17032,7 @@ define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remo
     ], Editor);
     exports.Editor = Editor;
 });
-define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_4, Editor_8, Textbox_15, Registry_106, Select_7, CSSProperties_3) {
+define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_4, Editor_8, Textbox_16, Registry_106, Select_8, CSSProperties_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.FontEditor = void 0;
@@ -16999,7 +17042,7 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Select_7.Select({
+            this.component = new Select_8.Select({
                 "multiple": false,
                 "placeholder": "select a font",
                 "allowDeselect": false
@@ -17069,7 +17112,7 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
     exports.FontEditor = FontEditor;
     function test2() {
         var prop = new PropertyEditor_4.PropertyEditor();
-        prop.value = new Textbox_15.Textbox();
+        prop.value = new Textbox_16.Textbox();
         return prop;
     }
     exports.test2 = test2;
@@ -17149,7 +17192,7 @@ define("jassijs/ui/PropertyEditors/FunctionEditor", ["require", "exports", "jass
     ], FunctionEditor);
     exports.FunctionEditor = FunctionEditor;
 });
-define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/ui/Panel"], function (require, exports, Editor_10, Registry_108, Textbox_16, ObjectChooser_2, Panel_21) {
+define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/ui/Panel"], function (require, exports, Editor_10, Registry_108, Textbox_17, ObjectChooser_2, Panel_22) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLEditor = void 0;
@@ -17162,8 +17205,8 @@ define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Panel_21.Panel( /*{useSpan:true}*/);
-            this._textbox = new Textbox_16.Textbox();
+            this.component = new Panel_22.Panel( /*{useSpan:true}*/);
+            this._textbox = new Textbox_17.Textbox();
             this._objectchooser = new ObjectChooser_2.ObjectChooser();
             this._objectchooser.width = 24;
             this._textbox.width = "calc(100% - 28px)";
@@ -17234,7 +17277,7 @@ define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/
     ], HTMLEditor);
     exports.HTMLEditor = HTMLEditor;
 });
-define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions", "jassijs/ui/Component", "jassijs/ext/jquerylib"], function (require, exports, Editor_11, Registry_109, Panel_22, Textbox_17, Button_12, Actions_16, Component_33) {
+define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions", "jassijs/ui/Component", "jassijs/ext/jquerylib"], function (require, exports, Editor_11, Registry_109, Panel_23, Textbox_18, Button_12, Actions_16, Component_33) {
     "use strict";
     var ImageEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17248,9 +17291,9 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Panel_22.Panel( /*{useSpan:true}*/);
+            this.component = new Panel_23.Panel( /*{useSpan:true}*/);
             this._button = new Button_12.Button();
-            this._textbox = new Textbox_17.Textbox();
+            this._textbox = new Textbox_18.Textbox();
             this._textbox.width = "calc(100% - 34px)";
             this.component.height = 24;
             this._button.icon = "mdi mdi-glasses";
@@ -17308,9 +17351,9 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
         async showDialog(onlytest = undefined) {
             if (!this.dialog) {
                 var _this = this;
-                this.dialog = new Panel_22.Panel();
-                var suche = new Textbox_17.Textbox();
-                var icons = new Panel_22.Panel();
+                this.dialog = new Panel_23.Panel();
+                var suche = new Textbox_18.Textbox();
+                var icons = new Panel_23.Panel();
                 this.dialog.add(suche);
                 this.dialog.add(icons);
                 suche.onchange((data) => {
@@ -17734,7 +17777,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
     }
     exports.test = test;
 });
-define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry"], function (require, exports, Editor_14, Textbox_18, Registry_112) {
+define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry"], function (require, exports, Editor_14, Textbox_19, Registry_112) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NameEditor = void 0;
@@ -17742,7 +17785,7 @@ define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Textbox_18.Textbox();
+            this.component = new Textbox_19.Textbox();
             this.component.width = "100%";
             var _this = this;
             this.component.onchange(function (param) {
@@ -17804,11 +17847,11 @@ define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/
     ], NameEditor);
     exports.NameEditor = NameEditor;
 });
-define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_113, Panel_23) {
+define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_113, Panel_24) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TableColumnImport = void 0;
-    let TableColumnImport = class TableColumnImport extends Panel_23.Panel {
+    let TableColumnImport = class TableColumnImport extends Panel_24.Panel {
         constructor() {
             super();
             this.me = {};
@@ -17833,7 +17876,7 @@ define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "luxon"], function (require, exports, DefaultConverter_2, Registry_114, Property_34, Textbox_19) {
+define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "luxon"], function (require, exports, DefaultConverter_2, Registry_114, Property_34, Textbox_20) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DateTimeConverter = void 0;
@@ -17956,7 +17999,7 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
     ], DateTimeConverter);
     exports.DateTimeConverter = DateTimeConverter;
     function test() {
-        var tb = new Textbox_19.Textbox();
+        var tb = new Textbox_20.Textbox();
         tb.converter = new DateTimeConverter({
             type: "DATETIME_SHORT_WITH_SECONDS"
         });
@@ -18165,12 +18208,12 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });
-define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_15, NumberConverter_2, Textbox_20, BoxPanel_9, Select_8, Table_6, Registry_119, Panel_24, papaparse_1, Database_3, Registry_120, Classes_31, DBObject_8, Actions_17, Router_7, Server_5, Transaction_1) {
+define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_15, NumberConverter_3, Textbox_21, BoxPanel_9, Select_9, Table_6, Registry_119, Panel_25, papaparse_1, Database_3, Registry_120, Classes_31, DBObject_8, Actions_17, Router_7, Server_5, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CSVImport = void 0;
-    let CSVImport = CSVImport_1 = class CSVImport extends Panel_24.Panel {
+    let CSVImport = CSVImport_1 = class CSVImport extends Panel_25.Panel {
         constructor() {
             super();
             this.me = {};
@@ -18251,14 +18294,14 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         }
         layout(me) {
             me.boxpanel1 = new BoxPanel_9.BoxPanel();
-            me.fromLine = new Textbox_20.Textbox();
+            me.fromLine = new Textbox_21.Textbox();
             me.next = new Button_15.Button();
             me.upload = new Upload_1.Upload();
             var _this = this;
             this.me.table = new Table_6.Table({
                 autoColumns: false
             });
-            me.select = new Select_8.Select();
+            me.select = new Select_9.Select();
             me.table.width = 500;
             me.table.height = "200";
             me.fromLine.value = 2;
@@ -18278,7 +18321,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
             me.boxpanel1.add(me.select);
             me.fromLine.label = "start from line";
             me.fromLine.width = "80";
-            me.fromLine.converter = new NumberConverter_2.NumberConverter();
+            me.fromLine.converter = new NumberConverter_3.NumberConverter();
             me.next.text = "Import";
             me.next.onclick(function (event) {
                 _this.doimport().then((prot) => {
@@ -18872,6 +18915,14 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Registry"
             for (let ff = 0; ff < fileNames.length; ff++) {
                 var fileName = fileNames[ff];
                 var fileNameBlank = fileName;
+                if (fileName.toLocaleLowerCase().endsWith("css")) {
+                    /*var node=document.getElementById("-->"+fileName);
+                    if(node){
+                        document.getElementById("-->"+fileName).remove();
+                    }*/
+                    jassijs.myRequire(fileName);
+                    continue;
+                }
                 if (fileNameBlank.endsWith(".js"))
                     fileNameBlank = fileNameBlank.substring(0, fileNameBlank.length - 3);
                 var test = this._findScript(fileNameBlank);

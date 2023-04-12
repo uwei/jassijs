@@ -345,7 +345,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/security/User.ts": {
-		"date": 1681322774491,
+		"date": 1681329602964,
 		"jassijs.security.User": {
 			"$DBObject": [
 				{
@@ -476,22 +476,27 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/security/GroupView.ts": {
-		"date": 1656073226000,
+		"date": 1681328190944,
 		"jassijs/security/GroupView": {
 			"$DBObjectView": [
 				{
-					"classname": "{{dbfullclassname}}"
+					"classname": "jassijs.security.Group",
+					"icon": "mdi mdi-account-group",
+					"actionname": "Administration/Security/Groups"
 				}
 			],
 			"@members": {}
 		}
 	},
 	"jassijs/security/UserView.ts": {
-		"date": 1681325623402,
-		"jassijs/UserView": {
+		"date": 1681330005862,
+		"jassijs/security/UserView": {
 			"$DBObjectView": [
 				{
-					"classname": "jassijs.security.User"
+					"classname": "jassijs.security.User",
+					"actionname": "Administration/Security/Users",
+					"icon": "mdi mdi-account-key-outline",
+					"queryname": "findWithRelations"
 				}
 			],
 			"@members": {}
@@ -802,7 +807,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectDialog.ts": {
-		"date": 1656681978000,
+		"date": 1681329942417,
 		"jassijs.ui.DBObjectDialog": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -886,7 +891,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1681124951985,
+		"date": 1681329647464,
 		"jassijs/ui/DBObjectView": {
 			"$UIComponent": [
 				{
@@ -1538,7 +1543,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Numberformatter": {}
 	},
 	"jassijs/util/Reloader.ts": {
-		"date": 1681326738952,
+		"date": 1681327400102,
 		"jassijs.util.Reloader": {}
 	},
 	"jassijs/util/Runlater.ts": {
