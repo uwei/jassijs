@@ -30,7 +30,7 @@ exports.default={
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1681240060303,
+		"date": 1681317354018,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -67,7 +67,7 @@ exports.default={
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
-		"date": 1656072578000,
+		"date": 1681322755237,
 		"jassijs.security.Group": {
 			"$DBObject": [
 				{
@@ -76,12 +76,24 @@ exports.default={
 			],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"name": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"parentRights": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"JoinTable": [],
 					"ManyToMany": [
 						"function",
@@ -89,6 +101,12 @@ exports.default={
 					]
 				},
 				"rights": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"JoinTable": [],
 					"ManyToMany": [
 						"function",
@@ -96,6 +114,12 @@ exports.default={
 					]
 				},
 				"users": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"ManyToMany": [
 						"function",
 						"function"
@@ -105,7 +129,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/ParentRight.ts": {
-		"date": 1656072588000,
+		"date": 1681322761219,
 		"jassijs.security.ParentRight": {
 			"$DBObject": [
 				{
@@ -114,15 +138,27 @@ exports.default={
 			],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryGeneratedColumn": []
 				},
 				"name": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"classname": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"i1": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -130,6 +166,11 @@ exports.default={
 					]
 				},
 				"i2": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -137,6 +178,11 @@ exports.default={
 					]
 				},
 				"s1": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -144,6 +190,11 @@ exports.default={
 					]
 				},
 				"s2": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -151,6 +202,12 @@ exports.default={
 					]
 				},
 				"groups": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"ManyToMany": [
 						"function",
 						"function"
@@ -160,7 +217,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/Right.ts": {
-		"date": 1656072608000,
+		"date": 1681322767135,
 		"jassijs.security.Right": {
 			"$DBObject": [
 				{
@@ -169,12 +226,24 @@ exports.default={
 			],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"name": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"groups": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"ManyToMany": [
 						"function",
 						"function"
@@ -188,7 +257,7 @@ exports.default={
 		"jassijs.security.Rights": {}
 	},
 	"jassijs/remote/security/Setting.ts": {
-		"date": 1656072620000,
+		"date": 1681316435162,
 		"jassijs.security.Setting": {
 			"$DBObject": [
 				{
@@ -197,9 +266,19 @@ exports.default={
 			],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"data": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -210,7 +289,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/User.ts": {
-		"date": 1656072626000,
+		"date": 1681322774491,
 		"jassijs.security.User": {
 			"$DBObject": [
 				{
@@ -219,12 +298,23 @@ exports.default={
 			],
 			"@members": {
 				"id": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryGeneratedColumn": []
 				},
 				"email": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"password": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"select": false
@@ -232,6 +322,12 @@ exports.default={
 					]
 				},
 				"groups": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"JoinTable": [],
 					"ManyToMany": [
 						"function",
@@ -239,6 +335,11 @@ exports.default={
 					]
 				},
 				"isAdmin": {
+					"ValidateIsBoolean": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -249,8 +350,20 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Settings.ts": {
-		"date": 1680946807085,
-		"jassijs.remote.Settings": {}
+		"date": 1681315774171,
+		"jassijs.remote.Settings": {
+			"@members": {
+				"remove": {
+					"ValidateFunctionParameter": []
+				},
+				"save": {
+					"ValidateFunctionParameter": []
+				},
+				"saveAll": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
 	},
 	"jassijs/remote/Test.ts": {
 		"date": 1655556930000,
@@ -278,7 +391,7 @@ exports.default={
 		"date": 1681309085019
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1680946644898,
+		"date": 1681318239391,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -316,10 +429,10 @@ exports.default={
 		"date": 1611490792000
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1681310972628
+		"date": 1681322647268
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1681310433480,
+		"date": 1681323038084,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
@@ -332,6 +445,33 @@ exports.default={
 					"ValidateFunctionParameter": []
 				},
 				"loadFile": {
+					"ValidateFunctionParameter": []
+				},
+				"saveFiles": {
+					"ValidateFunctionParameter": []
+				},
+				"saveFile": {
+					"ValidateFunctionParameter": []
+				},
+				"testServersideFile": {
+					"ValidateFunctionParameter": []
+				},
+				"removeServerModul": {
+					"ValidateFunctionParameter": []
+				},
+				"delete": {
+					"ValidateFunctionParameter": []
+				},
+				"rename": {
+					"ValidateFunctionParameter": []
+				},
+				"createFile": {
+					"ValidateFunctionParameter": []
+				},
+				"createFolder": {
+					"ValidateFunctionParameter": []
+				},
+				"createModule": {
 					"ValidateFunctionParameter": []
 				}
 			}

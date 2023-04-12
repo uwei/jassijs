@@ -17,7 +17,6 @@ const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const DBObjectQuery_1 = require("jassijs/remote/DBObjectQuery");
 const Rights_1 = require("jassijs/remote/security/Rights");
-const Validator_1 = require("jassijs/remote/Validator");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
@@ -84,7 +83,6 @@ __decorate([
     __metadata("design:type", Number)
 ], Kunde.prototype, "id", void 0);
 __decorate([
-    (0, Validator_1.ValidateIsInt)(),
     (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Kunde.prototype, "vorname", void 0);
@@ -154,7 +152,6 @@ async function test() {
     k.ort = "Mainz";
     k.PLZ = "99992";
     var tt = await k.validate(k);
-    debugger;
     k.save();
     //	new de.Kunde().generate();
     //jassijs.db.uploadType(de.Kunde);

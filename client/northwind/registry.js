@@ -40,7 +40,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/EmployeesView.ts": {
-		"date": 1681227804945,
+		"date": 1681317457903,
 		"northwind.EmployeesView": {
 			"$DBObjectView": [
 				{
@@ -254,7 +254,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Employees.ts": {
-		"date": 1681302641560,
+		"date": 1681322812010,
 		"northwind.Employees": {
 			"$DBObject": [],
 			"@members": {
@@ -427,7 +427,7 @@ define("northwind/registry",["require"], function(require) {
 				"ReportsTo": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Employees",
+							"type": "function",
 							"optional": true
 						}
 					],
@@ -464,7 +464,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/OrderDetails.ts": {
-		"date": 1681235233082,
+		"date": 1681322820167,
 		"northwind.OrderDetails": {
 			"$DBObject": [],
 			"@members": {
@@ -479,7 +479,7 @@ define("northwind/registry",["require"], function(require) {
 				"Order": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Orders"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -490,7 +490,7 @@ define("northwind/registry",["require"], function(require) {
 				"Product": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Products"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -523,7 +523,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Orders.ts": {
-		"date": 1681235896083,
+		"date": 1681322833004,
 		"northwind.Orders": {
 			"$DBObject": [],
 			"@members": {
@@ -538,7 +538,7 @@ define("northwind/registry",["require"], function(require) {
 				"Customer": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Customer"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -548,7 +548,7 @@ define("northwind/registry",["require"], function(require) {
 				"Employee": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Employees"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -594,7 +594,7 @@ define("northwind/registry",["require"], function(require) {
 				"ShipVia": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Shippers"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -689,7 +689,7 @@ define("northwind/registry",["require"], function(require) {
 				"Details": {
 					"ValidateIsArray": [
 						{
-							"type": "OrderDetails"
+							"type": "function"
 						}
 					],
 					"OneToMany": [
@@ -701,7 +701,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Products.ts": {
-		"date": 1681236399113,
+		"date": 1681322711343,
 		"northwind.Products": {
 			"$DBObject": [],
 			"@members": {
@@ -728,7 +728,7 @@ define("northwind/registry",["require"], function(require) {
 				"Supplier": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Suppliers"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -738,7 +738,7 @@ define("northwind/registry",["require"], function(require) {
 				"Category": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Categories"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -1076,7 +1076,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerPhoneList.ts": {
-		"date": 1656504952000,
+		"date": 1681317489793,
 		"northwind/CustomerPhoneList": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

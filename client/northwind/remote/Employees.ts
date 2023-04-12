@@ -69,7 +69,7 @@ export class Employees extends DBObject {
     @Column({ nullable: true })
     PhotoPath: string;
 
-    @ValidateIsInstanceOf({type:Employees,optional:true})
+    @ValidateIsInstanceOf({type:type=>Employees,optional:true})
     @JoinColumn()
     @ManyToOne(type => Employees)
     ReportsTo: Employees;

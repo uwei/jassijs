@@ -17,11 +17,11 @@ export class Orders extends DBObject {
         super();
     } 
 
-    @ValidateIsInstanceOf({type:Customer})
+    @ValidateIsInstanceOf({type:type=>Customer})
     @ManyToOne(type => Customer)
     Customer: Customer;
 
-    @ValidateIsInstanceOf({type:Employees})
+    @ValidateIsInstanceOf({type:type=>Employees})
     @ManyToOne(type => Employees)
     Employee: Employees;
 
@@ -37,7 +37,7 @@ export class Orders extends DBObject {
     @Column({ nullable: true })
     ShippedDate: Date;
     
-    @ValidateIsInstanceOf({type:Shippers})
+    @ValidateIsInstanceOf({type:type=>Shippers})
     @ManyToOne(type => Shippers)
     ShipVia: Shippers;
 
@@ -69,7 +69,7 @@ export class Orders extends DBObject {
     @Column({ nullable: true })
     ShipCountry: string;
 
-    @ValidateIsArray({type:OrderDetails})
+    @ValidateIsArray({type:type=>OrderDetails})
     @OneToMany(type => OrderDetails, e=>e.Order)
     Details: OrderDetails[];
 }

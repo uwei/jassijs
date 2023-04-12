@@ -15,6 +15,7 @@ const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Group_1 = require("jassijs/remote/security/Group");
 const ParentRight_1 = require("jassijs/remote/security/ParentRight");
+const Validator_1 = require("jassijs/remote/Validator");
 let User = class User extends DBObject_1.DBObject {
     /**
    * reload the object from jassijs.db
@@ -32,23 +33,28 @@ let User = class User extends DBObject_1.DBObject {
     }
 };
 __decorate([
+    (0, Validator_1.ValidateIsNumber)({ optional: true }),
     (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)(),
     (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ select: false }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsArray)({ optional: true, type: type => Group_1.Group }),
     (0, DatabaseSchema_1.JoinTable)(),
     (0, DatabaseSchema_1.ManyToMany)(type => Group_1.Group, ob => ob.users),
     __metadata("design:type", Array)
 ], User.prototype, "groups", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsBoolean)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isAdmin", void 0);

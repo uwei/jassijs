@@ -15,7 +15,6 @@
 		"tests": "tests",
 		"jassijs_report": "jassijs_report",
 		"demoreports": "demoreports"
-
 	},
 	"require": {
 		"paths": {

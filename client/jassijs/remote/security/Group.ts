@@ -4,6 +4,7 @@ import { JoinTable,Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOn
 import { ParentRight } from "jassijs/remote/security/ParentRight";
 import { User } from "jassijs/remote/security/User";
 import { Right } from "jassijs/remote/security/Right";
+import { ValidateIsArray, ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
 
 
 
@@ -13,17 +14,25 @@ import { Right } from "jassijs/remote/security/Right";
 
 export class Group extends DBObject  {
  
+    @ValidateIsInt({optional:true})
     @PrimaryColumn()
     declare id: number;
+
+    @ValidateIsString()
     @Column()
     name:string;
+
+    @ValidateIsArray({optional:true,type:type=>ParentRight})
     @JoinTable()
     @ManyToMany(type=>ParentRight,ob=>ob.groups)
     parentRights:ParentRight[];
 
+    @ValidateIsArray({optional:true,type:type=>Right})
     @JoinTable()
     @ManyToMany(type=>Right,ob=>ob.groups)
     rights:Right[];
+
+    @ValidateIsArray({optional:true,type:type=>User})
     @ManyToMany(type=>User,ob=>ob.groups)
     users:User[];
     

@@ -148,8 +148,12 @@ export class DBObject extends RemoteObject {
     * save the object to jassijs.db
     */
     async save(context: Context = undefined) {
-        await this.validate({},true);
-       
+        await this.validate({
+        delegateOptions: {
+            ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] },
+            ValidateIsArray: { alternativeJsonProperties: ["id"] }
+        }
+        });
         if (!context?.isServer) {
             if (this.id !== undefined) {
                 var cname = classes.getClassName(this);

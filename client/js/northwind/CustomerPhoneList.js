@@ -66,7 +66,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
     exports.CustomerPhoneList = CustomerPhoneList;
     async function test() {
         var ret = new CustomerPhoneList();
-        alert(ret.me.table.height);
+        //    alert(ret.me.table.height);
         return ret;
     }
     exports.test = test;

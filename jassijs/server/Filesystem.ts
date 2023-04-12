@@ -156,11 +156,14 @@ export default class Filesystem {
         if (serverdir) {
             root = ".";
         }
-        let filename=directoryname.split("/")[directoryname.split("/").length-1]+Filesystem.zipid++;
-        await this.zipFolder(root + "/" + directoryname, "/tmp/" + filename + ".zip");
-        
-        var data = fs.readFileSync("/tmp/" + filename + ".zip");//,'binary');
-        fs.unlinkSync("/tmp/" + filename + ".zip");
+        if(!fs.existsSync("./tmp")){
+            fs.mkdirSync("./tmp");
+        }
+
+        let filename = directoryname.split("/")[directoryname.split("/").length - 1] + Filesystem.zipid++;
+        await this.zipFolder(root + "/" + directoryname, "./tmp/" + filename + ".zip");
+        var data = fs.readFileSync("./tmp/" + filename + ".zip"); //,'binary');
+        fs.unlinkSync("./tmp/" + filename + ".zip");
         //let buff = new Buffer(data);
         let ret = data.toString('base64');
         return ret;

@@ -4,15 +4,18 @@ import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMa
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { Context } from "jassijs/remote/RemoteObject";
 import { JassiError } from "../Classes";
+import { ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
 @$DBObject({name:"jassijs_setting"})
 @$Class("jassijs.security.Setting")
 export class Setting extends DBObject {
+    @ValidateIsInt({optional:true})
     @PrimaryColumn()
     declare id: number;
     constructor() {
         super();
     }
     
+    @ValidateIsString({optional:true})
     @Column({	nullable: true})
     data: string;
 

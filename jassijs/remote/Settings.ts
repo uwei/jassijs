@@ -7,6 +7,7 @@ import { Setting } from "jassijs/remote/security/Setting";
 import { Server } from "./Server";
 import { Test } from "./Test";
 import { serverservices } from "jassijs/remote/Serverservice";
+import { ValidateFunctionParameter, ValidateIsBoolean, ValidateIsIn, ValidateIsString } from "jassijs/remote/Validator";
  
 
 
@@ -83,7 +84,8 @@ export class Settings extends RemoteObject {
             return Settings.allusersSettings[Settings_key];
         return undefined;
     }
-    static async remove(Settings_key: string, scope: "browser" | "user" | "allusers", context: Context = undefined) {
+    @ValidateFunctionParameter()
+    static async remove(@ValidateIsString() Settings_key: string,@ValidateIsIn({in:["browser" , "user" , "allusers"]})  scope: "browser" | "user" | "allusers", context: Context = undefined) {
         if (scope === "browser") {
             delete Settings.browserSettings[Settings_key];
             window.localStorage.setItem("jassijs.settings", JSON.stringify(Settings.browserSettings));
@@ -112,16 +114,16 @@ export class Settings extends RemoteObject {
             }
         }
     }
-
-    static async save<T>(Settings_key: T, value: T, scope: "browser" | "user" | "allusers") {
+    @ValidateFunctionParameter()
+    static async save<T>(@ValidateIsString()Settings_key: T, value: T, @ValidateIsIn({in:["browser" , "user" , "allusers"]}) scope: "browser" | "user" | "allusers") {
         let ob = {};
         //@ts-ignore
         ob[Settings_key] = value;
         return await this.saveAll(ob, scope);
     }
-    static async saveAll(namevaluepair: { [key: string]: any }, scope: "browser" | "user" | "allusers", removeOtherKeys = false, context: Context = undefined) {
+    @ValidateFunctionParameter()
+    static async saveAll(namevaluepair: { [key: string]: any }, @ValidateIsIn({in:["browser" , "user" , "allusers"]}) scope: "browser" | "user" | "allusers", @ValidateIsBoolean({optional:true}) removeOtherKeys = false, context: Context = undefined) {
         if (scope === "browser") {
-
             let entr = window.localStorage.getItem("jassijs.settings");
             var data = namevaluepair;
             if (entr) {

@@ -306,6 +306,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader"
             var r = await this.loadFileEntry(fileName);
             return (r ? r.data : undefined);
         }
+        async loadFiles(fileNames) {
+            var ret = {};
+            for (var x = 0; x < fileNames.length; x++) {
+                ret[fileNames[x]] = await this.loadFile(fileNames[x]);
+            }
+            return ret;
+        }
         /**
         * deletes a file or directory
         * @param file - old filename

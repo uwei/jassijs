@@ -336,8 +336,17 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/remote/ServerReport.ts": {
-		"date": 1656331484000,
-		"jassijs_report.remote.ServerReport": {}
+		"date": 1681315929902,
+		"jassijs_report.remote.ServerReport": {
+			"@members": {
+				"getDesign": {
+					"ValidateFunctionParameter": []
+				},
+				"getBase64": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
 	},
 	"jassijs_report/Reports.ts": {
 		"date": 1657978946000,

@@ -8,8 +8,6 @@ define(["require", "exports", "northwind/remote/Employees"], function (require, 
             "where": "UPPER('LastName') LIKE '%FUL%'"
         });
         // "whereParams":{"mftext":"%FUL%"}});
-        debugger;
-        ;
     }
     exports.test = test;
 });

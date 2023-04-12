@@ -125,7 +125,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655549184000
             },
             "jassijs/base/LoginDialog.ts": {
-                "date": 1655806952000
+                "date": 1681316975343
             },
             "jassijs/base/PropertyEditorService.ts": {
                 "date": 1657571268000,
@@ -173,15 +173,21 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Database": {}
             },
             "jassijs/remote/DatabaseTools.ts": {
-                "date": 1680946799456,
-                "jassijs.remote.DatabaseTools": {}
+                "date": 1681309880654,
+                "jassijs.remote.DatabaseTools": {
+                    "@members": {
+                        "runSQL": {
+                            "ValidateFunctionParameter": []
+                        }
+                    }
+                }
             },
             "jassijs/remote/DBArray.ts": {
                 "date": 1655556796000,
                 "jassijs.remote.DBArray": {}
             },
             "jassijs/remote/DBObject.ts": {
-                "date": 1680809099251,
+                "date": 1681317354018,
                 "jassijs.remote.DBObject": {}
             },
             "jassijs/remote/DBObjectQuery.ts": {
@@ -218,7 +224,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.RemoteProtocol": {}
             },
             "jassijs/remote/security/Group.ts": {
-                "date": 1656072578000,
+                "date": 1681322755237,
                 "jassijs.security.Group": {
                     "$DBObject": [
                         {
@@ -227,12 +233,24 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "name": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "parentRights": {
+                            "ValidateIsArray": [
+                                {
+                                    "optional": true,
+                                    "type": "function"
+                                }
+                            ],
                             "JoinTable": [],
                             "ManyToMany": [
                                 "function",
@@ -240,6 +258,12 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "rights": {
+                            "ValidateIsArray": [
+                                {
+                                    "optional": true,
+                                    "type": "function"
+                                }
+                            ],
                             "JoinTable": [],
                             "ManyToMany": [
                                 "function",
@@ -247,6 +271,12 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "users": {
+                            "ValidateIsArray": [
+                                {
+                                    "optional": true,
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToMany": [
                                 "function",
                                 "function"
@@ -256,7 +286,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/ParentRight.ts": {
-                "date": 1656072588000,
+                "date": 1681322761219,
                 "jassijs.security.ParentRight": {
                     "$DBObject": [
                         {
@@ -265,15 +295,27 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryGeneratedColumn": []
                         },
                         "name": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "classname": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "i1": {
+                            "ValidateIsNumber": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -281,6 +323,11 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "i2": {
+                            "ValidateIsNumber": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -288,6 +335,11 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "s1": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -295,6 +347,11 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "s2": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -302,6 +359,12 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "groups": {
+                            "ValidateIsArray": [
+                                {
+                                    "optional": true,
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToMany": [
                                 "function",
                                 "function"
@@ -311,7 +374,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/Right.ts": {
-                "date": 1656072608000,
+                "date": 1681322767135,
                 "jassijs.security.Right": {
                     "$DBObject": [
                         {
@@ -320,12 +383,24 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "name": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "groups": {
+                            "ValidateIsArray": [
+                                {
+                                    "optional": true,
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToMany": [
                                 "function",
                                 "function"
@@ -339,7 +414,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.security.Rights": {}
             },
             "jassijs/remote/security/Setting.ts": {
-                "date": 1656072620000,
+                "date": 1681316435162,
                 "jassijs.security.Setting": {
                     "$DBObject": [
                         {
@@ -348,9 +423,19 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "data": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -361,7 +446,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/User.ts": {
-                "date": 1656072626000,
+                "date": 1681322774491,
                 "jassijs.security.User": {
                     "$DBObject": [
                         {
@@ -370,12 +455,23 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
+                            "ValidateIsNumber": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryGeneratedColumn": []
                         },
                         "email": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "password": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "select": false
@@ -383,6 +479,12 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "groups": {
+                            "ValidateIsArray": [
+                                {
+                                    "optional": true,
+                                    "type": "function"
+                                }
+                            ],
                             "JoinTable": [],
                             "ManyToMany": [
                                 "function",
@@ -390,6 +492,11 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "isAdmin": {
+                            "ValidateIsBoolean": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -400,12 +507,66 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1680948998750,
-                "jassijs.remote.Server": {}
+                "date": 1681323038084,
+                "jassijs.remote.Server": {
+                    "@members": {
+                        "dir": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "zip": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "loadFiles": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "loadFile": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "saveFiles": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "saveFile": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "testServersideFile": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "removeServerModul": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "delete": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "rename": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "createFile": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "createFolder": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "createModule": {
+                            "ValidateFunctionParameter": []
+                        }
+                    }
+                }
             },
             "jassijs/remote/Settings.ts": {
-                "date": 1680946807085,
-                "jassijs.remote.Settings": {}
+                "date": 1681315774171,
+                "jassijs.remote.Settings": {
+                    "@members": {
+                        "remove": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "save": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "saveAll": {
+                            "ValidateFunctionParameter": []
+                        }
+                    }
+                }
             },
             "jassijs/remote/Test.ts": {
                 "date": 1655556930000,
@@ -725,7 +886,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Databinder.ts": {
-                "date": 1655843330000,
+                "date": 1681149723611,
                 "jassijs.ui.Databinder": {
                     "$UIComponent": [
                         {
@@ -826,7 +987,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1680708467637,
+                "date": 1681124951985,
                 "jassijs/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -1453,7 +1614,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655668838000
             },
             "jassijs/util/CSVImport.ts": {
-                "date": 1657658974000,
+                "date": 1681238809273,
                 "jassijs.util.CSVImport": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1567,7 +1728,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Validator.ts": {
-                "date": 1680723591109
+                "date": 1681322647268
             },
             "jassijs/remote/Serverservice.ts": {
                 "date": 1680954695071
@@ -2511,7 +2672,7 @@ define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ui/Component"
     }
     exports.login = login;
     function test() {
-        login();
+        //  login();
     }
     exports.test = test;
 });
@@ -3542,8 +3703,8 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
                 return undefined;
             return DBObject_1.cache[classname][id.toString()];
         }
-        async validate(options) {
-            var ret = (0, Validator_1.validate)(this, options);
+        async validate(options = undefined, throwError = false) {
+            var ret = (0, Validator_1.validate)(this, options, throwError);
             return ret;
         }
         static addToCache(ob) {
@@ -3610,6 +3771,12 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
         * save the object to jassijs.db
         */
         async save(context = undefined) {
+            await this.validate({
+                delegateOptions: {
+                    ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] },
+                    ValidateIsArray: { alternativeJsonProperties: ["id"] }
+                }
+            });
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 if (this.id !== undefined) {
                     var cname = Classes_6.classes.getClassName(this);
@@ -3841,75 +4008,10 @@ define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Registr
     var db = new Database();
     exports.db = db;
 });
-//@ts-ignore
-define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_19) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.$Serverservice = exports.beforeServiceLoad = void 0;
-    class ServerserviceProperties {
-    }
-    var runningServerservices = {};
-    exports.runningServerservices = runningServerservices;
-    var beforeServiceLoadHandler = [];
-    function beforeServiceLoad(func) {
-        beforeServiceLoadHandler.push(func);
-    }
-    exports.beforeServiceLoad = beforeServiceLoad;
-    var serverservices = new Proxy(runningServerservices, {
-        get(target, prop, receiver) {
-            return new Promise(async (resolve, reject) => {
-                var khsdf = runningServerservices;
-                if (target[prop]) {
-                    resolve(target[prop]);
-                }
-                else {
-                    var all = await Registry_19.default.getJSONData("$Serverservice");
-                    for (var x = 0; x < all.length; x++) {
-                        var serv = all[x];
-                        var name = serv.params[0].name;
-                        if (name === prop) {
-                            var classname = serv.classname;
-                            var cl = await Registry_19.default.getJSONData("$Class", classname);
-                            if (require.main) { //nodes load project class from module
-                                /*for (var jfile in require.cache) {
-                                    if(jfile.replaceAll("\\","/").endsWith(serv.filename.substring(0,serv.filename.length-2)+"js")){
-                                        delete require.cache[jfile];
-                                    }
-                                }*/
-                                //@ts-ignore
-                                await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
-                            }
-                            else {
-                                await new Promise((resolve_7, reject_7) => { require([classname.replaceAll(".", "/")], resolve_7, reject_7); });
-                            }
-                            var props = Registry_19.default.getData("$Serverservice", classname)[0].params[0];
-                            for (var x = 0; x < beforeServiceLoadHandler.length; x++) {
-                                await beforeServiceLoadHandler[x](prop, props);
-                            }
-                            var instance = props.getInstance();
-                            target[prop] = instance;
-                            resolve(instance);
-                            return;
-                        }
-                    }
-                }
-                reject("serverservice not found:" + prop);
-            });
-        }
-    });
-    exports.serverservices = serverservices;
-    function $Serverservice(properties) {
-        return function (pclass) {
-            Registry_19.default.register("$Serverservice", pclass, properties);
-        };
-    }
-    exports.$Serverservice = $Serverservice;
-    var doNotReloadModule = true;
-    exports.doNotReloadModule = doNotReloadModule;
-});
-define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Classes", "jassijs/remote/Serverservice"], function (require, exports, Registry_20, RemoteObject_2, Classes_9, Serverservice_2) {
+define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_19, RemoteObject_2, Classes_9, Serverservice_2, Validator_2) {
     "use strict";
     var DatabaseTools_1;
+    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DatabaseTools = void 0;
     let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_2.RemoteObject {
@@ -3936,25 +4038,33 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Re
             return await DatabaseTools_1.runSQL("DROP TABLE " + tables.join(","));
         }
     };
+    __decorate([
+        (0, Validator_2.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_2.ValidateIsString)()),
+        __param(1, (0, Validator_2.ValidateIsArray)({ optional: true })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, Array, typeof (_a = typeof RemoteObject_2.Context !== "undefined" && RemoteObject_2.Context) === "function" ? _a : Object]),
+        __metadata("design:returntype", Promise)
+    ], DatabaseTools, "runSQL", null);
     DatabaseTools = DatabaseTools_1 = __decorate([
-        (0, Registry_20.$Class)("jassijs.remote.DatabaseTools")
+        (0, Registry_19.$Class)("jassijs.remote.DatabaseTools")
     ], DatabaseTools);
     exports.DatabaseTools = DatabaseTools;
     async function test() {
         /*  var h=await DatabaseTools.runSQL('DROP TABLE :p1,:p2',[
                               {p1:"te_person2",
                                           p2:"tg_person"}]);//,"te_person2"]);*/
-        //var h=await DatabaseTools.runSQL('select * from $1'); 
+        //var h=await DatabaseTools.runSQL('select * from jassijs_rights'); 
     }
     exports.test = test;
 });
-define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_21) {
+define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_20) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extensions = exports.Extensions = exports.$Extension = void 0;
     function $Extension(forclass) {
         return function (pclass) {
-            Registry_21.default.register("$Extension", pclass, forclass);
+            Registry_20.default.register("$Extension", pclass, forclass);
         };
     }
     exports.$Extension = $Extension;
@@ -3968,10 +4078,10 @@ define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Regis
     }
     class Extensions {
         constructor() {
-            this.funcRegister = Registry_21.default.onregister("$Extension", this.register.bind(this));
+            this.funcRegister = Registry_20.default.onregister("$Extension", this.register.bind(this));
         }
         destroy() {
-            Registry_21.default.offregister("$Extension", this.funcRegister);
+            Registry_20.default.offregister("$Extension", this.funcRegister);
         }
         annotate(oclass, ...annotations) {
             throw new Error("not implemented yet");
@@ -3979,7 +4089,7 @@ define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Regis
         register(extensionclass, forclass) {
             //TODO reloading???
             //we must wait with to extent because forclass ist not loaded
-            var func = Registry_21.default.onregister("$Class", function (oclass, params) {
+            var func = Registry_20.default.onregister("$Class", function (oclass, params) {
                 if (oclass.prototype.constructor._classname === forclass) {
                     // reloading code-> registry.offregister("$Class", func);
                     let props = Object.getOwnPropertyNames(extensionclass.prototype);
@@ -4005,9 +4115,9 @@ define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Regis
             //  alert(forclass);
         }
         annotateMember(classname, member, type, ...annotations) {
-            var func = Registry_21.default.onregister("$Class", function (oclass, params) {
+            var func = Registry_20.default.onregister("$Class", function (oclass, params) {
                 if (oclass.prototype.constructor._classname === classname) {
-                    Registry_21.default.offregister("$Class", func);
+                    Registry_20.default.offregister("$Class", func);
                     //designtype
                     Reflect["metadata"]("design:type", type)(oclass.prototype, member);
                     for (var x = 0; x < annotations.length; x++) {
@@ -4022,7 +4132,7 @@ define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Regis
     var extensions = new Extensions();
     exports.extensions = extensions;
 });
-define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_22) {
+define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_21) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.FileNode = void 0;
@@ -4051,7 +4161,7 @@ define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Registr
         }
     };
     FileNode = __decorate([
-        (0, Registry_22.$Class)("jassijs.remote.FileNode"),
+        (0, Registry_21.$Class)("jassijs.remote.FileNode"),
         __metadata("design:paramtypes", [String])
     ], FileNode);
     exports.FileNode = FileNode;
@@ -4465,7 +4575,7 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
             //@ts-ignore
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
                 //@ts-ignore
-                var fs = await new Promise((resolve_8, reject_8) => { require(['fs'], resolve_8, reject_8); });
+                var fs = await new Promise((resolve_7, reject_7) => { require(['fs'], resolve_7, reject_7); });
                 modultext = fs.readFileSync("./jassijs.json", 'utf-8');
                 var modules = JSON.parse(modultext).modules;
                 for (let modul in modules) {
@@ -4664,7 +4774,7 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
     exports.migrateModul = migrateModul;
 });
 //jassijs.registry=registry;
-define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, Registry_23, Classes_10, RemoteProtocol_1) {
+define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, Registry_22, Classes_10, RemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteObject = exports.Context = void 0;
@@ -4720,11 +4830,11 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Reg
         }
     };
     RemoteObject = __decorate([
-        (0, Registry_23.$Class)("jassijs.remote.RemoteObject")
+        (0, Registry_22.$Class)("jassijs.remote.RemoteObject")
     ], RemoteObject);
     exports.RemoteObject = RemoteObject;
 });
-define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_24, Classes_11) {
+define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_23, Classes_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteProtocol = void 0;
@@ -4762,12 +4872,12 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
             });
         }
         static async simulateUser(user = undefined, password = undefined) {
-            var rights = (await new Promise((resolve_9, reject_9) => { require(["jassijs/remote/security/Rights"], resolve_9, reject_9); })).default;
+            var rights = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/security/Rights"], resolve_8, reject_8); })).default;
             //	if(await rights.isAdmin()){
             //		throw new Error("not an admin")
             //	}
             //@ts-ignore
-            var Cookies = (await new Promise((resolve_10, reject_10) => { require(["jassijs/util/Cookies"], resolve_10, reject_10); })).Cookies;
+            var Cookies = (await new Promise((resolve_9, reject_9) => { require(["jassijs/util/Cookies"], resolve_9, reject_9); })).Cookies;
             if (user === undefined) {
                 Cookies.remove("simulateUser", {});
                 Cookies.remove("simulateUserPassword", {});
@@ -4820,7 +4930,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                 if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                     redirect = new Promise((resolve) => {
                         //@ts-ignore
-                        new Promise((resolve_11, reject_11) => { require(["jassijs/base/LoginDialog"], resolve_11, reject_11); }).then((lib) => {
+                        new Promise((resolve_10, reject_10) => { require(["jassijs/base/LoginDialog"], resolve_10, reject_10); }).then((lib) => {
                             lib.doAfterLogin(resolve, _this);
                         });
                     });
@@ -4928,7 +5038,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
     };
     RemoteProtocol.counter = 0;
     RemoteProtocol = __decorate([
-        (0, Registry_24.$Class)("jassijs.remote.RemoteProtocol")
+        (0, Registry_23.$Class)("jassijs.remote.RemoteProtocol")
     ], RemoteProtocol);
     exports.RemoteProtocol = RemoteProtocol;
     class A {
@@ -4938,9 +5048,76 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
     }
 });
 //jassijs.register("classes", "de.B", B);
-define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "jassijs/remote/Classes", "jassijs/remote/Serverservice"], function (require, exports, Registry_25, RemoteObject_3, FileNode_1, Classes_12, Serverservice_3) {
+//@ts-ignore
+define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_24) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.$Serverservice = exports.beforeServiceLoad = void 0;
+    class ServerserviceProperties {
+    }
+    var runningServerservices = {};
+    exports.runningServerservices = runningServerservices;
+    var beforeServiceLoadHandler = [];
+    function beforeServiceLoad(func) {
+        beforeServiceLoadHandler.push(func);
+    }
+    exports.beforeServiceLoad = beforeServiceLoad;
+    var serverservices = new Proxy(runningServerservices, {
+        get(target, prop, receiver) {
+            return new Promise(async (resolve, reject) => {
+                var khsdf = runningServerservices;
+                if (target[prop]) {
+                    resolve(target[prop]);
+                }
+                else {
+                    var all = await Registry_24.default.getJSONData("$Serverservice");
+                    for (var x = 0; x < all.length; x++) {
+                        var serv = all[x];
+                        var name = serv.params[0].name;
+                        if (name === prop) {
+                            var classname = serv.classname;
+                            var cl = await Registry_24.default.getJSONData("$Class", classname);
+                            if (require.main) { //nodes load project class from module
+                                /*for (var jfile in require.cache) {
+                                    if(jfile.replaceAll("\\","/").endsWith(serv.filename.substring(0,serv.filename.length-2)+"js")){
+                                        delete require.cache[jfile];
+                                    }
+                                }*/
+                                //@ts-ignore
+                                await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
+                            }
+                            else {
+                                await new Promise((resolve_11, reject_11) => { require([classname.replaceAll(".", "/")], resolve_11, reject_11); });
+                            }
+                            var props = Registry_24.default.getData("$Serverservice", classname)[0].params[0];
+                            for (var x = 0; x < beforeServiceLoadHandler.length; x++) {
+                                await beforeServiceLoadHandler[x](prop, props);
+                            }
+                            var instance = props.getInstance();
+                            target[prop] = instance;
+                            resolve(instance);
+                            return;
+                        }
+                    }
+                }
+                reject("serverservice not found:" + prop);
+            });
+        }
+    });
+    exports.serverservices = serverservices;
+    function $Serverservice(properties) {
+        return function (pclass) {
+            Registry_24.default.register("$Serverservice", pclass, properties);
+        };
+    }
+    exports.$Serverservice = $Serverservice;
+    var doNotReloadModule = true;
+    exports.doNotReloadModule = doNotReloadModule;
+});
+define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_25, RemoteObject_3, FileNode_1, Classes_12, Serverservice_3, Validator_3) {
     "use strict";
     var Server_2;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Server = void 0;
     let Server = Server_2 = class Server extends RemoteObject_3.RemoteObject {
@@ -5107,7 +5284,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_12.JassiError("only admins can loadFile from Serverdirectory");
-                var rett = (await Serverservice_3.serverservices.filesystem).loadFile(fileName);
+                var rett = await (await Serverservice_3.serverservices.filesystem).loadFile(fileName);
                 return rett;
             }
         }
@@ -5185,7 +5362,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
        **/
         async testServersideFile(name, context = undefined) {
             if (!name.startsWith("$serverside/"))
-                throw new Classes_12.JassiError(name + " i not a serverside file");
+                throw new Classes_12.JassiError(name + " is not a serverside file");
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 var ret = await this.call(this, this.testServersideFile, name, context);
                 //@ts-ignore
@@ -5332,6 +5509,101 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
     Server.lastTestServersideFileResult = undefined;
     //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsBoolean)({ optional: true })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Boolean, typeof (_a = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _a : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "dir", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __param(1, (0, Validator_3.ValidateIsBoolean)({ optional: true })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, Boolean, typeof (_b = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _b : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "zip", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsArray)({ type: tp => String })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array, typeof (_c = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _c : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "loadFiles", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, typeof (_d = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _d : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "loadFile", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsArray)({ type: type => String })),
+        __param(1, (0, Validator_3.ValidateIsArray)({ type: type => String })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array, Array, typeof (_e = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _e : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "saveFiles", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __param(1, (0, Validator_3.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String, typeof (_f = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _f : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "saveFile", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, typeof (_g = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _g : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "testServersideFile", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, typeof (_h = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _h : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "removeServerModul", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, typeof (_j = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _j : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "delete", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __param(1, (0, Validator_3.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String, typeof (_k = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _k : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "rename", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String, typeof (_l = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _l : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "createFile", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, typeof (_m = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _m : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "createFolder", null);
+    __decorate([
+        (0, Validator_3.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_3.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, typeof (_o = typeof RemoteObject_3.Context !== "undefined" && RemoteObject_3.Context) === "function" ? _o : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "createModule", null);
     Server = Server_2 = __decorate([
         (0, Registry_25.$Class)("jassijs.remote.Server"),
         __metadata("design:paramtypes", [])
@@ -5408,9 +5680,10 @@ define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Registry"],
     ], Test);
     exports.Test = Test;
 });
-define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "jassijs/remote/Server", "jassijs/remote/Serverservice"], function (require, exports, Registry_27, Registry_28, RemoteObject_4, Setting_1, Server_3, Serverservice_4) {
+define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "jassijs/remote/Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_27, Registry_28, RemoteObject_4, Setting_1, Server_3, Serverservice_4, Validator_4) {
     "use strict";
     var Settings_2;
+    var _a, _b, _c, _d;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.load = exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
     const proxyhandler = {
@@ -5566,6 +5839,30 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
     Settings.browserSettings = undefined;
     Settings.userSettings = undefined;
     Settings.allusersSettings = undefined;
+    __decorate([
+        (0, Validator_4.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_4.ValidateIsString)()),
+        __param(1, (0, Validator_4.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String, typeof (_a = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _a : Object]),
+        __metadata("design:returntype", Promise)
+    ], Settings, "remove", null);
+    __decorate([
+        (0, Validator_4.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_4.ValidateIsString)()),
+        __param(2, (0, Validator_4.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, typeof (_c = typeof T !== "undefined" && T) === "function" ? _c : Object, String]),
+        __metadata("design:returntype", Promise)
+    ], Settings, "save", null);
+    __decorate([
+        (0, Validator_4.ValidateFunctionParameter)(),
+        __param(1, (0, Validator_4.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+        __param(2, (0, Validator_4.ValidateIsBoolean)({ optional: true })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, String, Object, typeof (_d = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _d : Object]),
+        __metadata("design:returntype", Promise)
+    ], Settings, "saveAll", null);
     Settings = Settings_2 = __decorate([
         (0, Registry_27.$Class)("jassijs.remote.Settings")
     ], Settings);
@@ -5757,7 +6054,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
 define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.validate = exports.ValidateFunctionParameter = exports.ValidationError = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.registerValidation = exports.ValidationOptions = void 0;
+    exports.test = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsNumber = exports.ValidationIsNumberOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateIsInstanceOf = exports.ValidationIsInstanceOfOptions = exports.ValidateIsIn = exports.ValidationIsInOptions = exports.ValidateFunctionParameter = exports.ValidateIsDate = exports.ValidationIsDateOptions = exports.ValidateIsBoolean = exports.ValidationIsBooleanOptions = exports.ValidateIsArray = exports.ValidationIsArrayOptions = exports.validate = exports.ValidationError = exports.registerValidation = exports.ValidationOptions = void 0;
     const paramMetadataKey = Symbol("paramMetadataKey");
     class ValidationOptions {
     }
@@ -5777,50 +6074,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
         };
     }
     exports.registerValidation = registerValidation;
-    class ValidationMaxOptions extends ValidationOptions {
-    }
-    exports.ValidationMaxOptions = ValidationMaxOptions;
-    function ValidateMax(options) {
-        return registerValidation("ValidateMax", options, (target, propertyName, val) => {
-            if ((options === null || options === void 0 ? void 0 : options.max) && val > (options === null || options === void 0 ? void 0 : options.max))
-                return "value {value} is not longer then {max}";
-        });
-    }
-    exports.ValidateMax = ValidateMax;
-    class ValidationMinOptions extends ValidationOptions {
-    }
-    exports.ValidationMinOptions = ValidationMinOptions;
-    function ValidateMin(options) {
-        return registerValidation("ValidateMin", options, (target, propertyName, val) => {
-            if ((options === null || options === void 0 ? void 0 : options.min) && val < (options === null || options === void 0 ? void 0 : options.min))
-                return "value {value} is not smaller then {min}";
-        });
-    }
-    exports.ValidateMin = ValidateMin;
-    class ValidationIsIntOptions extends ValidationOptions {
-    }
-    exports.ValidationIsIntOptions = ValidationIsIntOptions;
-    function ValidateIsInt(options) {
-        return registerValidation("ValidateIsInt", options, (target, propertyName, val) => {
-            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
-                return undefined;
-            if (!Number.isInteger(val))
-                return "value {value} is not an Integer";
-        });
-    }
-    exports.ValidateIsInt = ValidateIsInt;
-    class ValidationIsStringOptions extends ValidationOptions {
-    }
-    exports.ValidationIsStringOptions = ValidationIsStringOptions;
-    function ValidateIsString(options) {
-        return registerValidation("ValidateIsInt", options, (target, propertyName, val) => {
-            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
-                return undefined;
-            if (typeof val !== 'string' && !(val instanceof String))
-                return "value {value} is not a String";
-        });
-    }
-    exports.ValidateIsString = ValidateIsString;
     function translateMessage(msg, rule, property, target, value, options) {
         if (msg === undefined)
             return undefined;
@@ -5842,32 +6095,10 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
         }
     }
     exports.ValidationError = ValidationError;
-    function ValidateFunctionParameter() {
-        return (target, propertyName, descriptor) => {
-            let method = descriptor.value;
-            descriptor.value = function () {
-                //@ts-ignore
-                let params = Reflect.getOwnMetadata(paramMetadataKey, target, propertyName);
-                if (params) {
-                    for (var p in params) {
-                        for (var rule in params[p]) {
-                            //@ts-ignore
-                            var arg = (p > arguments.length) ? undefined : arguments[p];
-                            var val = arguments[p];
-                            var func = params[p][rule].func;
-                            var err = func(target, propertyName, val);
-                            var test = translateMessage(err, rule, propertyName, target, val, params[p][rule].options);
-                            if (test !== undefined)
-                                throw new Error(test);
-                        }
-                    }
-                }
-                return method.apply(this, arguments);
-            };
-        };
+    class ValidateOptions {
     }
-    exports.ValidateFunctionParameter = ValidateFunctionParameter;
     function validate(obj, options = undefined, raiseError = undefined) {
+        var _a, _b;
         var ret = [];
         var target = obj.__proto__;
         for (var propertyName in obj) {
@@ -5879,7 +6110,14 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                         //@ts-ignore
                         var val = obj[propertyName];
                         var func = params[p][rule].func;
-                        var err = func(target, propertyName, val);
+                        var opts = Object.assign({}, params[p][rule].options);
+                        if ((_a = options === null || options === void 0 ? void 0 : options.delegateOptions) === null || _a === void 0 ? void 0 : _a.ALL) {
+                            opts = Object.assign(opts, (_b = options === null || options === void 0 ? void 0 : options.delegateOptions) === null || _b === void 0 ? void 0 : _b.ALL);
+                        }
+                        if ((options === null || options === void 0 ? void 0 : options.delegateOptions) && (options === null || options === void 0 ? void 0 : options.delegateOptions[rule])) {
+                            opts = Object.assign(opts, options === null || options === void 0 ? void 0 : options.delegateOptions[rule]);
+                        }
+                        var err = func(target, propertyName, val, opts);
                         var test = translateMessage(err, rule, propertyName, obj, val, params[p][rule].options);
                         if (test !== undefined)
                             ret.push(new ValidationError(val, target, propertyName, test));
@@ -5895,7 +6133,194 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
         return ret;
     }
     exports.validate = validate;
+    class ValidationIsArrayOptions extends ValidationOptions {
+    }
+    exports.ValidationIsArrayOptions = ValidationIsArrayOptions;
+    function ValidateIsArray(options) {
+        return registerValidation("ValidateIsArray", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (!Array.isArray(val))
+                return "value {value} is not an array";
+            if (options === null || options === void 0 ? void 0 : options.type) {
+                for (var x = 0; x < val.length; x++) {
+                    var tp = options.type();
+                    if (val[x] !== undefined && !(val[x] instanceof tp)) {
+                        if (typeof val[x] === 'string' && tp == String)
+                            continue;
+                        if (typeof val[x] === 'number' && tp == Number)
+                            continue;
+                        if (typeof val[x] === 'boolean' && tp == Boolean)
+                            continue;
+                        if (options === null || options === void 0 ? void 0 : options.alternativeJsonProperties) {
+                            for (var x = 0; x < options.alternativeJsonProperties.length; x++) {
+                                var key = options.alternativeJsonProperties[x];
+                                if (val[x][key] === undefined)
+                                    return propertyName + " is not array of type " + tp.name;
+                            }
+                        }
+                        else
+                            return "value {value} is not an array ot type " + tp.name;
+                    }
+                }
+            }
+        });
+    }
+    exports.ValidateIsArray = ValidateIsArray;
+    class ValidationIsBooleanOptions extends ValidationOptions {
+    }
+    exports.ValidationIsBooleanOptions = ValidationIsBooleanOptions;
+    function ValidateIsBoolean(options) {
+        return registerValidation("ValidateIsBoolean", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (typeof val !== 'boolean')
+                return propertyName + " is not a Boolean";
+        });
+    }
+    exports.ValidateIsBoolean = ValidateIsBoolean;
+    class ValidationIsDateOptions extends ValidationOptions {
+    }
+    exports.ValidationIsDateOptions = ValidationIsDateOptions;
+    function ValidateIsDate(options) {
+        return registerValidation("ValidateIsDate", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (!(val instanceof Date && !isNaN(val.valueOf())))
+                return propertyName + " is not a date";
+        });
+    }
+    exports.ValidateIsDate = ValidateIsDate;
+    function ValidateFunctionParameter() {
+        return (target, propertyName, descriptor, options) => {
+            let method = descriptor.value;
+            if (method === undefined)
+                throw new Error("sdfgsdfgsfd");
+            const funcname = method.name;
+            const { [funcname]: newfunc } = {
+                [funcname]: function () {
+                    //@ts-ignore
+                    let params = Reflect.getOwnMetadata(paramMetadataKey, target, propertyName);
+                    if (params) {
+                        for (var p in params) {
+                            for (var rule in params[p]) {
+                                //@ts-ignore
+                                var arg = (p > arguments.length) ? undefined : arguments[p];
+                                var val = arguments[p];
+                                var func = params[p][rule].func;
+                                var opt = params[p][rule].options;
+                                var err = func(target, "parameter " + p, val, opt);
+                                var test = translateMessage(err, rule, propertyName, target, val, params[p][rule].options);
+                                if (test !== undefined)
+                                    throw new Error(test);
+                            }
+                        }
+                    }
+                    return method.apply(this, arguments);
+                }
+            };
+            descriptor.value = newfunc;
+        };
+    }
+    exports.ValidateFunctionParameter = ValidateFunctionParameter;
+    class ValidationIsInOptions extends ValidationOptions {
+    }
+    exports.ValidationIsInOptions = ValidationIsInOptions;
+    function ValidateIsIn(options) {
+        return registerValidation("ValidateIsIn", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (options.in.indexOf(val) === -1)
+                return propertyName + " is not valid";
+        });
+    }
+    exports.ValidateIsIn = ValidateIsIn;
+    class ValidationIsInstanceOfOptions extends ValidationOptions {
+    }
+    exports.ValidationIsInstanceOfOptions = ValidationIsInstanceOfOptions;
+    function ValidateIsInstanceOf(options) {
+        return registerValidation("ValidateIsInstanceOf", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            var tp = options.type();
+            if (!(val instanceof tp)) {
+                if (options === null || options === void 0 ? void 0 : options.alternativeJsonProperties) {
+                    for (var x = 0; x < options.alternativeJsonProperties.length; x++) {
+                        var key = options.alternativeJsonProperties[x];
+                        if (val[key] === undefined)
+                            return propertyName + " is not of type " + tp.name;
+                    }
+                }
+                else
+                    return propertyName + " is not of type " + tp.name;
+            }
+        });
+    }
+    exports.ValidateIsInstanceOf = ValidateIsInstanceOf;
+    class ValidationIsIntOptions extends ValidationOptions {
+    }
+    exports.ValidationIsIntOptions = ValidationIsIntOptions;
+    function ValidateIsInt(options) {
+        return registerValidation("ValidateIsInt", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (!Number.isInteger(val))
+                return propertyName + " is not an Integer";
+        });
+    }
+    exports.ValidateIsInt = ValidateIsInt;
+    class ValidationMaxOptions extends ValidationOptions {
+    }
+    exports.ValidationMaxOptions = ValidationMaxOptions;
+    function ValidateMax(options) {
+        return registerValidation("ValidateMax", options, (target, propertyName, val, options) => {
+            if ((options === null || options === void 0 ? void 0 : options.max) && val > (options === null || options === void 0 ? void 0 : options.max))
+                return "value {value} is not longer then {max}";
+        });
+    }
+    exports.ValidateMax = ValidateMax;
+    class ValidationMinOptions extends ValidationOptions {
+    }
+    exports.ValidationMinOptions = ValidationMinOptions;
+    function ValidateMin(options) {
+        return registerValidation("ValidateMin", options, (target, propertyName, val, options) => {
+            if ((options === null || options === void 0 ? void 0 : options.min) && val < (options === null || options === void 0 ? void 0 : options.min))
+                return "value {value} is not smaller then {min}";
+        });
+    }
+    exports.ValidateMin = ValidateMin;
+    class ValidationIsNumberOptions extends ValidationOptions {
+    }
+    exports.ValidationIsNumberOptions = ValidationIsNumberOptions;
+    function ValidateIsNumber(options) {
+        return registerValidation("ValidateIsNumber", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (!(typeof val === 'number' && isFinite(val)))
+                return propertyName + " is not a Number";
+        });
+    }
+    exports.ValidateIsNumber = ValidateIsNumber;
+    class ValidationIsStringOptions extends ValidationOptions {
+    }
+    exports.ValidationIsStringOptions = ValidationIsStringOptions;
+    function ValidateIsString(options) {
+        return registerValidation("ValidateIsInt", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (typeof val !== 'string' && !(val instanceof String))
+                return propertyName + " is not a String";
+        });
+    }
+    exports.ValidateIsString = ValidateIsString;
     class TestSample {
+        constructor() {
+            this.test = this;
+            this.testarr = [this];
+            this.num = 9.1;
+            this.bol = true;
+            this.inprop = 1;
+        }
         async call(num, text = undefined) {
             return num;
         }
@@ -5918,6 +6343,26 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
         ValidateIsString({ optional: true, message: "no string" }),
         __metadata("design:type", Object)
     ], TestSample.prototype, "str", void 0);
+    __decorate([
+        ValidateIsInstanceOf({ type: t => TestSample }),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "test", void 0);
+    __decorate([
+        ValidateIsArray({ type: t => TestSample }),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "testarr", void 0);
+    __decorate([
+        ValidateIsNumber(),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "num", void 0);
+    __decorate([
+        ValidateIsBoolean(),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "bol", void 0);
+    __decorate([
+        ValidateIsIn({ in: [1, "2", "3"] }),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "inprop", void 0);
     async function test(test) {
         var obj = new TestSample();
         obj.id = 8;
@@ -5939,8 +6384,47 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
         test.expectEqual(validate(obj)[0].message === "no string");
         test.expectEqual(await obj.call(8, "ok") === 8);
         test.expectError(() => obj.call("8", 8));
+        test.expectEqual(await obj.call(8, "ok") === 8);
+        obj.str = "kk";
+        test.expectEqual(validate(obj).length === 0);
+        obj.num = "1.2";
+        test.expectError(() => validate(obj, undefined, true));
+        obj.num = 1.2;
+        obj.testarr = 8;
+        test.expectError(() => validate(obj, undefined, true));
+        obj.testarr = [8];
+        test.expectError(() => validate(obj, undefined, true));
+        obj.testarr = [];
+        test.expectEqual(validate(obj).length === 0);
+        obj.bol = "";
+        test.expectError(() => validate(obj, undefined, true));
+        obj.bol = true;
+        test.expectEqual(validate(obj).length === 0);
+        obj.test = { kk: 9 };
+        test.expectError(() => validate(obj, undefined, true));
+        obj.test = { id: 9 };
+        test.expectEqual(validate(obj, {
+            delegateOptions: {
+                ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] }
+            }
+        }).length === 0);
+        obj.test = obj;
+        obj.testarr = [{ id: 8 }];
+        test.expectError(() => validate(obj, undefined, true));
+        test.expectEqual(validate(obj, {
+            delegateOptions: {
+                ValidateIsArray: { alternativeJsonProperties: ["id"] }
+            }
+        }).length === 0);
+        obj.testarr = [];
+        test.expectEqual(validate(obj).length === 0);
+        obj.inprop = 5;
+        test.expectError(() => validate(obj, undefined, true));
+        obj.inprop = "2";
+        test.expectEqual(validate(obj).length === 0);
     }
     exports.test = test;
+    var l;
 });
 define("jassijs/remote/hallo", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -5961,7 +6445,7 @@ define("jassijs/remote/hallo", ["require", "exports"], function (require, export
     }
     exports.OO = OO;
 });
-define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right"], function (require, exports, DBObject_2, Registry_30, DatabaseSchema_3, ParentRight_1, User_1, Right_1) {
+define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right", "jassijs/remote/Validator"], function (require, exports, DBObject_2, Registry_30, DatabaseSchema_3, ParentRight_1, User_1, Right_1, Validator_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Group = void 0;
@@ -5969,24 +6453,29 @@ define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/D
     let Group = class Group extends DBObject_2.DBObject {
     };
     __decorate([
+        (0, Validator_5.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_3.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Group.prototype, "id", void 0);
     __decorate([
+        (0, Validator_5.ValidateIsString)(),
         (0, DatabaseSchema_3.Column)(),
         __metadata("design:type", String)
     ], Group.prototype, "name", void 0);
     __decorate([
+        (0, Validator_5.ValidateIsArray)({ optional: true, type: type => ParentRight_1.ParentRight }),
         (0, DatabaseSchema_3.JoinTable)(),
         (0, DatabaseSchema_3.ManyToMany)(type => ParentRight_1.ParentRight, ob => ob.groups),
         __metadata("design:type", Array)
     ], Group.prototype, "parentRights", void 0);
     __decorate([
+        (0, Validator_5.ValidateIsArray)({ optional: true, type: type => Right_1.Right }),
         (0, DatabaseSchema_3.JoinTable)(),
         (0, DatabaseSchema_3.ManyToMany)(type => Right_1.Right, ob => ob.groups),
         __metadata("design:type", Array)
     ], Group.prototype, "rights", void 0);
     __decorate([
+        (0, Validator_5.ValidateIsArray)({ optional: true, type: type => User_1.User }),
         (0, DatabaseSchema_3.ManyToMany)(type => User_1.User, ob => ob.groups),
         __metadata("design:type", Array)
     ], Group.prototype, "users", void 0);
@@ -5996,7 +6485,7 @@ define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/D
     ], Group);
     exports.Group = Group;
 });
-define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group"], function (require, exports, DBObject_3, Registry_31, DatabaseSchema_4, Group_1) {
+define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_31, DatabaseSchema_4, Group_1, Validator_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ParentRight = void 0;
@@ -6004,34 +6493,42 @@ define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/re
     let ParentRight = class ParentRight extends DBObject_3.DBObject {
     };
     __decorate([
+        (0, Validator_6.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_4.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "id", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)(),
         (0, DatabaseSchema_4.Column)(),
         __metadata("design:type", String)
     ], ParentRight.prototype, "name", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)(),
         (0, DatabaseSchema_4.Column)(),
         __metadata("design:type", String)
     ], ParentRight.prototype, "classname", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_4.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "i1", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_4.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "i2", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_4.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], ParentRight.prototype, "s1", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_4.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], ParentRight.prototype, "s2", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsArray)({ optional: true, type: type => Group_1.Group }),
         (0, DatabaseSchema_4.ManyToMany)(type => Group_1.Group, ob => ob.parentRights),
         __metadata("design:type", Array)
     ], ParentRight.prototype, "groups", void 0);
@@ -6041,7 +6538,7 @@ define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/re
     ], ParentRight);
     exports.ParentRight = ParentRight;
 });
-define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group"], function (require, exports, DBObject_4, Registry_32, DatabaseSchema_5, Group_2) {
+define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_4, Registry_32, DatabaseSchema_5, Group_2, Validator_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Right = void 0;
@@ -6049,14 +6546,17 @@ define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/D
     let Right = class Right extends DBObject_4.DBObject {
     };
     __decorate([
+        (0, Validator_7.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_5.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Right.prototype, "id", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsString)(),
         (0, DatabaseSchema_5.Column)(),
         __metadata("design:type", String)
     ], Right.prototype, "name", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsArray)({ optional: true, type: type => Group_2.Group }),
         (0, DatabaseSchema_5.ManyToMany)(type => Group_2.Group, ob => ob.rights),
         __metadata("design:type", Array)
     ], Right.prototype, "groups", void 0);
@@ -6115,7 +6615,7 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
     var rights = new Rights();
     exports.default = rights;
 });
-define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Classes"], function (require, exports, DBObject_5, Registry_35, DatabaseSchema_6, Classes_13) {
+define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Classes", "jassijs/remote/Validator"], function (require, exports, DBObject_5, Registry_35, DatabaseSchema_6, Classes_13, Validator_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Setting = void 0;
@@ -6140,10 +6640,12 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
         }
     };
     __decorate([
+        (0, Validator_8.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_6.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Setting.prototype, "id", void 0);
     __decorate([
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Setting.prototype, "data", void 0);
@@ -6158,7 +6660,7 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
     exports.test = test;
     ;
 });
-define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight"], function (require, exports, DBObject_6, Registry_36, DatabaseSchema_7, Group_3, ParentRight_2) {
+define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight", "jassijs/remote/Validator"], function (require, exports, DBObject_6, Registry_36, DatabaseSchema_7, Group_3, ParentRight_2, Validator_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.User = void 0;
@@ -6179,23 +6681,28 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
         }
     };
     __decorate([
+        (0, Validator_9.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_7.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], User.prototype, "id", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)(),
         (0, DatabaseSchema_7.Column)(),
         __metadata("design:type", String)
     ], User.prototype, "email", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_7.Column)({ select: false }),
         __metadata("design:type", String)
     ], User.prototype, "password", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsArray)({ optional: true, type: type => Group_3.Group }),
         (0, DatabaseSchema_7.JoinTable)(),
         (0, DatabaseSchema_7.ManyToMany)(type => Group_3.Group, ob => ob.users),
         __metadata("design:type", Array)
     ], User.prototype, "groups", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsBoolean)({ optional: true }),
         (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], User.prototype, "isAdmin", void 0);
@@ -8793,30 +9300,20 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
         oncreated(handler) {
             this.addEvent("created", handler);
         }
-        doSave(ob) {
-            ob.save().then((obj) => {
-                this["value"] = typeof obj === "object" ? obj : ob;
-                this.callEvent("saved", ob);
-            });
-        }
-        async doValidation(ob) {
-            if (ob.validate) {
-                var validationerrors = await ob.validate();
-                if (validationerrors.length > 0) {
-                    (0, Notify_2.notify)("Could not save", "error", { position: "bottom right" });
-                    return false;
-                }
-            }
-            return true;
+        async doSave(ob) {
+            var obj = await ob.save();
+            this["value"] = typeof obj === "object" ? obj : ob;
+            this.callEvent("saved", ob);
         }
         /**
          * saves the object
          */
-        saveObject() {
-            var ob = this.me.databinder.fromForm();
-            this.doValidation(ob).then((success) => {
-                this.doSave(ob);
-            });
+        async saveObject() {
+            var ob = await this.me.databinder.fromForm();
+            if (ob !== undefined) {
+                await this.doSave(ob);
+                (0, Notify_2.notify)("saved");
+            }
         }
         onsaved(handler) {
             this.addEvent("saved", handler);
@@ -8836,6 +9333,8 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
          **/
         deleteObject() {
             var ob = this.me.databinder.fromForm();
+            if (ob === undefined)
+                return;
             ob.remove();
             //set obj to null
             var clname = Registry_61.default.getData("$DBObjectView", Classes_21.classes.getClassName(this))[0].params[0].classname;
@@ -9231,7 +9730,7 @@ define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPane
     }
     exports.test = test;
 });
-define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Database"], function (require, exports, InvisibleComponent_2, Component_14, Registry_64, Database_2) {
+define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Database", "jassijs/ui/Notify"], function (require, exports, InvisibleComponent_2, Component_14, Registry_64, Database_2, Notify_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Databinder = void 0;
@@ -9365,6 +9864,36 @@ define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComp
             else
                 this.toForm(obj);
         }
+        async doValidation(ob) {
+            var allErr = [];
+            if (ob.validate) {
+                for (var c = 0; c < this.components.length; c++) {
+                    var comp = this.components[c];
+                    comp.__dom.classList.remove("invalid");
+                }
+                var validationerrors = await ob.validate();
+                for (var x = 0; x < validationerrors.length; x++) {
+                    var err = validationerrors[x];
+                    for (var c = 0; c < this.components.length; c++) {
+                        var comp = this.components[c];
+                        var prop = this._properties[c];
+                        if (err.property === prop) {
+                            $(comp.__dom).notify(err.message, { position: 'bottom left', className: 'error' });
+                            comp.__dom.classList.add("invalid");
+                            //(<any>comp.__dom).setCustomValidity(err.message);
+                            //(<any>comp.__dom).reportValidity();
+                            allErr.push(err.message);
+                            break;
+                        }
+                    }
+                }
+                if (validationerrors.length > 0) {
+                    (0, Notify_3.notify)(allErr.join("\r\n"), "error", { position: "bottom right" });
+                    return false;
+                }
+            }
+            return true;
+        }
         /**
          * binds the object to all added components
          * @param {object} obj - the object to bind
@@ -9396,15 +9925,25 @@ define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComp
             }
             setter.finalizeSetProperty();
         }
+        async validateObject() {
+        }
         /**
          * gets the objectproperties from all added components
          * @return {object}
          */
-        fromForm() {
+        async fromForm() {
+            this.rollbackObject = {};
             if (this.userObject === undefined)
                 return undefined;
             for (var x = 0; x < this.components.length; x++) {
                 this._fromForm(x);
+            }
+            if (!await this.doValidation(this.userObject)) { //rollback
+                for (var x = 0; x < this.components.length; x++) {
+                    var prop = this._properties[x];
+                    new PropertyAccessor().setNestedProperty(this.userObject, prop, this.rollbackObject[prop]);
+                }
+                return undefined;
             }
             return this.userObject;
         }
@@ -9426,6 +9965,7 @@ define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComp
                     // if (comp["converter"] !== undefined) {
                     //     test = comp["converter"].stringToObject(test);
                     // }
+                    this.rollbackObject[prop] = new PropertyAccessor().getNestedProperty(this.userObject, prop);
                     new PropertyAccessor().setNestedProperty(this.userObject, prop, test);
                 }
             }
@@ -9958,7 +10498,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
     }
     exports.test = test;
 });
-define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/Notify", "jassijs/ui/Component"], function (require, exports, Panel_9, Errors_2, Registry_67, Button_5, Router_4, Actions_12, Notify_3, Component_15) {
+define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/Notify", "jassijs/ui/Component"], function (require, exports, Panel_9, Errors_2, Registry_67, Button_5, Router_4, Actions_12, Notify_4, Component_15) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.ErrorPanel = void 0;
@@ -10023,7 +10563,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
             await typescript.initService();
             var all = await typescript.getDiagnosticsForAll();
             if (all.length === 0)
-                (0, Notify_3.notify)("no Errors found", "info", { position: "right" });
+                (0, Notify_4.notify)("no Errors found", "info", { position: "right" });
             for (var x = 0; x < all.length; x++) {
                 var diag = all[x];
                 var s = diag.file.fileName;
@@ -17851,8 +18391,15 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
                             }
                             if (val === "#NV")
                                 val = undefined;
+                            if (mt === Date) {
+                                if (typeof val === "string")
+                                    val = new Date(val);
+                            }
                         }
                         if ((meta[fname].OneToOne || meta[fname].ManyToOne) && val !== undefined) {
+                            let cl = meta[fname].ManyToOne[0]();
+                            var nob = new cl();
+                            nob.id = val;
                             val = { id: val };
                         }
                         ob[fname] = val;
@@ -18258,7 +18805,7 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Re
     }
     exports.test = test;
 });
-define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Notify"], function (require, exports, Registry_122, Registry_123, Notify_4) {
+define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Notify"], function (require, exports, Registry_122, Registry_123, Notify_5) {
     "use strict";
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18289,7 +18836,7 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Registry"
                     for (var x = 0; x < len; x++) {
                         var file = h.files[x];
                         new Reloader_1().reloadJS(file);
-                        (0, Notify_4.notify)(file + " reloaded", "info", { position: "bottom right" });
+                        (0, Notify_5.notify)(file + " reloaded", "info", { position: "bottom right" });
                     }
                     window.setTimeout(f, 100000);
                 });

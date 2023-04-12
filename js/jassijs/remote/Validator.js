@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsNumber = exports.ValidationIsNumberOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateIsInstanceOf = exports.ValidationIsInstanceOfOptions = exports.ValidateFunctionParameter = exports.ValidateIsDate = exports.ValidationIsDateOptions = exports.ValidateIsBoolean = exports.ValidationIsBooleanOptions = exports.ValidateIsArray = exports.ValidationIsArrayOptions = exports.validate = exports.ValidationError = exports.registerValidation = exports.ValidationOptions = void 0;
+exports.test = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsNumber = exports.ValidationIsNumberOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateIsInstanceOf = exports.ValidationIsInstanceOfOptions = exports.ValidateIsIn = exports.ValidationIsInOptions = exports.ValidateFunctionParameter = exports.ValidateIsDate = exports.ValidationIsDateOptions = exports.ValidateIsBoolean = exports.ValidationIsBooleanOptions = exports.ValidateIsArray = exports.ValidationIsArrayOptions = exports.validate = exports.ValidationError = exports.registerValidation = exports.ValidationOptions = void 0;
 require("reflect-metadata");
 const paramMetadataKey = Symbol("paramMetadataKey");
 class ValidationOptions {
@@ -73,7 +73,7 @@ function validate(obj, options = undefined, raiseError = undefined) {
                     if ((_a = options === null || options === void 0 ? void 0 : options.delegateOptions) === null || _a === void 0 ? void 0 : _a.ALL) {
                         opts = Object.assign(opts, (_b = options === null || options === void 0 ? void 0 : options.delegateOptions) === null || _b === void 0 ? void 0 : _b.ALL);
                     }
-                    if (options === null || options === void 0 ? void 0 : options.delegateOptions[rule]) {
+                    if ((options === null || options === void 0 ? void 0 : options.delegateOptions) && (options === null || options === void 0 ? void 0 : options.delegateOptions[rule])) {
                         opts = Object.assign(opts, options === null || options === void 0 ? void 0 : options.delegateOptions[rule]);
                     }
                     var err = func(target, propertyName, val, opts);
@@ -103,22 +103,23 @@ function ValidateIsArray(options) {
             return "value {value} is not an array";
         if (options === null || options === void 0 ? void 0 : options.type) {
             for (var x = 0; x < val.length; x++) {
-                if (val[x] !== undefined && !(val[x] instanceof options.type)) {
-                    if (typeof val[x] === 'string' && options.type == String)
+                var tp = options.type();
+                if (val[x] !== undefined && !(val[x] instanceof tp)) {
+                    if (typeof val[x] === 'string' && tp == String)
                         continue;
-                    if (typeof val[x] === 'number' && options.type == Number)
+                    if (typeof val[x] === 'number' && tp == Number)
                         continue;
-                    if (typeof val[x] === 'boolean' && options.type == Boolean)
+                    if (typeof val[x] === 'boolean' && tp == Boolean)
                         continue;
                     if (options === null || options === void 0 ? void 0 : options.alternativeJsonProperties) {
                         for (var x = 0; x < options.alternativeJsonProperties.length; x++) {
                             var key = options.alternativeJsonProperties[x];
                             if (val[x][key] === undefined)
-                                return propertyName + " is not array of type " + options.type.name;
+                                return propertyName + " is not array of type " + tp.name;
                         }
                     }
                     else
-                        return "value {value} is not an array ot type " + options.type.name;
+                        return "value {value} is not an array ot type " + tp.name;
                 }
             }
         }
@@ -151,7 +152,6 @@ function ValidateIsDate(options) {
 exports.ValidateIsDate = ValidateIsDate;
 function ValidateFunctionParameter() {
     return (target, propertyName, descriptor, options) => {
-        console.log(propertyName);
         let method = descriptor.value;
         if (method === undefined)
             throw new Error("sdfgsdfgsfd");
@@ -182,6 +182,18 @@ function ValidateFunctionParameter() {
     };
 }
 exports.ValidateFunctionParameter = ValidateFunctionParameter;
+class ValidationIsInOptions extends ValidationOptions {
+}
+exports.ValidationIsInOptions = ValidationIsInOptions;
+function ValidateIsIn(options) {
+    return registerValidation("ValidateIsIn", options, (target, propertyName, val, options) => {
+        if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+            return undefined;
+        if (options.in.indexOf(val) === -1)
+            return propertyName + " is not valid";
+    });
+}
+exports.ValidateIsIn = ValidateIsIn;
 class ValidationIsInstanceOfOptions extends ValidationOptions {
 }
 exports.ValidationIsInstanceOfOptions = ValidationIsInstanceOfOptions;
@@ -189,16 +201,17 @@ function ValidateIsInstanceOf(options) {
     return registerValidation("ValidateIsInstanceOf", options, (target, propertyName, val, options) => {
         if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
             return undefined;
-        if (!(val instanceof (options.type))) {
+        var tp = options.type();
+        if (!(val instanceof tp)) {
             if (options === null || options === void 0 ? void 0 : options.alternativeJsonProperties) {
                 for (var x = 0; x < options.alternativeJsonProperties.length; x++) {
                     var key = options.alternativeJsonProperties[x];
                     if (val[key] === undefined)
-                        return propertyName + " is not of type " + options.type.name;
+                        return propertyName + " is not of type " + tp.name;
                 }
             }
             else
-                return propertyName + " is not of type " + options.type.name;
+                return propertyName + " is not of type " + tp.name;
         }
     });
 }
@@ -265,6 +278,7 @@ class TestSample {
         this.testarr = [this];
         this.num = 9.1;
         this.bol = true;
+        this.inprop = 1;
     }
     async call(num, text = undefined) {
         return num;
@@ -289,11 +303,11 @@ __decorate([
     __metadata("design:type", Object)
 ], TestSample.prototype, "str", void 0);
 __decorate([
-    ValidateIsInstanceOf({ type: TestSample }),
+    ValidateIsInstanceOf({ type: t => TestSample }),
     __metadata("design:type", Object)
 ], TestSample.prototype, "test", void 0);
 __decorate([
-    ValidateIsArray({ type: TestSample }),
+    ValidateIsArray({ type: t => TestSample }),
     __metadata("design:type", Object)
 ], TestSample.prototype, "testarr", void 0);
 __decorate([
@@ -304,6 +318,10 @@ __decorate([
     ValidateIsBoolean(),
     __metadata("design:type", Object)
 ], TestSample.prototype, "bol", void 0);
+__decorate([
+    ValidateIsIn({ in: [1, "2", "3"] }),
+    __metadata("design:type", Object)
+], TestSample.prototype, "inprop", void 0);
 async function test(test) {
     var obj = new TestSample();
     obj.id = 8;
@@ -357,6 +375,12 @@ async function test(test) {
             ValidateIsArray: { alternativeJsonProperties: ["id"] }
         }
     }).length === 0);
+    obj.testarr = [];
+    test.expectEqual(validate(obj).length === 0);
+    obj.inprop = 5;
+    test.expectError(() => validate(obj, undefined, true));
+    obj.inprop = "2";
+    test.expectEqual(validate(obj).length === 0);
 }
 exports.test = test;
 var l;

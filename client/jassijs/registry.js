@@ -24,7 +24,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655549184000
 	},
 	"jassijs/base/LoginDialog.ts": {
-		"date": 1655806952000
+		"date": 1681316975343
 	},
 	"jassijs/base/PropertyEditorService.ts": {
 		"date": 1657571268000,
@@ -86,7 +86,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1681240060303,
+		"date": 1681317354018,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -123,7 +123,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
-		"date": 1656072578000,
+		"date": 1681322755237,
 		"jassijs.security.Group": {
 			"$DBObject": [
 				{
@@ -132,12 +132,24 @@ define("jassijs/registry",["require"], function(require) {
 			],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"name": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"parentRights": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"JoinTable": [],
 					"ManyToMany": [
 						"function",
@@ -145,6 +157,12 @@ define("jassijs/registry",["require"], function(require) {
 					]
 				},
 				"rights": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"JoinTable": [],
 					"ManyToMany": [
 						"function",
@@ -152,6 +170,12 @@ define("jassijs/registry",["require"], function(require) {
 					]
 				},
 				"users": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"ManyToMany": [
 						"function",
 						"function"
@@ -161,7 +185,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/security/ParentRight.ts": {
-		"date": 1656072588000,
+		"date": 1681322761219,
 		"jassijs.security.ParentRight": {
 			"$DBObject": [
 				{
@@ -170,15 +194,27 @@ define("jassijs/registry",["require"], function(require) {
 			],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryGeneratedColumn": []
 				},
 				"name": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"classname": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"i1": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -186,6 +222,11 @@ define("jassijs/registry",["require"], function(require) {
 					]
 				},
 				"i2": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -193,6 +234,11 @@ define("jassijs/registry",["require"], function(require) {
 					]
 				},
 				"s1": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -200,6 +246,11 @@ define("jassijs/registry",["require"], function(require) {
 					]
 				},
 				"s2": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -207,6 +258,12 @@ define("jassijs/registry",["require"], function(require) {
 					]
 				},
 				"groups": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"ManyToMany": [
 						"function",
 						"function"
@@ -216,7 +273,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/security/Right.ts": {
-		"date": 1656072608000,
+		"date": 1681322767135,
 		"jassijs.security.Right": {
 			"$DBObject": [
 				{
@@ -225,12 +282,24 @@ define("jassijs/registry",["require"], function(require) {
 			],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"name": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"groups": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"ManyToMany": [
 						"function",
 						"function"
@@ -244,7 +313,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.security.Rights": {}
 	},
 	"jassijs/remote/security/Setting.ts": {
-		"date": 1656072620000,
+		"date": 1681316435162,
 		"jassijs.security.Setting": {
 			"$DBObject": [
 				{
@@ -253,9 +322,19 @@ define("jassijs/registry",["require"], function(require) {
 			],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"data": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -266,7 +345,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/security/User.ts": {
-		"date": 1656072626000,
+		"date": 1681322774491,
 		"jassijs.security.User": {
 			"$DBObject": [
 				{
@@ -275,12 +354,23 @@ define("jassijs/registry",["require"], function(require) {
 			],
 			"@members": {
 				"id": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryGeneratedColumn": []
 				},
 				"email": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"password": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"select": false
@@ -288,6 +378,12 @@ define("jassijs/registry",["require"], function(require) {
 					]
 				},
 				"groups": {
+					"ValidateIsArray": [
+						{
+							"optional": true,
+							"type": "function"
+						}
+					],
 					"JoinTable": [],
 					"ManyToMany": [
 						"function",
@@ -295,6 +391,11 @@ define("jassijs/registry",["require"], function(require) {
 					]
 				},
 				"isAdmin": {
+					"ValidateIsBoolean": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -305,7 +406,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1681310433480,
+		"date": 1681323038084,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
@@ -319,13 +420,52 @@ define("jassijs/registry",["require"], function(require) {
 				},
 				"loadFile": {
 					"ValidateFunctionParameter": []
+				},
+				"saveFiles": {
+					"ValidateFunctionParameter": []
+				},
+				"saveFile": {
+					"ValidateFunctionParameter": []
+				},
+				"testServersideFile": {
+					"ValidateFunctionParameter": []
+				},
+				"removeServerModul": {
+					"ValidateFunctionParameter": []
+				},
+				"delete": {
+					"ValidateFunctionParameter": []
+				},
+				"rename": {
+					"ValidateFunctionParameter": []
+				},
+				"createFile": {
+					"ValidateFunctionParameter": []
+				},
+				"createFolder": {
+					"ValidateFunctionParameter": []
+				},
+				"createModule": {
+					"ValidateFunctionParameter": []
 				}
 			}
 		}
 	},
 	"jassijs/remote/Settings.ts": {
-		"date": 1680946807085,
-		"jassijs.remote.Settings": {}
+		"date": 1681315774171,
+		"jassijs.remote.Settings": {
+			"@members": {
+				"remove": {
+					"ValidateFunctionParameter": []
+				},
+				"save": {
+					"ValidateFunctionParameter": []
+				},
+				"saveAll": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
 	},
 	"jassijs/remote/Test.ts": {
 		"date": 1655556930000,
@@ -1487,7 +1627,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1681310972628
+		"date": 1681322647268
 	},
 	"jassijs/remote/Serverservice.ts": {
 		"date": 1680954695071

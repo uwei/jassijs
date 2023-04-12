@@ -71,7 +71,7 @@ export function validate(obj, options: ValidateOptions = undefined, raiseError: 
                     if (options?.delegateOptions?.ALL) {
                         opts = Object.assign(opts, options?.delegateOptions?.ALL);
                     }
-                    if (options?.delegateOptions[rule]) {
+                    if (options?.delegateOptions&&options?.delegateOptions[rule]) {
                         opts = Object.assign(opts, options?.delegateOptions[rule]);
                     }
                     var err = func(target, propertyName, val, opts);
@@ -92,7 +92,7 @@ export function validate(obj, options: ValidateOptions = undefined, raiseError: 
 
 export class ValidationIsArrayOptions extends ValidationOptions {
     optional?: boolean;
-    type?: any;
+    type?: (type?: any) => any;
     alternativeJsonProperties?: string[];
 }
 
@@ -103,23 +103,24 @@ export function ValidateIsArray(options?: ValidationIsArrayOptions): Function {
                 return undefined;
             if (!Array.isArray(val))
                 return "value {value} is not an array";
-            if (options?.type) {
+            if (options?.type) { 
                 for (var x = 0; x < val.length; x++) {
-                    if (val[x] !== undefined && !(val[x] instanceof options.type)) {
-                        if(typeof val[x] === 'string' && options.type==String)
+                    var tp=options.type();
+                    if (val[x] !== undefined && !(val[x] instanceof tp)) {
+                        if (typeof val[x] === 'string' && tp == String)
                             continue;
-                         if(typeof val[x] === 'number' && options.type==Number)
+                        if (typeof val[x] === 'number' && tp == Number)
                             continue;
-                         if(typeof val[x] === 'boolean' && options.type==Boolean)
+                        if (typeof val[x] === 'boolean' && tp == Boolean)
                             continue;
                         if (options?.alternativeJsonProperties) {
                             for (var x = 0; x < options.alternativeJsonProperties.length; x++) {
                                 var key = options.alternativeJsonProperties[x];
                                 if (val[x][key] === undefined)
-                                    return propertyName + " is not array of type " + options.type.name;
+                                    return propertyName + " is not array of type " + tp.name;
                             }
                         } else
-                            return "value {value} is not an array ot type " + options.type.name;
+                            return "value {value} is not an array ot type " + tp.name;
                     }
                 }
             }
@@ -158,12 +159,11 @@ export function ValidateIsDate(options?: ValidationIsDateOptions): Function {
 
 export function ValidateFunctionParameter(): Function {
     return (target, propertyName, descriptor: PropertyDescriptor, options) => {
-        console.log(propertyName);
         let method = descriptor.value;
         if (method === undefined)
             throw new Error("sdfgsdfgsfd");
         const funcname = method.name;
-        const { [funcname]: newfunc } = {
+        const { [funcname]: newfunc } = {//we need named function!
             [funcname]: function () {
                 //@ts-ignore
                 let params = Reflect.getOwnMetadata(paramMetadataKey, target, propertyName);
@@ -188,10 +188,23 @@ export function ValidateFunctionParameter(): Function {
         descriptor.value = newfunc;
     };
 }
-
+export class ValidationIsInOptions extends ValidationOptions {
+    optional?: boolean;
+    in: any[];
+}
+export function ValidateIsIn(options?: ValidationIsInOptions): Function {
+    return registerValidation("ValidateIsIn", options,
+        (target: any, propertyName: string, val: any, options:ValidationIsInOptions) => {
+            if ((val === undefined || val === null) && options?.optional === true)
+                return undefined;
+            if(options.in.indexOf(val)===-1)
+                return propertyName + " is not valid";
+        }
+    )
+}
 export class ValidationIsInstanceOfOptions extends ValidationOptions {
     optional?: boolean;
-    type: any;
+    type: (type?: any) => any;
     /**
      * ["id"] means an object {id:9} is also a valid type
      */
@@ -202,15 +215,16 @@ export function ValidateIsInstanceOf(options?: ValidationIsInstanceOfOptions): F
         (target: any, propertyName: string, val: any, options) => {
             if ((val === undefined || val === null) && options?.optional === true)
                 return undefined;
-            if (!(val instanceof (options.type))) {
+            var tp=options.type();
+            if (!(val instanceof tp)) {
                 if (options?.alternativeJsonProperties) {
                     for (var x = 0; x < options.alternativeJsonProperties.length; x++) {
                         var key = options.alternativeJsonProperties[x];
                         if (val[key] === undefined)
-                            return propertyName + " is not of type " + options.type.name;
+                            return propertyName + " is not of type " + tp.name;
                     }
                 } else
-                    return propertyName + " is not of type " + options.type.name;
+                    return propertyName + " is not of type " + tp.name;
             }
         }
     )
@@ -301,10 +315,10 @@ class TestSample {
     @ValidateIsString({ optional: true, message: "no string" })
     str;
 
-    @ValidateIsInstanceOf({ type: TestSample })
+    @ValidateIsInstanceOf({ type: t=>TestSample })
     test: any = this;
 
-    @ValidateIsArray({ type: TestSample })
+    @ValidateIsArray({ type: t=>TestSample })
     testarr: any = [this];
 
     @ValidateIsNumber()
@@ -312,6 +326,9 @@ class TestSample {
 
     @ValidateIsBoolean()
     bol: any = true;
+
+    @ValidateIsIn({in:[1,"2","3"]})
+    inprop:any=1;
 }
 
 export async function test(test: Test) {
@@ -371,6 +388,14 @@ export async function test(test: Test) {
             ValidateIsArray: { alternativeJsonProperties: ["id"] }
         }
     }).length === 0);
+    obj.testarr=[];
+    test.expectEqual(validate(obj).length === 0);
+    obj.inprop=5;
+    test.expectError(() => validate(obj, undefined, true));
+    obj.inprop="2";
+    test.expectEqual(validate(obj).length === 0);
+
+   
 }
 
 interface MyOB {

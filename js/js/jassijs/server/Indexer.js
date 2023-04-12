@@ -4,8 +4,8 @@ exports.Indexer = void 0;
 const ts = require("typescript");
 //import "jassijs_editor/util/Typescript";
 //@ts-ignore
-const Filesystem_1 = require("jassijs/server/Filesystem");
 const Classes_1 = require("jassijs/remote/Classes");
+const Serverservice_1 = require("jassijs/remote/Serverservice");
 class Indexer {
     async updateModul(root, modul, isserver) {
         var path = root + (root === "" ? "" : "/") + modul;
@@ -71,8 +71,9 @@ class Indexer {
                 ' }\n' +
                 '});';
             var jsdir = "js/" + path;
-            if (Filesystem_1.default.path !== undefined)
-                jsdir = path.replace(Filesystem_1.default.path, Filesystem_1.default.path + "/js");
+            var fpath = (await (Serverservice_1.serverservices.filesystem)).path;
+            if (fpath !== undefined)
+                jsdir = path.replace(fpath, fpath + "/js");
             if (!(await this.fileExists(jsdir)))
                 await this.createDirectory(jsdir);
             await this.writeFile(jsdir + "/registry.js", text);

@@ -173,15 +173,5 @@ export class Company {
 
 }
 export function test() {
-    var ids = [];
-    var t = [];
-    for (var x = 0; x < parameter.allProducts.length; x++) {
-        var h = new Company(ids);
-        ids.push(h.productid);
-        t.push(h.productid);
-    }
-    t.sort();
-    for (var x = 0; x < t.length; x++) {
-        console.log(t[x]);
-    }
+
 }

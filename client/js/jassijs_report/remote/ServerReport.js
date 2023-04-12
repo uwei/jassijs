@@ -4,7 +4,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_1, RemoteObject_1) {
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Validator"], function (require, exports, Registry_1, RemoteObject_1, Validator_1) {
     "use strict";
     var ServerReport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -45,6 +51,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         }
     };
     ServerReport.cacheLastParameter = {};
+    __decorate([
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_1.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, Object, RemoteObject_1.Context]),
+        __metadata("design:returntype", Promise)
+    ], ServerReport, "getDesign", null);
+    __decorate([
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_1.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, Object, RemoteObject_1.Context]),
+        __metadata("design:returntype", Promise)
+    ], ServerReport, "getBase64", null);
     ServerReport = ServerReport_1 = __decorate([
         (0, Registry_1.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);

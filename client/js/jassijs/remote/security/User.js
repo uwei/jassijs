@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Group_1, ParentRight_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight", "jassijs/remote/Validator"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Group_1, ParentRight_1, Validator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.User = void 0;
@@ -28,23 +28,28 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
         }
     };
     __decorate([
+        (0, Validator_1.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], User.prototype, "id", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)(),
         (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], User.prototype, "email", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ select: false }),
         __metadata("design:type", String)
     ], User.prototype, "password", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsArray)({ optional: true, type: type => Group_1.Group }),
         (0, DatabaseSchema_1.JoinTable)(),
         (0, DatabaseSchema_1.ManyToMany)(type => Group_1.Group, ob => ob.users),
         __metadata("design:type", Array)
     ], User.prototype, "groups", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsBoolean)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], User.prototype, "isAdmin", void 0);

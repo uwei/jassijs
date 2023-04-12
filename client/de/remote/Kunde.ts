@@ -21,8 +21,7 @@ import { serverservices } from "jassijs/remote/Serverservice";
 export class Kunde extends DBObject implements ExtensionProvider {
     @PrimaryColumn()
     declare id: number;
-    @ValidateIsInt()
-    @Column()
+    @Column() 
     vorname: string;
     @Column()
     nachname: string; 
@@ -113,7 +112,6 @@ export async function test() {
     k.ort = "Mainz";
     k.PLZ = "99992";
     var tt=await k.validate(k);
-    debugger;
     k.save();
 
     //	new de.Kunde().generate();

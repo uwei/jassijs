@@ -14,6 +14,7 @@ const DBObject_1 = require("jassijs/remote/DBObject");
 const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Classes_1 = require("../Classes");
+const Validator_1 = require("jassijs/remote/Validator");
 let Setting = class Setting extends DBObject_1.DBObject {
     constructor() {
         super();
@@ -35,10 +36,12 @@ let Setting = class Setting extends DBObject_1.DBObject {
     }
 };
 __decorate([
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
     (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Setting.prototype, "id", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Setting.prototype, "data", void 0);

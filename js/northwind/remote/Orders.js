@@ -29,12 +29,12 @@ __decorate([
     __metadata("design:type", Number)
 ], Orders.prototype, "id", void 0);
 __decorate([
-    (0, Validator_1.ValidateIsInstanceOf)({ type: Customer_1.Customer }),
+    (0, Validator_1.ValidateIsInstanceOf)({ type: type => Customer_1.Customer }),
     (0, DatabaseSchema_1.ManyToOne)(type => Customer_1.Customer),
     __metadata("design:type", Customer_1.Customer)
 ], Orders.prototype, "Customer", void 0);
 __decorate([
-    (0, Validator_1.ValidateIsInstanceOf)({ type: Employees_1.Employees }),
+    (0, Validator_1.ValidateIsInstanceOf)({ type: type => Employees_1.Employees }),
     (0, DatabaseSchema_1.ManyToOne)(type => Employees_1.Employees),
     __metadata("design:type", Employees_1.Employees)
 ], Orders.prototype, "Employee", void 0);
@@ -54,7 +54,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Orders.prototype, "ShippedDate", void 0);
 __decorate([
-    (0, Validator_1.ValidateIsInstanceOf)({ type: Shippers_1.Shippers }),
+    (0, Validator_1.ValidateIsInstanceOf)({ type: type => Shippers_1.Shippers }),
     (0, DatabaseSchema_1.ManyToOne)(type => Shippers_1.Shippers),
     __metadata("design:type", Shippers_1.Shippers)
 ], Orders.prototype, "ShipVia", void 0);
@@ -94,7 +94,7 @@ __decorate([
     __metadata("design:type", String)
 ], Orders.prototype, "ShipCountry", void 0);
 __decorate([
-    (0, Validator_1.ValidateIsArray)({ type: OrderDetails_1.OrderDetails }),
+    (0, Validator_1.ValidateIsArray)({ type: type => OrderDetails_1.OrderDetails }),
     (0, DatabaseSchema_1.OneToMany)(type => OrderDetails_1.OrderDetails, e => e.Order),
     __metadata("design:type", Array)
 ], Orders.prototype, "Details", void 0);

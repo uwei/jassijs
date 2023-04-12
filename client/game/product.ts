@@ -491,9 +491,7 @@ export class Product {
 }
 
 export function test() {
-    var people = 30656;
-    console.log(parameter.allProducts[1].pricePurchase + " " + Math.round(200 * parameter.allProducts[1].dailyConsumtion * 40));
-    console.log(parameter.allProducts[1].calcPrice(200, 2, true));
+
 }
 
 

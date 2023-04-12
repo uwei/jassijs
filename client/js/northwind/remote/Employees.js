@@ -103,7 +103,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
         __metadata("design:type", String)
     ], Employees.prototype, "PhotoPath", void 0);
     __decorate([
-        (0, Validator_1.ValidateIsInstanceOf)({ type: Employees_1, optional: true }),
+        (0, Validator_1.ValidateIsInstanceOf)({ type: type => Employees_1, optional: true }),
         (0, DatabaseSchema_1.JoinColumn)(),
         (0, DatabaseSchema_1.ManyToOne)(type => Employees_1),
         __metadata("design:type", Employees)

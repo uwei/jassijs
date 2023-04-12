@@ -6,6 +6,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database
         //create Admin User if doesn't a user exists 
         DBManager_1.DBManager.prototype["hasLoaded"] = async function () {
             var User = await Classes_1.classes.loadClass("jassijs.security.User");
+            //@ts-ignore
             var us = User.findOne();
             if (us) {
                 us = new User();
@@ -34,6 +35,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database
             }
             return undefined;
         };
+        //@ts-ignore
         DBManager_1.DBManager["getConOpts"] = async function () {
             var dbclasses = [];
             const initSqlJs = window["SQL"];
@@ -55,9 +57,11 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database
                     throw err;
                 }
             }
+            //@ts-ignore
             DBManager_1.DBManager.clearMetadata();
             Database_1.db.fillDecorators();
             var tcl = await Classes_1.classes.loadClass("jassijs_localserver.TypeORMListener");
+            //@ts-ignore 
             new typeorm_1.EventSubscriber()(tcl);
             var Filesystem = await Classes_1.classes.loadClass("jassijs_localserver.Filesystem");
             var data = await new Filesystem().loadFile("__default.db");

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Group_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Group_1, Validator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ParentRight = void 0;
@@ -15,34 +15,42 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
     let ParentRight = class ParentRight extends DBObject_1.DBObject {
     };
     __decorate([
+        (0, Validator_1.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "id", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)(),
         (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], ParentRight.prototype, "name", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)(),
         (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], ParentRight.prototype, "classname", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "i1", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "i2", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], ParentRight.prototype, "s1", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], ParentRight.prototype, "s2", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsArray)({ optional: true, type: type => Group_1.Group }),
         (0, DatabaseSchema_1.ManyToMany)(type => Group_1.Group, ob => ob.parentRights),
         __metadata("design:type", Array)
     ], ParentRight.prototype, "groups", void 0);

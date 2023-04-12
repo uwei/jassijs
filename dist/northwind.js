@@ -243,7 +243,7 @@ define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table",
     exports.CustomerPhoneList = CustomerPhoneList;
     async function test() {
         var ret = new CustomerPhoneList();
-        alert(ret.me.table.height);
+        //    alert(ret.me.table.height);
         return ret;
     }
     exports.test = test;
@@ -414,7 +414,7 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry",
     }
     exports.test = test;
 });
-define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_1, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Textbox_4, Registry_6, Property_4, Employees_1, DBObjectView_4) {
+define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView", "jassijs/remote/Validator"], function (require, exports, DateTimeConverter_1, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Textbox_4, Registry_6, Property_4, Employees_1, DBObjectView_4, Validator_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -604,6 +604,8 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/
         var em = (await Employees_1.Employees.find({ id: 4 }))[0];
         var ret = new EmployeesView;
         ret["value"] = em;
+        var h = await (0, Validator_1.validate)(em);
+        // ret.me.address
         return ret;
     }
     exports.test = test;
@@ -1451,7 +1453,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1657926808000,
+                "date": 1681317457903,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1519,14 +1521,24 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1680976395432,
+                "date": 1681228125821,
                 "northwind.Categories": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "CategoryName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1534,6 +1546,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Description": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1541,6 +1558,7 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Picture": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Products": {
@@ -1553,29 +1571,44 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Customer.ts": {
-                "date": 1656072704000,
+                "date": 1681125122612,
                 "northwind.Customer": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "ContactName": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "ContactTitle": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Address": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "City": {
+                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Region": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1583,6 +1616,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1590,6 +1628,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1597,6 +1640,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1604,6 +1652,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Fax": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1614,14 +1667,24 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1680956794345,
+                "date": 1681322812010,
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "LastName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1629,6 +1692,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "FirstName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1636,6 +1704,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Title": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1643,6 +1716,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "TitleOfCourtesy": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1650,6 +1728,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Address": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1657,6 +1740,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "City": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1664,6 +1752,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Region": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1671,6 +1764,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1678,6 +1776,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1685,6 +1788,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HomePhone": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1706,6 +1814,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Notes": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1713,6 +1826,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PhotoPath": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1720,12 +1838,23 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ReportsTo": {
+                            "ValidateIsInstanceOf": [
+                                {
+                                    "type": "function",
+                                    "optional": true
+                                }
+                            ],
                             "JoinColumn": [],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "BirthDate": {
+                            "ValidateIsDate": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1733,6 +1862,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HireDate": {
+                            "ValidateIsDate": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1743,25 +1877,41 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/OrderDetails.ts": {
-                "date": 1656072710000,
+                "date": 1681322820167,
                 "northwind.OrderDetails": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryGeneratedColumn": []
                         },
                         "Order": {
+                            "ValidateIsInstanceOf": [
+                                {
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToOne": [
                                 "function",
                                 "function"
                             ]
                         },
                         "Product": {
+                            "ValidateIsInstanceOf": [
+                                {
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "UnitPrice": {
+                            "ValidateIsNumber": [],
                             "Column": [
                                 {
                                     "nullable": false,
@@ -1770,9 +1920,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Quantity": {
+                            "ValidateIsNumber": [],
                             "Column": []
                         },
                         "Discount": {
+                            "ValidateIsNumber": [],
                             "Column": [
                                 {
                                     "nullable": true,
@@ -1784,24 +1936,44 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1656072714000,
+                "date": 1681322833004,
                 "northwind.Orders": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsNumber": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "Customer": {
+                            "ValidateIsInstanceOf": [
+                                {
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "Employee": {
+                            "ValidateIsInstanceOf": [
+                                {
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "OrderDate": {
+                            "ValidateIsDate": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1809,6 +1981,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "RequiredDate": {
+                            "ValidateIsDate": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1816,6 +1993,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShippedDate": {
+                            "ValidateIsDate": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1823,11 +2005,21 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipVia": {
+                            "ValidateIsInstanceOf": [
+                                {
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "Freight": {
+                            "ValidateIsNumber": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true,
@@ -1836,6 +2028,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1843,6 +2040,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipAddress": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1850,6 +2052,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipCity": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1857,6 +2064,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipRegion": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1864,6 +2076,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipPostalCode": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1871,6 +2088,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipCountry": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1878,6 +2100,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Details": {
+                            "ValidateIsArray": [
+                                {
+                                    "type": "function"
+                                }
+                            ],
                             "OneToMany": [
                                 "function",
                                 "function"
@@ -1887,14 +2114,24 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Products.ts": {
-                "date": 1656072720000,
+                "date": 1681322711343,
                 "northwind.Products": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "ProductName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1902,17 +2139,32 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Supplier": {
+                            "ValidateIsInstanceOf": [
+                                {
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "Category": {
+                            "ValidateIsInstanceOf": [
+                                {
+                                    "type": "function"
+                                }
+                            ],
                             "ManyToOne": [
                                 "function",
                                 "function"
                             ]
                         },
                         "QuantityPerUnit": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1920,6 +2172,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "UnitPrice": {
+                            "ValidateIsNumber": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true,
@@ -1928,6 +2185,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "UnitsInStock": {
+                            "ValidateIsNumber": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1935,6 +2197,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "UnitsOnOrder": {
+                            "ValidateIsNumber": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1942,6 +2209,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ReorderLevel": {
+                            "ValidateIsNumber": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1949,6 +2221,7 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Discontinued": {
+                            "ValidateIsBoolean": [],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1959,14 +2232,24 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Shippers.ts": {
-                "date": 1656072724000,
+                "date": 1681236441210,
                 "northwind.Shippers": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1974,6 +2257,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1984,14 +2272,24 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Suppliers.ts": {
-                "date": 1656072728000,
+                "date": 1681236514330,
                 "northwind.Suppliers": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
+                            "ValidateIsInt": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1999,6 +2297,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ContactName": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2006,6 +2309,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ContactTitle": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2013,6 +2321,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Address": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2020,6 +2333,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "City": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2027,6 +2345,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Region": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2034,6 +2357,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2041,6 +2369,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2048,6 +2381,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2055,6 +2393,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Fax": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2062,6 +2405,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HomePage": {
+                            "ValidateIsString": [
+                                {
+                                    "optional": true
+                                }
+                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2141,7 +2489,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerPhoneList.ts": {
-                "date": 1656504952000,
+                "date": 1681317489793,
                 "northwind/CustomerPhoneList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2179,7 +2527,7 @@ define("northwind/registry", ["require"], function (require) {
         }
     };
 });
-define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema"], function (require, exports, Products_3, DBObject_1, Registry_13, DatabaseSchema_1) {
+define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_3, DBObject_1, Registry_13, DatabaseSchema_1, Validator_2) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2190,18 +2538,22 @@ define("northwind/remote/Categories", ["require", "exports", "northwind/remote/P
         }
     };
     __decorate([
+        (0, Validator_2.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Categories.prototype, "id", void 0);
     __decorate([
+        (0, Validator_2.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "CategoryName", void 0);
     __decorate([
+        (0, Validator_2.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "Description", void 0);
     __decorate([
+        (0, Validator_2.ValidateIsString)(),
         (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Categories.prototype, "Picture", void 0);
@@ -2220,7 +2572,7 @@ define("northwind/remote/Categories", ["require", "exports", "northwind/remote/P
     exports.test = test;
     ;
 });
-define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_2, Registry_14, DatabaseSchema_2) {
+define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_2, Registry_14, DatabaseSchema_2, Validator_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Customer = void 0;
@@ -2242,48 +2594,59 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
         }
     };
     __decorate([
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.PrimaryColumn)(),
         __metadata("design:type", String)
     ], Customer.prototype, "id", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "CompanyName", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactName", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactTitle", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "Address", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "City", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true })
         // @Column({default:""})
         ,
         __metadata("design:type", String)
     ], Customer.prototype, "Region", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "PostalCode", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Country", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Phone", void 0);
     __decorate([
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Fax", void 0);
@@ -2304,7 +2667,7 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
     exports.test = test;
     ;
 });
-define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice"], function (require, exports, DBObject_3, Registry_15, DatabaseSchema_3, Transaction_2, Serverservice_1) {
+define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_15, DatabaseSchema_3, Transaction_2, Serverservice_1, Validator_4) {
     "use strict";
     var Employees_2;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2325,58 +2688,59 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
                 return man.find(context, this, options);
             }
         }
-        async hallo(num) {
-            if (!jassijs.isServer) {
-                var ret = await this.call(this, this.hallo, num);
-                return ret * 10;
-            }
-            else {
-                return num + 1;
-                // return ["jassijs/base/ChromeDebugger.ts"];
-            }
-        }
     };
     __decorate([
+        (0, Validator_4.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_3.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Employees.prototype, "id", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "LastName", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "FirstName", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Title", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "TitleOfCourtesy", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Address", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "City", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Region", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PostalCode", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Country", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "HomePhone", void 0);
@@ -2389,23 +2753,28 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
         __metadata("design:type", String)
     ], Employees.prototype, "Photo", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Notes", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PhotoPath", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsInstanceOf)({ type: type => Employees_2, optional: true }),
         (0, DatabaseSchema_3.JoinColumn)(),
         (0, DatabaseSchema_3.ManyToOne)(type => Employees_2),
         __metadata("design:type", Employees)
     ], Employees.prototype, "ReportsTo", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Employees.prototype, "BirthDate", void 0);
     __decorate([
+        (0, Validator_4.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Employees.prototype, "HireDate", void 0);
@@ -2445,7 +2814,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
     exports.test2 = test2;
     ;
 });
-define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema"], function (require, exports, Products_4, Orders_3, DBObject_4, Registry_16, DatabaseSchema_4) {
+define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_4, Orders_3, DBObject_4, Registry_16, DatabaseSchema_4, Validator_5) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2456,26 +2825,32 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
         }
     };
     __decorate([
+        (0, Validator_5.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_4.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "id", void 0);
     __decorate([
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Orders_3.Orders }),
         (0, DatabaseSchema_4.ManyToOne)(type => Orders_3.Orders, e => e.Details),
         __metadata("design:type", typeof (_a = typeof Orders_3.Orders !== "undefined" && Orders_3.Orders) === "function" ? _a : Object)
     ], OrderDetails.prototype, "Order", void 0);
     __decorate([
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Products_4.Products }),
         (0, DatabaseSchema_4.ManyToOne)(type => Products_4.Products),
         __metadata("design:type", typeof (_b = typeof Products_4.Products !== "undefined" && Products_4.Products) === "function" ? _b : Object)
     ], OrderDetails.prototype, "Product", void 0);
     __decorate([
+        (0, Validator_5.ValidateIsNumber)(),
         (0, DatabaseSchema_4.Column)({ nullable: false, type: "decimal" }),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "UnitPrice", void 0);
     __decorate([
+        (0, Validator_5.ValidateIsNumber)(),
         (0, DatabaseSchema_4.Column)(),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "Quantity", void 0);
     __decorate([
+        (0, Validator_5.ValidateIsNumber)(),
         (0, DatabaseSchema_4.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "Discount", void 0);
@@ -2490,7 +2865,7 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
     exports.test = test;
     ;
 });
-define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_3, Employees_3, Customer_4, DBObject_5, Registry_17, DatabaseSchema_5, Shippers_2) {
+define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers", "jassijs/remote/Validator"], function (require, exports, OrderDetails_3, Employees_3, Customer_4, DBObject_5, Registry_17, DatabaseSchema_5, Shippers_2, Validator_6) {
     "use strict";
     var _a, _b, _c;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2501,62 +2876,77 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Order
         }
     };
     __decorate([
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_5.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Orders.prototype, "id", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Customer_4.Customer }),
         (0, DatabaseSchema_5.ManyToOne)(type => Customer_4.Customer),
         __metadata("design:type", typeof (_a = typeof Customer_4.Customer !== "undefined" && Customer_4.Customer) === "function" ? _a : Object)
     ], Orders.prototype, "Customer", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Employees_3.Employees }),
         (0, DatabaseSchema_5.ManyToOne)(type => Employees_3.Employees),
         __metadata("design:type", typeof (_b = typeof Employees_3.Employees !== "undefined" && Employees_3.Employees) === "function" ? _b : Object)
     ], Orders.prototype, "Employee", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Orders.prototype, "OrderDate", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Orders.prototype, "RequiredDate", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Orders.prototype, "ShippedDate", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Shippers_2.Shippers }),
         (0, DatabaseSchema_5.ManyToOne)(type => Shippers_2.Shippers),
         __metadata("design:type", typeof (_c = typeof Shippers_2.Shippers !== "undefined" && Shippers_2.Shippers) === "function" ? _c : Object)
     ], Orders.prototype, "ShipVia", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Orders.prototype, "Freight", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipName", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipAddress", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCity", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipRegion", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipPostalCode", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCountry", void 0);
     __decorate([
+        (0, Validator_6.ValidateIsArray)({ type: type => OrderDetails_3.OrderDetails }),
         (0, DatabaseSchema_5.OneToMany)(type => OrderDetails_3.OrderDetails, e => e.Order),
         __metadata("design:type", Array)
     ], Orders.prototype, "Details", void 0);
@@ -2571,7 +2961,7 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Order
     exports.test = test;
     ;
 });
-define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema"], function (require, exports, Categories_2, Suppliers_2, DBObject_6, Registry_18, DatabaseSchema_6) {
+define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Categories_2, Suppliers_2, DBObject_6, Registry_18, DatabaseSchema_6, Validator_7) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2582,42 +2972,52 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
         }
     };
     __decorate([
+        (0, Validator_7.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_6.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Products.prototype, "id", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "ProductName", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsInstanceOf)({ type: type => Suppliers_2.Suppliers }),
         (0, DatabaseSchema_6.ManyToOne)(type => Suppliers_2.Suppliers),
         __metadata("design:type", typeof (_a = typeof Suppliers_2.Suppliers !== "undefined" && Suppliers_2.Suppliers) === "function" ? _a : Object)
     ], Products.prototype, "Supplier", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsInstanceOf)({ type: c => Categories_2.Categories }),
         (0, DatabaseSchema_6.ManyToOne)(type => Categories_2.Categories, e => e.Products),
         __metadata("design:type", typeof (_b = typeof Categories_2.Categories !== "undefined" && Categories_2.Categories) === "function" ? _b : Object)
     ], Products.prototype, "Category", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "QuantityPerUnit", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitPrice", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsInStock", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsOnOrder", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "ReorderLevel", void 0);
     __decorate([
+        (0, Validator_7.ValidateIsBoolean)(),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], Products.prototype, "Discontinued", void 0);
@@ -2633,7 +3033,7 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
     exports.test = test;
     ;
 });
-define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_7, Registry_19, DatabaseSchema_7) {
+define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_7, Registry_19, DatabaseSchema_7, Validator_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Shippers = void 0;
@@ -2643,14 +3043,17 @@ define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObj
         }
     };
     __decorate([
+        (0, Validator_8.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_7.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Shippers.prototype, "id", void 0);
     __decorate([
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "CompanyName", void 0);
     __decorate([
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "Phone", void 0);
@@ -2665,7 +3068,7 @@ define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObj
     exports.test = test;
     ;
 });
-define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_8, Registry_20, DatabaseSchema_8) {
+define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_8, Registry_20, DatabaseSchema_8, Validator_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Suppliers = void 0;
@@ -2675,50 +3078,62 @@ define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBOb
         }
     };
     __decorate([
+        (0, Validator_9.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_8.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Suppliers.prototype, "id", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "CompanyName", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "ContactName", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "ContactTitle", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Address", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "City", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Region", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "PostalCode", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Country", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Phone", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Fax", void 0);
     __decorate([
+        (0, Validator_9.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "HomePage", void 0);
@@ -2732,6 +3147,9 @@ define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBOb
     }
     exports.test = test;
     ;
+    function ValidateIsIntn(arg0) {
+        throw new Error("Function not implemented.");
+    }
 });
 define("northwind/reports/CustomerLabels", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry", "northwind/remote/Customer", "jassijs/base/Actions"], function (require, exports, Report_1, Property_9, Registry_21, Customer_5, Actions_5) {
     "use strict";

@@ -69,7 +69,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ext/jquerylib"], 
     }
     exports.login = login;
     function test() {
-        login();
+        //  login();
     }
     exports.test = test;
 });

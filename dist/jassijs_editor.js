@@ -3580,7 +3580,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1657715198000,
+                "date": 1681317117367,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -4833,8 +4833,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         //parser.parse(code, undefined);
         //code="reportdesign={k:9};";
         parser.parse(code, [{ classname: "Dialog2", methodname: "layout" }]); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
-        parser.setPropertyInCode("me.table", "new", 'new Table({\n      paginationSize: 1\n})', undefined);
-        console.log(parser.getModifiedCode());
+        //    parser.setPropertyInCode("me.table","new",'new Table({\n      paginationSize: 1\n})',undefined);
+        //  console.log(parser.getModifiedCode());
         // parser.removeVariablesInCode(["me.repeater"]);
         //parser.addVariableInCode("Component", [{ classname: "Dialog", methodname: "layout" }]);
         //parser.setPropertyInCode("component", "x", "1", [{ classname: "Dialog", methodname: "layout" }]);

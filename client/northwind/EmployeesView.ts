@@ -218,7 +218,7 @@ export async function test() {
     
     var h=await validate(em);
     
-    debugger;
+   
    // ret.me.address
     return ret;
 }

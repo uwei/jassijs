@@ -148,7 +148,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1680947351203,
+		"date": 1681316844059,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -169,7 +169,6 @@ define("de/registry",["require"], function(require) {
 					"PrimaryColumn": []
 				},
 				"vorname": {
-					"ValidateIsInt": [],
 					"Column": []
 				},
 				"nachname": {
@@ -299,7 +298,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1656077196000
 	},
 	"de/TH.ts": {
-		"date": 1657970514000
+		"date": 1681316495340
 	},
 	"de/TTDialog.ts": {
 		"date": 1655556796000,

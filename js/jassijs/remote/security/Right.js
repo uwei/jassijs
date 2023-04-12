@@ -14,18 +14,22 @@ const DBObject_1 = require("jassijs/remote/DBObject");
 const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Group_1 = require("jassijs/remote/security/Group");
+const Validator_1 = require("jassijs/remote/Validator");
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 let Right = class Right extends DBObject_1.DBObject {
 };
 __decorate([
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
     (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Right.prototype, "id", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)(),
     (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Right.prototype, "name", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsArray)({ optional: true, type: type => Group_1.Group }),
     (0, DatabaseSchema_1.ManyToMany)(type => Group_1.Group, ob => ob.rights),
     __metadata("design:type", Array)
 ], Right.prototype, "groups", void 0);

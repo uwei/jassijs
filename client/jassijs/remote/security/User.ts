@@ -4,6 +4,7 @@ import {  PrimaryGeneratedColumn,JoinTable,Entity, PrimaryColumn, Column, OneToO
 import { Group } from "jassijs/remote/security/Group";
 import { ParentRight } from "jassijs/remote/security/ParentRight";
 import { Context } from "jassijs/remote/RemoteObject";
+import { ValidateIsArray, ValidateIsBoolean, ValidateIsNumber, ValidateIsString } from "jassijs/remote/Validator";
 
  
 
@@ -11,16 +12,24 @@ import { Context } from "jassijs/remote/RemoteObject";
 @$Class("jassijs.security.User")
 
 export class User extends DBObject  {
-
+	@ValidateIsNumber({optional:true})
     @PrimaryGeneratedColumn()
     declare id: number;
+	
+	@ValidateIsString()
     @Column()
     email:string;
+	
+	@ValidateIsString({optional:true})
     @Column({select: false})
     password:string;
+
+	@ValidateIsArray({optional:true,type:type=>Group})
     @JoinTable()
     @ManyToMany(type=>Group,ob=>ob.users)
 	groups:Group[];
+
+	@ValidateIsBoolean({optional:true})
 	@Column({nullable:true})
     isAdmin:boolean;
     

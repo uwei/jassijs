@@ -959,8 +959,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         //parser.parse(code, undefined);
         //code="reportdesign={k:9};";
         parser.parse(code, [{ classname: "Dialog2", methodname: "layout" }]); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
-        parser.setPropertyInCode("me.table", "new", 'new Table({\n      paginationSize: 1\n})', undefined);
-        console.log(parser.getModifiedCode());
+        //    parser.setPropertyInCode("me.table","new",'new Table({\n      paginationSize: 1\n})',undefined);
+        //  console.log(parser.getModifiedCode());
         // parser.removeVariablesInCode(["me.repeater"]);
         //parser.addVariableInCode("Component", [{ classname: "Dialog", methodname: "layout" }]);
         //parser.setPropertyInCode("component", "x", "1", [{ classname: "Dialog", methodname: "layout" }]);

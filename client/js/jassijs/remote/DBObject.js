@@ -122,7 +122,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
         * save the object to jassijs.db
         */
         async save(context = undefined) {
-            await this.validate({}, true);
+            await this.validate({
+                delegateOptions: {
+                    ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] },
+                    ValidateIsArray: { alternativeJsonProperties: ["id"] }
+                }
+            });
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 if (this.id !== undefined) {
                     var cname = Classes_1.classes.getClassName(this);

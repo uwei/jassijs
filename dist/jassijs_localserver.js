@@ -969,6 +969,7 @@ define("jassijs_localserver/DBManagerExt", ["require", "exports", "jassijs/remot
         //create Admin User if doesn't a user exists 
         DBManager_2.DBManager.prototype["hasLoaded"] = async function () {
             var User = await Classes_2.classes.loadClass("jassijs.security.User");
+            //@ts-ignore
             var us = User.findOne();
             if (us) {
                 us = new User();
@@ -997,6 +998,7 @@ define("jassijs_localserver/DBManagerExt", ["require", "exports", "jassijs/remot
             }
             return undefined;
         };
+        //@ts-ignore
         DBManager_2.DBManager["getConOpts"] = async function () {
             var dbclasses = [];
             const initSqlJs = window["SQL"];
@@ -1018,9 +1020,11 @@ define("jassijs_localserver/DBManagerExt", ["require", "exports", "jassijs/remot
                     throw err;
                 }
             }
+            //@ts-ignore
             DBManager_2.DBManager.clearMetadata();
             Database_1.db.fillDecorators();
             var tcl = await Classes_2.classes.loadClass("jassijs_localserver.TypeORMListener");
+            //@ts-ignore 
             new typeorm_3.EventSubscriber()(tcl);
             var Filesystem = await Classes_2.classes.loadClass("jassijs_localserver.Filesystem");
             var data = await new Filesystem().loadFile("__default.db");
@@ -1394,6 +1398,13 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
         async loadFile(fileName) {
             var r = await this.loadFileEntry(fileName);
             return (r ? r.data : undefined);
+        }
+        async loadFiles(fileNames) {
+            var ret = {};
+            for (var x = 0; x < fileNames.length; x++) {
+                ret[fileNames[x]] = await this.loadFile(fileNames[x]);
+            }
+            return ret;
         }
         /**
         * deletes a file or directory

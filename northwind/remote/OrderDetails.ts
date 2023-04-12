@@ -15,11 +15,11 @@ export class OrderDetails extends DBObject {
         super(); 
     }
 
-    @ValidateIsInstanceOf({type:Orders})
+    @ValidateIsInstanceOf({type:type=>Orders})
     @ManyToOne(type => Orders, e=>e.Details)
     Order: Orders;
 
-    @ValidateIsInstanceOf({type:Products})
+    @ValidateIsInstanceOf({type:type=>Products})
     @ManyToOne(type => Products)
     Product: Products;
 

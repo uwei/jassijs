@@ -32,12 +32,12 @@ __decorate([
     __metadata("design:type", String)
 ], Products.prototype, "ProductName", void 0);
 __decorate([
-    (0, Validator_1.ValidateIsInstanceOf)({ type: Suppliers_1.Suppliers }),
+    (0, Validator_1.ValidateIsInstanceOf)({ type: type => Suppliers_1.Suppliers }),
     (0, DatabaseSchema_1.ManyToOne)(type => Suppliers_1.Suppliers),
     __metadata("design:type", Suppliers_1.Suppliers)
 ], Products.prototype, "Supplier", void 0);
 __decorate([
-    (0, Validator_1.ValidateIsInstanceOf)({ type: Categories_1.Categories }),
+    (0, Validator_1.ValidateIsInstanceOf)({ type: c => Categories_1.Categories }),
     (0, DatabaseSchema_1.ManyToOne)(type => Categories_1.Categories, e => e.Products),
     __metadata("design:type", Categories_1.Categories)
 ], Products.prototype, "Category", void 0);

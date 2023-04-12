@@ -47,6 +47,7 @@ function createStyle() {
 }
 
 export function test() {
+    return;
     createStyle();
     var ret = new PPanel();
 

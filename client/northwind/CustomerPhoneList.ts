@@ -54,6 +54,6 @@ export class CustomerPhoneList extends Panel {
 }
 export async function test() {
     var ret = new CustomerPhoneList();
-    alert(ret.me.table.height);
+//    alert(ret.me.table.height);
     return ret;
 }

@@ -149,7 +149,7 @@ exports.default={
 		}
 	},
 	"northwind/remote/Employees.ts": {
-		"date": 1681302641560,
+		"date": 1681322812010,
 		"northwind.Employees": {
 			"$DBObject": [],
 			"@members": {
@@ -322,7 +322,7 @@ exports.default={
 				"ReportsTo": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Employees",
+							"type": "function",
 							"optional": true
 						}
 					],
@@ -359,7 +359,7 @@ exports.default={
 		}
 	},
 	"northwind/remote/OrderDetails.ts": {
-		"date": 1681235233082,
+		"date": 1681322820167,
 		"northwind.OrderDetails": {
 			"$DBObject": [],
 			"@members": {
@@ -374,7 +374,7 @@ exports.default={
 				"Order": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Orders"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -385,7 +385,7 @@ exports.default={
 				"Product": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Products"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -418,7 +418,7 @@ exports.default={
 		}
 	},
 	"northwind/remote/Orders.ts": {
-		"date": 1681235896083,
+		"date": 1681322833004,
 		"northwind.Orders": {
 			"$DBObject": [],
 			"@members": {
@@ -433,7 +433,7 @@ exports.default={
 				"Customer": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Customer"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -443,7 +443,7 @@ exports.default={
 				"Employee": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Employees"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -489,7 +489,7 @@ exports.default={
 				"ShipVia": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Shippers"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -584,7 +584,7 @@ exports.default={
 				"Details": {
 					"ValidateIsArray": [
 						{
-							"type": "OrderDetails"
+							"type": "function"
 						}
 					],
 					"OneToMany": [
@@ -596,7 +596,7 @@ exports.default={
 		}
 	},
 	"northwind/remote/Products.ts": {
-		"date": 1681236399113,
+		"date": 1681322711343,
 		"northwind.Products": {
 			"$DBObject": [],
 			"@members": {
@@ -623,7 +623,7 @@ exports.default={
 				"Supplier": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Suppliers"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [
@@ -633,7 +633,7 @@ exports.default={
 				"Category": {
 					"ValidateIsInstanceOf": [
 						{
-							"type": "Categories"
+							"type": "function"
 						}
 					],
 					"ManyToOne": [

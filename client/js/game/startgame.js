@@ -57,6 +57,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Windows", "game/
         head.appendChild(link);
     }
     function test() {
+        return;
         createStyle();
         var ret = new PPanel();
         //ret.dom.style.backgroundColor="white";

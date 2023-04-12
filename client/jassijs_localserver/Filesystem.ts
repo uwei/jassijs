@@ -5,7 +5,7 @@ import registry from "jassijs/remote/Registry";
 import { Server } from "jassijs/remote/Server";
 import { $Serverservice, serverservices } from "jassijs/remote/Serverservice";
 
-
+ 
 class FileEntry {
     id: string;
     date: number;
@@ -317,9 +317,17 @@ export default class Filesystem {
         return "";
 
     }
-    async loadFile(fileName: string) {
+    async loadFile(fileName: string):Promise<string> {
         var r = await this.loadFileEntry(fileName);
         return (r ? r.data : undefined);
+    }
+
+    async loadFiles(fileNames: string[]) {
+        var ret = {};
+        for(var x=0;x<fileNames.length;x++){
+            ret[fileNames[x]]=await this.loadFile(fileNames[x]);
+        }
+        return ret;
     }
     /**
     * deletes a file or directory 

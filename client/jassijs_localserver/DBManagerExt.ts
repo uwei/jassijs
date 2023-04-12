@@ -9,6 +9,7 @@ export function extendDBManager(){
       //create Admin User if doesn't a user exists 
       DBManager.prototype["hasLoaded"] = async function () {
         var User = await classes.loadClass("jassijs.security.User");
+        //@ts-ignore
         var us =<any> User.findOne();
         if (us) {
             us = new User();
@@ -38,6 +39,7 @@ export function extendDBManager(){
         }
         return undefined;
     }
+    //@ts-ignore
     DBManager["getConOpts"] = async function () {
         var dbclasses = []; 
         const initSqlJs = window["SQL"];
@@ -59,10 +61,11 @@ export function extendDBManager(){
                 throw err;
             }
         }
+        //@ts-ignore
         DBManager.clearMetadata();
         db.fillDecorators();
         var tcl = await classes.loadClass("jassijs_localserver.TypeORMListener");
-        
+       //@ts-ignore 
         new EventSubscriber()(tcl);
         var Filesystem = await classes.loadClass("jassijs_localserver.Filesystem");
         var data = await new Filesystem().loadFile("__default.db");

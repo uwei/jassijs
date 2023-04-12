@@ -18,11 +18,11 @@ export class Products extends DBObject {
     @Column({ nullable: true })
     ProductName: string;
 
-    @ValidateIsInstanceOf({type:Suppliers})
+    @ValidateIsInstanceOf({type:type=>Suppliers})
     @ManyToOne(type => Suppliers)
     Supplier: Suppliers;
 
-    @ValidateIsInstanceOf({type:Categories})
+    @ValidateIsInstanceOf({type:c=>Categories})
     @ManyToOne(type => Categories, e=>e.Products)
     Category: Categories;
 

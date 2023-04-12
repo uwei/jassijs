@@ -4,7 +4,6 @@ define(["require", "exports", "jassijs/remote/Server"], function (require, expor
     exports.test = void 0;
     async function test() {
         var g = await new Server_1.Server().loadFiles(["de/remote/Kunde.ts"]);
-        debugger;
     }
     exports.test = test;
 });

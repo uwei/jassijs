@@ -7,6 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/ext/pdfmake", "jassijs_report/PDFViewer", "jassijs_report/remote/pdfmakejassi"], function (require, exports, Registry_1, pdfmake_1, PDFViewer_1, pdfmakejassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -5063,8 +5066,17 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/remote/ServerReport.ts": {
-                "date": 1656331484000,
-                "jassijs_report.remote.ServerReport": {}
+                "date": 1681315929902,
+                "jassijs_report.remote.ServerReport": {
+                    "@members": {
+                        "getDesign": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "getBase64": {
+                            "ValidateFunctionParameter": []
+                        }
+                    }
+                }
             },
             "jassijs_report/Reports.ts": {
                 "date": 1657978946000,
@@ -6212,9 +6224,10 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
     ], RComponent);
     exports.RComponent = RComponent;
 });
-define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_29, RemoteObject_2) {
+define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Validator"], function (require, exports, Registry_29, RemoteObject_2, Validator_1) {
     "use strict";
     var ServerReport_4;
+    var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ServerReport = void 0;
     let ServerReport = ServerReport_4 = class ServerReport extends RemoteObject_2.RemoteObject {
@@ -6253,6 +6266,20 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
         }
     };
     ServerReport.cacheLastParameter = {};
+    __decorate([
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_1.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, Object, typeof (_a = typeof RemoteObject_2.Context !== "undefined" && RemoteObject_2.Context) === "function" ? _a : Object]),
+        __metadata("design:returntype", Promise)
+    ], ServerReport, "getDesign", null);
+    __decorate([
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_1.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, Object, typeof (_b = typeof RemoteObject_2.Context !== "undefined" && RemoteObject_2.Context) === "function" ? _b : Object]),
+        __metadata("design:returntype", Promise)
+    ], ServerReport, "getBase64", null);
     ServerReport = ServerReport_4 = __decorate([
         (0, Registry_29.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);

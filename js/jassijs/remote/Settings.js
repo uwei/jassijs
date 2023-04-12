@@ -5,7 +5,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var Settings_1;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.load = exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
@@ -14,6 +21,7 @@ const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Setting_1 = require("jassijs/remote/security/Setting");
 const Server_1 = require("./Server");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
+const Validator_1 = require("jassijs/remote/Validator");
 const proxyhandler = {
     get: function (target, prop, receiver) {
         return prop;
@@ -167,6 +175,30 @@ Settings.keys = new Proxy({}, proxyhandler); //the Proxy allwas give the key bac
 Settings.browserSettings = undefined;
 Settings.userSettings = undefined;
 Settings.allusersSettings = undefined;
+__decorate([
+    (0, Validator_1.ValidateFunctionParameter)(),
+    __param(0, (0, Validator_1.ValidateIsString)()),
+    __param(1, (0, Validator_1.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, RemoteObject_1.Context]),
+    __metadata("design:returntype", Promise)
+], Settings, "remove", null);
+__decorate([
+    (0, Validator_1.ValidateFunctionParameter)(),
+    __param(0, (0, Validator_1.ValidateIsString)()),
+    __param(2, (0, Validator_1.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_a = typeof T !== "undefined" && T) === "function" ? _a : Object, typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, String]),
+    __metadata("design:returntype", Promise)
+], Settings, "save", null);
+__decorate([
+    (0, Validator_1.ValidateFunctionParameter)(),
+    __param(1, (0, Validator_1.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+    __param(2, (0, Validator_1.ValidateIsBoolean)({ optional: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object, RemoteObject_1.Context]),
+    __metadata("design:returntype", Promise)
+], Settings, "saveAll", null);
 Settings = Settings_1 = __decorate([
     (0, Registry_1.$Class)("jassijs.remote.Settings")
 ], Settings);
