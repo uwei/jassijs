@@ -1,20 +1,18 @@
-import {NumberConverter} from "jassijs/ui/converters/NumberConverter";
-import {Textbox} from "jassijs/ui/Textbox";
+import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
+import { Textbox } from "jassijs/ui/Textbox";
 import { $Class } from "jassijs/remote/Registry";
-import {Panel} from "jassijs/ui/Panel";
+import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { User } from "jassijs/remote/security/User";
 import { Databinder } from "jassijs/ui/Databinder";
 import { DBObjectView, DBObjectViewMe, $DBObjectView } from "jassijs/ui/DBObjectView";
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
 import { notify } from "jassijs/ui/Notify";
-
 type Me = {
-	textbox1?:Textbox,
-	textbox2?:Textbox
-}&DBObjectViewMe
-
-@$DBObjectView({classname:"jassijs.security.User"})
+    IDID?: Textbox;
+    IDEmail?: Textbox;
+} & DBObjectViewMe;
+@$DBObjectView({ classname: "jassijs.security.User" })
 @$Class("jassijs/UserView")
 export class UserView extends DBObjectView {
     declare me: Me;
@@ -29,26 +27,32 @@ export class UserView extends DBObjectView {
         return this.value === undefined ? "User" : "User " + this.value.email;
     }
     layout(me: Me) {
-        me.textbox1=new Textbox();
-	    me.textbox2=new Textbox();
-    	this.add(me.textbox1);
-    	this.add(me.textbox2); 
-    	me.textbox1.bind=[me.databinder,"id"];
-    	me.textbox1.width=40;
-    	me.textbox1.converter=new NumberConverter();
-    	me.textbox2.bind=[me.databinder,"email"];
+        me.IDID = new Textbox();
+        me.IDEmail = new Textbox();
+        me.IDID.bind = [me.databinder, "id"];
+        me.IDID.width = 40;
+        me.IDID.converter = new NumberConverter();
+        me.IDID.label = "ID";
+        me.IDID.x = 10;
+        me.IDID.y = 5;
+        me.IDEmail.bind = [me.databinder, "email"];
+        me.IDEmail.label = "E-Mail";
+        me.IDEmail.x = 70;
+        me.IDEmail.y = 5;
+        this.me.main.isAbsolute = true;
+        this.me.main.height = "100";
+        this.me.main.add(me.IDID);
+        this.me.main.add(me.IDEmail);
     }
-	createObject():any{
-		super.createObject();
-		this.value.password=Math.random().toString(36).slice(-8);//random password
-		notify( "random password set: "+this.value.password,"info",{position:"right"});
-		console.log("random password set: "+this.value.password);
-	}
+    createObject(): any {
+        super.createObject();
+        this.value.password = Math.random().toString(36).slice(-8); //random password
+        notify("random password set: " + this.value.password, "info", { position: "right" });
+        console.log("random password set: " + this.value.password);
+    }
 }
-
-export async function test(){
-	var ret=new UserView();
-	
-	ret["value"]=<User>await User.findOne();
-	return ret;
+export async function test() {
+    var ret = new UserView();
+    ret["value"] = <User>await User.findOne();
+    return ret;
 }

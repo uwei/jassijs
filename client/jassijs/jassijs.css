@@ -26,7 +26,7 @@ br[data-mce-bogus="1"] {
   display:none;
 }
 .jdesignmode > .Panel {
-  border:1px solid #ccc;
+  border: 1px solid #ccc;
 }
 .jinlinecomponent.invalid{
   border: 1px solid red;
@@ -40,8 +40,7 @@ br[data-mce-bogus="1"] {
 
 
 .jselected{
-  border-color: blue; 
-  border-style:solid;
+  border: 1px solid rgb(70, 54, 214);
 }
 
 

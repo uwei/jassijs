@@ -79,6 +79,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
             for (let ff = 0; ff < fileNames.length; ff++) {
                 var fileName = fileNames[ff];
                 var fileNameBlank = fileName;
+                if (fileName.toLocaleLowerCase().endsWith("css")) {
+                    /*var node=document.getElementById("-->"+fileName);
+                    if(node){
+                        document.getElementById("-->"+fileName).remove();
+                    }*/
+                    jassijs.myRequire(fileName);
+                    continue;
+                }
                 if (fileNameBlank.endsWith(".js"))
                     fileNameBlank = fileNameBlank.substring(0, fileNameBlank.length - 3);
                 var test = this._findScript(fileNameBlank);

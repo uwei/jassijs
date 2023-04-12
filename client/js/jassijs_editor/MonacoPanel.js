@@ -221,7 +221,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
                 var ffile = monaco.Uri.from({ path: "/" + this.file, scheme: 'file' });
                 var mod = monaco.editor.getModel(ffile);
                 if (!mod) {
-                    mod = monaco.editor.createModel(value, "typescript", ffile);
+                    var stype = "typescript";
+                    if (this.file.toLocaleLowerCase().endsWith(".css"))
+                        stype = "css";
+                    mod = monaco.editor.createModel(value, stype, ffile);
                     this._editor.setModel(mod);
                     this._editor.setValue(value);
                 }

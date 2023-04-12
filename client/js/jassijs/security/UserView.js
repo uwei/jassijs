@@ -21,14 +21,22 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
             return this.value === undefined ? "User" : "User " + this.value.email;
         }
         layout(me) {
-            me.textbox1 = new Textbox_1.Textbox();
-            me.textbox2 = new Textbox_1.Textbox();
-            this.add(me.textbox1);
-            this.add(me.textbox2);
-            me.textbox1.bind = [me.databinder, "id"];
-            me.textbox1.width = 40;
-            me.textbox1.converter = new NumberConverter_1.NumberConverter();
-            me.textbox2.bind = [me.databinder, "email"];
+            me.IDID = new Textbox_1.Textbox();
+            me.IDEmail = new Textbox_1.Textbox();
+            me.IDID.bind = [me.databinder, "id"];
+            me.IDID.width = 40;
+            me.IDID.converter = new NumberConverter_1.NumberConverter();
+            me.IDID.label = "ID";
+            me.IDID.x = 10;
+            me.IDID.y = 5;
+            me.IDEmail.bind = [me.databinder, "email"];
+            me.IDEmail.label = "E-Mail";
+            me.IDEmail.x = 70;
+            me.IDEmail.y = 5;
+            this.me.main.isAbsolute = true;
+            this.me.main.height = "100";
+            this.me.main.add(me.IDID);
+            this.me.main.add(me.IDEmail);
         }
         createObject() {
             super.createObject();
