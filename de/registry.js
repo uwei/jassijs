@@ -216,7 +216,16 @@ exports.default={
 		}
 	},
 	"de/remote/MyRemoteObject.ts": {
-		"date": 1680980491170,
-		"de.remote.MyRemoteObject": {}
+		"date": 1681310881687,
+		"de.remote.MyRemoteObject": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"sayHello2": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
 	}
 }

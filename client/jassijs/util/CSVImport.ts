@@ -263,9 +263,17 @@ export class CSVImport extends Panel {
 						}
 						if (val === "#NV")
 							val = undefined;
+						if (mt === Date) {
+							if(typeof val === "string")
+								val=new Date(val);
+						}
+						
 					}
 					if ((meta[fname].OneToOne || meta[fname].ManyToOne) && val !== undefined) {
-						val = { id: val };
+						let cl=meta[fname].ManyToOne[0]();
+						var nob=new cl();
+						nob.id=val;
+						val = {id:val};
 					}
 					ob[fname] = val;
 				}

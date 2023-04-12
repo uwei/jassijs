@@ -5,7 +5,7 @@ import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { Transaction } from "jassijs/remote/Transaction";
 import { Context } from "jassijs/remote/RemoteObject";
 import { serverservices } from "jassijs/remote/Serverservice";
-import { ValidateIsDate, ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
+import { ValidateIsDate, ValidateIsInstanceOf, ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
 @$DBObject()
 @$Class("northwind.Employees")
 export class Employees extends DBObject {
@@ -69,6 +69,7 @@ export class Employees extends DBObject {
     @Column({ nullable: true })
     PhotoPath: string;
 
+    @ValidateIsInstanceOf({type:Employees,optional:true})
     @JoinColumn()
     @ManyToOne(type => Employees)
     ReportsTo: Employees;
@@ -92,16 +93,7 @@ export class Employees extends DBObject {
             return man.find(context,this, options);
         }
     } 
-    async hallo(num) {
-        if (!jassijs.isServer) {
-            var ret = await this.call(this, this.hallo, num);
-            return ret * 10;
-        } else { 
-
-            return num + 1;
-            // return ["jassijs/base/ChromeDebugger.ts"];
-        }
-    }
+  
 }
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Validator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Shippers = void 0;
@@ -17,14 +17,17 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
         }
     };
     __decorate([
+        (0, Validator_1.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Shippers.prototype, "id", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "CompanyName", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "Phone", void 0);

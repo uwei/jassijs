@@ -1,0 +1,4 @@
+interface MyOB{
+    hallo2();
+    
+}

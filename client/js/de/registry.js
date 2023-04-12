@@ -309,8 +309,20 @@ define("de/registry",["require"], function(require) {
 		"date": 1657973728000
 	},
 	"de/remote/MyRemoteObject.ts": {
-		"date": 1680980491170,
-		"de.remote.MyRemoteObject": {}
+		"date": 1681310881687,
+		"de.remote.MyRemoteObject": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"sayHello2": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
+	},
+	"de/test.ts": {
+		"date": 1681301004034
 	}
 }
  }

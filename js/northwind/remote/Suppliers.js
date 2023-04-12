@@ -13,56 +13,69 @@ exports.test = exports.Suppliers = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
 const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
+const Validator_1 = require("jassijs/remote/Validator");
 let Suppliers = class Suppliers extends DBObject_1.DBObject {
     constructor() {
         super();
     }
 };
 __decorate([
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
     (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Suppliers.prototype, "id", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "CompanyName", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "ContactName", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "ContactTitle", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Address", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "City", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Region", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "PostalCode", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Country", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Phone", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Fax", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "HomePage", void 0);
@@ -76,4 +89,7 @@ async function test() {
 }
 exports.test = test;
 ;
+function ValidateIsIntn(arg0) {
+    throw new Error("Function not implemented.");
+}
 //# sourceMappingURL=Suppliers.js.map

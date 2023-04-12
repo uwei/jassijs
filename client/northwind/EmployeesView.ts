@@ -14,6 +14,7 @@ import { Databinder } from "jassijs/ui/Databinder";
 import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
 import { notify } from "jassijs/ui/Notify";
+import { validate } from "jassijs/remote/Validator";
 type Me = {
     firstName?: Textbox;
     lastName?: Textbox;
@@ -214,7 +215,10 @@ export async function test() {
     var em = (await Employees.find({ id: 4 }))[0];
     var ret = new EmployeesView;
     ret["value"] = em;
-   
+    
+    var h=await validate(em);
+    
+    debugger;
    // ret.me.address
     return ret;
 }

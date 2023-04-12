@@ -4,6 +4,7 @@ import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { FileNode } from "jassijs/remote/FileNode";
 import { classes, JassiError } from "./Classes";
 import { serverservices } from "./Serverservice";
+import { ValidateFunctionParameter, ValidateIsArray, ValidateIsBoolean, ValidateIsString } from "jassijs/remote/Validator";
  
 
  
@@ -105,7 +106,8 @@ export class Server extends RemoteObject {
     * @param {Promise<string>} [async] - returns a Promise for asynchros handling
     * @returns {string[]} - list of files
     */
-    async dir(withDate: boolean = false, context: Context = undefined): Promise<FileNode> {
+    @ValidateFunctionParameter()
+    async dir(@ValidateIsBoolean({optional:true}) withDate: boolean = false, context: Context = undefined): Promise<FileNode> {
         if (!context?.isServer) {
             var ret: FileNode;
             if ((await Server.isOnline(context)) === true)
@@ -122,7 +124,8 @@ export class Server extends RemoteObject {
             // return ["jassijs/base/ChromeDebugger.ts"];
         }
     }
-    public async zip(directoryname: string, serverdir: boolean = undefined, context: Context = undefined) {
+    @ValidateFunctionParameter()
+    public async zip(@ValidateIsString() directoryname: string, @ValidateIsBoolean({optional:true}) serverdir: boolean = undefined, context: Context = undefined) {
         if (!context?.isServer) {
             return <{ [id: string]: string }>await this.call(this, this.zip, directoryname, serverdir, context);
         } else {
@@ -135,7 +138,8 @@ export class Server extends RemoteObject {
      * @param {string} fileNamew
      * @returns {string} content of the file
      */
-    async loadFiles(fileNames: string[], context: Context = undefined): Promise<{ [id: string]: string }> {
+    @ValidateFunctionParameter()
+    async loadFiles(@ValidateIsArray({type:String}) fileNames: string[], context: Context = undefined): Promise<{ [id: string]: string }> {
         if (!context?.isServer) {
             return <{ [id: string]: string }>await this.call(this, this.loadFiles, fileNames, context);
         } else {
@@ -148,7 +152,8 @@ export class Server extends RemoteObject {
      * @param {string} fileName
      * @returns {string} content of the file
      */
-    async loadFile(fileName: string, context: Context = undefined): Promise<string> {
+    @ValidateFunctionParameter()
+    async loadFile(@ValidateIsString() fileName: string, context: Context = undefined): Promise<string> {
         var fromServerdirectory=fileName.startsWith("$serverside/");
         if (!context?.isServer) {
             await this.fillFilesInMapIfNeeded();

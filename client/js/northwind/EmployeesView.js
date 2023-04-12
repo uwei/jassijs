@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_1, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Image_1, Textarea_1, Textbox_1, Registry_1, Property_1, Employees_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView", "jassijs/remote/Validator"], function (require, exports, DateTimeConverter_1, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Image_1, Textarea_1, Textbox_1, Registry_1, Property_1, Employees_1, DBObjectView_1, Validator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmployeesView = void 0;
@@ -196,6 +196,8 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
         var em = (await Employees_1.Employees.find({ id: 4 }))[0];
         var ret = new EmployeesView;
         ret["value"] = em;
+        var h = await (0, Validator_1.validate)(em);
+        debugger;
         // ret.me.address
         return ret;
     }

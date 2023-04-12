@@ -61,8 +61,8 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
             return undefined;
         return DBObject_1.cache[classname][id.toString()];
     }
-    async validate(options) {
-        var ret = (0, Validator_1.validate)(this, options);
+    async validate(options = undefined, throwError = false) {
+        var ret = (0, Validator_1.validate)(this, options, throwError);
         return ret;
     }
     static addToCache(ob) {
@@ -129,6 +129,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
     * save the object to jassijs.db
     */
     async save(context = undefined) {
+        await this.validate({}, true);
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             if (this.id !== undefined) {
                 var cname = Classes_1.classes.getClassName(this);

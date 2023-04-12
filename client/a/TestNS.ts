@@ -1,8 +1,6 @@
+import { Server } from "jassijs/remote/Server";
 
-declare namespace MyTabulator {
- 
-
-    interface OptionsDebug {
-       
-    }
+export async function test(){
+    var g=await new Server().loadFiles(["de/remote/Kunde.ts"]);
+    debugger;
 }

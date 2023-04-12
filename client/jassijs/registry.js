@@ -72,15 +72,21 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.Database": {}
 	},
 	"jassijs/remote/DatabaseTools.ts": {
-		"date": 1680946799456,
-		"jassijs.remote.DatabaseTools": {}
+		"date": 1681309880654,
+		"jassijs.remote.DatabaseTools": {
+			"@members": {
+				"runSQL": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
 	},
 	"jassijs/remote/DBArray.ts": {
 		"date": 1655556796000,
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1681113845409,
+		"date": 1681240060303,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -299,8 +305,23 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1680948998750,
-		"jassijs.remote.Server": {}
+		"date": 1681310433480,
+		"jassijs.remote.Server": {
+			"@members": {
+				"dir": {
+					"ValidateFunctionParameter": []
+				},
+				"zip": {
+					"ValidateFunctionParameter": []
+				},
+				"loadFiles": {
+					"ValidateFunctionParameter": []
+				},
+				"loadFile": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
 	},
 	"jassijs/remote/Settings.ts": {
 		"date": 1680946807085,
@@ -1352,7 +1373,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655668838000
 	},
 	"jassijs/util/CSVImport.ts": {
-		"date": 1657658974000,
+		"date": 1681238809273,
 		"jassijs.util.CSVImport": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -1466,7 +1487,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1681149380755
+		"date": 1681310972628
 	},
 	"jassijs/remote/Serverservice.ts": {
 		"date": 1680954695071

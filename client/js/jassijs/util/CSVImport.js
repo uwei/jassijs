@@ -228,8 +228,15 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
                             }
                             if (val === "#NV")
                                 val = undefined;
+                            if (mt === Date) {
+                                if (typeof val === "string")
+                                    val = new Date(val);
+                            }
                         }
                         if ((meta[fname].OneToOne || meta[fname].ManyToOne) && val !== undefined) {
+                            let cl = meta[fname].ManyToOne[0]();
+                            var nob = new cl();
+                            nob.id = val;
                             val = { id: val };
                         }
                         ob[fname] = val;

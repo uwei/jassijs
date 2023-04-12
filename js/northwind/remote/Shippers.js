@@ -13,20 +13,24 @@ exports.test = exports.Shippers = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
 const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
+const Validator_1 = require("jassijs/remote/Validator");
 let Shippers = class Shippers extends DBObject_1.DBObject {
     constructor() {
         super();
     }
 };
 __decorate([
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
     (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Shippers.prototype, "id", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Shippers.prototype, "CompanyName", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsString)({ optional: true }),
     (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Shippers.prototype, "Phone", void 0);

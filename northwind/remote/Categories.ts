@@ -22,6 +22,7 @@ export class Categories extends DBObject {
     @Column({ nullable: true })
     Description: string;
 
+    @ValidateIsString()
     @Column()
     Picture: string;
 

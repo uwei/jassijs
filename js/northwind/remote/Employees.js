@@ -33,16 +33,6 @@ let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
             return man.find(context, this, options);
         }
     }
-    async hallo(num) {
-        if (!jassijs.isServer) {
-            var ret = await this.call(this, this.hallo, num);
-            return ret * 10;
-        }
-        else {
-            return num + 1;
-            // return ["jassijs/base/ChromeDebugger.ts"];
-        }
-    }
 };
 __decorate([
     (0, Validator_1.ValidateIsInt)({ optional: true }),
@@ -118,6 +108,7 @@ __decorate([
     __metadata("design:type", String)
 ], Employees.prototype, "PhotoPath", void 0);
 __decorate([
+    (0, Validator_1.ValidateIsInstanceOf)({ type: Employees_1, optional: true }),
     (0, DatabaseSchema_1.JoinColumn)(),
     (0, DatabaseSchema_1.ManyToOne)(type => Employees_1),
     __metadata("design:type", Employees)

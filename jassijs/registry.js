@@ -16,15 +16,21 @@ exports.default={
 		"jassijs.remote.Database": {}
 	},
 	"jassijs/remote/DatabaseTools.ts": {
-		"date": 1680946799456,
-		"jassijs.remote.DatabaseTools": {}
+		"date": 1681309880654,
+		"jassijs.remote.DatabaseTools": {
+			"@members": {
+				"runSQL": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
 	},
 	"jassijs/remote/DBArray.ts": {
 		"date": 1655556796000,
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1681113845409,
+		"date": 1681240060303,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -269,7 +275,7 @@ exports.default={
 		}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
-		"date": 1680946638753
+		"date": 1681309085019
 	},
 	"jassijs/server/Filesystem.ts": {
 		"date": 1680946644898,
@@ -310,11 +316,26 @@ exports.default={
 		"date": 1611490792000
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1681149380755
+		"date": 1681310972628
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1680948998750,
-		"jassijs.remote.Server": {}
+		"date": 1681310433480,
+		"jassijs.remote.Server": {
+			"@members": {
+				"dir": {
+					"ValidateFunctionParameter": []
+				},
+				"zip": {
+					"ValidateFunctionParameter": []
+				},
+				"loadFiles": {
+					"ValidateFunctionParameter": []
+				},
+				"loadFile": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
 	},
 	"jassijs/remote/Serverservice.ts": {
 		"date": 1680954695071

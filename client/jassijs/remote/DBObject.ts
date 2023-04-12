@@ -6,7 +6,7 @@ let cl = classes;//force Classes
 import { Entity, EntityOptions } from "jassijs/util/DatabaseSchema";
 import { db } from "jassijs/remote/Database";
 import { Transaction } from "jassijs/remote/Transaction";
-import { validate, ValidationError } from "jassijs/remote/Validator";
+import { validate, ValidationError, ValidationOptions } from "jassijs/remote/Validator";
 import { serverservices } from "jassijs/remote/Serverservice";
 
 export function $DBObject(options?: EntityOptions): Function {
@@ -78,8 +78,8 @@ export class DBObject extends RemoteObject {
             return undefined;
         return DBObject.cache[classname][id.toString()];
     }
-    public async validate(options):Promise<ValidationError[]>{
-        var ret=validate(this,options);
+    public async validate(options=undefined,throwError=false):Promise<ValidationError[]>{
+        var ret=validate(this,options,throwError);
         return ret;
     }
     private static addToCache(ob) {
@@ -148,6 +148,8 @@ export class DBObject extends RemoteObject {
     * save the object to jassijs.db
     */
     async save(context: Context = undefined) {
+        await this.validate({},true);
+       
         if (!context?.isServer) {
             if (this.id !== undefined) {
                 var cname = classes.getClassName(this);

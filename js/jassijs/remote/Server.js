@@ -8,7 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var Server_1;
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var Server_1, _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
@@ -16,6 +19,7 @@ const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const FileNode_1 = require("jassijs/remote/FileNode");
 const Classes_1 = require("./Classes");
 const Serverservice_1 = require("./Serverservice");
+const Validator_1 = require("jassijs/remote/Validator");
 let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     constructor() {
         super();
@@ -257,7 +261,6 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
    * deletes a server modul
    **/
     async testServersideFile(name, context = undefined) {
-        var _a;
         if (!name.startsWith("$serverside/"))
             throw new Classes_1.JassiError(name + " i not a serverside file");
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -271,7 +274,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                 throw new Classes_1.JassiError("only admins can delete");
             }
             //@ts-ignore
-            var test = (await (_a = name.replaceAll("$serverside/", ""), Promise.resolve().then(() => require(_a)))).test;
+            var test = (await Promise.resolve().then(() => require(name.replaceAll("$serverside/", "")))).test;
             if (test)
                 Server_1.lastTestServersideFileResult = await test();
             return Server_1.lastTestServersideFileResult;
@@ -406,8 +409,37 @@ Server.isonline = undefined;
 Server.lastTestServersideFileResult = undefined;
 //files found in js.map of modules in the jassijs.json
 Server.filesInMap = undefined;
+__decorate([
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsBoolean({ optional: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Boolean, typeof (_a = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _a : Object]),
+    __metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], Server.prototype, "dir", null);
+__decorate([
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
+    __param(1, Validator_1.ValidateIsBoolean({ optional: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Boolean, typeof (_c = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _c : Object]),
+    __metadata("design:returntype", Promise)
+], Server.prototype, "zip", null);
+__decorate([
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsArray({ type: String })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array, typeof (_d = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _d : Object]),
+    __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], Server.prototype, "loadFiles", null);
+__decorate([
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, typeof (_f = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _f : Object]),
+    __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], Server.prototype, "loadFile", null);
 Server = Server_1 = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.Server"),
+    Registry_1.$Class("jassijs.remote.Server"),
     __metadata("design:paramtypes", [])
 ], Server);
 exports.Server = Server;

@@ -1,12 +1,14 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { JassiError } from "jassijs/remote/Classes";
-import { serverservices } from "./Serverservice";
+import { serverservices } from "jassijs/remote/Serverservice";
+import { ValidateFunctionParameter, ValidateIsArray, ValidateIsString } from "jassijs/remote/Validator";
 
 @$Class("jassijs.remote.DatabaseTools")
 export class DatabaseTools extends RemoteObject { 
     //this is a sample remote function
-    public static async runSQL(sql: string, parameter: any[] = undefined, context: Context = undefined) {
+    @ValidateFunctionParameter()
+    public static async runSQL(@ValidateIsString() sql: string, @ValidateIsArray({optional:true}) parameter: any[] = undefined, context: Context = undefined) {
         if (!context?.isServer) {
             return await this.call(this.runSQL, sql, parameter, context);
         } else {
@@ -31,7 +33,6 @@ export async function test() {
     /*  var h=await DatabaseTools.runSQL('DROP TABLE :p1,:p2',[
                           {p1:"te_person2",
                                       p2:"tg_person"}]);//,"te_person2"]);*/
-    //var h=await DatabaseTools.runSQL('select * from $1'); 
-
-
+    //var h=await DatabaseTools.runSQL('select * from jassijs_rights'); 
+ 
 }

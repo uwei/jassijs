@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"northwind/remote/Categories.ts": {
-		"date": 1681125000236,
+		"date": 1681228125821,
 		"northwind.Categories": {
 			"$DBObject": [],
 			"@members": {
@@ -40,6 +40,7 @@ exports.default={
 					]
 				},
 				"Picture": {
+					"ValidateIsString": [],
 					"Column": []
 				},
 				"Products": {
@@ -148,7 +149,7 @@ exports.default={
 		}
 	},
 	"northwind/remote/Employees.ts": {
-		"date": 1681149916756,
+		"date": 1681302641560,
 		"northwind.Employees": {
 			"$DBObject": [],
 			"@members": {
@@ -319,6 +320,12 @@ exports.default={
 					]
 				},
 				"ReportsTo": {
+					"ValidateIsInstanceOf": [
+						{
+							"type": "Employees",
+							"optional": true
+						}
+					],
 					"JoinColumn": [],
 					"ManyToOne": [
 						"function"
@@ -352,25 +359,41 @@ exports.default={
 		}
 	},
 	"northwind/remote/OrderDetails.ts": {
-		"date": 1656072710000,
+		"date": 1681235233082,
 		"northwind.OrderDetails": {
 			"$DBObject": [],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryGeneratedColumn": []
 				},
 				"Order": {
+					"ValidateIsInstanceOf": [
+						{
+							"type": "Orders"
+						}
+					],
 					"ManyToOne": [
 						"function",
 						"function"
 					]
 				},
 				"Product": {
+					"ValidateIsInstanceOf": [
+						{
+							"type": "Products"
+						}
+					],
 					"ManyToOne": [
 						"function"
 					]
 				},
 				"UnitPrice": {
+					"ValidateIsNumber": [],
 					"Column": [
 						{
 							"nullable": false,
@@ -379,9 +402,11 @@ exports.default={
 					]
 				},
 				"Quantity": {
+					"ValidateIsNumber": [],
 					"Column": []
 				},
 				"Discount": {
+					"ValidateIsNumber": [],
 					"Column": [
 						{
 							"nullable": true,
@@ -393,24 +418,44 @@ exports.default={
 		}
 	},
 	"northwind/remote/Orders.ts": {
-		"date": 1656072714000,
+		"date": 1681235896083,
 		"northwind.Orders": {
 			"$DBObject": [],
 			"@members": {
 				"id": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"Customer": {
+					"ValidateIsInstanceOf": [
+						{
+							"type": "Customer"
+						}
+					],
 					"ManyToOne": [
 						"function"
 					]
 				},
 				"Employee": {
+					"ValidateIsInstanceOf": [
+						{
+							"type": "Employees"
+						}
+					],
 					"ManyToOne": [
 						"function"
 					]
 				},
 				"OrderDate": {
+					"ValidateIsDate": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -418,6 +463,11 @@ exports.default={
 					]
 				},
 				"RequiredDate": {
+					"ValidateIsDate": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -425,6 +475,11 @@ exports.default={
 					]
 				},
 				"ShippedDate": {
+					"ValidateIsDate": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -432,11 +487,21 @@ exports.default={
 					]
 				},
 				"ShipVia": {
+					"ValidateIsInstanceOf": [
+						{
+							"type": "Shippers"
+						}
+					],
 					"ManyToOne": [
 						"function"
 					]
 				},
 				"Freight": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true,
@@ -445,6 +510,11 @@ exports.default={
 					]
 				},
 				"ShipName": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -452,6 +522,11 @@ exports.default={
 					]
 				},
 				"ShipAddress": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -459,6 +534,11 @@ exports.default={
 					]
 				},
 				"ShipCity": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -466,6 +546,11 @@ exports.default={
 					]
 				},
 				"ShipRegion": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -473,6 +558,11 @@ exports.default={
 					]
 				},
 				"ShipPostalCode": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -480,6 +570,11 @@ exports.default={
 					]
 				},
 				"ShipCountry": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -487,6 +582,11 @@ exports.default={
 					]
 				},
 				"Details": {
+					"ValidateIsArray": [
+						{
+							"type": "OrderDetails"
+						}
+					],
 					"OneToMany": [
 						"function",
 						"function"
@@ -496,14 +596,24 @@ exports.default={
 		}
 	},
 	"northwind/remote/Products.ts": {
-		"date": 1656072720000,
+		"date": 1681236399113,
 		"northwind.Products": {
 			"$DBObject": [],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"ProductName": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -511,17 +621,32 @@ exports.default={
 					]
 				},
 				"Supplier": {
+					"ValidateIsInstanceOf": [
+						{
+							"type": "Suppliers"
+						}
+					],
 					"ManyToOne": [
 						"function"
 					]
 				},
 				"Category": {
+					"ValidateIsInstanceOf": [
+						{
+							"type": "Categories"
+						}
+					],
 					"ManyToOne": [
 						"function",
 						"function"
 					]
 				},
 				"QuantityPerUnit": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -529,6 +654,11 @@ exports.default={
 					]
 				},
 				"UnitPrice": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true,
@@ -537,6 +667,11 @@ exports.default={
 					]
 				},
 				"UnitsInStock": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -544,6 +679,11 @@ exports.default={
 					]
 				},
 				"UnitsOnOrder": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -551,6 +691,11 @@ exports.default={
 					]
 				},
 				"ReorderLevel": {
+					"ValidateIsNumber": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -558,6 +703,7 @@ exports.default={
 					]
 				},
 				"Discontinued": {
+					"ValidateIsBoolean": [],
 					"Column": [
 						{
 							"nullable": true
@@ -568,14 +714,24 @@ exports.default={
 		}
 	},
 	"northwind/remote/Shippers.ts": {
-		"date": 1656072724000,
+		"date": 1681236441210,
 		"northwind.Shippers": {
 			"$DBObject": [],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"CompanyName": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -583,6 +739,11 @@ exports.default={
 					]
 				},
 				"Phone": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -593,14 +754,24 @@ exports.default={
 		}
 	},
 	"northwind/remote/Suppliers.ts": {
-		"date": 1656072728000,
+		"date": 1681236514330,
 		"northwind.Suppliers": {
 			"$DBObject": [],
 			"@members": {
 				"id": {
+					"ValidateIsInt": [
+						{
+							"optional": true
+						}
+					],
 					"PrimaryColumn": []
 				},
 				"CompanyName": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -608,6 +779,11 @@ exports.default={
 					]
 				},
 				"ContactName": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -615,6 +791,11 @@ exports.default={
 					]
 				},
 				"ContactTitle": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -622,6 +803,11 @@ exports.default={
 					]
 				},
 				"Address": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -629,6 +815,11 @@ exports.default={
 					]
 				},
 				"City": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -636,6 +827,11 @@ exports.default={
 					]
 				},
 				"Region": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -643,6 +839,11 @@ exports.default={
 					]
 				},
 				"PostalCode": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -650,6 +851,11 @@ exports.default={
 					]
 				},
 				"Country": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -657,6 +863,11 @@ exports.default={
 					]
 				},
 				"Phone": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -664,6 +875,11 @@ exports.default={
 					]
 				},
 				"Fax": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true
@@ -671,6 +887,11 @@ exports.default={
 					]
 				},
 				"HomePage": {
+					"ValidateIsString": [
+						{
+							"optional": true
+						}
+					],
 					"Column": [
 						{
 							"nullable": true

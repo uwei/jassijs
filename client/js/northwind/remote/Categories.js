@@ -32,6 +32,7 @@ define(["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObj
         __metadata("design:type", String)
     ], Categories.prototype, "Description", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)(),
         (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Categories.prototype, "Picture", void 0);

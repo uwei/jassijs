@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_1, Employees_1, Customer_1, DBObject_1, Registry_1, DatabaseSchema_1, Shippers_1) {
+define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers", "jassijs/remote/Validator"], function (require, exports, OrderDetails_1, Employees_1, Customer_1, DBObject_1, Registry_1, DatabaseSchema_1, Shippers_1, Validator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Orders = void 0;
@@ -17,62 +17,77 @@ define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote
         }
     };
     __decorate([
+        (0, Validator_1.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Orders.prototype, "id", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsInstanceOf)({ type: Customer_1.Customer }),
         (0, DatabaseSchema_1.ManyToOne)(type => Customer_1.Customer),
         __metadata("design:type", Customer_1.Customer)
     ], Orders.prototype, "Customer", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsInstanceOf)({ type: Employees_1.Employees }),
         (0, DatabaseSchema_1.ManyToOne)(type => Employees_1.Employees),
         __metadata("design:type", Employees_1.Employees)
     ], Orders.prototype, "Employee", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Orders.prototype, "OrderDate", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Orders.prototype, "RequiredDate", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Orders.prototype, "ShippedDate", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsInstanceOf)({ type: Shippers_1.Shippers }),
         (0, DatabaseSchema_1.ManyToOne)(type => Shippers_1.Shippers),
         __metadata("design:type", Shippers_1.Shippers)
     ], Orders.prototype, "ShipVia", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Orders.prototype, "Freight", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipName", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipAddress", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCity", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipRegion", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipPostalCode", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCountry", void 0);
     __decorate([
+        (0, Validator_1.ValidateIsArray)({ type: OrderDetails_1.OrderDetails }),
         (0, DatabaseSchema_1.OneToMany)(type => OrderDetails_1.OrderDetails, e => e.Order),
         __metadata("design:type", Array)
     ], Orders.prototype, "Details", void 0);
