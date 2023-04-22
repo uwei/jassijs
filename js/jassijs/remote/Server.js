@@ -261,7 +261,6 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
    * deletes a server modul
    **/
     async testServersideFile(name, context = undefined) {
-        var _a;
         if (!name.startsWith("$serverside/"))
             throw new Classes_1.JassiError(name + " is not a serverside file");
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -275,7 +274,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                 throw new Classes_1.JassiError("only admins can delete");
             }
             //@ts-ignore
-            var test = (await (_a = name.replaceAll("$serverside/", ""), Promise.resolve().then(() => require(_a)))).test;
+            var test = (await Promise.resolve().then(() => require(name.replaceAll("$serverside/", "")))).test;
             if (test)
                 Server_1.lastTestServersideFileResult = await test();
             return Server_1.lastTestServersideFileResult;
@@ -411,102 +410,102 @@ Server.lastTestServersideFileResult = undefined;
 //files found in js.map of modules in the jassijs.json
 Server.filesInMap = undefined;
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsBoolean)({ optional: true })),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsBoolean({ optional: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Boolean, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "dir", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
-    __param(1, (0, Validator_1.ValidateIsBoolean)({ optional: true })),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
+    __param(1, Validator_1.ValidateIsBoolean({ optional: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Boolean, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "zip", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsArray)({ type: tp => String })),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsArray({ type: tp => String })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "loadFiles", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "loadFile", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsArray)({ type: type => String })),
-    __param(1, (0, Validator_1.ValidateIsArray)({ type: type => String })),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsArray({ type: type => String })),
+    __param(1, Validator_1.ValidateIsArray({ type: type => String })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array, Array, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "saveFiles", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
-    __param(1, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
+    __param(1, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "saveFile", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "testServersideFile", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "removeServerModul", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "delete", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
-    __param(1, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
+    __param(1, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "rename", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "createFile", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "createFolder", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Server.prototype, "createModule", null);
 Server = Server_1 = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.Server"),
+    Registry_1.$Class("jassijs.remote.Server"),
     __metadata("design:paramtypes", [])
 ], Server);
 exports.Server = Server;

@@ -11,8 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var Settings_1;
-var _a, _b;
+var Settings_1, _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.load = exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
@@ -176,31 +175,31 @@ Settings.browserSettings = undefined;
 Settings.userSettings = undefined;
 Settings.allusersSettings = undefined;
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
-    __param(1, (0, Validator_1.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
+    __param(1, Validator_1.ValidateIsIn({ in: ["browser", "user", "allusers"] })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Settings, "remove", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
-    __param(2, (0, Validator_1.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
+    __param(2, Validator_1.ValidateIsIn({ in: ["browser", "user", "allusers"] })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [typeof (_a = typeof T !== "undefined" && T) === "function" ? _a : Object, typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, String]),
     __metadata("design:returntype", Promise)
 ], Settings, "save", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(1, (0, Validator_1.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
-    __param(2, (0, Validator_1.ValidateIsBoolean)({ optional: true })),
+    Validator_1.ValidateFunctionParameter(),
+    __param(1, Validator_1.ValidateIsIn({ in: ["browser", "user", "allusers"] })),
+    __param(2, Validator_1.ValidateIsBoolean({ optional: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String, Object, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Settings, "saveAll", null);
 Settings = Settings_1 = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.Settings")
+    Registry_1.$Class("jassijs.remote.Settings")
 ], Settings);
 exports.Settings = Settings;
 var settings = new Settings();

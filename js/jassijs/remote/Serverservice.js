@@ -17,7 +17,6 @@ exports.beforeServiceLoad = beforeServiceLoad;
 var serverservices = new Proxy(runningServerservices, {
     get(target, prop, receiver) {
         return new Promise(async (resolve, reject) => {
-            var _a;
             var khsdf = runningServerservices;
             if (target[prop]) {
                 resolve(target[prop]);
@@ -41,7 +40,7 @@ var serverservices = new Proxy(runningServerservices, {
                             await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                         }
                         else {
-                            await (_a = classname.replaceAll(".", "/"), Promise.resolve().then(() => require(_a)));
+                            await Promise.resolve().then(() => require(classname.replaceAll(".", "/")));
                         }
                         var props = Registry_1.default.getData("$Serverservice", classname)[0].params[0];
                         for (var x = 0; x < beforeServiceLoadHandler.length; x++) {

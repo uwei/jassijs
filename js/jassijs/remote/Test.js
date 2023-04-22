@@ -70,7 +70,7 @@ let Test = class Test {
     }
 };
 Test = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.Test")
+    Registry_1.$Class("jassijs.remote.Test")
 ], Test);
 exports.Test = Test;
 //# sourceMappingURL=Test.js.map

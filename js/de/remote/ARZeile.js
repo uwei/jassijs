@@ -61,29 +61,29 @@ let ARZeile = ARZeile_1 = class ARZeile extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
+    DatabaseSchema_1.PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
 ], ARZeile.prototype, "id", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], ARZeile.prototype, "text", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", Number)
 ], ARZeile.prototype, "position", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true, type: "decimal" }),
+    DatabaseSchema_1.Column({ nullable: true, type: "decimal" }),
     __metadata("design:type", Number)
 ], ARZeile.prototype, "preis", void 0);
 __decorate([
-    (0, Rights_1.$CheckParentRight)(),
-    (0, DatabaseSchema_1.ManyToOne)(type => AR_1.AR, ar => ar.zeilen),
+    Rights_1.$CheckParentRight(),
+    DatabaseSchema_1.ManyToOne(type => AR_1.AR, ar => ar.zeilen),
     __metadata("design:type", AR_1.AR)
 ], ARZeile.prototype, "ar", void 0);
 ARZeile = ARZeile_1 = __decorate([
-    (0, DBObject_1.$DBObject)(),
-    (0, Registry_1.$Class)("de.ARZeile"),
+    DBObject_1.$DBObject(),
+    Registry_1.$Class("de.ARZeile"),
     __metadata("design:paramtypes", [])
 ], ARZeile);
 exports.ARZeile = ARZeile;

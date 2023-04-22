@@ -20,23 +20,23 @@ let Shippers = class Shippers extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    (0, Validator_1.ValidateIsInt)({ optional: true }),
-    (0, DatabaseSchema_1.PrimaryColumn)(),
+    Validator_1.ValidateIsInt({ optional: true }),
+    DatabaseSchema_1.PrimaryColumn(),
     __metadata("design:type", Number)
 ], Shippers.prototype, "id", void 0);
 __decorate([
-    (0, Validator_1.ValidateIsString)({ optional: true }),
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    Validator_1.ValidateIsString({ optional: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Shippers.prototype, "CompanyName", void 0);
 __decorate([
-    (0, Validator_1.ValidateIsString)({ optional: true }),
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    Validator_1.ValidateIsString({ optional: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Shippers.prototype, "Phone", void 0);
 Shippers = __decorate([
-    (0, DBObject_1.$DBObject)(),
-    (0, Registry_1.$Class)("northwind.Shippers"),
+    DBObject_1.$DBObject(),
+    Registry_1.$Class("northwind.Shippers"),
     __metadata("design:paramtypes", [])
 ], Shippers);
 exports.Shippers = Shippers;

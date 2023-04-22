@@ -19,28 +19,28 @@ let TestBigData = class TestBigData extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
+    DatabaseSchema_1.PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
 ], TestBigData.prototype, "id", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], TestBigData.prototype, "name", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], TestBigData.prototype, "name2", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", Number)
 ], TestBigData.prototype, "number1", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", Number)
 ], TestBigData.prototype, "number2", void 0);
 TestBigData = __decorate([
-    (0, DBObject_1.$DBObject)(),
-    (0, Registry_1.$Class)("tests.TestBigData"),
+    DBObject_1.$DBObject(),
+    Registry_1.$Class("tests.TestBigData"),
     __metadata("design:paramtypes", [])
 ], TestBigData);
 exports.TestBigData = TestBigData;

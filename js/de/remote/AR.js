@@ -81,37 +81,37 @@ let AR = AR_1 = class AR extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    (0, DatabaseSchema_1.PrimaryColumn)(),
+    DatabaseSchema_1.PrimaryColumn(),
     __metadata("design:type", Number)
 ], AR.prototype, "id", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], AR.prototype, "strasse", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", Number)
 ], AR.prototype, "nummer", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], AR.prototype, "ort", void 0);
 __decorate([
-    (0, Rights_1.$CheckParentRight)()
+    Rights_1.$CheckParentRight()
     //@JoinTable()
     ,
-    (0, DatabaseSchema_1.ManyToOne)(type => Kunde_1.Kunde, kunde => kunde.rechnungen),
+    DatabaseSchema_1.ManyToOne(type => Kunde_1.Kunde, kunde => kunde.rechnungen),
     __metadata("design:type", Kunde_1.Kunde)
 ], AR.prototype, "kunde", void 0);
 __decorate([
-    (0, DatabaseSchema_1.OneToMany)(type => ARZeile_1.ARZeile, zeile => zeile.ar),
+    DatabaseSchema_1.OneToMany(type => ARZeile_1.ARZeile, zeile => zeile.ar),
     __metadata("design:type", Array)
 ], AR.prototype, "zeilen", void 0);
 AR = AR_1 = __decorate([
-    (0, Rights_1.$Rights)([{ name: "Auftragswesen/Ausgangsrechnung/festschreiben" },
+    Rights_1.$Rights([{ name: "Auftragswesen/Ausgangsrechnung/festschreiben" },
         { name: "Auftragswesen/Ausgangsrechnung/löschen" }]),
-    (0, DBObject_1.$DBObject)(),
-    (0, Registry_1.$Class)("de.AR"),
+    DBObject_1.$DBObject(),
+    Registry_1.$Class("de.AR"),
     __metadata("design:paramtypes", [])
 ], AR);
 exports.AR = AR;

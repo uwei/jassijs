@@ -19,20 +19,20 @@ let Book = class Book extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    (0, DatabaseSchema_1.PrimaryColumn)(),
+    DatabaseSchema_1.PrimaryColumn(),
     __metadata("design:type", Number)
 ], Book.prototype, "id", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Book.prototype, "tt", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], Book.prototype, "t2", void 0);
 Book = __decorate([
-    (0, DBObject_1.$DBObject)(),
-    (0, Registry_1.$Class)("local.Book"),
+    DBObject_1.$DBObject(),
+    Registry_1.$Class("local.Book"),
     __metadata("design:paramtypes", [])
 ], Book);
 exports.Book = Book;

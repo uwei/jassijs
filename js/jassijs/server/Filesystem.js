@@ -544,8 +544,8 @@ let Filesystem = Filesystem_1 = class Filesystem {
 Filesystem.allModules = {};
 Filesystem.zipid = 0;
 Filesystem = Filesystem_1 = __decorate([
-    (0, Serverservice_1.$Serverservice)({ name: "filesystem", getInstance: async () => { return new Filesystem_1(); } }),
-    (0, Registry_1.$Class)("jassijs.server.Filesystem")
+    Serverservice_1.$Serverservice({ name: "filesystem", getInstance: async () => { return new Filesystem_1(); } }),
+    Registry_1.$Class("jassijs.server.Filesystem")
 ], Filesystem);
 exports.default = Filesystem;
 function copyFile(f1, f2) {
