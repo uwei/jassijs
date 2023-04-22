@@ -100,6 +100,11 @@ declare module "jassijs_localserver/RegistryIndexer" {
         readFile(filename: any): Promise<any>;
     }
 }
+/// <amd-dependency name="JSZip" path="jszip" />
+declare module "jassijs_localserver/ext/jszip" {
+    var JSZip: any;
+    export default JSZip;
+}
 declare module "jassijs_localserver/Filesystem" {
     import { Context } from "jassijs/remote/RemoteObject";
     class FileEntry {
@@ -251,6 +256,8 @@ declare module "jassijs_localserver/DatabaseSchema" {
 declare module "jassijs_localserver/LocalProtocol" {
     import { Context } from "jassijs/remote/RemoteObject";
     import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
+    export function messageReceived(param: any): Promise<void>;
+    export function test(): Promise<void>;
     export function localExec(prot: RemoteProtocol, context?: Context): Promise<any>;
 }
 declare module "jassijs_localserver/Testuser" {
@@ -275,9 +282,4 @@ declare module "jassijs_localserver/modul" {
         };
     };
     export default _default;
-}
-/// <amd-dependency name="JSZip" path="jszip" />
-declare module "jassijs_localserver/ext/jzip" {
-    var JSZip: any;
-    export default JSZip;
 }

@@ -1,4 +1,13 @@
-define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema", "jassijs/remote/Serverservice", "jassijs_localserver/DBManagerExt"], function (Filesystem, schema, serverservice, dbmanext) {
+define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema", "jassijs/remote/Serverservice", "jassijs_localserver/DBManagerExt", "jassijs_localserver/LocalProtocol"], function (Filesystem, schema, serverservice, dbmanext, localProt) {
+    navigator.serviceWorker.controller.postMessage({
+        type: 'ACTIVATE_REMOTEPROTCOL'
+    });
+    navigator.serviceWorker.addEventListener("message", (evt) => {
+        var _a;
+        if (((_a = evt.data) === null || _a === void 0 ? void 0 : _a.type) === "REQUEST_REMOTEPROTCOL") {
+            localProt.messageReceived(evt);
+        }
+    });
     serverservice.beforeServiceLoad((name, service) => {
         if (name === "db") {
             dbmanext.extendDBManager(service);
@@ -22,14 +31,15 @@ requirejs.undef("jassijs/util/DatabaseSchema");
 define("jassijs/util/DatabaseSchema", ["jassijs_localserver/DatabaseSchema"], function (to) {
     return to;
 });
+/*
 define("jassijs/server/DoRemoteProtocol", ["jassijs_localserver/LocalProtocol"], function (locprot) {
     return {
         _execute: async function (protext, request, context) {
             var prot = JSON.parse(protext);
             return await locprot.localExec(prot, context);
         }
-    };
-});
+    }
+})*/
 /*
 define("jassijs/server/Filesystem", ["jassijs_localserver/Filesystem"], function (fs) {
     return fs

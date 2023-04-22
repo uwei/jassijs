@@ -215,7 +215,7 @@ exports.default={
 		}
 	},
 	"de/remote/MyRemoteObject.ts": {
-		"date": 1681310881687,
+		"date": 1682192454974,
 		"de.remote.MyRemoteObject": {
 			"@members": {
 				"sayHello": {

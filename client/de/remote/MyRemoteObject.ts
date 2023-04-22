@@ -32,5 +32,5 @@ export class MyRemoteObject extends RemoteObject{
 }
 export async function test(){
     console.log(await new MyRemoteObject().sayHello("Kurt"));
-    console.log(await MyRemoteObject.sayHello2("5"));
+   // console.log(await MyRemoteObject.sayHello2("5"));
 }

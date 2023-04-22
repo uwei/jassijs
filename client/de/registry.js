@@ -298,7 +298,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1656077196000
 	},
 	"de/TH.ts": {
-		"date": 1681571285869
+		"date": 1682186441295
 	},
 	"de/TTDialog.ts": {
 		"date": 1655556796000,
@@ -308,7 +308,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1657973728000
 	},
 	"de/remote/MyRemoteObject.ts": {
-		"date": 1681310881687,
+		"date": 1682192454974,
 		"de.remote.MyRemoteObject": {
 			"@members": {
 				"sayHello": {
@@ -328,6 +328,9 @@ define("de/registry",["require"], function(require) {
 		"de.ReportKunde": {
 			"@members": {}
 		}
+	},
+	"de/TestProt.ts": {
+		"date": 1682190808387
 	}
 }
  }

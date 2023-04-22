@@ -6,7 +6,7 @@ define("jassijs_localserver/registry",["require"], function(require) {
 		"date": 1622984214000
 	},
 	"jassijs_localserver/DBManager.ts": {
-		"date": 1680958168208,
+		"date": 1681919345935,
 		"jassijs_localserver.DBManager": {
 			"$Serverservice": [
 				{
@@ -17,7 +17,7 @@ define("jassijs_localserver/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_localserver/Filesystem.ts": {
-		"date": 1680948933087,
+		"date": 1681314476793,
 		"jassijs_localserver.Filesystem": {
 			"$Serverservice": [
 				{
@@ -31,7 +31,7 @@ define("jassijs_localserver/registry",["require"], function(require) {
 		"date": 1680806174434
 	},
 	"jassijs_localserver/LocalProtocol.ts": {
-		"date": 1680946908251
+		"date": 1682192720960
 	},
 	"jassijs_localserver/modul.ts": {
 		"date": 1622998476000
@@ -64,7 +64,7 @@ define("jassijs_localserver/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_localserver/DBManagerExt.ts": {
-		"date": 1680956657331
+		"date": 1681314239371
 	},
 	"jassijs_localserver/ext/jzip.ts": {
 		"date": 1657714030000

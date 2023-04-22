@@ -1146,6 +1146,13 @@ define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_lo
     ], RegistryIndexer);
     exports.RegistryIndexer = RegistryIndexer;
 });
+define("jassijs_localserver/ext/jszip", ["require", "exports", "jszip"], function (require, exports, JSZip) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <amd-dependency path="jszip" name="JSZip"/>
+    JSZip.support.nodebuffer = undefined; //we hacked window.Buffer
+    exports.default = JSZip;
+});
 define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Serverservice"], function (require, exports, Registry_4, Reloader_1, Registry_5, Server_2, Serverservice_3) {
     "use strict";
     var Filesystem_2;
@@ -1822,7 +1829,16 @@ define("jassijs_localserver/DatabaseSchema", ["require", "exports", "jassijs/rem
 });
 //export function Entity(options?: EntityOptions): Function;
 //export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
-define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema", "jassijs/remote/Serverservice", "jassijs_localserver/DBManagerExt"], function (Filesystem, schema, serverservice, dbmanext) {
+define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema", "jassijs/remote/Serverservice", "jassijs_localserver/DBManagerExt", "jassijs_localserver/LocalProtocol"], function (Filesystem, schema, serverservice, dbmanext, localProt) {
+    navigator.serviceWorker.controller.postMessage({
+        type: 'ACTIVATE_REMOTEPROTCOL'
+    });
+    navigator.serviceWorker.addEventListener("message", (evt) => {
+        var _a;
+        if (((_a = evt.data) === null || _a === void 0 ? void 0 : _a.type) === "REQUEST_REMOTEPROTCOL") {
+            localProt.messageReceived(evt);
+        }
+    });
     serverservice.beforeServiceLoad((name, service) => {
         if (name === "db") {
             dbmanext.extendDBManager(service);
@@ -1846,67 +1862,35 @@ requirejs.undef("jassijs/util/DatabaseSchema");
 define("jassijs/util/DatabaseSchema", ["jassijs_localserver/DatabaseSchema"], function (to) {
     return to;
 });
+/*
 define("jassijs/server/DoRemoteProtocol", ["jassijs_localserver/LocalProtocol"], function (locprot) {
     return {
         _execute: async function (protext, request, context) {
             var prot = JSON.parse(protext);
             return await locprot.localExec(prot, context);
         }
-    };
-});
+    }
+})*/
 /*
 define("jassijs/server/Filesystem", ["jassijs_localserver/Filesystem"], function (fs) {
     return fs
 
 })*/
 //DatabaseSchema
-define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Serverservice"], function (require, exports, RemoteProtocol_1, Serverservice_5) {
+define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Server", "jassijs/remote/Serverservice"], function (require, exports, RemoteProtocol_1, Server_3, Serverservice_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.localExec = void 0;
-    RemoteProtocol_1.RemoteProtocol.prototype.exec = async function (config, ob) {
-        var clname = JSON.parse(config.data).classname;
+    exports.localExec = exports.test = exports.messageReceived = void 0;
+    async function messageReceived(param) {
+        var config = param.data;
+        var data = config.data;
+        var clname = data.classname;
         var classes = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/Classes"], resolve_8, reject_8); })).classes;
         var DBObject = await classes.loadClass("jassijs.remote.DBObject");
         var ret;
-        //
-        /* if (clname === "jassijs.remote.Server") {
-             var tst = JSON.parse(config.data);
-             if (tst.method === "dir") {
-                 var retserver = JSON.parse(await $.ajax(config));
-                 var sret = await localExec(JSON.parse(config.data));
-                 for(let i=0;i<retserver.files.length;i++){
-                     if(retserver.files[i].name==="local"){
-                         //retserver.files.splice(i,1);
-                     }
-                 }
-                 for(let i=0;i<sret.files.length;i++){
-                     if(sret.files[i].name==="local")
-                         retserver.files.push(sret.files[i]);
-                 }
-                 return JSON.stringify(retserver);
-             }else if(tst.method==="saveFiles"){
-                 if(tst.parameter[0][0].startsWith("local/")||tst.parameter[0][0].startsWith("js/local/")){
-                     var sret = await localExec(JSON.parse(config.data));
-                     ret = new RemoteProtocol().stringify(sret);
-                     if (ret === undefined)
-                         ret = "$$undefined$$";
-                     return ret;
-                 }
-             } else if(tst.parameter.length>0&&(tst.parameter[0]==="local"||tst.parameter[0].startsWith("local/"))) {
-                 var sret = await localExec(JSON.parse(config.data));
-                 ret = new RemoteProtocol().stringify(sret);
-                 if (ret === undefined)
-                     ret = "$$undefined$$";
-                 return ret;
-             }
-     
-         }
-         if (local.indexOf(clname) > -1||clname.startsWith("local")) {*/
-        var data = JSON.parse(config.data);
-        var debugservermethods = []; //["dir"];//for testing run on server
+        var debugservermethods = []; //["saveFiles", "dir"];//["dir"];//for testing run on server
         if (debugservermethods.indexOf(data.method) > -1) {
-            ret = await $.ajax(config);
+            ret = "***POST_TO_SERVER***";
         }
         else {
             var sret = await localExec(data);
@@ -1914,10 +1898,62 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
             if (ret === undefined)
                 ret = "$$undefined$$";
         }
-        /* } else
-             ret = await $.ajax(config);*/
+        navigator.serviceWorker.controller.postMessage({
+            type: 'RESPONSE_REMOTEPROTCOL',
+            id: config.id,
+            data: ret
+        });
+    }
+    exports.messageReceived = messageReceived;
+    //var stest = '{"url":"remoteprotocol?1682187030801","type":"post","dataType":"text","data":"{\\"__clname__\\":\\"jassijs.remote.RemoteProtocol\\",\\"classname\\":\\"de.remote.MyRemoteObject\\",\\"_this\\":{\\"__clname__\\":\\"de.remote.MyRemoteObject\\",\\"__refid__\\":1},\\"parameter\\":[\\"Kurt\\"],\\"method\\":\\"sayHello\\",\\"__refid__\\":0}"}';
+    //var config = JSON.parse(stest);
+    async function test() {
+        var jj = await new Server_3.Server().zip("");
+        // var gg=await texec(config, undefined);
+        // debugger;
+    }
+    exports.test = test;
+    /*async function texec(config, object) {
+        return await new Promise((resolve, reject) => {
+            //@ts-ignore
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', config.url, true);
+            xhr.setRequestHeader("Content-Type", "text");
+    
+            xhr.onload = function (data) {
+                if (this.status === 200)
+                    resolve(this.responseText);
+                else
+                    reject(this);
+            };
+    
+            xhr.send(config.data);
+            xhr.onerror = function (data) {
+                reject(data);
+            };
+        }
+        );
+        //return await $.ajax(config, object);
+    }
+    RemoteProtocol.prototype.exec2 = async function (config, ob) {
+        var clname = JSON.parse(config.data).classname;
+        var classes = (await import("jassijs/remote/Classes")).classes;
+        var DBObject = await classes.loadClass("jassijs.remote.DBObject");
+        var ret;
+    
+        var data = JSON.parse(config.data);
+        var debugservermethods = [];//["dir"];//for testing run on server
+        if (debugservermethods.indexOf(data.method) > -1) {
+            ret = await $.ajax(config);
+        } else {
+            var sret = await localExec(data);
+            ret = new RemoteProtocol().stringify(sret);
+            if (ret === undefined)
+                ret = "$$undefined$$";
+        }
+      
         return ret;
-    };
+    }*/
     async function localExec(prot, context = undefined) {
         var classes = (await new Promise((resolve_9, reject_9) => { require(["jassijs/remote/Classes"], resolve_9, reject_9); })).classes;
         var p = new RemoteProtocol_1.RemoteProtocol();
@@ -2048,7 +2084,7 @@ define("jassijs_localserver/registry", ["require"], function (require) {
                 "date": 1622984214000
             },
             "jassijs_localserver/DBManager.ts": {
-                "date": 1680958168208,
+                "date": 1681919345935,
                 "jassijs_localserver.DBManager": {
                     "$Serverservice": [
                         {
@@ -2059,7 +2095,7 @@ define("jassijs_localserver/registry", ["require"], function (require) {
                 }
             },
             "jassijs_localserver/Filesystem.ts": {
-                "date": 1680948933087,
+                "date": 1681314476793,
                 "jassijs_localserver.Filesystem": {
                     "$Serverservice": [
                         {
@@ -2073,7 +2109,7 @@ define("jassijs_localserver/registry", ["require"], function (require) {
                 "date": 1680806174434
             },
             "jassijs_localserver/LocalProtocol.ts": {
-                "date": 1680946908251
+                "date": 1682192720960
             },
             "jassijs_localserver/modul.ts": {
                 "date": 1622998476000
@@ -2106,20 +2142,13 @@ define("jassijs_localserver/registry", ["require"], function (require) {
                 }
             },
             "jassijs_localserver/DBManagerExt.ts": {
-                "date": 1680956657331
+                "date": 1681314239371
             },
             "jassijs_localserver/ext/jzip.ts": {
                 "date": 1657714030000
             }
         }
     };
-});
-define("jassijs_localserver/ext/jzip", ["require", "exports", "jszip"], function (require, exports, JSZip) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /// <amd-dependency path="jszip" name="JSZip"/>
-    JSZip.support.nodebuffer = undefined; //we hacked window.Buffer
-    exports.default = JSZip;
 });
 define("sha.js", [], () => { return {}; });
 define("dotenv", [], () => { return {}; });

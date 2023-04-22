@@ -1,4 +1,5 @@
-var RUNTIME = 'runtime57';
+var RUNTIME = 'runtime58';
+var nextid = 0;
 var tempFiles = {};
 // A list of local resources we always want to be cached.
 var db;
@@ -36,6 +37,21 @@ function getMimeType(filename) {
         type = "text/html; charset=utf-8";
     return type;
 }
+var localRemoteProtocolList = {};
+async function doLocalRemoteProtocol(evt) {
+    var body = await evt.request.clone().json();
+    var client = await self.clients.get(evt.clientId);
+    var id = nextid++;
+    client.postMessage({ type: "REQUEST_REMOTEPROTCOL", data: body, id });
+    var waitForMessage = await new Promise((resolve) => {
+        localRemoteProtocolList[id] = function (data) {
+            resolve(data.data);
+        };
+    });
+    if (waitForMessage === "***POST_TO_SERVER***")
+        return "***POST_TO_SERVER***";
+    return new Response(waitForMessage);
+}
 // The activate handler takes care of cleaning up old caches.
 self.addEventListener('activate', event => {
     const currentCaches = [RUNTIME];
@@ -48,6 +64,7 @@ self.addEventListener('activate', event => {
     }).then(() => self.clients.claim()));
 });
 //var todoAfterLoggedin = [];
+var isLocalRemoteprotocolActivated = {}; //{clientid}:true
 self.addEventListener('message', function (evt) {
     if (evt.data && evt.data.type === "SAVE_FILE") { //this tempFiles could be delivered
         console.log(evt.data.filename);
@@ -59,6 +76,13 @@ self.addEventListener('message', function (evt) {
         /*todoAfterLoggedin.forEach((entr) => {
           entr();
         })*/
+    }
+    else if (evt.data && evt.data.type === "RESPONSE_REMOTEPROTCOL") {
+        localRemoteProtocolList[evt.data.id](evt.data);
+        delete localRemoteProtocolList[evt.data.id];
+    }
+    else if (evt.data && evt.data.type === "ACTIVATE_REMOTEPROTCOL") {
+        isLocalRemoteprotocolActivated[evt.source.id] = true;
     }
     else
         console.log('postMessage received', evt);
@@ -78,6 +102,11 @@ self.addEventListener('message', function (evt) {
   }
 }*/
 async function handleEvent(event) {
+    if (isLocalRemoteprotocolActivated[event.clientId] && event.request.method === "POST" && event.request.url.indexOf("/remoteprotocol?") !== -1) {
+        var ret = await doLocalRemoteProtocol(event);
+        if (ret !== "***POST_TO_SERVER***")
+            return ret;
+    }
     if (event.request.method === "POST" || event.request.url.indexOf("/remoteprotocol?") !== -1) {
         let res = await fetch(event.request);
         if (res.status === 401 || res.status === 500) { //now we display an Logindialog and pause the request

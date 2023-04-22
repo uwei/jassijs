@@ -1,47 +1,71 @@
 
 import { Context } from "jassijs/remote/RemoteObject";
 import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
+import { Server } from "jassijs/remote/Server";
 import { serverservices } from "jassijs/remote/Serverservice";
 
-RemoteProtocol.prototype.exec = async function (config, ob) {
+
+export async function messageReceived(param) {
+    var config = param.data;
+    var data = config.data;
+    var clname = data.classname;
+    var classes = (await import("jassijs/remote/Classes")).classes;
+    var DBObject = await classes.loadClass("jassijs.remote.DBObject");
+    var ret;
+
+    var debugservermethods = [];//["saveFiles", "dir"];//["dir"];//for testing run on server
+    if (debugservermethods.indexOf(data.method) > -1) {
+        ret = "***POST_TO_SERVER***";
+    } else {
+        var sret = await localExec(data);
+        ret = new RemoteProtocol().stringify(sret);
+        if (ret === undefined)
+            ret = "$$undefined$$";
+    }
+
+    navigator.serviceWorker.controller.postMessage({
+        type: 'RESPONSE_REMOTEPROTCOL',
+        id: config.id,
+        data: ret
+    });
+}
+
+//var stest = '{"url":"remoteprotocol?1682187030801","type":"post","dataType":"text","data":"{\\"__clname__\\":\\"jassijs.remote.RemoteProtocol\\",\\"classname\\":\\"de.remote.MyRemoteObject\\",\\"_this\\":{\\"__clname__\\":\\"de.remote.MyRemoteObject\\",\\"__refid__\\":1},\\"parameter\\":[\\"Kurt\\"],\\"method\\":\\"sayHello\\",\\"__refid__\\":0}"}';
+
+//var config = JSON.parse(stest);
+export async function test() {
+    var jj = await new Server().zip("");
+    // var gg=await texec(config, undefined);
+    // debugger;
+}
+/*async function texec(config, object) {
+    return await new Promise((resolve, reject) => {
+        //@ts-ignore
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', config.url, true);
+        xhr.setRequestHeader("Content-Type", "text");
+
+        xhr.onload = function (data) {
+            if (this.status === 200)
+                resolve(this.responseText);
+            else
+                reject(this);
+        };
+
+        xhr.send(config.data);
+        xhr.onerror = function (data) {
+            reject(data);
+        };
+    }
+    );
+    //return await $.ajax(config, object);
+}
+RemoteProtocol.prototype.exec2 = async function (config, ob) {
     var clname = JSON.parse(config.data).classname;
     var classes = (await import("jassijs/remote/Classes")).classes;
     var DBObject = await classes.loadClass("jassijs.remote.DBObject");
     var ret;
-    //
-    /* if (clname === "jassijs.remote.Server") {
-         var tst = JSON.parse(config.data);
-         if (tst.method === "dir") {
-             var retserver = JSON.parse(await $.ajax(config));
-             var sret = await localExec(JSON.parse(config.data));
-             for(let i=0;i<retserver.files.length;i++){
-                 if(retserver.files[i].name==="local"){
-                     //retserver.files.splice(i,1);
-                 }
-             }
-             for(let i=0;i<sret.files.length;i++){
-                 if(sret.files[i].name==="local")
-                     retserver.files.push(sret.files[i]);
-             }
-             return JSON.stringify(retserver);
-         }else if(tst.method==="saveFiles"){
-             if(tst.parameter[0][0].startsWith("local/")||tst.parameter[0][0].startsWith("js/local/")){
-                 var sret = await localExec(JSON.parse(config.data));
-                 ret = new RemoteProtocol().stringify(sret);
-                 if (ret === undefined)
-                     ret = "$$undefined$$";
-                 return ret;
-             }
-         } else if(tst.parameter.length>0&&(tst.parameter[0]==="local"||tst.parameter[0].startsWith("local/"))) {
-             var sret = await localExec(JSON.parse(config.data));
-             ret = new RemoteProtocol().stringify(sret);
-             if (ret === undefined)
-                 ret = "$$undefined$$";
-             return ret;
-         }
- 
-     }
-     if (local.indexOf(clname) > -1||clname.startsWith("local")) {*/
+
     var data = JSON.parse(config.data);
     var debugservermethods = [];//["dir"];//for testing run on server
     if (debugservermethods.indexOf(data.method) > -1) {
@@ -52,17 +76,16 @@ RemoteProtocol.prototype.exec = async function (config, ob) {
         if (ret === undefined)
             ret = "$$undefined$$";
     }
-    /* } else
-         ret = await $.ajax(config);*/
+  
     return ret;
-}
+}*/
 export async function localExec(prot: RemoteProtocol, context: Context = undefined) {
     var classes = (await import("jassijs/remote/Classes")).classes;
     var p = new RemoteProtocol();
 
     var C = await classes.loadClass(prot.classname);
     if (context === undefined) {
-        
+
         context = {
             isServer: true,
             request: {
@@ -73,16 +96,16 @@ export async function localExec(prot: RemoteProtocol, context: Context = undefin
             }
         };
         var Cookies = (await import("jassijs/util/Cookies")).Cookies;
-        if(Cookies.get("simulateUser")&&Cookies.get("simulateUserPassword")){
-            var man=await serverservices.db;
-            var user=await man.login(context,Cookies.get("simulateUser"),Cookies.get("simulateUserPassword"));
-            if(user===undefined){
+        if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
+            var man = await serverservices.db;
+            var user = await man.login(context, Cookies.get("simulateUser"), Cookies.get("simulateUserPassword"));
+            if (user === undefined) {
                 throw Error("simulated login failed")
-            }else{
-                context.request.user.user=user.id;
-                context.request.user.isAdmin=user.isAdmin?true:false;
+            } else {
+                context.request.user.user = user.id;
+                context.request.user.isAdmin = user.isAdmin ? true : false;
             }
-            
+
         }
     }
 

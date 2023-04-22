@@ -64,7 +64,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
     exports.MyRemoteObject = MyRemoteObject;
     async function test() {
         console.log(await new MyRemoteObject().sayHello("Kurt"));
-        console.log(await MyRemoteObject.sayHello2("5"));
+        // console.log(await MyRemoteObject.sayHello2("5"));
     }
     exports.test = test;
 });
