@@ -1,9 +1,9 @@
-import { OrderDetails } from "northwind/remote/OrderDetails";
-import { Orders } from "northwind/remote/Orders";
+
+
 import { Transaction } from "jassijs/remote/Transaction";
 
 export async function test() {
-    var a = await Orders.find();
+    /*var a = await Orders.find();
     var ids = [];
     a.forEach((o) => { ids.push(o.id) });
 
@@ -22,7 +22,7 @@ export async function test() {
     trans.add(all2[0], all2[0].remove);
     trans.add(all2[1], all2[1].remove);
     await trans.execute();
-
+*/
     // var all2=await OrderDetails.find({where:"Order.id in (10050)"});
 
 

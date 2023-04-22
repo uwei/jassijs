@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Chrome mit \"localhost\" starten",
-            "url": "http://localhost:5000/app.html",
+            "url": "http://localhost:5000/index.html",
             "webRoot": "${workspaceFolder}"
         }
     ]

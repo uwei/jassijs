@@ -203,9 +203,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                 var fileName = fileNames[f];
                 var content = contents[f];
                 if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
-                    //@ts-ignore
-                    var tss = await Promise.resolve().then(() => require("jassijs_editor/util/Typescript"));
-                    var rets = await tss.default.transpile(fileName, content);
+                    //var tss = await import("jassijs_editor/util/Typescript");
+                    var tss = await Classes_1.classes.loadClass("jassijs_editor.util.Typescript");
+                    var rets = await tss.instance.transpile(fileName, content);
                     allfileNames = allfileNames.concat(rets.fileNames);
                     allcontents = allcontents.concat(rets.contents);
                     alltsfiles.push(fileName);

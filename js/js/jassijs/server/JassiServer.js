@@ -17,6 +17,7 @@ require("jassijs/server/PassportSetup");
 const DoRemoteProtocol_1 = require("jassijs/server/DoRemoteProtocol");
 const RawBody_1 = require("jassijs/server/RawBody");
 const RegistryIndexer_1 = require("./RegistryIndexer");
+const UpdatePackage_1 = require("./UpdatePackage");
 class JassiConnectionProperties {
 }
 /**
@@ -27,13 +28,14 @@ class JassiConnectionProperties {
  */
 function JassiServer(properties = {}, expressApp = undefined) {
     let app = expressApp;
+    UpdatePackage_1.updatePackage();
     if (app === undefined)
         app = express();
     if (properties.updeateRegistryOnStart !== false)
         new RegistryIndexer_1.ServerIndexer().updateRegistry();
     if (properties.syncRemoteFiles !== false) {
         try {
-            (0, Filesystem_1.syncRemoteFiles)();
+            Filesystem_1.syncRemoteFiles();
         }
         catch (_a) {
             console.log("could not sync remotefiles");
@@ -52,7 +54,7 @@ function JassiServer(properties = {}, expressApp = undefined) {
     /* if (properties.allowDownloadAsZip!==false)
          app.get('/zip', passport.authenticate("jwt", { session: false }), zip);*/
     const PORT = (process.env.PORT || 5000);
-    app.listen(PORT, () => console.log(`Listening on ${PORT} ->browse http://localhost:${PORT}/app.html`));
+    app.listen(PORT, () => console.log(`Listening on ${PORT} ->browse http://localhost:${PORT}/index.html`));
     return app;
 }
 exports.default = JassiServer;

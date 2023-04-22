@@ -5,7 +5,6 @@ import { serverservices } from "jassijs/remote/Serverservice";
 
 RemoteProtocol.prototype.exec = async function (config, ob) {
     var clname = JSON.parse(config.data).classname;
-    var local = ["jassijs.remote.Transaction", "northwind.Employees", "northwind.Customer"];
     var classes = (await import("jassijs/remote/Classes")).classes;
     var DBObject = await classes.loadClass("jassijs.remote.DBObject");
     var ret;

@@ -847,7 +847,7 @@ function calcPosNewCity(world: World, deep) {
     var y = getRandomInt(world.game.mapHeight - 12) + 12;
     for (var i = 0; i < world.cities.length; i++) {
         var ct = world.cities[i];
-        if (x > (ct.x - 70) && x < (ct.x + 70) && y > (ct.y - 68) && (y < ct.y + 68) {
+        if (x > (ct.x - 70) && x < (ct.x + 70) && y > (ct.y - 68) && (y < ct.y + 68) ){
             //conflict
             if (deep > 0) {
                 deep--;

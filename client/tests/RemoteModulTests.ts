@@ -1,10 +1,10 @@
 import { FileNode } from "jassijs/remote/FileNode";
-import { FileActions } from "jassijs/ui/FileExplorer";
+import { FileActions } from "jassijs_editor/FileExplorer";
 import { Server } from "jassijs/remote/Server";
 import { classes } from "jassijs/remote/Classes";
-import { Tests } from "jassijs/base/Tests";
+import { Tests } from "jassijs_editor/util/Tests";
 import registry from "jassijs/remote/Registry";
-import { DatabaseDesigner } from "jassijs/ui/DatabaseDesigner";
+import { DatabaseDesigner } from "jassijs_editor/DatabaseDesigner";
 import { DBObject } from "jassijs/remote/DBObject";
 import { DatabaseTools } from "jassijs/remote/DatabaseTools";
 import { Test } from "jassijs/remote/Test";

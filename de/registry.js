@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"de/remote/AR.ts": {
-		"date": 1680947266134,
+		"date": 1681557287008,
 		"de.AR": {
 			"$Rights": [
 				[

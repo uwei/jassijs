@@ -7,9 +7,206 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Categories", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Table_1, BoxPanel_1, Textarea_1, Textbox_1, Registry_1, Panel_1, Property_1, Categories_1, DBObjectView_1) {
+define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Validator_1) {
     "use strict";
-    var _a;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Suppliers = void 0;
+    let Suppliers = class Suppliers extends DBObject_1.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        (0, Validator_1.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Suppliers.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "CompanyName", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "ContactName", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "ContactTitle", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Address", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "City", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Region", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "PostalCode", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Country", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Phone", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Fax", void 0);
+    __decorate([
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "HomePage", void 0);
+    Suppliers = __decorate([
+        (0, DBObject_1.$DBObject)(),
+        (0, Registry_1.$Class)("northwind.Suppliers"),
+        __metadata("design:paramtypes", [])
+    ], Suppliers);
+    exports.Suppliers = Suppliers;
+    async function test() {
+    }
+    exports.test = test;
+    ;
+    function ValidateIsIntn(arg0) {
+        throw new Error("Function not implemented.");
+    }
+});
+define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Categories_1, Suppliers_1, DBObject_2, Registry_2, DatabaseSchema_2, Validator_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Products = void 0;
+    let Products = class Products extends DBObject_2.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        (0, Validator_2.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_2.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Products.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Products.prototype, "ProductName", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsInstanceOf)({ type: type => Suppliers_1.Suppliers }),
+        (0, DatabaseSchema_2.ManyToOne)(type => Suppliers_1.Suppliers),
+        __metadata("design:type", Suppliers_1.Suppliers)
+    ], Products.prototype, "Supplier", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsInstanceOf)({ type: c => Categories_1.Categories }),
+        (0, DatabaseSchema_2.ManyToOne)(type => Categories_1.Categories, e => e.Products),
+        __metadata("design:type", Categories_1.Categories)
+    ], Products.prototype, "Category", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Products.prototype, "QuantityPerUnit", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true, type: "decimal" }),
+        __metadata("design:type", Number)
+    ], Products.prototype, "UnitPrice", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", Number)
+    ], Products.prototype, "UnitsInStock", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", Number)
+    ], Products.prototype, "UnitsOnOrder", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", Number)
+    ], Products.prototype, "ReorderLevel", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsBoolean)(),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", Boolean)
+    ], Products.prototype, "Discontinued", void 0);
+    Products = __decorate([
+        (0, DBObject_2.$DBObject)(),
+        (0, Registry_2.$Class)("northwind.Products"),
+        __metadata("design:paramtypes", [])
+    ], Products);
+    exports.Products = Products;
+    async function test() {
+        var p = await Products.findOne();
+    }
+    exports.test = test;
+    ;
+});
+define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_1, DBObject_3, Registry_3, DatabaseSchema_3, Validator_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Categories = void 0;
+    let Categories = class Categories extends DBObject_3.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        (0, Validator_3.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_3.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Categories.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Categories.prototype, "CategoryName", void 0);
+    __decorate([
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Categories.prototype, "Description", void 0);
+    __decorate([
+        (0, Validator_3.ValidateIsString)(),
+        (0, DatabaseSchema_3.Column)(),
+        __metadata("design:type", String)
+    ], Categories.prototype, "Picture", void 0);
+    __decorate([
+        (0, DatabaseSchema_3.OneToMany)(type => Products_1.Products, e => e.Category),
+        __metadata("design:type", Products_1.Products)
+    ], Categories.prototype, "Products", void 0);
+    Categories = __decorate([
+        (0, DBObject_3.$DBObject)(),
+        (0, Registry_3.$Class)("northwind.Categories"),
+        __metadata("design:paramtypes", [])
+    ], Categories);
+    exports.Categories = Categories;
+    async function test() {
+    }
+    exports.test = test;
+    ;
+});
+define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Categories", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Table_1, BoxPanel_1, Textarea_1, Textbox_1, Registry_4, Panel_1, Property_1, Categories_2, DBObjectView_1) {
+    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CategoriesView = void 0;
     let CategoriesView = class CategoriesView extends DBObjectView_1.DBObjectView {
@@ -63,22 +260,444 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
     };
     __decorate([
         (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Categories_1.Categories !== "undefined" && Categories_1.Categories) === "function" ? _a : Object)
+        __metadata("design:type", Categories_2.Categories)
     ], CategoriesView.prototype, "value", void 0);
     CategoriesView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
-        (0, Registry_1.$Class)("northwind.CategoriesView"),
+        (0, Registry_4.$Class)("northwind.CategoriesView"),
         __metadata("design:paramtypes", [])
     ], CategoriesView);
     exports.CategoriesView = CategoriesView;
     async function test() {
         var ret = new CategoriesView();
-        ret["value"] = await Categories_1.Categories.findOne({ relations: ["*"] });
+        ret["value"] = await Categories_2.Categories.findOne({ relations: ["*"] });
         return ret;
     }
     exports.test = test;
 });
-define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/ObjectChooser", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Customer", "northwind/remote/Orders", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_2, BoxPanel_2, HTMLPanel_1, Databinder_1, ObjectChooser_1, Registry_2, Panel_2, Customer_1, Orders_1, Actions_1, Windows_1) {
+define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_4, Registry_5, DatabaseSchema_4, Validator_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Customer = void 0;
+    let Customer = class Customer extends DBObject_4.DBObject {
+        constructor() {
+            super();
+            this.CompanyName = "";
+            this.ContactName = "";
+            this.ContactTitle = "";
+            this.Address = "";
+            this.City = "";
+            /*  this.id = 0;
+              this.vorname = "";
+              this.nachname = "";
+              this.strasse = "";
+              this.PLZ = "";
+              this.hausnummer = 0;
+              this.initExtensions();*/
+        }
+    };
+    __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_4.PrimaryColumn)(),
+        __metadata("design:type", String)
+    ], Customer.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)(),
+        (0, DatabaseSchema_4.Column)(),
+        __metadata("design:type", String)
+    ], Customer.prototype, "CompanyName", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)(),
+        (0, DatabaseSchema_4.Column)(),
+        __metadata("design:type", String)
+    ], Customer.prototype, "ContactName", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)(),
+        (0, DatabaseSchema_4.Column)(),
+        __metadata("design:type", String)
+    ], Customer.prototype, "ContactTitle", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)(),
+        (0, DatabaseSchema_4.Column)(),
+        __metadata("design:type", String)
+    ], Customer.prototype, "Address", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)(),
+        (0, DatabaseSchema_4.Column)(),
+        __metadata("design:type", String)
+    ], Customer.prototype, "City", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_4.Column)({ nullable: true })
+        // @Column({default:""})
+        ,
+        __metadata("design:type", String)
+    ], Customer.prototype, "Region", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_4.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Customer.prototype, "PostalCode", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_4.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Customer.prototype, "Country", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_4.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Customer.prototype, "Phone", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_4.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Customer.prototype, "Fax", void 0);
+    Customer = __decorate([
+        (0, DBObject_4.$DBObject)(),
+        (0, Registry_5.$Class)("northwind.Customer"),
+        __metadata("design:paramtypes", [])
+    ], Customer);
+    exports.Customer = Customer;
+    async function test() {
+        var all = await Customer.find();
+        //var cus2=<Customer>await Customer.findOne();
+        //debugger;
+        //await Kunde.sample();
+        //	new de.Kunde().generate();
+        //jassijs.db.uploadType(de.Kunde);
+    }
+    exports.test = test;
+    ;
+});
+define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_2, Orders_1, DBObject_5, Registry_6, DatabaseSchema_5, Validator_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.OrderDetails = void 0;
+    let OrderDetails = class OrderDetails extends DBObject_5.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        (0, Validator_5.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_5.PrimaryGeneratedColumn)(),
+        __metadata("design:type", Number)
+    ], OrderDetails.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Orders_1.Orders }),
+        (0, DatabaseSchema_5.ManyToOne)(type => Orders_1.Orders, e => e.Details),
+        __metadata("design:type", Orders_1.Orders)
+    ], OrderDetails.prototype, "Order", void 0);
+    __decorate([
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Products_2.Products }),
+        (0, DatabaseSchema_5.ManyToOne)(type => Products_2.Products),
+        __metadata("design:type", Products_2.Products)
+    ], OrderDetails.prototype, "Product", void 0);
+    __decorate([
+        (0, Validator_5.ValidateIsNumber)(),
+        (0, DatabaseSchema_5.Column)({ nullable: false, type: "decimal" }),
+        __metadata("design:type", Number)
+    ], OrderDetails.prototype, "UnitPrice", void 0);
+    __decorate([
+        (0, Validator_5.ValidateIsNumber)(),
+        (0, DatabaseSchema_5.Column)(),
+        __metadata("design:type", Number)
+    ], OrderDetails.prototype, "Quantity", void 0);
+    __decorate([
+        (0, Validator_5.ValidateIsNumber)(),
+        (0, DatabaseSchema_5.Column)({ nullable: true, type: "decimal" }),
+        __metadata("design:type", Number)
+    ], OrderDetails.prototype, "Discount", void 0);
+    OrderDetails = __decorate([
+        (0, DBObject_5.$DBObject)(),
+        (0, Registry_6.$Class)("northwind.OrderDetails"),
+        __metadata("design:paramtypes", [])
+    ], OrderDetails);
+    exports.OrderDetails = OrderDetails;
+    async function test() {
+    }
+    exports.test = test;
+    ;
+});
+define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_6, Registry_7, DatabaseSchema_6, Transaction_1, Serverservice_1, Validator_6) {
+    "use strict";
+    var Employees_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test2 = exports.test = exports.Employees = void 0;
+    let Employees = Employees_1 = class Employees extends DBObject_6.DBObject {
+        constructor() {
+            super();
+        }
+        static async find(options = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                if (options === undefined)
+                    options = { relations: ["ReportsTo"] };
+                return await this.call(this.find, options, context);
+            }
+            else {
+                //@ts-ignore
+                var man = await (await Serverservice_1.serverservices.db);
+                return man.find(context, this, options);
+            }
+        }
+    };
+    __decorate([
+        (0, Validator_6.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_6.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Employees.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "LastName", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "FirstName", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "Title", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "TitleOfCourtesy", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "Address", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "City", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "Region", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "PostalCode", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "Country", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "HomePhone", void 0);
+    __decorate([
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "Extension", void 0);
+    __decorate([
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "Photo", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "Notes", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Employees.prototype, "PhotoPath", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Employees_1, optional: true }),
+        (0, DatabaseSchema_6.JoinColumn)(),
+        (0, DatabaseSchema_6.ManyToOne)(type => Employees_1),
+        __metadata("design:type", Employees)
+    ], Employees.prototype, "ReportsTo", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", Date)
+    ], Employees.prototype, "BirthDate", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", Date)
+    ], Employees.prototype, "HireDate", void 0);
+    Employees = Employees_1 = __decorate([
+        (0, DBObject_6.$DBObject)(),
+        (0, Registry_7.$Class)("northwind.Employees"),
+        __metadata("design:paramtypes", [])
+    ], Employees);
+    exports.Employees = Employees;
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+    async function test() {
+        var all = await Employees.find({ where: "id>:p", whereParams: { p: 5 } });
+    }
+    exports.test = test;
+    async function test2() {
+        var em = new Employees();
+        em.id = getRandomInt(100000);
+        var em2 = new Employees();
+        em2.id = getRandomInt(100000);
+        var trans = new Transaction_1.Transaction();
+        console.log(em.id + " " + em2.id);
+        trans.add(em, em.save);
+        trans.add(em2, em2.save);
+        var h = await trans.execute();
+        h = h;
+        /*  var emp = new Employees();
+          emp.id = 100003;
+          emp.BirthDate = new Date(Date.now());
+          //await emp.save();
+          var emp2 = new Employees();
+          emp2.id = 200000;
+          emp2.ReportsTo = emp;
+          //await emp2.save();*/
+    }
+    exports.test2 = test2;
+    ;
+});
+define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_7, Registry_8, DatabaseSchema_7, Validator_7) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Shippers = void 0;
+    let Shippers = class Shippers extends DBObject_7.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        (0, Validator_7.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_7.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Shippers.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_7.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_7.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Shippers.prototype, "CompanyName", void 0);
+    __decorate([
+        (0, Validator_7.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_7.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Shippers.prototype, "Phone", void 0);
+    Shippers = __decorate([
+        (0, DBObject_7.$DBObject)(),
+        (0, Registry_8.$Class)("northwind.Shippers"),
+        __metadata("design:paramtypes", [])
+    ], Shippers);
+    exports.Shippers = Shippers;
+    async function test() {
+    }
+    exports.test = test;
+    ;
+});
+define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers", "jassijs/remote/Validator"], function (require, exports, OrderDetails_1, Employees_2, Customer_1, DBObject_8, Registry_9, DatabaseSchema_8, Shippers_1, Validator_8) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Orders = void 0;
+    let Orders = class Orders extends DBObject_8.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        (0, Validator_8.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_8.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Orders.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsInstanceOf)({ type: type => Customer_1.Customer }),
+        (0, DatabaseSchema_8.ManyToOne)(type => Customer_1.Customer),
+        __metadata("design:type", Customer_1.Customer)
+    ], Orders.prototype, "Customer", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsInstanceOf)({ type: type => Employees_2.Employees }),
+        (0, DatabaseSchema_8.ManyToOne)(type => Employees_2.Employees),
+        __metadata("design:type", Employees_2.Employees)
+    ], Orders.prototype, "Employee", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
+        __metadata("design:type", Date)
+    ], Orders.prototype, "OrderDate", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
+        __metadata("design:type", Date)
+    ], Orders.prototype, "RequiredDate", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
+        __metadata("design:type", Date)
+    ], Orders.prototype, "ShippedDate", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsInstanceOf)({ type: type => Shippers_1.Shippers }),
+        (0, DatabaseSchema_8.ManyToOne)(type => Shippers_1.Shippers),
+        __metadata("design:type", Shippers_1.Shippers)
+    ], Orders.prototype, "ShipVia", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true, type: "decimal" }),
+        __metadata("design:type", Number)
+    ], Orders.prototype, "Freight", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Orders.prototype, "ShipName", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Orders.prototype, "ShipAddress", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Orders.prototype, "ShipCity", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Orders.prototype, "ShipRegion", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Orders.prototype, "ShipPostalCode", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Orders.prototype, "ShipCountry", void 0);
+    __decorate([
+        (0, Validator_8.ValidateIsArray)({ type: type => OrderDetails_1.OrderDetails }),
+        (0, DatabaseSchema_8.OneToMany)(type => OrderDetails_1.OrderDetails, e => e.Order),
+        __metadata("design:type", Array)
+    ], Orders.prototype, "Details", void 0);
+    Orders = __decorate([
+        (0, DBObject_8.$DBObject)(),
+        (0, Registry_9.$Class)("northwind.Orders"),
+        __metadata("design:paramtypes", [])
+    ], Orders);
+    exports.Orders = Orders;
+    async function test() {
+    }
+    exports.test = test;
+    ;
+});
+define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/ObjectChooser", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Customer", "northwind/remote/Orders", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_2, BoxPanel_2, HTMLPanel_1, Databinder_1, ObjectChooser_1, Registry_10, Panel_2, Customer_2, Orders_2, Actions_1, Windows_1) {
     "use strict";
     var CustomerOrders_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -153,13 +772,13 @@ define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "j
         }
         async customerChanged() {
             var cust = this.me.databinderCustomer.value;
-            var orders = await Orders_1.Orders.find({ where: "Customer.id=:param",
+            var orders = await Orders_2.Orders.find({ where: "Customer.id=:param",
                 whereParams: { param: cust.id } });
             this.me.IDOrders.items = orders;
             this.me.databinderOrder.value = orders[0];
         }
         async setData() {
-            var all = await Customer_1.Customer.find();
+            var all = await Customer_2.Customer.find();
             this.me.databinderCustomer.value = all[0];
             this.customerChanged();
             //        this.me.IDChooseCustomer.items = all;
@@ -174,7 +793,7 @@ define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "j
     ], CustomerOrders, "showDialog", null);
     CustomerOrders = CustomerOrders_1 = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Registry_2.$Class)("northwind/CustomerOrders"),
+        (0, Registry_10.$Class)("northwind/CustomerOrders"),
         __metadata("design:paramtypes", [])
     ], CustomerOrders);
     exports.CustomerOrders = CustomerOrders;
@@ -184,7 +803,7 @@ define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "j
     }
     exports.test = test;
 });
-define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Customer"], function (require, exports, Table_3, Registry_3, Panel_3, Actions_2, Windows_2, Customer_2) {
+define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Customer"], function (require, exports, Table_3, Registry_11, Panel_3, Actions_2, Windows_2, Customer_3) {
     "use strict";
     var CustomerPhoneList_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -221,7 +840,7 @@ define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table",
             this.setData();
         }
         async setData() {
-            var all = await Customer_2.Customer.find();
+            var all = await Customer_3.Customer.find();
             this.me.table.items = all;
             //  new Customer().Fax
         }
@@ -237,7 +856,7 @@ define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table",
     ], CustomerPhoneList, "showDialog", null);
     CustomerPhoneList = CustomerPhoneList_1 = __decorate([
         (0, Actions_2.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Registry_3.$Class)("northwind/CustomerPhoneList"),
+        (0, Registry_11.$Class)("northwind/CustomerPhoneList"),
         __metadata("design:paramtypes", [])
     ], CustomerPhoneList);
     exports.CustomerPhoneList = CustomerPhoneList;
@@ -248,9 +867,8 @@ define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table",
     }
     exports.test = test;
 });
-define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Customer", "jassijs/ui/DBObjectView"], function (require, exports, Textbox_2, Registry_4, Property_2, Customer_3, DBObjectView_2) {
+define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Customer", "jassijs/ui/DBObjectView"], function (require, exports, Textbox_2, Registry_12, Property_2, Customer_4, DBObjectView_2) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CustomerView = void 0;
     let CustomerView = class CustomerView extends DBObjectView_2.DBObjectView {
@@ -357,7 +975,7 @@ define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "j
     };
     __decorate([
         (0, Property_2.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Customer_3.Customer !== "undefined" && Customer_3.Customer) === "function" ? _a : Object)
+        __metadata("design:type", Customer_4.Customer)
     ], CustomerView.prototype, "value", void 0);
     CustomerView = __decorate([
         (0, DBObjectView_2.$DBObjectView)({
@@ -365,20 +983,19 @@ define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "j
             actionname: "Northwind/Customers",
             icon: "mdi mdi-nature-people"
         }),
-        (0, Registry_4.$Class)("northwind/CustomerView"),
+        (0, Registry_12.$Class)("northwind/CustomerView"),
         __metadata("design:paramtypes", [])
     ], CustomerView);
     exports.CustomerView = CustomerView;
     async function test() {
         var ret = new CustomerView;
-        ret["value"] = await Customer_3.Customer.findOne();
+        ret["value"] = await Customer_4.Customer.findOne();
         return ret;
     }
     exports.test = test;
 });
-define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/OrderDetails", "jassijs/ui/DBObjectView", "jassijs/ui/Textbox"], function (require, exports, Registry_5, Property_3, OrderDetails_1, DBObjectView_3, Textbox_3) {
+define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/OrderDetails", "jassijs/ui/DBObjectView", "jassijs/ui/Textbox"], function (require, exports, Registry_13, Property_3, OrderDetails_2, DBObjectView_3, Textbox_3) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DetailTest = void 0;
     let DetailTest = class DetailTest extends DBObjectView_3.DBObjectView {
@@ -398,25 +1015,24 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry",
     };
     __decorate([
         (0, Property_3.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof OrderDetails_1.OrderDetails !== "undefined" && OrderDetails_1.OrderDetails) === "function" ? _a : Object)
+        __metadata("design:type", OrderDetails_2.OrderDetails)
     ], DetailTest.prototype, "value", void 0);
     DetailTest = __decorate([
         (0, DBObjectView_3.$DBObjectView)({ classname: "northwind.OrderDetails" }),
-        (0, Registry_5.$Class)("northwind.DetailTest"),
+        (0, Registry_13.$Class)("northwind.DetailTest"),
         __metadata("design:paramtypes", [])
     ], DetailTest);
     exports.DetailTest = DetailTest;
     async function test() {
         var ret = new DetailTest();
         // ret.value.Order.Customer
-        ret["value"] = await OrderDetails_1.OrderDetails.findOne(); //{ relations: ["Order","Order.Customer"] });
+        ret["value"] = await OrderDetails_2.OrderDetails.findOne(); //{ relations: ["Order","Order.Customer"] });
         return ret;
     }
     exports.test = test;
 });
-define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView", "jassijs/remote/Validator"], function (require, exports, DateTimeConverter_1, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Textbox_4, Registry_6, Property_4, Employees_1, DBObjectView_4, Validator_1) {
+define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView", "jassijs/remote/Validator"], function (require, exports, DateTimeConverter_1, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Textbox_4, Registry_14, Property_4, Employees_3, DBObjectView_4, Validator_9) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmployeesView = void 0;
     let EmployeesView = class EmployeesView extends DBObjectView_4.DBObjectView {
@@ -592,25 +1208,25 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/
     };
     __decorate([
         (0, Property_4.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Employees_1.Employees !== "undefined" && Employees_1.Employees) === "function" ? _a : Object)
+        __metadata("design:type", Employees_3.Employees)
     ], EmployeesView.prototype, "value", void 0);
     EmployeesView = __decorate([
         (0, DBObjectView_4.$DBObjectView)({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
-        (0, Registry_6.$Class)("northwind.EmployeesView"),
+        (0, Registry_14.$Class)("northwind.EmployeesView"),
         __metadata("design:paramtypes", [])
     ], EmployeesView);
     exports.EmployeesView = EmployeesView;
     async function test() {
-        var em = (await Employees_1.Employees.find({ id: 4 }))[0];
+        var em = (await Employees_3.Employees.find({ id: 4 }))[0];
         var ret = new EmployeesView;
         ret["value"] = em;
-        var h = await (0, Validator_1.validate)(em);
+        var h = await (0, Validator_9.validate)(em);
         // ret.me.address
         return ret;
     }
     exports.test = test;
 });
-define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router", "northwind/remote/OrderDetails", "jassijs/remote/Transaction"], function (require, exports, Button_1, HTMLPanel_3, Registry_7, Panel_4, CSVImport_1, Actions_3, Router_1, OrderDetails_2, Transaction_1) {
+define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router", "northwind/remote/OrderDetails", "jassijs/remote/Transaction"], function (require, exports, Button_1, HTMLPanel_3, Registry_15, Panel_4, CSVImport_1, Actions_3, Router_1, OrderDetails_3, Transaction_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ImportData = void 0;
@@ -646,9 +1262,9 @@ define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jass
                 //   debugger;
                 var ids = [];
                 data.forEach((o) => { ids.push(o.id); });
-                var all2 = await OrderDetails_2.OrderDetails.find({ where: "Order.id in (:...ids)", whereParams: { ids: ids } });
+                var all2 = await OrderDetails_3.OrderDetails.find({ where: "Order.id in (:...ids)", whereParams: { ids: ids } });
                 if (all2.length > 0) {
-                    var trans = new Transaction_1.Transaction();
+                    var trans = new Transaction_2.Transaction();
                     for (var x = 0; x < all2.length; x++) {
                         trans.add(all2[x], all2[x].remove);
                     }
@@ -695,7 +1311,7 @@ define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jass
     ], ImportData, "showDialog", null);
     ImportData = __decorate([
         (0, Actions_3.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Registry_7.$Class)("northwind.ImportData"),
+        (0, Registry_15.$Class)("northwind.ImportData"),
         __metadata("design:paramtypes", [])
     ], ImportData);
     exports.ImportData = ImportData;
@@ -705,9 +1321,8 @@ define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jass
     }
     exports.test = test;
 });
-define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_2, Style_1, BoxPanel_3, Repeater_1, ObjectChooser_3, HTMLPanel_4, NumberConverter_3, Textbox_5, Registry_8, Panel_5, Property_5, Orders_2, DBObjectView_5) {
+define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_2, Style_1, BoxPanel_3, Repeater_1, ObjectChooser_3, HTMLPanel_4, NumberConverter_3, Textbox_5, Registry_16, Panel_5, Property_5, Orders_3, DBObjectView_5) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.OrdersView = void 0;
     let OrdersView = class OrdersView extends DBObjectView_5.DBObjectView {
@@ -932,22 +1547,22 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
     };
     __decorate([
         (0, Property_5.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Orders_2.Orders !== "undefined" && Orders_2.Orders) === "function" ? _a : Object)
+        __metadata("design:type", Orders_3.Orders)
     ], OrdersView.prototype, "value", void 0);
     OrdersView = __decorate([
         (0, DBObjectView_5.$DBObjectView)({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text" }),
-        (0, Registry_8.$Class)("northwind.OrdersView"),
+        (0, Registry_16.$Class)("northwind.OrdersView"),
         __metadata("design:paramtypes", [])
     ], OrdersView);
     exports.OrdersView = OrdersView;
     async function test() {
         var ret = new OrdersView;
-        ret["value"] = await Orders_2.Orders.findOne({ id: 10249, relations: ["*"] });
+        ret["value"] = await Orders_3.Orders.findOne({ id: 10249, relations: ["*"] });
         return ret;
     }
     exports.test = test;
 });
-define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/Repeater", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Products", "jassijs/ui/converters/NumberConverter"], function (require, exports, Checkbox_1, Textbox_6, Repeater_2, BoxPanel_4, HTMLPanel_5, Databinder_2, Registry_9, Panel_6, Actions_4, Windows_3, Products_1, NumberConverter_4) {
+define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/Repeater", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Products", "jassijs/ui/converters/NumberConverter"], function (require, exports, Checkbox_1, Textbox_6, Repeater_2, BoxPanel_4, HTMLPanel_5, Databinder_2, Registry_17, Panel_6, Actions_4, Windows_3, Products_3, NumberConverter_4) {
     "use strict";
     var ProductList_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1029,7 +1644,7 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
             Windows_3.default.add(new ProductList_1(), "ProductList");
         }
         async setData() {
-            var all = await Products_1.Products.find({});
+            var all = await Products_3.Products.find({});
             all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName); });
             this.me.databinder.value = all;
             //        this.me.IDChooseCustomer.items = all;
@@ -1044,7 +1659,7 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
     ], ProductList, "showDialog", null);
     ProductList = ProductList_1 = __decorate([
         (0, Actions_4.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Registry_9.$Class)("northwind/ProductList"),
+        (0, Registry_17.$Class)("northwind/ProductList"),
         __metadata("design:paramtypes", [])
     ], ProductList);
     exports.ProductList = ProductList;
@@ -1054,9 +1669,8 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
     }
     exports.test = test;
 });
-define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_2, ObjectChooser_4, HTMLPanel_6, Checkbox_2, NumberConverter_5, Textbox_7, Registry_10, Property_6, Products_2, DBObjectView_6) {
+define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_2, ObjectChooser_4, HTMLPanel_6, Checkbox_2, NumberConverter_5, Textbox_7, Registry_18, Property_6, Products_4, DBObjectView_6) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ProductView = void 0;
     let ProductView = class ProductView extends DBObjectView_6.DBObjectView {
@@ -1190,25 +1804,24 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
     };
     __decorate([
         (0, Property_6.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Products_2.Products !== "undefined" && Products_2.Products) === "function" ? _a : Object)
+        __metadata("design:type", Products_4.Products)
     ], ProductView.prototype, "value", void 0);
     ProductView = __decorate([
         (0, DBObjectView_6.$DBObjectView)({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" }),
-        (0, Registry_10.$Class)("northwind.ProductView"),
+        (0, Registry_18.$Class)("northwind.ProductView"),
         __metadata("design:paramtypes", [])
     ], ProductView);
     exports.ProductView = ProductView;
     async function test() {
         var ret = new ProductView;
         //var h=await Products.find({relations:["Category"]});
-        ret["value"] = await Products_2.Products.findOne({ relations: ["*"] });
+        ret["value"] = await Products_4.Products.findOne({ relations: ["*"] });
         return ret;
     }
     exports.test = test;
 });
-define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_6, Textbox_8, Registry_11, Property_7, Shippers_1, DBObjectView_7) {
+define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_6, Textbox_8, Registry_19, Property_7, Shippers_2, DBObjectView_7) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ShippersView = void 0;
     let ShippersView = class ShippersView extends DBObjectView_7.DBObjectView {
@@ -1257,24 +1870,23 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
     };
     __decorate([
         (0, Property_7.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Shippers_1.Shippers !== "undefined" && Shippers_1.Shippers) === "function" ? _a : Object)
+        __metadata("design:type", Shippers_2.Shippers)
     ], ShippersView.prototype, "value", void 0);
     ShippersView = __decorate([
         (0, DBObjectView_7.$DBObjectView)({ classname: "northwind.Shippers", actionname: "Northwind/Shippers", icon: "mdi mdi-truck-delivery" }),
-        (0, Registry_11.$Class)("northwind.ShippersView"),
+        (0, Registry_19.$Class)("northwind.ShippersView"),
         __metadata("design:paramtypes", [])
     ], ShippersView);
     exports.ShippersView = ShippersView;
     async function test() {
         var ret = new ShippersView;
-        ret["value"] = await Shippers_1.Shippers.findOne();
+        ret["value"] = await Shippers_2.Shippers.findOne();
         return ret;
     }
     exports.test = test;
 });
-define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_7, Textbox_9, Registry_12, Property_8, Suppliers_1, DBObjectView_8) {
+define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_7, Textbox_9, Registry_20, Property_8, Suppliers_2, DBObjectView_8) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SuppliersView = void 0;
     let SuppliersView = class SuppliersView extends DBObjectView_8.DBObjectView {
@@ -1389,17 +2001,17 @@ define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/
     };
     __decorate([
         (0, Property_8.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Suppliers_1.Suppliers !== "undefined" && Suppliers_1.Suppliers) === "function" ? _a : Object)
+        __metadata("design:type", Suppliers_2.Suppliers)
     ], SuppliersView.prototype, "value", void 0);
     SuppliersView = __decorate([
         (0, DBObjectView_8.$DBObjectView)({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" }),
-        (0, Registry_12.$Class)("northwind.SuppliersView"),
+        (0, Registry_20.$Class)("northwind.SuppliersView"),
         __metadata("design:paramtypes", [])
     ], SuppliersView);
     exports.SuppliersView = SuppliersView;
     async function test() {
         var ret = new SuppliersView;
-        ret["value"] = await Suppliers_1.Suppliers.findOne();
+        ret["value"] = await Suppliers_2.Suppliers.findOne();
         return ret;
     }
     exports.test = test;
@@ -1429,7 +2041,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1656682770000,
+                "date": 1682164037474,
                 "northwind/CustomerView": {
                     "$DBObjectView": [
                         {
@@ -2489,7 +3101,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerPhoneList.ts": {
-                "date": 1681317489793,
+                "date": 1681640212626,
                 "northwind/CustomerPhoneList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2526,630 +3138,6 @@ define("northwind/registry", ["require"], function (require) {
             }
         }
     };
-});
-define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_3, DBObject_1, Registry_13, DatabaseSchema_1, Validator_2) {
-    "use strict";
-    var _a;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Categories = void 0;
-    let Categories = class Categories extends DBObject_1.DBObject {
-        constructor() {
-            super();
-        }
-    };
-    __decorate([
-        (0, Validator_2.ValidateIsInt)({ optional: true }),
-        (0, DatabaseSchema_1.PrimaryColumn)(),
-        __metadata("design:type", Number)
-    ], Categories.prototype, "id", void 0);
-    __decorate([
-        (0, Validator_2.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_1.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Categories.prototype, "CategoryName", void 0);
-    __decorate([
-        (0, Validator_2.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_1.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Categories.prototype, "Description", void 0);
-    __decorate([
-        (0, Validator_2.ValidateIsString)(),
-        (0, DatabaseSchema_1.Column)(),
-        __metadata("design:type", String)
-    ], Categories.prototype, "Picture", void 0);
-    __decorate([
-        (0, DatabaseSchema_1.OneToMany)(type => Products_3.Products, e => e.Category),
-        __metadata("design:type", typeof (_a = typeof Products_3.Products !== "undefined" && Products_3.Products) === "function" ? _a : Object)
-    ], Categories.prototype, "Products", void 0);
-    Categories = __decorate([
-        (0, DBObject_1.$DBObject)(),
-        (0, Registry_13.$Class)("northwind.Categories"),
-        __metadata("design:paramtypes", [])
-    ], Categories);
-    exports.Categories = Categories;
-    async function test() {
-    }
-    exports.test = test;
-    ;
-});
-define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_2, Registry_14, DatabaseSchema_2, Validator_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Customer = void 0;
-    let Customer = class Customer extends DBObject_2.DBObject {
-        constructor() {
-            super();
-            this.CompanyName = "";
-            this.ContactName = "";
-            this.ContactTitle = "";
-            this.Address = "";
-            this.City = "";
-            /*  this.id = 0;
-              this.vorname = "";
-              this.nachname = "";
-              this.strasse = "";
-              this.PLZ = "";
-              this.hausnummer = 0;
-              this.initExtensions();*/
-        }
-    };
-    __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_2.PrimaryColumn)(),
-        __metadata("design:type", String)
-    ], Customer.prototype, "id", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)(),
-        (0, DatabaseSchema_2.Column)(),
-        __metadata("design:type", String)
-    ], Customer.prototype, "CompanyName", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)(),
-        (0, DatabaseSchema_2.Column)(),
-        __metadata("design:type", String)
-    ], Customer.prototype, "ContactName", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)(),
-        (0, DatabaseSchema_2.Column)(),
-        __metadata("design:type", String)
-    ], Customer.prototype, "ContactTitle", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)(),
-        (0, DatabaseSchema_2.Column)(),
-        __metadata("design:type", String)
-    ], Customer.prototype, "Address", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)(),
-        (0, DatabaseSchema_2.Column)(),
-        __metadata("design:type", String)
-    ], Customer.prototype, "City", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_2.Column)({ nullable: true })
-        // @Column({default:""})
-        ,
-        __metadata("design:type", String)
-    ], Customer.prototype, "Region", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_2.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Customer.prototype, "PostalCode", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_2.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Customer.prototype, "Country", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_2.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Customer.prototype, "Phone", void 0);
-    __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_2.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Customer.prototype, "Fax", void 0);
-    Customer = __decorate([
-        (0, DBObject_2.$DBObject)(),
-        (0, Registry_14.$Class)("northwind.Customer"),
-        __metadata("design:paramtypes", [])
-    ], Customer);
-    exports.Customer = Customer;
-    async function test() {
-        var all = await Customer.find();
-        //var cus2=<Customer>await Customer.findOne();
-        //debugger;
-        //await Kunde.sample();
-        //	new de.Kunde().generate();
-        //jassijs.db.uploadType(de.Kunde);
-    }
-    exports.test = test;
-    ;
-});
-define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_15, DatabaseSchema_3, Transaction_2, Serverservice_1, Validator_4) {
-    "use strict";
-    var Employees_2;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.test = exports.Employees = void 0;
-    let Employees = Employees_2 = class Employees extends DBObject_3.DBObject {
-        constructor() {
-            super();
-        }
-        static async find(options = undefined, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                if (options === undefined)
-                    options = { relations: ["ReportsTo"] };
-                return await this.call(this.find, options, context);
-            }
-            else {
-                //@ts-ignore
-                var man = await (await Serverservice_1.serverservices.db);
-                return man.find(context, this, options);
-            }
-        }
-    };
-    __decorate([
-        (0, Validator_4.ValidateIsInt)({ optional: true }),
-        (0, DatabaseSchema_3.PrimaryColumn)(),
-        __metadata("design:type", Number)
-    ], Employees.prototype, "id", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "LastName", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "FirstName", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "Title", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "TitleOfCourtesy", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "Address", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "City", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "Region", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "PostalCode", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "Country", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "HomePhone", void 0);
-    __decorate([
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "Extension", void 0);
-    __decorate([
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "Photo", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "Notes", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Employees.prototype, "PhotoPath", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsInstanceOf)({ type: type => Employees_2, optional: true }),
-        (0, DatabaseSchema_3.JoinColumn)(),
-        (0, DatabaseSchema_3.ManyToOne)(type => Employees_2),
-        __metadata("design:type", Employees)
-    ], Employees.prototype, "ReportsTo", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsDate)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", Date)
-    ], Employees.prototype, "BirthDate", void 0);
-    __decorate([
-        (0, Validator_4.ValidateIsDate)({ optional: true }),
-        (0, DatabaseSchema_3.Column)({ nullable: true }),
-        __metadata("design:type", Date)
-    ], Employees.prototype, "HireDate", void 0);
-    Employees = Employees_2 = __decorate([
-        (0, DBObject_3.$DBObject)(),
-        (0, Registry_15.$Class)("northwind.Employees"),
-        __metadata("design:paramtypes", [])
-    ], Employees);
-    exports.Employees = Employees;
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
-    async function test() {
-        var all = await Employees.find({ where: "id>:p", whereParams: { p: 5 } });
-    }
-    exports.test = test;
-    async function test2() {
-        var em = new Employees();
-        em.id = getRandomInt(100000);
-        var em2 = new Employees();
-        em2.id = getRandomInt(100000);
-        var trans = new Transaction_2.Transaction();
-        console.log(em.id + " " + em2.id);
-        trans.add(em, em.save);
-        trans.add(em2, em2.save);
-        var h = await trans.execute();
-        h = h;
-        /*  var emp = new Employees();
-          emp.id = 100003;
-          emp.BirthDate = new Date(Date.now());
-          //await emp.save();
-          var emp2 = new Employees();
-          emp2.id = 200000;
-          emp2.ReportsTo = emp;
-          //await emp2.save();*/
-    }
-    exports.test2 = test2;
-    ;
-});
-define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_4, Orders_3, DBObject_4, Registry_16, DatabaseSchema_4, Validator_5) {
-    "use strict";
-    var _a, _b;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.OrderDetails = void 0;
-    let OrderDetails = class OrderDetails extends DBObject_4.DBObject {
-        constructor() {
-            super();
-        }
-    };
-    __decorate([
-        (0, Validator_5.ValidateIsInt)({ optional: true }),
-        (0, DatabaseSchema_4.PrimaryGeneratedColumn)(),
-        __metadata("design:type", Number)
-    ], OrderDetails.prototype, "id", void 0);
-    __decorate([
-        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Orders_3.Orders }),
-        (0, DatabaseSchema_4.ManyToOne)(type => Orders_3.Orders, e => e.Details),
-        __metadata("design:type", typeof (_a = typeof Orders_3.Orders !== "undefined" && Orders_3.Orders) === "function" ? _a : Object)
-    ], OrderDetails.prototype, "Order", void 0);
-    __decorate([
-        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Products_4.Products }),
-        (0, DatabaseSchema_4.ManyToOne)(type => Products_4.Products),
-        __metadata("design:type", typeof (_b = typeof Products_4.Products !== "undefined" && Products_4.Products) === "function" ? _b : Object)
-    ], OrderDetails.prototype, "Product", void 0);
-    __decorate([
-        (0, Validator_5.ValidateIsNumber)(),
-        (0, DatabaseSchema_4.Column)({ nullable: false, type: "decimal" }),
-        __metadata("design:type", Number)
-    ], OrderDetails.prototype, "UnitPrice", void 0);
-    __decorate([
-        (0, Validator_5.ValidateIsNumber)(),
-        (0, DatabaseSchema_4.Column)(),
-        __metadata("design:type", Number)
-    ], OrderDetails.prototype, "Quantity", void 0);
-    __decorate([
-        (0, Validator_5.ValidateIsNumber)(),
-        (0, DatabaseSchema_4.Column)({ nullable: true, type: "decimal" }),
-        __metadata("design:type", Number)
-    ], OrderDetails.prototype, "Discount", void 0);
-    OrderDetails = __decorate([
-        (0, DBObject_4.$DBObject)(),
-        (0, Registry_16.$Class)("northwind.OrderDetails"),
-        __metadata("design:paramtypes", [])
-    ], OrderDetails);
-    exports.OrderDetails = OrderDetails;
-    async function test() {
-    }
-    exports.test = test;
-    ;
-});
-define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers", "jassijs/remote/Validator"], function (require, exports, OrderDetails_3, Employees_3, Customer_4, DBObject_5, Registry_17, DatabaseSchema_5, Shippers_2, Validator_6) {
-    "use strict";
-    var _a, _b, _c;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Orders = void 0;
-    let Orders = class Orders extends DBObject_5.DBObject {
-        constructor() {
-            super();
-        }
-    };
-    __decorate([
-        (0, Validator_6.ValidateIsNumber)({ optional: true }),
-        (0, DatabaseSchema_5.PrimaryColumn)(),
-        __metadata("design:type", Number)
-    ], Orders.prototype, "id", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Customer_4.Customer }),
-        (0, DatabaseSchema_5.ManyToOne)(type => Customer_4.Customer),
-        __metadata("design:type", typeof (_a = typeof Customer_4.Customer !== "undefined" && Customer_4.Customer) === "function" ? _a : Object)
-    ], Orders.prototype, "Customer", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Employees_3.Employees }),
-        (0, DatabaseSchema_5.ManyToOne)(type => Employees_3.Employees),
-        __metadata("design:type", typeof (_b = typeof Employees_3.Employees !== "undefined" && Employees_3.Employees) === "function" ? _b : Object)
-    ], Orders.prototype, "Employee", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsDate)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true }),
-        __metadata("design:type", Date)
-    ], Orders.prototype, "OrderDate", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsDate)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true }),
-        __metadata("design:type", Date)
-    ], Orders.prototype, "RequiredDate", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsDate)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true }),
-        __metadata("design:type", Date)
-    ], Orders.prototype, "ShippedDate", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Shippers_2.Shippers }),
-        (0, DatabaseSchema_5.ManyToOne)(type => Shippers_2.Shippers),
-        __metadata("design:type", typeof (_c = typeof Shippers_2.Shippers !== "undefined" && Shippers_2.Shippers) === "function" ? _c : Object)
-    ], Orders.prototype, "ShipVia", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsNumber)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true, type: "decimal" }),
-        __metadata("design:type", Number)
-    ], Orders.prototype, "Freight", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Orders.prototype, "ShipName", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Orders.prototype, "ShipAddress", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Orders.prototype, "ShipCity", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Orders.prototype, "ShipRegion", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Orders.prototype, "ShipPostalCode", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_5.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Orders.prototype, "ShipCountry", void 0);
-    __decorate([
-        (0, Validator_6.ValidateIsArray)({ type: type => OrderDetails_3.OrderDetails }),
-        (0, DatabaseSchema_5.OneToMany)(type => OrderDetails_3.OrderDetails, e => e.Order),
-        __metadata("design:type", Array)
-    ], Orders.prototype, "Details", void 0);
-    Orders = __decorate([
-        (0, DBObject_5.$DBObject)(),
-        (0, Registry_17.$Class)("northwind.Orders"),
-        __metadata("design:paramtypes", [])
-    ], Orders);
-    exports.Orders = Orders;
-    async function test() {
-    }
-    exports.test = test;
-    ;
-});
-define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Categories_2, Suppliers_2, DBObject_6, Registry_18, DatabaseSchema_6, Validator_7) {
-    "use strict";
-    var _a, _b;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Products = void 0;
-    let Products = class Products extends DBObject_6.DBObject {
-        constructor() {
-            super();
-        }
-    };
-    __decorate([
-        (0, Validator_7.ValidateIsInt)({ optional: true }),
-        (0, DatabaseSchema_6.PrimaryColumn)(),
-        __metadata("design:type", Number)
-    ], Products.prototype, "id", void 0);
-    __decorate([
-        (0, Validator_7.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_6.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Products.prototype, "ProductName", void 0);
-    __decorate([
-        (0, Validator_7.ValidateIsInstanceOf)({ type: type => Suppliers_2.Suppliers }),
-        (0, DatabaseSchema_6.ManyToOne)(type => Suppliers_2.Suppliers),
-        __metadata("design:type", typeof (_a = typeof Suppliers_2.Suppliers !== "undefined" && Suppliers_2.Suppliers) === "function" ? _a : Object)
-    ], Products.prototype, "Supplier", void 0);
-    __decorate([
-        (0, Validator_7.ValidateIsInstanceOf)({ type: c => Categories_2.Categories }),
-        (0, DatabaseSchema_6.ManyToOne)(type => Categories_2.Categories, e => e.Products),
-        __metadata("design:type", typeof (_b = typeof Categories_2.Categories !== "undefined" && Categories_2.Categories) === "function" ? _b : Object)
-    ], Products.prototype, "Category", void 0);
-    __decorate([
-        (0, Validator_7.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_6.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Products.prototype, "QuantityPerUnit", void 0);
-    __decorate([
-        (0, Validator_7.ValidateIsNumber)({ optional: true }),
-        (0, DatabaseSchema_6.Column)({ nullable: true, type: "decimal" }),
-        __metadata("design:type", Number)
-    ], Products.prototype, "UnitPrice", void 0);
-    __decorate([
-        (0, Validator_7.ValidateIsNumber)({ optional: true }),
-        (0, DatabaseSchema_6.Column)({ nullable: true }),
-        __metadata("design:type", Number)
-    ], Products.prototype, "UnitsInStock", void 0);
-    __decorate([
-        (0, Validator_7.ValidateIsNumber)({ optional: true }),
-        (0, DatabaseSchema_6.Column)({ nullable: true }),
-        __metadata("design:type", Number)
-    ], Products.prototype, "UnitsOnOrder", void 0);
-    __decorate([
-        (0, Validator_7.ValidateIsNumber)({ optional: true }),
-        (0, DatabaseSchema_6.Column)({ nullable: true }),
-        __metadata("design:type", Number)
-    ], Products.prototype, "ReorderLevel", void 0);
-    __decorate([
-        (0, Validator_7.ValidateIsBoolean)(),
-        (0, DatabaseSchema_6.Column)({ nullable: true }),
-        __metadata("design:type", Boolean)
-    ], Products.prototype, "Discontinued", void 0);
-    Products = __decorate([
-        (0, DBObject_6.$DBObject)(),
-        (0, Registry_18.$Class)("northwind.Products"),
-        __metadata("design:paramtypes", [])
-    ], Products);
-    exports.Products = Products;
-    async function test() {
-        var p = await Products.findOne();
-    }
-    exports.test = test;
-    ;
-});
-define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_7, Registry_19, DatabaseSchema_7, Validator_8) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Shippers = void 0;
-    let Shippers = class Shippers extends DBObject_7.DBObject {
-        constructor() {
-            super();
-        }
-    };
-    __decorate([
-        (0, Validator_8.ValidateIsInt)({ optional: true }),
-        (0, DatabaseSchema_7.PrimaryColumn)(),
-        __metadata("design:type", Number)
-    ], Shippers.prototype, "id", void 0);
-    __decorate([
-        (0, Validator_8.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_7.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Shippers.prototype, "CompanyName", void 0);
-    __decorate([
-        (0, Validator_8.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_7.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Shippers.prototype, "Phone", void 0);
-    Shippers = __decorate([
-        (0, DBObject_7.$DBObject)(),
-        (0, Registry_19.$Class)("northwind.Shippers"),
-        __metadata("design:paramtypes", [])
-    ], Shippers);
-    exports.Shippers = Shippers;
-    async function test() {
-    }
-    exports.test = test;
-    ;
-});
-define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_8, Registry_20, DatabaseSchema_8, Validator_9) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Suppliers = void 0;
-    let Suppliers = class Suppliers extends DBObject_8.DBObject {
-        constructor() {
-            super();
-        }
-    };
-    __decorate([
-        (0, Validator_9.ValidateIsInt)({ optional: true }),
-        (0, DatabaseSchema_8.PrimaryColumn)(),
-        __metadata("design:type", Number)
-    ], Suppliers.prototype, "id", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "CompanyName", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "ContactName", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "ContactTitle", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "Address", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "City", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "Region", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "PostalCode", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "Country", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "Phone", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "Fax", void 0);
-    __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
-        (0, DatabaseSchema_8.Column)({ nullable: true }),
-        __metadata("design:type", String)
-    ], Suppliers.prototype, "HomePage", void 0);
-    Suppliers = __decorate([
-        (0, DBObject_8.$DBObject)(),
-        (0, Registry_20.$Class)("northwind.Suppliers"),
-        __metadata("design:paramtypes", [])
-    ], Suppliers);
-    exports.Suppliers = Suppliers;
-    async function test() {
-    }
-    exports.test = test;
-    ;
-    function ValidateIsIntn(arg0) {
-        throw new Error("Function not implemented.");
-    }
 });
 define("northwind/reports/CustomerLabels", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry", "northwind/remote/Customer", "jassijs/base/Actions"], function (require, exports, Report_1, Property_9, Registry_21, Customer_5, Actions_5) {
     "use strict";

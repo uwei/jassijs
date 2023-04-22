@@ -16,7 +16,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerView.ts": {
-		"date": 1656682770000,
+		"date": 1682164037474,
 		"northwind/CustomerView": {
 			"$DBObjectView": [
 				{
@@ -1076,7 +1076,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerPhoneList.ts": {
-		"date": 1681317489793,
+		"date": 1681640212626,
 		"northwind/CustomerPhoneList": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

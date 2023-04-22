@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Customer", "jassijs/ui/DBObjectView"], function (require, exports, Textbox_1, Registry_1, Property_1, Customer_1, DBObjectView_1) {
     "use strict";
+    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CustomerView = void 0;
     let CustomerView = class CustomerView extends DBObjectView_1.DBObjectView {
@@ -115,7 +116,7 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "
     };
     __decorate([
         (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", Customer_1.Customer)
+        __metadata("design:type", typeof (_a = typeof Customer_1.Customer !== "undefined" && Customer_1.Customer) === "function" ? _a : Object)
     ], CustomerView.prototype, "value", void 0);
     CustomerView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({

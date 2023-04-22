@@ -1,13 +1,29 @@
 
 
 
-declare global {
+/*declare global {
 
     export class ExtensionAction {
-        /* sample?: {
+         sample?: {
              name: string,
              param1: string;
-         };*/
+         };
+    }
+}*/
+declare global {
+    export interface ExtensionAction {
+        componentDesignerSetDesignMode?: {
+            enable: boolean,
+            componentDesigner: any/*ComponentDesigner*/
+        }
+        componentDesignerComponentCreated?: {
+            //component:Component
+            newParent: any;/*Container*/
+        },
+        componentDesignerInvisibleComponentClicked?: {
+            codeEditor,//:CodeEditor,
+            designButton//: Button
+        }
     }
 }
 
@@ -182,7 +198,7 @@ if(global){
     global["jassijs"] = jassijs;
 }*/
 
-
+//@ts-ignore
 declare global {
     class JassiStatic extends Jassi {
 

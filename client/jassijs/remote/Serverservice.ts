@@ -4,7 +4,7 @@ import "jassijs/remote/Classes";
 import { classes } from "jassijs/remote/Classes";
 import registry from "jassijs/remote/Registry";
 
-class ServerserviceProperties {
+export class ServerserviceProperties {
     name: string;
     getInstance:(()=>Promise<any>) 
 }
@@ -13,12 +13,18 @@ var beforeServiceLoadHandler=[];
 export function beforeServiceLoad(func:(name:string,props:ServerserviceProperties)=>void){
     beforeServiceLoadHandler.push(func);
 }
+declare global{ 
+    interface Serverservice{
+
+    }
+}
+
 var serverservices: Serverservice = <any>new Proxy(runningServerservices, {
     get(target, prop, receiver) {
         return new Promise(async (resolve, reject) => {
             var khsdf=runningServerservices;
-            if (target[prop]) {
-                resolve(target[prop]);
+            if (target[prop]) { 
+                resolve(target[prop]); 
             } else {
                 var all = await registry.getJSONData("$Serverservice");
                 for (var x = 0; x < all.length; x++) { 
@@ -27,6 +33,7 @@ var serverservices: Serverservice = <any>new Proxy(runningServerservices, {
                     if (name === prop) { 
                         var classname = serv.classname;
                         var cl = await registry.getJSONData("$Class", classname);
+                        //@ts-ignore
                         if (require.main) {//nodes load project class from module
                             /*for (var jfile in require.cache) {
                                 if(jfile.replaceAll("\\","/").endsWith(serv.filename.substring(0,serv.filename.length-2)+"js")){

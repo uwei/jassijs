@@ -47,7 +47,7 @@ exports.default={
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1655761748000
+		"date": 1681571354352
 	},
 	"jassijs/remote/JassijsGlobal.ts": {
 		"date": 1655549782000
@@ -129,7 +129,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/ParentRight.ts": {
-		"date": 1681322761219,
+		"date": 1681581396308,
 		"jassijs.security.ParentRight": {
 			"$DBObject": [
 				{
@@ -377,7 +377,7 @@ exports.default={
 		"date": 1680803766537
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1680982331732,
+		"date": 1681919357965,
 		"jassijs/server/DBManager": {
 			"$Serverservice": [
 				{
@@ -391,7 +391,7 @@ exports.default={
 		"date": 1681309085019
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1681318239391,
+		"date": 1682162614975,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -405,7 +405,7 @@ exports.default={
 		"date": 1680806099946
 	},
 	"jassijs/server/JassiServer.ts": {
-		"date": 1680722219857
+		"date": 1681930018357
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
 		"date": 1680946666516
@@ -417,7 +417,7 @@ exports.default={
 		"date": 1654195782000
 	},
 	"jassijs/server/RegistryIndexer.ts": {
-		"date": 1680805467362
+		"date": 1681930917452
 	},
 	"jassijs/server/Zip.ts": {
 		"date": 1622984046000
@@ -432,7 +432,7 @@ exports.default={
 		"date": 1681322647268
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1681323038084,
+		"date": 1681589727772,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
@@ -478,6 +478,12 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Serverservice.ts": {
-		"date": 1680954695071
+		"date": 1681919267935
+	},
+	"jassijs/index.d.ts": {
+		"date": 1681918735845
+	},
+	"jassijs/server/UpdatePackage.ts": {
+		"date": 1682113731372
 	}
 }

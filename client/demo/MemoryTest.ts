@@ -1,9 +1,7 @@
-import  {Button} from "jassijs/ui/Button";
 import {Server} from "jassijs/remote/Server";
 import {Reloader} from "jassijs/util/Reloader";
 
 import registry from "jassijs/remote/Registry";
-import { Kunde } from "de/remote/Kunde";
 
 
 function test(){

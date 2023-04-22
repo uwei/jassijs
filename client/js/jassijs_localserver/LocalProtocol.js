@@ -4,7 +4,6 @@ define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/S
     exports.localExec = void 0;
     RemoteProtocol_1.RemoteProtocol.prototype.exec = async function (config, ob) {
         var clname = JSON.parse(config.data).classname;
-        var local = ["jassijs.remote.Transaction", "northwind.Employees", "northwind.Customer"];
         var classes = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/Classes"], resolve_1, reject_1); })).classes;
         var DBObject = await classes.loadClass("jassijs.remote.DBObject");
         var ret;

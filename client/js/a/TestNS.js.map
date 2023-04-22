@@ -1,1 +1,1 @@
-{"version":3,"file":"TestNS.js","sourceRoot":"","sources":["../../a/TestNS.ts"],"names":[],"mappings":";;;;IAEO,KAAK,UAAU,IAAI;QACtB,IAAI,CAAC,GAAC,MAAM,IAAI,eAAM,EAAE,CAAC,SAAS,CAAC,CAAC,oBAAoB,CAAC,CAAC,CAAC;IAE/D,CAAC;IAHD,oBAGC"}
+{"version":3,"file":"TestNS.js","sourceRoot":"","sources":["../../a/TestNS.ts"],"names":[],"mappings":";;;;IAEA,IAAI,OAAE,EAAE,CAAC,EAAE,CAAA;IACJ,KAAK,UAAU,IAAI;QACtB,IAAI,CAAC,GAAC,MAAM,IAAI,eAAM,EAAE,CAAC,SAAS,CAAC,CAAC,oBAAoB,CAAC,CAAC,CAAC;IAE/D,CAAC;IAHD,oBAGC"}

@@ -8,9 +8,11 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "declaration": true,
-      "outDir": "./deployserver",
+      "sourceMap": true,
+      "outDir": "./build",
       "rootDir": "./"
   },
   "include":["./jassijs"],
+  "exclude": ["/jassijs/index.dts"]
   
 }

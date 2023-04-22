@@ -1,0 +1,47 @@
+{
+  "compilerOptions": { 
+    "baseUrl": "./demo",
+    "allowJs": true,
+    "target": "es2017",
+    "module": "amd",
+    "moduleResolution": "node",
+    "lib": [
+      "esnext", 
+      "dom",
+      "es5"
+    ],
+    "inlineSources": true,
+    "outFile": ".././dist/2.js",
+    "rootDir": "./",
+    "skipLibCheck": true,
+    "declaration": true,
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+  },
+  "references": [
+    { "path": "./jassijs" }
+]
+  /*"exclude": [
+    "../$serverside",
+    "../de",
+    "../demo",
+    "../demoreports",
+    "../game",
+    "../jassijs",
+    "../jassijs_editor",
+    "../jassijs_localserver",
+    "../jassijs_report",
+    "../js",
+    "../local",
+    "../northwind",
+    "../node_modules",
+    "../node_modules2",
+    "../tests",
+    "../types",
+    "jassistart.js",
+    "service-worker.js",
+    "jassijs.js",
+    "app.ts"
+  ] */
+}

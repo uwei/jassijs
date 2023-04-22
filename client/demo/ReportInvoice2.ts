@@ -1,9 +1,5 @@
-import { ReportDesign } from "jassijs_report/ReportDesign";
+
 import { $Class } from "jassijs/remote/Registry";
-import { $Property } from "jassijs/ui/Property";
-import { $UIComponent } from "jassijs/ui/Component";
-import { Kunde } from "de/remote/Kunde";
-import { RText } from "jassijs_report/RText";
 
 var reportdesign = {
 	content: [

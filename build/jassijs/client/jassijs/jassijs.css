@@ -1,0 +1,174 @@
+
+.jlabel{ 
+  display:block;font-size: smaller;
+}
+body .lm_content{
+    overflow: auto;
+}
+
+.mce-content-body.HTMLPanel{
+	min-width:12px;
+	min-height:12px;
+	border:1px solid #ccc;
+} 
+.mce-content-body>p{
+  margin-top:0px;
+  margin-bottom:0px;
+}
+.mce-content-body.RText{
+	min-width:12px;
+	min-height:12px;
+	border:1px solid #ccc;
+} 
+
+
+br[data-mce-bogus="1"] {
+  display:none;
+}
+.jdesignmode > .Panel {
+  border: 1px solid #ccc;
+}
+.jinlinecomponent.invalid{
+  border: 1px solid red;
+}
+
+.ui-state-highlight> .jinlinecomponent{
+  border: 1px solid #dad55e;
+  background: #fffa90;
+  color: #777620;
+}
+
+
+.jselected{
+  border: 1px solid rgb(70, 54, 214);
+}
+
+
+
+.jabsolutelayout{
+  position:relative;
+}
+
+.Table{
+  min-height: 25px;
+  min-width: 25px;
+}
+.Tree{
+  min-height: 25px;
+  min-width: 25px;
+}
+.Button{
+  min-height: 8px;
+}
+.Button.down {
+  background: #bbb;
+  border-top: solid 2px #777;
+  border-left: solid 2px #777;
+  border-bottom: solid 2px #eaeaea;
+  border-right: solid 2px #eaeaea;
+}
+.propertyvalue *{
+            /* width:100%; */
+            padding:initial;
+            font-size:11px;
+}
+
+.propertyeditorheader {border: 1px solid black}
+.propertyeditorrow {border: 1px solid black}
+
+.input{
+  color:red;
+}
+
+.autohide {
+  opacity: 0;
+}
+
+.autohide:hover {
+  opacity: 1;
+}
+/*split.js*/
+.gutter {
+  background-color: #eee;
+
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.gutter.gutter-vertical {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+}
+
+.gutter.gutter-horizontal {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+}
+.split {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+split,
+.gutter.gutter-horizontal {
+  float: left;
+}
+.split,
+.gutter.gutter-horizontal {
+  height: 300px;
+}
+.split {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/*end split.js*/
+/*Style for tinymce-editor*/
+.tox .tox-tbtn {
+  transform: scale(0.7) !important; 
+  height: unset !important;
+  width: unset !important;
+}
+.tox .tox-tbtn--bespoke .tox-tbtn__select-label {
+  width: unset !important;
+}
+.tox .tox-toolbar, .tox .tox-toolbar__overflow, .tox .tox-toolbar__primary {
+/* change the background y-positionning to : bottom 0*/
+background: url("data:image/svg+xml;charset=utf8,%3Csvg height='39px' viewBox='0 0 40 39px' width='40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='38px' width='100' height='1' fill='%23cccccc'/%3E%3C/svg%3E") left 0 bottom 0 #fff !important;
+}
+.InlineEditorPanel .tox .tox-toolbar__group{
+  margin: 0px 0 0px 0;
+  padding: 0 0px 0 0px;
+  height: 25px;
+}
+.InlineEditorPanel .tox .tox-split-button {
+  margin: 0px 0 0px 0;
+}
+.InlineEditorPanel .tox .tox-tbtn--select {
+  margin: 0px 0 0px 0;
+  padding: 0 0px;
+}
+
+
+
+
+/* Tooltip for mobile Browser 
+https://stackoverflow.com/questions/12539006/tooltips-for-mobile-browsers 
+  
+@media (pointer: coarse), (hover: none) {
+  [title] {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+  }
+  [title]:focus::after {
+    content: attr(title);
+    position: absolute;
+    top: 90%;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid;
+    width: fit-content;
+    padding: 3px;
+    font-size: 10px;
+  }
+
+}*/
+

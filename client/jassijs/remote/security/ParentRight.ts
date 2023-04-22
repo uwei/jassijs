@@ -4,11 +4,11 @@ import {JoinTable, Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToMany,
 import { Group } from "jassijs/remote/security/Group";
 import { ValidateIsArray, ValidateIsInt, ValidateIsNumber, ValidateIsString } from "jassijs/remote/Validator";
 
-
+ 
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 @$DBObject({name:"jassijs_parentright"})
 @$Class("jassijs.security.ParentRight")
-
+ 
 export class ParentRight extends DBObject  {
     @ValidateIsInt({optional:true})
     @PrimaryGeneratedColumn()
@@ -25,7 +25,7 @@ export class ParentRight extends DBObject  {
     @ValidateIsNumber({optional:true})
     @Column({nullable:true})
     i1:number;
-´
+
     @ValidateIsNumber({optional:true})
     @Column({nullable:true})
     i2:number;

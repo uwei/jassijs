@@ -3,7 +3,7 @@ define("demo/registry",["require"], function(require) {
  return {
   default: {
 	"demo/DelTest.ts": {
-		"date": 1656074246000
+		"date": 1681563012791
 	},
 	"demo/Dialog.ts": {
 		"date": 1655851716000,
@@ -21,7 +21,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1634240084000
 	},
 	"demo/MemoryTest.ts": {
-		"date": 1624296680000
+		"date": 1681590022384
 	},
 	"demo/modul.ts": {
 		"date": 1612818334000
@@ -33,28 +33,22 @@ define("demo/registry",["require"], function(require) {
 		"date": 1656018452000
 	},
 	"demo/ReportInvoice.ts": {
-		"date": 1680805529628,
+		"date": 1681590033017,
 		"demo.ReportInvoice": {}
 	},
 	"demo/ReportInvoice2.ts": {
-		"date": 1655843266000,
+		"date": 1681590037724,
 		"demo.ReportInvoice": {}
 	},
-	"demo/ReportKunden.ts": {
-		"date": 1655556796000,
-		"de.ReportKunde": {
-			"@members": {}
-		}
-	},
 	"demo/ReportStyle.ts": {
-		"date": 1655843282000
+		"date": 1681590042799
 	},
 	"demo/StyleDialog.ts": {
 		"date": 1655556794000,
 		"demo/StyleDialog": {}
 	},
 	"demo/TableContextmenu.ts": {
-		"date": 1656676746000
+		"date": 1681590827947
 	},
 	"demo/TestComponent.ts": {
 		"date": 1655843270000,
@@ -75,16 +69,16 @@ define("demo/registry",["require"], function(require) {
 		"demo.Testcontextmenu": {}
 	},
 	"demo/Testdatatable.ts": {
-		"date": 1655843292000
+		"date": 1681590287285
 	},
 	"demo/Testdatatable1.ts": {
-		"date": 1655843296000
+		"date": 1681590296071
 	},
 	"demo/Testdatatable2.ts": {
-		"date": 1655843304000
+		"date": 1681590305213
 	},
 	"demo/Testdatatable3.ts": {
-		"date": 1655843308000
+		"date": 1681590312664
 	},
 	"demo/TestImage.ts": {
 		"date": 1633792454000
@@ -97,7 +91,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.Testmenu": {}
 	},
 	"demo/Testtable.ts": {
-		"date": 1655843314000
+		"date": 1681590320377
 	},
 	"demo/TestTree.ts": {
 		"date": 1655843318000,
@@ -111,11 +105,11 @@ define("demo/registry",["require"], function(require) {
 		"date": 1634384688000
 	},
 	"demo/TreeTable.ts": {
-		"date": 1656676470000,
+		"date": 1681590899858,
 		"demo.TreeTable": {}
 	},
 	"demo/TestProTable.ts": {
-		"date": 1656621990000
+		"date": 1681563005344
 	},
 	"demo/_test1.ts": {
 		"date": 1670673960000

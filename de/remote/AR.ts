@@ -1,4 +1,3 @@
-
 import { ARZeile } from "de/remote/ARZeile";
 import { Kunde } from "de/remote/Kunde";
 import { DBObject, $DBObject } from "jassijs/remote/DBObject";
@@ -7,13 +6,13 @@ import { JoinColumn, JoinTable, Entity, PrimaryColumn, Column, ManyToMany, ManyT
 import { $CheckParentRight, $Rights } from "jassijs/remote/security/Rights";
 import { Context } from "jassijs/remote/RemoteObject";
 import { serverservices } from "jassijs/remote/Serverservice";
-/** 
-* Ausgangsrechnung 
-* @class de.AR  
-*/ 
+/**
+* Ausgangsrechnung
+* @class de.AR
+*/
 @$Rights([{ name: "Auftragswesen/Ausgangsrechnung/festschreiben" },
     { name: "Auftragswesen/Ausgangsrechnung/löschen" }])
-@$DBObject() 
+@$DBObject()
 @$Class("de.AR")
 export class AR extends DBObject {
     @PrimaryColumn()
@@ -36,9 +35,9 @@ export class AR extends DBObject {
         this.strasse = "";
         this.nummer = 0;
     }
-    static async myfind(options = undefined,context:Context=undefined): Promise<AR[]> {
+    static async myfind(options = undefined, context: Context = undefined): Promise<AR[]> {
         if (!jassijs.isServer) {
-            return await this.call(this.myfind, options,context);
+            return await this.call(this.myfind, options, context);
         }
         else {
             //@ts-ignore
@@ -69,7 +68,6 @@ export class AR extends DBObject {
     }
     async sample() {
         var all = AR.myfind();
-
         var ar = new AR();
         ar.strasse = "gemeindeberg";
         ar.nummer = 7;
@@ -86,6 +84,7 @@ export class AR extends DBObject {
         */
         //jassijs.db.delete(kunde);
     }
+
 }
 export async function test() {
     //jassijs.db.clearCache();

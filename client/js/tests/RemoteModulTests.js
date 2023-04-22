@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/FileNode", "jassijs/remote/Server", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/ui/DatabaseDesigner", "jassijs/remote/DBObject", "jassijs/remote/DatabaseTools"], function (require, exports, FileNode_1, Server_1, Classes_1, Registry_1, DatabaseDesigner_1, DBObject_1, DatabaseTools_1) {
+define(["require", "exports", "jassijs/remote/FileNode", "jassijs/remote/Server", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs_editor/DatabaseDesigner", "jassijs/remote/DBObject", "jassijs/remote/DatabaseTools"], function (require, exports, FileNode_1, Server_1, Classes_1, Registry_1, DatabaseDesigner_1, DBObject_1, DatabaseTools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;

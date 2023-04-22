@@ -1,7 +1,5 @@
 import { Table } from "jassijs/ui/Table";
-import { Customer } from "northwind/remote/Customer";
-import { OrderDetails } from "northwind/remote/OrderDetails";
-import { Orders } from "northwind/remote/Orders";
+
 
 var x=0;
 export async function test() {

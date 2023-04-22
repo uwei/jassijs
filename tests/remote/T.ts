@@ -9,6 +9,7 @@ export class T extends RemoteObject{
         if (!context?.isServer) {
             return await this.call(this, this.sayHello, name,context);
         } else {
+            //@ts-ignore
             var H=await import("Hallo");
             return "Hello "+name+H.test();  //this would be execute on server  
         }

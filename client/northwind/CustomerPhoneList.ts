@@ -5,9 +5,13 @@ import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import windows from "jassijs/base/Windows";
 import { Customer } from "northwind/remote/Customer";
 import { Button } from "jassijs/ui/Button";
+import { Tabulator } from "tabulator-tables";
+
 type Me = {
     table?: Table;
 };
+
+
 @$ActionProvider("jassijs.base.ActionNode")
 @$Class("northwind/CustomerPhoneList")
 export class CustomerPhoneList extends Panel {

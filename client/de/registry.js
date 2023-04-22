@@ -66,7 +66,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/AR.ts": {
-		"date": 1680947266134,
+		"date": 1681557287008,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -298,7 +298,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1656077196000
 	},
 	"de/TH.ts": {
-		"date": 1681316495340
+		"date": 1681571285869
 	},
 	"de/TTDialog.ts": {
 		"date": 1655556796000,
@@ -322,6 +322,12 @@ define("de/registry",["require"], function(require) {
 	},
 	"de/test.ts": {
 		"date": 1681301004034
+	},
+	"de/ReportKunden.ts": {
+		"date": 1655556796000,
+		"de.ReportKunde": {
+			"@members": {}
+		}
 	}
 }
  }

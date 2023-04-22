@@ -12,12 +12,11 @@ let resolve = require('path').resolve;
 const passport = require("passport");
 
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"]
-declare global{
-    export interface Serverservice{
+declare global{ 
+    interface Serverservice{
         filesystem:Promise<Filesystem>;
     }
 }
-
 @$Serverservice({name:"filesystem",getInstance:async ()=>{return new Filesystem()}}) 
 @$Class("jassijs.server.Filesystem")
 export default class Filesystem {
@@ -44,6 +43,8 @@ export default class Filesystem {
        }*/
     dir(curdir = "", appendDate = false, parentPath = this.path, parent: FileNode = undefined): FileNode {
         var _this = this;
+        if(modules===undefined)
+          modules=JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules
         if (parent === undefined) {
             parent = { name: "", files: [] };
         }
@@ -79,6 +80,25 @@ export default class Filesystem {
                 }
             }
         });
+         //add files in node modules
+         if(parent.name===""&&parentPath==="./client"){
+            for (var key in modules) {
+                if (fs.existsSync("./node_modules/" + key + "/client")) {
+                    var addFiles= this.dir("client",appendDate,"./node_modules/" + key );
+                    var temp={};
+                    for(var x=0;x<parent.files.length;x++){
+                        var entr=parent.files[x];
+                        temp[entr.name]=entr;
+                    }
+                    for(var x=0;x<addFiles.files.length;x++){
+                        if(temp[addFiles.files[x].name]===undefined){
+                            parent.files.push(addFiles.files[x]);
+                            addFiles.files[x].isNode_module=true;
+                        }
+                    }
+                }
+            }
+        }
         return parent;
     }
     public loadFile(fileName:string) {
@@ -114,10 +134,8 @@ export default class Filesystem {
         var _this = this;
         for (let l = 0; l < list.length; l++) {
             let file = list[l];
-            for (var x = 0; x < ignore.length; x++) {
-                if (file === ignore[x])
-                    return;
-            }
+            if(ignore.indexOf(file)!==-1)
+                continue;
             file = dir + '/' + file;
 
             var stat = fs.statSync(file);
@@ -383,10 +401,19 @@ export default class Filesystem {
     public async saveFiles(fileNames: string[], contents: string[], rollbackonerror: boolean = true): Promise<string> {
         var ret: string = "";
         var rollbackcontents: string[] = [];
+        if(modules===undefined)
+            modules=JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules
         for (var x = 0; x < fileNames.length; x++) {
             let fileName = fileNames[x];
             var fromServerdirectory=fileName.startsWith("$serverside/");
             var path = require('path').dirname(this._pathForFile(fileName,fromServerdirectory));
+             //check if file is node_module
+             for (var key in modules) {
+                if (((path + "/").startsWith("./client/" + key + "/"))&&fs.existsSync("./node_modules/" + key)) {
+                    return "packages in node_modules could not be saved";
+                }
+            }
+
             try {
 
                 //var fdir = fpath.dirname(path + "/" + fileName).split(fpath.sep).pop();
@@ -582,6 +609,7 @@ async function checkRemoteFiles() {
         }
     }
 }
+
 export function syncRemoteFiles() {
     /*await*/checkRemoteFiles();
     //server remote
@@ -615,13 +643,25 @@ export function syncRemoteFiles() {
         }
     })
 }
+var modules = undefined;
 export function staticfiles(req, res, next) {
+    if(modules===undefined)
+        modules=JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules
     var path=new Filesystem().path;
     // console.log(req.path);
-    let sfile = path + "/" + req.path;
+    let sfile = path + req.path;
     if (sfile.indexOf("Settings.ts") > -1) {//&&!passport.authenticate("jwt", { session: false })){
         next();
         return;
+    }
+    if (!fs.existsSync(sfile) && sfile.startsWith("./client")) {
+        for (var key in modules) {
+            if ((sfile.startsWith("./client/" + key)||sfile.startsWith("./client/js/" + key)) && fs.existsSync("./node_modules/" + key + "/client" + req.path)) {
+                sfile = "./node_modules/" + key + "/client" + req.path;
+                break;
+            }
+        }
+        //sfile="./node_modules/_uw/"+req.path;
     }
     if (fs.existsSync(sfile)) {
         // let code=fs.readFileSync(this.path+"/"+req.path);
@@ -639,18 +679,28 @@ export function staticfiles(req, res, next) {
             });
         }
     } else {
+
         next();
     }
     var s = 1;
 }
 export function staticsecurefiles(req, res, next) {
-
+    if(modules===undefined)
+        modules=JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules
     // console.log(req.path);
-    let sfile = new Filesystem().path + "/" + req.path;
+    let sfile = new Filesystem().path + req.path;
     if (sfile.indexOf("Settings.ts") > -1) {//&&!passport.authenticate("jwt", { session: false })){
         if (!req.isAuthenticated()) {
             res.send(401, 'not logged in');
             return;
+        }
+    }
+    if (!fs.existsSync(sfile) && sfile.startsWith("./client")) {
+        for (var key in modules) {
+            if ((sfile.startsWith("./client/" + key) || sfile.startsWith("./client/js/" + key)) && fs.existsSync("./node_modules/" + key + "/client" + req.path)) {
+                sfile = "./node_modules/" + key + "/client" + req.path;
+                break;
+            }
         }
     }
     if (fs.existsSync(sfile)) {

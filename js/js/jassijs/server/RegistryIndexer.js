@@ -11,14 +11,14 @@ class ServerIndexer extends Indexer_1.Indexer {
         var data = fs.readFileSync(path + "/jassijs.json", 'utf-8');
         var modules = JSON.parse(data).modules;
         for (var m in modules) {
-            if (!modules[m].endsWith(".js") && modules[m].indexOf(".js?") === -1) //.js are internet modules
+            if (fs.existsSync(path + "/" + modules[m]) && !modules[m].endsWith(".js") && modules[m].indexOf(".js?") === -1) //.js are internet modules
                 await this.updateModul(path, m, false);
         }
         //server modules
         data = fs.readFileSync("./jassijs.json", 'utf-8');
         var modules = JSON.parse(data).modules;
         for (var m in modules) {
-            if (!modules[m].endsWith(".js")) //.js are internet modules
+            if (fs.existsSync("./" + modules[m]) && !modules[m].endsWith(".js")) //.js are internet modules
                 await this.updateModul(".", m, true);
         }
         return;

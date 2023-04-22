@@ -9,5 +9,5 @@ The server runs in nodes (e.g. on Heroku with connecting this main repos and add
 or completly in the browser.
 
 The Stage of development is pre-alpha - it should not be used in production.
-But you could have a preview (https://uwei.github.io/jassijs/dist/sample/app.html). 
+But you could have a preview (https://uwei.github.io/jassijs/dist/sample/index.html). 
 

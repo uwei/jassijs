@@ -15,6 +15,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return await this.call(this, this.sayHello, name, context);
             }
             else {
+                //@ts-ignore
                 var H = await new Promise((resolve_1, reject_1) => { require(["Hallo"], resolve_1, reject_1); });
                 return "Hello " + name + H.test(); //this would be execute on server  
             }

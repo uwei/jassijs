@@ -842,262 +842,311 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         }
     }
 });
-define("jassijs_localserver/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs_localserver/Filesystem", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, Registry_3, typeorm_2, Filesystem_1, Reloader_1, Registry_4, Serverservice_2) {
+define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs_editor/util/Typescript"], function (require, exports, Classes_2, Serverservice_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TypeORMListener = void 0;
-    //listener for code changes
-    Reloader_1.Reloader.instance.addEventCodeReloaded(async function (files) {
-        var dbobjects = await Registry_4.default.getJSONData("$DBObject");
-        var reload = false;
-        for (var x = 0; x < files.length; x++) {
-            var file = files[x];
-            dbobjects.forEach((data) => {
-                if (data.filename === file + ".ts")
-                    reload = true;
-            });
-        }
-        if (reload) {
-            (await Serverservice_2.serverservices.db).renewConnection();
-        }
-    });
-    let TypeORMListener = class TypeORMListener {
-        saveDB(event) {
-            if (this.savetimer) {
-                clearTimeout(this.savetimer);
-                this.savetimer = undefined;
-            }
-            this.savetimer = setTimeout(() => {
-                var data = event.connection.driver.export();
-                new Filesystem_1.default().saveFile("__default.db", data);
-                console.log("save DB");
-            }, 300);
-        }
-        /**
-         * Called after entity is loaded.
-         */
-        afterLoad(entity) {
-            // console.log(`AFTER ENTITY LOADED: `, entity);
-        }
-        /**
-         * Called before post insertion.
-         */
-        beforeInsert(event) {
-            //console.log(`BEFORE POST INSERTED: `, event.entity);
-        }
-        /**
-         * Called after entity insertion.
-         */
-        afterInsert(event) {
-            this.saveDB(event);
-            //console.log(`AFTER ENTITY INSERTED: `, event.entity);
-        }
-        /**
-         * Called before entity update.
-         */
-        beforeUpdate(event) {
-            //console.log(`BEFORE ENTITY UPDATED: `, event.entity);
-        }
-        /**
-         * Called after entity update.
-         */
-        afterUpdate(event) {
-            this.saveDB(event);
-            //console.log(`AFTER ENTITY UPDATED: `, event.entity);
-        }
-        /**
-         * Called before entity removal.
-         */
-        beforeRemove(event) {
-            // console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
-        }
-        /**
-         * Called after entity removal.
-         */
-        afterRemove(event) {
-            //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
-            this.saveDB(event);
-        }
-        /**
-         * Called before transaction start.
-         */
-        beforeTransactionStart(event) {
-            // console.log(`BEFORE TRANSACTION STARTED: `, event);
-        }
-        /**
-         * Called after transaction start.
-         */
-        afterTransactionStart(event /*: TransactionStartEvent*/) {
-            //console.log(`AFTER TRANSACTION STARTED: `, event);
-        }
-        /**
-         * Called before transaction commit.
-         */
-        beforeTransactionCommit(event /*: TransactionCommitEvent*/) {
-            // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
-        }
-        /**
-         * Called after transaction commit.
-         */
-        afterTransactionCommit(event /*: TransactionCommitEvent*/) {
-            //console.log(`AFTER TRANSACTION COMMITTED: `, event);
-        }
-        /**
-         * Called before transaction rollback.
-         */
-        beforeTransactionRollback(event /*: TransactionRollbackEvent*/) {
-            //   console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
-        }
-        /**
-         * Called after transaction rollback.
-         */
-        afterTransactionRollback(event /*: TransactionRollbackEvent*/) {
-            // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
-        }
-    };
-    TypeORMListener = __decorate([
-        (0, typeorm_2.EventSubscriber)(),
-        (0, Registry_3.$Class)("jassijs_localserver.TypeORMListener")
-    ], TypeORMListener);
-    exports.TypeORMListener = TypeORMListener;
-});
-define("jassijs_localserver/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs_localserver/DBManager", "jassijs_localserver/TypeORMListener", "typeorm"], function (require, exports, Classes_2, Database_1, Registry_5, DBManager_2, TypeORMListener_1, typeorm_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.extendDBManager = void 0;
-    function extendDBManager() {
-        //create Admin User if doesn't a user exists 
-        DBManager_2.DBManager.prototype["hasLoaded"] = async function () {
-            var User = await Classes_2.classes.loadClass("jassijs.security.User");
-            //@ts-ignore
-            var us = User.findOne();
-            if (us) {
-                us = new User();
-                us.email = "admin";
-                us.password = "jassi";
-                us.isAdmin = true;
-                await us.save();
-            }
-        };
-        DBManager_2.DBManager.prototype["login"] = async function (context, user, password) {
-            try {
-                var User = await Classes_2.classes.loadClass("jassijs.security.User");
-                var ret = await this.connection().manager.createQueryBuilder().
-                    select("me").from(User, "me").addSelect("me.password").
-                    andWhere("me.email=:email", { email: user });
-                var auser = await ret.getOne();
-                if (!auser || !password)
-                    return undefined;
-                if (auser.password === password) {
-                    delete auser.password;
-                    return auser;
+    exports.Indexer = void 0;
+    class Indexer {
+        async updateModul(root, modul, isserver) {
+            var path = root + (root === "" ? "" : "/") + modul;
+            //create empty if needed
+            var text = "{}";
+            if (await this.fileExists(path + "/registry.js")) {
+                text = await this.readFile(path + "/registry.js");
+                if (!isserver) {
+                    text = text.substring(text.indexOf("default:") + 8);
+                    text = text.substring(0, text.lastIndexOf("}") - 1);
+                    text = text.substring(0, text.lastIndexOf("}") - 1);
+                }
+                else {
+                    text = text.substring(text.indexOf("default=") + 8);
                 }
             }
-            catch (err) {
-                err = err;
+            try {
+                var index = JSON.parse(text);
+            }
+            catch (_a) {
+                console.log("error read modul " + modul + "- create new");
+                index = {};
+            }
+            //remove deleted files
+            for (var key in index) {
+                if (!(await this.fileExists(root + (root === "" ? "" : "/") + key))) {
+                    delete index[key];
+                }
+            }
+            var jsFiles = await this.dirFiles(modul, path, [".ts"], ["node_modules"]);
+            for (let x = 0; x < jsFiles.length; x++) {
+                var jsFile = jsFiles[x];
+                var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
+                if (fileName === undefined)
+                    continue;
+                var entry = index[fileName];
+                if (entry === undefined) {
+                    entry = {};
+                    entry.date = undefined;
+                    index[fileName] = entry;
+                }
+                if (await this.fileExists(root + (root === "" ? "" : "/") + fileName)) {
+                    var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
+                    if (dat !== entry.date) {
+                        var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
+                        var sourceFile = ts.createSourceFile('hallo.ts', text, ts.ScriptTarget.ES5, true);
+                        var outDecorations = [];
+                        entry = {};
+                        entry.date = undefined;
+                        index[fileName] = entry;
+                        this.collectAnnotations(sourceFile, entry);
+                        // findex(Filesystem.path + "/" + jsFile);
+                        entry.date = dat;
+                    }
+                }
+            }
+            if (!isserver) { //write client
+                var text = JSON.stringify(index, undefined, "\t");
+                text = "//this file is autogenerated don't modify\n" +
+                    'define("' + modul + '/registry",["require"], function(require) {\n' +
+                    ' return {\n' +
+                    '  default: ' + text + "\n" +
+                    ' }\n' +
+                    '});';
+                var jsdir = "js/" + path;
+                var fpath = (await (Serverservice_2.serverservices.filesystem)).path;
+                if (fpath !== undefined)
+                    jsdir = path.replace(fpath, fpath + "/js");
+                if (!(await this.fileExists(jsdir)))
+                    await this.createDirectory(jsdir);
+                await this.writeFile(jsdir + "/registry.js", text);
+                await this.writeFile(path + "/registry.js", text);
+            }
+            else { //write server
+                var modules = JSON.parse(await this.readFile("./jassijs.json")).modules;
+                for (let smodul in modules) {
+                    if (modul === smodul) {
+                        var text = JSON.stringify(index, undefined, "\t");
+                        if (text !== "{}") {
+                            text = '"use strict:"\n' +
+                                "//this file is autogenerated don't modify\n" +
+                                'Object.defineProperty(exports, "__esModule", { value: true });\n' +
+                                'exports.default=' + text;
+                            var jsdir = "js/" + modul;
+                            if (!(await this.fileExists(jsdir)))
+                                await this.createDirectory(jsdir);
+                            await this.writeFile(jsdir + "/registry.js", text);
+                            await this.writeFile(modul + "/registry.js", text);
+                        }
+                    }
+                }
+            }
+        }
+        convertArgument(arg) {
+            if (arg === undefined)
+                return undefined;
+            if (arg.kind === ts.SyntaxKind.ObjectLiteralExpression) {
+                var ret = {};
+                var props = arg.properties;
+                if (props !== undefined) {
+                    for (var p = 0; p < props.length; p++) {
+                        ret[props[p].name.text] = this.convertArgument(props[p].initializer);
+                    }
+                }
+                return ret;
+            }
+            else if (arg.kind === ts.SyntaxKind.StringLiteral) {
+                return arg.text;
+            }
+            else if (arg.kind === ts.SyntaxKind.ArrayLiteralExpression) {
+                let ret = [];
+                for (var p = 0; p < arg.elements.length; p++) {
+                    ret.push(this.convertArgument(arg.elements[p]));
+                }
+                return ret;
+            }
+            else if (arg.kind === ts.SyntaxKind.Identifier) {
+                return arg.text;
+            }
+            else if (arg.kind === ts.SyntaxKind.TrueKeyword) {
+                return true;
+            }
+            else if (arg.kind === ts.SyntaxKind.FalseKeyword) {
+                return false;
+            }
+            else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
+                return Number(arg.text);
+            }
+            else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
+                return "function";
+            }
+            throw new Classes_2.JassiError("Error typ not found");
+        }
+        collectAnnotations(node, outDecorations, depth = 0) {
+            var _a;
+            //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
+            if (node.kind === ts.SyntaxKind.ClassDeclaration) {
+                if (node.decorators !== undefined) {
+                    var dec = {};
+                    var sclass = undefined;
+                    for (let x = 0; x < node.decorators.length; x++) {
+                        var decnode = node.decorators[x];
+                        var ex = decnode.expression;
+                        if (ex.expression === undefined) {
+                            dec[ex.text] = []; //Annotation without parameter
+                        }
+                        else {
+                            if (ex.expression.text === "$Class")
+                                sclass = this.convertArgument(ex.arguments[0]);
+                            else {
+                                if (dec[ex.expression.text] === undefined) {
+                                    dec[ex.expression.text] = [];
+                                }
+                                for (var a = 0; a < ex.arguments.length; a++) {
+                                    dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                }
+                            }
+                        }
+                    }
+                    if (sclass !== undefined)
+                        outDecorations[sclass] = dec;
+                    //@members.value.$Property=[{name:string}]
+                    for (let x = 0; x < node["members"].length; x++) {
+                        var member = node["members"][x];
+                        var membername = (_a = node["members"][x].name) === null || _a === void 0 ? void 0 : _a.escapedText;
+                        if (member.decorators !== undefined) {
+                            if (!dec["@members"])
+                                dec["@members"] = {};
+                            var decm = {};
+                            dec["@members"][membername] = decm;
+                            for (let x = 0; x < member.decorators.length; x++) {
+                                var decnode = member.decorators[x];
+                                var ex = decnode.expression;
+                                if (ex.expression === undefined) {
+                                    decm[ex.text] = []; //Annotation without parameter
+                                }
+                                else {
+                                    if (ex.expression.text === "$Property") {
+                                        //do nothing;
+                                    }
+                                    else {
+                                        if (decm[ex.expression.text] === undefined) {
+                                            decm[ex.expression.text] = [];
+                                        }
+                                        for (var a = 0; a < ex.arguments.length; a++) {
+                                            decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                        }
+                                    }
+                                }
+                            }
+                            if (Object.keys(dec["@members"][membername]).length === 0) {
+                                delete dec["@members"][membername];
+                            }
+                        }
+                    }
+                }
+            }
+            depth++;
+            node.getChildren().forEach(c => this.collectAnnotations(c, outDecorations, depth));
+        }
+    }
+    exports.Indexer = Indexer;
+});
+define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Server", "jassijs_localserver/Filesystem", "jassijs/remote/Registry"], function (require, exports, Indexer_1, Server_1, Filesystem_1, Registry_3) {
+    "use strict";
+    var RegistryIndexer_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RegistryIndexer = void 0;
+    let RegistryIndexer = RegistryIndexer_1 = class RegistryIndexer extends Indexer_1.Indexer {
+        constructor() {
+            super(...arguments);
+            this.mapcache = {};
+        }
+        async updateRegistry() {
+            //client modules
+            var data = await new Server_1.Server().loadFile("jassijs.json");
+            var modules = JSON.parse(data).modules;
+            for (var m in modules) {
+                if (await new Filesystem_1.default().existsDirectory(modules[m]) || await new Filesystem_1.default().existsDirectory(m)) {
+                    if (modules[m].indexOf(".js") === -1) { //.js are internet modules
+                        await this.updateModul("", m, false);
+                    }
+                    else {
+                        await this.updateModul("", m, false);
+                    }
+                }
+            }
+            return;
+        }
+        async dirFiles(modul, path, extensions, ignore = []) {
+            var tsfiles = await new Filesystem_1.default().dirFiles(path, extensions, ignore);
+            //add files from map
+            if (this.mapcache[modul] === undefined && jassijs.modules[modul] !== undefined && jassijs.modules[modul].indexOf(".js") > 0) { //read webtsfiles
+                let ret = {};
+                let mapname = jassijs.modules[modul].split("?")[0] + ".map";
+                if (jassijs.modules[modul].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + jassijs.modules[modul].split("?")[1];
+                var code = await $.ajax({ url: mapname, dataType: "text" });
+                var data = JSON.parse(code);
+                var files = data.sources;
+                for (let x = 0; x < files.length; x++) {
+                    let fname = files[x].substring(files[x].indexOf(modul + "/"));
+                    ret[fname] = data.sourcesContent[x];
+                }
+                this.mapcache[modul] = ret;
+            }
+            if (this.mapcache[modul]) {
+                for (var key in this.mapcache[modul]) {
+                    if (tsfiles.indexOf(key) === -1) {
+                        tsfiles.push(key);
+                    }
+                }
+            }
+            return tsfiles;
+        }
+        async writeFile(name, content) {
+            await new Filesystem_1.default().saveFile(name, content);
+        }
+        async createDirectory(name) {
+            await new Filesystem_1.default().createFolder(name);
+            return;
+        }
+        async getFileTime(filename) {
+            var entry = await new Filesystem_1.default().loadFileEntry(filename);
+            if (entry !== undefined)
+                return RegistryIndexer_1.version;
+            for (var modul in this.mapcache) {
+                if (this.mapcache[modul][filename]) {
+                    return 0;
+                }
             }
             return undefined;
-        };
-        //@ts-ignore
-        DBManager_2.DBManager["getConOpts"] = async function () {
-            var dbclasses = [];
-            const initSqlJs = window["SQL"];
-            const SQL = await window["SQL"]({
-                // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-                // You can omit locateFile completely when running in node
-                locateFile: file => `https://sql.js.org/dist/${file}`
-            });
-            var dbobjects = await Registry_5.default.getJSONData("$DBObject");
-            var dbfiles = [];
-            for (var o = 0; o < dbobjects.length; o++) {
-                var clname = dbobjects[o].classname;
-                try {
-                    dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
-                    dbclasses.push(await Classes_2.classes.loadClass(clname));
-                }
-                catch (err) {
-                    console.log(err);
-                    throw err;
+        }
+        async fileExists(filename) {
+            for (var modul in this.mapcache) {
+                if (this.mapcache[modul][filename]) {
+                    return true;
                 }
             }
-            //@ts-ignore
-            DBManager_2.DBManager.clearMetadata();
-            Database_1.db.fillDecorators();
-            var tcl = await Classes_2.classes.loadClass("jassijs_localserver.TypeORMListener");
-            //@ts-ignore 
-            new typeorm_3.EventSubscriber()(tcl);
-            var Filesystem = await Classes_2.classes.loadClass("jassijs_localserver.Filesystem");
-            var data = await new Filesystem().loadFile("__default.db");
-            var opt = {
-                database: data,
-                type: "sqljs",
-                subscribers: [TypeORMListener_1.TypeORMListener],
-                "entities": dbclasses
-            };
-            return opt;
-        };
-    }
-    exports.extendDBManager = extendDBManager;
+            var test = await new Filesystem_1.default().loadFileEntry(filename);
+            return test !== undefined;
+        }
+        async readFile(filename) {
+            var ret = await new Filesystem_1.default().loadFile(filename);
+            if (ret !== undefined)
+                return ret;
+            for (var modul in this.mapcache) {
+                if (this.mapcache[modul][filename]) {
+                    return this.mapcache[modul][filename];
+                }
+            }
+            return undefined;
+        }
+    };
+    RegistryIndexer.version = Math.floor(Math.random() * 100000);
+    RegistryIndexer = RegistryIndexer_1 = __decorate([
+        (0, Registry_3.$Class)("jassijs_localserver.RegistryIndexer")
+    ], RegistryIndexer);
+    exports.RegistryIndexer = RegistryIndexer;
 });
-define("jassijs_localserver/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_3, Database_2, typeorm_4) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
-    function addDecorater(decoratername, delegate, ...args) {
-        return function (...fargs) {
-            var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
-            var clname = Classes_3.classes.getClassName(con);
-            var field = fargs.length == 1 ? "this" : fargs[1];
-            Database_2.db._setMetadata(con, field, decoratername, args, fargs, delegate);
-            if (delegate)
-                delegate(...args)(...fargs);
-        };
-    }
-    function Entity(...param) {
-        //DEntity(param)(pclass, ...params);
-        return addDecorater("Entity", typeorm_4.Entity, ...param);
-    }
-    exports.Entity = Entity;
-    function PrimaryGeneratedColumn(...param) {
-        return addDecorater("PrimaryGeneratedColumn", typeorm_4.PrimaryGeneratedColumn, ...param);
-    }
-    exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
-    function JoinColumn(...param) {
-        return addDecorater("JoinColumn", typeorm_4.JoinColumn, ...param);
-    }
-    exports.JoinColumn = JoinColumn;
-    function JoinTable(...param) {
-        return addDecorater("JoinTable", typeorm_4.JoinTable, ...param);
-    }
-    exports.JoinTable = JoinTable;
-    function Column(...param) {
-        return addDecorater("Column", typeorm_4.Column, ...param);
-    }
-    exports.Column = Column;
-    function PrimaryColumn(...param) {
-        return addDecorater("PrimaryColumn", typeorm_4.PrimaryColumn, ...param);
-    }
-    exports.PrimaryColumn = PrimaryColumn;
-    function OneToOne(...param) {
-        return addDecorater("OneToOne", typeorm_4.OneToOne, ...param);
-    }
-    exports.OneToOne = OneToOne;
-    function OneToMany(...param) {
-        return addDecorater("OneToMany", typeorm_4.OneToMany, ...param);
-    }
-    exports.OneToMany = OneToMany;
-    function ManyToOne(...param) {
-        return addDecorater("ManyToOne", typeorm_4.ManyToOne, ...param);
-    }
-    exports.ManyToOne = ManyToOne;
-    function ManyToMany(...param) {
-        return addDecorater("ManyToMany", typeorm_4.ManyToMany, ...param);
-    }
-    exports.ManyToMany = ManyToMany;
-});
-//export function Entity(options?: EntityOptions): Function;
-//export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
-define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Serverservice"], function (require, exports, Registry_6, Reloader_2, Registry_7, Server_1, Serverservice_3) {
+define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Serverservice"], function (require, exports, Registry_4, Reloader_1, Registry_5, Server_2, Serverservice_3) {
     "use strict";
     var Filesystem_2;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1300,10 +1349,10 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 return;
             var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassijs_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
-            await Registry_7.default.reload();
+            await Registry_5.default.reload();
             if (rollbackonerror) {
                 try {
-                    await Reloader_2.Reloader.instance.reloadJSAll(jsToReload);
+                    await Reloader_1.Reloader.instance.reloadJSAll(jsToReload);
                     /*if (dbschemaHasChanged) { //happens in reloadJS
                         await(await serverservices.db).renewConnection();
                     }*/
@@ -1387,7 +1436,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 await this.saveFiles([modulename + "/modul.ts", "js/" + modulename + "/modul.js"], ["export default {}",
                     'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'], false);
             }
-            var json = await new Server_1.Server().loadFile("jassijs.json");
+            var json = await new Server_2.Server().loadFile("jassijs.json");
             var ob = JSON.parse(json);
             if (!ob.modules[modulename]) {
                 ob.modules[modulename] = modulename;
@@ -1423,7 +1472,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
             }
             //update client jassijs.json if removing client module 
-            var json = await new Server_1.Server().loadFile("jassijs.json");
+            var json = await new Server_2.Server().loadFile("jassijs.json");
             var ob = JSON.parse(json);
             if (ob.modules[file]) {
                 delete ob.modules[file];
@@ -1481,7 +1530,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
     };
     Filesystem = Filesystem_2 = __decorate([
         (0, Serverservice_3.$Serverservice)({ name: "filesystem", getInstance: async () => new Filesystem_2() }),
-        (0, Registry_6.$Class)("jassijs_localserver.Filesystem")
+        (0, Registry_4.$Class)("jassijs_localserver.Filesystem")
     ], Filesystem);
     exports.default = Filesystem;
     async function test2() {
@@ -1518,213 +1567,261 @@ define("local/registry",["require"], function(require) {
     }
     exports.test2 = test2;
 });
-define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs_editor/util/Typescript"], function (require, exports, Classes_4, Serverservice_4) {
+define("jassijs_localserver/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs_localserver/Filesystem", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, Registry_6, typeorm_2, Filesystem_3, Reloader_2, Registry_7, Serverservice_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Indexer = void 0;
-    class Indexer {
-        async updateModul(root, modul, isserver) {
-            var path = root + (root === "" ? "" : "/") + modul;
-            //create empty if needed
-            var text = "{}";
-            if (await this.fileExists(path + "/registry.js")) {
-                text = await this.readFile(path + "/registry.js");
-                if (!isserver) {
-                    text = text.substring(text.indexOf("default:") + 8);
-                    text = text.substring(0, text.lastIndexOf("}") - 1);
-                    text = text.substring(0, text.lastIndexOf("}") - 1);
-                }
-                else {
-                    text = text.substring(text.indexOf("default=") + 8);
-                }
-            }
-            try {
-                var index = JSON.parse(text);
-            }
-            catch (_a) {
-                console.log("error read modul " + modul + "- create new");
-                index = {};
-            }
-            //remove deleted files
-            for (var key in index) {
-                if (!(await this.fileExists(root + (root === "" ? "" : "/") + key))) {
-                    delete index[key];
-                }
-            }
-            var jsFiles = await this.dirFiles(modul, path, [".ts"], ["node_modules"]);
-            for (let x = 0; x < jsFiles.length; x++) {
-                var jsFile = jsFiles[x];
-                var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
-                if (fileName === undefined)
-                    continue;
-                var entry = index[fileName];
-                if (entry === undefined) {
-                    entry = {};
-                    entry.date = undefined;
-                    index[fileName] = entry;
-                }
-                if (await this.fileExists(root + (root === "" ? "" : "/") + fileName)) {
-                    var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
-                    if (dat !== entry.date) {
-                        var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
-                        var sourceFile = ts.createSourceFile('hallo.ts', text, ts.ScriptTarget.ES5, true);
-                        var outDecorations = [];
-                        entry = {};
-                        entry.date = undefined;
-                        index[fileName] = entry;
-                        this.collectAnnotations(sourceFile, entry);
-                        // findex(Filesystem.path + "/" + jsFile);
-                        entry.date = dat;
-                    }
-                }
-            }
-            if (!isserver) { //write client
-                var text = JSON.stringify(index, undefined, "\t");
-                text = "//this file is autogenerated don't modify\n" +
-                    'define("' + modul + '/registry",["require"], function(require) {\n' +
-                    ' return {\n' +
-                    '  default: ' + text + "\n" +
-                    ' }\n' +
-                    '});';
-                var jsdir = "js/" + path;
-                var fpath = (await (Serverservice_4.serverservices.filesystem)).path;
-                if (fpath !== undefined)
-                    jsdir = path.replace(fpath, fpath + "/js");
-                if (!(await this.fileExists(jsdir)))
-                    await this.createDirectory(jsdir);
-                await this.writeFile(jsdir + "/registry.js", text);
-                await this.writeFile(path + "/registry.js", text);
-            }
-            else { //write server
-                var modules = JSON.parse(await this.readFile("./jassijs.json")).modules;
-                for (let smodul in modules) {
-                    if (modul === smodul) {
-                        var text = JSON.stringify(index, undefined, "\t");
-                        if (text !== "{}") {
-                            text = '"use strict:"\n' +
-                                "//this file is autogenerated don't modify\n" +
-                                'Object.defineProperty(exports, "__esModule", { value: true });\n' +
-                                'exports.default=' + text;
-                            var jsdir = "js/" + modul;
-                            if (!(await this.fileExists(jsdir)))
-                                await this.createDirectory(jsdir);
-                            await this.writeFile(jsdir + "/registry.js", text);
-                            await this.writeFile(modul + "/registry.js", text);
-                        }
-                    }
-                }
-            }
+    exports.TypeORMListener = void 0;
+    //listener for code changes
+    Reloader_2.Reloader.instance.addEventCodeReloaded(async function (files) {
+        var dbobjects = await Registry_7.default.getJSONData("$DBObject");
+        var reload = false;
+        for (var x = 0; x < files.length; x++) {
+            var file = files[x];
+            dbobjects.forEach((data) => {
+                if (data.filename === file + ".ts")
+                    reload = true;
+            });
         }
-        convertArgument(arg) {
-            if (arg === undefined)
-                return undefined;
-            if (arg.kind === ts.SyntaxKind.ObjectLiteralExpression) {
-                var ret = {};
-                var props = arg.properties;
-                if (props !== undefined) {
-                    for (var p = 0; p < props.length; p++) {
-                        ret[props[p].name.text] = this.convertArgument(props[p].initializer);
-                    }
-                }
-                return ret;
-            }
-            else if (arg.kind === ts.SyntaxKind.StringLiteral) {
-                return arg.text;
-            }
-            else if (arg.kind === ts.SyntaxKind.ArrayLiteralExpression) {
-                let ret = [];
-                for (var p = 0; p < arg.elements.length; p++) {
-                    ret.push(this.convertArgument(arg.elements[p]));
-                }
-                return ret;
-            }
-            else if (arg.kind === ts.SyntaxKind.Identifier) {
-                return arg.text;
-            }
-            else if (arg.kind === ts.SyntaxKind.TrueKeyword) {
-                return true;
-            }
-            else if (arg.kind === ts.SyntaxKind.FalseKeyword) {
-                return false;
-            }
-            else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
-                return Number(arg.text);
-            }
-            else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
-                return "function";
-            }
-            throw new Classes_4.JassiError("Error typ not found");
+        if (reload) {
+            (await Serverservice_4.serverservices.db).renewConnection();
         }
-        collectAnnotations(node, outDecorations, depth = 0) {
-            var _a;
-            //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
-            if (node.kind === ts.SyntaxKind.ClassDeclaration) {
-                if (node.decorators !== undefined) {
-                    var dec = {};
-                    var sclass = undefined;
-                    for (let x = 0; x < node.decorators.length; x++) {
-                        var decnode = node.decorators[x];
-                        var ex = decnode.expression;
-                        if (ex.expression === undefined) {
-                            dec[ex.text] = []; //Annotation without parameter
-                        }
-                        else {
-                            if (ex.expression.text === "$Class")
-                                sclass = this.convertArgument(ex.arguments[0]);
-                            else {
-                                if (dec[ex.expression.text] === undefined) {
-                                    dec[ex.expression.text] = [];
-                                }
-                                for (var a = 0; a < ex.arguments.length; a++) {
-                                    dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
-                                }
-                            }
-                        }
-                    }
-                    if (sclass !== undefined)
-                        outDecorations[sclass] = dec;
-                    //@members.value.$Property=[{name:string}]
-                    for (let x = 0; x < node["members"].length; x++) {
-                        var member = node["members"][x];
-                        var membername = (_a = node["members"][x].name) === null || _a === void 0 ? void 0 : _a.escapedText;
-                        if (member.decorators !== undefined) {
-                            if (!dec["@members"])
-                                dec["@members"] = {};
-                            var decm = {};
-                            dec["@members"][membername] = decm;
-                            for (let x = 0; x < member.decorators.length; x++) {
-                                var decnode = member.decorators[x];
-                                var ex = decnode.expression;
-                                if (ex.expression === undefined) {
-                                    decm[ex.text] = []; //Annotation without parameter
-                                }
-                                else {
-                                    if (ex.expression.text === "$Property") {
-                                        //do nothing;
-                                    }
-                                    else {
-                                        if (decm[ex.expression.text] === undefined) {
-                                            decm[ex.expression.text] = [];
-                                        }
-                                        for (var a = 0; a < ex.arguments.length; a++) {
-                                            decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
-                                        }
-                                    }
-                                }
-                            }
-                            if (Object.keys(dec["@members"][membername]).length === 0) {
-                                delete dec["@members"][membername];
-                            }
-                        }
-                    }
-                }
+    });
+    let TypeORMListener = class TypeORMListener {
+        saveDB(event) {
+            if (this.savetimer) {
+                clearTimeout(this.savetimer);
+                this.savetimer = undefined;
             }
-            depth++;
-            node.getChildren().forEach(c => this.collectAnnotations(c, outDecorations, depth));
+            this.savetimer = setTimeout(() => {
+                var data = event.connection.driver.export();
+                new Filesystem_3.default().saveFile("__default.db", data);
+                console.log("save DB");
+            }, 300);
         }
-    }
-    exports.Indexer = Indexer;
+        /**
+         * Called after entity is loaded.
+         */
+        afterLoad(entity) {
+            // console.log(`AFTER ENTITY LOADED: `, entity);
+        }
+        /**
+         * Called before post insertion.
+         */
+        beforeInsert(event) {
+            //console.log(`BEFORE POST INSERTED: `, event.entity);
+        }
+        /**
+         * Called after entity insertion.
+         */
+        afterInsert(event) {
+            this.saveDB(event);
+            //console.log(`AFTER ENTITY INSERTED: `, event.entity);
+        }
+        /**
+         * Called before entity update.
+         */
+        beforeUpdate(event) {
+            //console.log(`BEFORE ENTITY UPDATED: `, event.entity);
+        }
+        /**
+         * Called after entity update.
+         */
+        afterUpdate(event) {
+            this.saveDB(event);
+            //console.log(`AFTER ENTITY UPDATED: `, event.entity);
+        }
+        /**
+         * Called before entity removal.
+         */
+        beforeRemove(event) {
+            // console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+        }
+        /**
+         * Called after entity removal.
+         */
+        afterRemove(event) {
+            //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+            this.saveDB(event);
+        }
+        /**
+         * Called before transaction start.
+         */
+        beforeTransactionStart(event) {
+            // console.log(`BEFORE TRANSACTION STARTED: `, event);
+        }
+        /**
+         * Called after transaction start.
+         */
+        afterTransactionStart(event /*: TransactionStartEvent*/) {
+            //console.log(`AFTER TRANSACTION STARTED: `, event);
+        }
+        /**
+         * Called before transaction commit.
+         */
+        beforeTransactionCommit(event /*: TransactionCommitEvent*/) {
+            // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
+        }
+        /**
+         * Called after transaction commit.
+         */
+        afterTransactionCommit(event /*: TransactionCommitEvent*/) {
+            //console.log(`AFTER TRANSACTION COMMITTED: `, event);
+        }
+        /**
+         * Called before transaction rollback.
+         */
+        beforeTransactionRollback(event /*: TransactionRollbackEvent*/) {
+            //   console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
+        }
+        /**
+         * Called after transaction rollback.
+         */
+        afterTransactionRollback(event /*: TransactionRollbackEvent*/) {
+            // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
+        }
+    };
+    TypeORMListener = __decorate([
+        (0, typeorm_2.EventSubscriber)(),
+        (0, Registry_6.$Class)("jassijs_localserver.TypeORMListener")
+    ], TypeORMListener);
+    exports.TypeORMListener = TypeORMListener;
 });
+define("jassijs_localserver/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs_localserver/DBManager", "jassijs_localserver/TypeORMListener", "typeorm"], function (require, exports, Classes_3, Database_1, Registry_8, DBManager_2, TypeORMListener_1, typeorm_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.extendDBManager = void 0;
+    function extendDBManager() {
+        //create Admin User if doesn't a user exists 
+        DBManager_2.DBManager.prototype["hasLoaded"] = async function () {
+            var User = await Classes_3.classes.loadClass("jassijs.security.User");
+            //@ts-ignore
+            var us = User.findOne();
+            if (us) {
+                us = new User();
+                us.email = "admin";
+                us.password = "jassi";
+                us.isAdmin = true;
+                await us.save();
+            }
+        };
+        DBManager_2.DBManager.prototype["login"] = async function (context, user, password) {
+            try {
+                var User = await Classes_3.classes.loadClass("jassijs.security.User");
+                var ret = await this.connection().manager.createQueryBuilder().
+                    select("me").from(User, "me").addSelect("me.password").
+                    andWhere("me.email=:email", { email: user });
+                var auser = await ret.getOne();
+                if (!auser || !password)
+                    return undefined;
+                if (auser.password === password) {
+                    delete auser.password;
+                    return auser;
+                }
+            }
+            catch (err) {
+                err = err;
+            }
+            return undefined;
+        };
+        //@ts-ignore
+        DBManager_2.DBManager["getConOpts"] = async function () {
+            var dbclasses = [];
+            const initSqlJs = window["SQL"];
+            const SQL = await window["SQL"]({
+                // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+                // You can omit locateFile completely when running in node
+                locateFile: file => `https://sql.js.org/dist/${file}`
+            });
+            var dbobjects = await Registry_8.default.getJSONData("$DBObject");
+            var dbfiles = [];
+            for (var o = 0; o < dbobjects.length; o++) {
+                var clname = dbobjects[o].classname;
+                try {
+                    dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
+                    dbclasses.push(await Classes_3.classes.loadClass(clname));
+                }
+                catch (err) {
+                    console.log(err);
+                    throw err;
+                }
+            }
+            //@ts-ignore
+            DBManager_2.DBManager.clearMetadata();
+            Database_1.db.fillDecorators();
+            var tcl = await Classes_3.classes.loadClass("jassijs_localserver.TypeORMListener");
+            //@ts-ignore 
+            new typeorm_3.EventSubscriber()(tcl);
+            var Filesystem = await Classes_3.classes.loadClass("jassijs_localserver.Filesystem");
+            var data = await new Filesystem().loadFile("__default.db");
+            var opt = {
+                database: data,
+                type: "sqljs",
+                subscribers: [TypeORMListener_1.TypeORMListener],
+                "entities": dbclasses
+            };
+            return opt;
+        };
+    }
+    exports.extendDBManager = extendDBManager;
+});
+define("jassijs_localserver/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_4, Database_2, typeorm_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
+    function addDecorater(decoratername, delegate, ...args) {
+        return function (...fargs) {
+            var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
+            var clname = Classes_4.classes.getClassName(con);
+            var field = fargs.length == 1 ? "this" : fargs[1];
+            Database_2.db._setMetadata(con, field, decoratername, args, fargs, delegate);
+            if (delegate)
+                delegate(...args)(...fargs);
+        };
+    }
+    function Entity(...param) {
+        //DEntity(param)(pclass, ...params);
+        return addDecorater("Entity", typeorm_4.Entity, ...param);
+    }
+    exports.Entity = Entity;
+    function PrimaryGeneratedColumn(...param) {
+        return addDecorater("PrimaryGeneratedColumn", typeorm_4.PrimaryGeneratedColumn, ...param);
+    }
+    exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
+    function JoinColumn(...param) {
+        return addDecorater("JoinColumn", typeorm_4.JoinColumn, ...param);
+    }
+    exports.JoinColumn = JoinColumn;
+    function JoinTable(...param) {
+        return addDecorater("JoinTable", typeorm_4.JoinTable, ...param);
+    }
+    exports.JoinTable = JoinTable;
+    function Column(...param) {
+        return addDecorater("Column", typeorm_4.Column, ...param);
+    }
+    exports.Column = Column;
+    function PrimaryColumn(...param) {
+        return addDecorater("PrimaryColumn", typeorm_4.PrimaryColumn, ...param);
+    }
+    exports.PrimaryColumn = PrimaryColumn;
+    function OneToOne(...param) {
+        return addDecorater("OneToOne", typeorm_4.OneToOne, ...param);
+    }
+    exports.OneToOne = OneToOne;
+    function OneToMany(...param) {
+        return addDecorater("OneToMany", typeorm_4.OneToMany, ...param);
+    }
+    exports.OneToMany = OneToMany;
+    function ManyToOne(...param) {
+        return addDecorater("ManyToOne", typeorm_4.ManyToOne, ...param);
+    }
+    exports.ManyToOne = ManyToOne;
+    function ManyToMany(...param) {
+        return addDecorater("ManyToMany", typeorm_4.ManyToMany, ...param);
+    }
+    exports.ManyToMany = ManyToMany;
+});
+//export function Entity(options?: EntityOptions): Function;
+//export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
 define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema", "jassijs/remote/Serverservice", "jassijs_localserver/DBManagerExt"], function (Filesystem, schema, serverservice, dbmanext) {
     serverservice.beforeServiceLoad((name, service) => {
         if (name === "db") {
@@ -1769,7 +1866,6 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
     exports.localExec = void 0;
     RemoteProtocol_1.RemoteProtocol.prototype.exec = async function (config, ob) {
         var clname = JSON.parse(config.data).classname;
-        var local = ["jassijs.remote.Transaction", "northwind.Employees", "northwind.Customer"];
         var classes = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/Classes"], resolve_8, reject_8); })).classes;
         var DBObject = await classes.loadClass("jassijs.remote.DBObject");
         var ret;
@@ -1902,103 +1998,6 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
         }
     }
     exports.localExec = localExec;
-});
-define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Server", "jassijs_localserver/Filesystem", "jassijs/remote/Registry"], function (require, exports, Indexer_1, Server_2, Filesystem_3, Registry_8) {
-    "use strict";
-    var RegistryIndexer_1;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.RegistryIndexer = void 0;
-    let RegistryIndexer = RegistryIndexer_1 = class RegistryIndexer extends Indexer_1.Indexer {
-        constructor() {
-            super(...arguments);
-            this.mapcache = {};
-        }
-        async updateRegistry() {
-            //client modules
-            var data = await new Server_2.Server().loadFile("jassijs.json");
-            var modules = JSON.parse(data).modules;
-            for (var m in modules) {
-                if (await new Filesystem_3.default().existsDirectory(modules[m]) || await new Filesystem_3.default().existsDirectory(m)) {
-                    if (modules[m].indexOf(".js") === -1) { //.js are internet modules
-                        await this.updateModul("", m, false);
-                    }
-                    else {
-                        await this.updateModul("", m, false);
-                    }
-                }
-            }
-            return;
-        }
-        async dirFiles(modul, path, extensions, ignore = []) {
-            var tsfiles = await new Filesystem_3.default().dirFiles(path, extensions, ignore);
-            //add files from map
-            if (this.mapcache[modul] === undefined && jassijs.modules[modul] !== undefined && jassijs.modules[modul].indexOf(".js") > 0) { //read webtsfiles
-                let ret = {};
-                let mapname = jassijs.modules[modul].split("?")[0] + ".map";
-                if (jassijs.modules[modul].indexOf(".js?") > -1)
-                    mapname = mapname + "?" + jassijs.modules[modul].split("?")[1];
-                var code = await $.ajax({ url: mapname, dataType: "text" });
-                var data = JSON.parse(code);
-                var files = data.sources;
-                for (let x = 0; x < files.length; x++) {
-                    let fname = files[x].substring(files[x].indexOf(modul + "/"));
-                    ret[fname] = data.sourcesContent[x];
-                }
-                this.mapcache[modul] = ret;
-            }
-            if (this.mapcache[modul]) {
-                for (var key in this.mapcache[modul]) {
-                    if (tsfiles.indexOf(key) === -1) {
-                        tsfiles.push(key);
-                    }
-                }
-            }
-            return tsfiles;
-        }
-        async writeFile(name, content) {
-            await new Filesystem_3.default().saveFile(name, content);
-        }
-        async createDirectory(name) {
-            await new Filesystem_3.default().createFolder(name);
-            return;
-        }
-        async getFileTime(filename) {
-            var entry = await new Filesystem_3.default().loadFileEntry(filename);
-            if (entry !== undefined)
-                return RegistryIndexer_1.version;
-            for (var modul in this.mapcache) {
-                if (this.mapcache[modul][filename]) {
-                    return 0;
-                }
-            }
-            return undefined;
-        }
-        async fileExists(filename) {
-            for (var modul in this.mapcache) {
-                if (this.mapcache[modul][filename]) {
-                    return true;
-                }
-            }
-            var test = await new Filesystem_3.default().loadFileEntry(filename);
-            return test !== undefined;
-        }
-        async readFile(filename) {
-            var ret = await new Filesystem_3.default().loadFile(filename);
-            if (ret !== undefined)
-                return ret;
-            for (var modul in this.mapcache) {
-                if (this.mapcache[modul][filename]) {
-                    return this.mapcache[modul][filename];
-                }
-            }
-            return undefined;
-        }
-    };
-    RegistryIndexer.version = Math.floor(Math.random() * 100000);
-    RegistryIndexer = RegistryIndexer_1 = __decorate([
-        (0, Registry_8.$Class)("jassijs_localserver.RegistryIndexer")
-    ], RegistryIndexer);
-    exports.RegistryIndexer = RegistryIndexer;
 });
 define("jassijs_localserver/Testuser", ["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Registry"], function (require, exports, DatabaseSchema_1, DBObject_1, Registry_9) {
     "use strict";

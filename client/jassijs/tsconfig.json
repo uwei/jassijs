@@ -1,0 +1,30 @@
+{
+  "compilerOptions": { 
+    "baseUrl": "./../",
+    "allowJs": true,
+    //"checkJs":false,
+    "target": "es2017",
+    "module": "amd",
+    "moduleResolution": "node",
+    "lib": [
+      "es2016", 
+      "dom",
+      "es5"
+    ],
+   
+    "skipLibCheck": true,
+
+    "typeRoots": [".././node_modules/@types",".././node_modules2/typescriptservice"],
+    "composite": true,
+    "inlineSources": true,
+    "outFile": "../../dist/jassijs.js",
+    "rootDir": "./../",
+    "declaration": true,
+     "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+  },
+   "include":["./",".././node_modules2"]
+ 
+  
+}

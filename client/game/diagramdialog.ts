@@ -227,8 +227,8 @@ export class DiagramDialog {
         }
         content += `<tr>
                         <td>Total</td>
-                        <td style="text-align: right">`+"&nbsp;"+gesy.toLocaleString()) + `</td>
-                        <td style="text-align: right">`+"&nbsp;"+gest.toLocaleString()) + `</td>
+                        <td style="text-align: right">`+"&nbsp;"+gesy.toLocaleString() + `</td>
+                        <td style="text-align: right">`+"&nbsp;"+gest.toLocaleString() + `</td>
                       </tr>`
         table.innerHTML = content;
         document.getElementById("diagramdialog-buildings-last-change").textContent=this.world.game.statistic.lastPriceChange;

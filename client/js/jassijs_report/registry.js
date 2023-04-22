@@ -14,14 +14,14 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1655329710000
 	},
 	"jassijs_report/pdfMake-interface.ts": {
-		"date": 1656184596000
+		"date": 1681513961981
 	},
 	"jassijs_report/PDFReport.ts": {
 		"date": 1655556866000,
 		"jassijs_report.PDFReport": {}
 	},
 	"jassijs_report/PDFViewer.ts": {
-		"date": 1680797793349,
+		"date": 1681513899603,
 		"jassijs_report.PDFViewer": {}
 	},
 	"jassijs_report/RColumns.ts": {
@@ -190,7 +190,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTable.ts": {
-		"date": 1656019452000,
+		"date": 1681571019401,
 		"jassijs_report.RTable": {
 			"$ReportComponent": [
 				{
@@ -279,10 +279,10 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassi_report.SimpleReportEditor": {}
 	},
 	"jassijs_report/StartReporteditor.ts": {
-		"date": 1655760764000
+		"date": 1681570913030
 	},
 	"jassijs_report/TemplateReport.ts": {
-		"date": 1656019404000,
+		"date": 1681570098047,
 		"jassijs_report.TemplateReport": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -367,7 +367,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ReportViewer.ts": {
-		"date": 1656456336000,
+		"date": 1681571041227,
 		"jassijs_report/ReportViewer": {}
 	},
 	"jassijs_report/ext/Pdfjs.ts": {

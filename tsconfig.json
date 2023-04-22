@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
       "baseUrl": "./",
-     // "rootDirs": ["../client/remote","./"],
       "target": "es2017",
       "module": "commonjs",
       "outDir": "js",
@@ -16,5 +15,5 @@
         "typeorm":["../node_modules/typeorm","../server/node_modules/typeorm"]
       }
     }, 
-    "exclude": ["client","js","private","deployserver"]
+    "exclude": ["dist","client","js","private","deployserver","build"]
   }

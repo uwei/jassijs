@@ -17,6 +17,7 @@ let T = class T extends RemoteObject_1.RemoteObject {
             return await this.call(this, this.sayHello, name, context);
         }
         else {
+            //@ts-ignore
             var H = await Promise.resolve().then(() => require("Hallo"));
             return "Hello " + name + H.test(); //this would be execute on server  
         }

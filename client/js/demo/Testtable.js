@@ -1,8 +1,8 @@
+//height=50 -> gilt für alle und height=function()
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
-    //height=50 -> gilt für alle und height=function()
     var reportdesign = {
         content: [
             {

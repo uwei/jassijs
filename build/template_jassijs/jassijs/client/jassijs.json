@@ -1,0 +1,13 @@
+{
+
+	"modules": {
+		"jassijs": "jassijs",
+		"jassijs_editor": "jassijs_editor",
+		"jassijs_report": "jassijs_report"
+	},
+	"require": {
+		"paths": {
+			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"
+		}
+	}
+}

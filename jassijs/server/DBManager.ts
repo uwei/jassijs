@@ -23,12 +23,9 @@ export interface MyFindManyOptions<Entity = any> extends FindManyOptions {
 
 var _instance: DBManager = undefined;
 
-/**
- * Database access with typeorm
- */
-declare global {
-  export interface Serverservice {
-    db: Promise<DBManager>;
+declare global{
+  export interface Serverservice{
+      db:Promise<DBManager>;
   }
 }
 
