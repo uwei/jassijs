@@ -28,10 +28,12 @@ function updatePackage() {
                 if (!fs.existsSync(client_path + "/" + filename)) {
                     fs.copyFileSync(module_path + "/" + filename, client_path + "/" + filename);
                 }
-                if (fs.statSync(module_path + "/" + filename).mtime.getTime() > fs.statSync(client_path + "/" + filename).mtime.getTime()) {
-                    //update serviceworker if newer
-                    console.log("update " + filename);
-                    fs.copyFileSync(module_path + "/" + filename, client_path + "/" + filename);
+                if (filename === "jassistart.js" || filename === "service-worker.js") {
+                    if (fs.statSync(module_path + "/" + filename).mtime.getTime() > fs.statSync(client_path + "/" + filename).mtime.getTime()) {
+                        //update serviceworker if newer
+                        console.log("update " + filename);
+                        fs.copyFileSync(module_path + "/" + filename, client_path + "/" + filename);
+                    }
                 }
             }
         });

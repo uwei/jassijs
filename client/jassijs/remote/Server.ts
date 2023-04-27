@@ -7,8 +7,7 @@ import { serverservices } from "./Serverservice";
 import { ValidateFunctionParameter, ValidateIsArray, ValidateIsBoolean, ValidateIsString } from "jassijs/remote/Validator";
 
 
-
-
+ 
 
 @$Class("jassijs.remote.Server")
 export class Server extends RemoteObject {
@@ -108,6 +107,7 @@ export class Server extends RemoteObject {
     */
     @ValidateFunctionParameter()
     async dir(@ValidateIsBoolean({ optional: true }) withDate: boolean = false, context: Context = undefined): Promise<FileNode> {
+        
         if (!context?.isServer) {
             var ret: FileNode;
             if ((await Server.isOnline(context)) === true)
@@ -118,8 +118,8 @@ export class Server extends RemoteObject {
             ret.fullpath = "";//root
             let r = this._convertFileNode(ret);
             return r;
-        } else {
-            var rett = (await serverservices.filesystem).dir("", withDate);
+        } else { 
+            var rett = await (await serverservices.filesystem).dir("", withDate);
             return rett;
             // return ["jassijs/base/ChromeDebugger.ts"];
         }
@@ -327,16 +327,17 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             if (!context.request.user.isAdmin)
-                throw new JassiError("only admins can rename");
+                throw new JassiError("only admins can rename"); 
             return (await serverservices.filesystem).rename(oldname, newname);;
         }
-    }
+    } 
     /**
     * is the nodes server running 
     **/
     public static async isOnline(context: Context = undefined): Promise<boolean> {
         if (!context?.isServer) {
             //no serviceworker no serverside implementation
+            //@ts-ignore
             if (navigator.serviceWorker.controller === null)
                 return false;
             try {

@@ -439,11 +439,11 @@ let RComponent = RComponent_1 = class RComponent extends Panel_1.Panel {
     }
 };
 __decorate([
-    Property_1.$Property(),
+    (0, Property_1.$Property)(),
     __metadata("design:type", String)
 ], RComponent.prototype, "foreach", void 0);
 __decorate([
-    Property_1.$Property({
+    (0, Property_1.$Property)({
         default: undefined,
         isVisible: (component) => {
             var _a;
@@ -454,7 +454,7 @@ __decorate([
     __metadata("design:paramtypes", [Number])
 ], RComponent.prototype, "counter", null);
 __decorate([
-    Property_1.$Property({
+    (0, Property_1.$Property)({
         name: "listType",
         default: undefined,
         isVisible: (component) => {
@@ -472,7 +472,7 @@ __decorate([
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "listType", null);
 __decorate([
-    Property_1.$Property({
+    (0, Property_1.$Property)({
         type: "color", isVisible: (component) => {
             var _a;
             //only in table and column width is posible
@@ -483,7 +483,7 @@ __decorate([
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "fillColor", null);
 __decorate([
-    Property_1.$Property({
+    (0, Property_1.$Property)({
         type: "string", isVisible: (component) => {
             var _a;
             //only in table and column width is posible
@@ -494,7 +494,7 @@ __decorate([
     __metadata("design:paramtypes", [Number])
 ], RComponent.prototype, "colSpan", null);
 __decorate([
-    Property_1.$Property({
+    (0, Property_1.$Property)({
         type: "string", isVisible: (component) => {
             var _a;
             //only in table and column width is posible
@@ -505,7 +505,7 @@ __decorate([
     __metadata("design:paramtypes", [Number])
 ], RComponent.prototype, "rowSpan", null);
 __decorate([
-    Property_1.$Property({
+    (0, Property_1.$Property)({
         type: "boolean[]",
         default: [false, false, false, false],
         isVisible: (component) => {
@@ -519,7 +519,7 @@ __decorate([
     __metadata("design:paramtypes", [Array])
 ], RComponent.prototype, "border", null);
 __decorate([
-    Property_1.$Property({
+    (0, Property_1.$Property)({
         type: "string", isVisible: (component) => {
             var _a, _b;
             //only in table and column width is posible
@@ -530,7 +530,7 @@ __decorate([
     __metadata("design:paramtypes", [Object])
 ], RComponent.prototype, "width", null);
 __decorate([
-    Property_1.$Property({
+    (0, Property_1.$Property)({
         type: "string", isVisible: (component) => {
             var _a, _b;
             //only in table and column width is posible
@@ -541,73 +541,73 @@ __decorate([
     __metadata("design:paramtypes", [Object])
 ], RComponent.prototype, "height", null);
 __decorate([
-    Property_1.$Property(),
+    (0, Property_1.$Property)(),
     __metadata("design:type", Boolean),
     __metadata("design:paramtypes", [Boolean])
 ], RComponent.prototype, "bold", null);
 __decorate([
-    Property_1.$Property(),
+    (0, Property_1.$Property)(),
     __metadata("design:type", Boolean),
     __metadata("design:paramtypes", [Boolean])
 ], RComponent.prototype, "italics", null);
 __decorate([
-    Property_1.$Property({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
+    (0, Property_1.$Property)({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
     __metadata("design:type", String),
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "font", null);
 __decorate([
-    Property_1.$Property(),
+    (0, Property_1.$Property)(),
     __metadata("design:type", Number),
     __metadata("design:paramtypes", [Number])
 ], RComponent.prototype, "fontSize", null);
 __decorate([
-    Property_1.$Property({ type: "color" }),
+    (0, Property_1.$Property)({ type: "color" }),
     __metadata("design:type", String),
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "background", null);
 __decorate([
-    Property_1.$Property({ type: "color" }),
+    (0, Property_1.$Property)({ type: "color" }),
     __metadata("design:type", String),
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "color", null);
 __decorate([
-    Property_1.$Property({ chooseFrom: ["left", "center", "right"] }),
+    (0, Property_1.$Property)({ chooseFrom: ["left", "center", "right"] }),
     __metadata("design:type", String),
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "alignment", null);
 __decorate([
-    Property_1.$Property({ chooseFrom: ["underline", "lineThrough", "overline"] }),
+    (0, Property_1.$Property)({ chooseFrom: ["underline", "lineThrough", "overline"] }),
     __metadata("design:type", String),
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "decoration", null);
 __decorate([
-    Property_1.$Property({ type: "color" }),
+    (0, Property_1.$Property)({ type: "color" }),
     __metadata("design:type", String),
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "decorationColor", null);
 __decorate([
-    Property_1.$Property({ chooseFrom: ["dashed", "dotted", "double", "wavy"] }),
+    (0, Property_1.$Property)({ chooseFrom: ["dashed", "dotted", "double", "wavy"] }),
     __metadata("design:type", String),
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "decorationStyle", null);
 __decorate([
-    Property_1.$Property(),
+    (0, Property_1.$Property)(),
     __metadata("design:type", String),
     __metadata("design:paramtypes", [String])
 ], RComponent.prototype, "style", null);
 __decorate([
-    Property_1.$Property({ default: 1 }),
+    (0, Property_1.$Property)({ default: 1 }),
     __metadata("design:type", Number),
     __metadata("design:paramtypes", [Number])
 ], RComponent.prototype, "lineHeight", null);
 __decorate([
-    Property_1.$Property({ type: "number[]", description: "margin left, top, right, bottom" }),
+    (0, Property_1.$Property)({ type: "number[]", description: "margin left, top, right, bottom" }),
     __metadata("design:type", Array),
     __metadata("design:paramtypes", [Array])
 ], RComponent.prototype, "margin", null);
 RComponent = RComponent_1 = __decorate([
-    Registry_2.$Class("jassijs_report.ReportComponent"),
-    Property_1.$Property({ hideBaseClassProperties: true }),
+    (0, Registry_2.$Class)("jassijs_report.ReportComponent"),
+    (0, Property_1.$Property)({ hideBaseClassProperties: true }),
     __metadata("design:paramtypes", [Object])
 ], RComponent);
 exports.RComponent = RComponent;

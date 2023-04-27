@@ -22,38 +22,38 @@ let OrderDetails = class OrderDetails extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    Validator_1.ValidateIsInt({ optional: true }),
-    DatabaseSchema_1.PrimaryGeneratedColumn(),
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
+    (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], OrderDetails.prototype, "id", void 0);
 __decorate([
-    Validator_1.ValidateIsInstanceOf({ type: type => Orders_1.Orders }),
-    DatabaseSchema_1.ManyToOne(type => Orders_1.Orders, e => e.Details),
+    (0, Validator_1.ValidateIsInstanceOf)({ type: type => Orders_1.Orders }),
+    (0, DatabaseSchema_1.ManyToOne)(type => Orders_1.Orders, e => e.Details),
     __metadata("design:type", Orders_1.Orders)
 ], OrderDetails.prototype, "Order", void 0);
 __decorate([
-    Validator_1.ValidateIsInstanceOf({ type: type => Products_1.Products }),
-    DatabaseSchema_1.ManyToOne(type => Products_1.Products),
+    (0, Validator_1.ValidateIsInstanceOf)({ type: type => Products_1.Products }),
+    (0, DatabaseSchema_1.ManyToOne)(type => Products_1.Products),
     __metadata("design:type", Products_1.Products)
 ], OrderDetails.prototype, "Product", void 0);
 __decorate([
-    Validator_1.ValidateIsNumber(),
-    DatabaseSchema_1.Column({ nullable: false, type: "decimal" }),
+    (0, Validator_1.ValidateIsNumber)(),
+    (0, DatabaseSchema_1.Column)({ nullable: false, type: "decimal" }),
     __metadata("design:type", Number)
 ], OrderDetails.prototype, "UnitPrice", void 0);
 __decorate([
-    Validator_1.ValidateIsNumber(),
-    DatabaseSchema_1.Column(),
+    (0, Validator_1.ValidateIsNumber)(),
+    (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", Number)
 ], OrderDetails.prototype, "Quantity", void 0);
 __decorate([
-    Validator_1.ValidateIsNumber(),
-    DatabaseSchema_1.Column({ nullable: true, type: "decimal" }),
+    (0, Validator_1.ValidateIsNumber)(),
+    (0, DatabaseSchema_1.Column)({ nullable: true, type: "decimal" }),
     __metadata("design:type", Number)
 ], OrderDetails.prototype, "Discount", void 0);
 OrderDetails = __decorate([
-    DBObject_1.$DBObject(),
-    Registry_1.$Class("northwind.OrderDetails"),
+    (0, DBObject_1.$DBObject)(),
+    (0, Registry_1.$Class)("northwind.OrderDetails"),
     __metadata("design:paramtypes", [])
 ], OrderDetails);
 exports.OrderDetails = OrderDetails;

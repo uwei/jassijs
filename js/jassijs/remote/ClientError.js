@@ -17,7 +17,7 @@ let ClientError = class ClientError extends Error {
     }
 };
 ClientError = __decorate([
-    Registry_1.$Class("jassijs.remote.ClientError"),
+    (0, Registry_1.$Class)("jassijs.remote.ClientError"),
     __metadata("design:paramtypes", [String])
 ], ClientError);
 exports.ClientError = ClientError;

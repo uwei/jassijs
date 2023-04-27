@@ -53,7 +53,7 @@ class JassijsStarter {
             window.document.head.appendChild(js);
         });
     }
-    loadModules(res, mods, modules, requireconfig, startlib, beforestartlib) {
+    loadModules(res, mods, modules, requireconfig, startlib, beforestartlib, beforestartlibServerContext) {
         for (let x = 0; x < res.length; x++) {
             if (res[x].default.css) {
                 var mod = mods[x];
@@ -76,7 +76,14 @@ class JassijsStarter {
                 res[x].default.loadonstart.forEach((entr) => startlib.push(entr));
             }
             if (res[x].default.loadbeforestart) {
-                res[x].default.loadbeforestart.forEach((entr) => beforestartlib.push(entr));
+
+
+                res[x].default.loadbeforestart.forEach((entr) => {
+                    if (res[x].default.serverContext === true)
+                        beforestartlibServerContext.push(entr);
+                    else
+                        beforestartlib.push(entr);
+                });
             }
             let toadd = res[x].default.require;
             if (toadd) {
@@ -93,11 +100,11 @@ class JassijsStarter {
             }
         }
     }
-    async loadBeforestart(beforestartlib) {
+    async loadBeforestart(beforestartlib, myrequire) {
         var _this = this;
         for (var x = 0; x < beforestartlib.length; x++) {
             await new Promise((resolve) => {
-                require([beforestartlib[x]], function (beforestart) {
+                myrequire([beforestartlib[x]], function (beforestart) {
                     if (beforestart && beforestart.autostart) {
                         beforestart.autostart().then(() => {
                             resolve(undefined);
@@ -107,7 +114,7 @@ class JassijsStarter {
                     }
                 });
             })
-            
+
         }
     }
     async loadRequirejs(requireconfig) {
@@ -122,12 +129,12 @@ class JassijsStarter {
             await this.loadScript(path);
         }
         //wait for async sample
-        define("async",{
+        define("async", {
             load: function (name, req, onload, config) {
-                var file=name.split(":")[0];
-                var func=name.split(":")[1];
+                var file = name.split(":")[0];
+                var func = name.split(":")[1];
                 req([file], function (value) {
-                        value[func]().then((ret )=>onload(ret));
+                    value[func]().then((ret) => onload(ret));
                 });
             }
         });
@@ -139,35 +146,95 @@ class JassijsStarter {
             }
         };
     }
-    async loadInternetModules(modules) {
-        let allmodules = {};
-        let dowait = [];
-        for (let modul in modules) {
-            if (modules[modul].endsWith(".js") || modules[modul].indexOf(".js?") > -1) {
-                dowait.push(this.loadScript(modules[modul]));
+    async loadInternetModules(modules, myrequire) {
+        var all = await new Promise((resolve) => {
+            myrequire([], () => {
+                let allmodules = {};
+                let dowait = [];
+                for (let modul in modules) {
+                    if (modules[modul].endsWith(".js") || modules[modul].indexOf(".js?") > -1) {
+                        dowait.push(this.loadScript(modules[modul]));
+                    }
+                }
+                resolve(dowait);
+            });
+        });
+        await Promise.all(all);
+    }
+    async runContext(modules, myRequire, contextname) {
+        if(modules===undefined||modules.length===0)
+            return;
+        await this.loadInternetModules(modules, myRequire);
+        return await new Promise((resolvemain) => {
+
+            
+            // await this.loadInternetModules(servermodules,serverRequire);
+
+            var mods = [];
+            var all = ["jassijs/remote/Jassi"];
+            for (let key in modules) {
+                mods.push(key + "/modul");
+                all.push(key + "/modul");
             }
-        }
-        for (let x = 0; x < dowait.length; x++) {
-            var mod = await dowait[x];
-        }
+            var startlib = [];
+            var beforestartlib = [];
+            var _this = this;
+
+
+
+            require(all, function (remoteJassi, ...res) {
+                if(contextname==="_")
+                    window.jassijs.modules = _this.config.modules;
+                else
+                    window.jassijs.servermodules = _this.config.servermodules;
+                var requireconfig={};
+                _this.loadModules(res, mods, modules, requireconfig, startlib, beforestartlib);
+                window.jassijs.options = _this.config.options;
+                window.jassijs.cssFiles = _this.cssFiles;
+                var h=require.s.contexts[contextname].configure(requireconfig);
+                //            requirejs.config(requireconfig);
+                //var context=JSON.parse(JSON.stringify(require.s.contexts._.config))
+
+
+
+                _this.loadBeforestart(beforestartlib, myRequire).then(() => {
+                    myRequire(startlib, function (jassijs, ...others) {
+                        for (var key in _this.cssFiles) {
+                            //jassijs.default.myRequire(_this.cssFiles[key]);
+                        }
+                        if (_this.runFunction && window[_this.runFunction]) {
+                            window[_this.runFunction]();
+                        }
+                        if (_this.runScript&&contextname==="_") {
+                            myRequire([_this.runScript], function () {
+                                resolvemain();
+                            });
+                        }else{
+                            resolvemain();
+                            
+                        }
+                    });
+                });
+            });
+        });
     }
     async run() {
         var smodules = await this.loadText(this.configFile);
         var requireconfig = {};
         let modules;
-
+        let servermodules;
         if (smodules) {
             let data = JSON.parse(smodules);
             if (data.require)
                 requireconfig = data.require;
             modules = data.modules;
+            servermodules = data.servermodules;
             this.config = data;
             // window.__jassijsconfig__ = data;//is consumed by Jassijs
 
 
         }
         await this.loadRequirejs(requireconfig);
-        await this.loadInternetModules(modules);
         requirejs.config({
             waitSeconds: 200,
             baseUrl: 'js',
@@ -177,42 +244,14 @@ class JassijsStarter {
 
             }
         });
-        var mods = [];
-        var all = ["jassijs/remote/Jassi"];
-        for (let key in modules) {
-            mods.push(key + "/modul");
-            all.push(key + "/modul");
-        }
-        var startlib = [];
-        var beforestartlib = [];
-        var _this = this;
-        require(all, function (remoteJassi, ...res) {
-            window.jassijs.modules = _this.config.modules;
+        var context = JSON.parse(JSON.stringify(require.s.contexts._.config))
+        context.context = "server";
+        window.serverRequire = requirejs.config(context);
+        await this.runContext(servermodules,serverRequire,"server");
+        this.runContext(modules,requirejs,"_");
 
-            _this.loadModules(res, mods, modules, requireconfig, startlib, beforestartlib);
-            window.jassijs.options = _this.config.options;
-            window.jassijs.cssFiles = _this.cssFiles;
-            requirejs.config(requireconfig);
-            //read UserSettings after all beforestartlib are loaded
-           // beforestartlib.push("jassijs/jassi");
-           // beforestartlib.push("jassijs/remote/Settings");
-            //load beforestartlib synchron
 
-            _this.loadBeforestart(beforestartlib).then(() => {
-                require(startlib, function (jassijs, ...others) {
-                    for (var key in _this.cssFiles) {
-                        //jassijs.default.myRequire(_this.cssFiles[key]);
-                    }
-                    if (_this.runFunction && window[_this.runFunction]) {
-                        window[_this.runFunction]();
-                    }
-                    if (_this.runScript) {
-                        require([_this.runScript], function () {
-                        });
-                    }
-                });
-            });
-        });
+
     }
 }
 (() => {

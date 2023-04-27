@@ -20,68 +20,68 @@ let Suppliers = class Suppliers extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    Validator_1.ValidateIsInt({ optional: true }),
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Suppliers.prototype, "id", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "CompanyName", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "ContactName", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "ContactTitle", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Address", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "City", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Region", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "PostalCode", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Country", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Phone", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Fax", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "HomePage", void 0);
 Suppliers = __decorate([
-    DBObject_1.$DBObject(),
-    Registry_1.$Class("northwind.Suppliers"),
+    (0, DBObject_1.$DBObject)(),
+    (0, Registry_1.$Class)("northwind.Suppliers"),
     __metadata("design:paramtypes", [])
 ], Suppliers);
 exports.Suppliers = Suppliers;

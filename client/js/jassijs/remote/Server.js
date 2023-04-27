@@ -116,7 +116,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return r;
             }
             else {
-                var rett = (await Serverservice_1.serverservices.filesystem).dir("", withDate);
+                var rett = await (await Serverservice_1.serverservices.filesystem).dir("", withDate);
                 return rett;
                 // return ["jassijs/base/ChromeDebugger.ts"];
             }
@@ -330,6 +330,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         static async isOnline(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 //no serviceworker no serverside implementation
+                //@ts-ignore
                 if (navigator.serviceWorker.controller === null)
                     return false;
                 try {

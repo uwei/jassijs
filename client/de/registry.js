@@ -331,6 +331,9 @@ define("de/registry",["require"], function(require) {
 	},
 	"de/TestProt.ts": {
 		"date": 1682190808387
+	},
+	"de/aa.ts": {
+		"date": 1682369481262
 	}
 }
  }

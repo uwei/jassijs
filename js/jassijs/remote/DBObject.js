@@ -28,7 +28,7 @@ function $DBObject(options) {
         if (!options.name)
             options.name = classname.toLowerCase().replaceAll(".", "_");
         Registry_2.default.register("$DBObject", pclass, options);
-        DatabaseSchema_1.Entity(options)(pclass, ...params); //pass to orginal Entitiy
+        (0, DatabaseSchema_1.Entity)(options)(pclass, ...params); //pass to orginal Entitiy
     };
 }
 exports.$DBObject = $DBObject;
@@ -41,14 +41,14 @@ exports.MyFindManyOptions = MyFindManyOptions;
 * @class DBObject
 */
 let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
-    constructor() {
-        super();
-    }
     //clear cache on reload
     static _initFunc() {
         Registry_2.default.onregister("$Class", (data, name) => {
             delete DBObject_1.cache[name];
         });
+    }
+    constructor() {
+        super();
     }
     isAutoId() {
         var _a;
@@ -62,7 +62,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
         return DBObject_1.cache[classname][id.toString()];
     }
     async validate(options = undefined, throwError = false) {
-        var ret = Validator_1.validate(this, options, throwError);
+        var ret = (0, Validator_1.validate)(this, options, throwError);
         return ret;
     }
     static addToCache(ob) {
@@ -231,7 +231,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
 DBObject.cache = {};
 DBObject._init = DBObject_1._initFunc();
 DBObject = DBObject_1 = __decorate([
-    Registry_1.$Class("jassijs.remote.DBObject"),
+    (0, Registry_1.$Class)("jassijs.remote.DBObject"),
     __metadata("design:paramtypes", [])
 ], DBObject);
 exports.DBObject = DBObject;

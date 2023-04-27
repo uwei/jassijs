@@ -8,6 +8,9 @@ define(["require", "exports", "jassijs/ext/js-cookie"], function (require, expor
         get(name) {
         }
         remove(name, params = undefined) {
+        }
+        getJSON() {
+            return "";
         } // removed!
     }
     var Cookies = js_cookie_1.default;

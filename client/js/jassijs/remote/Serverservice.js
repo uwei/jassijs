@@ -1,5 +1,5 @@
 //@ts-ignore
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_1) {
+define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Classes_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.$Serverservice = exports.beforeServiceLoad = exports.ServerserviceProperties = void 0;
@@ -39,7 +39,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
                                 await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                             }
                             else {
-                                await new Promise((resolve_1, reject_1) => { require([classname.replaceAll(".", "/")], resolve_1, reject_1); });
+                                await Classes_1.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
                             }
                             var props = Registry_1.default.getData("$Serverservice", classname)[0].params[0];
                             for (var x = 0; x < beforeServiceLoadHandler.length; x++) {

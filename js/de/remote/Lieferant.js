@@ -17,16 +17,16 @@ const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 let Lieferant = class Lieferant extends DBObject_1.DBObject {
 };
 __decorate([
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Lieferant.prototype, "id", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: false }),
+    (0, DatabaseSchema_1.Column)({ nullable: false }),
     __metadata("design:type", String)
 ], Lieferant.prototype, "name", void 0);
 Lieferant = __decorate([
-    Registry_1.$Class("de.Lieferant"),
-    DBObject_1.$DBObject()
+    (0, Registry_1.$Class)("de.Lieferant"),
+    (0, DBObject_1.$DBObject)()
 ], Lieferant);
 exports.Lieferant = Lieferant;
 /*export async function test(){

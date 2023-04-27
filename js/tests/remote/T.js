@@ -24,7 +24,7 @@ let T = class T extends RemoteObject_1.RemoteObject {
     }
 };
 T = __decorate([
-    Registry_1.$Class("tests.remote.T")
+    (0, Registry_1.$Class)("tests.remote.T")
 ], T);
 exports.T = T;
 async function test() {

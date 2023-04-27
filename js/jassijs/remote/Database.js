@@ -81,7 +81,7 @@ let Database = class Database {
     }
 };
 Database = __decorate([
-    Registry_1.$Class("jassijs.remote.Database"),
+    (0, Registry_1.$Class)("jassijs.remote.Database"),
     __metadata("design:paramtypes", [])
 ], Database);
 exports.Database = Database;

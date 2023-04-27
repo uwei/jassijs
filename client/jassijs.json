@@ -17,6 +17,15 @@
 		"demoreports": "demoreports"
 		
 	},
+	"servermodulesw": {
+		"jassijs":"jassijs",
+		"jassijs_report": "jassijs_report",
+		"jassijs_editor": "jassijs_editor",
+		"jassijs_localserver": "jassijs_localserver",
+		
+		"northwind": "northwind"
+		
+	},
 	"require": {
 		"paths": {
 			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"

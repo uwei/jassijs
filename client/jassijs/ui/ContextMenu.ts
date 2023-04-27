@@ -127,7 +127,8 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
                     var men = new MenuItem();
                     men["_classaction"] = true;
                     men.text = path[i];
-                    men.icon = action.icon;
+                    if(action.icon!==undefined)
+                        men.icon = action.icon;
                     men.onclick(() => action.call(_this.value));
                     parent.add(men);
                 } else {

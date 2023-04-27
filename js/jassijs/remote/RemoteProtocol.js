@@ -209,7 +209,7 @@ let RemoteProtocol = class RemoteProtocol {
 };
 RemoteProtocol.counter = 0;
 RemoteProtocol = __decorate([
-    Registry_1.$Class("jassijs.remote.RemoteProtocol")
+    (0, Registry_1.$Class)("jassijs.remote.RemoteProtocol")
 ], RemoteProtocol);
 exports.RemoteProtocol = RemoteProtocol;
 class A {

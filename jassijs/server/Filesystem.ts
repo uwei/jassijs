@@ -1,31 +1,28 @@
-import fs = require('fs');
-
-var fpath = require('path');
 import { Compile } from 'jassijs/server/Compile';
 import { FileNode } from 'jassijs/remote/FileNode';
-import JSZip = require("jszip");
+
 import { ServerIndexer } from './RegistryIndexer';
 import registry, { $Class } from 'jassijs/remote/Registry';
 import { JassiError } from 'jassijs/remote/Classes';
 import { $Serverservice, runningServerservices, serverservices } from '../remote/Serverservice';
-let resolve = require('path').resolve;
-const passport = require("passport");
+import { dozip, myfs,  exists } from './NativeAdapter';
 
+const passport = require("passport");
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"]
-declare global{ 
-    interface Serverservice{
-        filesystem:Promise<Filesystem>;
+declare global {
+    interface Serverservice {
+        filesystem: Promise<Filesystem>;
     }
 }
-@$Serverservice({name:"filesystem",getInstance:async ()=>{return new Filesystem()}}) 
+@$Serverservice({ name: "filesystem", getInstance: async () => { return new Filesystem() } })
 @$Class("jassijs.server.Filesystem")
 export default class Filesystem {
     static allModules: { [name: string]: any[] } = {};
     public path = "./client";
-    _pathForFile(fileName: string,fromServerdirectory:boolean=undefined) {
+    _pathForFile(fileName: string, fromServerdirectory: boolean = undefined) {
         var path = this.path + "/" + fileName;
-        if(fromServerdirectory)
-        path = "./" + fileName.replace("$serverside/","");
+        if (fromServerdirectory)
+            path = "./" + fileName.replace("$serverside/", "");
         return path;
     }
     /*   _getDirectory(file:string,main:FileNode[]):FileNode[]{
@@ -40,80 +37,85 @@ export default class Filesystem {
                }
            }
            return parent;
-       }*/
-    dir(curdir = "", appendDate = false, parentPath = this.path, parent: FileNode = undefined): FileNode {
-        var _this = this;
-        if(modules===undefined)
-          modules=JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules
-        if (parent === undefined) {
-            parent = { name: "", files: [] };
-        }
-        //var parent:FileNode[]=_this._getDirectory(file,results);
+       }*/ 
+    async dir(curdir = "", appendDate = false, parentPath = this.path, parent: FileNode = undefined): Promise<FileNode> {
+        try {
+            var modules = undefined;
+            var _this = this;
+            if (modules === undefined)
+                modules = JSON.parse(await myfs.readFile('./jassijs.json', 'utf-8')).modules
+            if (parent === undefined) {
+                parent = { name: "", files: [] };
+            }  
+            //var parent:FileNode[]=_this._getDirectory(file,results);
 
-        var list: string[] = fs.readdirSync(parentPath + "/" + curdir);
+            var list: string[] = await myfs.readdir(parentPath +(curdir===""?"":( "/" + curdir)));
+            for (var xx = 0; xx < list.length; xx++) {
+                var filename = list[xx]; 
+                var file = curdir + (curdir === "" ? "" : '/') + filename;
+                if (file !== "js" && file !== "tmp") {//compiled js
 
-        list.forEach(function (filename) {
-            var file = curdir + (curdir === "" ? "" : '/') + filename;
-            if (file !== "js" && file !== "tmp") {//compiled js
-
-                var stat = fs.statSync(parentPath + "/" + file);
-                if (stat && stat.isDirectory()) {
-                    var newDir = { name: filename, files: [] };
-                    parent.files.push(newDir)
-                    /* Recurse into a subdirectory */
-                    if (ignore.indexOf(file) === -1)
-                        _this.dir(file, appendDate, parentPath, newDir);
-                } else {
-                    let dat = "";//fs.statSync(file).mtime.getTime().toString();
-                    let toAdd: FileNode = { name: filename };
-                    if (appendDate === true)
-                        toAdd.date = fs.statSync(parentPath + "/" + file).mtime.getTime().toString();
-                    // if (file.toLowerCase().endsWith(".ts"))
-                    parent.files.push(toAdd);
-                    /* if (file.toLowerCase().endsWith(".js")) {
-                         if (!fs.existsSync(file.replace(".js", ".ts"))) {
-                             parent.files.push(toAdd);
+                    var stat = await myfs.stat(parentPath + "/" + file);
+                    if (stat && stat.isDirectory()) {
+                        var newDir = { name: filename, files: [] };
+                        parent.files.push(newDir)
+                        /* Recurse into a subdirectory */
+                        if (ignore.indexOf(file) === -1)
+                            await _this.dir(file, appendDate, parentPath, newDir);
+                    } else {
+                        let dat = "";
+                        let toAdd: FileNode = { name: filename };
+                        if (appendDate === true)
+                            toAdd.date = (await myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
+                        // if (file.toLowerCase().endsWith(".ts"))
+                        parent.files.push(toAdd);
+                        /* if (file.toLowerCase().endsWith(".js")) {
+                             if (!await exists(file.replace(".js", ".ts"))) {
+                                 parent.files.push(toAdd);
+                             }
                          }
-                     }
-                     if (file.toLowerCase().endsWith(".json"))
-                         parent.files.push(toAdd);*/
-                }
-            }
-        });
-         //add files in node modules
-         if(parent.name===""&&parentPath==="./client"){
-            for (var key in modules) {
-                if (fs.existsSync("./node_modules/" + key + "/client")) {
-                    var addFiles= this.dir("client",appendDate,"./node_modules/" + key );
-                    var temp={};
-                    for(var x=0;x<parent.files.length;x++){
-                        var entr=parent.files[x];
-                        temp[entr.name]=entr;
+                         if (file.toLowerCase().endsWith(".json"))
+                             parent.files.push(toAdd);*/
                     }
-                    for(var x=0;x<addFiles.files.length;x++){
-                        if(temp[addFiles.files[x].name]===undefined){
-                            parent.files.push(addFiles.files[x]);
-                            addFiles.files[x].isNode_module=true;
+                }
+            };
+            //add files in node modules
+            if (parent.name === "" && parentPath === "./client") {
+                for (var key in modules) {
+                    if (await exists("./node_modules/" + key + "/client")) {
+                        var addFiles = await this.dir("client", appendDate, "./node_modules/" + key);
+                        var temp = {};
+                        for (var x = 0; x < parent.files.length; x++) {
+                            var entr = parent.files[x];
+                            temp[entr.name] = entr;
+                        }
+                        for (var x = 0; x < addFiles.files.length; x++) {
+                            if (temp[addFiles.files[x].name] === undefined) {
+                                parent.files.push(addFiles.files[x]);
+                                //addFiles.files[x].isNode_module=true;
+                            }
                         }
                     }
                 }
             }
+            return parent;
+        } catch (err) {
+            throw err;
         }
-        return parent;
     }
-    public loadFile(fileName:string) {
-        var fromServerdirectory=fileName.startsWith("$serverside/");
-        let file=this._pathForFile(fileName,fromServerdirectory);
-        return fs.readFileSync(file, { encoding: 'utf-8' });
+    public async loadFile(fileName: string) {
+        var fromServerdirectory = fileName.startsWith("$serverside/");
+        let file = this._pathForFile(fileName, fromServerdirectory);
+        return await myfs.readFile(file,  'utf-8' );
 
     }
-    public loadFiles(fileNames: string[]) {
+    public async loadFiles(fileNames: string[]) {
         var ret = {};
 
         for (var x = 0; x < fileNames.length; x++) {
 
-            ret[fileNames[x]] = fs.readFileSync(this._pathForFile(fileNames[x]), { encoding: 'utf-8' });
-            /* fs.readFileSync(path+"/"+fileName, {encoding: 'utf-8'}, function(err,data){
+            ret[fileNames[x]] = await myfs.readFile(this._pathForFile(fileNames[x]), 'utf-8' );
+            /* await myfs.readFile(path+"/"+fileName, {encoding: 'utf-8'}, function(err,data){
                 if (!err) {
                     response.send( data);
               //    response.writeHead(200, {'Content-Type': 'text/html'});
@@ -128,17 +130,17 @@ export default class Filesystem {
     }
     public async dirFiles(dir: string, extensions: string[], ignore: string[] = []): Promise<string[]> {
         var results = [];
-        if(!fs.existsSync(dir))
+        if (!await exists(dir))
             return results;
-        var list = fs.readdirSync(dir);
+        var list = await myfs.readdir(dir);
         var _this = this;
         for (let l = 0; l < list.length; l++) {
             let file = list[l];
-            if(ignore.indexOf(file)!==-1)
+            if (ignore.indexOf(file) !== -1)
                 continue;
             file = dir + '/' + file;
 
-            var stat = fs.statSync(file);
+            var stat = await myfs.stat(file);
             if (stat && stat.isDirectory()) {
                 /* Recurse into a subdirectory */
                 var arr = await _this.dirFiles(file, extensions);
@@ -155,78 +157,22 @@ export default class Filesystem {
         return results;
     }
 
-    private async writeZip(zip: JSZip, outfile: string) {
-        return new Promise((ready) => {
 
-            var out = fs.createWriteStream(outfile);
-            zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true }).
-                pipe(out).on('finish', () => {
-                    ready(undefined);
-                }).on('error', (err) => {
-                    ready(err);
-                });
 
-        });
-    }
-    static zipid=0;
     public async zip(directoryname: string, serverdir: boolean = undefined): Promise<string> {
-        var root = this.path;
-        if (serverdir) {
-            root = ".";
-        }
-        if(!fs.existsSync("./tmp")){
-            fs.mkdirSync("./tmp");
-        }
-
-        let filename = directoryname.split("/")[directoryname.split("/").length - 1] + Filesystem.zipid++;
-        await this.zipFolder(root + "/" + directoryname, "./tmp/" + filename + ".zip");
-        var data = fs.readFileSync("./tmp/" + filename + ".zip"); //,'binary');
-        fs.unlinkSync("./tmp/" + filename + ".zip");
-        //let buff = new Buffer(data);
-        let ret = data.toString('base64');
-        return ret;
+        return await dozip(directoryname, serverdir);
     }
-    private async zipFolder(folder: string, outfile: string, parent: JSZip = undefined) {
-
-        var isRoot = parent === undefined;
-        if (parent === undefined)
-            parent = new JSZip();
-        var _this = this;
-        //var parent:FileNode[]=_this._getDirectory(file,results);
-        var list: string[] = fs.readdirSync(folder);
-
-        for (var x = 0; x < list.length; x++) {
-            var filename = list[x];
-            var file = folder + "/" + filename;
-            var stat = fs.statSync(file);
-            if (stat && stat.isDirectory()) {
-                var newFolder = parent.folder(filename);
-                await _this.zipFolder(file, outfile, newFolder);
-            } else {
-                var data = fs.readFileSync(file, "binary");
-                parent.file(filename, data, { binary: true });
-            }
-        }
-        if (isRoot) {
-            var d = await this.writeZip(parent, outfile);
-            return d;
-        }
-        return parent;
-    }
-
-
     //Reset ORM config
-
     /**
      * create a folder
      * @param foldername - the name of the new file 
      */
     public async createFolder(foldername: string): Promise<string> {
         var newpath = this._pathForFile(foldername);
-        if (fs.existsSync(newpath))
-            return foldername + " allready exists";
+        if (await exists(newpath))
+            return foldername + " allready await exists";
         try {
-            fs.mkdirSync( newpath, { recursive: true })
+            await myfs.mkdir(newpath, { recursive: true })
         } catch (ex) {
             return ex.message;
         }
@@ -241,43 +187,43 @@ export default class Filesystem {
         var newpath = this._pathForFile(modulename);
         try {
             //create folder
-            if (!fs.existsSync(newpath))
-                fs.mkdirSync(newpath, { recursive: true });
+            if (!await exists(newpath))
+                await myfs.mkdir(newpath, { recursive: true });
             //create remotefolder
-            //if (!fs.existsSync(newpath + "/remote"))
-            //    fs.mkdirSync(newpath + "/remote", { recursive: true });
-            if (!fs.existsSync(newpath + "/modul.ts")) {
+            //if (!await exists(newpath + "/remote"))
+            //    await myfs.mkdir(newpath + "/remote", { recursive: true });
+            if (!await exists(newpath + "/modul.ts")) {
                 await this.saveFiles([modulename + "/modul.js", "js/" + modulename + "/modul.js"], [
                     "export default {}",
                     'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'
                 ]);
             }
 
-            if (!fs.existsSync(newpath + "/registry.js")) {
+            if (!await exists(newpath + "/registry.js")) {
                 await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], [
                     'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
                     'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
                 ]);
             }
-           /* if (!fs.existsSync("./" + modulename))
-                fs.mkdirSync("./" + modulename, { recursive: true });
-            if (!fs.existsSync("./js/" + modulename))
-                fs.mkdirSync("./js/" + modulename, { recursive: true });
-            if (!fs.existsSync("./" + modulename + "/remote"))
-                fs.mkdirSync("./" + modulename + "/remote", { recursive: true });
-            if (!fs.existsSync("./" + modulename + "/registry.js")) {
-                fs.writeFileSync("./" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
-                fs.writeFileSync("./js/" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
-
-            }*/
+            /* if (!await exists("./" + modulename))
+                 await myfs.mkdir("./" + modulename, { recursive: true });
+             if (!await exists("./js/" + modulename))
+                 await myfs.mkdir("./js/" + modulename, { recursive: true });
+             if (!await exists("./" + modulename + "/remote"))
+                 await myfs.mkdir("./" + modulename + "/remote", { recursive: true });
+             if (!await exists("./" + modulename + "/registry.js")) {
+                 await myfs.writeFile("./" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+                 await myfs.writeFile("./js/" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+ 
+             }*/
 
 
             //update client jassijs.json
-            var json = fs.readFileSync(this._pathForFile("jassijs.json"), 'utf-8');
+            var json = await myfs.readFile(this._pathForFile("jassijs.json"), 'utf-8');
             var ob = JSON.parse(json);
             if (!ob.modules[modulename])
                 ob.modules[modulename] = modulename;
-            fs.writeFileSync(this._pathForFile("jassijs.json"), JSON.stringify(ob, undefined, "\t"));
+            await myfs.writeFile(this._pathForFile("jassijs.json"), JSON.stringify(ob, undefined, "\t"));
 
             //this.createRemoteModulIfNeeded(modulename);
 
@@ -295,17 +241,15 @@ export default class Filesystem {
      */
     public async createFile(filename: string, content: string): Promise<string> {
         var newpath = this._pathForFile(filename);
-        var parent = require('path').dirname(newpath);
+        var parent = this.getDirectoryname(newpath);
 
-        //var fdir = fpath.dirname(path + "/" + fileName).split(fpath.sep).pop();
+        if (await exists(newpath))
+            return filename + " allready await exists";
+        try {
+            if (!await exists(parent))
+                await myfs.mkdir(parent, { recursive: true });
 
-        if (fs.existsSync(newpath))
-            return filename + " allready exists";
-        try { 
-            if (!fs.existsSync(parent))
-                fs.mkdirSync(parent, { recursive: true });
-
-            fs.writeFileSync(newpath, content)
+            await myfs.writeFile(newpath, content)
         } catch (ex) {
             return ex.message;
         }
@@ -317,18 +261,17 @@ export default class Filesystem {
      * @param newfile - new filename
      */
     public async rename(oldfile: string, newfile: string): Promise<string> {
-        var resolve = require('path').resolve
         var oldpath = this._pathForFile(oldfile);
         var newpath = this._pathForFile(newfile);
-        if (!fs.existsSync(oldpath))
-            return oldfile + " not exists";
-        if (fs.existsSync(newpath))
-            return newfile + " already exists";
+        if (!await exists(oldpath))
+            return oldfile + " not await exists";
+        if (await exists(newpath))
+            return newfile + " already await exists";
         try {
             /*  if(fs.lstatSync(oldpath).isDirectory()
-                  fs.rmdirSync(oldpath, newpath);
+                 await myfs.rmdir((oldpath, newpath);
               else*/
-            fs.renameSync(oldpath, newpath);
+            await myfs.rename(oldpath, newpath);
         } catch (ex) {
             return ex.message;
         }
@@ -339,12 +282,12 @@ export default class Filesystem {
     * deletes a server module
     * @param modul - to delete
     */
-     public async removeServerModul(modul: string): Promise<string> {
-        var modules = JSON.parse(fs.readFileSync("./jassijs.json", 'utf-8'));
+    public async removeServerModul(modul: string): Promise<string> {
+        var modules = JSON.parse(await myfs.readFile("./jassijs.json", 'utf-8'));
         delete modules.modules[modul];
-        fs.writeFileSync("./jassijs.json", JSON.stringify(modules, undefined, "\t"));
-        if(fs.existsSync(modul)){
-            fs.rmdirSync(modul, { recursive: true });
+        await myfs.writeFile("./jassijs.json", JSON.stringify(modules, undefined, "\t"));
+        if (await exists(modul)) {
+           await myfs.rmdir(modul, { recursive: true });
         }
         return "";
     }
@@ -353,23 +296,22 @@ export default class Filesystem {
     * @param file - old filename
     */
     public async remove(file: string): Promise<string> {
-        var resolve = require('path').resolve
         var path = this._pathForFile(file);
-        if (!fs.existsSync(path))
-            return file + " not exists";
+        if (!await exists(path))
+            return file + " not await exists";
         try {
-            if (fs.lstatSync(path).isDirectory()) {
-                
+            if ((await myfs.stat(path)).isDirectory()) {
+
                 //update client jassijs.json if removing client module 
-                var json = fs.readFileSync(this._pathForFile("jassijs.json"), 'utf-8');
+                var json = await myfs.readFile(this._pathForFile("jassijs.json"), 'utf-8');
                 var ob = JSON.parse(json);
                 if (ob.modules[file]) {
                     delete ob.modules[file];
-                    fs.writeFileSync(this._pathForFile("jassijs.json"), JSON.stringify(ob, undefined, "\t"));
+                    await myfs.writeFile(this._pathForFile("jassijs.json"), JSON.stringify(ob, undefined, "\t"));
                 }
-                fs.rmdirSync(path, { recursive: true });
+               await myfs.rmdir(path, { recursive: true });
             } else
-                fs.unlinkSync(path);
+            await myfs.unlink(path);
         } catch (ex) {
             return ex.message;
         }
@@ -380,13 +322,16 @@ export default class Filesystem {
      * create modul in ./jassijs.json
      * @param modul 
      */
-    createRemoteModulIfNeeded(modul: string) {
+    async createRemoteModulIfNeeded(modul: string) {
 
-        var modules = JSON.parse(fs.readFileSync("./jassijs.json", 'utf-8'));
+        var modules = JSON.parse(await myfs.readFile("./jassijs.json", 'utf-8'));
         if (!modules.modules[modul]) {
             modules.modules[modul] = modul;
-            fs.writeFileSync("./jassijs.json", JSON.stringify(modules, undefined, "\t"));
+            await myfs.writeFile("./jassijs.json", JSON.stringify(modules, undefined, "\t"));
         }
+    }
+    getDirectoryname(path) {
+        return path.substring(0, path.lastIndexOf("/"));
     }
     /**
      * save files + 
@@ -401,48 +346,47 @@ export default class Filesystem {
     public async saveFiles(fileNames: string[], contents: string[], rollbackonerror: boolean = true): Promise<string> {
         var ret: string = "";
         var rollbackcontents: string[] = [];
-        if(modules===undefined)
-            modules=JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules
+        if (modules === undefined)
+            modules = JSON.parse(await myfs.readFile('./jassijs.json', 'utf-8')).modules
         for (var x = 0; x < fileNames.length; x++) {
             let fileName = fileNames[x];
-            var fromServerdirectory=fileName.startsWith("$serverside/");
-            var path = require('path').dirname(this._pathForFile(fileName,fromServerdirectory));
-             //check if file is node_module
-             for (var key in modules) {
-                if (((path + "/").startsWith("./client/" + key + "/"))&&fs.existsSync("./node_modules/" + key)) {
+            var fromServerdirectory = fileName.startsWith("$serverside/");
+            var path = this.getDirectoryname(this._pathForFile(fileName, fromServerdirectory));// require('path').dirname(this._pathForFile(fileName,fromServerdirectory));
+            //check if file is node_module
+            for (var key in modules) {
+                if (((path + "/").startsWith("./client/" + key + "/")) && await exists("./node_modules/" + key)) {
                     return "packages in node_modules could not be saved";
                 }
             }
 
             try {
 
-                //var fdir = fpath.dirname(path + "/" + fileName).split(fpath.sep).pop();
-                fs.mkdirSync(path, { recursive: true });
+                await myfs.mkdir(path, { recursive: true });
             } catch (err) {
 
             }
-            if (fs.existsSync(this._pathForFile(fileName,fromServerdirectory))) {
-                rollbackcontents.push(fs.readFileSync(this._pathForFile(fileName,fromServerdirectory), { encoding: 'utf-8' }));
+            if (await exists(this._pathForFile(fileName, fromServerdirectory))) {
+                rollbackcontents.push(await myfs.readFile(this._pathForFile(fileName, fromServerdirectory), 'utf-8' ));
             } else {
                 rollbackcontents.push(undefined);//this file would be killed at revert
             }
             if (contents[x] === undefined)
-                fs.unlinkSync(this._pathForFile(fileName,fromServerdirectory));//remove file on revert
+                await myfs.unlink(this._pathForFile(fileName, fromServerdirectory));//remove file on revert
             else {
-                fs.writeFileSync(this._pathForFile(fileName,fromServerdirectory), contents[x]);
+                await myfs.writeFile(this._pathForFile(fileName, fromServerdirectory), contents[x]);
                 //transpile remoteCode for Server
                 let spath = fileName.split("/");
-                if ((fromServerdirectory|| (spath.length > 1 && spath[1].toLowerCase() === "remote")) && fileName.toLowerCase().endsWith(".ts")) {
-                    var fneu=fileName.replace("$serverside/","");
-                    let rpath = require('path').dirname("./" + fneu);
+                if ((fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote")) && fileName.toLowerCase().endsWith(".ts")) {
+                    var fneu = fileName.replace("$serverside/", "");
+                    let rpath = this.getDirectoryname("./" + fneu);
                     try {
-                        fs.mkdirSync(rpath, { recursive: true });
+                        await myfs.mkdir(rpath, { recursive: true });
                     } catch (err) {
                     }
-                    fs.writeFileSync("./" + fneu, contents[x]);
-                    if(spath.length>1&&spath[0]!=="$serverside")
-                        this.createRemoteModulIfNeeded(spath[0]);
-                    new Compile().transpile(fneu,fromServerdirectory);
+                    await myfs.writeFile("./" + fneu, contents[x]);
+                    if (spath.length > 1 && spath[0] !== "$serverside")
+                        await this.createRemoteModulIfNeeded(spath[0]);
+                    new Compile().transpile(fneu, fromServerdirectory);
                 }
             }
         }
@@ -453,53 +397,53 @@ export default class Filesystem {
             if (contents[f] === undefined)
                 continue;
             var spath = fileName.split("/");
-            var fromServerdirectory=fileName.startsWith("$serverside/");
-            if (fromServerdirectory||(spath.length > 1 &&  spath[1].toLowerCase() === "remote") && fileName.toLowerCase().endsWith(".ts")) {
+            var fromServerdirectory = fileName.startsWith("$serverside/");
+            if (fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote") && fileName.toLowerCase().endsWith(".ts")) {
                 //reload Modules
-                var remotecodeincluded = true; 
+                var remotecodeincluded = true;
                 //var root = require.main["path"]+"\\";  //not work on heroku
-                var root:string =  require('path').dirname(require.main.filename).replaceAll("\\","/");
-                root=root+(root.endsWith("/js")?"/":"/js/");
+                var root: string = this.getDirectoryname(require.main.filename).replaceAll("\\", "/");
+                root = root + (root.endsWith("/js") ? "/" : "/js/");
                 // root = root.substring(0, root.length - "jassijs/remote/Classes.js".length);
-                var modules = JSON.parse(fs.readFileSync("./jassijs.json", 'utf-8')).modules;
+                var modules = JSON.parse(await myfs.readFile("./jassijs.json", 'utf-8')).modules;
                 var jfiles = [];
                 for (var modul in modules) {
                     for (var jfile in require.cache) {
-                        if(jfile.indexOf("TestServerreport")>-1)
-                            jfile=jfile;
-                        if(jfile.replaceAll("\\", "/").indexOf("/"+modul+"/remote/")>-1||
-                          (fromServerdirectory&&jfile.replaceAll("\\", "/").replaceAll("$serverside/", "").
-                             endsWith("/js/"+fileName.replaceAll("$serverside/", "").replace(".ts",".js") ))){
+                        if (jfile.indexOf("TestServerreport") > -1)
+                            jfile = jfile;
+                        if (jfile.replaceAll("\\", "/").indexOf("/" + modul + "/remote/") > -1 ||
+                            (fromServerdirectory && jfile.replaceAll("\\", "/").replaceAll("$serverside/", "").
+                                endsWith("/js/" + fileName.replaceAll("$serverside/", "").replace(".ts", ".js")))) {
                             //save Modules
-                           
+
                             var p = jfile.substring(root.length).replaceAll("\\", "/");
-                            if(jfile.indexOf("node_modules")>-1){//jassi modules
-                                p=jfile.split("node_modules")[1].substring(1).replaceAll("\\", "/");;
+                            if (jfile.indexOf("node_modules") > -1) {//jassi modules
+                                p = jfile.split("node_modules")[1].substring(1).replaceAll("\\", "/");;
                             }
                             p = p.substring(0, p.length - 3);
                             //console.log(jfile+"->"+p);
                             if (Filesystem.allModules[p] === undefined) {
                                 Filesystem.allModules[p] = [];
-                            } 
-                            
+                            }
+
                             //save all modules
                             var mod = await Promise.resolve().then(() => require.main.require(p));
                             if (Filesystem.allModules[p].indexOf(mod) === -1)
                                 Filesystem.allModules[p].push(mod);
 
                             jfiles.push(jfile);
-                            
-                        }  
+
+                        }
                     }
                 }
                 for (let k = 0; k < jfiles.length; k++) {
                     let jfile = jfiles[k];
-                    if(require.cache[jfile].exports.doNotReloadModule){
-                        
-                    }else
+                    if (require.cache[jfile].exports.doNotReloadModule) {
+
+                    } else
                         delete require.cache[jfile];
                 }
-                if(runningServerservices["db"]){
+                if (runningServerservices["db"]) {
                     (await serverservices.db).renewConnection();
                 }
                 // }
@@ -510,13 +454,13 @@ export default class Filesystem {
             for (var key in Filesystem.allModules) {//load and migrate modules
                 var all = Filesystem.allModules[key];
                 var mod = await Promise.resolve().then(() => require.main.require(key));
-              
+
                 for (var a = 0; a < all.length; a++) {
-                   
-                       for (key in mod) { 
-                            all[a][key] = mod[key];
-                        }
-                    
+
+                    for (key in mod) {
+                        all[a][key] = mod[key];
+                    }
+
                 }
             }
         } catch (err) {
@@ -524,8 +468,8 @@ export default class Filesystem {
             console.error(err.stack);
             return err + "DB corrupt changes are reverted " + restore;
         }
-        if(remotecodeincluded){
-            await registry.reload(); 
+        if (remotecodeincluded) {
+            await registry.reload();
         }
         if (remotecodeincluded && rollbackonerror) {//verify DB-Schema
             try {
@@ -538,15 +482,15 @@ export default class Filesystem {
         }
         return ret;
     }
-    public async saveFile(fileName: string, content:string) {
+    public async saveFile(fileName: string, content: string) {
         try {
-            var path = this._pathForFile(fileName);
-            var fdir = fpath.dirname(path).split(fpath.sep).pop();
-            fs.mkdirSync(fdir, { recursive: true });
+            var fdir = this.getDirectoryname(this._pathForFile(fileName));
+            // var fdir = path.substring(0,path.lastIndexOf("/"));//fpath.dirname(path).split(fpath.sep).pop();
+            await myfs.mkdir(fdir, { recursive: true });
         } catch (err) {
 
         }
-        fs.writeFileSync(this.path + "/" + fileName, content)
+        await myfs.writeFile(this.path + "/" + fileName, content)
         /*
         if(fileName.endsWith(".ts")){
             new Compile().transpile(fileName,function(done){
@@ -564,159 +508,3 @@ export default class Filesystem {
         //TODO $this->updateRegistry();
     }
 }
-function copyFile(f1: string, f2: string) {
-    try {
-        if (fs.existsSync(f1) && f1.endsWith(".ts") && !fs.statSync(f1).isDirectory()) {
-            if (!fs.existsSync(f2) || (fs.statSync(f1).mtimeMs > fs.statSync(f2).mtimeMs)) {
-                console.log("sync " + f1 + "->" + f2);
-                var dirname = require('path').dirname(f2);
-                if (!fs.existsSync(dirname)) {
-                    fs.mkdirSync(dirname, { recursive: true });
-                }
-                fs.copyFileSync(f1, f2);
-            }
-        }
-
-    } catch (ex) {
-        console.error(ex);
-        debugger;
-    }
-}
-/**
- *  each remote file on server and client should be the same
-*/
-async function checkRemoteFiles() { 
-    var path=new Filesystem().path;
-    var modules = JSON.parse(fs.readFileSync("./jassijs.json", 'utf-8')).modules;
-    for (var m in modules) {
-        var files = await new Filesystem().dirFiles("./" + m + "/remote", [".ts"]);
-        for (let x = 0; x < files.length; x++) {
-            var file = files[x];
-            var clientfile = file.replace("./", path + "/");
-            if (!fs.existsSync(clientfile)) {
-                console.error(clientfile + " not exists");
-            } else {
-                if (fs.statSync(file).mtimeMs !== fs.statSync(clientfile).mtimeMs) {
-                    if (fs.statSync(file).mtimeMs > fs.statSync(clientfile).mtimeMs) {
-                        console.error(clientfile + " is not up to date " + file + " is newer");
-                    } else {
-                        console.error(file + " is not up to date " + clientfile + " is newer");
-                    }
-                }
-            }
- 
-
-        }
-    }
-}
-
-export function syncRemoteFiles() {
-    /*await*/checkRemoteFiles();
-    //server remote
-    var path=new Filesystem().path;
-    fs.watch(path, { recursive: true }, (eventType, filename) => {
-        if (!filename)
-            return;
-        var file = filename.replaceAll("\\", "/");
-        var paths = file.split("/");
-        if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
-            setTimeout(() => {
-                var f2 = "./" + file;
-                var f1 = path + "/" + file;
-                copyFile(f1, f2);
-            }, 200);
-        }
-    })
-    //client remote
-    fs.watch("./", { recursive: true }, (eventType, filename) => {
-        if (!filename)
-            return;
-        var file = filename.replaceAll("\\", "/");
-        var paths = file.split("/");
-        if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
-            setTimeout(() => {
-
-                var f1 = "./" + file;
-                var f2 = path + "/" + file;
-                copyFile(f1, f2);
-            }, 200);
-        }
-    })
-}
-var modules = undefined;
-export function staticfiles(req, res, next) {
-    if(modules===undefined)
-        modules=JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules
-    var path=new Filesystem().path;
-    // console.log(req.path);
-    let sfile = path + req.path;
-    if (sfile.indexOf("Settings.ts") > -1) {//&&!passport.authenticate("jwt", { session: false })){
-        next();
-        return;
-    }
-    if (!fs.existsSync(sfile) && sfile.startsWith("./client")) {
-        for (var key in modules) {
-            if ((sfile.startsWith("./client/" + key)||sfile.startsWith("./client/js/" + key)) && fs.existsSync("./node_modules/" + key + "/client" + req.path)) {
-                sfile = "./node_modules/" + key + "/client" + req.path;
-                break;
-            }
-        }
-        //sfile="./node_modules/_uw/"+req.path;
-    }
-    if (fs.existsSync(sfile)) {
-        // let code=fs.readFileSync(this.path+"/"+req.path);
-        let dat = fs.statSync(sfile).mtime.getTime();
-        if (req.query.lastcachedate === dat.toString()) {
-            res.set('X-Custom-UpToDate', 'true');
-            res.send("");
-        } else {
-            res.sendFile(resolve(sfile), {
-                
-                headers: { 'X-Custom-Date': dat.toString(),
-                'Cache-Control': 'max-age=1',
-                    'Last-Modified': fs.statSync(sfile).mtime.toUTCString()
-                }
-            });
-        }
-    } else {
-
-        next();
-    }
-    var s = 1;
-}
-export function staticsecurefiles(req, res, next) {
-    if(modules===undefined)
-        modules=JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules
-    // console.log(req.path);
-    let sfile = new Filesystem().path + req.path;
-    if (sfile.indexOf("Settings.ts") > -1) {//&&!passport.authenticate("jwt", { session: false })){
-        if (!req.isAuthenticated()) {
-            res.send(401, 'not logged in');
-            return;
-        }
-    }
-    if (!fs.existsSync(sfile) && sfile.startsWith("./client")) {
-        for (var key in modules) {
-            if ((sfile.startsWith("./client/" + key) || sfile.startsWith("./client/js/" + key)) && fs.existsSync("./node_modules/" + key + "/client" + req.path)) {
-                sfile = "./node_modules/" + key + "/client" + req.path;
-                break;
-            }
-        }
-    }
-    if (fs.existsSync(sfile)) {
-        // let code=fs.readFileSync(this.path+"/"+req.path);
-        let dat = fs.statSync(sfile).mtime.getTime();
-        if (req.query.lastcachedate === dat.toString()) {
-            res.set('X-Custom-UpToDate', 'true');
-            res.send("");
-        } else {
-            res.sendFile(resolve(sfile), {
-                headers: { 'X-Custom-Date': dat.toString() }
-            });
-        }
-    } else {
-        next();
-    }
-    var s = 1;
-}
-

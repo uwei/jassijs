@@ -44,15 +44,15 @@ let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1
     }
 };
 __decorate([
-    Validator_1.ValidateFunctionParameter(),
-    __param(0, Validator_1.ValidateIsString()),
-    __param(1, Validator_1.ValidateIsArray({ optional: true })),
+    (0, Validator_1.ValidateFunctionParameter)(),
+    __param(0, (0, Validator_1.ValidateIsString)()),
+    __param(1, (0, Validator_1.ValidateIsArray)({ optional: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Array, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], DatabaseTools, "runSQL", null);
 DatabaseTools = DatabaseTools_1 = __decorate([
-    Registry_1.$Class("jassijs.remote.DatabaseTools")
+    (0, Registry_1.$Class)("jassijs.remote.DatabaseTools")
 ], DatabaseTools);
 exports.DatabaseTools = DatabaseTools;
 async function test() {

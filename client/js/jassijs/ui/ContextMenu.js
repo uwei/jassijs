@@ -95,7 +95,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
                         var men = new MenuItem_1.MenuItem();
                         men["_classaction"] = true;
                         men.text = path[i];
-                        men.icon = action.icon;
+                        if (action.icon !== undefined)
+                            men.icon = action.icon;
                         men.onclick(() => action.call(_this.value));
                         parent.add(men);
                     }

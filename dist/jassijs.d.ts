@@ -25,6 +25,17 @@ declare module "jassijs/modul" {
             "tabulator-tables.ts": string;
         };
         require: {
+            shim: {
+                goldenlayout: string[];
+                "jquery.choosen": string[];
+                "jquery.contextMenu": string[];
+                'jquery.fancytree': string[];
+                'jquery.fancytree.dnd': string[];
+                'jquery.ui': string[];
+                'jquery.notify': string[];
+                'jquery.ui.touch': string[];
+                spectrum: string[];
+            };
             paths: {
                 'intersection-observer': string;
                 goldenlayout: string;
@@ -51,19 +62,15 @@ declare module "jassijs/modul" {
                 tinymcelib: string;
                 'tabulator-tables': string;
                 "reflect-metadata": string;
-            };
-            shim: {
-                goldenlayout: string[];
-                "jquery.choosen": string[];
-                "jquery.contextMenu": string[];
-                'jquery.fancytree': string[];
-                'jquery.fancytree.dnd': string[];
-                'jquery.ui': string[];
-                'jquery.notify': string[];
-                'jquery.ui.touch': string[];
-                spectrum: string[];
+                jszip: string;
+                "js-sql-parser": string;
+                typeorm: string;
+                typeormbrowser: string;
+                "window.SQL": string;
+                "jassijs/util/DatabaseSchema": string;
             };
         };
+        loadbeforestart: string[];
     };
     export default _default;
 }
@@ -290,6 +297,7 @@ declare module "jassijs/util/Cookies" {
         set(name: string, value: string, params?: any): void;
         get(name: string): any;
         remove(name: string, params?: any): void;
+        getJSON(): string;
     }
     var Cookies: C;
     export { Cookies };
@@ -1172,6 +1180,28 @@ declare module "jassijs/remote/ObjectTransaction" {
         finally(): Promise<void>;
     }
 }
+declare module "jassijs/remote/Serverservice" {
+    import "jassijs/remote/Classes";
+    export class ServerserviceProperties {
+        name: string;
+        getInstance: (() => Promise<any>);
+    }
+    var runningServerservices: {};
+    export function beforeServiceLoad(func: (name: string, props: ServerserviceProperties) => void): void;
+    global {
+        interface Serverservice {
+        }
+    }
+    var serverservices: Serverservice;
+    export function $Serverservice(properties: ServerserviceProperties): Function;
+    var doNotReloadModule: boolean;
+    export { serverservices, doNotReloadModule, runningServerservices };
+}
+declare module "jassijs/server/DoRemoteProtocol" {
+    import { Context } from "jassijs/remote/RemoteObject";
+    export function remoteProtocol(request: any, response: any): void;
+    export function _execute(protext: string, request: any, context: Context): Promise<string>;
+}
 declare module "jassijs/remote/Transaction" {
     import { RemoteObject } from "jassijs/remote/RemoteObject";
     import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
@@ -1291,23 +1321,6 @@ declare module "jassijs/remote/Validator" {
     export function ValidateIsString(options?: ValidationIsIntOptions): Function;
     export function test(test: Test): Promise<void>;
 }
-declare module "jassijs/remote/Serverservice" {
-    import "jassijs/remote/Classes";
-    export class ServerserviceProperties {
-        name: string;
-        getInstance: (() => Promise<any>);
-    }
-    var runningServerservices: {};
-    export function beforeServiceLoad(func: (name: string, props: ServerserviceProperties) => void): void;
-    global {
-        interface Serverservice {
-        }
-    }
-    var serverservices: Serverservice;
-    export function $Serverservice(properties: ServerserviceProperties): Function;
-    var doNotReloadModule: boolean;
-    export { serverservices, doNotReloadModule, runningServerservices };
-}
 declare module "jassijs/remote/DBObject" {
     import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
     import { EntityOptions } from "jassijs/util/DatabaseSchema";
@@ -1366,7 +1379,7 @@ declare module "jassijs/remote/DBObject" {
         * save the object to jassijs.db
         */
         save(context?: Context): Promise<any>;
-        _createObjectInDB(context?: Context): Promise<any>;
+        _createObjectInDB(context?: Context): Promise<unknown>;
         static findOne(options?: any, context?: Context): Promise<DBObject>;
         static find(options?: MyFindManyOptions, context?: Context): Promise<DBObject[]>;
         /**
@@ -1518,6 +1531,7 @@ declare module "jassijs/remote/Server" {
 }
 declare module "jassijs/remote/Settings" {
     import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+    import { Setting } from "jassijs/remote/security/Setting";
     import { Test } from "jassijs/remote/Test";
     global {
         export interface KnownSettings {
@@ -1532,8 +1546,8 @@ declare module "jassijs/remote/Settings" {
         * loads the settings
         */
         static load(context?: Context): Promise<{
-            user: any;
-            allusers: any;
+            user: Setting;
+            allusers: Setting;
         }>;
         static getAll(scope: "browser" | "user" | "allusers"): {};
         gets<T>(Settings_key: T): T;
@@ -1549,8 +1563,8 @@ declare module "jassijs/remote/Settings" {
     export function autostart(): Promise<void>;
     export function test(t: Test): Promise<void>;
     export function load(): Promise<{
-        user: any;
-        allusers: any;
+        user: Setting;
+        allusers: Setting;
     }>;
 }
 declare module "jassijs/base/CurrentSettings" {
@@ -2684,6 +2698,15 @@ declare module "jassijs/remote/ClientError" {
         constructor(msg: string);
     }
 }
+declare module "jassijs/remote/Config" {
+    export class Config {
+        require: Function;
+        isServer: boolean;
+        serverConfig: Config;
+        clientConfig: Config;
+        modules: string[];
+    }
+}
 declare module "jassijs/remote/DBArray" {
     export class DBArray
     /**
@@ -3442,6 +3465,529 @@ declare module "jassijs/security/UserView" {
         createObject(): any;
     }
     export function test(): Promise<UserView>;
+}
+declare module "jassijs/server/DBManager" {
+    import { ConnectionOptions, SaveOptions, FindConditions, FindOneOptions, ObjectType, ObjectID, FindManyOptions, Connection, EntitySchema } from "typeorm";
+    import { DBObject } from "jassijs/remote/DBObject";
+    import { User } from "jassijs/remote/security/User";
+    import { Context } from "jassijs/remote/RemoteObject";
+    export interface MyFindManyOptions<Entity = any> extends FindManyOptions {
+        whereParams?: any;
+        onlyColumns?: string[];
+        order: {
+            [field: string]: "ASC" | "DESC";
+        };
+    }
+    global {
+        export interface Serverservice {
+            db: Promise<DBManager>;
+        }
+    }
+    export class DBManager {
+        waitForConnection: Promise<DBManager>;
+        static getConOpts(): Promise<ConnectionOptions>;
+        private static _get;
+        private open;
+        private mySync;
+        private static clearMetadata;
+        renewConnection(): Promise<void>;
+        destroyConnection(waitForCompleteOpen?: boolean): Promise<void>;
+        private static clearArray;
+        private constructor();
+        connection(): Connection;
+        runSQL(context: Context, sql: string, parameters?: any[]): Promise<any>;
+        remove<Entity>(context: Context, entity: Entity): Promise<void>;
+        private addSaveTransaction;
+        /**
+       * insert a new object
+       * @param obj - the object to insert
+       */
+        insert(context: Context, obj: DBObject): Promise<unknown>;
+        /**
+        * Saves all given entities in the database.
+        * If entities do not exist in the database then inserts, otherwise updates.
+        */
+        save<Entity>(context: Context, entities: Entity[], options?: SaveOptions): Promise<Entity[]>;
+        /**
+         * Saves all given entities in the database.
+         * If entities do not exist in the database then inserts, otherwise updates.
+         */
+        save<Entity>(context: Context, entity: Entity, options?: SaveOptions): Promise<Entity>;
+        private _checkParentRightsForSave;
+        findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, id?: string | number | Date | ObjectID, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+        /**
+         * Finds first entity that matches given find options.
+         */
+        findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+        /**
+        * Finds first entity that matches given conditions.
+        */
+        findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, conditions?: FindConditions<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+        /**
+       * Finds entities that match given options.
+       */
+        find<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, options?: MyFindManyOptions<Entity>): Promise<Entity[]>;
+        /**
+         * Finds entities that match given conditions.
+         */
+        find<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, conditions?: FindConditions<Entity>): Promise<Entity[]>;
+        private resolveWildcharInRelations;
+        createUser(context: Context, username: string, password: string): Promise<User>;
+        login(context: Context, user: string, password: any): Promise<User>;
+        checkParentRight(context: Context, entityClass: any, ids: any[]): Promise<boolean>;
+    }
+}
+declare module "jassijs/util/Reloader" {
+    export class Reloader {
+        static cache: any[];
+        static reloadCodeFromServerIsRunning: boolean;
+        static instance: Reloader;
+        listener: any[];
+        /**
+         * reloads Code
+         */
+        private constructor();
+        /**
+         * check code changes out of the browser if localhost and load the changes in to the browser
+         */
+        static startReloadCodeFromServer(): void;
+        /**
+         * listener for code reloaded
+         * @param {function} func - callfunction for the event
+         */
+        addEventCodeReloaded(func: any): void;
+        removeEventCodeReloaded(func: any): void;
+        private _findScript;
+        reloadJS(fileName: string): Promise<void>;
+        reloadJSAll(fileNames: string[]): Promise<void>;
+        migrateModul(allModules: any, file: any, modul: any): void;
+        migrateClasses(file: any, oldmodul: any, modul: any): void;
+    }
+}
+declare module "jassijs_editor/modul" {
+    const _default_1: {
+        css: {
+            "jassijs_editor.css": string;
+        };
+        types: {
+            "node_modules/monaco.d.ts": string;
+            "node_modules/typescript/typescriptServices.d.ts": string;
+        };
+        require: {
+            paths: {
+                ace: string;
+                'ace/ext/language_tools': string;
+                monacoLib: string;
+                vs: string;
+            };
+            shim: {
+                'ace/ext/language_tools': string[];
+            };
+        };
+    };
+    export default _default_1;
+}
+/// <amd-dependency name="_monaco" path="vs/editor/editor.main" />
+/// <amd-dependency name="tsWorker" path="vs/language/typescript/tsWorker" />
+declare module "jassijs_editor/ext/monaco" {
+    export {};
+}
+declare module "jassijs_editor/util/Typescript" {
+    import "jassijs_editor/ext/monaco";
+    export class Typescript {
+        static instance: Typescript;
+        waitForInited: Promise<boolean>;
+        tsWorker: monaco.languages.typescript.TypeScriptWorker;
+        static languageServiceHost: ts.LanguageServiceHost;
+        static ts: any;
+        /**
+        * resolved if the service is inited
+        */
+        private static _isInited;
+        static compilerSettings: {
+            baseUrl: string;
+            target: string;
+            module: string;
+            sourceMap: boolean;
+            outDir: string;
+            allowJs: boolean;
+            moduleResolution: monaco.languages.typescript.ModuleResolutionKind;
+            emitDecoratorMetadata: boolean;
+            experimentalDecorators: boolean;
+            typeRoots: string[];
+        };
+        isInited(file: any): boolean;
+        /**
+         * transpile the ts-file an returns all reflected files
+         * @param fileName
+         * @param content
+         */
+        transpile(fileName: string, content: string, compilerSettings?: any): Promise<{
+            fileNames: string[];
+            contents: string[];
+        }>;
+        private constructor();
+        static initMonaco(): void;
+        initInIdle: boolean;
+        private includeModulTypes;
+        /**
+         * initialize the services tooks any seconds
+         * functions which uses the languageservice are blocked until ready
+         */
+        initService(): Promise<boolean>;
+        /**
+         * unused
+         */
+        getDefinitionAtPosition(file: string, position: number): Promise<readonly any[]>;
+        /**
+         * unused
+         */
+        getSignatureHelpItems(file: string, position: number): Promise<any>;
+        includefileIfNeeded(file: string): Promise<void>;
+        renameFile(oldfile: string, newfile: string): Promise<void>;
+        /**
+         * @returns all code filenames
+         */
+        getFiles(): string[];
+        /**
+         * get the code for a file
+         * @params file - the filename e.g. jassijs/base/Parser.ts
+         */
+        getCode(file: string): string;
+        /**
+         * put file in cache
+         * @param file - the ts file
+         * @param text - the text of the ts file
+         */
+        setCode(file: string, text: string): Promise<unknown>;
+        /**
+         * get info for a completionentry
+         * @param file - the ts file
+         * @param position - the position in string
+         * @param item -the item we are interested
+         * @param formatOptions -unused
+         * @param source -unused
+         * @param preferences - unused
+         */
+        getCompletionEntryDetails(file: string, position: number, item: string, formatOptions?: {}, source?: any, preferences?: {}): Promise<any>;
+        /**
+         * get all completions at a  position
+         * @param file -the ts file
+         * @param position -the position in string
+         * @param text - the text of the file is saved to cache
+         */
+        getCompletion(file: string, position: number, text: string, options: any): Promise<any>;
+        getQuickInfoAtPosition(file: string, position: number, text: string): Promise<any>;
+        getCodeFixesAtPosition(file: string, text: string, start: number, end: number, errorCodes: []): Promise<any>;
+        formatDocument(filePath: string, text?: string): Promise<string>;
+        getDiagnosticsForAll(): Promise<ts.Diagnostic[]>;
+        getLineAndCharacterOfPosition(fileName: string, pos: number): {
+            line: any;
+            character: any;
+        };
+        getPositionOfLineAndCharacter(fileName: string, pos: {
+            line: any;
+            character: any;
+        }): number;
+        getDiagnostics(file: string, text?: string): Promise<{
+            semantic: monaco.languages.typescript.Diagnostic[];
+            suggestion: monaco.languages.typescript.Diagnostic[];
+            syntactic: monaco.languages.typescript.Diagnostic[];
+        }>;
+    }
+    var typescript: Typescript;
+    export default typescript;
+}
+declare module "jassijs/server/Indexer" {
+    import "jassijs_editor/util/Typescript";
+    export abstract class Indexer {
+        abstract fileExists(name: any): any;
+        abstract readFile(name: any): any;
+        abstract getFileTime(name: any): any;
+        abstract createDirectory(name: any): any;
+        abstract writeFile(name: string, content: string): any;
+        abstract dirFiles(modul: string, path: string, extensions: string[], ignore: string[]): Promise<string[]>;
+        updateModul(root: any, modul: string, isserver: boolean): Promise<void>;
+        convertArgument(arg: any): any;
+        collectAnnotations(node: ts.Node, outDecorations: any, depth?: number): void;
+    }
+}
+declare module "jassijs/server/RegistryIndexer" {
+    import { Indexer } from "jassijs/server/Indexer";
+    export class RegistryIndexer extends Indexer {
+        private static version;
+        private mapcache;
+        updateRegistry(): Promise<void>;
+        dirFiles(modul: string, path: string, extensions: string[], ignore?: string[]): Promise<string[]>;
+        writeFile(name: string, content: string): Promise<void>;
+        createDirectory(name: string): Promise<void>;
+        getFileTime(filename: any): Promise<number>;
+        fileExists(filename: any): Promise<boolean>;
+        readFile(filename: any): Promise<any>;
+    }
+}
+/// <amd-dependency name="JSZip" path="jszip" />
+declare module "jassijs/server/ext/jszip" {
+    var JSZip: any;
+    export default JSZip;
+}
+declare module "jassijs/server/Filesystem" {
+    import { Context } from "jassijs/remote/RemoteObject";
+    class FileEntry {
+        id: string;
+        date: number;
+        isDirectory?: boolean;
+        data: any;
+    }
+    global {
+        export interface Serverservice {
+            filesystem: Promise<Filesystem>;
+        }
+    }
+    export default class Filesystem {
+        path: undefined;
+        private static db;
+        private static getDB;
+        /**
+         * exists a directory?
+         * @param path
+         */
+        existsDirectory(path: string): Promise<boolean>;
+        dirFiles(dir: string, extensions: string[], ignore?: string[]): Promise<string[]>;
+        dirEntry(curdir?: string): Promise<FileEntry[]>;
+        /**
+         * @returns  [{name:"hallo",date:1566554},{name:"demo",files:[]}]
+         */
+        dir(curdir?: string, appendDate?: boolean): Promise<{
+            name: string;
+            files: any[];
+        }>;
+        createFile(filename: string, content: any): Promise<any>;
+        saveFile(filename: any, content: any): Promise<any>;
+        saveFiles(fileNames: string[], contents: any[], rollbackonerror?: boolean): any;
+        loadFileEntry(fileName: string): Promise<FileEntry>;
+        /**
+        * deletes a server module (nothing to do on localserver)
+        * @param modul - to delete
+        */
+        removeServerModul(modul: string): Promise<string>;
+        /**
+        * create a folder
+        * @param filename - the name of the new file
+        * @param content - then content
+        */
+        createFolder(filename: string): Promise<string>;
+        /**
+         * create a module
+         * @param modulname - the name of the module
+      
+         */
+        createModule(modulename: string): Promise<string>;
+        loadFile(fileName: string): Promise<string>;
+        loadFiles(fileNames: string[]): Promise<{}>;
+        /**
+        * deletes a file or directory
+        * @param file - old filename
+        */
+        remove(file: string): Promise<string>;
+        /**
+         * zip a directory
+         */
+        zip(directoryname: string, serverdir?: boolean, context?: Context): Promise<any>;
+        /**
+         * renames a file or directory
+         * @param oldfile - old filename
+         * @param newfile - new filename
+         */
+        rename(oldfile: string, newfile: string): Promise<string>;
+    }
+    export function test2(): Promise<void>;
+}
+declare module "jassijs/server/TypeORMListener" {
+    import { EntitySubscriberInterface, InsertEvent, RemoveEvent, UpdateEvent } from "typeorm";
+    export class TypeORMListener implements EntitySubscriberInterface {
+        savetimer: any;
+        saveDB(event: any): void;
+        /**
+         * Called after entity is loaded.
+         */
+        afterLoad(entity: any): void;
+        /**
+         * Called before post insertion.
+         */
+        beforeInsert(event: InsertEvent<any>): void;
+        /**
+         * Called after entity insertion.
+         */
+        afterInsert(event: InsertEvent<any>): void;
+        /**
+         * Called before entity update.
+         */
+        beforeUpdate(event: UpdateEvent<any>): void;
+        /**
+         * Called after entity update.
+         */
+        afterUpdate(event: UpdateEvent<any>): void;
+        /**
+         * Called before entity removal.
+         */
+        beforeRemove(event: RemoveEvent<any>): void;
+        /**
+         * Called after entity removal.
+         */
+        afterRemove(event: RemoveEvent<any>): void;
+        /**
+         * Called before transaction start.
+         */
+        beforeTransactionStart(event: any): void;
+        /**
+         * Called after transaction start.
+         */
+        afterTransactionStart(event: any): void;
+        /**
+         * Called before transaction commit.
+         */
+        beforeTransactionCommit(event: any): void;
+        /**
+         * Called after transaction commit.
+         */
+        afterTransactionCommit(event: any): void;
+        /**
+         * Called before transaction rollback.
+         */
+        beforeTransactionRollback(event: any): void;
+        /**
+         * Called after transaction rollback.
+         */
+        afterTransactionRollback(event: any): void;
+    }
+}
+declare module "jassijs/server/DBManagerExt" {
+    export function extendDBManager(): void;
+}
+declare module "jassijs/server/DatabaseSchema" {
+    import { EntityOptions } from "typeorm";
+    export function Entity(...param: any[]): Function;
+    export function PrimaryGeneratedColumn(...param: any[]): Function;
+    export function JoinColumn(...param: any[]): Function;
+    export function JoinTable(...param: any[]): Function;
+    export function Column(...param: any[]): Function;
+    export function PrimaryColumn(...param: any[]): Function;
+    export function OneToOne(...param: any[]): Function;
+    export function OneToMany(...param: any[]): Function;
+    export function ManyToOne(...param: any[]): Function;
+    export function ManyToMany(...param: any[]): Function;
+    export { EntityOptions };
+}
+declare module "jassijs/server/LocalProtocol" {
+    import { Context } from "jassijs/remote/RemoteObject";
+    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
+    export function messageReceived(param: any): Promise<void>;
+    export function test(): Promise<void>;
+    export function localExec(prot: RemoteProtocol, context?: Context): Promise<any>;
+}
+declare module "jassijs/server/Installserver" {
+    const _default_2: {
+        ret: {
+            autostart: () => Promise<void>;
+        };
+    };
+    export default _default_2;
+}
+declare module "jassijs_editor/util/TSSourceMap" {
+    export class TSSourceMap {
+        getCode(file: string): Promise<any>;
+        getLineFromTS(tsfile: string, line: any, column: any): Promise<{
+            line: number;
+            column: number;
+            jsfilename: string;
+        }>;
+        getLineFromJS(jsfile: string, line: number, column: number): Promise<{
+            source: string;
+            line: number;
+            column: number;
+        }>;
+        getLinesFromJS(jsfile: any, data: {
+            line: number;
+            column: number;
+        }[]): Promise<{
+            source: string;
+            line: number;
+            column: number;
+        }[]>;
+    }
+}
+declare module "jassijs_editor/ErrorPanel" {
+    import { Panel } from "jassijs/ui/Panel";
+    import { Button } from "jassijs/ui/Button";
+    export class ErrorPanel extends Panel {
+        IDClear: Button;
+        _container: any;
+        IDToolbar: Panel;
+        IDSearch: Button;
+        withControls: boolean;
+        withLastErrors: boolean;
+        withNewErrors: boolean;
+        /**
+     * shows errors
+     * @class jassijs.ui.ErrorPanel
+     */
+        constructor(withControls?: boolean, withLastErrors?: boolean, withNewErrors?: boolean);
+        static showDialog(): Promise<void>;
+        layout(): void;
+        /**
+         * search Errors in code
+         **/
+        search(): Promise<void>;
+        /**
+         * adds a new error
+         * @param {object} error - the error
+         */
+        addError(error: any): Promise<void>;
+        _convertURL(url: string): Promise<string>;
+        /**
+         * deletes all errors
+         */
+        clear(): void;
+        registerError(): void;
+        unregisterError(): void;
+        destroy(): void;
+    }
+    export function test2(): ErrorPanel;
+}
+declare module "jassijs_editor/util/Tests" {
+    import { FileNode } from "jassijs/remote/FileNode";
+    import { BoxPanel } from "jassijs/ui/BoxPanel";
+    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+    import { Test } from "jassijs/remote/Test";
+    class MyContainer extends BoxPanel {
+        statustext: HTMLPanel;
+        alltests: number;
+        failedtests: number;
+        finished: boolean;
+        update(): void;
+    }
+    export class TestAction {
+        static testNode(all: FileNode[], container?: MyContainer): Promise<void>;
+    }
+    export class Tests {
+    }
+    export function test(tst: Test): Promise<void>;
+}
+declare module "jassijs/server/NativeAdapter" {
+    import { Test } from "jassijs/remote/Test";
+    export function exists(filename: string): Promise<boolean>;
+    export function test(tt: Test): Promise<void>;
+}
+declare module "jassijs/server/Testuser" {
+    export class Testuser {
+        id: number;
+        firstname: string;
+        lastname: string;
+    }
+}
+declare module "jassijs/server/ext/EmpyDeclaration" {
+    export {};
 }
 declare module "jassijs/ui/MenuItem" {
     import "jassijs/ext/jquerylib";
@@ -4658,33 +5204,6 @@ declare module "jassijs/util/CSVImport" {
     }
     export function test(): Promise<void>;
 }
-declare module "jassijs/util/Reloader" {
-    export class Reloader {
-        static cache: any[];
-        static reloadCodeFromServerIsRunning: boolean;
-        static instance: Reloader;
-        listener: any[];
-        /**
-         * reloads Code
-         */
-        private constructor();
-        /**
-         * check code changes out of the browser if localhost and load the changes in to the browser
-         */
-        static startReloadCodeFromServer(): void;
-        /**
-         * listener for code reloaded
-         * @param {function} func - callfunction for the event
-         */
-        addEventCodeReloaded(func: any): void;
-        removeEventCodeReloaded(func: any): void;
-        private _findScript;
-        reloadJS(fileName: string): Promise<void>;
-        reloadJSAll(fileNames: string[]): Promise<void>;
-        migrateModul(allModules: any, file: any, modul: any): void;
-        migrateClasses(file: any, oldmodul: any, modul: any): void;
-    }
-}
 declare module "jassijs/util/Runlater" {
     export class Runlater {
         lastRun: number;
@@ -4695,4 +5214,13 @@ declare module "jassijs/util/Runlater" {
         _checkRun(): void;
         runlater(): void;
     }
+}
+declare module "jassijs_localserver/modul" {
+    const _default_3: {
+        require: {
+            paths: {};
+            shim: {};
+        };
+    };
+    export default _default_3;
 }

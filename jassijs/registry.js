@@ -56,7 +56,7 @@ exports.default={
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1680975011688
+		"date": 1682363039551
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1655556866000,
@@ -374,10 +374,10 @@ exports.default={
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1680803766537
+		"date": 1682283699017
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1681919357965,
+		"date": 1682591475311,
 		"jassijs/server/DBManager": {
 			"$Serverservice": [
 				{
@@ -388,10 +388,10 @@ exports.default={
 		}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
-		"date": 1681309085019
+		"date": 1682362433280
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1682162614975,
+		"date": 1682591314622,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -405,7 +405,7 @@ exports.default={
 		"date": 1680806099946
 	},
 	"jassijs/server/JassiServer.ts": {
-		"date": 1681930018357
+		"date": 1682449512016
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
 		"date": 1680946666516
@@ -432,7 +432,7 @@ exports.default={
 		"date": 1681322647268
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1681589727772,
+		"date": 1682513195150,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
@@ -478,12 +478,21 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Serverservice.ts": {
-		"date": 1681919267935
+		"date": 1682277848397
 	},
 	"jassijs/index.d.ts": {
 		"date": 1681918735845
 	},
 	"jassijs/server/UpdatePackage.ts": {
 		"date": 1682167521365
+	},
+	"jassijs/remote/Config.ts": {
+		"date": 1682361522060
+	},
+	"jassijs/server/NativeAdapter.ts": {
+		"date": 1682517569027
+	},
+	"jassijs/server/FileTools.ts": {
+		"date": 1682591534994
 	}
 }

@@ -1,8 +1,9 @@
-//@ts-ignore
+//synchronize-server-client
+//@ts-ignore  
 import { ConnectionOptions, createConnection, getConnection, SaveOptions, FindConditions, FindOneOptions, ObjectType, ObjectID, FindManyOptions, Connection, SelectQueryBuilder, Brackets, EntitySchema, getMetadataArgsStorage, Entity } from "typeorm";
 import { classes, JassiError } from "jassijs/remote/Classes";
-
-import registry from "jassijs/remote/Registry";
+ 
+import registry from "jassijs/remote/Registry";       
 import { DBObject } from "jassijs/remote/DBObject";
 import { ParentRightProperties } from "jassijs/remote/security/Rights";
 import { User } from "jassijs/remote/security/User";
@@ -125,6 +126,7 @@ export class DBManager {
 
       } catch (err) {
         console.log("DB corrupt - revert the last change");
+        console.error(err1);
         console.error(err);
         _instance = undefined;
         _initrunning = undefined;

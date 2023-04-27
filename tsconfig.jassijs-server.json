@@ -1,0 +1,30 @@
+{
+  "compilerOptions": { 
+    "baseUrl": "./jassijs_localserver",
+    "allowJs": true,
+    //"checkJs":false,
+    "target": "es2017",
+    "module": "amd",
+    "moduleResolution": "node",
+    "lib": [
+      "es2016", 
+      "dom",
+      "es5"
+    ],
+    "inlineSources": true,
+    "outFile": "./dist/test.js",
+    "rootDir": "./",
+    "paths": {
+      "jassijs/*":["client/jassijs/*"]
+    },
+     "sourceMap": true,
+
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+  },
+  "include":[
+    "./jassijs/remote/**.*",
+    "./de"
+],
+
+}

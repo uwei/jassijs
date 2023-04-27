@@ -13,8 +13,7 @@ import "jassijs/remote/Registry";
 //important: registry must be loaded after "reflect-metadata" and before the typeorm (because delegation of Reflect.metadata)
 import express = require('express');
 
-import { staticfiles, staticsecurefiles, syncRemoteFiles } from "jassijs/server/Filesystem";
-import { Indexer } from 'jassijs/server/Indexer';
+
 import { loginRegister, manageToken } from "jassijs/server/PassportLoginRegister";
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
@@ -27,6 +26,8 @@ import { ServerIndexer } from "./RegistryIndexer";
 import { DoServerreport } from "jassijs_report/DoServerreport";
 import { serverservices } from "../remote/Serverservice";
 import { updatePackage } from "./UpdatePackage";
+import { staticfiles, staticsecurefiles, syncRemoteFiles } from "./FileTools";
+
 
 
 

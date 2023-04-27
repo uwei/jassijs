@@ -23,7 +23,8 @@ class DoServerreport {
         doc.end();
     }
     async getDesign(path, parameter) {
-        var fill = (await Promise.resolve().then(() => require(path))).fill;
+        var _a;
+        var fill = (await (_a = path, Promise.resolve().then(() => require(_a)))).fill;
         var content = await fill(parameter);
         return content;
     }
@@ -122,7 +123,7 @@ class DoServerreport {
     async getBase64LastTestResult() {
         var data = Server_1.Server.lastTestServersideFileResult;
         await this.registerFonts(data.reportdesign);
-        data = pdfmakejassi_1.createReportDefinition(data.reportdesign, data.data, data.parameter);
+        data = (0, pdfmakejassi_1.createReportDefinition)(data.reportdesign, data.data, data.parameter);
         var ret = await new Promise((resolve) => {
             this.createPdfBinary(data, resolve);
         });
@@ -131,7 +132,7 @@ class DoServerreport {
     async getBase64(file, parameter) {
         var data = await this.getDesign(file, parameter);
         await this.registerFonts(data.reportdesign);
-        data = pdfmakejassi_1.createReportDefinition(data.reportdesign, data.data, data.parameter);
+        data = (0, pdfmakejassi_1.createReportDefinition)(data.reportdesign, data.data, data.parameter);
         var ret = await new Promise((resolve) => {
             this.createPdfBinary(data, resolve);
         });

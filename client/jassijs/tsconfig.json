@@ -24,7 +24,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
-   "include":["./",".././node_modules2"]
+   "include":["./",".././node_modules2", "../jassijs_localserver/modul.ts"]
  
   
 }

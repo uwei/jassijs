@@ -50,6 +50,7 @@ class Registry {
         this.jsondataMembers = {};
         this._eventHandler = {};
         this._nextID = 10;
+        this.isLoading = this.reload();
     }
     getData(service, classname = undefined) {
         var olddata = this.data[service];
@@ -258,21 +259,27 @@ class Registry {
         else { //on client
             var all = {};
             var mod = JSON.parse(await (this.loadText("jassijs.json")));
-            for (let modul in mod.modules) {
-                if (!mod.modules[modul].endsWith(".js") && mod.modules[modul].indexOf(".js?") === -1)
+            var modules = mod.modules;
+            var myrequire = require;
+            /*if(require.defined("jassijs_localserver/remote/Installserver")){
+                myrequire=window["serverRequire"];
+                modules=mod.servermodules;
+            }*/
+            for (let modul in modules) {
+                if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
                     //@ts-ignore
                     requirejs.undef(modul + "/registry");
                 {
                     var m = modul;
                     all[modul] = new Promise((resolve, reject) => {
                         //@ts-ignore
-                        require([m + "/registry"], function (ret) {
+                        myrequire([m + "/registry"], function (ret) {
                             resolve(ret.default);
                         });
                     });
                 }
             }
-            for (let modul in mod.modules) {
+            for (let modul in modules) {
                 var data = await all[modul];
                 _this.initJSONData(data);
             }
@@ -348,13 +355,13 @@ class Registry {
      * @param service - the service for which we want informations
      */
     async getJSONData(service, classname = undefined) {
-        if (this.isLoading)
-            await this.isLoading;
-        if (this.jsondata === undefined) {
-            this.isLoading = this.reload();
-            await this.isLoading;
-        }
-        this.isLoading = undefined;
+        // if (this.isLoading)
+        await this.isLoading;
+        /* if (this.jsondata === undefined) {
+             this.isLoading = this.reload();
+             await this.isLoading;
+         }
+         this.isLoading = undefined;*/
         var ret = [];
         var odata = this.jsondata[service];
         if (odata === undefined)

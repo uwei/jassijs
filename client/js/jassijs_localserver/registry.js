@@ -2,72 +2,8 @@
 define("jassijs_localserver/registry", ["require"], function (require) {
     return {
         default: {
-            "jassijs_localserver/DatabaseSchema.ts": {
-                "date": 1622984214000
-            },
-            "jassijs_localserver/DBManager.ts": {
-                "date": 1681919345935,
-                "jassijs_localserver.DBManager": {
-                    "$Serverservice": [
-                        {
-                            "name": "db",
-                            "getInstance": "function"
-                        }
-                    ]
-                }
-            },
-            "jassijs_localserver/Filesystem.ts": {
-                "date": 1681314476793,
-                "jassijs_localserver.Filesystem": {
-                    "$Serverservice": [
-                        {
-                            "name": "filesystem",
-                            "getInstance": "function"
-                        }
-                    ]
-                }
-            },
-            "jassijs_localserver/Indexer.ts": {
-                "date": 1680806174434
-            },
-            "jassijs_localserver/LocalProtocol.ts": {
-                "date": 1682192720960
-            },
             "jassijs_localserver/modul.ts": {
-                "date": 1622998476000
-            },
-            "jassijs_localserver/RegistryIndexer.ts": {
-                "date": 1680949036749,
-                "jassijs_localserver.RegistryIndexer": {}
-            },
-            "jassijs_localserver/Testuser.ts": {
-                "date": 1655556794000,
-                "Testuser": {
-                    "$DBObject": [],
-                    "@members": {
-                        "id": {
-                            "PrimaryColumn": []
-                        },
-                        "firstname": {
-                            "Column": []
-                        },
-                        "lastname": {
-                            "Column": []
-                        }
-                    }
-                }
-            },
-            "jassijs_localserver/TypeORMListener.ts": {
-                "date": 1680949085543,
-                "jassijs_localserver.TypeORMListener": {
-                    "EventSubscriber": []
-                }
-            },
-            "jassijs_localserver/DBManagerExt.ts": {
-                "date": 1681314239371
-            },
-            "jassijs_localserver/ext/jzip.ts": {
-                "date": 1657714030000
+                "date": 1682362013642
             }
         }
     };
