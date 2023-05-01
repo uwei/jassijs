@@ -237,7 +237,7 @@ class JassijsStarter {
         let modules;
         let servermodules;
         if (configtext) {
-            let data = JSON.parse(configtext);
+            var data = JSON.parse(configtext);
             if (data.require)
                 requireconfig = data.require;
             modules = data.modules;
@@ -261,7 +261,8 @@ class JassijsStarter {
         var context = JSON.parse(JSON.stringify(require.s.contexts._.config))
         context.context = "server";
         let serverRequire = requirejs.config(context);
-        await this.runContext(servermodules, serverRequire, "server", configtext,requirejs);
+        if(data.runServerInBrowser)
+            await this.runContext(servermodules, serverRequire, "server", configtext,requirejs);
         this.runContext(modules, requirejs, "_", configtext,serverRequire);
 
 

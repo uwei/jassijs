@@ -35,7 +35,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/modul.ts": {
-		"date": 1682801980196.8997
+		"date": 1682930130364.68
 	},
 	"jassijs/remote/Classes.ts": {
 		"date": 1682795551717.3792,
@@ -102,7 +102,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
-		"date": 1681322755236.7244,
+		"date": 1682888734579.9475,
 		"jassijs.security.Group": {
 			"$DBObject": [
 				{
@@ -1372,7 +1372,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1682715263974.073
 	},
 	"jassijs/remote/Config.ts": {
-		"date": 1682798490416.0051
+		"date": 1682889087734.386
 	},
 	"jassijs/server/DatabaseSchema.ts": {
 		"date": 1682241708158.535
@@ -1401,7 +1401,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1682806194944.4678
 	},
 	"jassijs/server/Installserver.ts": {
-		"date": 1682613879220.7644
+		"date": 1682930462690.898
 	},
 	"jassijs/server/LocalProtocol.ts": {
 		"date": 1682804261351.0828
@@ -1436,7 +1436,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1682802877109.1504
 	},
 	"jassijs/server/NativeAdapter.ts": {
-		"date": 1682806909328.146
+		"date": 1682930434231.358
 	},
 	"jassijs/server/Filesystem.ts": {
 		"date": 1682807745323.753,
@@ -1451,6 +1451,9 @@ define("jassijs/registry",["require"], function(require) {
 	},
 	"jassijs/remote/Modules.ts": {
 		"date": 1682799474543.8716
+	},
+	"jassijs/server/FS.ts": {
+		"date": 1682930344917.084
 	}
 }
  }
