@@ -13,16 +13,16 @@ export function updatePackage(){
     if(!fs.existsSync(client_path+"/js")){
         fs.mkdirSync(client_path+"/js");
     }
-    if(!fs.existsSync("./jassijs.json")){
-        fs.copyFileSync(module_path.replace("/client","")+"/jassijs.json", "./jassijs.json");
-    }
+   // if(!fs.existsSync("./jassijs.json")){
+   //     fs.copyFileSync(module_path.replace("/client","")+"/jassijs.json", "./jassijs.json");
+  //  }
     if(!fs.existsSync("./tsconfig.json")){
         fs.copyFileSync(module_path.replace("/client","")+"/tsconfig.json", "./tsconfig.json");
-    }
+    } 
     if(fs.existsSync(module_path)){
         var list: string[] = fs.readdirSync(module_path);
 
-        list.forEach(function (filename) {
+        list.forEach(function (filename) { 
             if (!fs.lstatSync(module_path + "/" + filename).isDirectory()) {
 
                 if(!fs.existsSync(client_path+"/"+filename)){

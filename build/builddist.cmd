@@ -18,7 +18,6 @@ call tsc --project jassijs_editor/tsconfig.json
 call tsc --project demoreports/tsconfig.json 
 call tsc --project jassijs_report/tsconfig.json
 call tsc --project demo/tsconfig.json
-call tsc --project jassijs_localserver/tsconfig.json
 call tsc --project northwind/tsconfig.json
 call tsc --project tests/tsconfig.json
 pause

@@ -9,6 +9,7 @@ import { router } from "jassijs/base/Router";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import { notify } from "jassijs/ui/Notify";
 import { Component } from "jassijs/ui/Component";
+import { config } from "jassijs/remote/Config";
 @$ActionProvider("jassijs.base.ActionNode")
 @$Class("jassijs_editor.ui.ErrorPanel")
 export class ErrorPanel extends Panel {
@@ -179,8 +180,8 @@ export class ErrorPanel extends Panel {
             if (line === "" || col === "" || u === "")
                 return url;
             var ismodul = false;
-            for (var mod in jassijs.modules) {
-                if (jassijs.modules[mod] === u)
+            for (var mod in config.modules) {
+                if (config.modules[mod] === u)
                     ismodul = true;
             }
             if (u.indexOf("/js/") > -1 || ismodul) {

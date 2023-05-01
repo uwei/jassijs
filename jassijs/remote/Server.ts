@@ -5,6 +5,7 @@ import { FileNode } from "jassijs/remote/FileNode";
 import { classes, JassiError } from "./Classes";
 import { serverservices } from "./Serverservice";
 import { ValidateFunctionParameter, ValidateIsArray, ValidateIsBoolean, ValidateIsString } from "jassijs/remote/Validator";
+import { config } from "./Config";
 
 
  
@@ -36,15 +37,15 @@ export class Server extends RemoteObject {
         if (Server.filesInMap)
             return;
         var ret = {};
-        for (var mod in jassijs.modules) {
+        for (var mod in config.modules) {
             if (jassijs?.options?.Server?.filterModulInFilemap) {
                 if (jassijs?.options?.Server?.filterModulInFilemap.indexOf(mod) === -1)
                     continue;
             }
-            if (jassijs.modules[mod].endsWith(".js") || jassijs.modules[mod].indexOf(".js?") > -1) {
-                let mapname = jassijs.modules[mod].split("?")[0] + ".map";
-                if (jassijs.modules[mod].indexOf(".js?") > -1)
-                    mapname = mapname + "?" + jassijs.modules[mod].split("?")[1];
+            if (config.modules[mod].endsWith(".js") || config.modules[mod].indexOf(".js?") > -1) {
+                let mapname = config.modules[mod].split("?")[0] + ".map";
+                if (config.modules[mod].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + config.modules[mod].split("?")[1];
                 var code = await $.ajax({ url: mapname, dataType: "text" })
                 var data = JSON.parse(code);
                 var files = data.sources;
@@ -164,9 +165,9 @@ export class Server extends RemoteObject {
                     //use ajax
                 } else {
                     var found = Server.filesInMap[fileName];
-                    let mapname = jassijs.modules[found.modul].split("?")[0] + ".map";
-                    if (jassijs.modules[found.modul].indexOf(".js?") > -1)
-                        mapname = mapname + "?" + jassijs.modules[found.modul].split("?")[1];
+                    let mapname = config.modules[found.modul].split("?")[0] + ".map";
+                    if (config.modules[found.modul].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + config.modules[found.modul].split("?")[1];
                     var code = await this.loadFile(mapname, context);
                     var data = JSON.parse(code).sourcesContent[found.id];
                     return data;

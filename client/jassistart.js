@@ -53,50 +53,53 @@ class JassijsStarter {
             window.document.head.appendChild(js);
         });
     }
-    loadModules(res, mods, modules, requireconfig, startlib, beforestartlib, beforestartlibServerContext) {
+    loadModules(res, mods, modules, requireconfig, startlib, beforestartlib, isServer) {
         for (let x = 0; x < res.length; x++) {
-            if (res[x].default.css) {
-                var mod = mods[x];
-                mod = mod.substring(0, mod.length - "/modul".length);
-                var modpath = modules[mod];
-                for (let key in res[x].default.css) {
-                    let f = res[x].default.css[key];
-                    if (f.indexOf(":") > -1) //https://cdn
-                        this.cssFiles[key] = f;
-                    else if (modpath.endsWith(".js") || modpath.indexOf(".js?") > -1) {
-                        var m = modpath.substring(0, modpath.lastIndexOf("/"));
-                        this.cssFiles[key] = m + "/" + f;
-                    }
-                    else {
-                        this.cssFiles[key] = modpath + "/" + f;
+            var conf = res[x].default;
+            if (isServer)
+                conf = conf.server;
+            if (conf) {
+                if (conf.css) {
+                    var mod = mods[x];
+                    mod = mod.substring(0, mod.length - "/modul".length);
+                    var modpath = modules[mod];
+                    for (let key in conf.css) {
+                        let f = conf.css[key];
+                        if (f.indexOf(":") > -1) //https://cdn
+                            this.cssFiles[key] = f;
+                        else if (modpath.endsWith(".js") || modpath.indexOf(".js?") > -1) {
+                            var m = modpath.substring(0, modpath.lastIndexOf("/"));
+                            this.cssFiles[key] = m + "/" + f;
+                        }
+                        else {
+                            this.cssFiles[key] = modpath + "/" + f;
+                        }
                     }
                 }
-            }
-            if (res[x].default.loadonstart) {
-                res[x].default.loadonstart.forEach((entr) => startlib.push(entr));
-            }
-            if (res[x].default.loadbeforestart) {
+
+                if (conf.loadonstart) {
+                    conf.loadonstart.forEach((entr) => startlib.push(entr));
+                }
+                if (conf.loadbeforestart) {
 
 
-                res[x].default.loadbeforestart.forEach((entr) => {
-                    if (res[x].default.serverContext === true)
-                        beforestartlibServerContext.push(entr);
-                    else
+                    conf.loadbeforestart.forEach((entr) => {
                         beforestartlib.push(entr);
-                });
-            }
-            let toadd = res[x].default.require;
-            if (toadd) {
-                if (!requireconfig.paths) {
-                    requireconfig.paths = {};
+                    });
                 }
-                if (toadd.paths)
-                    Object.assign(requireconfig.paths, toadd.paths);
-                if (!requireconfig.shim) {
-                    requireconfig.shim = {};
+                let toadd = conf.require;
+                if (toadd) {
+                    if (!requireconfig.paths) {
+                        requireconfig.paths = {};
+                    }
+                    if (toadd.paths)
+                        Object.assign(requireconfig.paths, toadd.paths);
+                    if (!requireconfig.shim) {
+                        requireconfig.shim = {};
+                    }
+                    if (toadd.shim)
+                        Object.assign(requireconfig.shim, toadd.shim);
                 }
-                if (toadd.shim)
-                    Object.assign(requireconfig.shim, toadd.shim);
             }
         }
     }
@@ -161,17 +164,19 @@ class JassijsStarter {
         });
         await Promise.all(all);
     }
-    async runContext(modules, myRequire, contextname) {
-        if(modules===undefined||modules.length===0)
+
+    async runContext(modules, myRequire, contextname, configtext,otherRequire) {
+        if (modules === undefined || modules.length === 0)
             return;
         await this.loadInternetModules(modules, myRequire);
+
         return await new Promise((resolvemain) => {
 
-            
+
             // await this.loadInternetModules(servermodules,serverRequire);
 
             var mods = [];
-            var all = ["jassijs/remote/Jassi"];
+            var all = ["jassijs/remote/Jassi", "jassijs/remote/Config"];
             for (let key in modules) {
                 mods.push(key + "/modul");
                 all.push(key + "/modul");
@@ -182,16 +187,24 @@ class JassijsStarter {
 
 
 
-            require(all, function (remoteJassi, ...res) {
-                if(contextname==="_")
-                    window.jassijs.modules = _this.config.modules;
-                else
-                    window.jassijs.servermodules = _this.config.servermodules;
-                var requireconfig={};
-                _this.loadModules(res, mods, modules, requireconfig, startlib, beforestartlib);
+            myRequire(all, function (remoteJassi, config, ...res) {
+                config.config.init(configtext);
+
+                if (contextname === "server") {
+                    //window.jassijs.modules = _this.config.modules;
+                    config.config.isServer = true;
+                    config.config.clientrequire = otherRequire;
+                    config.config.serverrequire = myRequire;
+                } else {
+                    config.config.isServer = false;
+                    config.config.clientrequire = myRequire;
+                    config.config.serverrequire = otherRequire;
+                }
+                var requireconfig = {};
+                _this.loadModules(res, mods, modules, requireconfig, startlib, beforestartlib, contextname !== "_");
                 window.jassijs.options = _this.config.options;
                 window.jassijs.cssFiles = _this.cssFiles;
-                var h=require.s.contexts[contextname].configure(requireconfig);
+                var h = require.s.contexts[contextname].configure(requireconfig);
                 //            requirejs.config(requireconfig);
                 //var context=JSON.parse(JSON.stringify(require.s.contexts._.config))
 
@@ -205,13 +218,13 @@ class JassijsStarter {
                         if (_this.runFunction && window[_this.runFunction]) {
                             window[_this.runFunction]();
                         }
-                        if (_this.runScript&&contextname==="_") {
+                        if (_this.runScript && contextname === "_") {
                             myRequire([_this.runScript], function () {
                                 resolvemain();
                             });
-                        }else{
+                        } else {
                             resolvemain();
-                            
+
                         }
                     });
                 });
@@ -219,16 +232,16 @@ class JassijsStarter {
         });
     }
     async run() {
-        var smodules = await this.loadText(this.configFile);
+        var configtext = await this.loadText(this.configFile);
         var requireconfig = {};
         let modules;
         let servermodules;
-        if (smodules) {
-            let data = JSON.parse(smodules);
+        if (configtext) {
+            let data = JSON.parse(configtext);
             if (data.require)
                 requireconfig = data.require;
             modules = data.modules;
-            servermodules = data.servermodules;
+            servermodules = data.server.modules;
             this.config = data;
             // window.__jassijsconfig__ = data;//is consumed by Jassijs
 
@@ -244,11 +257,12 @@ class JassijsStarter {
 
             }
         });
+
         var context = JSON.parse(JSON.stringify(require.s.contexts._.config))
         context.context = "server";
-        window.serverRequire = requirejs.config(context);
-        await this.runContext(servermodules,serverRequire,"server");
-        this.runContext(modules,requirejs,"_");
+        let serverRequire = requirejs.config(context);
+        await this.runContext(servermodules, serverRequire, "server", configtext,requirejs);
+        this.runContext(modules, requirejs, "_", configtext,serverRequire);
 
 
 

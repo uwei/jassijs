@@ -4,6 +4,8 @@ import registry from "jassijs/remote/Registry";
 import { DBManager } from "./DBManager";
 import { TypeORMListener } from "./TypeORMListener";
 import {EventSubscriber} from "typeorm";
+import { myfs ,exists} from "./NativeAdapter";
+
 
 export function extendDBManager(){
       //create Admin User if doesn't a user exists 
@@ -68,7 +70,11 @@ export function extendDBManager(){
        //@ts-ignore 
         new EventSubscriber()(tcl);
         var Filesystem = await classes.loadClass("jassijs.server.Filesystem");
-        var data = await new Filesystem().loadFile("__default.db");
+       
+        var data=undefined;
+        if(await exists("./client/__default.db"))
+             data=await myfs.readFile("./client/__default.db",undefined,false);
+      
         var opt = {
             database: data,
             type: "sqljs",

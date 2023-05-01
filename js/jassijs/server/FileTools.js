@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.staticsecurefiles = exports.staticfiles = exports.syncRemoteFiles = void 0;
 const fs = require("fs");
 const Filesystem_1 = require("./Filesystem");
+const Config_1 = require("jassijs/remote/Config");
 let resolve = require('path').resolve;
 function copyFile(f1, f2) {
     try {
@@ -27,7 +28,7 @@ function copyFile(f1, f2) {
 */
 async function checkRemoteFiles() {
     var path = new Filesystem_1.default().path;
-    var modules = JSON.parse(fs.readFileSync("./jassijs.json", 'utf-8')).modules;
+    var modules = Config_1.config.server.modules;
     for (var m in modules) {
         var files = await new Filesystem_1.default().dirFiles("./" + m + "/remote", [".ts"]);
         var filess = await new Filesystem_1.default().dirFiles("./" + m + "/server", [".ts"]);
@@ -68,9 +69,11 @@ function syncRemoteFiles() {
         if (eventType === "change" && paths.length > 1 && (paths[1] === "remote" || paths[1] === "server")) {
             setTimeout(() => {
                 if (paths[1] === "server") {
-                    var code = fs.readFileSync(file, 'utf-8');
-                    if (code.indexOf("//synchronize-server-client") !== 0)
-                        return;
+                    if (fs.existsSync(file) && !fs.statSync(file).isDirectory()) {
+                        var code = fs.readFileSync(file, 'utf-8');
+                        if (code.indexOf("//synchronize-server-client") !== 0)
+                            return;
+                    }
                 }
                 var f2 = "./" + file;
                 var f1 = path + "/" + file;
@@ -87,9 +90,11 @@ function syncRemoteFiles() {
         if (eventType === "change" && paths.length > 1 && paths[1] === "remote" || paths[1] === "server") {
             setTimeout(() => {
                 if (paths[1] === "server") {
-                    var code = fs.readFileSync(file, 'utf-8');
-                    if (code.indexOf("//synchronize-server-client") !== 0)
-                        return;
+                    if (fs.existsSync(file) && !fs.statSync(file).isDirectory()) {
+                        var code = fs.readFileSync(file, 'utf-8');
+                        if (code.indexOf("//synchronize-server-client") !== 0)
+                            return;
+                    }
                 }
                 var f1 = "./" + file;
                 var f2 = path + "/" + file;
@@ -101,9 +106,8 @@ function syncRemoteFiles() {
 exports.syncRemoteFiles = syncRemoteFiles;
 var modules = undefined;
 function staticfiles(req, res, next) {
-    if (modules === undefined)
-        modules = JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules;
     var path = new Filesystem_1.default().path;
+    var modules = Config_1.config.server.modules;
     // console.log(req.path);
     let sfile = path + req.path;
     if (sfile.indexOf("Settings.ts") > -1) { //&&!passport.authenticate("jwt", { session: false })){
@@ -143,8 +147,8 @@ function staticfiles(req, res, next) {
 }
 exports.staticfiles = staticfiles;
 function staticsecurefiles(req, res, next) {
-    if (modules === undefined)
-        modules = JSON.parse(fs.readFileSync('./jassijs.json', 'utf-8')).modules;
+    var path = new Filesystem_1.default().path;
+    modules = Config_1.config.server.modules;
     // console.log(req.path);
     let sfile = new Filesystem_1.default().path + req.path;
     if (sfile.indexOf("Settings.ts") > -1) { //&&!passport.authenticate("jwt", { session: false })){

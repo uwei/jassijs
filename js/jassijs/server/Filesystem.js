@@ -7,18 +7,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var Filesystem_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-const Compile_1 = require("jassijs/server/Compile");
 const RegistryIndexer_1 = require("./RegistryIndexer");
 const Registry_1 = require("jassijs/remote/Registry");
 const Serverservice_1 = require("../remote/Serverservice");
 const NativeAdapter_1 = require("./NativeAdapter");
-const passport = require("passport");
+const Config_1 = require("jassijs/remote/Config");
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
 let Filesystem = Filesystem_1 = class Filesystem {
     constructor() {
         this.path = "./client";
     }
     _pathForFile(fileName, fromServerdirectory = undefined) {
+        if (fileName.startsWith("/"))
+            fileName = fileName.substring(1);
         var path = this.path + "/" + fileName;
         if (fromServerdirectory)
             path = "./" + fileName.replace("$serverside/", "");
@@ -39,10 +40,8 @@ let Filesystem = Filesystem_1 = class Filesystem {
        }*/
     async dir(curdir = "", appendDate = false, parentPath = this.path, parent = undefined) {
         try {
-            var modules = undefined;
             var _this = this;
-            if (modules === undefined)
-                modules = JSON.parse(await NativeAdapter_1.myfs.readFile('./jassijs.json', 'utf-8')).modules;
+            var modules = Config_1.config.server.modules;
             if (parent === undefined) {
                 parent = { name: "", files: [] };
             }
@@ -212,11 +211,9 @@ let Filesystem = Filesystem_1 = class Filesystem {
  
              }*/
             //update client jassijs.json
-            var json = await NativeAdapter_1.myfs.readFile(this._pathForFile("jassijs.json"), 'utf-8');
-            var ob = JSON.parse(json);
-            if (!ob.modules[modulename])
-                ob.modules[modulename] = modulename;
-            await NativeAdapter_1.myfs.writeFile(this._pathForFile("jassijs.json"), JSON.stringify(ob, undefined, "\t"));
+            if (!Config_1.config.modules[modulename])
+                Config_1.config.jsonData.modules[modulename] = modulename;
+            await Config_1.config.saveJSON();
             //this.createRemoteModulIfNeeded(modulename);
         }
         catch (ex) {
@@ -273,9 +270,8 @@ let Filesystem = Filesystem_1 = class Filesystem {
     * @param modul - to delete
     */
     async removeServerModul(modul) {
-        var modules = JSON.parse(await NativeAdapter_1.myfs.readFile("./jassijs.json", 'utf-8'));
-        delete modules.modules[modul];
-        await NativeAdapter_1.myfs.writeFile("./jassijs.json", JSON.stringify(modules, undefined, "\t"));
+        delete Config_1.config.jsonData.server.modules[modul];
+        await Config_1.config.saveJSON();
         if (await (0, NativeAdapter_1.exists)(modul)) {
             await NativeAdapter_1.myfs.rmdir(modul, { recursive: true });
         }
@@ -292,11 +288,9 @@ let Filesystem = Filesystem_1 = class Filesystem {
         try {
             if ((await NativeAdapter_1.myfs.stat(path)).isDirectory()) {
                 //update client jassijs.json if removing client module 
-                var json = await NativeAdapter_1.myfs.readFile(this._pathForFile("jassijs.json"), 'utf-8');
-                var ob = JSON.parse(json);
-                if (ob.modules[file]) {
-                    delete ob.modules[file];
-                    await NativeAdapter_1.myfs.writeFile(this._pathForFile("jassijs.json"), JSON.stringify(ob, undefined, "\t"));
+                if (Config_1.config.modules[file]) {
+                    delete Config_1.config.jsonData.modules[file];
+                    await Config_1.config.saveJSON();
                 }
                 await NativeAdapter_1.myfs.rmdir(path, { recursive: true });
             }
@@ -314,13 +308,13 @@ let Filesystem = Filesystem_1 = class Filesystem {
      * @param modul
      */
     async createRemoteModulIfNeeded(modul) {
-        var modules = JSON.parse(await NativeAdapter_1.myfs.readFile("./jassijs.json", 'utf-8'));
-        if (!modules.modules[modul]) {
-            modules.modules[modul] = modul;
-            await NativeAdapter_1.myfs.writeFile("./jassijs.json", JSON.stringify(modules, undefined, "\t"));
+        if (!Config_1.config.jsonData.server.modules[modul]) {
+            Config_1.config.jsonData.server.modules[modul] = modul;
+            await Config_1.config.saveJSON();
         }
     }
-    getDirectoryname(path) {
+    getDirectoryname(ppath) {
+        var path = ppath.replaceAll("\\", "/");
         return path.substring(0, path.lastIndexOf("/"));
     }
     /**
@@ -336,8 +330,8 @@ let Filesystem = Filesystem_1 = class Filesystem {
     async saveFiles(fileNames, contents, rollbackonerror = true) {
         var ret = "";
         var rollbackcontents = [];
-        if (modules === undefined)
-            modules = JSON.parse(await NativeAdapter_1.myfs.readFile('./jassijs.json', 'utf-8')).modules;
+        var modules = Config_1.config.server.modules;
+        var remoteFiles = [];
         for (var x = 0; x < fileNames.length; x++) {
             let fileName = fileNames[x];
             var fromServerdirectory = fileName.startsWith("$serverside/");
@@ -376,7 +370,7 @@ let Filesystem = Filesystem_1 = class Filesystem {
                     await NativeAdapter_1.myfs.writeFile("./" + fneu, contents[x]);
                     if (spath.length > 1 && spath[0] !== "$serverside")
                         await this.createRemoteModulIfNeeded(spath[0]);
-                    new Compile_1.Compile().transpile(fneu, fromServerdirectory);
+                    (0, NativeAdapter_1.transpile)(fneu, fromServerdirectory);
                 }
             }
         }
@@ -389,63 +383,19 @@ let Filesystem = Filesystem_1 = class Filesystem {
             var spath = fileName.split("/");
             var fromServerdirectory = fileName.startsWith("$serverside/");
             if (fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote") && fileName.toLowerCase().endsWith(".ts")) {
-                //reload Modules
                 var remotecodeincluded = true;
-                //var root = require.main["path"]+"\\";  //not work on heroku
-                var root = this.getDirectoryname(require.main.filename).replaceAll("\\", "/");
-                root = root + (root.endsWith("/js") ? "/" : "/js/");
-                // root = root.substring(0, root.length - "jassijs/remote/Classes.js".length);
-                var modules = JSON.parse(await NativeAdapter_1.myfs.readFile("./jassijs.json", 'utf-8')).modules;
-                var jfiles = [];
-                for (var modul in modules) {
-                    for (var jfile in require.cache) {
-                        if (jfile.indexOf("TestServerreport") > -1)
-                            jfile = jfile;
-                        if (jfile.replaceAll("\\", "/").indexOf("/" + modul + "/remote/") > -1 ||
-                            (fromServerdirectory && jfile.replaceAll("\\", "/").replaceAll("$serverside/", "").
-                                endsWith("/js/" + fileName.replaceAll("$serverside/", "").replace(".ts", ".js")))) {
-                            //save Modules
-                            var p = jfile.substring(root.length).replaceAll("\\", "/");
-                            if (jfile.indexOf("node_modules") > -1) { //jassi modules
-                                p = jfile.split("node_modules")[1].substring(1).replaceAll("\\", "/");
-                                ;
-                            }
-                            p = p.substring(0, p.length - 3);
-                            //console.log(jfile+"->"+p);
-                            if (Filesystem_1.allModules[p] === undefined) {
-                                Filesystem_1.allModules[p] = [];
-                            }
-                            //save all modules
-                            var mod = await Promise.resolve().then(() => require.main.require(p));
-                            if (Filesystem_1.allModules[p].indexOf(mod) === -1)
-                                Filesystem_1.allModules[p].push(mod);
-                            jfiles.push(jfile);
-                        }
-                    }
-                }
-                for (let k = 0; k < jfiles.length; k++) {
-                    let jfile = jfiles[k];
-                    if (require.cache[jfile].exports.doNotReloadModule) {
-                    }
-                    else
-                        delete require.cache[jfile];
-                }
-                if (Serverservice_1.runningServerservices["db"]) {
-                    (await Serverservice_1.serverservices.db).renewConnection();
-                }
+                remoteFiles.push(fileName.substring(0, fileName.length - 3));
                 // }
             }
         }
         ;
         try {
-            for (var key in Filesystem_1.allModules) { //load and migrate modules
-                var all = Filesystem_1.allModules[key];
-                var mod = await Promise.resolve().then(() => require.main.require(key));
-                for (var a = 0; a < all.length; a++) {
-                    for (key in mod) {
-                        all[a][key] = mod[key];
+            if (remotecodeincluded) {
+                await (0, NativeAdapter_1.reloadJSAll)(remoteFiles, async () => {
+                    if (Serverservice_1.runningServerservices["db"]) {
+                        (await Serverservice_1.serverservices.db).renewConnection();
                     }
-                }
+                });
             }
         }
         catch (err) {

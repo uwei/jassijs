@@ -8,6 +8,13 @@
 		"demo": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/demo.js",
 		"tests":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/tests.js"
 	},
+	"server": {
+		"modules": {
+			"jassijs": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassijs.js?version=newest",
+			"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js?version=newest",
+			"tests":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/tests.js"
+		}
+	},
 	"require": {
 		"paths": {
 			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js",

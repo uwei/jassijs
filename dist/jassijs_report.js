@@ -5944,7 +5944,7 @@ define("jassijs_report/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1680803515410,
+                "date": 1680803515410.1963,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -5955,14 +5955,14 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1655329710000
             },
             "jassijs_report/pdfMake-interface.ts": {
-                "date": 1681513961981
+                "date": 1681513961981.488
             },
             "jassijs_report/PDFReport.ts": {
                 "date": 1655556866000,
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
-                "date": 1681513899603,
+                "date": 1681513899602.687,
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
@@ -6131,7 +6131,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-                "date": 1681571019401,
+                "date": 1681571019401.4517,
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -6220,10 +6220,10 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassi_report.SimpleReportEditor": {}
             },
             "jassijs_report/StartReporteditor.ts": {
-                "date": 1681570913030
+                "date": 1681570913030.2517
             },
             "jassijs_report/TemplateReport.ts": {
-                "date": 1681570098047,
+                "date": 1681570098047.462,
                 "jassijs_report.TemplateReport": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -6277,7 +6277,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/remote/ServerReport.ts": {
-                "date": 1681315929902,
+                "date": 1681315929902.2598,
                 "jassijs_report.remote.ServerReport": {
                     "@members": {
                         "getDesign": {
@@ -6308,7 +6308,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportViewer.ts": {
-                "date": 1681571041227,
+                "date": 1681571041226.5884,
                 "jassijs_report/ReportViewer": {}
             },
             "jassijs_report/ext/Pdfjs.ts": {

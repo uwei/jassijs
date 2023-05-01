@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs_editor/util/Typescript"], function (require, exports, Classes_1, Serverservice_1) {
+define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_1, Config_1, Serverservice_1, NativeAdapter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -47,7 +47,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverse
                     var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
                     if (dat !== entry.date) {
                         var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
-                        var sourceFile = ts.createSourceFile('hallo.ts', text, ts.ScriptTarget.ES5, true);
+                        var sourceFile = NativeAdapter_1.ts.createSourceFile('hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true);
                         var outDecorations = [];
                         entry = {};
                         entry.date = undefined;
@@ -76,7 +76,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverse
                 await this.writeFile(path + "/registry.js", text);
             }
             else { //write server
-                var modules = JSON.parse(await this.readFile("./jassijs.json")).modules;
+                var modules = Config_1.config.server.modules;
                 for (let smodul in modules) {
                     if (modul === smodul) {
                         var text = JSON.stringify(index, undefined, "\t");
@@ -98,7 +98,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverse
         convertArgument(arg) {
             if (arg === undefined)
                 return undefined;
-            if (arg.kind === ts.SyntaxKind.ObjectLiteralExpression) {
+            if (arg.kind === NativeAdapter_1.ts.SyntaxKind.ObjectLiteralExpression) {
                 var ret = {};
                 var props = arg.properties;
                 if (props !== undefined) {
@@ -108,29 +108,29 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverse
                 }
                 return ret;
             }
-            else if (arg.kind === ts.SyntaxKind.StringLiteral) {
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.StringLiteral) {
                 return arg.text;
             }
-            else if (arg.kind === ts.SyntaxKind.ArrayLiteralExpression) {
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.ArrayLiteralExpression) {
                 let ret = [];
                 for (var p = 0; p < arg.elements.length; p++) {
                     ret.push(this.convertArgument(arg.elements[p]));
                 }
                 return ret;
             }
-            else if (arg.kind === ts.SyntaxKind.Identifier) {
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.Identifier) {
                 return arg.text;
             }
-            else if (arg.kind === ts.SyntaxKind.TrueKeyword) {
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.TrueKeyword) {
                 return true;
             }
-            else if (arg.kind === ts.SyntaxKind.FalseKeyword) {
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.FalseKeyword) {
                 return false;
             }
-            else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.NumericLiteral) {
                 return Number(arg.text);
             }
-            else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.ArrowFunction || arg.kind === NativeAdapter_1.ts.SyntaxKind.FunctionExpression) {
                 return "function";
             }
             throw new Classes_1.JassiError("Error typ not found");
@@ -138,7 +138,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Serverse
         collectAnnotations(node, outDecorations, depth = 0) {
             var _a;
             //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
-            if (node.kind === ts.SyntaxKind.ClassDeclaration) {
+            if (node.kind === NativeAdapter_1.ts.SyntaxKind.ClassDeclaration) {
                 if (node.decorators !== undefined) {
                     var dec = {};
                     var sclass = undefined;

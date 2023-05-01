@@ -98,6 +98,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 }
                 catch (err) {
                     console.log("DB corrupt - revert the last change");
+                    console.error(err1);
                     console.error(err);
                     _instance = undefined;
                     _initrunning = undefined;

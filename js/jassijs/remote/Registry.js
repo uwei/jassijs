@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.migrateModul = exports.Registry = exports.$register = exports.$Class = void 0;
 require("reflect-metadata");
+const Config_1 = require("./Config");
 function $Class(longclassname) {
     return function (pclass) {
         registry.register("$Class", pclass, longclassname);
@@ -229,10 +230,10 @@ class Registry {
         var modultext = "";
         //@ts-ignore
         if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
-            //@ts-ignore
+            //@ts-ignore 
             var fs = await Promise.resolve().then(() => require('fs'));
-            modultext = fs.readFileSync("./jassijs.json", 'utf-8');
-            var modules = JSON.parse(modultext).modules;
+            var Filesystem = await Promise.resolve().then(() => require("jassijs/server/Filesystem"));
+            var modules = Config_1.config.server.modules;
             for (let modul in modules) {
                 try {
                     try {
@@ -258,17 +259,18 @@ class Registry {
         }
         else { //on client
             var all = {};
-            var mod = JSON.parse(await (this.loadText("jassijs.json")));
-            var modules = mod.modules;
-            var myrequire = require;
-            /*if(require.defined("jassijs_localserver/remote/Installserver")){
-                myrequire=window["serverRequire"];
-                modules=mod.servermodules;
-            }*/
+            var modules = Config_1.config.modules;
+            var myrequire;
+            if (require.defined("jassijs/server/Installserver")) {
+                myrequire = Config_1.config.serverrequire;
+                modules = Config_1.config.server.modules;
+            }
+            else {
+                myrequire = Config_1.config.clientrequire;
+            }
             for (let modul in modules) {
                 if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
-                    //@ts-ignore
-                    requirejs.undef(modul + "/registry");
+                    myrequire.undef(modul + "/registry");
                 {
                     var m = modul;
                     all[modul] = new Promise((resolve, reject) => {

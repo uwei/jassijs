@@ -10,6 +10,7 @@ import sourceMap from "jassijs/ext/sourcemap";
 
 import { Server } from "jassijs/remote/Server";
 import { $Class } from "jassijs/remote/Registry";
+import { config } from "jassijs/remote/Config";
 //var sourceMap=window["sourceMap"];
 @$Class("jassijs_editor.util.TSSourceMap")
 export class TSSourceMap {
@@ -24,7 +25,7 @@ export class TSSourceMap {
         var jsfilename;
         if (Server.filesInMap && Server.filesInMap[tsfile]) {
             var mod = Server.filesInMap[tsfile].modul;
-            jsfilename = jassijs.modules[mod];
+            jsfilename = config.modules[mod];
             var mapname = jsfilename.split("").reverse().join("").replace("sj.", "pam.sj.").split("").reverse().join("").split("?")[0];
            
             mapcode = await this.getCode(mapname);//await $.ajax({ url: jsfilename+".map", dataType: "text" });

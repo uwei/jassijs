@@ -63,7 +63,6 @@ export class Jassi {
     //  public classes:Classes=undefined;
     [key: string]: any;
     base: { [k: string]: any };
-    public modules: { [key: string]: string };
     public options: any;
     isServer: boolean = false;
     cssFiles:{[key:string]:string};

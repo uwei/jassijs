@@ -42,7 +42,7 @@ export class Classes {
             try {
                 //@ts-ignore
                 if (require.main) {//nodes load project class from module
-                    //@ts-ignore
+                    //@ts-ignore 
                     await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                 } else {
                     await import(classname.replaceAll(".", "/"));
@@ -58,9 +58,9 @@ export class Classes {
             var file = cl[0].filename;
             //@ts-ignore
             if (window.document === undefined) {
-                var pack = file.split("/");
-                if (pack.length < 2 || pack[1] !== "remote") {
-                    throw new JassiError("failed loadClass " + classname + " on server only remote classes coud be loaded");
+                var pack = file.split("/"); 
+                if (pack.length < 2 || pack[1] === "server") {
+                   // throw new JassiError("Server classes could not be loaded: " + classname );
                 }
             }
             //@ts-ignore

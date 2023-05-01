@@ -4,25 +4,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs/server/Filesystem", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, Registry_1, typeorm_1, Filesystem_1, Reloader_1, Registry_2, Serverservice_1) {
+define(["require", "exports", "jassijs/remote/Registry", "typeorm", "./NativeAdapter"], function (require, exports, Registry_1, typeorm_1, NativeAdapter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
     //listener for code changes
-    Reloader_1.Reloader.instance.addEventCodeReloaded(async function (files) {
-        var dbobjects = await Registry_2.default.getJSONData("$DBObject");
+    /*Reloader.instance.addEventCodeReloaded(async function (files: string[]) {
+        var dbobjects = await registry.getJSONData("$DBObject");
         var reload = false;
         for (var x = 0; x < files.length; x++) {
             var file = files[x];
             dbobjects.forEach((data) => {
-                if (data.filename === file + ".ts")
+                if (data.filename === file+".ts")
                     reload = true;
             });
         }
-        if (reload) {
-            (await Serverservice_1.serverservices.db).renewConnection();
+        if(reload){
+            (await serverservices.db).renewConnection();
         }
-    });
+    });*/
     let TypeORMListener = class TypeORMListener {
         saveDB(event) {
             if (this.savetimer) {
@@ -31,7 +31,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs/ser
             }
             this.savetimer = setTimeout(() => {
                 var data = event.connection.driver.export();
-                new Filesystem_1.default().saveFile("__default.db", data);
+                NativeAdapter_1.myfs.writeFile("./client/__default.db", data);
                 console.log("save DB");
             }, 300);
         }

@@ -5,8 +5,9 @@ import { ParentRight } from "jassijs/remote/security/ParentRight";
 import { User } from "jassijs/remote/security/User";
 import { Right } from "jassijs/remote/security/Right";
 import { ValidateIsArray, ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
+import { config } from "../Config";
 
-
+var hh=config;
 
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 @$DBObject({name:"jassijs_group"})

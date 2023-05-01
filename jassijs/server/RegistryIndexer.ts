@@ -1,46 +1,57 @@
-import { Indexer } from "./Indexer";
-import fs = require('fs');
+//synchronize-server-client
+import { Indexer } from "jassijs/server/Indexer";
 import { serverservices } from "jassijs/remote/Serverservice";
+import { exists, myfs } from "jassijs/server//NativeAdapter";
+import { config } from "jassijs/remote/Config";
 
 
 export class ServerIndexer extends Indexer {
     public async updateRegistry() {
         //client modules
-        var path=(await serverservices.filesystem).path
-        var data = fs.readFileSync(path + "/jassijs.json", 'utf-8');
-        var modules = JSON.parse(data).modules;
+        var path = (await serverservices.filesystem).path
+        var modules = config.modules;
         for (var m in modules) {
-            if (fs.existsSync(path+"/"+modules[m])&& !modules[m].endsWith(".js") && modules[m].indexOf(".js?") === -1) //.js are internet modules
+            if ((await exists(path + "/" + modules[m]) && !modules[m].endsWith(".js") && modules[m].indexOf(".js?")) === -1) //.js are internet modules
                 await this.updateModul(path, m, false);
-        } 
+        }
         //server modules
-        data = fs.readFileSync("./jassijs.json", 'utf-8');
-        var modules = JSON.parse(data).modules;
+        modules = config.server.modules;
         for (var m in modules) {
-            if (fs.existsSync("./"+modules[m])&&!modules[m].endsWith(".js")) //.js are internet modules
+            if (await exists("./" + modules[m]) && !modules[m].endsWith(".js")) //.js are internet modules
                 await this.updateModul(".", m, true);
         }
         return;
     }
-    async dirFiles(modul:string,path: string, extensions: string[], ignore: string[] = []): Promise<string[]> {
-        var jsFiles: string[] =await (await  serverservices.filesystem).dirFiles(path, extensions, ignore);
+    async dirFiles(modul: string, path: string, extensions: string[], ignore: string[] = []): Promise<string[]> {
+       
+        var jsFiles: string[] = await (await serverservices.filesystem).dirFiles(path, extensions, ignore);
         return jsFiles;
     }
-    async writeFile(name:string,content:string){
-        fs.writeFileSync(name, content);
+    async writeFile(name: string, content: string) {
+        if (!name.startsWith("./"))
+            name = "./"+name ;
+        await myfs.writeFile(name, content);
     }
-    async createDirectory(name:string){
-        fs.mkdirSync(name);
+    async createDirectory(name: string) {
+        if (!name.startsWith("./"))
+        name = "./"+name ;
+        await myfs.mkdir(name, { recursive: true });
         return;
-    } 
-    async getFileTime(filename):Promise<number>{
-        var stats = fs.statSync(filename);
-        return stats.mtime.getTime();
     }
-    async fileExists(filename):Promise<boolean>{
-        return fs.existsSync(filename);
+    async getFileTime(filename): Promise<number> {
+        if (!filename.startsWith("./"))
+        filename = "./"+filename ;
+        var stats = await myfs.stat(filename);
+        return stats.mtimeMs;
     }
-    async readFile(filename):Promise<any>{
-        return fs.readFileSync(filename, 'utf-8');
+    async fileExists(filename): Promise<boolean> {
+        if (!filename.startsWith("./"))
+        filename = "./"+filename ;
+        return await exists(filename);
+    }
+    async readFile(filename): Promise<any> {
+        if (!filename.startsWith("./"))
+        filename = "./"+filename ;
+        return myfs.readFile(filename, 'utf-8');
     }
 }

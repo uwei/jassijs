@@ -13,6 +13,7 @@ import { MenuItem } from "jassijs/ui/MenuItem";
 import { ContextMenu } from "jassijs/ui/ContextMenu";
 import { CSSProperties } from "jassijs/ui/CSSProperties";
 import windows from "jassijs/base/Windows";
+import { config } from "jassijs/remote/Config";
 //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
 @$ActionProvider("jassijs.remote.FileNode")
 @$Class("jassijs_editor.ui.FileActions")
@@ -38,10 +39,10 @@ export class FileActions {
         }
         //console.log("create " + fileName);
         var key = FileExplorer.instance?.tree?.getKeyFromItem(all[0]);
-        var newfile = path + "/" + fileName;
+        var newfile = path + (path===""?"":"/") + fileName;
 
         var ret = await new Server().createFile(newfile, code);
-        var newkey = path + "|" + fileName;
+        var newkey = path + (path===""?"":"|")+ fileName;
         if (ret !== "") {
             alert(ret);
             return;
@@ -64,7 +65,7 @@ export class FileActions {
     static async download(all: FileNode[]) {
 
         var path = all[0].fullpath;
-        var byteCharacters = atob(await new Server().zip(path));
+        var byteCharacters = atob(<string>await new Server().zip(path));
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
             byteNumbers[i] = byteCharacters.charCodeAt(i);
@@ -99,9 +100,9 @@ export class FileActions {
         if (res.button === "ok" && res.text !== all[0].name) {
            // console.log("create Folder" + res.text);
             var key = FileExplorer.instance?.tree.getKeyFromItem(all[0]);
-            var newfile = path + "/" + res.text;
+            var newfile = path + (path===""?"":"/") + res.text;
             var ret = await new Server().createFolder(newfile);
-            var newkey = path + "|" + res.text;
+            var newkey = path + (path===""?"":"|") + res.text;
             if (ret !== "") {
                 alert(ret);
                 return;
@@ -125,19 +126,19 @@ export class FileActions {
         var res = await OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
         if (res.button === "ok" && res.text !== all[0].name) {
             var smodule = res.text.toLocaleLowerCase();
-            if (jassijs.modules[smodule]) {
+            if (config.modules[smodule]) {
                 alert("modul allready exists");
                 return;
             }
             var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
 
             var ret = await new Server().createModule(smodule);
-            var newkey = path + "|" + smodule;
+            var newkey = path + (path===""?"":"|") + smodule;
             if (ret !== "") {
                 alert(ret);
                 return;
             } else {
-                jassijs.modules[smodule] = smodule;
+                config.modules[smodule] = smodule;
             }
             await FileExplorer.instance.refresh();
             FileExplorer.instance.tree.activateKey(newkey);
@@ -179,7 +180,7 @@ export class FileActions {
                 //console.log("rename " + all[0].name + " to " + res.text);
                 var key = FileExplorer.instance?.tree.getKeyFromItem(all[0]);
                 var path = all[0].parent !== undefined ? all[0].parent.fullpath : "";
-                var newfile = path + "/" + res.text;
+                var newfile = path + (path===""?"":"/") + res.text;
                 var ret = await new Server().rename(all[0].fullpath, newfile);
                 var newkey = key?.replace(all[0].name, res.text);
                 if (ret !== "") {
@@ -265,7 +266,7 @@ export class FileExplorer extends Panel {
         //flag modules
         for (let x = 0; x < root.files.length; x++) {
 
-            if (jassijs.modules[root.files[x].name] !== undefined) {
+            if (config.modules[root.files[x].name] !== undefined) {
                 root.files[x].flag = (root.files[x].flag?.length > 0) ? "module" : root.files[x].flag + " module";
             }
         }

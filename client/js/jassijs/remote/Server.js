@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes", "./Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_1, RemoteObject_1, FileNode_1, Classes_1, Serverservice_1, Validator_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes", "./Serverservice", "jassijs/remote/Validator", "./Config"], function (require, exports, Registry_1, RemoteObject_1, FileNode_1, Classes_1, Serverservice_1, Validator_1, Config_1) {
     "use strict";
     var Server_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -37,15 +37,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             if (Server_1.filesInMap)
                 return;
             var ret = {};
-            for (var mod in jassijs.modules) {
+            for (var mod in Config_1.config.modules) {
                 if ((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
                     if (((_d = (_c = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
                         continue;
                 }
-                if (jassijs.modules[mod].endsWith(".js") || jassijs.modules[mod].indexOf(".js?") > -1) {
-                    let mapname = jassijs.modules[mod].split("?")[0] + ".map";
-                    if (jassijs.modules[mod].indexOf(".js?") > -1)
-                        mapname = mapname + "?" + jassijs.modules[mod].split("?")[1];
+                if (Config_1.config.modules[mod].endsWith(".js") || Config_1.config.modules[mod].indexOf(".js?") > -1) {
+                    let mapname = Config_1.config.modules[mod].split("?")[0] + ".map";
+                    if (Config_1.config.modules[mod].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + Config_1.config.modules[mod].split("?")[1];
                     var code = await $.ajax({ url: mapname, dataType: "text" });
                     var data = JSON.parse(code);
                     var files = data.sources;
@@ -161,9 +161,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                     }
                     else {
                         var found = Server_1.filesInMap[fileName];
-                        let mapname = jassijs.modules[found.modul].split("?")[0] + ".map";
-                        if (jassijs.modules[found.modul].indexOf(".js?") > -1)
-                            mapname = mapname + "?" + jassijs.modules[found.modul].split("?")[1];
+                        let mapname = Config_1.config.modules[found.modul].split("?")[0] + ".map";
+                        if (Config_1.config.modules[found.modul].indexOf(".js?") > -1)
+                            mapname = mapname + "?" + Config_1.config.modules[found.modul].split("?")[1];
                         var code = await this.loadFile(mapname, context);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;

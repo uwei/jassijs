@@ -2,9 +2,8 @@
 //import ts = require('typescript');
 import * as ts from "typescript";
 import fs = require('fs');
-import { file } from "jszip";
 import { JassiError } from "jassijs/remote/Classes";
-import Filesystem from "./Filesystem";
+import Filesystem from "jassijs/server/Filesystem";
 var rpath = require('path')
 
 //var chokidar = require('chokidar');
@@ -28,6 +27,7 @@ export class Compile {
   constructor() {
 
   }
+  /*
   test(response) {
     const host: ts.ParseConfigFileHost = ts.sys as any;
     // Fix after https://github.com/Microsoft/TypeScript/issues/18217
@@ -35,15 +35,7 @@ export class Compile {
     const parsedCmd = ts.getParsedCommandLineOfConfigFile(path + "/tsconfig.json", undefined, host);
     const { options, fileNames } = parsedCmd;
     var data = this.compile([path + "/jassijs/base/Registry.ts"], options);
-    /* {
-        baseUrl: "./../public_html",
-        noEmitOnError: true,
-        noImplicitAny: true,
-        sourceMap:true,
-        lib: ["lib.es2015.d.ts"],
-        target: ts.ScriptTarget.ESNext,
-        module: ts.ModuleKind.CommonJS
-      });*/
+   
     response.send(data);
   }
   compile(fileNames: string[], options: ts.CompilerOptions): string[] {
@@ -85,7 +77,7 @@ export class Compile {
 
   runWatcher() {
     const configPath = ts.findConfigFile(
-      path + "/",/*searchPath*/ //"./",
+      path + "/",
       ts.sys.fileExists,
       "tsconfig.json"
     );
@@ -168,8 +160,8 @@ export class Compile {
       //console.info(Compile.lastModifiedTSFiles);
     }
     console.info(s);
-  }
-  transpile(fileName: string,inServerdirectory:boolean=undefined) {
+  }*/
+  async transpile(fileName: string,inServerdirectory:boolean=undefined) {
     let spath = fileName.split("/");
     if (!inServerdirectory&&spath.length < 2 && spath[1] !== "remote") {
       throw new JassiError("fileName must startswith remote");

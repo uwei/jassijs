@@ -1,10 +1,11 @@
 import { beforeServiceLoad, serverservices } from "jassijs/remote/Serverservice";
 import { messageReceived } from "./LocalProtocol";
-
+import { config } from "jassijs/remote/Config";
+import { FS } from "./FS";
 //
 
- 
-var load=serverservices;
+
+var load = serverservices;
 //throw new Error("Kkk"); 
 navigator.serviceWorker.controller.postMessage({
     type: 'ACTIVATE_REMOTEPROTCOL'
@@ -12,35 +13,34 @@ navigator.serviceWorker.controller.postMessage({
 navigator.serviceWorker.addEventListener("message", (evt) => {
     var _a;
     if (((_a = evt.data) === null || _a === void 0 ? void 0 : _a.type) === "REQUEST_REMOTEPROTCOL") {
-       
+
         messageReceived(evt);
-       
-       
+
+
     }
 });
 beforeServiceLoad(async (name, service) => {
     if (name === "db") {
-        var man=(await import("jassijs/server/DBManagerExt"))
+        var man = (await import("jassijs/server/DBManagerExt"))
         man.extendDBManager();
     }
 });
-var ret={
-    //search for file in local-DB and undefine this files 
-    //so this files could be loaded from local-DB
-    autostart: async function () {
-        var Filesystem=(await import("jassijs/server/Filesystem")).default;
-        var files = await new Filesystem().dirFiles("", ["js", "ts"]);
-        files.forEach((fname) => {
-            if (!fname.startsWith("js/")) {
-                var name = fname.substring(0, fname.length - 3);
-                requirejs.undef(name);
-            }
-
-        });
+var autostart = async function () {
+    var files = await new FS().readdir("./client");
+    for (var x = 0; x < files.length; x++) {
+        var fname = files[x];
+        fname = fname.replace("./client/", "");
+        if (!fname.startsWith("./client/js/")) {
+            var name = fname.substring(0, fname.length - 3);
+            config.serverrequire.undef(name);
+        }
     }
 }
-export default {ret};
-requirejs.undef("jassijs/util/DatabaseSchema");
+
+
+
+export { autostart };
+config.serverrequire.undef("jassijs/util/DatabaseSchema");
 
 define("jassijs/util/DatabaseSchema", ["jassijs/server/DatabaseSchema"], function (to) {
     return to;

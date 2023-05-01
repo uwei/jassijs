@@ -1475,7 +1475,7 @@ define("demo/registry", ["require"], function (require) {
     return {
         default: {
             "demo/DelTest.ts": {
-                "date": 1681563012791
+                "date": 1681563012791.259
             },
             "demo/Dialog.ts": {
                 "date": 1655851716000,
@@ -1493,7 +1493,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1634240084000
             },
             "demo/MemoryTest.ts": {
-                "date": 1681590022384
+                "date": 1681590022384.015
             },
             "demo/modul.ts": {
                 "date": 1612818334000
@@ -1505,22 +1505,22 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1656018452000
             },
             "demo/ReportInvoice.ts": {
-                "date": 1681590033017,
+                "date": 1681590033016.9358,
                 "demo.ReportInvoice": {}
             },
             "demo/ReportInvoice2.ts": {
-                "date": 1681590037724,
+                "date": 1681590037723.6914,
                 "demo.ReportInvoice": {}
             },
             "demo/ReportStyle.ts": {
-                "date": 1681590042799
+                "date": 1681590042799.431
             },
             "demo/StyleDialog.ts": {
                 "date": 1655556794000,
                 "demo/StyleDialog": {}
             },
             "demo/TableContextmenu.ts": {
-                "date": 1681590827947
+                "date": 1681590827947.2778
             },
             "demo/TestComponent.ts": {
                 "date": 1655843270000,
@@ -1541,16 +1541,16 @@ define("demo/registry", ["require"], function (require) {
                 "demo.Testcontextmenu": {}
             },
             "demo/Testdatatable.ts": {
-                "date": 1681590287285
+                "date": 1681590287285.2383
             },
             "demo/Testdatatable1.ts": {
-                "date": 1681590296071
+                "date": 1681590296070.9636
             },
             "demo/Testdatatable2.ts": {
-                "date": 1681590305213
+                "date": 1681590305213.099
             },
             "demo/Testdatatable3.ts": {
-                "date": 1681590312664
+                "date": 1681590312663.8284
             },
             "demo/TestImage.ts": {
                 "date": 1633792454000
@@ -1563,7 +1563,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo.Testmenu": {}
             },
             "demo/Testtable.ts": {
-                "date": 1681590320377
+                "date": 1681590320376.6711
             },
             "demo/TestTree.ts": {
                 "date": 1655843318000,
@@ -1577,11 +1577,11 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1634384688000
             },
             "demo/TreeTable.ts": {
-                "date": 1681590899858,
+                "date": 1681590899857.6982,
                 "demo.TreeTable": {}
             },
             "demo/TestProTable.ts": {
-                "date": 1681563005344
+                "date": 1681563005343.9316
             },
             "demo/_test1.ts": {
                 "date": 1670673960000

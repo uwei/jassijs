@@ -20,6 +20,7 @@ const FileNode_1 = require("jassijs/remote/FileNode");
 const Classes_1 = require("./Classes");
 const Serverservice_1 = require("./Serverservice");
 const Validator_1 = require("jassijs/remote/Validator");
+const Config_1 = require("./Config");
 let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     constructor() {
         super();
@@ -42,15 +43,15 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         if (Server_1.filesInMap)
             return;
         var ret = {};
-        for (var mod in jassijs.modules) {
+        for (var mod in Config_1.config.modules) {
             if ((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
                 if (((_d = (_c = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
                     continue;
             }
-            if (jassijs.modules[mod].endsWith(".js") || jassijs.modules[mod].indexOf(".js?") > -1) {
-                let mapname = jassijs.modules[mod].split("?")[0] + ".map";
-                if (jassijs.modules[mod].indexOf(".js?") > -1)
-                    mapname = mapname + "?" + jassijs.modules[mod].split("?")[1];
+            if (Config_1.config.modules[mod].endsWith(".js") || Config_1.config.modules[mod].indexOf(".js?") > -1) {
+                let mapname = Config_1.config.modules[mod].split("?")[0] + ".map";
+                if (Config_1.config.modules[mod].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + Config_1.config.modules[mod].split("?")[1];
                 var code = await $.ajax({ url: mapname, dataType: "text" });
                 var data = JSON.parse(code);
                 var files = data.sources;
@@ -166,9 +167,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                 }
                 else {
                     var found = Server_1.filesInMap[fileName];
-                    let mapname = jassijs.modules[found.modul].split("?")[0] + ".map";
-                    if (jassijs.modules[found.modul].indexOf(".js?") > -1)
-                        mapname = mapname + "?" + jassijs.modules[found.modul].split("?")[1];
+                    let mapname = Config_1.config.modules[found.modul].split("?")[0] + ".map";
+                    if (Config_1.config.modules[found.modul].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + Config_1.config.modules[found.modul].split("?")[1];
                     var code = await this.loadFile(mapname, context);
                     var data = JSON.parse(code).sourcesContent[found.id];
                     return data;

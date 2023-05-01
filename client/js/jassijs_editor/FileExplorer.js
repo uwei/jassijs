@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Registry_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, ContextMenu_1, Windows_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows", "jassijs/remote/Config"], function (require, exports, Registry_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, ContextMenu_1, Windows_1, Config_1) {
     "use strict";
     var FileExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -29,9 +29,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
             }
             //console.log("create " + fileName);
             var key = (_b = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree) === null || _b === void 0 ? void 0 : _b.getKeyFromItem(all[0]);
-            var newfile = path + "/" + fileName;
+            var newfile = path + (path === "" ? "" : "/") + fileName;
             var ret = await new Server_1.Server().createFile(newfile, code);
-            var newkey = path + "|" + fileName;
+            var newkey = path + (path === "" ? "" : "|") + fileName;
             if (ret !== "") {
                 alert(ret);
                 return;
@@ -77,9 +77,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
             if (res.button === "ok" && res.text !== all[0].name) {
                 // console.log("create Folder" + res.text);
                 var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
-                var newfile = path + "/" + res.text;
+                var newfile = path + (path === "" ? "" : "/") + res.text;
                 var ret = await new Server_1.Server().createFolder(newfile);
-                var newkey = path + "|" + res.text;
+                var newkey = path + (path === "" ? "" : "|") + res.text;
                 if (ret !== "") {
                     alert(ret);
                     return;
@@ -95,19 +95,19 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
             var res = await OptionDialog_1.OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
             if (res.button === "ok" && res.text !== all[0].name) {
                 var smodule = res.text.toLocaleLowerCase();
-                if (jassijs.modules[smodule]) {
+                if (Config_1.config.modules[smodule]) {
                     alert("modul allready exists");
                     return;
                 }
                 var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
                 var ret = await new Server_1.Server().createModule(smodule);
-                var newkey = path + "|" + smodule;
+                var newkey = path + (path === "" ? "" : "|") + smodule;
                 if (ret !== "") {
                     alert(ret);
                     return;
                 }
                 else {
-                    jassijs.modules[smodule] = smodule;
+                    Config_1.config.modules[smodule] = smodule;
                 }
                 await FileExplorer.instance.refresh();
                 FileExplorer.instance.tree.activateKey(newkey);
@@ -149,7 +149,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
                     //console.log("rename " + all[0].name + " to " + res.text);
                     var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
                     var path = all[0].parent !== undefined ? all[0].parent.fullpath : "";
-                    var newfile = path + "/" + res.text;
+                    var newfile = path + (path === "" ? "" : "/") + res.text;
                     var ret = await new Server_1.Server().rename(all[0].fullpath, newfile);
                     var newkey = key === null || key === void 0 ? void 0 : key.replace(all[0].name, res.text);
                     if (ret !== "") {
@@ -295,7 +295,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
             root.name = "client";
             //flag modules
             for (let x = 0; x < root.files.length; x++) {
-                if (jassijs.modules[root.files[x].name] !== undefined) {
+                if (Config_1.config.modules[root.files[x].name] !== undefined) {
                     root.files[x].flag = (((_a = root.files[x].flag) === null || _a === void 0 ? void 0 : _a.length) > 0) ? "module" : root.files[x].flag + " module";
                 }
             }

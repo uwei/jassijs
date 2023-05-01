@@ -1,5 +1,6 @@
 
 import "reflect-metadata";
+import { config } from "./Config";
 
 
 
@@ -259,12 +260,11 @@ export class Registry {
         var modultext = "";
         //@ts-ignore
         if (window?.document === undefined) { //on server
-
-            //@ts-ignore
+  
+            //@ts-ignore 
             var fs = await import('fs');
- 
-            modultext = fs.readFileSync("./jassijs.json", 'utf-8');
-            var modules = JSON.parse(modultext).modules;
+            var Filesystem=await import("jassijs/server/Filesystem");
+            var modules = config.server.modules;
             for (let modul in modules) {
                 try {
 
@@ -292,17 +292,17 @@ export class Registry {
 
         } else { //on client
             var all = {};
-            var mod = JSON.parse(await (this.loadText("jassijs.json")));
-            var modules=mod.modules;
-            var myrequire=require;
-            /*if(require.defined("jassijs_localserver/remote/Installserver")){
-                myrequire=window["serverRequire"];
-                modules=mod.servermodules;
-            }*/
+            var modules=config.modules;
+            var myrequire;
+            if(require.defined("jassijs/server/Installserver")){
+                myrequire=<any>config.serverrequire;
+                modules=config.server.modules;
+            }else{
+                myrequire=<any>config.clientrequire;
+            }
             for (let modul in modules) {
                 if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
-                    //@ts-ignore
-                    requirejs.undef(modul + "/registry");
+                    myrequire.undef(modul + "/registry");
                 {
                     var m = modul;
                     all[modul] = new Promise((resolve, reject) => {

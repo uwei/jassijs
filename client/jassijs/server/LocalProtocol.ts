@@ -3,13 +3,15 @@ import { Context } from "jassijs/remote/RemoteObject";
 import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
 import { Server } from "jassijs/remote/Server";
 import { serverservices } from "jassijs/remote/Serverservice";
-import { Cookies } from "jassijs/util/Cookies";
+//@ts-ignore
+import  {getJSON} from "js-cookie";
 import { remoteProtocol } from "jassijs/server/DoRemoteProtocol";
 
 
 export async function messageReceived(param) {
+
     var config = param.data;
-    var cookies = Cookies.getJSON();
+    var cookies = getJSON();
     var myRequest = {
         cookies,
         rawBody:JSON.stringify(config.data),

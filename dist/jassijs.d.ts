@@ -62,17 +62,309 @@ declare module "jassijs/modul" {
                 tinymcelib: string;
                 'tabulator-tables': string;
                 "reflect-metadata": string;
-                jszip: string;
-                "js-sql-parser": string;
-                typeorm: string;
-                typeormbrowser: string;
-                "window.SQL": string;
-                "jassijs/util/DatabaseSchema": string;
             };
         };
-        loadbeforestart: string[];
+        server: {
+            require: {
+                shim: {};
+                paths: {
+                    'js-cookie': string;
+                    "reflect-metadata": string;
+                    jszip: string;
+                    "js-sql-parser": string;
+                    typeorm: string;
+                    typeormbrowser: string;
+                    "window.SQL": string;
+                };
+            };
+            loadbeforestart: string[];
+        };
     };
     export default _default;
+}
+declare module "jassijs/remote/Classes" {
+    export class JassiError extends Error {
+        constructor(msg: string);
+    }
+    /**
+    * manage all registered classes ->jassijs.register("classes")
+    * @class jassijs.base.Classes
+    */
+    export class Classes {
+        private _cache;
+        private funcRegister;
+        constructor();
+        destroy(): void;
+        /**
+         * load the a class
+         * @param classname - the class to load
+         */
+        loadClass(classname: string): Promise<new (...args: any[]) => any>;
+        /**
+        * get the class of the given classname
+        * @param {string} - the classname
+        * @returns {class} - the class
+        */
+        getClass(classname: string): new (...args: any[]) => any;
+        /**
+        * get the name of the given class
+        * @param {class} _class - the class (prototype)
+        * @returns {string} name of the class
+        */
+        getClassName(_class: any): string;
+        register(data: new (...args: any[]) => any, name: string): void;
+    }
+    let classes: Classes;
+    export { classes };
+    export function test(t: any): Promise<void>;
+}
+declare module "jassijs/remote/Test" {
+    export class Test {
+        /**
+         * fails if the condition is false
+         * @parameter condition
+         **/
+        expectEqual(condition: boolean): void;
+        /**
+         * fails if the func does not throw an error
+         * @parameter func - the function that should failed
+         **/
+        expectError(func: any): void;
+        /**
+        * fails if the func does not throw an error
+        * @parameter func - the function that should failed
+        **/
+        expectErrorAsync(func: any): Promise<void>;
+    }
+}
+declare module "jassijs/util/Reloader" {
+    export class Reloader {
+        static cache: any[];
+        static reloadCodeFromServerIsRunning: boolean;
+        static instance: Reloader;
+        listener: any[];
+        /**
+         * reloads Code
+         */
+        private constructor();
+        /**
+         * check code changes out of the browser if localhost and load the changes in to the browser
+         */
+        static startReloadCodeFromServer(): void;
+        /**
+         * listener for code reloaded
+         * @param {function} func - callfunction for the event
+         */
+        addEventCodeReloaded(func: any): void;
+        removeEventCodeReloaded(func: any): void;
+        private _findScript;
+        reloadJS(fileName: string): Promise<void>;
+        reloadJSAll(fileNames: string[], afterUnload?: () => {}): Promise<void>;
+        migrateModul(allModules: any, file: any, modul: any): void;
+        migrateClasses(file: any, oldmodul: any, modul: any): void;
+    }
+}
+declare module "jassijs/server/FS" {
+    class Stats {
+        mtimeMs: number;
+        isDirectory: () => boolean;
+    }
+    export class FS {
+        private static db;
+        private static getDB;
+        constructor();
+        static _readdir(db: IDBDatabase, folder: string, withSubfolders?: boolean, fullPath?: boolean): Promise<string[]>;
+        readdir(folder: string): Promise<string[]>;
+        readFile(file: string, format?: string, fallback?: boolean): Promise<string>;
+        stat(file: string): Promise<Stats>;
+        getDirectoryname(path: any): any;
+        private static _mkdir;
+        mkdir(filename: string, options?: {
+            recursive?: boolean;
+        }): Promise<void>;
+        private loadFileEntry;
+        private static _loadFileEntry;
+        writeFile(file: string, data: string): Promise<void>;
+        rename(oldPath: string, newPath: string): Promise<void>;
+        private static _removeEntry;
+        unlink(file: string): Promise<void>;
+        rmdir(dirName: any, options?: {
+            recursive?: boolean;
+        }): Promise<void>;
+        private exists;
+    }
+    export function exists(filename: string): Promise<boolean>;
+}
+/// <amd-dependency name="JSZip" path="jszip" />
+declare module "jassijs/server/ext/jszip" {
+    var JSZip: any;
+    export default JSZip;
+}
+declare module "jassijs/server/NativeAdapter" {
+    import { Test } from "jassijs/remote/Test";
+    import { FS, exists } from "jassijs/server/FS";
+    var ts: typeof globalThis.ts;
+    export { ts };
+    export { exists };
+    var myfs: FS;
+    export { myfs };
+    export function test(tt: Test): Promise<void>;
+    export function dozip(directoryname: string, serverdir?: boolean): Promise<string>;
+    export function reloadJSAll(filenames: string[], afterUnload: () => {}): Promise<void>;
+    export function transpile(fileName: string, inServerdirectory?: boolean): Promise<void>;
+}
+declare module "jassijs/remote/Config" {
+    export class Config {
+        require: Function;
+        isServer: boolean;
+        modules: {
+            [modul: string]: string;
+        };
+        server: {
+            modules: {
+                [modul: string]: string;
+            };
+        };
+        jsonData: any;
+        clientrequire: any;
+        serverrequire: any;
+        constructor();
+        init(configtext: string): void;
+        reload(): Promise<void>;
+        saveJSON(): Promise<void>;
+    }
+    var config: Config;
+    export { config };
+}
+declare module "jassijs/remote/FileNode" {
+    export class FileNode {
+        name: string;
+        fullpath?: string;
+        parent?: FileNode;
+        files?: FileNode[];
+        date?: any;
+        flag?: string;
+        constructor(fullpath?: string);
+        isDirectory?(): boolean;
+        resolveChilds?(all?: {
+            [path: string]: FileNode;
+        }): {
+            [path: string]: FileNode;
+        };
+    }
+}
+declare module "jassijs/remote/Serverservice" {
+    import "jassijs/remote/Classes";
+    export class ServerserviceProperties {
+        name: string;
+        getInstance: (() => Promise<any>);
+    }
+    var runningServerservices: {};
+    export function beforeServiceLoad(func: (name: string, props: ServerserviceProperties) => void): void;
+    global {
+        interface Serverservice {
+        }
+    }
+    var serverservices: Serverservice;
+    export function $Serverservice(properties: ServerserviceProperties): Function;
+    var doNotReloadModule: boolean;
+    export { serverservices, doNotReloadModule, runningServerservices };
+}
+declare module "jassijs/server/Indexer" {
+    export abstract class Indexer {
+        abstract fileExists(name: any): any;
+        abstract readFile(name: any): any;
+        abstract getFileTime(name: any): any;
+        abstract createDirectory(name: any): any;
+        abstract writeFile(name: string, content: string): any;
+        abstract dirFiles(modul: string, path: string, extensions: string[], ignore: string[]): Promise<string[]>;
+        updateModul(root: any, modul: string, isserver: boolean): Promise<void>;
+        convertArgument(arg: any): any;
+        collectAnnotations(node: ts.Node, outDecorations: any, depth?: number): void;
+    }
+}
+declare module "jassijs/server/RegistryIndexer" {
+    import { Indexer } from "jassijs/server/Indexer";
+    export class ServerIndexer extends Indexer {
+        updateRegistry(): Promise<void>;
+        dirFiles(modul: string, path: string, extensions: string[], ignore?: string[]): Promise<string[]>;
+        writeFile(name: string, content: string): Promise<void>;
+        createDirectory(name: string): Promise<void>;
+        getFileTime(filename: any): Promise<number>;
+        fileExists(filename: any): Promise<boolean>;
+        readFile(filename: any): Promise<any>;
+    }
+}
+declare module "jassijs/server/Filesystem" {
+    import { FileNode } from "jassijs/remote/FileNode";
+    global {
+        interface Serverservice {
+            filesystem: Promise<Filesystem>;
+        }
+    }
+    export default class Filesystem {
+        static allModules: {
+            [name: string]: any[];
+        };
+        path: string;
+        _pathForFile(fileName: string, fromServerdirectory?: boolean): string;
+        dir(curdir?: string, appendDate?: boolean, parentPath?: string, parent?: FileNode): Promise<FileNode>;
+        loadFile(fileName: string): Promise<string>;
+        loadFiles(fileNames: string[]): Promise<{}>;
+        dirFiles(dir: string, extensions: string[], ignore?: string[]): Promise<string[]>;
+        zip(directoryname: string, serverdir?: boolean): Promise<string>;
+        /**
+         * create a folder
+         * @param foldername - the name of the new file
+         */
+        createFolder(foldername: string): Promise<string>;
+        /**
+         * create a module
+         * @param modulname - the name of the module
+      
+         */
+        createModule(modulename: string): Promise<string>;
+        /**
+         * create a file
+         * @param filename - the name of the new file
+         * @param content - then content
+         */
+        createFile(filename: string, content: string): Promise<string>;
+        /**
+         * renames a file or directory
+         * @param oldfile - old filename
+         * @param newfile - new filename
+         */
+        rename(oldfile: string, newfile: string): Promise<string>;
+        /**
+        * deletes a server module
+        * @param modul - to delete
+        */
+        removeServerModul(modul: string): Promise<string>;
+        /**
+        * deletes a file or directory
+        * @param file - old filename
+        */
+        remove(file: string): Promise<string>;
+        /**
+         * create modul in ./jassijs.json
+         * @param modul
+         */
+        createRemoteModulIfNeeded(modul: string): Promise<void>;
+        getDirectoryname(ppath: any): any;
+        /**
+         * save files +
+         * transpile remote files and
+         * reload the remote files in server if needed
+         * update db schema
+         * the changes would be reverted if there are errors
+         * @param fileNames
+         * @param contents
+         * @returns "" or the error
+         */
+        saveFiles(fileNames: string[], contents: string[], rollbackonerror?: boolean): Promise<string>;
+        saveFile(fileName: string, content: string): Promise<void>;
+    }
 }
 declare module "jassijs/remote/Registry" {
     import "reflect-metadata";
@@ -189,42 +481,6 @@ declare module "jassijs/remote/Registry" {
     var registry: Registry;
     export default registry;
     export function migrateModul(oldModul: any, newModul: any): void;
-}
-declare module "jassijs/remote/Classes" {
-    export class JassiError extends Error {
-        constructor(msg: string);
-    }
-    /**
-    * manage all registered classes ->jassijs.register("classes")
-    * @class jassijs.base.Classes
-    */
-    export class Classes {
-        private _cache;
-        private funcRegister;
-        constructor();
-        destroy(): void;
-        /**
-         * load the a class
-         * @param classname - the class to load
-         */
-        loadClass(classname: string): Promise<new (...args: any[]) => any>;
-        /**
-        * get the class of the given classname
-        * @param {string} - the classname
-        * @returns {class} - the class
-        */
-        getClass(classname: string): new (...args: any[]) => any;
-        /**
-        * get the name of the given class
-        * @param {class} _class - the class (prototype)
-        * @returns {string} name of the class
-        */
-        getClassName(_class: any): string;
-        register(data: new (...args: any[]) => any, name: string): void;
-    }
-    let classes: Classes;
-    export { classes };
-    export function test(t: any): Promise<void>;
 }
 declare module "jassijs/base/Actions" {
     export class ActionProperties {
@@ -1180,23 +1436,6 @@ declare module "jassijs/remote/ObjectTransaction" {
         finally(): Promise<void>;
     }
 }
-declare module "jassijs/remote/Serverservice" {
-    import "jassijs/remote/Classes";
-    export class ServerserviceProperties {
-        name: string;
-        getInstance: (() => Promise<any>);
-    }
-    var runningServerservices: {};
-    export function beforeServiceLoad(func: (name: string, props: ServerserviceProperties) => void): void;
-    global {
-        interface Serverservice {
-        }
-    }
-    var serverservices: Serverservice;
-    export function $Serverservice(properties: ServerserviceProperties): Function;
-    var doNotReloadModule: boolean;
-    export { serverservices, doNotReloadModule, runningServerservices };
-}
 declare module "jassijs/server/DoRemoteProtocol" {
     import { Context } from "jassijs/remote/RemoteObject";
     export function remoteProtocol(request: any, response: any): void;
@@ -1224,25 +1463,6 @@ declare module "jassijs/remote/Transaction" {
         private sendRequest;
         private doServerStatement;
         add(obj: any, method: (...args: any[]) => any, ...params: any[]): void;
-    }
-}
-declare module "jassijs/remote/Test" {
-    export class Test {
-        /**
-         * fails if the condition is false
-         * @parameter condition
-         **/
-        expectEqual(condition: boolean): void;
-        /**
-         * fails if the func does not throw an error
-         * @parameter func - the function that should failed
-         **/
-        expectError(func: any): void;
-        /**
-        * fails if the func does not throw an error
-        * @parameter func - the function that should failed
-        **/
-        expectErrorAsync(func: any): Promise<void>;
     }
 }
 declare module "jassijs/remote/Validator" {
@@ -1425,23 +1645,6 @@ declare module "jassijs/remote/security/Setting" {
     }
     export function test(): Promise<void>;
 }
-declare module "jassijs/remote/FileNode" {
-    export class FileNode {
-        name: string;
-        fullpath?: string;
-        parent?: FileNode;
-        files?: FileNode[];
-        date?: any;
-        flag?: string;
-        constructor(fullpath?: string);
-        isDirectory?(): boolean;
-        resolveChilds?(all?: {
-            [path: string]: FileNode;
-        }): {
-            [path: string]: FileNode;
-        };
-    }
-}
 declare module "jassijs/ui/Notify" {
     import "jquery";
     import "jquery.notify";
@@ -1470,7 +1673,9 @@ declare module "jassijs/remote/Server" {
         * @returns {string[]} - list of files
         */
         dir(withDate?: boolean, context?: Context): Promise<FileNode>;
-        zip(directoryname: string, serverdir?: boolean, context?: Context): Promise<any>;
+        zip(directoryname: string, serverdir?: boolean, context?: Context): Promise<string | {
+            [id: string]: string;
+        }>;
         /**
          * gets the content of a file from server
          * @param {string} fileNamew
@@ -2698,15 +2903,6 @@ declare module "jassijs/remote/ClientError" {
         constructor(msg: string);
     }
 }
-declare module "jassijs/remote/Config" {
-    export class Config {
-        require: Function;
-        isServer: boolean;
-        serverConfig: Config;
-        clientConfig: Config;
-        modules: string[];
-    }
-}
 declare module "jassijs/remote/DBArray" {
     export class DBArray
     /**
@@ -2796,9 +2992,6 @@ declare module "jassijs/remote/Jassi" {
         base: {
             [k: string]: any;
         };
-        modules: {
-            [key: string]: string;
-        };
         options: any;
         isServer: boolean;
         cssFiles: {
@@ -2825,6 +3018,17 @@ declare module "jassijs/remote/Jassi" {
         class JassiStatic extends Jassi {
         }
     }
+}
+declare module "jassijs/remote/Modules" {
+    class Modules {
+        modules: {
+            [modul: string]: string;
+        };
+        server: Modules;
+        constructor();
+    }
+    var modules: Modules;
+    export { modules };
 }
 declare module "jassijs/remote/hallo" {
     export class OO {
@@ -3537,272 +3741,6 @@ declare module "jassijs/server/DBManager" {
         checkParentRight(context: Context, entityClass: any, ids: any[]): Promise<boolean>;
     }
 }
-declare module "jassijs/util/Reloader" {
-    export class Reloader {
-        static cache: any[];
-        static reloadCodeFromServerIsRunning: boolean;
-        static instance: Reloader;
-        listener: any[];
-        /**
-         * reloads Code
-         */
-        private constructor();
-        /**
-         * check code changes out of the browser if localhost and load the changes in to the browser
-         */
-        static startReloadCodeFromServer(): void;
-        /**
-         * listener for code reloaded
-         * @param {function} func - callfunction for the event
-         */
-        addEventCodeReloaded(func: any): void;
-        removeEventCodeReloaded(func: any): void;
-        private _findScript;
-        reloadJS(fileName: string): Promise<void>;
-        reloadJSAll(fileNames: string[]): Promise<void>;
-        migrateModul(allModules: any, file: any, modul: any): void;
-        migrateClasses(file: any, oldmodul: any, modul: any): void;
-    }
-}
-declare module "jassijs_editor/modul" {
-    const _default_1: {
-        css: {
-            "jassijs_editor.css": string;
-        };
-        types: {
-            "node_modules/monaco.d.ts": string;
-            "node_modules/typescript/typescriptServices.d.ts": string;
-        };
-        require: {
-            paths: {
-                ace: string;
-                'ace/ext/language_tools': string;
-                monacoLib: string;
-                vs: string;
-            };
-            shim: {
-                'ace/ext/language_tools': string[];
-            };
-        };
-    };
-    export default _default_1;
-}
-/// <amd-dependency name="_monaco" path="vs/editor/editor.main" />
-/// <amd-dependency name="tsWorker" path="vs/language/typescript/tsWorker" />
-declare module "jassijs_editor/ext/monaco" {
-    export {};
-}
-declare module "jassijs_editor/util/Typescript" {
-    import "jassijs_editor/ext/monaco";
-    export class Typescript {
-        static instance: Typescript;
-        waitForInited: Promise<boolean>;
-        tsWorker: monaco.languages.typescript.TypeScriptWorker;
-        static languageServiceHost: ts.LanguageServiceHost;
-        static ts: any;
-        /**
-        * resolved if the service is inited
-        */
-        private static _isInited;
-        static compilerSettings: {
-            baseUrl: string;
-            target: string;
-            module: string;
-            sourceMap: boolean;
-            outDir: string;
-            allowJs: boolean;
-            moduleResolution: monaco.languages.typescript.ModuleResolutionKind;
-            emitDecoratorMetadata: boolean;
-            experimentalDecorators: boolean;
-            typeRoots: string[];
-        };
-        isInited(file: any): boolean;
-        /**
-         * transpile the ts-file an returns all reflected files
-         * @param fileName
-         * @param content
-         */
-        transpile(fileName: string, content: string, compilerSettings?: any): Promise<{
-            fileNames: string[];
-            contents: string[];
-        }>;
-        private constructor();
-        static initMonaco(): void;
-        initInIdle: boolean;
-        private includeModulTypes;
-        /**
-         * initialize the services tooks any seconds
-         * functions which uses the languageservice are blocked until ready
-         */
-        initService(): Promise<boolean>;
-        /**
-         * unused
-         */
-        getDefinitionAtPosition(file: string, position: number): Promise<readonly any[]>;
-        /**
-         * unused
-         */
-        getSignatureHelpItems(file: string, position: number): Promise<any>;
-        includefileIfNeeded(file: string): Promise<void>;
-        renameFile(oldfile: string, newfile: string): Promise<void>;
-        /**
-         * @returns all code filenames
-         */
-        getFiles(): string[];
-        /**
-         * get the code for a file
-         * @params file - the filename e.g. jassijs/base/Parser.ts
-         */
-        getCode(file: string): string;
-        /**
-         * put file in cache
-         * @param file - the ts file
-         * @param text - the text of the ts file
-         */
-        setCode(file: string, text: string): Promise<unknown>;
-        /**
-         * get info for a completionentry
-         * @param file - the ts file
-         * @param position - the position in string
-         * @param item -the item we are interested
-         * @param formatOptions -unused
-         * @param source -unused
-         * @param preferences - unused
-         */
-        getCompletionEntryDetails(file: string, position: number, item: string, formatOptions?: {}, source?: any, preferences?: {}): Promise<any>;
-        /**
-         * get all completions at a  position
-         * @param file -the ts file
-         * @param position -the position in string
-         * @param text - the text of the file is saved to cache
-         */
-        getCompletion(file: string, position: number, text: string, options: any): Promise<any>;
-        getQuickInfoAtPosition(file: string, position: number, text: string): Promise<any>;
-        getCodeFixesAtPosition(file: string, text: string, start: number, end: number, errorCodes: []): Promise<any>;
-        formatDocument(filePath: string, text?: string): Promise<string>;
-        getDiagnosticsForAll(): Promise<ts.Diagnostic[]>;
-        getLineAndCharacterOfPosition(fileName: string, pos: number): {
-            line: any;
-            character: any;
-        };
-        getPositionOfLineAndCharacter(fileName: string, pos: {
-            line: any;
-            character: any;
-        }): number;
-        getDiagnostics(file: string, text?: string): Promise<{
-            semantic: monaco.languages.typescript.Diagnostic[];
-            suggestion: monaco.languages.typescript.Diagnostic[];
-            syntactic: monaco.languages.typescript.Diagnostic[];
-        }>;
-    }
-    var typescript: Typescript;
-    export default typescript;
-}
-declare module "jassijs/server/Indexer" {
-    import "jassijs_editor/util/Typescript";
-    export abstract class Indexer {
-        abstract fileExists(name: any): any;
-        abstract readFile(name: any): any;
-        abstract getFileTime(name: any): any;
-        abstract createDirectory(name: any): any;
-        abstract writeFile(name: string, content: string): any;
-        abstract dirFiles(modul: string, path: string, extensions: string[], ignore: string[]): Promise<string[]>;
-        updateModul(root: any, modul: string, isserver: boolean): Promise<void>;
-        convertArgument(arg: any): any;
-        collectAnnotations(node: ts.Node, outDecorations: any, depth?: number): void;
-    }
-}
-declare module "jassijs/server/RegistryIndexer" {
-    import { Indexer } from "jassijs/server/Indexer";
-    export class RegistryIndexer extends Indexer {
-        private static version;
-        private mapcache;
-        updateRegistry(): Promise<void>;
-        dirFiles(modul: string, path: string, extensions: string[], ignore?: string[]): Promise<string[]>;
-        writeFile(name: string, content: string): Promise<void>;
-        createDirectory(name: string): Promise<void>;
-        getFileTime(filename: any): Promise<number>;
-        fileExists(filename: any): Promise<boolean>;
-        readFile(filename: any): Promise<any>;
-    }
-}
-/// <amd-dependency name="JSZip" path="jszip" />
-declare module "jassijs/server/ext/jszip" {
-    var JSZip: any;
-    export default JSZip;
-}
-declare module "jassijs/server/Filesystem" {
-    import { Context } from "jassijs/remote/RemoteObject";
-    class FileEntry {
-        id: string;
-        date: number;
-        isDirectory?: boolean;
-        data: any;
-    }
-    global {
-        export interface Serverservice {
-            filesystem: Promise<Filesystem>;
-        }
-    }
-    export default class Filesystem {
-        path: undefined;
-        private static db;
-        private static getDB;
-        /**
-         * exists a directory?
-         * @param path
-         */
-        existsDirectory(path: string): Promise<boolean>;
-        dirFiles(dir: string, extensions: string[], ignore?: string[]): Promise<string[]>;
-        dirEntry(curdir?: string): Promise<FileEntry[]>;
-        /**
-         * @returns  [{name:"hallo",date:1566554},{name:"demo",files:[]}]
-         */
-        dir(curdir?: string, appendDate?: boolean): Promise<{
-            name: string;
-            files: any[];
-        }>;
-        createFile(filename: string, content: any): Promise<any>;
-        saveFile(filename: any, content: any): Promise<any>;
-        saveFiles(fileNames: string[], contents: any[], rollbackonerror?: boolean): any;
-        loadFileEntry(fileName: string): Promise<FileEntry>;
-        /**
-        * deletes a server module (nothing to do on localserver)
-        * @param modul - to delete
-        */
-        removeServerModul(modul: string): Promise<string>;
-        /**
-        * create a folder
-        * @param filename - the name of the new file
-        * @param content - then content
-        */
-        createFolder(filename: string): Promise<string>;
-        /**
-         * create a module
-         * @param modulname - the name of the module
-      
-         */
-        createModule(modulename: string): Promise<string>;
-        loadFile(fileName: string): Promise<string>;
-        loadFiles(fileNames: string[]): Promise<{}>;
-        /**
-        * deletes a file or directory
-        * @param file - old filename
-        */
-        remove(file: string): Promise<string>;
-        /**
-         * zip a directory
-         */
-        zip(directoryname: string, serverdir?: boolean, context?: Context): Promise<any>;
-        /**
-         * renames a file or directory
-         * @param oldfile - old filename
-         * @param newfile - new filename
-         */
-        rename(oldfile: string, newfile: string): Promise<string>;
-    }
-    export function test2(): Promise<void>;
-}
 declare module "jassijs/server/TypeORMListener" {
     import { EntitySubscriberInterface, InsertEvent, RemoveEvent, UpdateEvent } from "typeorm";
     export class TypeORMListener implements EntitySubscriberInterface {
@@ -3887,97 +3825,8 @@ declare module "jassijs/server/LocalProtocol" {
     export function localExec(prot: RemoteProtocol, context?: Context): Promise<any>;
 }
 declare module "jassijs/server/Installserver" {
-    const _default_2: {
-        ret: {
-            autostart: () => Promise<void>;
-        };
-    };
-    export default _default_2;
-}
-declare module "jassijs_editor/util/TSSourceMap" {
-    export class TSSourceMap {
-        getCode(file: string): Promise<any>;
-        getLineFromTS(tsfile: string, line: any, column: any): Promise<{
-            line: number;
-            column: number;
-            jsfilename: string;
-        }>;
-        getLineFromJS(jsfile: string, line: number, column: number): Promise<{
-            source: string;
-            line: number;
-            column: number;
-        }>;
-        getLinesFromJS(jsfile: any, data: {
-            line: number;
-            column: number;
-        }[]): Promise<{
-            source: string;
-            line: number;
-            column: number;
-        }[]>;
-    }
-}
-declare module "jassijs_editor/ErrorPanel" {
-    import { Panel } from "jassijs/ui/Panel";
-    import { Button } from "jassijs/ui/Button";
-    export class ErrorPanel extends Panel {
-        IDClear: Button;
-        _container: any;
-        IDToolbar: Panel;
-        IDSearch: Button;
-        withControls: boolean;
-        withLastErrors: boolean;
-        withNewErrors: boolean;
-        /**
-     * shows errors
-     * @class jassijs.ui.ErrorPanel
-     */
-        constructor(withControls?: boolean, withLastErrors?: boolean, withNewErrors?: boolean);
-        static showDialog(): Promise<void>;
-        layout(): void;
-        /**
-         * search Errors in code
-         **/
-        search(): Promise<void>;
-        /**
-         * adds a new error
-         * @param {object} error - the error
-         */
-        addError(error: any): Promise<void>;
-        _convertURL(url: string): Promise<string>;
-        /**
-         * deletes all errors
-         */
-        clear(): void;
-        registerError(): void;
-        unregisterError(): void;
-        destroy(): void;
-    }
-    export function test2(): ErrorPanel;
-}
-declare module "jassijs_editor/util/Tests" {
-    import { FileNode } from "jassijs/remote/FileNode";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-    import { Test } from "jassijs/remote/Test";
-    class MyContainer extends BoxPanel {
-        statustext: HTMLPanel;
-        alltests: number;
-        failedtests: number;
-        finished: boolean;
-        update(): void;
-    }
-    export class TestAction {
-        static testNode(all: FileNode[], container?: MyContainer): Promise<void>;
-    }
-    export class Tests {
-    }
-    export function test(tst: Test): Promise<void>;
-}
-declare module "jassijs/server/NativeAdapter" {
-    import { Test } from "jassijs/remote/Test";
-    export function exists(filename: string): Promise<boolean>;
-    export function test(tt: Test): Promise<void>;
+    var autostart: () => Promise<void>;
+    export { autostart };
 }
 declare module "jassijs/server/Testuser" {
     export class Testuser {
@@ -5214,13 +5063,4 @@ declare module "jassijs/util/Runlater" {
         _checkRun(): void;
         runlater(): void;
     }
-}
-declare module "jassijs_localserver/modul" {
-    const _default_3: {
-        require: {
-            paths: {};
-            shim: {};
-        };
-    };
-    export default _default_3;
 }

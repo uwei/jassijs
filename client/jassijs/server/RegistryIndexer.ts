@@ -1,98 +1,57 @@
-
+//synchronize-server-client
 import { Indexer } from "jassijs/server/Indexer";
+import { serverservices } from "jassijs/remote/Serverservice";
+import { exists, myfs } from "jassijs/server//NativeAdapter";
+import { config } from "jassijs/remote/Config";
 
 
-import { Server } from "jassijs/remote/Server";
-import Filesystem from "jassijs/server/Filesystem";
-import { $Class } from "jassijs/remote/Registry";
-
-@$Class("jassijs.server.RegistryIndexer")
-export class RegistryIndexer extends Indexer {
-    private static version=Math.floor(Math.random() * 100000);
-    private mapcache: { [modul: string]: any } = {};
+export class ServerIndexer extends Indexer {
     public async updateRegistry() {
         //client modules
-        var data = await new Server().loadFile("jassijs.json");
-        var modules = JSON.parse(data).modules;
+        var path = (await serverservices.filesystem).path
+        var modules = config.modules;
         for (var m in modules) {
-            if (await new Filesystem().existsDirectory(modules[m]) || await new Filesystem().existsDirectory(m)) {
-                if (modules[m].indexOf(".js") === -1) {//.js are internet modules
-
-                    await this.updateModul("", m, false);
-                } else {
-
-                    await this.updateModul("", m, false);
-
-                }
-            }
+            if ((await exists(path + "/" + modules[m]) && !modules[m].endsWith(".js") && modules[m].indexOf(".js?")) === -1) //.js are internet modules
+                await this.updateModul(path, m, false);
         }
-
+        //server modules
+        modules = config.server.modules;
+        for (var m in modules) {
+            if (await exists("./" + modules[m]) && !modules[m].endsWith(".js")) //.js are internet modules
+                await this.updateModul(".", m, true);
+        }
         return;
     }
     async dirFiles(modul: string, path: string, extensions: string[], ignore: string[] = []): Promise<string[]> {
-        var tsfiles: string[] = await new Filesystem().dirFiles(path, extensions, ignore);
-        //add files from map
-        if (this.mapcache[modul] === undefined && jassijs.modules[modul]!==undefined&&jassijs.modules[modul].indexOf(".js") > 0) {//read webtsfiles
-            let ret = {};
-            let mapname = jassijs.modules[modul].split("?")[0] + ".map";
-            if (jassijs.modules[modul].indexOf(".js?") > -1)
-                mapname = mapname + "?" + jassijs.modules[modul].split("?")[1];
-            var code = await $.ajax({ url: mapname, dataType: "text" })
-            var data = JSON.parse(code);
-            var files = data.sources;
-            for (let x = 0; x < files.length; x++) {
-                let fname = files[x].substring(files[x].indexOf(modul + "/"));
-                ret[fname] = data.sourcesContent[x];
-            }
-            this.mapcache[modul] = ret;
-        }
-        if (this.mapcache[modul]) {
-            for (var key in this.mapcache[modul]) {
-                if (tsfiles.indexOf(key) === -1) {
-                    tsfiles.push(key);
-                }
-
-            }
-        }
-        return tsfiles;
+       
+        var jsFiles: string[] = await (await serverservices.filesystem).dirFiles(path, extensions, ignore);
+        return jsFiles;
     }
     async writeFile(name: string, content: string) {
-        await new Filesystem().saveFile(name, content);
+        if (!name.startsWith("./"))
+            name = "./"+name ;
+        await myfs.writeFile(name, content);
     }
     async createDirectory(name: string) {
-        await new Filesystem().createFolder(name);
+        if (!name.startsWith("./"))
+        name = "./"+name ;
+        await myfs.mkdir(name, { recursive: true });
         return;
     }
     async getFileTime(filename): Promise<number> {
-        var entry = await new Filesystem().loadFileEntry(filename);
-        if (entry !== undefined)
-            return RegistryIndexer.version;
-        for (var modul in this.mapcache) {
-            if (this.mapcache[modul][filename]) {
-                return 0;
-            }
-        }
-        return undefined;
+        if (!filename.startsWith("./"))
+        filename = "./"+filename ;
+        var stats = await myfs.stat(filename);
+        return stats.mtimeMs;
     }
     async fileExists(filename): Promise<boolean> {
-
-        for (var modul in this.mapcache) {
-            if (this.mapcache[modul][filename]) {
-                return true;
-            }
-        }
-        var test = await new Filesystem().loadFileEntry(filename);
-        return test !== undefined;
+        if (!filename.startsWith("./"))
+        filename = "./"+filename ;
+        return await exists(filename);
     }
     async readFile(filename): Promise<any> {
-        var ret = await new Filesystem().loadFile(filename);
-        if (ret !== undefined)
-            return ret;
-        for (var modul in this.mapcache) {
-            if (this.mapcache[modul][filename]) {
-                return this.mapcache[modul][filename];
-            }
-        }
-        return undefined;
+        if (!filename.startsWith("./"))
+        filename = "./"+filename ;
+        return myfs.readFile(filename, 'utf-8');
     }
 }

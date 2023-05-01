@@ -2,13 +2,14 @@ import { $Class } from "jassijs/remote/Registry";
 //@ts-ignore
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, RemoveEvent, UpdateEvent } from "typeorm";
 import Filesystem from "jassijs/server/Filesystem";
-import { Reloader } from "jassijs/util/Reloader";
+
 import registry from "jassijs/remote/Registry";
 import { serverservices } from "jassijs/remote/Serverservice";
+import { myfs } from "./NativeAdapter";
 
 
 //listener for code changes
-Reloader.instance.addEventCodeReloaded(async function (files: string[]) {
+/*Reloader.instance.addEventCodeReloaded(async function (files: string[]) {
     var dbobjects = await registry.getJSONData("$DBObject");
     var reload = false;
     for (var x = 0; x < files.length; x++) {
@@ -21,7 +22,7 @@ Reloader.instance.addEventCodeReloaded(async function (files: string[]) {
     if(reload){
         (await serverservices.db).renewConnection();
     }
-});
+});*/
 
 @EventSubscriber()
 @$Class("jassijs.server.TypeORMListener")
@@ -34,7 +35,7 @@ export class TypeORMListener implements EntitySubscriberInterface {
         }
         this.savetimer = setTimeout(() => {
             var data = event.connection.driver.export();
-            new Filesystem().saveFile("__default.db", data);
+            myfs.writeFile("./client/__default.db",data);
             console.log("save DB");
         }, 300);
 

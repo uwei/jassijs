@@ -42,7 +42,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
         Object.assign(prot, vdata);
         var files = Registry_1.default.getAllFilesForService("$Class", prot.classname);
         if (files === undefined || files.length === 0) {
-            return "file for " + prot.classname + " not found";
+            throw new Classes_1.JassiError("file for " + prot.classname + " not found");
         }
         var file = files[0];
         var path = file.split("/");

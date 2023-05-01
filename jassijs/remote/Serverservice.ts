@@ -43,7 +43,7 @@ var serverservices: Serverservice = <any>new Proxy(runningServerservices, {
                             //@ts-ignore
                             await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                         } else {
-                            classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
+                            await classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
                         } 
                         var props:ServerserviceProperties=registry.getData("$Serverservice",classname)[0].params[0];
                         for(var x=0;x<beforeServiceLoadHandler.length;x++){
@@ -56,7 +56,7 @@ var serverservices: Serverservice = <any>new Proxy(runningServerservices, {
                         return;
                            
                     }
-                   
+                    
                 }
             }
 

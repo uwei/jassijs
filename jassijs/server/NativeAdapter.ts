@@ -1,10 +1,15 @@
 import fs = require('fs');
 import myfs=fs.promises;
-
+import ts = require("typescript");
 
 import JSZip = require("jszip");
 import { JassiError } from 'jassijs/remote/Classes';
 import Filesystem from './Filesystem';
+import { Reloader } from './Reloader';
+import { Compile } from './Compile';
+
+
+export{ts};
 class Stats{
     mtimeMs:number;
     isDirectory:()=>true;
@@ -110,4 +115,12 @@ async function zipFolder(folder: string, outfile: string, parent: JSZip = undefi
         return d;
     }
     return parent;
+}
+
+export async function reloadJSAll(filenames: string[], afterUnload: () => {}) {
+    return new Reloader().reloadJSAll(filenames,afterUnload);
+}
+
+export async function   transpile(fileName: string,inServerdirectory:boolean=undefined) {
+    await new Compile().transpile(fileName,inServerdirectory);
 }

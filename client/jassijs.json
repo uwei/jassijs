@@ -15,16 +15,16 @@
 		"tests": "tests",
 		"jassijs_report": "jassijs_report",
 		"demoreports": "demoreports"
-		
 	},
-	"servermodulesw": {
-		"jassijs":"jassijs",
-		"jassijs_report": "jassijs_report",
-		"jassijs_editor": "jassijs_editor",
-		"jassijs_localserver": "jassijs_localserver",
-		
-		"northwind": "northwind"
-		
+	"server": {
+		"modules": {
+			"jassijs": "jassijs",
+			"northwind": "northwind",
+			"de": "de",
+			"local": "local",
+			"tests": "tests",
+			"jassijs_report": "jassijs_report"
+		}
 	},
 	"require": {
 		"paths": {

@@ -22,7 +22,7 @@ async function getDB() {
 async function loadFileFromDB(fileName, callback) {
     let transaction = (await getDB()).transaction('files', 'readonly');
     const store = transaction.objectStore('files');
-    var ret = await store.get(fileName);
+    var ret = await store.get("./client/" + fileName);
     var r = await new Promise((resolve) => {
         ret.onsuccess = ev => { resolve(ret.result); };
         ret.onerror = ev => { resolve(undefined); };

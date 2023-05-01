@@ -1,290 +1,182 @@
-import { $Class } from "jassijs/remote/Registry";
-import { Context } from "jassijs/remote/RemoteObject";
-import { Reloader } from "jassijs/util/Reloader";
-import registry from "jassijs/remote/Registry";
-import { Server } from "jassijs/remote/Server";
-import { $Serverservice, serverservices } from "jassijs/remote/Serverservice";
+//synchronize-server-client
+import { FileNode } from 'jassijs/remote/FileNode';
 
- 
-class FileEntry {
-    id: string;
-    date: number;
-    isDirectory?: boolean;
-    data: any;
-}
-declare global{
-    export interface Serverservice{
-        filesystem:Promise<Filesystem>;
+import { ServerIndexer } from './RegistryIndexer';
+import registry, { $Class } from 'jassijs/remote/Registry';
+import { $Serverservice, runningServerservices, serverservices } from '../remote/Serverservice';
+import { dozip, myfs, exists, reloadJSAll, transpile } from './NativeAdapter';
+import { config } from 'jassijs/remote/Config';
+
+
+var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"]
+declare global {
+    interface Serverservice {
+        filesystem: Promise<Filesystem>;
     }
 }
-
-@$Serverservice({name:"filesystem",getInstance:async ()=>new Filesystem()})  
+@$Serverservice({ name: "filesystem", getInstance: async () => { return new Filesystem() } })
 @$Class("jassijs.server.Filesystem")
 export default class Filesystem {
-    path:undefined;
-    private static db: IDBDatabase;
-    private static async getDB() {
-        if (Filesystem.db)
-            return Filesystem.db;
-        var req = window.indexedDB.open("jassi", 1);
-        req.onupgradeneeded = function (event) {
-            var db = event.target["result"];
-            var objectStore = db.createObjectStore("files", { keyPath: "id" });
+    static allModules: { [name: string]: any[] } = {};
+    public path = "./client";
+    _pathForFile(fileName: string, fromServerdirectory: boolean = undefined) {
+        if (fileName.startsWith("/"))
+            fileName = fileName.substring(1);
+        var path = this.path + "/" + fileName;
+        if (fromServerdirectory)
+            path = "./" + fileName.replace("$serverside/", "");
+        return path;
+    }
+    /*   _getDirectory(file:string,main:FileNode[]):FileNode[]{
+           var paths:string[]=file.split("/");
+           var parent=main;
+           for(let p=0;p<paths.length-1;p++){
+               for(let x=0;x<parent.length;x++){
+                   if(parent[x].name===paths[p]){
+                       parent=parent[x].files;
+                       continue;
+                   }
+               }
+           }
+           return parent;
+       }*/
+    async dir(curdir = "", appendDate = false, parentPath = this.path, parent: FileNode = undefined): Promise<FileNode> {
+        try {
+
+            var _this = this;
+            var modules = config.server.modules;
+            if (parent === undefined) {
+                parent = { name: "", files: [] };
+            }
+            //var parent:FileNode[]=_this._getDirectory(file,results);
+
+            var list: string[] = await myfs.readdir(parentPath + (curdir === "" ? "" : ("/" + curdir)));
+            for (var xx = 0; xx < list.length; xx++) {
+                var filename = list[xx];
+                var file = curdir + (curdir === "" ? "" : '/') + filename;
+                if (file !== "js" && file !== "tmp") {//compiled js
+
+                    var stat = await myfs.stat(parentPath + "/" + file);
+                    if (stat && stat.isDirectory()) {
+                        var newDir = { name: filename, files: [] };
+                        parent.files.push(newDir)
+                        /* Recurse into a subdirectory */
+                        if (ignore.indexOf(file) === -1)
+                            await _this.dir(file, appendDate, parentPath, newDir);
+                    } else {
+                        let dat = "";
+                        let toAdd: FileNode = { name: filename };
+                        if (appendDate === true)
+                            toAdd.date = (await myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
+                        // if (file.toLowerCase().endsWith(".ts"))
+                        parent.files.push(toAdd);
+                        /* if (file.toLowerCase().endsWith(".js")) {
+                             if (!await exists(file.replace(".js", ".ts"))) {
+                                 parent.files.push(toAdd);
+                             }
+                         }
+                         if (file.toLowerCase().endsWith(".json"))
+                             parent.files.push(toAdd);*/
+                    }
+                }
+            };
+            //add files in node modules
+            if (parent.name === "" && parentPath === "./client") {
+                for (var key in modules) {
+                    if (await exists("./node_modules/" + key + "/client")) {
+                        var addFiles = await this.dir("client", appendDate, "./node_modules/" + key);
+                        var temp = {};
+                        for (var x = 0; x < parent.files.length; x++) {
+                            var entr = parent.files[x];
+                            temp[entr.name] = entr;
+                        }
+                        for (var x = 0; x < addFiles.files.length; x++) {
+                            if (temp[addFiles.files[x].name] === undefined) {
+                                parent.files.push(addFiles.files[x]);
+                                //addFiles.files[x].isNode_module=true;
+                            }
+                        }
+                    }
+                }
+            }
+            return parent;
+        } catch (err) {
+            throw err;
         }
-        Filesystem.db = await new Promise((resolve) => {
-            req.onsuccess = (ev) => { resolve(ev.target["result"]) };
-        })
-
-        return Filesystem.db;
     }
-    /**
-     * exists a directory?
-     * @param path 
-     */
-    async existsDirectory(path: string): Promise<boolean> {
-        var test = await this.dirEntry(path);
-        return test.length > 0;
-    }
-    public async dirFiles(dir: string, extensions: string[], ignore: string[] = []): Promise<string[]> {
-        var ret = [];
-        var all = await this.dirEntry(dir);
-        for (let x = 0; x < all.length; x++) {
-            let fname = all[x].id;
-            var include = true;
-            if(jassijs?.options?.Server?.filterSytemfilesInFilemap===true){
-                if(fname==="__default.db")
-                    include = false;
-            }
-            if (extensions) {
-                include = false;
-                extensions.forEach((ent) => {
-                    if (fname.endsWith(ent))
-                        include = true;
-                });
-            }
-            if (ignore) {
-                ignore.forEach((ent) => {
-                    if (fname === ent)
-                        include = false;
-                });
+    public async loadFile(fileName: string) {
+        var fromServerdirectory = fileName.startsWith("$serverside/");
+        let file = this._pathForFile(fileName, fromServerdirectory);
+        return await myfs.readFile(file, 'utf-8');
 
-            }
-            if (include && !all[x].isDirectory)
-                ret.push(fname);
+    }
+    public async loadFiles(fileNames: string[]) {
+        var ret = {};
+
+        for (var x = 0; x < fileNames.length; x++) {
+
+            ret[fileNames[x]] = await myfs.readFile(this._pathForFile(fileNames[x]), 'utf-8');
+            /* await myfs.readFile(path+"/"+fileName, {encoding: 'utf-8'}, function(err,data){
+                if (!err) {
+                    response.send( data);
+              //    response.writeHead(200, {'Content-Type': 'text/html'});
+                //  response.write(data);
+                }else{
+                  return response.send(err);
+                }
+              });*/
         }
         return ret;
+        //  return ret;
     }
-    async dirEntry(curdir = "") {
-        var db = await Filesystem.getDB();
-        let transaction = db.transaction('files', 'readonly');
-        const store = transaction.objectStore('files');
-        var ret = await store.openCursor();
-        var all: FileEntry[] = [];
-        await new Promise((resolve) => {
-            ret.onsuccess = ev => {
-                var el = ev.target["result"];
-                if (el) {
-                    if (curdir === "" || el.value.id === curdir || el.value.id.startsWith(curdir + "/"))
-                        all.push(el.value);
-                    el.continue();
-                } else
-                    resolve(undefined);
-            }
-            ret.onerror = ev => {
+    public async dirFiles(dir: string, extensions: string[], ignore: string[] = []): Promise<string[]> {
+        var results = [];
+        if (!await exists(dir))
+            return results;
+        var list = await myfs.readdir(dir);
+        var _this = this;
+        for (let l = 0; l < list.length; l++) {
+            let file = list[l];
+            if (ignore.indexOf(file) !== -1)
+                continue;
+            file = dir + '/' + file;
 
-                resolve(undefined)
-            }
-        });
-        return all;
-    }
-    /**
-     * @returns  [{name:"hallo",date:1566554},{name:"demo",files:[]}]
-     */
-    async dir(curdir = "", appendDate = false) {
-        var root = { name: "", files: [] };
-        var all = await this.dirEntry(curdir);
-        var keys = {
-            "": root
-        }
-        for (let x = 0; x < all.length; x++) {
-            var entr = all[x];
-            var paths = entr.id.split("/");
-            if(jassijs?.options?.Server?.filterSytemfilesInFilemap===true){
-                if(entr.id==="__default.db")
-                    continue;
-            }
-            var parent = root;
-            var currentpath = [];
-            for (let p = 0; p < paths.length; p++) {
-                let name = paths[p];
-                currentpath.push(name);
-                let scurrentpath = currentpath.join("/");
-                if (p < paths.length - 1) {//the parentfolders
-
-                    if (!keys[scurrentpath]) {
-                        let nf = {
-                            name: name,
-                            files: []
-                        }
-                        parent.files.push(nf);
-                        keys[scurrentpath] = nf;
-                    }
-                    parent = keys[scurrentpath];
-                } else {
-                    if (entr.isDirectory) {
-                        if (keys[scurrentpath] === undefined) {
-                            let nf = {
-                                name: name,
-                                files: []
-                            }
-                            keys[scurrentpath] = nf;
-                            parent.files.push(nf);
-                        }
-                    } else {
-                        var newitem: any = {
-                            name: name
-                        }
-                        if (appendDate)
-                            newitem.date = entr.date;
-                        parent.files.push(newitem)
-                    }
-                }
-            }
-        }
-        return root;
-    }
-    public async createFile(filename: string, content: any) {
-        return await this.saveFiles([filename], [content], false);
-    }
-    async saveFile(filename, content) {
-        return await this.saveFiles([filename], [content]);
-    }
-    async saveFiles(fileNames: string[], contents: any[],  rollbackonerror: boolean = true) {
-        //serverside compile
-        if (fileNames[0].startsWith("$serverside/")) {
-            var allfileNames: string[] = [];
-            var allcontents: string[] = [];
-            for (var f = 0; f < fileNames.length; f++) {
-                var fileName = fileNames[f];
-                var content = contents[f];
-                if (fileName.endsWith(".ts") || fileName.endsWith(".js")) {
-                    //@ts-ignore
-                    var tss = await import("jassijs_editor/util/Typescript");
-                    var rets = await tss.default.transpile(fileName, content);
-                    allfileNames = allfileNames.concat(rets.fileNames);
-                    allcontents = allcontents.concat(rets.contents);
-                }
-            }
-            fileNames = allfileNames;
-            contents = allcontents;
-        }
-
-        var db = await Filesystem.getDB();
-        var rollbackcontents: string[] = [];
-        var jsToReload = [];
-        var dbschemaHasChanged = false;
-
-        for (let x = 0; x < fileNames.length; x++) {
-            let fname = fileNames[x];
-            if(fname.startsWith("/"))
-                fname=fname.substring(1);
-            if (fname.startsWith("js/")&&fname.endsWith(".js"))
-                jsToReload.push(fname.substring(3).replace(".ts",".js"));
-            if (contents[x]?.indexOf("@$DBObject(") > -1)
-                dbschemaHasChanged = true;
-
-            let exists = await this.loadFileEntry(fname);
-            if (exists) {
-                rollbackcontents.push(exists.data);
+            var stat = await myfs.stat(file);
+            if (stat && stat.isDirectory()) {
+                /* Recurse into a subdirectory */
+                var arr = await _this.dirFiles(file, extensions);
+                results = results.concat(arr);
             } else {
-                rollbackcontents.push(undefined);//this file would be killed at revert
-            }
-            if (contents[x] === undefined)
-                await this.remove(fname);//remove file on revert
-            else {
-                let data = contents[x];
-                let transaction = db.transaction('files', 'readwrite');
-                const store = transaction.objectStore('files');
-                var el = new FileEntry();
-                el.id = fname;
-                el.data = data;
-                el.date = Date.now();
-                if (exists)
-                    store.put(el);
-                else
-                    store.add(el);
-                await new Promise((resolve) => { transaction.oncomplete = resolve })
-            }
-        }
-        if (fileNames.length === 1 && fileNames[0].endsWith("/registry.js"))//no indexer save recurse
-            return;
-        var RegistryIndexer = (await import("jassijs/server/RegistryIndexer")).RegistryIndexer;
-        await new RegistryIndexer().updateRegistry();
-        await registry.reload();
-        if (rollbackonerror) {
-            try {
-                await Reloader.instance.reloadJSAll(jsToReload);
-                /*if (dbschemaHasChanged) { //happens in reloadJS
-                    await(await serverservices.db).renewConnection();
-                }*/
-            } catch (err) {
-                console.error(err);
-                if (dbschemaHasChanged) {
-                    await await(await serverservices.db).destroyConnection()
+                /* Is a file */
+                for (var x = 0; x < extensions.length; x++) {
+                    if (file.toLowerCase().endsWith(extensions[x]) && results.indexOf(file) === -1) {
+                        results.push(file);
+                    }
                 }
-                var restore = await this.saveFiles(fileNames, rollbackcontents, false);
-                if (dbschemaHasChanged) {
-                    await(await serverservices.db).renewConnection();
-                }
-                return err + "DB corrupt changes are reverted " + restore;
             }
-        }
-        return "";
-    }
-    async loadFileEntry(fileName: string): Promise<FileEntry> {
-        var db = await Filesystem.getDB();
-        let transaction = db.transaction('files', 'readonly');
-        const store = transaction.objectStore('files');
-        var ret = await store.get(fileName);
-        var r: any = await new Promise((resolve) => {
-            ret.onsuccess = ev => { resolve(ret.result) }
-            ret.onerror = ev => { resolve(undefined) }
-        });
-
-        return r;
-    }
-    /**
-    * deletes a server module (nothing to do on localserver)
-    * @param modul - to delete
-    */
-    public async removeServerModul(modul: string): Promise<string> {
-        return "";
-    }
-    /**
-    * create a folder
-    * @param filename - the name of the new file 
-    * @param content - then content
-    */
-    public async createFolder(filename: string): Promise<string> {
-        if (filename.startsWith("/"))
-            filename = filename.substring(1);
-        var test = await this.loadFileEntry(filename);
-        if (test)
-            return filename + " allready exists";
-        var db = await Filesystem.getDB();
-        let transaction = db.transaction('files', 'readwrite');
-        const store = transaction.objectStore('files');
-        var el: FileEntry = {
-            data: undefined,
-            id: filename,
-            isDirectory: true,
-            date: Date.now()
-        }
-        store.add(el);
-        transaction.onerror = (en) => {
-            debugger;
         };
-        await new Promise((resolve) => { transaction.oncomplete = resolve })
+        return results;
+    }
+
+
+
+    public async zip(directoryname: string, serverdir: boolean = undefined): Promise<string> {
+        return await dozip(directoryname, serverdir);
+    }
+    //Reset ORM config
+    /**
+     * create a folder
+     * @param foldername - the name of the new file 
+     */
+    public async createFolder(foldername: string): Promise<string> {
+        var newpath = this._pathForFile(foldername);
+        if (await exists(newpath))
+            return foldername + " allready await exists";
+        try {
+            await myfs.mkdir(newpath, { recursive: true })
+        } catch (ex) {
+            return ex.message;
+        }
         return "";
     }
     /**
@@ -293,92 +185,73 @@ export default class Filesystem {
   
      */
     public async createModule(modulename: string): Promise<string> {
-        if (!(await this.existsDirectory(modulename))) {
-            await this.createFolder(modulename);
-        }
-        if (!(await this.existsDirectory(modulename + "/remote"))) {
-            await this.createFolder(modulename + "/remote");
-        }
+        var newpath = this._pathForFile(modulename);
+        try {
+            //create folder
+            if (!await exists(newpath))
+                await myfs.mkdir(newpath, { recursive: true });
+            //create remotefolder
+            //if (!await exists(newpath + "/remote"))
+            //    await myfs.mkdir(newpath + "/remote", { recursive: true });
+            if (!await exists(newpath + "/modul.ts")) {
+                await this.saveFiles([modulename + "/modul.js", "js/" + modulename + "/modul.js"], [
+                    "export default {}",
+                    'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'
+                ]);
+            }
 
-        if ((await this.dirEntry(modulename + "/registry.js")).length === 0) {
-            await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"],
-                ['define("' + modulename + '/registry",["require"], function(require) { return {  default: {	} } } );',
-                'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );'], false);
-        }
-        if ((await this.dirEntry(modulename + "/modul.ts")).length === 0) {
-            await this.saveFiles([modulename + "/modul.ts", "js/" + modulename + "/modul.js"],
-                ["export default {}",
-                    'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'], false);
-        }
-        var json = await new Server().loadFile("jassijs.json");
-        var ob = JSON.parse(json);
-        if (!ob.modules[modulename]) {
-            ob.modules[modulename] = modulename;
-            await this.saveFile("jassijs.json", JSON.stringify(ob, undefined, "\t"));
+            if (!await exists(newpath + "/registry.js")) {
+                await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], [
+                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
+                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
+                ]);
+            }
+            /* if (!await exists("./" + modulename))
+                 await myfs.mkdir("./" + modulename, { recursive: true });
+             if (!await exists("./js/" + modulename))
+                 await myfs.mkdir("./js/" + modulename, { recursive: true });
+             if (!await exists("./" + modulename + "/remote"))
+                 await myfs.mkdir("./" + modulename + "/remote", { recursive: true });
+             if (!await exists("./" + modulename + "/registry.js")) {
+                 await myfs.writeFile("./" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+                 await myfs.writeFile("./js/" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+ 
+             }*/
+
+
+            //update client jassijs.json
+            if (!config.modules[modulename])
+                config.jsonData.modules[modulename] = modulename;
+            await config.saveJSON();
+            //this.createRemoteModulIfNeeded(modulename);
+
+
+        } catch (ex) {
+            return ex.message;
         }
         return "";
 
     }
-    async loadFile(fileName: string):Promise<string> {
-        var r = await this.loadFileEntry(fileName);
-        return (r ? r.data : undefined);
-    }
-
-    async loadFiles(fileNames: string[]) {
-        var ret = {};
-        for(var x=0;x<fileNames.length;x++){
-            ret[fileNames[x]]=await this.loadFile(fileNames[x]);
-        }
-        return ret;
-    }
     /**
-    * deletes a file or directory 
-    * @param file - old filename
-    */
-    public async remove(file: string): Promise<string> {
-        var entr = await this.dirEntry(file);
-        if (entr.length === 0) {
-            return file + " not exists";
-        }
-        var db = await Filesystem.getDB();
-        for (let i = 0; i < entr.length; i++) {
-            let transaction = db.transaction('files', 'readwrite');
-            const store = transaction.objectStore('files');
-            store.delete(entr[i].id);
-            await new Promise((resolve) => { transaction.oncomplete = resolve })
-        }
-        //update client jassijs.json if removing client module 
-        var json = await new Server().loadFile("jassijs.json");
-        var ob = JSON.parse(json);
-        if (ob.modules[file]) {
-            delete ob.modules[file];
-            this.saveFile("jassijs.json", JSON.stringify(ob, undefined, "\t"));
-        }
-        var RegistryIndexer = (await import("jassijs/server/RegistryIndexer")).RegistryIndexer;
-        await new RegistryIndexer().updateRegistry();
-        //entr = await this.dirEntry(file);
-        return "";
-    }
-    /**
-     * zip a directory
+     * create a file
+     * @param filename - the name of the new file 
+     * @param content - then content
      */
-    public async zip(directoryname: string, serverdir: boolean = undefined, context: Context = undefined) {
-        //@ts-ignore
-        var JSZip = (await import("jassijs/server/ext/jszip")).default;
-        if (serverdir)
-            throw new Error("serverdir is unsupported on localserver");
-        var zip = new JSZip();
-        var files = await this.dirEntry(directoryname);
-        for (let x = 0; x < files.length; x++) {
-            if (files[x].isDirectory)
-                zip.folder(files[x].id);
-            else
-                zip.file(files[x].id, files[x].data);
-        }
+    public async createFile(filename: string, content: string): Promise<string> {
+        var newpath = this._pathForFile(filename);
+        var parent = this.getDirectoryname(newpath);
 
-        var ret = await zip.generateAsync({ type: "base64" });
-        //var ret = await zip.generateAsync({ type: "base64" });
-        return ret;
+        if (await exists(newpath))
+            return filename + " allready await exists";
+        try {
+            if (!await exists(parent))
+                await myfs.mkdir(parent, { recursive: true });
+
+            await myfs.writeFile(newpath, content)
+        } catch (ex) {
+            return ex.message;
+        }
+        return "";
     }
     /**
      * renames a file or directory
@@ -386,60 +259,200 @@ export default class Filesystem {
      * @param newfile - new filename
      */
     public async rename(oldfile: string, newfile: string): Promise<string> {
-        debugger;
-        var oldf = await this.dirEntry(oldfile);
-        var newf = await this.dirEntry(newfile);
-
-        if (oldf.length < 1)
-            return oldfile + " not exists";
-        if (newf.length > 0)
-            return newfile + " already exists";
-        for (let i = 0; i < oldf.length; i++) {
-            await this.remove(oldf[i].id);
-            oldf[i].id = newfile + oldf[i].id.substring(oldfile.length);
-            if (oldf[i].isDirectory)
-                await this.createFolder(oldf[i].id);
-            else
-                await this.createFile(oldf[i].id, oldf[i].data);
+        var oldpath = this._pathForFile(oldfile);
+        var newpath = this._pathForFile(newfile);
+        if (!await exists(oldpath))
+            return oldfile + " not await exists";
+        if (await exists(newpath))
+            return newfile + " already await exists";
+        try {
+            /*  if(fs.lstatSync(oldpath).isDirectory()
+                 await myfs.rmdir((oldpath, newpath);
+              else*/
+            await myfs.rename(oldpath, newpath);
+        } catch (ex) {
+            return ex.message;
         }
-        var RegistryIndexer = (await import("jassijs/server/RegistryIndexer")).RegistryIndexer;
-        await new RegistryIndexer().updateRegistry();
+        await new ServerIndexer().updateRegistry();
         return "";
     }
-}
-
-export async function test2() {
-    var fs = new Filesystem();
-    var hh = await fs.dir("local");
-    /*await fs.createFolder("demo");
-    await fs.createFile("demo/hallo", "");
-    await fs.createFile("demo/hallo2", "");
-    await fs.rename("demo","demo1");
-    var hh=await fs.dirEntry();
-    await fs.remove("demo1");*/
-    return;
-
-    await new Filesystem().saveFiles(["hallo.js"], ["alert(2)"]);
-    var s1 = await new Filesystem().remove("hallo.js");
-    var test = await new Filesystem().loadFile("hallo.js")
-    var s2 = await new Filesystem().remove("hallo.js");
-    var s = await new Filesystem().createFolder("demo");
-    var s3 = await new Filesystem().remove("demo");
-    await new Filesystem().saveFiles(["local/modul.ts"], [`export default {
-    "require":{ 
-        
+    /**
+    * deletes a server module
+    * @param modul - to delete
+    */
+    public async removeServerModul(modul: string): Promise<string> {
+        delete config.jsonData.server.modules[modul];
+        await config.saveJSON();
+        if (await exists(modul)) {
+            await myfs.rmdir(modul, { recursive: true });
+        }
+        return "";
     }
-}`]);
-    await new Filesystem().saveFiles(["local/registry.js"], [`//this file is autogenerated don't modify
-define("local/registry",["require"], function(require) {
- return {
-  default: {
-	"local/modul.ts": {
-		"date": 1614616375403
-	}
-}
- }
-});`]);
+    /**
+    * deletes a file or directory 
+    * @param file - old filename
+    */
+    public async remove(file: string): Promise<string> {
+        var path = this._pathForFile(file);
+        if (!await exists(path))
+            return file + " not await exists";
+        try {
+            if ((await myfs.stat(path)).isDirectory()) {
+
+                //update client jassijs.json if removing client module 
+                if (config.modules[file]) {
+                    delete config.jsonData.modules[file];
+                    await config.saveJSON();
+                }
+                await myfs.rmdir(path, { recursive: true });
+            } else
+                await myfs.unlink(path);
+        } catch (ex) {
+            return ex.message;
+        }
+        await new ServerIndexer().updateRegistry();
+        return "";
+    }
+    /**
+     * create modul in ./jassijs.json
+     * @param modul 
+     */
+    async createRemoteModulIfNeeded(modul: string) {
+        if (!config.jsonData.server.modules[modul]) {
+            config.jsonData.server.modules[modul] = modul;
+            await config.saveJSON();
+        }
+    }
+    getDirectoryname(ppath) {
+        var path = ppath.replaceAll("\\", "/");
+        return path.substring(0, path.lastIndexOf("/"));
+    }
+    /**
+     * save files + 
+     * transpile remote files and 
+     * reload the remote files in server if needed 
+     * update db schema
+     * the changes would be reverted if there are errors
+     * @param fileNames 
+     * @param contents 
+     * @returns "" or the error
+     */
+    public async saveFiles(fileNames: string[], contents: string[], rollbackonerror: boolean = true): Promise<string> {
+        var ret: string = "";
+        var rollbackcontents: string[] = [];
+        var modules = config.server.modules;
+        var remoteFiles: string[] = [];
+        for (var x = 0; x < fileNames.length; x++) {
+            let fileName = fileNames[x];
+            var fromServerdirectory = fileName.startsWith("$serverside/");
+            var path = this.getDirectoryname(this._pathForFile(fileName, fromServerdirectory));// require('path').dirname(this._pathForFile(fileName,fromServerdirectory));
+            //check if file is node_module
+            for (var key in modules) {
+                if (((path + "/").startsWith("./client/" + key + "/")) && await exists("./node_modules/" + key)) {
+                    return "packages in node_modules could not be saved";
+                }
+            }
+
+            try {
+
+                await myfs.mkdir(path, { recursive: true });
+            } catch (err) {
+
+            }
+            if (await exists(this._pathForFile(fileName, fromServerdirectory))) {
+                rollbackcontents.push(await myfs.readFile(this._pathForFile(fileName, fromServerdirectory), 'utf-8'));
+            } else {
+                rollbackcontents.push(undefined);//this file would be killed at revert
+            }
+            if (contents[x] === undefined)
+                await myfs.unlink(this._pathForFile(fileName, fromServerdirectory));//remove file on revert
+            else {
+                await myfs.writeFile(this._pathForFile(fileName, fromServerdirectory), contents[x]);
+                //transpile remoteCode for Server
+                let spath = fileName.split("/");
+                if ((fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote")) && fileName.toLowerCase().endsWith(".ts")) {
+                    var fneu = fileName.replace("$serverside/", "");
+                    let rpath = this.getDirectoryname("./" + fneu);
+                    try {
+                        await myfs.mkdir(rpath, { recursive: true });
+                    } catch (err) {
+                    }
+                    await myfs.writeFile("./" + fneu, contents[x]);
+                    if (spath.length > 1 && spath[0] !== "$serverside")
+                        await this.createRemoteModulIfNeeded(spath[0]);
+                    transpile(fneu, fromServerdirectory);
+                }
+            }
+        }
+        await new ServerIndexer().updateRegistry();
+        var remotecodeincluded = false;
+        for (var f = 0; f < fileNames.length; f++) {
+            var fileName = fileNames[f];
+            if (contents[f] === undefined)
+                continue;
+            var spath = fileName.split("/");
+            var fromServerdirectory = fileName.startsWith("$serverside/");
+            
+            if (fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote") && fileName.toLowerCase().endsWith(".ts")) {
+                var remotecodeincluded = true;
+                remoteFiles.push(fileName.substring(0, fileName.length - 3));
+
+                // }
+            }
 
 
+        };
+
+        try {
+            if (remotecodeincluded) {
+                await reloadJSAll(remoteFiles, async () => {
+                    if (runningServerservices["db"]) {
+                        (await serverservices.db).renewConnection();
+                    }
+                });
+            }
+        } catch (err) {
+            var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+            console.error(err.stack);
+            return err + "DB corrupt changes are reverted " + restore;
+        }
+        if (remotecodeincluded) {
+            await registry.reload();
+        }
+        if (remotecodeincluded && rollbackonerror) {//verify DB-Schema
+            try {
+                await serverservices.db;
+            } catch (err) {
+                var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                console.error(err.stack);
+                return err + "DB corrupt changes are reverted " + restore;
+            }
+        }
+        return ret;
+    }
+    public async saveFile(fileName: string, content: string) {
+        try {
+            var fdir = this.getDirectoryname(this._pathForFile(fileName));
+            // var fdir = path.substring(0,path.lastIndexOf("/"));//fpath.dirname(path).split(fpath.sep).pop();
+            await myfs.mkdir(fdir, { recursive: true });
+        } catch (err) {
+
+        }
+        await myfs.writeFile(this.path + "/" + fileName, content)
+        /*
+        if(fileName.endsWith(".ts")){
+            new Compile().transpile(fileName,function(done){
+                var kk=Compile.lastModifiedTSFiles[0]; 
+                if(Compile.lastModifiedTSFiles.indexOf(fileName)>-1){
+                    var pos=Compile.lastModifiedTSFiles.indexOf(fileName);
+                    Compile.lastModifiedTSFiles.splice(pos, 1);
+                }
+                response.send(done)
+                
+            });
+            return;
+             }*/
+        await new ServerIndexer().updateRegistry();
+        //TODO $this->updateRegistry();
+    }
 }

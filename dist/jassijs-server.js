@@ -1,0 +1,10064 @@
+"use strict:";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.classes = exports.Classes = exports.JassiError = void 0;
+    let JassiError = class JassiError extends Error {
+        constructor(msg) {
+            super(msg);
+        }
+    };
+    JassiError = __decorate([
+        $Class("jassijs.remote.JassiError"),
+        __metadata("design:paramtypes", [String])
+    ], JassiError);
+    exports.JassiError = JassiError;
+    function $Class(longclassname) {
+        return function (pclass) {
+            Registry_1.default.register("$Class", pclass, longclassname);
+        };
+    }
+    /**
+    * manage all registered classes ->jassijs.register("classes")
+    * @class jassijs.base.Classes
+    */
+    let Classes = class Classes {
+        constructor() {
+            this._cache = {};
+            this.funcRegister = Registry_1.default.onregister("$Class", this.register.bind(this));
+        }
+        destroy() {
+            Registry_1.default.offregister("$Class", this.funcRegister);
+        }
+        /**
+         * load the a class
+         * @param classname - the class to load
+         */
+        async loadClass(classname) {
+            var cl = await Registry_1.default.getJSONData("$Class", classname);
+            if (cl === undefined) {
+                try {
+                    //@ts-ignore
+                    if (require.main) { //nodes load project class from module
+                        //@ts-ignore 
+                        await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
+                    }
+                    else {
+                        await new Promise((resolve_1, reject_1) => { require([classname.replaceAll(".", "/")], resolve_1, reject_1); });
+                    }
+                }
+                catch (err) {
+                    err = err;
+                }
+            }
+            else {
+                if (cl === undefined || cl.length === 0) {
+                    throw new JassiError("Class not found:" + classname);
+                }
+                var file = cl[0].filename;
+                //@ts-ignore
+                if (window.document === undefined) {
+                    var pack = file.split("/");
+                    if (pack.length < 2 || pack[1] === "server") {
+                        // throw new JassiError("Server classes could not be loaded: " + classname );
+                    }
+                }
+                //@ts-ignore
+                if (require.main) { //nodes load project class from module
+                    //@ts-ignore
+                    var imp = await Promise.resolve().then(() => require.main.require(file.replace(".ts", "")));
+                }
+                else {
+                    var imp = await new Promise((resolve_2, reject_2) => { require([file.replace(".ts", "")], resolve_2, reject_2); });
+                }
+            }
+            return this.getClass(classname);
+        }
+        /**
+        * get the class of the given classname
+        * @param {string} - the classname
+        * @returns {class} - the class
+        */
+        getClass(classname) {
+            return this._cache[classname];
+            /* var ret=this.getPackage(classname);
+             
+             if(ret!==undefined&&ret.prototype!==undefined && ret.prototype.constructor === ret)
+                 return ret;
+             else
+                 return undefined; */
+        }
+        /**
+        * get the name of the given class
+        * @param {class} _class - the class (prototype)
+        * @returns {string} name of the class
+        */
+        getClassName(_class) {
+            var _a, _b, _c, _d, _e, _f;
+            if (_class === undefined)
+                return undefined;
+            if ((_a = _class.constructor) === null || _a === void 0 ? void 0 : _a._classname)
+                return (_b = _class.constructor) === null || _b === void 0 ? void 0 : _b._classname;
+            if ((_d = (_c = _class.prototype) === null || _c === void 0 ? void 0 : _c.constructor) === null || _d === void 0 ? void 0 : _d._classname)
+                return (_f = (_e = _class.prototype) === null || _e === void 0 ? void 0 : _e.constructor) === null || _f === void 0 ? void 0 : _f._classname;
+            return undefined;
+        }
+        register(data, name) {
+            //data.prototype._classname=name;
+            this._cache[name] = data;
+        }
+    };
+    Classes = __decorate([
+        $Class("jassijs.remote.Classes"),
+        __metadata("design:paramtypes", [])
+    ], Classes);
+    exports.Classes = Classes;
+    ;
+    let classes = new Classes();
+    exports.classes = classes;
+    async function test(t) {
+        var cl = classes.getClass("jassijs.ui.Button");
+        t.expectEqual(cl === await classes.loadClass("jassijs.ui.Button"));
+        t.expectEqual(classes.getClassName(cl) === "jassijs.ui.Button");
+    }
+    exports.test = test;
+});
+define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.FileNode = void 0;
+    ;
+    let FileNode = class FileNode {
+        constructor(fullpath = undefined) {
+            if (fullpath) {
+                this.fullpath = fullpath;
+                this.name = fullpath.split("/")[fullpath.split("/").length - 1];
+            }
+        }
+        isDirectory() {
+            return this.files !== undefined;
+        }
+        resolveChilds(all) {
+            if (all === undefined)
+                all = {};
+            //var ret:FileNode[]=[];
+            if (this.files !== undefined) {
+                for (let x = 0; x < this.files.length; x++) {
+                    all[this.files[x].fullpath] = this.files[x];
+                    this.files[x].resolveChilds(all);
+                }
+            }
+            return all;
+        }
+    };
+    FileNode = __decorate([
+        (0, Registry_2.$Class)("jassijs.remote.FileNode"),
+        __metadata("design:paramtypes", [String])
+    ], FileNode);
+    exports.FileNode = FileNode;
+});
+//@ts-ignore
+define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Classes_1, Registry_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.$Serverservice = exports.beforeServiceLoad = exports.ServerserviceProperties = void 0;
+    class ServerserviceProperties {
+    }
+    exports.ServerserviceProperties = ServerserviceProperties;
+    var runningServerservices = {};
+    exports.runningServerservices = runningServerservices;
+    var beforeServiceLoadHandler = [];
+    function beforeServiceLoad(func) {
+        beforeServiceLoadHandler.push(func);
+    }
+    exports.beforeServiceLoad = beforeServiceLoad;
+    var serverservices = new Proxy(runningServerservices, {
+        get(target, prop, receiver) {
+            return new Promise(async (resolve, reject) => {
+                var khsdf = runningServerservices;
+                if (target[prop]) {
+                    resolve(target[prop]);
+                }
+                else {
+                    var all = await Registry_3.default.getJSONData("$Serverservice");
+                    for (var x = 0; x < all.length; x++) {
+                        var serv = all[x];
+                        var name = serv.params[0].name;
+                        if (name === prop) {
+                            var classname = serv.classname;
+                            var cl = await Registry_3.default.getJSONData("$Class", classname);
+                            //@ts-ignore
+                            if (require.main) { //nodes load project class from module
+                                /*for (var jfile in require.cache) {
+                                    if(jfile.replaceAll("\\","/").endsWith(serv.filename.substring(0,serv.filename.length-2)+"js")){
+                                        delete require.cache[jfile];
+                                    }
+                                }*/
+                                //@ts-ignore
+                                await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
+                            }
+                            else {
+                                await Classes_1.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
+                            }
+                            var props = Registry_3.default.getData("$Serverservice", classname)[0].params[0];
+                            for (var x = 0; x < beforeServiceLoadHandler.length; x++) {
+                                await beforeServiceLoadHandler[x](prop, props);
+                            }
+                            var instance = props.getInstance();
+                            target[prop] = instance;
+                            resolve(instance);
+                            return;
+                        }
+                    }
+                }
+                reject("serverservice not found:" + prop);
+            });
+        }
+    });
+    exports.serverservices = serverservices;
+    function $Serverservice(properties) {
+        return function (pclass) {
+            Registry_3.default.register("$Serverservice", pclass, properties);
+        };
+    }
+    exports.$Serverservice = $Serverservice;
+    var doNotReloadModule = true;
+    exports.doNotReloadModule = doNotReloadModule;
+});
+define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_2, Config_1, Serverservice_1, NativeAdapter_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Indexer = void 0;
+    class Indexer {
+        async updateModul(root, modul, isserver) {
+            var path = root + (root === "" ? "" : "/") + modul;
+            //create empty if needed
+            var text = "{}";
+            if (await this.fileExists(path + "/registry.js")) {
+                text = await this.readFile(path + "/registry.js");
+                if (!isserver) {
+                    text = text.substring(text.indexOf("default:") + 8);
+                    text = text.substring(0, text.lastIndexOf("}") - 1);
+                    text = text.substring(0, text.lastIndexOf("}") - 1);
+                }
+                else {
+                    text = text.substring(text.indexOf("default=") + 8);
+                }
+            }
+            try {
+                var index = JSON.parse(text);
+            }
+            catch (_a) {
+                console.log("error read modul " + modul + "- create new");
+                index = {};
+            }
+            //remove deleted files
+            for (var key in index) {
+                if (!(await this.fileExists(root + (root === "" ? "" : "/") + key))) {
+                    delete index[key];
+                }
+            }
+            var jsFiles = await this.dirFiles(modul, path, [".ts"], ["node_modules"]);
+            for (let x = 0; x < jsFiles.length; x++) {
+                var jsFile = jsFiles[x];
+                var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
+                if (fileName === undefined)
+                    continue;
+                var entry = index[fileName];
+                if (entry === undefined) {
+                    entry = {};
+                    entry.date = undefined;
+                    index[fileName] = entry;
+                }
+                if (await this.fileExists(root + (root === "" ? "" : "/") + fileName)) {
+                    var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
+                    if (dat !== entry.date) {
+                        var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
+                        var sourceFile = NativeAdapter_1.ts.createSourceFile('hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true);
+                        var outDecorations = [];
+                        entry = {};
+                        entry.date = undefined;
+                        index[fileName] = entry;
+                        this.collectAnnotations(sourceFile, entry);
+                        // findex(Filesystem.path + "/" + jsFile);
+                        entry.date = dat;
+                    }
+                }
+            }
+            if (!isserver) { //write client
+                var text = JSON.stringify(index, undefined, "\t");
+                text = "//this file is autogenerated don't modify\n" +
+                    'define("' + modul + '/registry",["require"], function(require) {\n' +
+                    ' return {\n' +
+                    '  default: ' + text + "\n" +
+                    ' }\n' +
+                    '});';
+                var jsdir = "js/" + path;
+                var fpath = (await (Serverservice_1.serverservices.filesystem)).path;
+                if (fpath !== undefined)
+                    jsdir = path.replace(fpath, fpath + "/js");
+                if (!(await this.fileExists(jsdir)))
+                    await this.createDirectory(jsdir);
+                await this.writeFile(jsdir + "/registry.js", text);
+                await this.writeFile(path + "/registry.js", text);
+            }
+            else { //write server
+                var modules = Config_1.config.server.modules;
+                for (let smodul in modules) {
+                    if (modul === smodul) {
+                        var text = JSON.stringify(index, undefined, "\t");
+                        if (text !== "{}") {
+                            text = '"use strict:"\n' +
+                                "//this file is autogenerated don't modify\n" +
+                                'Object.defineProperty(exports, "__esModule", { value: true });\n' +
+                                'exports.default=' + text;
+                            var jsdir = "js/" + modul;
+                            if (!(await this.fileExists(jsdir)))
+                                await this.createDirectory(jsdir);
+                            await this.writeFile(jsdir + "/registry.js", text);
+                            await this.writeFile(modul + "/registry.js", text);
+                        }
+                    }
+                }
+            }
+        }
+        convertArgument(arg) {
+            if (arg === undefined)
+                return undefined;
+            if (arg.kind === NativeAdapter_1.ts.SyntaxKind.ObjectLiteralExpression) {
+                var ret = {};
+                var props = arg.properties;
+                if (props !== undefined) {
+                    for (var p = 0; p < props.length; p++) {
+                        ret[props[p].name.text] = this.convertArgument(props[p].initializer);
+                    }
+                }
+                return ret;
+            }
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.StringLiteral) {
+                return arg.text;
+            }
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.ArrayLiteralExpression) {
+                let ret = [];
+                for (var p = 0; p < arg.elements.length; p++) {
+                    ret.push(this.convertArgument(arg.elements[p]));
+                }
+                return ret;
+            }
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.Identifier) {
+                return arg.text;
+            }
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.TrueKeyword) {
+                return true;
+            }
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.FalseKeyword) {
+                return false;
+            }
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.NumericLiteral) {
+                return Number(arg.text);
+            }
+            else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.ArrowFunction || arg.kind === NativeAdapter_1.ts.SyntaxKind.FunctionExpression) {
+                return "function";
+            }
+            throw new Classes_2.JassiError("Error typ not found");
+        }
+        collectAnnotations(node, outDecorations, depth = 0) {
+            var _a;
+            //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
+            if (node.kind === NativeAdapter_1.ts.SyntaxKind.ClassDeclaration) {
+                if (node.decorators !== undefined) {
+                    var dec = {};
+                    var sclass = undefined;
+                    for (let x = 0; x < node.decorators.length; x++) {
+                        var decnode = node.decorators[x];
+                        var ex = decnode.expression;
+                        if (ex.expression === undefined) {
+                            dec[ex.text] = []; //Annotation without parameter
+                        }
+                        else {
+                            if (ex.expression.text === "$Class")
+                                sclass = this.convertArgument(ex.arguments[0]);
+                            else {
+                                if (dec[ex.expression.text] === undefined) {
+                                    dec[ex.expression.text] = [];
+                                }
+                                for (var a = 0; a < ex.arguments.length; a++) {
+                                    dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                }
+                            }
+                        }
+                    }
+                    if (sclass !== undefined)
+                        outDecorations[sclass] = dec;
+                    //@members.value.$Property=[{name:string}]
+                    for (let x = 0; x < node["members"].length; x++) {
+                        var member = node["members"][x];
+                        var membername = (_a = node["members"][x].name) === null || _a === void 0 ? void 0 : _a.escapedText;
+                        if (member.decorators !== undefined) {
+                            if (!dec["@members"])
+                                dec["@members"] = {};
+                            var decm = {};
+                            dec["@members"][membername] = decm;
+                            for (let x = 0; x < member.decorators.length; x++) {
+                                var decnode = member.decorators[x];
+                                var ex = decnode.expression;
+                                if (ex.expression === undefined) {
+                                    decm[ex.text] = []; //Annotation without parameter
+                                }
+                                else {
+                                    if (ex.expression.text === "$Property") {
+                                        //do nothing;
+                                    }
+                                    else {
+                                        if (decm[ex.expression.text] === undefined) {
+                                            decm[ex.expression.text] = [];
+                                        }
+                                        for (var a = 0; a < ex.arguments.length; a++) {
+                                            decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                        }
+                                    }
+                                }
+                            }
+                            if (Object.keys(dec["@members"][membername]).length === 0) {
+                                delete dec["@members"][membername];
+                            }
+                        }
+                    }
+                }
+            }
+            depth++;
+            node.getChildren().forEach(c => this.collectAnnotations(c, outDecorations, depth));
+        }
+    }
+    exports.Indexer = Indexer;
+});
+define("jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/Indexer", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "jassijs/remote/Config"], function (require, exports, Indexer_1, Serverservice_2, NativeAdapter_2, Config_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ServerIndexer = void 0;
+    class ServerIndexer extends Indexer_1.Indexer {
+        async updateRegistry() {
+            //client modules
+            var path = (await Serverservice_2.serverservices.filesystem).path;
+            var modules = Config_2.config.modules;
+            for (var m in modules) {
+                if ((await (0, NativeAdapter_2.exists)(path + "/" + modules[m]) && !modules[m].endsWith(".js") && modules[m].indexOf(".js?")) === -1) //.js are internet modules
+                    await this.updateModul(path, m, false);
+            }
+            //server modules
+            modules = Config_2.config.server.modules;
+            for (var m in modules) {
+                if (await (0, NativeAdapter_2.exists)("./" + modules[m]) && !modules[m].endsWith(".js")) //.js are internet modules
+                    await this.updateModul(".", m, true);
+            }
+            return;
+        }
+        async dirFiles(modul, path, extensions, ignore = []) {
+            var jsFiles = await (await Serverservice_2.serverservices.filesystem).dirFiles(path, extensions, ignore);
+            return jsFiles;
+        }
+        async writeFile(name, content) {
+            if (!name.startsWith("./"))
+                name = "./" + name;
+            await NativeAdapter_2.myfs.writeFile(name, content);
+        }
+        async createDirectory(name) {
+            if (!name.startsWith("./"))
+                name = "./" + name;
+            await NativeAdapter_2.myfs.mkdir(name, { recursive: true });
+            return;
+        }
+        async getFileTime(filename) {
+            if (!filename.startsWith("./"))
+                filename = "./" + filename;
+            var stats = await NativeAdapter_2.myfs.stat(filename);
+            return stats.mtimeMs;
+        }
+        async fileExists(filename) {
+            if (!filename.startsWith("./"))
+                filename = "./" + filename;
+            return await (0, NativeAdapter_2.exists)(filename);
+        }
+        async readFile(filename) {
+            if (!filename.startsWith("./"))
+                filename = "./" + filename;
+            return NativeAdapter_2.myfs.readFile(filename, 'utf-8');
+        }
+    }
+    exports.ServerIndexer = ServerIndexer;
+});
+define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/RegistryIndexer", "jassijs/remote/Registry", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "jassijs/remote/Config"], function (require, exports, RegistryIndexer_1, Registry_4, Serverservice_3, NativeAdapter_3, Config_3) {
+    "use strict";
+    var Filesystem_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
+    let Filesystem = Filesystem_1 = class Filesystem {
+        constructor() {
+            this.path = "./client";
+        }
+        _pathForFile(fileName, fromServerdirectory = undefined) {
+            if (fileName.startsWith("/"))
+                fileName = fileName.substring(1);
+            var path = this.path + "/" + fileName;
+            if (fromServerdirectory)
+                path = "./" + fileName.replace("$serverside/", "");
+            return path;
+        }
+        /*   _getDirectory(file:string,main:FileNode[]):FileNode[]{
+               var paths:string[]=file.split("/");
+               var parent=main;
+               for(let p=0;p<paths.length-1;p++){
+                   for(let x=0;x<parent.length;x++){
+                       if(parent[x].name===paths[p]){
+                           parent=parent[x].files;
+                           continue;
+                       }
+                   }
+               }
+               return parent;
+           }*/
+        async dir(curdir = "", appendDate = false, parentPath = this.path, parent = undefined) {
+            try {
+                var _this = this;
+                var modules = Config_3.config.server.modules;
+                if (parent === undefined) {
+                    parent = { name: "", files: [] };
+                }
+                //var parent:FileNode[]=_this._getDirectory(file,results);
+                var list = await NativeAdapter_3.myfs.readdir(parentPath + (curdir === "" ? "" : ("/" + curdir)));
+                for (var xx = 0; xx < list.length; xx++) {
+                    var filename = list[xx];
+                    var file = curdir + (curdir === "" ? "" : '/') + filename;
+                    if (file !== "js" && file !== "tmp") { //compiled js
+                        var stat = await NativeAdapter_3.myfs.stat(parentPath + "/" + file);
+                        if (stat && stat.isDirectory()) {
+                            var newDir = { name: filename, files: [] };
+                            parent.files.push(newDir);
+                            /* Recurse into a subdirectory */
+                            if (ignore.indexOf(file) === -1)
+                                await _this.dir(file, appendDate, parentPath, newDir);
+                        }
+                        else {
+                            let dat = "";
+                            let toAdd = { name: filename };
+                            if (appendDate === true)
+                                toAdd.date = (await NativeAdapter_3.myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
+                            // if (file.toLowerCase().endsWith(".ts"))
+                            parent.files.push(toAdd);
+                            /* if (file.toLowerCase().endsWith(".js")) {
+                                 if (!await exists(file.replace(".js", ".ts"))) {
+                                     parent.files.push(toAdd);
+                                 }
+                             }
+                             if (file.toLowerCase().endsWith(".json"))
+                                 parent.files.push(toAdd);*/
+                        }
+                    }
+                }
+                ;
+                //add files in node modules
+                if (parent.name === "" && parentPath === "./client") {
+                    for (var key in modules) {
+                        if (await (0, NativeAdapter_3.exists)("./node_modules/" + key + "/client")) {
+                            var addFiles = await this.dir("client", appendDate, "./node_modules/" + key);
+                            var temp = {};
+                            for (var x = 0; x < parent.files.length; x++) {
+                                var entr = parent.files[x];
+                                temp[entr.name] = entr;
+                            }
+                            for (var x = 0; x < addFiles.files.length; x++) {
+                                if (temp[addFiles.files[x].name] === undefined) {
+                                    parent.files.push(addFiles.files[x]);
+                                    //addFiles.files[x].isNode_module=true;
+                                }
+                            }
+                        }
+                    }
+                }
+                return parent;
+            }
+            catch (err) {
+                throw err;
+            }
+        }
+        async loadFile(fileName) {
+            var fromServerdirectory = fileName.startsWith("$serverside/");
+            let file = this._pathForFile(fileName, fromServerdirectory);
+            return await NativeAdapter_3.myfs.readFile(file, 'utf-8');
+        }
+        async loadFiles(fileNames) {
+            var ret = {};
+            for (var x = 0; x < fileNames.length; x++) {
+                ret[fileNames[x]] = await NativeAdapter_3.myfs.readFile(this._pathForFile(fileNames[x]), 'utf-8');
+                /* await myfs.readFile(path+"/"+fileName, {encoding: 'utf-8'}, function(err,data){
+                    if (!err) {
+                        response.send( data);
+                  //    response.writeHead(200, {'Content-Type': 'text/html'});
+                    //  response.write(data);
+                    }else{
+                      return response.send(err);
+                    }
+                  });*/
+            }
+            return ret;
+            //  return ret;
+        }
+        async dirFiles(dir, extensions, ignore = []) {
+            var results = [];
+            if (!await (0, NativeAdapter_3.exists)(dir))
+                return results;
+            var list = await NativeAdapter_3.myfs.readdir(dir);
+            var _this = this;
+            for (let l = 0; l < list.length; l++) {
+                let file = list[l];
+                if (ignore.indexOf(file) !== -1)
+                    continue;
+                file = dir + '/' + file;
+                var stat = await NativeAdapter_3.myfs.stat(file);
+                if (stat && stat.isDirectory()) {
+                    /* Recurse into a subdirectory */
+                    var arr = await _this.dirFiles(file, extensions);
+                    results = results.concat(arr);
+                }
+                else {
+                    /* Is a file */
+                    for (var x = 0; x < extensions.length; x++) {
+                        if (file.toLowerCase().endsWith(extensions[x]) && results.indexOf(file) === -1) {
+                            results.push(file);
+                        }
+                    }
+                }
+            }
+            ;
+            return results;
+        }
+        async zip(directoryname, serverdir = undefined) {
+            return await (0, NativeAdapter_3.dozip)(directoryname, serverdir);
+        }
+        //Reset ORM config
+        /**
+         * create a folder
+         * @param foldername - the name of the new file
+         */
+        async createFolder(foldername) {
+            var newpath = this._pathForFile(foldername);
+            if (await (0, NativeAdapter_3.exists)(newpath))
+                return foldername + " allready await exists";
+            try {
+                await NativeAdapter_3.myfs.mkdir(newpath, { recursive: true });
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            return "";
+        }
+        /**
+         * create a module
+         * @param modulname - the name of the module
+      
+         */
+        async createModule(modulename) {
+            var newpath = this._pathForFile(modulename);
+            try {
+                //create folder
+                if (!await (0, NativeAdapter_3.exists)(newpath))
+                    await NativeAdapter_3.myfs.mkdir(newpath, { recursive: true });
+                //create remotefolder
+                //if (!await exists(newpath + "/remote"))
+                //    await myfs.mkdir(newpath + "/remote", { recursive: true });
+                if (!await (0, NativeAdapter_3.exists)(newpath + "/modul.ts")) {
+                    await this.saveFiles([modulename + "/modul.js", "js/" + modulename + "/modul.js"], [
+                        "export default {}",
+                        'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'
+                    ]);
+                }
+                if (!await (0, NativeAdapter_3.exists)(newpath + "/registry.js")) {
+                    await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], [
+                        'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
+                        'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
+                    ]);
+                }
+                /* if (!await exists("./" + modulename))
+                     await myfs.mkdir("./" + modulename, { recursive: true });
+                 if (!await exists("./js/" + modulename))
+                     await myfs.mkdir("./js/" + modulename, { recursive: true });
+                 if (!await exists("./" + modulename + "/remote"))
+                     await myfs.mkdir("./" + modulename + "/remote", { recursive: true });
+                 if (!await exists("./" + modulename + "/registry.js")) {
+                     await myfs.writeFile("./" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+                     await myfs.writeFile("./js/" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+     
+                 }*/
+                //update client jassijs.json
+                if (!Config_3.config.modules[modulename])
+                    Config_3.config.jsonData.modules[modulename] = modulename;
+                await Config_3.config.saveJSON();
+                //this.createRemoteModulIfNeeded(modulename);
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            return "";
+        }
+        /**
+         * create a file
+         * @param filename - the name of the new file
+         * @param content - then content
+         */
+        async createFile(filename, content) {
+            var newpath = this._pathForFile(filename);
+            var parent = this.getDirectoryname(newpath);
+            if (await (0, NativeAdapter_3.exists)(newpath))
+                return filename + " allready await exists";
+            try {
+                if (!await (0, NativeAdapter_3.exists)(parent))
+                    await NativeAdapter_3.myfs.mkdir(parent, { recursive: true });
+                await NativeAdapter_3.myfs.writeFile(newpath, content);
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            return "";
+        }
+        /**
+         * renames a file or directory
+         * @param oldfile - old filename
+         * @param newfile - new filename
+         */
+        async rename(oldfile, newfile) {
+            var oldpath = this._pathForFile(oldfile);
+            var newpath = this._pathForFile(newfile);
+            if (!await (0, NativeAdapter_3.exists)(oldpath))
+                return oldfile + " not await exists";
+            if (await (0, NativeAdapter_3.exists)(newpath))
+                return newfile + " already await exists";
+            try {
+                /*  if(fs.lstatSync(oldpath).isDirectory()
+                     await myfs.rmdir((oldpath, newpath);
+                  else*/
+                await NativeAdapter_3.myfs.rename(oldpath, newpath);
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            await new RegistryIndexer_1.ServerIndexer().updateRegistry();
+            return "";
+        }
+        /**
+        * deletes a server module
+        * @param modul - to delete
+        */
+        async removeServerModul(modul) {
+            delete Config_3.config.jsonData.server.modules[modul];
+            await Config_3.config.saveJSON();
+            if (await (0, NativeAdapter_3.exists)(modul)) {
+                await NativeAdapter_3.myfs.rmdir(modul, { recursive: true });
+            }
+            return "";
+        }
+        /**
+        * deletes a file or directory
+        * @param file - old filename
+        */
+        async remove(file) {
+            var path = this._pathForFile(file);
+            if (!await (0, NativeAdapter_3.exists)(path))
+                return file + " not await exists";
+            try {
+                if ((await NativeAdapter_3.myfs.stat(path)).isDirectory()) {
+                    //update client jassijs.json if removing client module 
+                    if (Config_3.config.modules[file]) {
+                        delete Config_3.config.jsonData.modules[file];
+                        await Config_3.config.saveJSON();
+                    }
+                    await NativeAdapter_3.myfs.rmdir(path, { recursive: true });
+                }
+                else
+                    await NativeAdapter_3.myfs.unlink(path);
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            await new RegistryIndexer_1.ServerIndexer().updateRegistry();
+            return "";
+        }
+        /**
+         * create modul in ./jassijs.json
+         * @param modul
+         */
+        async createRemoteModulIfNeeded(modul) {
+            if (!Config_3.config.jsonData.server.modules[modul]) {
+                Config_3.config.jsonData.server.modules[modul] = modul;
+                await Config_3.config.saveJSON();
+            }
+        }
+        getDirectoryname(ppath) {
+            var path = ppath.replaceAll("\\", "/");
+            return path.substring(0, path.lastIndexOf("/"));
+        }
+        /**
+         * save files +
+         * transpile remote files and
+         * reload the remote files in server if needed
+         * update db schema
+         * the changes would be reverted if there are errors
+         * @param fileNames
+         * @param contents
+         * @returns "" or the error
+         */
+        async saveFiles(fileNames, contents, rollbackonerror = true) {
+            var ret = "";
+            var rollbackcontents = [];
+            var modules = Config_3.config.server.modules;
+            var remoteFiles = [];
+            for (var x = 0; x < fileNames.length; x++) {
+                let fileName = fileNames[x];
+                var fromServerdirectory = fileName.startsWith("$serverside/");
+                var path = this.getDirectoryname(this._pathForFile(fileName, fromServerdirectory)); // require('path').dirname(this._pathForFile(fileName,fromServerdirectory));
+                //check if file is node_module
+                for (var key in modules) {
+                    if (((path + "/").startsWith("./client/" + key + "/")) && await (0, NativeAdapter_3.exists)("./node_modules/" + key)) {
+                        return "packages in node_modules could not be saved";
+                    }
+                }
+                try {
+                    await NativeAdapter_3.myfs.mkdir(path, { recursive: true });
+                }
+                catch (err) {
+                }
+                if (await (0, NativeAdapter_3.exists)(this._pathForFile(fileName, fromServerdirectory))) {
+                    rollbackcontents.push(await NativeAdapter_3.myfs.readFile(this._pathForFile(fileName, fromServerdirectory), 'utf-8'));
+                }
+                else {
+                    rollbackcontents.push(undefined); //this file would be killed at revert
+                }
+                if (contents[x] === undefined)
+                    await NativeAdapter_3.myfs.unlink(this._pathForFile(fileName, fromServerdirectory)); //remove file on revert
+                else {
+                    await NativeAdapter_3.myfs.writeFile(this._pathForFile(fileName, fromServerdirectory), contents[x]);
+                    //transpile remoteCode for Server
+                    let spath = fileName.split("/");
+                    if ((fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote")) && fileName.toLowerCase().endsWith(".ts")) {
+                        var fneu = fileName.replace("$serverside/", "");
+                        let rpath = this.getDirectoryname("./" + fneu);
+                        try {
+                            await NativeAdapter_3.myfs.mkdir(rpath, { recursive: true });
+                        }
+                        catch (err) {
+                        }
+                        await NativeAdapter_3.myfs.writeFile("./" + fneu, contents[x]);
+                        if (spath.length > 1 && spath[0] !== "$serverside")
+                            await this.createRemoteModulIfNeeded(spath[0]);
+                        (0, NativeAdapter_3.transpile)(fneu, fromServerdirectory);
+                    }
+                }
+            }
+            await new RegistryIndexer_1.ServerIndexer().updateRegistry();
+            var remotecodeincluded = false;
+            for (var f = 0; f < fileNames.length; f++) {
+                var fileName = fileNames[f];
+                if (contents[f] === undefined)
+                    continue;
+                var spath = fileName.split("/");
+                var fromServerdirectory = fileName.startsWith("$serverside/");
+                if (fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote") && fileName.toLowerCase().endsWith(".ts")) {
+                    var remotecodeincluded = true;
+                    remoteFiles.push(fileName.substring(0, fileName.length - 3));
+                    // }
+                }
+            }
+            ;
+            try {
+                if (remotecodeincluded) {
+                    await (0, NativeAdapter_3.reloadJSAll)(remoteFiles, async () => {
+                        if (Serverservice_3.runningServerservices["db"]) {
+                            (await Serverservice_3.serverservices.db).renewConnection();
+                        }
+                    });
+                }
+            }
+            catch (err) {
+                var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                console.error(err.stack);
+                return err + "DB corrupt changes are reverted " + restore;
+            }
+            if (remotecodeincluded) {
+                await Registry_4.default.reload();
+            }
+            if (remotecodeincluded && rollbackonerror) { //verify DB-Schema
+                try {
+                    await Serverservice_3.serverservices.db;
+                }
+                catch (err) {
+                    var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                    console.error(err.stack);
+                    return err + "DB corrupt changes are reverted " + restore;
+                }
+            }
+            return ret;
+        }
+        async saveFile(fileName, content) {
+            try {
+                var fdir = this.getDirectoryname(this._pathForFile(fileName));
+                // var fdir = path.substring(0,path.lastIndexOf("/"));//fpath.dirname(path).split(fpath.sep).pop();
+                await NativeAdapter_3.myfs.mkdir(fdir, { recursive: true });
+            }
+            catch (err) {
+            }
+            await NativeAdapter_3.myfs.writeFile(this.path + "/" + fileName, content);
+            /*
+            if(fileName.endsWith(".ts")){
+                new Compile().transpile(fileName,function(done){
+                    var kk=Compile.lastModifiedTSFiles[0];
+                    if(Compile.lastModifiedTSFiles.indexOf(fileName)>-1){
+                        var pos=Compile.lastModifiedTSFiles.indexOf(fileName);
+                        Compile.lastModifiedTSFiles.splice(pos, 1);
+                    }
+                    response.send(done)
+                    
+                });
+                return;
+                 }*/
+            await new RegistryIndexer_1.ServerIndexer().updateRegistry();
+            //TODO $this->updateRegistry();
+        }
+    };
+    Filesystem.allModules = {};
+    Filesystem = Filesystem_1 = __decorate([
+        (0, Serverservice_3.$Serverservice)({ name: "filesystem", getInstance: async () => { return new Filesystem_1(); } }),
+        (0, Registry_4.$Class)("jassijs.server.Filesystem")
+    ], Filesystem);
+    exports.default = Filesystem;
+});
+define("jassijs/server/Reloader", ["require", "exports", "jassijs/remote/Config", "jassijs/server/Filesystem"], function (require, exports, Config_4, Filesystem_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Reloader = void 0;
+    class Reloader {
+        async reloadJSAll(filenames, afterUnload = undefined) {
+            //reload Modules
+            var modules = Config_4.config.server.modules;
+            //var root = require.main["path"]+"\\";  //not work on heroku
+            var root = new Filesystem_2.default().getDirectoryname(require.main.filename).replaceAll("\\", "/");
+            root = root + (root.endsWith("/js") ? "/" : "/js/");
+            // root = root.substring(0, root.length - "jassijs/remote/Classes.js".length);
+            var jfiles = [];
+            for (var modul in modules) { //undef all modules
+                for (var jfile in require.cache) {
+                    if (jfile.indexOf("TestServerreport") > -1)
+                        jfile = jfile;
+                    if (jfile.replaceAll("\\", "/").indexOf("/" + modul + "/remote/") > -1) /* ||
+                         (fromServerdirectory && jfile.replaceAll("\\", "/").replaceAll("$serverside/", "").
+                             endsWith("/js/" + fileName.replaceAll("$serverside/", "").replace(".ts", ".js"))))*/ {
+                        //save Modules
+                        var p = jfile.substring(root.length).replaceAll("\\", "/");
+                        if (jfile.indexOf("node_modules") > -1) { //jassi modules
+                            p = jfile.split("node_modules")[1].substring(1).replaceAll("\\", "/");
+                            ;
+                        }
+                        p = p.substring(0, p.length - 3);
+                        //console.log(jfile+"->"+p);
+                        if (Filesystem_2.default.allModules[p] === undefined) {
+                            Filesystem_2.default.allModules[p] = [];
+                        }
+                        //save all modules
+                        var mod = await Promise.resolve().then(() => require.main.require(p));
+                        if (Filesystem_2.default.allModules[p].indexOf(mod) === -1)
+                            Filesystem_2.default.allModules[p].push(mod);
+                        jfiles.push(jfile);
+                    }
+                }
+            }
+            for (let k = 0; k < jfiles.length; k++) {
+                let jfile = jfiles[k];
+                if (require.cache[jfile].exports.doNotReloadModule) {
+                }
+                else
+                    delete require.cache[jfile];
+            }
+            if (afterUnload !== undefined)
+                await afterUnload();
+            for (var key in Filesystem_2.default.allModules) { //load and migrate modules
+                var all = Filesystem_2.default.allModules[key];
+                var mod = await Promise.resolve().then(() => require.main.require(key));
+                for (var a = 0; a < all.length; a++) {
+                    for (key in mod) {
+                        all[a][key] = mod[key];
+                    }
+                }
+            }
+        }
+    }
+    exports.Reloader = Reloader;
+});
+define("jassijs/server/Compile", ["require", "exports", "typescript", "fs", "jassijs/remote/Classes", "jassijs/server/Filesystem"], function (require, exports, ts, fs, Classes_3, Filesystem_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Compile = void 0;
+    var rpath = require('path');
+    //var chokidar = require('chokidar');
+    var path = "./../public_html";
+    const formatHost = {
+        getCanonicalFileName: path => path,
+        getCurrentDirectory: ts.sys.getCurrentDirectory,
+        getNewLine: () => ts.sys.newLine
+    };
+    var events = require('events');
+    /**
+     * compile
+     */
+    class Compile {
+        constructor() {
+            this.lastCompiledTSFiles = [];
+        }
+        /*
+        test(response) {
+          const host: ts.ParseConfigFileHost = ts.sys as any;
+          // Fix after https://github.com/Microsoft/TypeScript/issues/18217
+          //host.onUnRecoverableConfigFileDiagnostic = printDiagnostic;
+          const parsedCmd = ts.getParsedCommandLineOfConfigFile(path + "/tsconfig.json", undefined, host);
+          const { options, fileNames } = parsedCmd;
+          var data = this.compile([path + "/jassijs/base/Registry.ts"], options);
+         
+          response.send(data);
+        }
+        compile(fileNames: string[], options: ts.CompilerOptions): string[] {
+          var ret = [];
+          let program = ts.createProgram(fileNames, options);
+          let emitResult = program.emit();
+      
+          let allDiagnostics = ts
+            .getPreEmitDiagnostics(program)
+            .concat(emitResult.diagnostics);
+      
+          allDiagnostics.forEach(diagnostic => {
+            if (diagnostic.file) {
+              let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
+                diagnostic.start!
+              );
+              let message = ts.flattenDiagnosticMessageText(
+                diagnostic.messageText,
+                "\n"
+              );
+              ret.push(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+              // console.log(
+              // `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`
+              //);
+            } else {
+              ret.push(`${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
+              //        console.log(
+              //        `${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`
+              //    );
+            }
+          });
+      
+          let exitCode = emitResult.emitSkipped ? 1 : 0;
+          ret.push(`Process exiting with code '${exitCode}'.`);
+          //console.log(`Process exiting with code '${exitCode}'.`);
+          //process.exit(exitCode);
+          return ret;
+        }
+      
+        runWatcher() {
+          const configPath = ts.findConfigFile(
+            path + "/",
+            ts.sys.fileExists,
+            "tsconfig.json"
+          );
+          if (!configPath) {
+            throw new JassiError("Could not find a valid 'tsconfig.json'.");
+          }
+          const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
+          const host = ts.createWatchCompilerHost(
+            configPath,
+            {},
+            ts.sys,
+            createProgram,
+            this.reportDiagnostic.bind(this),
+            this.reportWatchStatusChanged.bind(this)
+          );
+      
+          const origCreateProgram = host.createProgram;
+          host.createProgram = (
+            rootNames: ReadonlyArray<string>,
+            options,
+            host,
+            oldProgram
+          ) => {
+            console.log("** We're about to create the program! **");
+            return origCreateProgram(rootNames, options, host, oldProgram);
+          };
+          const origPostProgramCreate = host.afterProgramCreate;
+          var test = host.trace;
+          //onWatchStatusChange
+          //readFile
+          //trace
+          host.trace = function (s: string) {
+            s = s;
+          }
+          host.afterProgramCreate = program => {
+            console.log("** We finished making the program! **");
+            origPostProgramCreate!(program);
+          };
+      
+          // `createWatchProgram` creates an initial program, watches files, and updates
+          // the program over time.
+          ts.createWatchProgram(host);
+        }
+        reportDiagnostic(diagnostic: ts.Diagnostic) {
+          console.error(
+            "Error",
+            diagnostic.code,
+            ":",
+            ts.flattenDiagnosticMessageText(
+              diagnostic.messageText,
+              formatHost.getNewLine()
+            )
+          );
+        }
+        checkNewCompiledFiles(response) {
+          var ret = { date: 0, files: [] };
+          ret.files = this.lastCompiledTSFiles;
+          this.lastCompiledTSFiles = [];
+          response.send(JSON.stringify(ret));
+          //start the watcher to compile the client code
+          var _this = this;
+          if (Compile.clientWatcherIsRunning === false) {
+            Compile.clientWatcherIsRunning = true;
+            this.runWatcher();
+            var clientTsHasChanged = function (files, text) {
+              for (let f = 0; f < files.length; f++) {
+                _this.lastCompiledTSFiles.push(files[f].replace(".ts", ".js").replace("\\", "/"));
+              }
+              console.log("client changed" + files + " " + text);
+            };
+            Compile.eventEmitter.addListener("compiled", clientTsHasChanged);
+          }
+        }
+      
+        reportWatchStatusChanged(diagnostic: ts.Diagnostic) {
+          let s = ts.formatDiagnostic(diagnostic, formatHost);
+          if (diagnostic.code === 6194) {
+            Compile.eventEmitter.emit('compiled', Compile.lastModifiedTSFiles, s);
+            Compile.lastModifiedTSFiles = [];
+            //console.info(Compile.lastModifiedTSFiles);
+          }
+          console.info(s);
+        }*/
+        async transpile(fileName, inServerdirectory = undefined) {
+            let spath = fileName.split("/");
+            if (!inServerdirectory && spath.length < 2 && spath[1] !== "remote") {
+                throw new Classes_3.JassiError("fileName must startswith remote");
+            }
+            var path = ".";
+            var data = fs.readFileSync(path + "/" + fileName, { encoding: 'utf-8' });
+            var module = fileName.replace(".ts", "");
+            const host = ts.sys;
+            const parsedCmd = ts.getParsedCommandLineOfConfigFile("./tsconfig.json", undefined, host);
+            const { options } = parsedCmd;
+            var outPath = "js";
+            var fdir = outPath + "/" + fileName;
+            fdir = fdir.substring(0, fdir.lastIndexOf("/"));
+            fs.mkdirSync(fdir, { recursive: true });
+            var prefix = "";
+            for (let x = 0; x < fileName.split("/").length; x++) {
+                prefix = "../" + prefix;
+            }
+            var content = ts.transpileModule(data, {
+                compilerOptions: options,
+                fileName: prefix + fileName
+            });
+            var pathname = rpath.dirname(fileName);
+            if (!fs.existsSync(pathname)) {
+                fs.mkdirSync(pathname, { recursive: true });
+            }
+            if (!inServerdirectory)
+                fs.copyFileSync(new Filesystem_3.default().path + "/" + fileName, fileName);
+            fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
+            fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
+        }
+    }
+    exports.Compile = Compile;
+    Compile.lastModifiedTSFiles = [];
+    Compile.clientWatcherIsRunning = false;
+    Compile.eventEmitter = new events.EventEmitter();
+});
+define("jassijs/server/NativeAdapter", ["require", "exports", "fs", "typescript", "jszip", "jassijs/remote/Classes", "jassijs/server/Filesystem", "jassijs/server/Reloader", "jassijs/server/Compile"], function (require, exports, fs, ts, JSZip, Classes_4, Filesystem_4, Reloader_1, Compile_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.transpile = exports.reloadJSAll = exports.dozip = exports.exists = exports.myfs = exports.ts = void 0;
+    var myfs = fs.promises;
+    exports.myfs = myfs;
+    exports.ts = ts;
+    class Stats {
+    }
+    class FS {
+        async readdir(folder) {
+            return [""];
+        }
+        ;
+        async readFile(file, format) {
+            return "";
+        }
+        ;
+        async stat(file) {
+            return new Stats();
+        }
+        ;
+        createWriteStream(...any) {
+            throw new Classes_4.JassiError("Not supported");
+        }
+        async mkdir(file, option) {
+        }
+        ;
+        async writeFile(file, data) {
+        }
+        ;
+        async rename(oldPath, newPath) {
+        }
+        async unlink(file) {
+        }
+        async copyFile(src, dest) {
+            throw new Classes_4.JassiError("Not supported");
+        }
+        watch(...any) {
+            throw new Classes_4.JassiError("Not supported");
+        }
+        ;
+        async rmdir(dirName, options) {
+        }
+    }
+    async function exists(filename) {
+        return fs.existsSync(filename);
+    }
+    exports.exists = exists;
+    var zipid = 0;
+    async function writeZip(zip, outfile) {
+        return new Promise((ready) => {
+            var out = fs.createWriteStream(outfile);
+            zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true }).
+                pipe(out).on('finish', () => {
+                ready(undefined);
+            }).on('error', (err) => {
+                ready(err);
+            });
+        });
+    }
+    async function dozip(directoryname, serverdir = undefined) {
+        var root = new Filesystem_4.default().path;
+        if (serverdir) {
+            root = ".";
+        }
+        if (!fs.existsSync("./tmp")) {
+            fs.mkdirSync("./tmp");
+        }
+        let filename = directoryname.split("/")[directoryname.split("/").length - 1] + zipid++;
+        await this.zipFolder(root + "/" + directoryname, "./tmp/" + filename + ".zip");
+        var data = fs.readFileSync("./tmp/" + filename + ".zip"); //,'binary');
+        fs.unlinkSync("./tmp/" + filename + ".zip");
+        //let buff = new Buffer(data);
+        let ret = data.toString('base64');
+        return ret;
+    }
+    exports.dozip = dozip;
+    async function zipFolder(folder, outfile, parent = undefined) {
+        var isRoot = parent === undefined;
+        if (parent === undefined)
+            parent = new JSZip();
+        var _this = this;
+        //var parent:FileNode[]=_this._getDirectory(file,results);
+        var list = fs.readdirSync(folder);
+        for (var x = 0; x < list.length; x++) {
+            var filename = list[x];
+            var file = folder + "/" + filename;
+            var stat = fs.statSync(file);
+            if (stat && stat.isDirectory()) {
+                var newFolder = parent.folder(filename);
+                await _this.zipFolder(file, outfile, newFolder);
+            }
+            else {
+                var data = fs.readFileSync(file, "binary");
+                parent.file(filename, data, { binary: true });
+            }
+        }
+        if (isRoot) {
+            var d = await this.writeZip(parent, outfile);
+            return d;
+        }
+        return parent;
+    }
+    async function reloadJSAll(filenames, afterUnload) {
+        return new Reloader_1.Reloader().reloadJSAll(filenames, afterUnload);
+    }
+    exports.reloadJSAll = reloadJSAll;
+    async function transpile(fileName, inServerdirectory = undefined) {
+        await new Compile_1.Compile().transpile(fileName, inServerdirectory);
+    }
+    exports.transpile = transpile;
+});
+define("jassijs/remote/Config", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.config = exports.Config = void 0;
+    class Config {
+        constructor() {
+            if (!window.document) {
+                this.isServer = true;
+                var fs = require("fs");
+                this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
+            }
+        }
+        init(configtext) {
+            this.jsonData = JSON.parse(configtext);
+            this.modules = this.jsonData.modules;
+            this.server = {
+                modules: this.jsonData.server.modules
+            };
+        }
+        async reload() {
+            if (!window.document) {
+                this.isServer = true;
+                var fs = require("fs");
+                this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
+            }
+            else {
+                var myfs = (await new Promise((resolve_3, reject_3) => { require(["jassijs/server/NativeAdapter"], resolve_3, reject_3); })).myfs;
+                this.init(await myfs.readFile('./client/jassijs.json', 'utf-8'));
+            }
+        }
+        async saveJSON() {
+            var myfs = (await new Promise((resolve_4, reject_4) => { require(["jassijs/server/NativeAdapter"], resolve_4, reject_4); })).myfs;
+            await myfs.writeFile('./client/jassijs.json', JSON.stringify(this.jsonData, undefined, "\t"));
+            this.init(await myfs.readFile('./client/jassijs.json'));
+        }
+    }
+    exports.Config = Config;
+    var config = new Config();
+    exports.config = config;
+});
+define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config", "reflect-metadata"], function (require, exports, Config_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.migrateModul = exports.Registry = exports.$register = exports.$Class = void 0;
+    function $Class(longclassname) {
+        return function (pclass) {
+            registry.register("$Class", pclass, longclassname);
+        };
+    }
+    exports.$Class = $Class;
+    function $register(servicename, ...params) {
+        return function (pclass) {
+            registry.register(servicename, pclass, params);
+        };
+    }
+    exports.$register = $register;
+    if (Reflect["_metadataorg"] === undefined) {
+        Reflect["_metadataorg"] = Reflect["metadata"];
+        if (Reflect["_metadataorg"] === undefined)
+            Reflect["_metadataorg"] = null;
+    }
+    //@ts-ignore
+    Reflect["metadata"] = function (o, property, ...args) {
+        return function (target, propertyKey, descriptor, ...fargs) {
+            //delegation to 
+            if (Reflect["_metadataorg"] !== null) {
+                var func = Reflect["_metadataorg"](o, property, ...args);
+                func(target, propertyKey, descriptor, ...fargs);
+            }
+            if (o === "design:type") {
+                registry.registerMember("design:type", target, propertyKey, property);
+            }
+        };
+    };
+    class DataEntry {
+    }
+    class JSONDataEntry {
+    }
+    /**
+    * Manage all known data registered by jassijs.register
+    * the data is downloaded by /registry.json
+    * registry.json is updated by the server on code upload
+    * @class jassijs.base.Registry
+    */
+    class Registry {
+        constructor() {
+            this.jsondata = undefined;
+            this.data = {};
+            this.dataMembers = {};
+            this.jsondataMembers = {};
+            this._eventHandler = {};
+            this._nextID = 10;
+            this.isLoading = this.reload();
+        }
+        getData(service, classname = undefined) {
+            var olddata = this.data[service];
+            if (olddata === undefined)
+                return [];
+            var ret = [];
+            if (classname !== undefined) {
+                if (olddata[classname] !== undefined) {
+                    ret.push(olddata[classname]);
+                }
+            }
+            else {
+                for (var key in olddata) {
+                    ret.push(olddata[key]);
+                }
+            }
+            return ret;
+        }
+        onregister(service, callback) {
+            var events = this._eventHandler[service];
+            if (events === undefined) {
+                events = [];
+                this._eventHandler[service] = events;
+            }
+            events.push(callback);
+            //push already registered events
+            var olddata = this.data[service];
+            for (var key in olddata) {
+                var dataentry = olddata[key];
+                callback(dataentry.oclass, ...dataentry.params);
+            }
+            return callback;
+        }
+        offregister(service, callback) {
+            var events = this._eventHandler[service];
+            var pos = events.indexOf(callback);
+            if (pos >= 0)
+                events.splice(pos, 1);
+        }
+        /**
+         * register an anotation
+         * Important: this function should only used from an annotation, because the annotation is saved in
+         *            index.json and could be read without loading the class
+         **/
+        register(service, oclass, ...params) {
+            var sclass = oclass.prototype.constructor._classname;
+            if (sclass === undefined && service !== "$Class") {
+                throw new Error("@$Class member is missing or must be set at last");
+                return;
+            }
+            if (service === "$Class") {
+                sclass = params[0];
+                oclass.prototype.constructor._classname = params[0];
+            }
+            if (this.data[service] === undefined) {
+                this.data[service] = {};
+            }
+            this.data[service][sclass] = { oclass, params };
+            //the array could be modified so we need a copy
+            var events = this._eventHandler[service] === undefined ? undefined : [].concat(this._eventHandler[service]);
+            if (events !== undefined) {
+                for (var x = 0; x < events.length; x++) {
+                    events[x](oclass, ...params);
+                }
+            }
+            if (service === "$Class") {
+                //console.log("load " + params[0]);
+                //finalize temporary saved registerd members
+                let tempMem = oclass.prototype.$$tempRegisterdMembers$$;
+                if (tempMem === undefined)
+                    //@ts-ignore
+                    tempMem = oclass.$$tempRegisterdMembers$$;
+                if (tempMem !== undefined) {
+                    //this.dataMembers = oclass.prototype.$$tempRegisterdMembers$$;
+                    for (var sservice in tempMem) {
+                        var pservice = tempMem[sservice];
+                        if (this.dataMembers[sservice] === undefined) {
+                            this.dataMembers[sservice] = {};
+                        }
+                        this.dataMembers[sservice][sclass] = pservice;
+                    }
+                    delete oclass.prototype.$$tempRegisterdMembers$$;
+                    //@ts-ignore
+                    delete oclass.$$tempRegisterdMembers$$;
+                }
+            }
+        }
+        getMemberData(service) {
+            return this.dataMembers[service];
+        }
+        getJSONMemberData(service) {
+            return this.jsondataMembers[service];
+        }
+        /**
+         * register an anotation
+         * Important: this function should only used from an annotation
+         **/
+        registerMember(service, oclass /*new (...args: any[]) => any*/, membername, ...params) {
+            var m = oclass;
+            if (oclass.prototype !== undefined)
+                m = oclass.prototype;
+            //the classname is not already known so we temporarly store the data in oclass.$$tempRegisterdMembers$$
+            //and register the member in register("$Class",....)
+            if (m.$$tempRegisterdMembers$$ === undefined) {
+                m.$$tempRegisterdMembers$$ = {};
+            }
+            if (m.$$tempRegisterdMembers$$[service] === undefined) {
+                m.$$tempRegisterdMembers$$[service] = {};
+            }
+            if (m.$$tempRegisterdMembers$$[service][membername] === undefined) {
+                m.$$tempRegisterdMembers$$[service][membername] = [];
+            }
+            m.$$tempRegisterdMembers$$[service][membername].push(params);
+        }
+        /**
+        * with every call a new id is generated - used to create a free id for the dom
+        * @returns {number} - the id
+        */
+        nextID() {
+            this._nextID = this._nextID + 1;
+            return this._nextID.toString();
+        }
+        /**
+        * Load text with Ajax synchronously: takes path to file and optional MIME type
+        * @param {string} filePath - the url
+        * @returns {string} content
+        */ /*
+        loadFile(filePath)
+        {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                let response = null;
+                xhr.addEventListener("readystatechange", function() {
+                  if (this.readyState === xhr.DONE) {
+                    response = this.responseText;
+                    if (response) {
+                      //response = JSON.parse(response);
+                      resolve(response);
+                    }
+                  }
+                });
+                xhr.open("GET",filePath, true);
+                xhr.send();
+                xhr.overrideMimeType("application/json");
+                xhr.onerror = function(error) {
+                  reject({
+                    error: "Some error"
+                  })
+                }
+              });
+        }*/
+        async loadText(url) {
+            return new Promise((resolve) => {
+                //@ts-ignore
+                let oReq = new XMLHttpRequest();
+                oReq.open("GET", url);
+                oReq.onerror = () => {
+                    resolve(undefined);
+                };
+                oReq.addEventListener("load", () => {
+                    if (oReq.status === 200)
+                        resolve(oReq.responseText);
+                    else
+                        resolve(undefined);
+                });
+                oReq.send();
+            });
+        }
+        /**
+         * reload the registry
+         */
+        async reload() {
+            this.jsondata = { $Class: {} };
+            this.jsondataMembers = {};
+            var _this = this;
+            var modultext = "";
+            //@ts-ignore
+            if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
+                //@ts-ignore 
+                var fs = await new Promise((resolve_5, reject_5) => { require(['fs'], resolve_5, reject_5); });
+                var Filesystem = await new Promise((resolve_6, reject_6) => { require(["jassijs/server/Filesystem"], resolve_6, reject_6); });
+                var modules = Config_5.config.server.modules;
+                for (let modul in modules) {
+                    try {
+                        try {
+                            //@ts-ignore
+                            delete require.cache[require.resolve(modul + "/registry")];
+                        }
+                        catch (_a) {
+                            //@ts-ignore
+                            var s = (require.main["path"] + "/" + modul + "/registry").replaceAll("\\", "/") + ".js";
+                            //@ts-ignore
+                            delete require.cache[s];
+                            //@ts-ignore
+                            delete require.cache[s.replaceAll("/", "\\")];
+                        }
+                        //@ts-ignore
+                        var data = (await require.main.require(modul + "/registry")).default;
+                        this.initJSONData(data);
+                    }
+                    catch (_b) {
+                        console.error("failed load registry " + modul + "/registry.js");
+                    }
+                }
+            }
+            else { //on client
+                var all = {};
+                var modules = Config_5.config.modules;
+                var myrequire;
+                if (require.defined("jassijs/server/Installserver")) {
+                    myrequire = Config_5.config.serverrequire;
+                    modules = Config_5.config.server.modules;
+                }
+                else {
+                    myrequire = Config_5.config.clientrequire;
+                }
+                for (let modul in modules) {
+                    if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
+                        myrequire.undef(modul + "/registry");
+                    {
+                        var m = modul;
+                        all[modul] = new Promise((resolve, reject) => {
+                            //@ts-ignore
+                            myrequire([m + "/registry"], function (ret) {
+                                resolve(ret.default);
+                            });
+                        });
+                    }
+                }
+                for (let modul in modules) {
+                    var data = await all[modul];
+                    _this.initJSONData(data);
+                }
+            }
+            /* for (let modul in modules) {
+            
+                        //requirejs.undef("js/"+modul+"/registry.js");
+                        all[modul] = fs.readFileSync("./../client/"+modul+"/registry.js", 'utf-8');
+                    }
+                    for (let modul in modules) {
+                        var data = await all[modul].default;
+                        _this.initJSONData(data);
+                    }
+            */
+            //var reg = await this.reloadRegistry();
+            //_this.initJSONData(reg);
+            /*     requirejs.undef("text!../../../../registry.json?bust="+window["jassiversion"]);
+             require(["text!../../../../registry.json?bust="+window["jassiversion"]], function(registry){
+                 _this.init(registry);
+             });*/
+        }
+        /**
+        * loads entries from json string
+        * @param {string} json - jsondata
+        */
+        initJSONData(json) {
+            if (json === undefined)
+                return;
+            var vdata = json;
+            for (var file in vdata) {
+                var vfiles = vdata[file];
+                for (var classname in vfiles) {
+                    if (classname === "date")
+                        continue;
+                    this.jsondata.$Class[classname] = {
+                        classname: classname,
+                        params: [classname],
+                        filename: file
+                    };
+                    var theclass = vfiles[classname];
+                    for (var service in theclass) {
+                        if (service === "@members") {
+                            //public jsondataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
+                            var mems = theclass[service];
+                            for (let mem in mems) {
+                                let scs = mems[mem];
+                                for (let sc in scs) {
+                                    if (!this.jsondataMembers[sc])
+                                        this.jsondataMembers[sc] = {};
+                                    if (!this.jsondataMembers[sc][classname])
+                                        this.jsondataMembers[sc][classname] = {};
+                                    if (this.jsondataMembers[sc][classname][mem] === undefined)
+                                        this.jsondataMembers[sc][classname][mem] = [];
+                                    this.jsondataMembers[sc][classname][mem].push(scs[sc]);
+                                }
+                            }
+                        }
+                        else {
+                            if (this.jsondata[service] === undefined)
+                                this.jsondata[service] = {};
+                            var entr = new JSONDataEntry();
+                            entr.params = theclass[service];
+                            entr.classname = classname; //vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
+                            entr.filename = file;
+                            this.jsondata[service][entr.classname] = entr;
+                        }
+                    }
+                }
+            }
+        }
+        /**
+         *
+         * @param service - the service for which we want informations
+         */
+        async getJSONData(service, classname = undefined) {
+            // if (this.isLoading)
+            await this.isLoading;
+            /* if (this.jsondata === undefined) {
+                 this.isLoading = this.reload();
+                 await this.isLoading;
+             }
+             this.isLoading = undefined;*/
+            var ret = [];
+            var odata = this.jsondata[service];
+            if (odata === undefined)
+                return ret;
+            if (classname !== undefined)
+                return odata[classname] === undefined ? undefined : [odata[classname]];
+            for (var clname in odata) {
+                if (classname === undefined || classname === clname)
+                    ret.push(odata[clname]);
+            }
+            return ret;
+        }
+        getAllFilesForService(service, classname = undefined) {
+            var data = this.jsondata[service];
+            var ret = [];
+            for (var clname in data) {
+                var test = data[clname];
+                if (classname == undefined || test.classname === classname)
+                    ret.push(test.filename);
+            }
+            return ret;
+        }
+        async loadAllFilesForEntries(entries) {
+            var files = [];
+            for (let x = 0; x < entries.length; x++) {
+                if (files.indexOf(entries[x].filename) === -1)
+                    files.push(entries[x].filename);
+            }
+            await this.loadAllFiles(files);
+        }
+        /**
+         * load all files that registered the service
+         * @param {string} service - name of the service
+         * @param {function} callback - called when loading is finished
+         */
+        async loadAllFilesForService(service) {
+            var services = this.getAllFilesForService(service);
+            await this.loadAllFiles(services);
+        }
+        /**
+         * load all files
+         * @param {string} files - the files to load
+         */
+        async loadAllFiles(files) {
+            //   var services = this.getAllFilesForService(service);
+            return new Promise((resolve, reject) => {
+                var dependency = [];
+                for (var x = 0; x < files.length; x++) {
+                    var name = files[x];
+                    if (name.endsWith(".ts"))
+                        name = name.substring(0, name.length - 3);
+                    dependency.push(name);
+                }
+                var req = require;
+                req(dependency, function () {
+                    resolve(undefined);
+                });
+            });
+        }
+    }
+    exports.Registry = Registry;
+    ;
+    var registry = new Registry();
+    exports.default = registry;
+    function migrateModul(oldModul, newModul) {
+        if (newModul.registry) {
+            newModul.registry._nextID = oldModul.registry._nextID;
+            newModul.registry.entries = oldModul.registry.entries;
+        }
+    }
+    exports.migrateModul = migrateModul;
+});
+//jassijs.registry=registry;
+define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_5, Registry_6, RemoteObject_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Rights = exports.$CheckParentRight = exports.$ParentRights = exports.$Rights = exports.ParentRightProperties = exports.RightProperties = void 0;
+    class RightProperties {
+    }
+    exports.RightProperties = RightProperties;
+    class ParentRightProperties {
+    }
+    exports.ParentRightProperties = ParentRightProperties;
+    function $Rights(rights) {
+        return function (pclass) {
+            Registry_6.default.register("$Rights", pclass, rights);
+        };
+    }
+    exports.$Rights = $Rights;
+    function $ParentRights(rights) {
+        return function (pclass) {
+            Registry_6.default.register("$ParentRights", pclass, rights);
+        };
+    }
+    exports.$ParentRights = $ParentRights;
+    function $CheckParentRight() {
+        return function (target, propertyKey, descriptor) {
+            Registry_6.default.registerMember("$CheckParentRight", target, propertyKey, undefined);
+        };
+    }
+    exports.$CheckParentRight = $CheckParentRight;
+    let Rights = class Rights extends RemoteObject_1.RemoteObject {
+        async isAdmin(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                if (this._isAdmin !== undefined)
+                    return this._isAdmin;
+                return await this.call(this, this.isAdmin, context);
+            }
+            else {
+                //@ts-ignore
+                var req = context.request;
+                return req.user.isAdmin;
+            }
+        }
+    };
+    Rights = __decorate([
+        (0, Registry_5.$Class)("jassijs.security.Rights")
+    ], Rights);
+    exports.Rights = Rights;
+    var rights = new Rights();
+    exports.default = rights;
+});
+define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_7, Classes_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RemoteProtocol = void 0;
+    let RemoteProtocol = class RemoteProtocol {
+        /**
+         * converts object to jsonstring
+         * if class is registerd in classes then the class is used
+         * if id is used then recursive childs are possible
+         * @param obj
+         */
+        stringify(obj) {
+            var ref = [];
+            return JSON.stringify(obj, function (key, value) {
+                var val = {};
+                var clname = value === null ? undefined : Classes_5.classes.getClassName(value);
+                var k = clname;
+                if (k !== undefined) {
+                    val.__clname__ = clname;
+                    //if (value.id !== undefined)
+                    //	k = k + ":" + (value.id === undefined ? RemoteProtocol.counter++ : value.id);
+                    //the object was seen the we save a ref
+                    if (ref.indexOf(value) >= 0) {
+                        val.__ref__ = ref.indexOf(value);
+                    }
+                    else {
+                        Object.assign(val, value);
+                        ref.push(value);
+                        val.__refid__ = ref.length - 1;
+                    }
+                }
+                else {
+                    val = value;
+                }
+                return val;
+            });
+        }
+        static async simulateUser(user = undefined, password = undefined) {
+            var rights = (await new Promise((resolve_7, reject_7) => { require(["jassijs/remote/security/Rights"], resolve_7, reject_7); })).default;
+            //	if(await rights.isAdmin()){
+            //		throw new Error("not an admin")
+            //	}
+            //@ts-ignore
+            var Cookies = (await new Promise((resolve_8, reject_8) => { require(["jassijs/util/Cookies"], resolve_8, reject_8); })).Cookies;
+            if (user === undefined) {
+                Cookies.remove("simulateUser", {});
+                Cookies.remove("simulateUserPassword", {});
+            }
+            else {
+                Cookies.set("simulateUser", user, {});
+                Cookies.set("simulateUserPassword", password, {});
+            }
+        }
+        async exec(config, object) {
+            return await new Promise((resolve, reject) => {
+                //@ts-ignore
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', config.url, true);
+                xhr.setRequestHeader("Content-Type", "text");
+                xhr.onload = function (data) {
+                    if (this.status === 200)
+                        resolve(this.responseText);
+                    else
+                        reject(this);
+                };
+                xhr.send(config.data);
+                xhr.onerror = function (data) {
+                    reject(data);
+                };
+            });
+            //return await $.ajax(config, object);
+        }
+        /**
+       * call the server
+       */
+        async call() {
+            if (jassijs.isServer)
+                throw new Classes_5.JassiError("should be called on client");
+            var sdataObject = undefined;
+            var url = "remoteprotocol?" + Date.now();
+            var _this = this;
+            var redirect = undefined;
+            var config = {
+                url: url,
+                type: 'post',
+                dataType: "text",
+                data: this.stringify(this),
+            };
+            var ret;
+            try {
+                ret = await this.exec(config, this._this);
+            }
+            catch (ex) {
+                if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
+                    redirect = new Promise((resolve) => {
+                        //@ts-ignore
+                        new Promise((resolve_9, reject_9) => { require(["jassijs/base/LoginDialog"], resolve_9, reject_9); }).then((lib) => {
+                            lib.doAfterLogin(resolve, _this);
+                        });
+                    });
+                }
+                else {
+                    throw ex;
+                }
+            }
+            if (redirect !== undefined)
+                return await redirect;
+            if (ret === "$$undefined$$")
+                return undefined;
+            var retval = await this.parse(ret);
+            if (retval["**throw error**"] !== undefined) {
+                throw new Classes_5.JassiError(retval["**throw error**"]);
+            }
+            return retval;
+        }
+        /**
+         * converts jsonstring to an object
+         */
+        async parse(text) {
+            var ref = {};
+            if (text === undefined)
+                return undefined;
+            if (text === "")
+                return "";
+            //first get all classnames	
+            var allclassnames = [];
+            JSON.parse(text, function (key, value) {
+                if (value === null || value === undefined)
+                    return value;
+                if (value.__clname__ !== null && value.__clname__ !== undefined && allclassnames.indexOf(value.__clname__) === -1) {
+                    allclassnames.push(value.__clname__);
+                }
+                return value;
+            });
+            //all classes must be loaded
+            for (var x = 0; x < allclassnames.length; x++) {
+                await Classes_5.classes.loadClass(allclassnames[x]);
+            }
+            return JSON.parse(text, function (key, value) {
+                var val = value;
+                if (value === null || value === undefined)
+                    return value;
+                if (value.__ref__ !== undefined) {
+                    val = ref[value.__ref__];
+                    if (val === undefined) {
+                        //TODO import types from js
+                        //create dummy
+                        var type = Classes_5.classes.getClass(value.__clname__);
+                        //@ts-ignore
+                        var test = type._createObject === undefined ? undefined : type._createObject(val);
+                        if (test !== undefined)
+                            val = test;
+                        else
+                            val = new type();
+                        ref[value.__ref__] = val;
+                    }
+                }
+                else {
+                    if (value.__clname__ !== undefined) {
+                        if (value.__refid__ !== undefined && ref[value.__refid__] !== undefined) { //there is a dummy
+                            val = ref[value.__refid__];
+                        }
+                        else {
+                            //TODO import types from js
+                            var type = Classes_5.classes.getClass(value.__clname__);
+                            //@ts-ignore
+                            var test = type._createObject === undefined ? undefined : type._createObject(value);
+                            if (test !== undefined)
+                                val = test;
+                            else
+                                val = new type();
+                            if (value.__refid__ !== undefined) {
+                                ref[value.__refid__] = val;
+                            }
+                        }
+                        Object.assign(val, value);
+                        delete val.__refid__;
+                        delete val.__clname__;
+                    }
+                }
+                //Date conversation
+                var datepattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
+                if (typeof value === 'string') {
+                    var a = datepattern.exec(value);
+                    if (a)
+                        return new Date(value);
+                }
+                return val;
+            });
+        }
+        async test() {
+            var a = new A();
+            var b = new B();
+            a.b = b;
+            a.name = "max";
+            a.id = 9;
+            b.a = a;
+            b.id = 7;
+            var s = this.stringify(a);
+            var test = await this.parse(s);
+        }
+    };
+    RemoteProtocol.counter = 0;
+    RemoteProtocol = __decorate([
+        (0, Registry_7.$Class)("jassijs.remote.RemoteProtocol")
+    ], RemoteProtocol);
+    exports.RemoteProtocol = RemoteProtocol;
+    class A {
+    }
+    //jassijs.register("classes", "de.A", A);
+    class B {
+    }
+});
+//jassijs.register("classes", "de.B", B);
+define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, Registry_8, Classes_6, RemoteProtocol_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RemoteObject = exports.Context = void 0;
+    class Context {
+    }
+    exports.Context = Context;
+    let RemoteObject = class RemoteObject {
+        static async call(method, ...parameter) {
+            if (jassijs.isServer)
+                throw new Classes_6.JassiError("should be called on client");
+            var prot = new RemoteProtocol_1.RemoteProtocol();
+            var context = parameter[parameter.length - 1];
+            prot.classname = Classes_6.classes.getClassName(this);
+            prot._this = "static";
+            prot.parameter = parameter;
+            prot.method = method.name;
+            prot.parameter.splice(parameter.length - 1, 1);
+            var ret;
+            if (context === null || context === void 0 ? void 0 : context.transactionitem) {
+                ret = await context.transactionitem.transaction.wait(context.transactionitem, prot);
+                return ret;
+            }
+            //let Transaction= (await import("jassijs/remote/Transaction")).Transaction;
+            //var trans=Transaction.cache.get(_this);
+            //if(trans&&trans[method.name]){
+            //	throw "not implemented"
+            //	ret=await trans[method.name][0]._push(undefined,prot.method,prot,trans[method.name][1]);
+            //}
+            ret = await prot.call();
+            return ret;
+        }
+        async call(_this, method, ...parameter) {
+            if (jassijs.isServer)
+                throw new Classes_6.JassiError("should be called on client");
+            var prot = new RemoteProtocol_1.RemoteProtocol();
+            var context = parameter[parameter.length - 1];
+            prot.classname = Classes_6.classes.getClassName(this);
+            prot._this = _this;
+            prot.parameter = parameter;
+            prot.method = method.name;
+            prot.parameter.splice(parameter.length - 1, 1);
+            var ret;
+            //let context=(await import("jassijs/remote/Context")).Context;
+            //let Transaction= (await import("jassijs/remote/Transaction")).Transaction;
+            //var trans=Transaction.cache.get(_this);
+            //var trans=context.get("transaction");
+            if (context === null || context === void 0 ? void 0 : context.transactionitem) {
+                ret = await context.transactionitem.transaction.wait(context.transactionitem, prot);
+                return ret;
+            }
+            ret = await prot.call();
+            return ret;
+        }
+    };
+    RemoteObject = __decorate([
+        (0, Registry_8.$Class)("jassijs.remote.RemoteObject")
+    ], RemoteObject);
+    exports.RemoteObject = RemoteObject;
+});
+define("jassijs/util/DatabaseSchema", ["require", "exports", "typeorm"], function (require, exports, typeorm_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
+    Object.defineProperty(exports, "Entity", { enumerable: true, get: function () { return typeorm_1.Entity; } });
+    Object.defineProperty(exports, "PrimaryGeneratedColumn", { enumerable: true, get: function () { return typeorm_1.PrimaryGeneratedColumn; } });
+    Object.defineProperty(exports, "JoinColumn", { enumerable: true, get: function () { return typeorm_1.JoinColumn; } });
+    Object.defineProperty(exports, "JoinTable", { enumerable: true, get: function () { return typeorm_1.JoinTable; } });
+    Object.defineProperty(exports, "Column", { enumerable: true, get: function () { return typeorm_1.Column; } });
+    Object.defineProperty(exports, "PrimaryColumn", { enumerable: true, get: function () { return typeorm_1.PrimaryColumn; } });
+    Object.defineProperty(exports, "OneToOne", { enumerable: true, get: function () { return typeorm_1.OneToOne; } });
+    Object.defineProperty(exports, "OneToMany", { enumerable: true, get: function () { return typeorm_1.OneToMany; } });
+    Object.defineProperty(exports, "ManyToOne", { enumerable: true, get: function () { return typeorm_1.ManyToOne; } });
+    Object.defineProperty(exports, "ManyToMany", { enumerable: true, get: function () { return typeorm_1.ManyToMany; } });
+});
+//export function Entity(options?: EntityOptions): Function;
+//export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
+define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_9, Classes_7) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.db = exports.Database = exports.TypeDef = void 0;
+    class TypeDef {
+        constructor() {
+            this.fields = {};
+        }
+        getRelation(fieldname) {
+            var ret = undefined;
+            var test = this.fields[fieldname];
+            for (let key in test) {
+                if (key === "OneToOne" || key === "OneToMany" || key === "ManyToOne" || key === "ManyToMany") {
+                    return { type: key, oclass: test[key][0]() };
+                }
+            }
+            return ret;
+        }
+    }
+    exports.TypeDef = TypeDef;
+    let Database = class Database {
+        constructor() {
+            this.typeDef = new Map();
+            this.decoratorCalls = new Map();
+            ;
+        }
+        removeOld(oclass) {
+            var name = Classes_7.classes.getClassName(oclass);
+            this.typeDef.forEach((value, key) => {
+                var testname = Classes_7.classes.getClassName(key);
+                if (testname === name && key !== oclass)
+                    this.typeDef.delete(key);
+            });
+            this.decoratorCalls.forEach((value, key) => {
+                var testname = Classes_7.classes.getClassName(key);
+                if (testname === name && key !== oclass) {
+                    this.decoratorCalls.delete(key);
+                }
+            });
+        }
+        _setMetadata(constructor, field, decoratername, fieldprops, decoraterprops, delegate) {
+            var def = this.typeDef.get(constructor);
+            if (def === undefined) {
+                def = new TypeDef();
+                this.decoratorCalls.set(constructor, []);
+                this.typeDef.set(constructor, def); //new class
+            }
+            if (field === "this") {
+                this.removeOld(constructor);
+            }
+            /*if(delegate===undefined){
+                debugger;
+            }*/
+            this.decoratorCalls.get(constructor).push([delegate, fieldprops, decoraterprops]);
+            var afield = def.fields[field];
+            if (def.fields[field] === undefined) {
+                afield = {};
+                def.fields[field] = afield;
+            }
+            afield[decoratername] = fieldprops;
+        }
+        fillDecorators() {
+            this.decoratorCalls.forEach((allvalues, key) => {
+                allvalues.forEach((value) => {
+                    value[0](...value[1])(...value[2]);
+                });
+            });
+        }
+        getMetadata(sclass) {
+            return this.typeDef.get(sclass);
+        }
+    };
+    Database = __decorate([
+        (0, Registry_9.$Class)("jassijs.remote.Database"),
+        __metadata("design:paramtypes", [])
+    ], Database);
+    exports.Database = Database;
+    //@ts-ignore
+    var db = new Database();
+    exports.db = db;
+});
+define("jassijs/remote/ObjectTransaction", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ObjectTransaction = void 0;
+    class ObjectTransaction {
+        constructor() {
+            this.statements = [];
+            this.functionsFinally = [];
+        }
+        transactionResolved(context) {
+            //var session = getNamespace('objecttransaction');
+            var test = context.objecttransactionitem; // session.get("objecttransaction");
+            if (test)
+                test.resolve = true;
+        }
+        addFunctionFinally(functionToAdd) {
+            this.functionsFinally.push(functionToAdd);
+        }
+        checkFinally() {
+            let canFinally = true;
+            this.statements.forEach((ent) => {
+                if (ent.result === "**unresolved**")
+                    canFinally = false;
+                if (ent.result["then"] && !ent["resolve"]) { //Promise, which is not resolved by addFunctionFinally
+                    canFinally = false;
+                }
+            });
+            if (canFinally) {
+                this.finally();
+            }
+        }
+        async finally() {
+            for (let x = 0; x < this.functionsFinally.length; x++) {
+                await this.functionsFinally[x]();
+            }
+        }
+    }
+    exports.ObjectTransaction = ObjectTransaction;
+});
+define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice"], function (require, exports, Registry_10, Classes_8, Serverservice_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports._execute = exports.remoteProtocol = void 0;
+    function remoteProtocol(request, response) {
+        execute(request, response);
+    }
+    exports.remoteProtocol = remoteProtocol;
+    async function checkSimulateUser(context, request) {
+        var rights = (await new Promise((resolve_10, reject_10) => { require(["jassijs/remote/security/Rights"], resolve_10, reject_10); })).default;
+        var test = request.cookies["simulateUser"];
+        if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
+            var db = await Serverservice_4.serverservices.db;
+            var user = await db.login(context, context.request.cookies["simulateUser"], context.request.cookies["simulateUserPassword"]);
+            if (!user) {
+                console.log("simulateUser not found");
+                return;
+            }
+            request.user.user = user.id;
+            request.user.isAdmin = (user.isAdmin === null ? false : user.isAdmin);
+            if (!user)
+                throw new Classes_8.JassiError("simulateUser not logged in");
+        }
+    }
+    async function execute(request, res) {
+        var RemoteProtocol = (await new Promise((resolve_11, reject_11) => { require(["jassijs/remote/RemoteProtocol"], resolve_11, reject_11); })).RemoteProtocol;
+        var context = {
+            isServer: true,
+            request: request
+        };
+        var val = await _execute(request.rawBody, request, context);
+        var s = new RemoteProtocol().stringify(val);
+        if (s === undefined)
+            s = "$$undefined$$";
+        res.send(s);
+    }
+    async function _execute(protext, request, context) {
+        // await new Promise((resolve)=>{docls(request,response,resolve)});
+        var RemoteProtocol = (await new Promise((resolve_12, reject_12) => { require(["jassijs/remote/RemoteProtocol"], resolve_12, reject_12); })).RemoteProtocol;
+        var prot = new RemoteProtocol();
+        var vdata = await prot.parse(protext);
+        Object.assign(prot, vdata);
+        var files = Registry_10.default.getAllFilesForService("$Class", prot.classname);
+        if (files === undefined || files.length === 0) {
+            return "file for " + prot.classname + " not found";
+        }
+        var file = files[0];
+        var path = file.split("/");
+        if (path.length < 2 || path[1] !== "remote")
+            throw new Classes_8.JassiError("only remote packages can be loadeded");
+        file = file.replace(".ts", "");
+        //var ret = await import(file);
+        var C = await Classes_8.classes.loadClass(prot.classname);
+        ///await Promise.resolve().then(() => require.main.require(file));
+        //var C = classes.getClass(prot.classname);
+        if (prot._this === "static") {
+            try {
+                await checkSimulateUser(context, request);
+                if (prot.parameter === undefined)
+                    ret = await (C[prot.method](context));
+                else
+                    ret = await (C[prot.method](...prot.parameter, context));
+            }
+            catch (ex) {
+                console.error(ex.stack);
+                var msg = ex.message;
+                if (!msg)
+                    msg = ex;
+                if (!ex)
+                    ex = "";
+                ret = {
+                    "**throw error**": msg
+                };
+            }
+            return ret;
+        }
+        else {
+            var obj = new C();
+            if (prot._this !== undefined)
+                Object.assign(obj, prot._this);
+            var ret = undefined;
+            try {
+                await checkSimulateUser(context, request);
+                if (prot.parameter === undefined)
+                    ret = await (obj[prot.method](context));
+                else
+                    ret = await (obj[prot.method](...prot.parameter, context));
+            }
+            catch (ex) {
+                if (!(ex instanceof Classes_8.JassiError)) {
+                    console.error(ex.stack);
+                }
+                var msg = ex.message;
+                if (!msg)
+                    msg = ex;
+                if (!ex)
+                    ex = "";
+                ret = {
+                    "**throw error**": msg
+                };
+            }
+            return ret;
+        }
+    }
+    exports._execute = _execute;
+});
+define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_11, RemoteObject_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Transaction = exports.TransactionItem = void 0;
+    //var serversession;
+    class TransactionItem {
+        constructor() {
+            this.result = "**unresolved**";
+        }
+    }
+    exports.TransactionItem = TransactionItem;
+    let Transaction = class Transaction extends RemoteObject_2.RemoteObject {
+        constructor() {
+            super(...arguments);
+            this.statements = [];
+            this.context = new RemoteObject_2.Context();
+        }
+        async execute() {
+            //  return this.context.register("transaction", this, async () => {
+            for (var x = 0; x < this.statements.length; x++) {
+                var it = this.statements[x];
+                var context = {
+                    isServer: false,
+                    transaction: this,
+                    transactionitem: it
+                };
+                it.promise = it.obj[it.method.name](...it.params, context);
+                it.promise.then((val) => {
+                    it.result = val; //promise returned or resolved out of Transaction
+                });
+            }
+            let _this = this;
+            await new Promise((res) => {
+                _this.ready = res;
+            });
+            var ret = [];
+            for (let x = 0; x < this.statements.length; x++) {
+                var res = await this.statements[x].promise;
+                ret.push(res);
+            }
+            return ret;
+            //  });
+        }
+        async wait(transactionItem, prot) {
+            transactionItem.remoteProtocol = prot;
+            //if all transactions are placed then do the request
+            var foundUnplaced = false;
+            for (let x = 0; x < this.statements.length; x++) {
+                let it = this.statements[x];
+                if (it.result === "**unresolved**" && it.remoteProtocol === undefined)
+                    foundUnplaced = true;
+            }
+            if (foundUnplaced === false) {
+                this.sendRequest();
+            }
+            let _this = this;
+            return new Promise((res) => {
+                transactionItem.resolve = res;
+            }); //await this.statements[id].result;//wait for result - comes with Request
+        }
+        async sendRequest(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var prots = [];
+                for (let x = 0; x < this.statements.length; x++) {
+                    let st = this.statements[x];
+                    if (st.result !== "**unresolved**")
+                        prots.push(undefined);
+                    else
+                        prots.push(st.remoteProtocol.stringify(st.remoteProtocol));
+                }
+                var sic = this.statements;
+                this.statements = prots;
+                var ret = await this.call(this, this.sendRequest, context);
+                this.statements = sic;
+                for (let x = 0; x < this.statements.length; x++) {
+                    this.statements[x].resolve(ret[x]);
+                }
+                this.ready();
+                //ret is not what we want - perhaps there is a modification
+                /* let ret2=[];
+                 for(let x=0;x<this.statements.length;x++){
+                     ret2.push(await this.statements[x].promise);
+                 }
+                 this.resolve(ret);*/
+                return true;
+            }
+            else {
+                //@ts-ignore
+                //@ts-ignore
+                var ObjectTransaction = (await new Promise((resolve_13, reject_13) => { require(["jassijs/remote/ObjectTransaction"], resolve_13, reject_13); })).ObjectTransaction;
+                var ot = new ObjectTransaction();
+                ot.statements = [];
+                let ret = [];
+                for (let x = 0; x < this.statements.length; x++) {
+                    var stat = {
+                        result: "**unresolved**"
+                    };
+                    ot.statements.push(stat);
+                }
+                for (let x = 0; x < this.statements.length; x++) {
+                    ret.push(this.doServerStatement(this.statements, ot, x, context));
+                }
+                for (let x = 0; x < ret.length; x++) {
+                    ret[x] = await ret[x];
+                }
+                return ret;
+            }
+        }
+        async doServerStatement(statements, ot /*:ObjectTransaction*/, num, context) {
+            //@ts-ignore
+            var _execute = (await new Promise((resolve_14, reject_14) => { require(["jassijs/server/DoRemoteProtocol"], resolve_14, reject_14); }))._execute;
+            var _this = this;
+            var newcontext = {};
+            Object.assign(newcontext, context);
+            newcontext.objecttransaction = ot;
+            newcontext.objecttransactionitem = ot.statements[num];
+            //@ts-ignore
+            ot.statements[num].result = _execute(_this.statements[num], context.request, newcontext);
+            return ot.statements[num].result;
+        }
+        add(obj, method, ...params) {
+            var ti = new TransactionItem();
+            ti.method = method;
+            ti.obj = obj;
+            ti.params = params;
+            ti.transaction = this;
+            this.statements.push(ti);
+        }
+    };
+    Transaction = __decorate([
+        (0, Registry_11.$Class)("jassijs.remote.Transaction")
+    ], Transaction);
+    exports.Transaction = Transaction;
+});
+define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_12) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Test = void 0;
+    let Test = class Test {
+        /**
+         * fails if the condition is false
+         * @parameter condition
+         **/
+        expectEqual(condition) {
+            if (!condition)
+                throw new Error("Test fails");
+        }
+        /**
+         * fails if the func does not throw an error
+         * @parameter func - the function that should failed
+         **/
+        expectError(func) {
+            try {
+                if (func.toString().startsWith("async ")) {
+                    var errobj;
+                    try {
+                        throw new Error("test fails");
+                    }
+                    catch (err) {
+                        errobj = err;
+                    }
+                    func().then(() => {
+                        throw errobj;
+                    }).catch((err) => {
+                        if (err.message === "test fails")
+                            throw errobj;
+                        var k = 1; //io
+                    });
+                    return;
+                }
+                else {
+                    func();
+                }
+            }
+            catch (_a) {
+                return; //io
+            }
+            throw new Error("test fails");
+        }
+        /**
+        * fails if the func does not throw an error
+        * @parameter func - the function that should failed
+        **/
+        async expectErrorAsync(func) {
+            var errors = false;
+            try {
+                var errobj;
+                await func().then((e) => {
+                }).catch((e) => {
+                    errors = true;
+                });
+            }
+            catch (_a) {
+                errors = true;
+            }
+            if (!errors)
+                throw new Error("test fails");
+        }
+    };
+    Test = __decorate([
+        (0, Registry_12.$Class)("jassijs.remote.Test")
+    ], Test);
+    exports.Test = Test;
+});
+define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsNumber = exports.ValidationIsNumberOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateIsInstanceOf = exports.ValidationIsInstanceOfOptions = exports.ValidateIsIn = exports.ValidationIsInOptions = exports.ValidateFunctionParameter = exports.ValidateIsDate = exports.ValidationIsDateOptions = exports.ValidateIsBoolean = exports.ValidationIsBooleanOptions = exports.ValidateIsArray = exports.ValidationIsArrayOptions = exports.validate = exports.ValidationError = exports.registerValidation = exports.ValidationOptions = void 0;
+    const paramMetadataKey = Symbol("paramMetadataKey");
+    class ValidationOptions {
+    }
+    exports.ValidationOptions = ValidationOptions;
+    function registerValidation(name, options, func) {
+        return (target, propertyKey, parameterIndex) => {
+            //@ts-ignore
+            let params = Reflect.getOwnMetadata(paramMetadataKey, target, propertyKey) || {};
+            if (params[parameterIndex] === undefined)
+                params[parameterIndex] = {};
+            params[parameterIndex][name] = {
+                func,
+                options
+            };
+            //@ts-ignore
+            Reflect.defineMetadata(paramMetadataKey, params, target, propertyKey);
+        };
+    }
+    exports.registerValidation = registerValidation;
+    function translateMessage(msg, rule, property, target, value, options) {
+        if (msg === undefined)
+            return undefined;
+        var ret = (options === null || options === void 0 ? void 0 : options.message) ? options === null || options === void 0 ? void 0 : options.message : msg;
+        ret = ret.replaceAll("{rule}", rule).replaceAll("{property}", property).replaceAll("{target}", target).replaceAll("{value}", value);
+        if (options) {
+            for (var key in options) {
+                ret = ret.replaceAll("{" + key + "}", options[key]);
+            }
+        }
+        return ret;
+    }
+    class ValidationError {
+        constructor(value, target, property, message) {
+            this.value = value;
+            this.target = target;
+            this.property = property;
+            this.message = message;
+        }
+    }
+    exports.ValidationError = ValidationError;
+    class ValidateOptions {
+    }
+    function validate(obj, options = undefined, raiseError = undefined) {
+        var _a, _b;
+        var ret = [];
+        var target = obj.__proto__;
+        for (var propertyName in obj) {
+            //@ts-ignore
+            let params = Reflect.getOwnMetadata(paramMetadataKey, target, propertyName);
+            if (params) {
+                for (var p in params) {
+                    for (var rule in params[p]) {
+                        //@ts-ignore
+                        var val = obj[propertyName];
+                        var func = params[p][rule].func;
+                        var opts = Object.assign({}, params[p][rule].options);
+                        if ((_a = options === null || options === void 0 ? void 0 : options.delegateOptions) === null || _a === void 0 ? void 0 : _a.ALL) {
+                            opts = Object.assign(opts, (_b = options === null || options === void 0 ? void 0 : options.delegateOptions) === null || _b === void 0 ? void 0 : _b.ALL);
+                        }
+                        if ((options === null || options === void 0 ? void 0 : options.delegateOptions) && (options === null || options === void 0 ? void 0 : options.delegateOptions[rule])) {
+                            opts = Object.assign(opts, options === null || options === void 0 ? void 0 : options.delegateOptions[rule]);
+                        }
+                        var err = func(target, propertyName, val, opts);
+                        var test = translateMessage(err, rule, propertyName, obj, val, params[p][rule].options);
+                        if (test !== undefined)
+                            ret.push(new ValidationError(val, target, propertyName, test));
+                    }
+                }
+            }
+        }
+        if (raiseError && ret.length > 0) {
+            var sret = [];
+            ret.forEach((err) => sret.push("ValidationError " + err.property + ": " + err.message));
+            throw new Error(sret.join("\r\n"));
+        }
+        return ret;
+    }
+    exports.validate = validate;
+    class ValidationIsArrayOptions extends ValidationOptions {
+    }
+    exports.ValidationIsArrayOptions = ValidationIsArrayOptions;
+    function ValidateIsArray(options) {
+        return registerValidation("ValidateIsArray", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (!Array.isArray(val))
+                return "value {value} is not an array";
+            if (options === null || options === void 0 ? void 0 : options.type) {
+                for (var x = 0; x < val.length; x++) {
+                    var tp = options.type();
+                    if (val[x] !== undefined && !(val[x] instanceof tp)) {
+                        if (typeof val[x] === 'string' && tp == String)
+                            continue;
+                        if (typeof val[x] === 'number' && tp == Number)
+                            continue;
+                        if (typeof val[x] === 'boolean' && tp == Boolean)
+                            continue;
+                        if (options === null || options === void 0 ? void 0 : options.alternativeJsonProperties) {
+                            for (var x = 0; x < options.alternativeJsonProperties.length; x++) {
+                                var key = options.alternativeJsonProperties[x];
+                                if (val[x][key] === undefined)
+                                    return propertyName + " is not array of type " + tp.name;
+                            }
+                        }
+                        else
+                            return "value {value} is not an array ot type " + tp.name;
+                    }
+                }
+            }
+        });
+    }
+    exports.ValidateIsArray = ValidateIsArray;
+    class ValidationIsBooleanOptions extends ValidationOptions {
+    }
+    exports.ValidationIsBooleanOptions = ValidationIsBooleanOptions;
+    function ValidateIsBoolean(options) {
+        return registerValidation("ValidateIsBoolean", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (typeof val !== 'boolean')
+                return propertyName + " is not a Boolean";
+        });
+    }
+    exports.ValidateIsBoolean = ValidateIsBoolean;
+    class ValidationIsDateOptions extends ValidationOptions {
+    }
+    exports.ValidationIsDateOptions = ValidationIsDateOptions;
+    function ValidateIsDate(options) {
+        return registerValidation("ValidateIsDate", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (!(val instanceof Date && !isNaN(val.valueOf())))
+                return propertyName + " is not a date";
+        });
+    }
+    exports.ValidateIsDate = ValidateIsDate;
+    function ValidateFunctionParameter() {
+        return (target, propertyName, descriptor, options) => {
+            let method = descriptor.value;
+            if (method === undefined)
+                throw new Error("sdfgsdfgsfd");
+            const funcname = method.name;
+            const { [funcname]: newfunc } = {
+                [funcname]: function () {
+                    //@ts-ignore
+                    let params = Reflect.getOwnMetadata(paramMetadataKey, target, propertyName);
+                    if (params) {
+                        for (var p in params) {
+                            for (var rule in params[p]) {
+                                //@ts-ignore
+                                var arg = (p > arguments.length) ? undefined : arguments[p];
+                                var val = arguments[p];
+                                var func = params[p][rule].func;
+                                var opt = params[p][rule].options;
+                                var err = func(target, "parameter " + p, val, opt);
+                                var test = translateMessage(err, rule, propertyName, target, val, params[p][rule].options);
+                                if (test !== undefined)
+                                    throw new Error(test);
+                            }
+                        }
+                    }
+                    return method.apply(this, arguments);
+                }
+            };
+            descriptor.value = newfunc;
+        };
+    }
+    exports.ValidateFunctionParameter = ValidateFunctionParameter;
+    class ValidationIsInOptions extends ValidationOptions {
+    }
+    exports.ValidationIsInOptions = ValidationIsInOptions;
+    function ValidateIsIn(options) {
+        return registerValidation("ValidateIsIn", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (options.in.indexOf(val) === -1)
+                return propertyName + " is not valid";
+        });
+    }
+    exports.ValidateIsIn = ValidateIsIn;
+    class ValidationIsInstanceOfOptions extends ValidationOptions {
+    }
+    exports.ValidationIsInstanceOfOptions = ValidationIsInstanceOfOptions;
+    function ValidateIsInstanceOf(options) {
+        return registerValidation("ValidateIsInstanceOf", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            var tp = options.type();
+            if (!(val instanceof tp)) {
+                if (options === null || options === void 0 ? void 0 : options.alternativeJsonProperties) {
+                    for (var x = 0; x < options.alternativeJsonProperties.length; x++) {
+                        var key = options.alternativeJsonProperties[x];
+                        if (val[key] === undefined)
+                            return propertyName + " is not of type " + tp.name;
+                    }
+                }
+                else
+                    return propertyName + " is not of type " + tp.name;
+            }
+        });
+    }
+    exports.ValidateIsInstanceOf = ValidateIsInstanceOf;
+    class ValidationIsIntOptions extends ValidationOptions {
+    }
+    exports.ValidationIsIntOptions = ValidationIsIntOptions;
+    function ValidateIsInt(options) {
+        return registerValidation("ValidateIsInt", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (!Number.isInteger(val))
+                return propertyName + " is not an Integer";
+        });
+    }
+    exports.ValidateIsInt = ValidateIsInt;
+    class ValidationMaxOptions extends ValidationOptions {
+    }
+    exports.ValidationMaxOptions = ValidationMaxOptions;
+    function ValidateMax(options) {
+        return registerValidation("ValidateMax", options, (target, propertyName, val, options) => {
+            if ((options === null || options === void 0 ? void 0 : options.max) && val > (options === null || options === void 0 ? void 0 : options.max))
+                return "value {value} is not longer then {max}";
+        });
+    }
+    exports.ValidateMax = ValidateMax;
+    class ValidationMinOptions extends ValidationOptions {
+    }
+    exports.ValidationMinOptions = ValidationMinOptions;
+    function ValidateMin(options) {
+        return registerValidation("ValidateMin", options, (target, propertyName, val, options) => {
+            if ((options === null || options === void 0 ? void 0 : options.min) && val < (options === null || options === void 0 ? void 0 : options.min))
+                return "value {value} is not smaller then {min}";
+        });
+    }
+    exports.ValidateMin = ValidateMin;
+    class ValidationIsNumberOptions extends ValidationOptions {
+    }
+    exports.ValidationIsNumberOptions = ValidationIsNumberOptions;
+    function ValidateIsNumber(options) {
+        return registerValidation("ValidateIsNumber", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (!(typeof val === 'number' && isFinite(val)))
+                return propertyName + " is not a Number";
+        });
+    }
+    exports.ValidateIsNumber = ValidateIsNumber;
+    class ValidationIsStringOptions extends ValidationOptions {
+    }
+    exports.ValidationIsStringOptions = ValidationIsStringOptions;
+    function ValidateIsString(options) {
+        return registerValidation("ValidateIsInt", options, (target, propertyName, val, options) => {
+            if ((val === undefined || val === null) && (options === null || options === void 0 ? void 0 : options.optional) === true)
+                return undefined;
+            if (typeof val !== 'string' && !(val instanceof String))
+                return propertyName + " is not a String";
+        });
+    }
+    exports.ValidateIsString = ValidateIsString;
+    class TestSample {
+        constructor() {
+            this.test = this;
+            this.testarr = [this];
+            this.num = 9.1;
+            this.bol = true;
+            this.inprop = 1;
+        }
+        async call(num, text = undefined) {
+            return num;
+        }
+    }
+    __decorate([
+        ValidateIsInt({ message: "r:{rule} p:{property} v:{value}" }),
+        ValidateMax({ max: 10, message: "{max}" }),
+        ValidateMin({ min: 5, message: "{value} is smaller then {min}" }),
+        __metadata("design:type", Number)
+    ], TestSample.prototype, "id", void 0);
+    __decorate([
+        ValidateFunctionParameter(),
+        __param(0, ValidateIsInt()),
+        __param(1, ValidateIsString({ optional: true })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", Promise)
+    ], TestSample.prototype, "call", null);
+    __decorate([
+        ValidateIsString({ optional: true, message: "no string" }),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "str", void 0);
+    __decorate([
+        ValidateIsInstanceOf({ type: t => TestSample }),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "test", void 0);
+    __decorate([
+        ValidateIsArray({ type: t => TestSample }),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "testarr", void 0);
+    __decorate([
+        ValidateIsNumber(),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "num", void 0);
+    __decorate([
+        ValidateIsBoolean(),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "bol", void 0);
+    __decorate([
+        ValidateIsIn({ in: [1, "2", "3"] }),
+        __metadata("design:type", Object)
+    ], TestSample.prototype, "inprop", void 0);
+    async function test(test) {
+        var obj = new TestSample();
+        obj.id = 8;
+        var hh = validate(obj);
+        test.expectEqual(validate(obj).length === 0);
+        //@ts-ignore
+        obj.id = "8";
+        test.expectEqual(validate(obj)[0].message === "r:ValidateIsInt p:id v:8");
+        test.expectEqual(await obj.call(8) === 8);
+        test.expectError(() => obj.call("8"));
+        obj.id = 0;
+        test.expectEqual(validate(obj)[0].message === "0 is smaller then 5");
+        obj.id = 20;
+        test.expectEqual(validate(obj)[0].message === "10");
+        obj.str = 20;
+        obj.id = 8;
+        var hdh = validate(obj)[0].message;
+        test.expectError(() => validate(obj, undefined, true));
+        test.expectEqual(validate(obj)[0].message === "no string");
+        test.expectEqual(await obj.call(8, "ok") === 8);
+        test.expectError(() => obj.call("8", 8));
+        test.expectEqual(await obj.call(8, "ok") === 8);
+        obj.str = "kk";
+        test.expectEqual(validate(obj).length === 0);
+        obj.num = "1.2";
+        test.expectError(() => validate(obj, undefined, true));
+        obj.num = 1.2;
+        obj.testarr = 8;
+        test.expectError(() => validate(obj, undefined, true));
+        obj.testarr = [8];
+        test.expectError(() => validate(obj, undefined, true));
+        obj.testarr = [];
+        test.expectEqual(validate(obj).length === 0);
+        obj.bol = "";
+        test.expectError(() => validate(obj, undefined, true));
+        obj.bol = true;
+        test.expectEqual(validate(obj).length === 0);
+        obj.test = { kk: 9 };
+        test.expectError(() => validate(obj, undefined, true));
+        obj.test = { id: 9 };
+        test.expectEqual(validate(obj, {
+            delegateOptions: {
+                ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] }
+            }
+        }).length === 0);
+        obj.test = obj;
+        obj.testarr = [{ id: 8 }];
+        test.expectError(() => validate(obj, undefined, true));
+        test.expectEqual(validate(obj, {
+            delegateOptions: {
+                ValidateIsArray: { alternativeJsonProperties: ["id"] }
+            }
+        }).length === 0);
+        obj.testarr = [];
+        test.expectEqual(validate(obj).length === 0);
+        obj.inprop = 5;
+        test.expectError(() => validate(obj, undefined, true));
+        obj.inprop = "2";
+        test.expectEqual(validate(obj).length === 0);
+    }
+    exports.test = test;
+    var l;
+});
+define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database", "jassijs/remote/Validator", "jassijs/remote/Serverservice"], function (require, exports, Registry_13, Classes_9, RemoteObject_3, Registry_14, DatabaseSchema_1, Database_1, Validator_1, Serverservice_5) {
+    "use strict";
+    var DBObject_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.DBObject = exports.MyFindManyOptions = exports.$DBObject = void 0;
+    let cl = Classes_9.classes; //force Classes
+    function $DBObject(options) {
+        return function (pclass, ...params) {
+            var classname = Classes_9.classes.getClassName(pclass);
+            if (!options)
+                options = {};
+            if (!options.name)
+                options.name = classname.toLowerCase().replaceAll(".", "_");
+            Registry_14.default.register("$DBObject", pclass, options);
+            (0, DatabaseSchema_1.Entity)(options)(pclass, ...params); //pass to orginal Entitiy
+        };
+    }
+    exports.$DBObject = $DBObject;
+    class MyFindManyOptions {
+    }
+    exports.MyFindManyOptions = MyFindManyOptions;
+    /**
+    * base class for all database entfities
+    * all objects which use the jassijs.db must implement this
+    * @class DBObject
+    */
+    let DBObject = DBObject_1 = class DBObject extends RemoteObject_3.RemoteObject {
+        //clear cache on reload
+        static _initFunc() {
+            Registry_14.default.onregister("$Class", (data, name) => {
+                delete DBObject_1.cache[name];
+            });
+        }
+        constructor() {
+            super();
+        }
+        isAutoId() {
+            var _a;
+            var h = Database_1.db;
+            var def = (_a = Database_1.db.getMetadata(this.constructor)) === null || _a === void 0 ? void 0 : _a.fields;
+            return def.id.PrimaryGeneratedColumn !== undefined;
+        }
+        static getFromCache(classname, id) {
+            if (!DBObject_1.cache[classname])
+                return undefined;
+            return DBObject_1.cache[classname][id.toString()];
+        }
+        async validate(options = undefined, throwError = false) {
+            var ret = (0, Validator_1.validate)(this, options, throwError);
+            return ret;
+        }
+        static addToCache(ob) {
+            if (ob === undefined)
+                return undefined;
+            var clname = Classes_9.classes.getClassName(ob);
+            var cl = DBObject_1.cache[clname];
+            if (cl === undefined) {
+                cl = {};
+                DBObject_1.cache[clname] = cl;
+            }
+            cl[ob.id] = ob;
+        }
+        static clearCache(classname) {
+            DBObject_1.cache[classname] = {};
+        }
+        removeFromCache() {
+            var clname = Classes_9.classes.getClassName(this);
+            if (!DBObject_1.cache[clname])
+                return;
+            delete DBObject_1.cache[clname][this.id.toString()];
+        }
+        static _createObject(ob) {
+            if (ob === undefined)
+                return undefined;
+            var cl = DBObject_1.cache[ob.__clname__];
+            if (cl === undefined) {
+                cl = {};
+                DBObject_1.cache[ob.__clname__] = cl;
+            }
+            var ret = cl[ob.id];
+            if (ret === undefined) {
+                ret = new (Classes_9.classes.getClass(ob.__clname__))();
+                cl[ob.id] = ret;
+            }
+            return ret;
+        }
+        //public id:number;
+        /**
+         * replace all childs objects with {id:}
+         */
+        _replaceObjectWithId(obj) {
+            var ret = {};
+            if (obj === undefined)
+                return undefined;
+            for (var key in obj) {
+                ret[key] = obj[key];
+                if (ret[key] !== undefined && ret[key] !== null && ret[key].id !== undefined) {
+                    ret[key] = { id: ret[key].id };
+                }
+                if (Array.isArray(ret[key])) {
+                    ret[key] = [];
+                    for (var i = 0; i < obj[key].length; i++) {
+                        ret[key].push(obj[key][i]);
+                        if (ret[key][i] !== undefined && ret[key][i] !== null && ret[key][i].id !== undefined) {
+                            ret[key][i] = { id: ret[key][i].id };
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+        /**
+        * save the object to jassijs.db
+        */
+        async save(context = undefined) {
+            await this.validate({
+                delegateOptions: {
+                    ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] },
+                    ValidateIsArray: { alternativeJsonProperties: ["id"] }
+                }
+            });
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                if (this.id !== undefined) {
+                    var cname = Classes_9.classes.getClassName(this);
+                    /* var cl = DBObject.cache[cname];
+                     if (cl === undefined) {
+                         cl = {};
+                         DBObject.cache[cname] = cl;
+                     }*/
+                    var cached = DBObject_1.getFromCache(cname, this.id);
+                    if (cached === undefined) {
+                        DBObject_1.addToCache(this); //must be cached before inserting, so the new properties are introduced to the existing
+                        if (this.isAutoId())
+                            throw new Classes_9.JassiError("autoid - load the object  before saving or remove id");
+                        else
+                            return await this.call(this, this._createObjectInDB, context);
+                        //}//fails if the Object is saved before loading 
+                    }
+                    else {
+                        if (cached !== this) {
+                            throw new Classes_9.JassiError("the object must be loaded before save");
+                        }
+                    }
+                    DBObject_1.addToCache(this);
+                    //                cl[this.id] = this;//Update cache on save
+                    var newob = this._replaceObjectWithId(this);
+                    var id = await this.call(newob, this.save, context);
+                    this.id = id;
+                    return this;
+                }
+                else {
+                    if (!this.isAutoId()) {
+                        throw new Classes_9.JassiError("error while saving the Id is not set");
+                    }
+                    else {
+                        var newob = this._replaceObjectWithId(this);
+                        var h = await this.call(newob, this._createObjectInDB, context);
+                        this.id = h;
+                        DBObject_1.addToCache(this);
+                        //                	 DBObject.cache[classes.getClassName(this)][this.id]=this;
+                        return this;
+                    }
+                }
+            }
+            else {
+                return (await Serverservice_5.serverservices.db).save(context, this);
+            }
+        }
+        async _createObjectInDB(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                throw new Classes_9.JassiError("createObject could oly be called on server");
+            }
+            else {
+                return (await Serverservice_5.serverservices.db).insert(context, this);
+            }
+        }
+        static async findOne(options = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this.findOne, options, context);
+            }
+            else {
+                return (await Serverservice_5.serverservices.db).findOne(context, this, options);
+            }
+        }
+        static async find(options = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this.find, options, context);
+            }
+            else {
+                return (await Serverservice_5.serverservices.db).find(context, this, options);
+            }
+        }
+        /**
+        * reload the object from jassijs.db
+        */
+        async remove(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                //@ts-ignore
+                var cl = DBObject_1.cache[Classes_9.classes.getClassName(this)];
+                if (cl !== undefined) {
+                    delete cl[this.id];
+                }
+                return await this.call({ id: this.id }, this.remove, context);
+            }
+            else {
+                //@ts-ignore
+                return (await Serverservice_5.serverservices.db).remove(context, this);
+            }
+        }
+        _getObjectProperty(dummy) {
+        }
+        _setObjectProperty(dummy, dumm1) {
+        }
+    };
+    DBObject.cache = {};
+    DBObject._init = DBObject_1._initFunc();
+    DBObject = DBObject_1 = __decorate([
+        (0, Registry_13.$Class)("jassijs.remote.DBObject"),
+        __metadata("design:paramtypes", [])
+    ], DBObject);
+    exports.DBObject = DBObject;
+    async function test() {
+        var h = Database_1.db.getMetadata(Classes_9.classes.getClass("de.Kunde"));
+        // debugger;
+    }
+    exports.test = test;
+});
+define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_2, Registry_15, DatabaseSchema_2, Group_1, Validator_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ParentRight = void 0;
+    //import "jassijs/ext/enableExtension.js?de.Kunde";
+    let ParentRight = class ParentRight extends DBObject_2.DBObject {
+    };
+    __decorate([
+        (0, Validator_2.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_2.PrimaryGeneratedColumn)(),
+        __metadata("design:type", Number)
+    ], ParentRight.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsString)(),
+        (0, DatabaseSchema_2.Column)(),
+        __metadata("design:type", String)
+    ], ParentRight.prototype, "name", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsString)(),
+        (0, DatabaseSchema_2.Column)(),
+        __metadata("design:type", String)
+    ], ParentRight.prototype, "classname", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", Number)
+    ], ParentRight.prototype, "i1", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", Number)
+    ], ParentRight.prototype, "i2", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], ParentRight.prototype, "s1", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], ParentRight.prototype, "s2", void 0);
+    __decorate([
+        (0, Validator_2.ValidateIsArray)({ optional: true, type: type => Group_1.Group }),
+        (0, DatabaseSchema_2.ManyToMany)(type => Group_1.Group, ob => ob.parentRights),
+        __metadata("design:type", Array)
+    ], ParentRight.prototype, "groups", void 0);
+    ParentRight = __decorate([
+        (0, DBObject_2.$DBObject)({ name: "jassijs_parentright" }),
+        (0, Registry_15.$Class)("jassijs.security.ParentRight")
+    ], ParentRight);
+    exports.ParentRight = ParentRight;
+});
+define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_16, DatabaseSchema_3, Group_2, Validator_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Right = void 0;
+    //import "jassijs/ext/enableExtension.js?de.Kunde";
+    let Right = class Right extends DBObject_3.DBObject {
+    };
+    __decorate([
+        (0, Validator_3.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_3.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Right.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_3.ValidateIsString)(),
+        (0, DatabaseSchema_3.Column)(),
+        __metadata("design:type", String)
+    ], Right.prototype, "name", void 0);
+    __decorate([
+        (0, Validator_3.ValidateIsArray)({ optional: true, type: type => Group_2.Group }),
+        (0, DatabaseSchema_3.ManyToMany)(type => Group_2.Group, ob => ob.rights),
+        __metadata("design:type", Array)
+    ], Right.prototype, "groups", void 0);
+    Right = __decorate([
+        (0, DBObject_3.$DBObject)({ name: "jassijs_right" }),
+        (0, Registry_16.$Class)("jassijs.security.Right")
+    ], Right);
+    exports.Right = Right;
+});
+define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right", "jassijs/remote/Validator"], function (require, exports, DBObject_4, Registry_17, DatabaseSchema_4, ParentRight_1, User_1, Right_1, Validator_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Group = void 0;
+    //import "jassijs/ext/enableExtension.js?de.Kunde";
+    let Group = class Group extends DBObject_4.DBObject {
+    };
+    __decorate([
+        (0, Validator_4.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_4.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Group.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsString)(),
+        (0, DatabaseSchema_4.Column)(),
+        __metadata("design:type", String)
+    ], Group.prototype, "name", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsArray)({ optional: true, type: type => ParentRight_1.ParentRight }),
+        (0, DatabaseSchema_4.JoinTable)(),
+        (0, DatabaseSchema_4.ManyToMany)(type => ParentRight_1.ParentRight, ob => ob.groups),
+        __metadata("design:type", Array)
+    ], Group.prototype, "parentRights", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsArray)({ optional: true, type: type => Right_1.Right }),
+        (0, DatabaseSchema_4.JoinTable)(),
+        (0, DatabaseSchema_4.ManyToMany)(type => Right_1.Right, ob => ob.groups),
+        __metadata("design:type", Array)
+    ], Group.prototype, "rights", void 0);
+    __decorate([
+        (0, Validator_4.ValidateIsArray)({ optional: true, type: type => User_1.User }),
+        (0, DatabaseSchema_4.ManyToMany)(type => User_1.User, ob => ob.groups),
+        __metadata("design:type", Array)
+    ], Group.prototype, "users", void 0);
+    Group = __decorate([
+        (0, DBObject_4.$DBObject)({ name: "jassijs_group" }),
+        (0, Registry_17.$Class)("jassijs.security.Group")
+    ], Group);
+    exports.Group = Group;
+});
+define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight", "jassijs/remote/Validator"], function (require, exports, DBObject_5, Registry_18, DatabaseSchema_5, Group_3, ParentRight_2, Validator_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test2 = exports.test = exports.User = void 0;
+    let User = class User extends DBObject_5.DBObject {
+        static async findWithRelations() {
+            return this.find({ relations: ["*"] });
+        }
+        /**
+       * reload the object from jassijs.db
+       */
+        async hallo(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this, this.hallo, context);
+            }
+            else {
+                return 11;
+            }
+        }
+        async save(context = undefined) {
+            return await super.save(context);
+        }
+    };
+    __decorate([
+        (0, Validator_5.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_5.PrimaryGeneratedColumn)(),
+        __metadata("design:type", Number)
+    ], User.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_5.ValidateIsString)(),
+        (0, DatabaseSchema_5.Column)(),
+        __metadata("design:type", String)
+    ], User.prototype, "email", void 0);
+    __decorate([
+        (0, Validator_5.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ select: false }),
+        __metadata("design:type", String)
+    ], User.prototype, "password", void 0);
+    __decorate([
+        (0, Validator_5.ValidateIsArray)({ optional: true, type: type => Group_3.Group }),
+        (0, DatabaseSchema_5.JoinTable)(),
+        (0, DatabaseSchema_5.ManyToMany)(type => Group_3.Group, ob => ob.users),
+        __metadata("design:type", Array)
+    ], User.prototype, "groups", void 0);
+    __decorate([
+        (0, Validator_5.ValidateIsBoolean)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
+        __metadata("design:type", Boolean)
+    ], User.prototype, "isAdmin", void 0);
+    User = __decorate([
+        (0, DBObject_5.$DBObject)({ name: "jassijs_user" }),
+        (0, Registry_18.$Class)("jassijs.security.User")
+    ], User);
+    exports.User = User;
+    async function test() {
+        var gps = await (Group_3.Group.find({}));
+    }
+    exports.test = test;
+    async function test2() {
+        var user = new User();
+        user.id = 1;
+        user.email = "a@b.com";
+        user.password = "";
+        var group1 = new Group_3.Group();
+        group1.id = 1;
+        group1.name = "Mandanten I";
+        var group2 = new Group_3.Group();
+        group2.id = 2;
+        group2.name = "Mandanten 2";
+        var pr1 = new ParentRight_2.ParentRight();
+        pr1.id = 10;
+        pr1.classname = "de.Kunde";
+        pr1.name = "Kunden";
+        pr1.i1 = 1;
+        pr1.i2 = 4;
+        await pr1.save();
+        var pr2 = new ParentRight_2.ParentRight();
+        pr2.id = 11;
+        pr2.classname = "de.Kunde";
+        pr2.name = "Kunden";
+        pr2.i1 = 6;
+        pr2.i2 = 10;
+        await pr2.save();
+        group1.parentRights = [pr1];
+        await group1.save();
+        group2.parentRights = [pr2];
+        await group2.save();
+        user.groups = [group1, group2];
+        await user.save();
+    }
+    exports.test2 = test2;
+});
+define("jassijs/UserModel", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.UserModel = void 0;
+    class UserModel {
+    }
+    exports.UserModel = UserModel;
+    UserModel.secret = "TODO change this";
+});
+define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Classes_10, Registry_19) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.DBObjectQuery = exports.$DBObjectQuery = exports.DBObjectQueryProperties = void 0;
+    class DBObjectQueryProperties {
+    }
+    exports.DBObjectQueryProperties = DBObjectQueryProperties;
+    function $DBObjectQuery(property) {
+        return function (target, propertyKey, descriptor) {
+            var test = Classes_10.classes.getClassName(target);
+            Registry_19.default.registerMember("$DBObjectQuery", target, propertyKey, property);
+        };
+    }
+    exports.$DBObjectQuery = $DBObjectQuery;
+    class DBObjectQuery {
+        async execute() {
+            return undefined;
+        }
+        static async getQueries(classname) {
+            var cl = await Classes_10.classes.loadClass(classname);
+            var ret = [];
+            var all = Registry_19.default.getMemberData("$DBObjectQuery");
+            var queries = all[classname];
+            for (var name in queries) {
+                var qu = queries[name][0][0];
+                var query = new DBObjectQuery();
+                query.classname = classname;
+                query.name = qu.name;
+                query.description = qu.description;
+                query.execute = async function () {
+                    return await cl[name]();
+                };
+                ret.push(query);
+            }
+            return ret;
+        }
+    }
+    exports.DBObjectQuery = DBObjectQuery;
+    async function test() {
+        //	var qu=(await DBObjectQuery.getQueries("de.Kunde"))[0];
+        //	var j=await qu.execute();
+    }
+    exports.test = test;
+});
+define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Classes", "jassijs/remote/Validator"], function (require, exports, DBObject_6, Registry_20, DatabaseSchema_6, Classes_11, Validator_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Setting = void 0;
+    let Setting = class Setting extends DBObject_6.DBObject {
+        constructor() {
+            super();
+        }
+        async save(context = undefined) {
+            throw new Classes_11.JassiError("not suported");
+        }
+        static async findOne(options = undefined, context = undefined) {
+            throw new Classes_11.JassiError("not suported");
+        }
+        static async find(options = undefined, context = undefined) {
+            throw new Classes_11.JassiError("not suported");
+        }
+        /**
+        * reload the object from jassijs.db
+        */
+        async remove(context = undefined) {
+            throw new Classes_11.JassiError("not suported");
+        }
+    };
+    __decorate([
+        (0, Validator_6.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_6.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Setting.prototype, "id", void 0);
+    __decorate([
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Setting.prototype, "data", void 0);
+    Setting = __decorate([
+        (0, DBObject_6.$DBObject)({ name: "jassijs_setting" }),
+        (0, Registry_20.$Class)("jassijs.security.Setting"),
+        __metadata("design:paramtypes", [])
+    ], Setting);
+    exports.Setting = Setting;
+    async function test() {
+    }
+    exports.test = test;
+    ;
+});
+define("jassijs/remote/ClientError", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_21) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ClientError = void 0;
+    let ClientError = class ClientError extends Error {
+        constructor(msg) {
+            super(msg);
+        }
+    };
+    ClientError = __decorate([
+        (0, Registry_21.$Class)("jassijs.remote.ClientError"),
+        __metadata("design:paramtypes", [String])
+    ], ClientError);
+    exports.ClientError = ClientError;
+});
+define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_22, RemoteObject_4, Classes_12, Serverservice_6, Validator_7) {
+    "use strict";
+    var DatabaseTools_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.DatabaseTools = void 0;
+    let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_4.RemoteObject {
+        //this is a sample remote function
+        static async runSQL(sql, parameter = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this.runSQL, sql, parameter, context);
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw new Classes_12.JassiError("only admins can delete");
+                return (await Serverservice_6.serverservices.db).runSQL(context, sql, parameter);
+            }
+        }
+        static async dropTables(tables) {
+            for (var i = 0; i < tables.length; i++) {
+                if ((/[A-Z,a-z,_,0-9]+/g).exec(tables[i])[0] !== tables[i]) {
+                    throw new Classes_12.JassiError(tables[i] + " is not a valid tablename");
+                }
+            }
+            if (tables.length === 0) {
+                throw new Classes_12.JassiError("no tables to drop");
+            }
+            return await DatabaseTools_1.runSQL("DROP TABLE " + tables.join(","));
+        }
+    };
+    __decorate([
+        (0, Validator_7.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_7.ValidateIsString)()),
+        __param(1, (0, Validator_7.ValidateIsArray)({ optional: true })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, Array, RemoteObject_4.Context]),
+        __metadata("design:returntype", Promise)
+    ], DatabaseTools, "runSQL", null);
+    DatabaseTools = DatabaseTools_1 = __decorate([
+        (0, Registry_22.$Class)("jassijs.remote.DatabaseTools")
+    ], DatabaseTools);
+    exports.DatabaseTools = DatabaseTools;
+    async function test() {
+        /*  var h=await DatabaseTools.runSQL('DROP TABLE :p1,:p2',[
+                              {p1:"te_person2",
+                                          p2:"tg_person"}]);//,"te_person2"]);*/
+        //var h=await DatabaseTools.runSQL('select * from jassijs_rights'); 
+    }
+    exports.test = test;
+});
+define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_23) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.extensions = exports.Extensions = exports.$Extension = void 0;
+    function $Extension(forclass) {
+        return function (pclass) {
+            Registry_23.default.register("$Extension", pclass, forclass);
+        };
+    }
+    exports.$Extension = $Extension;
+    class ExtensionTarget {
+        addFunction(name, func, ifExists) {
+        }
+        addMember(name) {
+        }
+        annotateMember(member, type, ...annotations) {
+        }
+    }
+    class Extensions {
+        constructor() {
+            this.funcRegister = Registry_23.default.onregister("$Extension", this.register.bind(this));
+        }
+        destroy() {
+            Registry_23.default.offregister("$Extension", this.funcRegister);
+        }
+        annotate(oclass, ...annotations) {
+            throw new Error("not implemented yet");
+        }
+        register(extensionclass, forclass) {
+            //TODO reloading???
+            //we must wait with to extent because forclass ist not loaded
+            var func = Registry_23.default.onregister("$Class", function (oclass, params) {
+                if (oclass.prototype.constructor._classname === forclass) {
+                    // reloading code-> registry.offregister("$Class", func);
+                    let props = Object.getOwnPropertyNames(extensionclass.prototype);
+                    for (var m = 0; m < props.length; m++) {
+                        var member = props[m];
+                        if (member !== "_classname" && member !== "constructor") {
+                            if (typeof extensionclass.prototype[member] === "function") {
+                                if (oclass.prototype[member] !== undefined) {
+                                    var sic = oclass.prototype[member];
+                                    var ext = extensionclass.prototype[member];
+                                    oclass.prototype[member] = function (...p) {
+                                        sic.bind(this)(...p);
+                                        ext.bind(this)(...p);
+                                    };
+                                }
+                                else
+                                    oclass.prototype[member] = extensionclass.prototype[member];
+                            }
+                        }
+                    }
+                }
+            });
+            //  alert(forclass);
+        }
+        annotateMember(classname, member, type, ...annotations) {
+            var func = Registry_23.default.onregister("$Class", function (oclass, params) {
+                if (oclass.prototype.constructor._classname === classname) {
+                    Registry_23.default.offregister("$Class", func);
+                    //designtype
+                    Reflect["metadata"]("design:type", type)(oclass.prototype, member);
+                    for (var x = 0; x < annotations.length; x++) {
+                        let ann = annotations[x];
+                        ann(oclass.prototype, member);
+                    }
+                }
+            });
+        }
+    }
+    exports.Extensions = Extensions;
+    var extensions = new Extensions();
+    exports.extensions = extensions;
+});
+define("jassijs/remote/Jassi", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Jassi = void 0;
+    //@ts-ignore
+    String.prototype.replaceAll = function (search, replacement) {
+        var target = this;
+        return target.split(search).join(replacement);
+    };
+    /**
+    * main class for jassi
+    * @class Jassi
+    */
+    class Jassi {
+        constructor() {
+            this.isServer = false;
+            //@ts-ignore
+            this.isServer = window.document === undefined;
+            //@ts-ignore
+            //this.modules = window?.__jassijsconfig__?.modules;
+            //@ts-ignore
+            //this.options = window?.__jassijsconfig__?.options;
+            if (!this.isServer) {
+                //@ts-ignore 
+                /*import("jassijs/modul").then((modul)=>{
+                    jassijs.myRequire(modul.default.css["jassijs.css"]);
+                    jassijs.myRequire(modul.default.css["jquery-ui.css"]);
+                    jassijs.myRequire(modul.default.css["materialdesignicons.min.css"]);
+        
+                });*/
+                //  this.myRequire("jassi/jassijs.css");
+                //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
+                //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
+            }
+        }
+        includeCSSFile(modulkey) {
+            this.myRequire(this.cssFiles[modulkey]);
+        }
+        /**
+         * include a global stylesheet
+         * @id - the given id - important for update
+         * @data - the css data to insert
+         **/
+        includeCSS(id, data) {
+            //@ts-ignore
+            var style = document.getElementById(id);
+            //@ts-ignore
+            if (!document.getElementById(id)) {
+                style = document.createRange().createContextualFragment('<style id=' + id + '></style>').children[0];
+                //@ts-ignore
+                document.head.appendChild(style);
+            }
+            var sstyle = "";
+            for (var selector in data) {
+                var sstyle = sstyle + "\n\t" + selector + "{\n";
+                var properties = data[selector];
+                var prop = {};
+                for (let key in properties) {
+                    if (key === "_classname")
+                        continue;
+                    var newKey = key.replaceAll("_", "-");
+                    prop[newKey] = properties[key];
+                    sstyle = sstyle + "\t\t" + newKey + ":" + properties[key] + ";\n";
+                }
+                sstyle = sstyle + "\t}\n";
+            }
+            style.innerHTML = sstyle;
+        }
+        /**
+        * include a js or a css file
+        * @param {string|string[]} href - url(s) of the js or css file(s)
+        * @param {function} [param] - would be added with? to the url
+        */
+        myRequire(href, event = undefined, param = undefined) {
+            if (this.isServer)
+                throw new Error("jassi.Require is only available on client");
+            if ((typeof href) === "string") {
+                href = [href];
+            }
+            var url = "";
+            if (href instanceof Array) {
+                if (href.length === 0) {
+                    if (event !== undefined)
+                        event();
+                    return;
+                }
+                else {
+                    url = href[0];
+                    href.splice(0, 1);
+                }
+            }
+            if (url.endsWith(".js")) {
+                //@ts-ignore
+                if (window.document.getElementById("-->" + url) !== null) {
+                    this.myRequire(href, event);
+                }
+                else {
+                    //@ts-ignore
+                    var js = window.document.createElement("script");
+                    //   js.type = "text/javascript";
+                    js.src = url + (param !== undefined ? "?" + param : "");
+                    var _this = this;
+                    js.onload = function () {
+                        _this.myRequire(href, event);
+                    };
+                    js.id = "-->" + url;
+                    //@ts-ignore
+                    window.document.head.appendChild(js);
+                }
+            }
+            else {
+                if (document.getElementById("-->" + url) != null) {
+                    if (event)
+                        event();
+                    return;
+                }
+                //    <link href="lib/jquery.splitter.css" rel="stylesheet"/>
+                //@ts-ignore
+                var head = window.document.getElementsByTagName('head')[0];
+                //@ts-ignore
+                var link = window.document.createElement('link');
+                //  link.rel  = 'import';
+                link.href = url;
+                link.rel = "stylesheet";
+                link.id = "-->" + url;
+                var _this = this;
+                //@ts-ignore 
+                link.onload = function (data1, data2) {
+                    _this.myRequire(href, event);
+                };
+                head.appendChild(link);
+            }
+        }
+    }
+    exports.Jassi = Jassi;
+    ;
+    var jassijs = new Jassi();
+    globalThis.jassijs = jassijs;
+});
+define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Validator", "jassijs/remote/Config"], function (require, exports, Registry_24, RemoteObject_5, FileNode_1, Classes_13, Serverservice_7, Validator_8, Config_6) {
+    "use strict";
+    var Server_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Server = void 0;
+    let Server = Server_1 = class Server extends RemoteObject_5.RemoteObject {
+        constructor() {
+            super();
+        }
+        _convertFileNode(node) {
+            var ret = new FileNode_1.FileNode();
+            Object.assign(ret, node);
+            if (ret.files !== undefined) {
+                for (let x = 0; x < ret.files.length; x++) {
+                    ret.files[x].parent = ret;
+                    var s = ret.fullpath === undefined ? "" : ret.fullpath;
+                    ret.files[x].fullpath = s + (s === "" ? "" : "/") + ret.files[x].name;
+                    ret.files[x] = this._convertFileNode(ret.files[x]);
+                }
+            }
+            return ret;
+        }
+        async fillFilesInMapIfNeeded() {
+            var _a, _b, _c, _d, _e, _f;
+            if (Server_1.filesInMap)
+                return;
+            var ret = {};
+            for (var mod in Config_6.config.modules) {
+                if ((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
+                    if (((_d = (_c = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
+                        continue;
+                }
+                if (Config_6.config.modules[mod].endsWith(".js") || Config_6.config.modules[mod].indexOf(".js?") > -1) {
+                    let mapname = Config_6.config.modules[mod].split("?")[0] + ".map";
+                    if (Config_6.config.modules[mod].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + Config_6.config.modules[mod].split("?")[1];
+                    var code = await $.ajax({ url: mapname, dataType: "text" });
+                    var data = JSON.parse(code);
+                    var files = data.sources;
+                    for (let x = 0; x < files.length; x++) {
+                        let fname = files[x].substring(files[x].indexOf(mod + "/"));
+                        if (((_f = (_e = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _e === void 0 ? void 0 : _e.Server) === null || _f === void 0 ? void 0 : _f.filterSytemfilesInFilemap) === true) {
+                            if (fname.endsWith("/modul.js") || fname.endsWith("/registry.js"))
+                                continue;
+                        }
+                        if (fname.endsWith)
+                            ret[fname] = {
+                                id: x,
+                                modul: mod
+                            };
+                    }
+                }
+            }
+            Server_1.filesInMap = ret;
+        }
+        async addFilesFromMap(root) {
+            await this.fillFilesInMapIfNeeded();
+            for (var fname in Server_1.filesInMap) {
+                let path = fname.split("/");
+                var parent = root;
+                for (let p = 0; p < path.length; p++) {
+                    if (p + 1 < path.length) {
+                        let dirname = path[p];
+                        var found = undefined;
+                        for (let f = 0; f < parent.files.length; f++) {
+                            if (parent.files[f].name === dirname)
+                                found = parent.files[f];
+                        }
+                        if (!found) {
+                            found = {
+                                flag: "fromMap",
+                                name: dirname,
+                                files: []
+                            };
+                            parent.files.push(found);
+                        }
+                        parent = found;
+                    }
+                    else {
+                        parent.files.push({
+                            flag: "fromMap",
+                            name: path[p],
+                            date: undefined
+                        });
+                    }
+                }
+            }
+        }
+        /**
+        * gets alls ts/js-files from server
+        * @param {Promise<string>} [async] - returns a Promise for asynchros handling
+        * @returns {string[]} - list of files
+        */
+        async dir(withDate = false, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret;
+                if ((await Server_1.isOnline(context)) === true)
+                    ret = await this.call(this, this.dir, withDate, context);
+                else
+                    ret = { name: "", files: [] };
+                await this.addFilesFromMap(ret);
+                ret.fullpath = ""; //root
+                let r = this._convertFileNode(ret);
+                return r;
+            }
+            else {
+                var rett = await (await Serverservice_7.serverservices.filesystem).dir("", withDate);
+                return rett;
+                // return ["jassijs/base/ChromeDebugger.ts"];
+            }
+        }
+        async zip(directoryname, serverdir = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this, this.zip, directoryname, serverdir, context);
+            }
+            else {
+                return (await Serverservice_7.serverservices.filesystem).zip(directoryname, serverdir);
+                // return ["jassijs/base/ChromeDebugger.ts"];
+            }
+        }
+        /**
+         * gets the content of a file from server
+         * @param {string} fileNamew
+         * @returns {string} content of the file
+         */
+        async loadFiles(fileNames, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this, this.loadFiles, fileNames, context);
+            }
+            else {
+                return (await Serverservice_7.serverservices.filesystem).loadFiles(fileNames);
+                // return ["jassijs/base/ChromeDebugger.ts"];
+            }
+        }
+        /**
+         * gets the content of a file from server
+         * @param {string} fileName
+         * @returns {string} content of the file
+         */
+        async loadFile(fileName, context = undefined) {
+            var fromServerdirectory = fileName.startsWith("$serverside/");
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                await this.fillFilesInMapIfNeeded();
+                if (!fromServerdirectory && Server_1.filesInMap[fileName]) {
+                    //perhabs the files ar in localserver?
+                    var Filesystem = Classes_13.classes.getClass("jassijs_localserver.Filesystem");
+                    if (Filesystem && (await new Filesystem().loadFileEntry(fileName) !== undefined)) {
+                        //use ajax
+                    }
+                    else {
+                        var found = Server_1.filesInMap[fileName];
+                        let mapname = Config_6.config.modules[found.modul].split("?")[0] + ".map";
+                        if (Config_6.config.modules[found.modul].indexOf(".js?") > -1)
+                            mapname = mapname + "?" + Config_6.config.modules[found.modul].split("?")[1];
+                        var code = await this.loadFile(mapname, context);
+                        var data = JSON.parse(code).sourcesContent[found.id];
+                        return data;
+                    }
+                }
+                if (fromServerdirectory) {
+                    return await this.call(this, this.loadFile, fileName, context);
+                }
+                else
+                    return $.ajax({ url: fileName, dataType: "text" });
+                //return await this.call(this,"loadFile", fileName);
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw new Classes_13.JassiError("only admins can loadFile from Serverdirectory");
+                var rett = await (await Serverservice_7.serverservices.filesystem).loadFile(fileName);
+                return rett;
+            }
+        }
+        /**
+        * put the content to a file
+        * @param [{string}] fileNames - the name of the file
+        * @param [{string}] contents
+        */
+        async saveFiles(fileNames, contents, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var allfileNames = [];
+                var allcontents = [];
+                var alltsfiles = [];
+                for (var f = 0; f < fileNames.length; f++) {
+                    var _this = this;
+                    var fileName = fileNames[f];
+                    var content = contents[f];
+                    if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
+                        //var tss = await import("jassijs_editor/util/Typescript");
+                        var tss = await Classes_13.classes.loadClass("jassijs_editor.util.Typescript");
+                        var rets = await tss.instance.transpile(fileName, content);
+                        allfileNames = allfileNames.concat(rets.fileNames);
+                        allcontents = allcontents.concat(rets.contents);
+                        alltsfiles.push(fileName);
+                    }
+                    else {
+                        allfileNames.push(fileName);
+                        allcontents.push(content);
+                    }
+                }
+                var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
+                if (res === "") {
+                    //@ts-ignore
+                    new Promise((resolve_15, reject_15) => { require(["jassijs/ui/Notify"], resolve_15, reject_15); }).then((el) => {
+                        el.notify(fileName + " saved", "info", { position: "bottom right" });
+                    });
+                    //if (!fromServerdirectory) {
+                    for (var x = 0; x < alltsfiles.length; x++) {
+                        await $.ajax({ url: alltsfiles[x], dataType: "text" });
+                    }
+                    // }
+                }
+                else {
+                    //@ts-ignore
+                    new Promise((resolve_16, reject_16) => { require(["jassijs/ui/Notify"], resolve_16, reject_16); }).then((el) => {
+                        el.notify(fileName + " not saved", "error", { position: "bottom right" });
+                    });
+                    throw new Classes_13.JassiError(res);
+                }
+                return res;
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw new Classes_13.JassiError("only admins can saveFiles");
+                var ret = (await Serverservice_7.serverservices.filesystem).saveFiles(fileNames, contents, true);
+                return ret;
+            }
+        }
+        /**
+        * put the content to a file
+        * @param {string} fileName - the name of the file
+        * @param {string} content
+        */
+        async saveFile(fileName, content, context = undefined) {
+            /*await this.fillFilesInMapIfNeeded();
+            if (Server.filesInMap[fileName]) {
+                //@ts-ignore
+                 notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
+                return;
+            }*/
+            return await this.saveFiles([fileName], [content], context);
+        }
+        /**
+       * deletes a server modul
+       **/
+        async testServersideFile(name, context = undefined) {
+            if (!name.startsWith("$serverside/"))
+                throw new Classes_13.JassiError(name + " is not a serverside file");
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.testServersideFile, name, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin) {
+                    throw new Classes_13.JassiError("only admins can delete");
+                }
+                //@ts-ignore
+                var test = (await new Promise((resolve_17, reject_17) => { require([name.replaceAll("$serverside/", "")], resolve_17, reject_17); })).test;
+                if (test)
+                    Server_1.lastTestServersideFileResult = await test();
+                return Server_1.lastTestServersideFileResult;
+            }
+        }
+        /**
+       * deletes a server modul
+       **/
+        async removeServerModul(name, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.removeServerModul, name, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw new Classes_13.JassiError("only admins can delete");
+                return (await Serverservice_7.serverservices.filesystem).removeServerModul(name);
+            }
+        }
+        /**
+        * deletes a file or directory
+        **/
+        async delete(name, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.delete, name, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw new Classes_13.JassiError("only admins can delete");
+                return (await Serverservice_7.serverservices.filesystem).remove(name);
+            }
+        }
+        /**
+         * renames a file or directory
+         **/
+        async rename(oldname, newname, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.rename, oldname, newname, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw new Classes_13.JassiError("only admins can rename");
+                return (await Serverservice_7.serverservices.filesystem).rename(oldname, newname);
+                ;
+            }
+        }
+        /**
+        * is the nodes server running
+        **/
+        static async isOnline(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                //no serviceworker no serverside implementation
+                //@ts-ignore
+                if (navigator.serviceWorker.controller === null)
+                    return false;
+                try {
+                    if (this.isonline === undefined)
+                        Server_1.isonline = await this.call(this.isOnline, context);
+                    return await Server_1.isonline;
+                }
+                catch (_a) {
+                    return false;
+                }
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+            }
+            else {
+                return true;
+            }
+        }
+        /**
+         * creates a file
+         **/
+        async createFile(filename, content, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.createFile, filename, content, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw new Classes_13.JassiError("only admins can createFile");
+                return (await Serverservice_7.serverservices.filesystem).createFile(filename, content);
+            }
+        }
+        /**
+        * creates a file
+        **/
+        async createFolder(foldername, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.createFolder, foldername, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw new Classes_13.JassiError("only admins can createFolder");
+                return (await Serverservice_7.serverservices.filesystem).createFolder(foldername);
+            }
+        }
+        async createModule(modulname, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.createModule, modulname, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw new Classes_13.JassiError("only admins can createFolder");
+                return (await Serverservice_7.serverservices.filesystem).createModule(modulname);
+            }
+        }
+        static async mytest(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this.mytest, context);
+            }
+            else
+                return 14; //this is called on server
+        }
+    };
+    Server.isonline = undefined;
+    Server.lastTestServersideFileResult = undefined;
+    //files found in js.map of modules in the jassijs.json
+    Server.filesInMap = undefined;
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsBoolean)({ optional: true })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Boolean, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "dir", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __param(1, (0, Validator_8.ValidateIsBoolean)({ optional: true })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, Boolean, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "zip", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsArray)({ type: tp => String })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "loadFiles", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "loadFile", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsArray)({ type: type => String })),
+        __param(1, (0, Validator_8.ValidateIsArray)({ type: type => String })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array, Array, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "saveFiles", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __param(1, (0, Validator_8.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "saveFile", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "testServersideFile", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "removeServerModul", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "delete", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __param(1, (0, Validator_8.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "rename", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "createFile", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "createFolder", null);
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, RemoteObject_5.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server.prototype, "createModule", null);
+    Server = Server_1 = __decorate([
+        (0, Registry_24.$Class)("jassijs.remote.Server"),
+        __metadata("design:paramtypes", [])
+    ], Server);
+    exports.Server = Server;
+});
+define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "jassijs/remote/Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_25, Registry_26, RemoteObject_6, Setting_1, Server_2, Serverservice_8, Validator_9) {
+    "use strict";
+    var Settings_1;
+    var _a, _b;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.load = exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
+    const proxyhandler = {
+        get: function (target, prop, receiver) {
+            return prop;
+        }
+    };
+    let Settings = Settings_1 = class Settings extends RemoteObject_6.RemoteObject {
+        /**
+        * loads the settings
+        */
+        static async load(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                //browser
+                let entr = window.localStorage.getItem("jassijs.settings");
+                if (entr) {
+                    Settings_1.browserSettings = JSON.parse(entr);
+                }
+                else
+                    Settings_1.browserSettings = {};
+                var all = (await Server_2.Server.isOnline() === false) ? undefined : await this.call(this.load, context);
+                if (all === null || all === void 0 ? void 0 : all.user) {
+                    Settings_1.userSettings = JSON.parse(all.user.data);
+                }
+                else
+                    Settings_1.userSettings = {};
+                if (all === null || all === void 0 ? void 0 : all.allusers) {
+                    Settings_1.allusersSettings = JSON.parse(all.allusers.data);
+                }
+                else
+                    Settings_1.allusersSettings = {};
+            }
+            else {
+                //@ts-ignore
+                var man = await Serverservice_8.serverservices.db;
+                var id = context.request.user.user;
+                return {
+                    user: await man.findOne(context, Setting_1.Setting, { "id": 1 }),
+                    allusers: await man.findOne(context, Setting_1.Setting, { "id": 0 }),
+                };
+            }
+        }
+        static getAll(scope) {
+            var ret = {};
+            if (scope === "browser") {
+                Object.assign(ret, Settings_1.browserSettings);
+            }
+            if (scope === "user") {
+                Object.assign(ret, Settings_1.userSettings);
+            }
+            if (scope === "allusers") {
+                Object.assign(ret, Settings_1.allusersSettings);
+            }
+            return ret;
+        }
+        gets(Settings_key) {
+            if (Settings_1.browserSettings && Settings_1.browserSettings[Settings_key])
+                return Settings_1.browserSettings[Settings_key];
+            if (Settings_1.userSettings && Settings_1.userSettings[Settings_key])
+                return Settings_1.userSettings[Settings_key];
+            if (Settings_1.allusersSettings && Settings_1.allusersSettings[Settings_key])
+                return Settings_1.allusersSettings[Settings_key];
+            return undefined;
+        }
+        static async remove(Settings_key, scope, context = undefined) {
+            if (scope === "browser") {
+                delete Settings_1.browserSettings[Settings_key];
+                window.localStorage.setItem("jassijs.settings", JSON.stringify(Settings_1.browserSettings));
+            }
+            if (scope === "user" || scope === "allusers") {
+                if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                    if (scope == "user" && Settings_1.userSettings)
+                        delete Settings_1.userSettings[Settings_key];
+                    if (scope == "allusers" && Settings_1.allusersSettings)
+                        delete Settings_1.allusersSettings[Settings_key];
+                    this.call(this.remove, Settings_key, scope, context);
+                }
+                else {
+                    //@ts-ignore
+                    var man = await Serverservice_8.serverservices.db;
+                    var id = context.request.user.user;
+                    //first load
+                    let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });
+                    if (entr !== undefined) {
+                        var data = JSON.parse(entr.data);
+                        delete data[Settings_key];
+                        entr.data = JSON.stringify(data);
+                        await man.save(context, entr);
+                    }
+                }
+            }
+        }
+        static async save(Settings_key, value, scope) {
+            let ob = {};
+            //@ts-ignore
+            ob[Settings_key] = value;
+            return await this.saveAll(ob, scope);
+        }
+        static async saveAll(namevaluepair, scope, removeOtherKeys = false, context = undefined) {
+            if (scope === "browser") {
+                let entr = window.localStorage.getItem("jassijs.settings");
+                var data = namevaluepair;
+                if (entr) {
+                    data = JSON.parse(entr);
+                    Object.assign(data, namevaluepair);
+                }
+                if (removeOtherKeys)
+                    data = namevaluepair;
+                window.localStorage.setItem("jassijs.settings", JSON.stringify(data));
+                if (removeOtherKeys)
+                    Settings_1.browserSettings = {};
+                Object.assign(Settings_1.browserSettings, namevaluepair);
+            }
+            if (scope === "user" || scope === "allusers") {
+                if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                    var props = {};
+                    Object.assign(props, namevaluepair);
+                    if (scope == "user" && Settings_1.userSettings) {
+                        if (removeOtherKeys)
+                            Settings_1.userSettings = {};
+                        Object.assign(Settings_1.userSettings, namevaluepair);
+                    }
+                    if (scope == "allusers" && Settings_1.allusersSettings) {
+                        if (removeOtherKeys)
+                            Settings_1.allusersSettings = {};
+                        Object.assign(Settings_1.allusersSettings, namevaluepair);
+                    }
+                    return await this.call(this.saveAll, props, scope, removeOtherKeys, context);
+                }
+                else {
+                    //@ts-ignore
+                    var man = await Serverservice_8.serverservices.db;
+                    var id = context.request.user.user;
+                    //first load
+                    let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });
+                    var data = namevaluepair;
+                    if (removeOtherKeys !== true) {
+                        if (entr !== undefined) {
+                            data = JSON.parse(entr.data);
+                            Object.assign(data, namevaluepair);
+                        }
+                    }
+                    var newsetting = new Setting_1.Setting();
+                    newsetting.id = (scope === "user" ? id : 0);
+                    newsetting.data = JSON.stringify(data);
+                    return await man.save(context, newsetting);
+                    //return man.find(context, this, { "id": "admin" });
+                }
+            }
+        }
+    };
+    Settings.keys = new Proxy({}, proxyhandler); //the Proxy allwas give the key back
+    Settings.browserSettings = undefined;
+    Settings.userSettings = undefined;
+    Settings.allusersSettings = undefined;
+    __decorate([
+        (0, Validator_9.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_9.ValidateIsString)()),
+        __param(1, (0, Validator_9.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, String, RemoteObject_6.Context]),
+        __metadata("design:returntype", Promise)
+    ], Settings, "remove", null);
+    __decorate([
+        (0, Validator_9.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_9.ValidateIsString)()),
+        __param(2, (0, Validator_9.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [typeof (_a = typeof T !== "undefined" && T) === "function" ? _a : Object, typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, String]),
+        __metadata("design:returntype", Promise)
+    ], Settings, "save", null);
+    __decorate([
+        (0, Validator_9.ValidateFunctionParameter)(),
+        __param(1, (0, Validator_9.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+        __param(2, (0, Validator_9.ValidateIsBoolean)({ optional: true })),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, String, Object, RemoteObject_6.Context]),
+        __metadata("design:returntype", Promise)
+    ], Settings, "saveAll", null);
+    Settings = Settings_1 = __decorate([
+        (0, Registry_25.$Class)("jassijs.remote.Settings")
+    ], Settings);
+    exports.Settings = Settings;
+    var settings = new Settings();
+    exports.settings = settings;
+    function $SettingsDescriptor() {
+        return function (pclass) {
+            Registry_26.default.register("$SettingsDescriptor", pclass);
+        };
+    }
+    exports.$SettingsDescriptor = $SettingsDescriptor;
+    async function autostart() {
+        await Settings.load();
+    }
+    exports.autostart = autostart;
+    async function test(t) {
+        try {
+            await Settings.load();
+            var settings = new Settings();
+            await Settings.remove("antestsetting", "user");
+            await Settings.remove("antestsetting", "browser");
+            await Settings.remove("antestsetting", "allusers");
+            t.expectEqual(settings.gets("antestsetting") === undefined);
+            await Settings.load();
+            t.expectEqual(settings.gets("antestsetting") === undefined);
+            await Settings.save("antestsetting", "1", "allusers");
+            t.expectEqual(settings.gets("antestsetting") === "1");
+            await Settings.load();
+            t.expectEqual(settings.gets("antestsetting") === "1");
+            await Settings.save("antestsetting", "2", "user");
+            t.expectEqual(settings.gets("antestsetting") === "2");
+            await Settings.load();
+            t.expectEqual(settings.gets("antestsetting") === "2");
+            await Settings.save("antestsetting", "3", "browser");
+            t.expectEqual(settings.gets("antestsetting") === "3");
+            await Settings.load();
+            t.expectEqual(settings.gets("antestsetting") === "3");
+        }
+        catch (ex) {
+            throw ex;
+        }
+        finally {
+            await Settings.remove("antestsetting", "user");
+            await Settings.remove("antestsetting", "browser");
+            await Settings.remove("antestsetting", "allusers");
+        }
+    }
+    exports.test = test;
+    async function load() {
+        return Settings.load();
+    }
+    exports.load = load;
+});
+define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, typeorm_2, Classes_14, Registry_27, User_2, Registry_28, Serverservice_9) {
+    "use strict";
+    var DBManager_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DBManager = void 0;
+    const parser = require('js-sql-parser');
+    const passwordIteration = 10000;
+    var _instance = undefined;
+    let DBManager = DBManager_1 = class DBManager {
+        static async getConOpts() {
+            var stype = "postgres";
+            var shost = "localhost";
+            var suser = "postgres";
+            var spass = "ja$$1";
+            var iport = 5432;
+            var sdb = "jassi";
+            //the default is the sqlite3
+            //this is the default way: define an environment var DATABASSE_URL
+            //type://user:password@hostname:port/database
+            //eg: postgres://abcknhlveqwqow:polc78b98e8cd7168d35a66e392d2de6a8d5710e854c084ff47f90643lce2876@ec2-174-102-251-1.compute-1.amazonaws.com:5432/dcpqmp4rcmu182
+            //@ts-ignore
+            var test = process.env.DATABASE_URL;
+            if (test !== undefined) {
+                var all = test.split(":");
+                stype = all[0];
+                if (stype === "postgresql")
+                    stype = "postgres";
+                var h = all[2].split("@");
+                shost = h[1];
+                iport = Number(all[3].split("/")[0]);
+                suser = all[1].replace("//", "");
+                spass = h[0];
+                sdb = all[3].split("/")[1];
+            }
+            var dbclasses = [];
+            var dbobjects = await Registry_27.default.getJSONData("$DBObject");
+            for (var o = 0; o < dbobjects.length; o++) {
+                var clname = dbobjects[o].classname;
+                dbclasses.push(await Classes_14.classes.loadClass(clname));
+                //var fname = dbobjects[o].filename;
+                //dbfiles.push("js/" + fname.replace(".ts", ".js"));
+            }
+            var opt = {
+                //@ts-ignore
+                "type": stype,
+                "host": shost,
+                "port": iport,
+                "username": suser,
+                "password": spass,
+                "database": sdb,
+                //"synchronize": true,
+                "logging": false,
+                "entities": dbclasses
+                //"js/client/remote/de/**/*.js"
+                // "migrations": [
+                //    "src/migration/**/*.ts"
+                // ],
+                // "subscribers": [
+                //    "src/subscriber/**/*.ts"
+                // ]
+            };
+            return opt;
+        }
+        static async _get() {
+            if (_instance === undefined) {
+                _instance = new DBManager_1();
+            }
+            await _instance.waitForConnection;
+            return _instance;
+        }
+        async open() {
+            var _initrunning = undefined;
+            var test = (0, typeorm_2.getMetadataArgsStorage)();
+            try {
+                var opts = await DBManager_1.getConOpts();
+                _initrunning = (0, typeorm_2.createConnection)(opts);
+                await _initrunning;
+            }
+            catch (err1) {
+                try {
+                    _initrunning = undefined;
+                    //@ts-ignore //heroku need this
+                    opts.ssl = {
+                        rejectUnauthorized: false
+                    };
+                    //          opts["ssl"] = true; 
+                    _initrunning = (0, typeorm_2.createConnection)(opts);
+                    await _initrunning;
+                }
+                catch (err) {
+                    console.log("DB corrupt - revert the last change");
+                    console.error(err1);
+                    console.error(err);
+                    _instance = undefined;
+                    _initrunning = undefined;
+                    if (err.message === "The server does not support SSL connections") {
+                        throw err1;
+                        console.error(err1);
+                    }
+                    else {
+                        throw err;
+                        console.error(err);
+                    }
+                }
+            }
+            try {
+                var con = (0, typeorm_2.getConnection)();
+                for (var x = 0; x < 500; x++) { //sometimes on reconnect the connection is not ready
+                    if (con.isConnected)
+                        break;
+                    else
+                        await new Promise((resolve) => setTimeout(() => resolve(undefined), 10));
+                }
+                console.log(con.isConnected);
+                await this.mySync();
+            }
+            catch (err) {
+                console.log("DB Schema could not be saved");
+                throw err;
+            }
+            //wait for connection ready
+            await _initrunning;
+            //on server we convert decimal type to Number https://github.com/brianc/node-postgres/issues/811
+            //@ts-ignore
+            if ((window === null || window === void 0 ? void 0 : window.document) === undefined) {
+                try {
+                    //@ts-ignore
+                    var types = (await new Promise((resolve_18, reject_18) => { require(['pg'], resolve_18, reject_18); })).types;
+                    types.setTypeParser(1700, function (val) {
+                        return parseFloat(val);
+                    });
+                }
+                catch (_a) {
+                }
+            }
+            return this;
+        }
+        async mySync() {
+            var con = (0, typeorm_2.getConnection)();
+            //@ts-ignore
+            var schem = await new Promise((resolve_19, reject_19) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_19, reject_19); });
+            var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
+            schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"] = async function () {
+                //try{
+                await this.createNewTables();
+                await this.addNewColumns();
+                await this.updatePrimaryKeys();
+                await this.updateExistColumns();
+                await this.createNewIndices();
+                await this.createNewChecks();
+                await this.createNewExclusions();
+                await this.createCompositeUniqueConstraints();
+                await this.createForeignKeys();
+                await this.createViews();
+                /*}catch(err){
+                  this.prototype._error_=err;
+                  }*/
+            };
+            //  var h=Reflect.getMetadata("design:type",AR.prototype,"id");
+            await con.synchronize();
+            //if(schem.RdbmsSchemaBuilder.prototype["_error_"])
+            //throw schem.RdbmsSchemaBuilder.prototype["_error_"]; 
+            //con.driver.
+        }
+        static async clearMetadata() {
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().checks);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().columns);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().discriminatorValues);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().embeddeds);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().entityListeners);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().entityRepositories);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().entitySubscribers);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().exclusions);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().tables);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().generations);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().indices);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().inheritances);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().joinColumns);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().joinTables);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().namingStrategies);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().relationCounts);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().relationIds);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().relations);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().tables);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().transactionEntityManagers);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().transactionRepositories);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().trees);
+            DBManager_1.clearArray((0, typeorm_2.getMetadataArgsStorage)().uniques);
+        }
+        async renewConnection() {
+            if (this.waitForConnection !== undefined)
+                await this.waitForConnection;
+            this.waitForConnection = new Promise((resolve) => { }); //never resolve
+            await this.destroyConnection(false);
+            this.waitForConnection = this.open();
+        }
+        async destroyConnection(waitForCompleteOpen = true) {
+            if (waitForCompleteOpen)
+                await this.waitForConnection;
+            try {
+                var con = await (0, typeorm_2.getConnection)();
+                await con.close();
+            }
+            catch (err) {
+                debugger;
+            }
+            await DBManager_1.clearMetadata();
+        }
+        static clearArray(arr) {
+            while (arr.length > 0) {
+                arr.pop();
+            }
+        }
+        constructor() {
+            this.waitForConnection = undefined;
+            Object.freeze(_instance);
+            this.waitForConnection = this.open();
+        }
+        connection() {
+            return (0, typeorm_2.getConnection)();
+        }
+        async runSQL(context, sql, parameters = undefined) {
+            var ret = (await this.waitForConnection).connection().query(sql, parameters);
+            return ret;
+        }
+        async remove(context, entity) {
+            var test = await (await this.waitForConnection).checkParentRight(context, entity, [entity["id"]]);
+            if (test === false)
+                throw new Classes_14.JassiError("you are not allowed to delete " + Classes_14.classes.getClassName(entity) + " with id " + entity["id"]);
+            await this.connection().manager.remove(entity);
+        }
+        async addSaveTransaction(context, entity) {
+            await this.waitForConnection;
+            if (context.objecttransaction) {
+                let ot = context.objecttransaction;
+                if (!ot.savelist) {
+                    ot.savelist = [entity];
+                    ot.saveresolve = [];
+                    ot.addFunctionFinally(async () => {
+                        ot.savereturn = await this.connection().manager.save(ot.savelist);
+                        for (let x = 0; x < ot.savereturn.length; x++) {
+                            delete ot.savereturn[x].password;
+                            ot.saveresolve[x](ot.savereturn[x]);
+                        }
+                    });
+                }
+                else
+                    ot.savelist.push(entity);
+                return new Promise((resolve) => {
+                    ot.saveresolve.push(resolve);
+                    ot.transactionResolved(context);
+                    ot.checkFinally();
+                });
+            }
+        }
+        /**
+       * insert a new object
+       * @param obj - the object to insert
+       */
+        async insert(context, obj) {
+            (await this.waitForConnection);
+            await this._checkParentRightsForSave(context, obj);
+            if (context.objecttransaction) {
+                return this.addSaveTransaction(context, obj);
+            }
+            if (obj.id !== undefined) {
+                if ((await this.connection().manager.findOne(obj.constructor, obj.id)) !== undefined) {
+                    throw new Classes_14.JassiError("object is already in DB: " + obj.id);
+                }
+            }
+            //@ts-ignore
+            var ret = await this.connection().manager.insert(obj.constructor, obj);
+            //save also relations
+            let retob = await this.save(context, obj);
+            return retob;
+        }
+        async save(context, entity, options) {
+            await this.waitForConnection;
+            await this._checkParentRightsForSave(context, entity);
+            if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
+                if (Classes_14.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
+                    entity.password = await new Promise((resolve) => {
+                        const crypto = require('crypto');
+                        const salt = crypto.randomBytes(8).toString('base64');
+                        crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
+                            if (err)
+                                throw err;
+                            resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
+                        });
+                    });
+                }
+            }
+            if (context.objecttransaction && options === undefined) {
+                return this.addSaveTransaction(context, entity);
+            }
+            var ret = await this.connection().manager.save(entity, options);
+            //delete entity.password;
+            //delete ret["password"];
+            //@ts-ignore
+            return ret === null || ret === void 0 ? void 0 : ret.id;
+        }
+        async _checkParentRightsForSave(context, entity) {
+            var _a;
+            await this.waitForConnection;
+            if ((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)
+                return;
+            //Check if the object self has restrictions
+            var cl = Classes_14.classes.getClass(Classes_14.classes.getClassName(entity));
+            if (entity["id"] !== undefined) {
+                var exist = await this.connection().manager.findOne(cl, entity["id"]);
+                if (exist !== undefined) {
+                    var t = await this.checkParentRight(context, cl, [entity["id"]]);
+                    if (!t) {
+                        throw new Classes_14.JassiError("you are not allowed to save " + Classes_14.classes.getClassName(cl) + " with id " + entity["id"]);
+                    }
+                }
+            }
+            //check if the field of parentRight is set
+            if (Registry_27.default.getMemberData("$CheckParentRight") !== undefined) {
+                var data = Registry_27.default.getMemberData("$CheckParentRight")[Classes_14.classes.getClassName(entity)];
+                for (var key in data) {
+                    if (entity[key] === undefined) {
+                        throw new Classes_14.JassiError("the CheckParentRight field " + key + " must not be undefined");
+                    }
+                }
+            }
+            var vdata = this.connection().getMetadata(cl);
+            //Check if the relations fields have restrictions
+            for (var r = 0; r < vdata.relations.length; r++) {
+                var rel = vdata.relations[r];
+                var data = entity[rel.propertyName];
+                if (data !== undefined && !Array.isArray(data)) {
+                    let cl = rel.type;
+                    var t = await this.checkParentRight(context, cl, [data["id"]]);
+                    if (!t) {
+                        throw new Classes_14.JassiError("you are not allowed to save " + Classes_14.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                    }
+                }
+                if (data !== undefined && Array.isArray(data)) {
+                    let cl = rel.type;
+                    var arr = [];
+                    for (let x = 0; x < data.length; x++) {
+                        arr.push(data[x].id);
+                    }
+                    let t = await this.checkParentRight(context, cl, arr);
+                    if (!t) {
+                        throw new Classes_14.JassiError("you are not allowed to save " + Classes_14.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                    }
+                }
+                /* var tp=await p1.__proto__.constructor;
+                 var test=await this.connection().manager.findOne(tp,902);
+                 var ob=await this.connection().manager.preload(tp,p1);
+                 if(ob===undefined){//does not exists in DB
+                   ob=p1;
+                 }*/
+            }
+        }
+        /**
+         * Finds first entity that matches given conditions.
+         */
+        async findOne(context, entityClass, p1, p2) {
+            if (typeof p1 === "string" || typeof p1 === "number") { //search by id
+                p1 = { id: p1 };
+            }
+            var ret = await this.find(context, entityClass, p1);
+            if (ret === undefined || ret.length === 0)
+                return undefined;
+            else
+                return ret[0];
+            //return this.connection().manager.findOne(entityClass,id,options);
+            // else
+            //return this.connection().manager.findOne(entityClass, p1, p2);
+        }
+        /**
+          * Finds first entity that matches given conditions.
+          */
+        async find(context, entityClass, p1) {
+            //return this.connection().manager.findOne(entityClass,id,options);
+            // else
+            await this.waitForConnection;
+            var options = p1;
+            var onlyColumns = options === null || options === void 0 ? void 0 : options.onlyColumns;
+            var clname = Classes_14.classes.getClassName(entityClass);
+            var cl = Classes_14.classes.getClass(clname);
+            var relations = new RelationInfo(context, clname, this);
+            var allRelations = this.resolveWildcharInRelations(clname, options === null || options === void 0 ? void 0 : options.relations);
+            if (options && options.relations) {
+                relations.addRelations(context, allRelations, true);
+            }
+            var ret = await this.connection().manager.createQueryBuilder().
+                select("me").from(cl, "me");
+            if (options)
+                ret = relations.addWhere(context, options.where, options.whereParams, ret);
+            options === null || options === void 0 ? true : delete options.where;
+            options === null || options === void 0 ? true : delete options.whereParams;
+            options === null || options === void 0 ? true : delete options.onlyColumns;
+            ret = relations.addWhereBySample(context, options, ret);
+            ret = relations.join(ret);
+            if (!context.request.user.isAdmin)
+                ret = await relations.addParentRightDestriction(context, ret);
+            if (options === null || options === void 0 ? void 0 : options.skip) {
+                ret.skip(options.skip);
+                delete options.skip;
+            }
+            if (options === null || options === void 0 ? void 0 : options.take) {
+                ret.take(options.take);
+                delete options.take;
+            }
+            if (options === null || options === void 0 ? void 0 : options.order) {
+                for (var key in options === null || options === void 0 ? void 0 : options.order) {
+                    ret.addOrderBy("\"me_" + key + "\"", options.order[key]);
+                }
+                delete options.order;
+            }
+            var test = ret.getSql();
+            let objs = await ret.getMany();
+            if (objs && onlyColumns) {
+                objs.forEach((ob) => {
+                    for (var key in ob) {
+                        if (onlyColumns.indexOf(key) === -1 && allRelations.indexOf(key) === -1 && key !== "id")
+                            ob[key] = undefined;
+                    }
+                });
+            }
+            return objs;
+            // return await this.connection().manager.find(entityClass, p1);
+        }
+        resolveWildcharInRelations(classname, relation) {
+            var ret = [];
+            if (!relation)
+                return ret;
+            for (let r = 0; r < relation.length; r++) {
+                if (relation[r] === "*") {
+                    var vdata = (0, typeorm_2.getConnection)().getMetadata(Classes_14.classes.getClass(classname));
+                    for (var re = 0; re < vdata.relations.length; re++) {
+                        var s = vdata.relations[re].propertyName;
+                        if (ret.indexOf(s) === -1)
+                            ret.push(s);
+                    }
+                }
+                else
+                    ret.push(relation[r]);
+            }
+            return ret;
+        }
+        async createUser(context, username, password) {
+            await this.waitForConnection;
+            //var hh=getConnection().manager.findOne(User,{ email: username });
+            if (await (0, typeorm_2.getConnection)().manager.findOne(User_2.User, { email: username }) !== undefined) {
+                throw new Error("User already exists");
+            }
+            const user = new User_2.User();
+            user.email = username;
+            user.password = password;
+            //first user would be admin
+            if (await this.connection().manager.findOne(User_2.User) === undefined) {
+                user.isAdmin = true;
+            }
+            //password is encrypted when saving
+            /* await new Promise((resolve) => {
+              const crypto = require('crypto');
+        
+              const salt = crypto.randomBytes(8).toString('base64');
+              crypto.pbkdf2(password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
+                if (err) throw err;
+                resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
+              });
+            })*/
+            await this.save(context, user);
+            delete user.password;
+            return user;
+        }
+        async login(context, user, password) {
+            await this.waitForConnection;
+            /* const users = await this.connection().getRepository(User)
+             .createQueryBuilder()
+             .select("user.id", "id")
+             //.addSelect("user.password")
+             .getMany();*/
+            var ret = await this.connection().manager.createQueryBuilder().
+                select("me").from(User_2.User, "me").addSelect("me.password").
+                andWhere("me.email=:email", { email: user });
+            /* if (options)
+               ret = relations.addWhere(<string>options.where, options.whereParams, ret);
+         
+             ret = relations.addWhereBySample(options, ret);
+             ret = relations.join(ret);
+             ret = await relations.addParentRightDestriction(ret);*/
+            var auser = await ret.getOne();
+            if (!auser || !password)
+                return undefined;
+            let pw = auser.password.split(":");
+            let iteration = parseInt(pw[0]);
+            let salt = pw[1];
+            var test = await new Promise((resolve) => {
+                const crypto = require('crypto');
+                crypto.pbkdf2(password, salt, iteration, 512, 'sha512', (err, derivedKey) => {
+                    if (err)
+                        throw err;
+                    resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
+                });
+            });
+            if (test === auser.password) {
+                delete auser.password;
+                return auser;
+            }
+            else {
+                delete auser.password;
+            }
+            return undefined;
+        }
+        async checkParentRight(context, entityClass, ids) {
+            await this.waitForConnection;
+            var clname = Classes_14.classes.getClassName(entityClass);
+            var cl = Classes_14.classes.getClass(clname);
+            var relations = new RelationInfo(context, clname, this);
+            var ret = await this.connection().manager.createQueryBuilder().
+                select("me").from(cl, "me");
+            ret = relations.join(ret);
+            ret.andWhere("me.id IN (:...ids)", { ids: ids });
+            if (!context.request.user.isAdmin)
+                ret = await relations.addParentRightDestriction(context, ret);
+            var tt = ret.getSql();
+            var test = await ret.getCount();
+            return test === ids.length;
+        }
+    };
+    DBManager = DBManager_1 = __decorate([
+        (0, Serverservice_9.$Serverservice)({ name: "db", getInstance: async () => { return DBManager_1._get(); } }),
+        (0, Registry_28.$Class)("jassijs/server/DBManager"),
+        __metadata("design:paramtypes", [])
+    ], DBManager);
+    exports.DBManager = DBManager;
+    class RelationInfo {
+        constructor(context, className, dbmanager) {
+            this.counter = 100;
+            this.className = className;
+            this.dbmanager = dbmanager;
+            this.relations = {};
+            var testPR = Registry_27.default.getData("$ParentRights", className);
+            this.relations[""] = {
+                name: "",
+                className: className,
+                fullPath: "",
+                parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
+                doSelect: true
+            };
+            this.addRelationsFromParentRights(context, "");
+        }
+        addRelationsFromParentRights(context, relationname) {
+            var pr = this.relations[relationname];
+            if (Registry_27.default.getMemberData("$CheckParentRight") !== undefined) {
+                var data = Registry_27.default.getMemberData("$CheckParentRight")[pr.className];
+                if (data !== undefined) {
+                    var membername = "";
+                    for (var key in data) {
+                        membername = key;
+                    }
+                    var r = relationname + (relationname === "" ? "" : ".") + membername;
+                    this.addRelations(context, [r], false);
+                    this.addRelationsFromParentRights(context, r);
+                }
+            }
+        }
+        _getRelationFromProperty(property) {
+            var keys = property.split(".");
+            var path = "me";
+            for (var x = 0; x < keys.length; x++) {
+                if (x + 1 === keys.length)
+                    path = path + ".";
+                else
+                    path = path + "_";
+                path = path + keys[x];
+            }
+            return path;
+        }
+        /**
+         * add an andWhere to the sql-Query to check the parent rights
+         * @param builder
+         */
+        join(builder) {
+            var ret = builder;
+            for (var key in this.relations) {
+                if (key !== "") {
+                    /* var keys = key.split(".");
+                     var path = "me";
+                     for (var x = 0; x < keys.length; x++) {
+             
+                       if (x + 1 === keys.length)
+                         path = path + ".";
+                       else
+                         path = path + "_";
+                       path = path + keys[x];
+                     }*/
+                    var path = this._getRelationFromProperty(key);
+                    if (this.relations[key].doSelect)
+                        ret = ret.leftJoinAndSelect(path, "me_" + key.replaceAll(".", "_"));
+                    else
+                        ret = ret.leftJoin(path, "me_" + key.replaceAll(".", "_"));
+                }
+            }
+            return ret;
+        }
+        /**
+         * add an andWhere to the sql-Query to check the parent rights
+         * @param builder
+         */
+        async addParentRightDestriction(context, builder) {
+            var username = "a@b.com";
+            var ret = builder;
+            //first we get the sql from User-Rights we had to check 
+            var kk = context.request.user;
+            var userid = context.request.user.user;
+            var query = this.dbmanager.connection().createQueryBuilder().
+                select("me").from(Classes_14.classes.getClass("jassijs.security.ParentRight"), "me").
+                leftJoin("me.groups", "me_groups").
+                leftJoin("me_groups.users", "me_groups_users");
+            query = query.andWhere("me_groups_users.id=:theUserId", { theUserId: userid });
+            var doBr = false;
+            query = query.andWhere(new typeorm_2.Brackets((entr) => {
+                var parentrights = undefined;
+                for (var relationname in this.relations) {
+                    var relation = this.relations[relationname];
+                    if (relation.parentRights !== undefined) {
+                        for (var x = 0; x < relation.parentRights.length; x++) {
+                            doBr = true;
+                            var right = relation.parentRights[x];
+                            var param = {};
+                            param["classname" + this.counter] = relation.className;
+                            param["name" + this.counter] = right.name;
+                            entr.orWhere("me.classname=:classname" + this.counter + " and me.name=:name" + this.counter, param);
+                            this.counter++;
+                        }
+                    }
+                }
+                if (!doBr) {
+                    doBr = true;
+                    entr.orWhere("me.classname=me.classname");
+                }
+            }));
+            var debug = query.getSql();
+            var parentRights = await query.getMany();
+            for (var relationname in this.relations) {
+                var relation = this.relations[relationname];
+                if (relation.parentRights !== undefined) {
+                    ret = ret.andWhere(new typeorm_2.Brackets((qu) => {
+                        for (var p = 0; p < relation.parentRights.length; p++) {
+                            var pr = relation.parentRights[p];
+                            var found = false;
+                            for (var z = 0; z < parentRights.length; z++) {
+                                var oneRight = parentRights[z];
+                                if (oneRight.name === pr.name && oneRight.classname === relation.className) {
+                                    var sql = pr.sqlToCheck;
+                                    //modify sql that params are unique
+                                    var param = {};
+                                    for (var field in oneRight) {
+                                        if (field !== "classname" && field !== "groups" && field !== "name") {
+                                            sql = sql.replaceAll(":" + field, ":" + field + this.counter);
+                                            if (relation.fullPath !== "")
+                                                sql = sql.replaceAll("me.", "\"me_" + relation.fullPath.replaceAll(".", "_") + "\".");
+                                            param[field + this.counter] = oneRight[field];
+                                        }
+                                    }
+                                    qu.orWhere(sql, param);
+                                    found = true;
+                                    this.counter++;
+                                }
+                            }
+                            if (!found) {
+                                qu.andWhere("me.id>1 and me.id<1", param); //no right exists
+                            }
+                        }
+                    }));
+                }
+            }
+            return ret;
+        }
+        _checkExpression(context, node) {
+            if (node.operator !== undefined) {
+                this._parseNode(context, node);
+            }
+            //replace id to me.id and ar.zeile.id to me_ar_zeile.id
+            if (node.type === "Identifier" && !node.value.startsWith("xxxparams")) {
+                var name = node.value;
+                var path = this._getRelationFromProperty(name);
+                /*      var keys = name.split(".");
+                      var path = "me";
+                      for (var x = 0; x < keys.length; x++) {
+                
+                        if (x + 1 === keys.length)
+                          path = path + ".";
+                        else
+                          path = path + "_";
+                        path = path + keys[x];
+                      }*/
+                node.value = path;
+                var pack = path.split(".")[0].substring(3);
+                if (pack !== "")
+                    this.addRelations(context, [pack], false);
+            }
+            var _this = this;
+            if (node.type === "SimpleExprParentheses") {
+                node.value.value.forEach(element => {
+                    _this._parseNode(context, element);
+                });
+            }
+        }
+        _parseNode(context, node) {
+            /* if (node.operator !== undefined) {
+               var left = node.left;
+               var right = node.right;
+               this._checkExpression(context, left);
+               this._checkExpression(context, right);
+             }*/
+            var left = node.left;
+            var right = node.right;
+            if (node.left !== undefined) {
+                this._checkExpression(context, left);
+            }
+            if (node.right !== undefined) {
+                this._checkExpression(context, right);
+            }
+        }
+        addWhereBySample(context, param, builder) {
+            var ret = builder;
+            for (var key in param) {
+                if (key === "cache" || key === "join" || key === "loadEagerRelations" || key === "loadRelationids" || key == "lock" || key == "order" ||
+                    key === "relations" || key === "select" || key === "skip" || key === "take" || key === "where" || key === "withDeleted") {
+                    continue;
+                }
+                //this should prevent sql injection
+                var test = /[A-Z,a-z][A-Z,a-z,0-9,\.]*/g.exec(key);
+                if (test === null || test[0] !== key)
+                    throw new Classes_14.JassiError("could not set property " + key + " in where clause");
+                var field = this._getRelationFromProperty(key);
+                var pack = field.split(".")[0].substring(3);
+                if (pack !== "")
+                    this.addRelations(context, [pack], false);
+                var placeholder = "pp" + this.counter++;
+                var par = {};
+                par[placeholder] = param[key];
+                ret = ret.andWhere(field + "=:" + placeholder, par);
+            }
+            return ret;
+            /* var dummyselect = "select * from k where ";
+             //we must replace because parsing Exception
+             var ast = parser.parse(dummyselect + sql.replaceAll(":","xxxparams"));
+             this._parseNode(ast.value.where);
+             var newsql=parser.stringify(ast).replaceAll("xxxparams",":");
+             ret.andWhere(newsql.substring(dummyselect.length),whereParams);
+             return ret;*/
+        }
+        addWhere(context, sql, whereParams, builder) {
+            var ret = builder;
+            if (sql === undefined)
+                return ret;
+            var dummyselect = "select * from k where ";
+            //we must replace because parsing Exception
+            var fullSQL = dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams");
+            fullSQL = fullSQL.replaceAll("\" AS TEXT", " AS_TEXT\"");
+            var ast = parser.parse(fullSQL);
+            this._parseNode(context, ast.value.where);
+            var newsql = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
+            newsql = newsql.replaceAll(" AS_TEXT\"", "\" AS TEXT");
+            ret.andWhere(newsql.substring(dummyselect.length), whereParams);
+            return ret;
+        }
+        addRelations(context, relations, doselect) {
+            var _a;
+            if (relations === undefined)
+                return;
+            for (var z = 0; z < relations.length; z++) {
+                var relation = relations[z];
+                var all = relation.split(".");
+                var curPath = "";
+                var parentPath = "";
+                var curClassname = this.className;
+                for (var x = 0; x < all.length; x++) {
+                    parentPath = curPath;
+                    curPath = curPath + (curPath === "" ? "" : ".") + all[x];
+                    if (this.relations[curPath] === undefined) {
+                        var vdata = this.dbmanager.connection().getMetadata(Classes_14.classes.getClass(curClassname));
+                        //read type
+                        var membername = all[x];
+                        for (var r = 0; r < vdata.relations.length; r++) {
+                            var rel = vdata.relations[r];
+                            if (rel.propertyName === membername) {
+                                var clname = Classes_14.classes.getClassName(rel.type);
+                                var testPR = Registry_27.default.getData("$ParentRights", clname);
+                                this.relations[curPath] = {
+                                    className: Classes_14.classes.getClassName(rel.type),
+                                    name: membername,
+                                    fullPath: curPath,
+                                    parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
+                                    doSelect: doselect
+                                };
+                            }
+                        }
+                        //Parentrights
+                        membername = "";
+                        if (!((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)) {
+                            if (Registry_27.default.getMemberData("$CheckParentRight") !== undefined) {
+                                var data = Registry_27.default.getMemberData("$CheckParentRight")[curClassname];
+                                for (var key in data) {
+                                    membername = key;
+                                }
+                            }
+                        }
+                        if (membername !== "") {
+                            for (var r = 0; r < vdata.relations.length; r++) {
+                                var rel = vdata.relations[r];
+                                if (rel.propertyName === membername) {
+                                    var clname = Classes_14.classes.getClassName(rel.type);
+                                    var testPR = Registry_27.default.getData("$ParentRights", clname);
+                                    var mpath = parentPath + (parentPath === "" ? "" : ".") + membername;
+                                    this.relations[mpath] = {
+                                        className: Classes_14.classes.getClassName(rel.type),
+                                        name: membername,
+                                        fullPath: mpath,
+                                        parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
+                                        doSelect: doselect
+                                    };
+                                }
+                            }
+                        }
+                    }
+                    else if (doselect) {
+                        this.relations[curPath].doSelect = true;
+                    }
+                    curClassname = this.relations[curPath].className;
+                }
+            }
+        }
+    }
+});
+define("jassijs/server/PassportSetup", ["require", "exports", "jassijs/UserModel", "jassijs/remote/Serverservice"], function (require, exports, UserModel_1, Serverservice_10) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.JWT_EXPIRATION_MS = void 0;
+    const passport = require('passport');
+    const LocalStrategy = require('passport-local').Strategy;
+    const passportJWT = require('passport-jwt');
+    const JWTStrategy = passportJWT.Strategy;
+    const jwt = require('jsonwebtoken');
+    const JWT_EXPIRATION_MS = 60000 * 30; //30min
+    exports.JWT_EXPIRATION_MS = JWT_EXPIRATION_MS;
+    passport.use(new LocalStrategy({
+        usernameField: "username",
+        passwordField: "password",
+    }, async (username, password, done) => {
+        try {
+            var context = {
+                isServer: true
+            };
+            const userDocument = await (await Serverservice_10.serverservices.db).login(context, username, password); //UserModel.findOne({username: username});
+            if (userDocument) {
+                return done(null, userDocument);
+            }
+            else {
+                return done('Incorrect Username / Password');
+            }
+        }
+        catch (error) {
+            done(error);
+        }
+    }));
+    passport.use(new JWTStrategy({
+        jwtFromRequest: req => req.cookies.jwt,
+        secretOrKey: UserModel_1.UserModel.secret,
+    }, (jwtPayload, done) => {
+        if (Date.now() > jwtPayload.expires) {
+            return done('jwt expired');
+        }
+        return done(null, jwtPayload);
+    }));
+});
+define("jassijs/server/PassportLoginRegister", ["require", "exports", "jassijs/server/PassportSetup", "jassijs/UserModel", "jassijs/remote/Serverservice"], function (require, exports, PassportSetup_1, UserModel_2, Serverservice_11) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.manageToken = exports.loginRegister = void 0;
+    const express = require('express');
+    const passport = require('passport');
+    const jwt = require('jsonwebtoken');
+    var router = express.Router();
+    router.post('/register', async (req, res) => {
+        var username = decodeURIComponent(req.rawBody.split("&")[0].split("=")[1]);
+        var password = decodeURIComponent(req.rawBody.split("&")[1].split("=")[1]);
+        try {
+            var context = {
+                isServer: true,
+                request: req
+            };
+            await (await Serverservice_11.serverservices.db).createUser(context, username, password);
+            console.log("user created");
+            /*const user= new User();
+            user.email=username;
+            user.password=passwordHash;
+            await (await DBManager.get()).save(user);*/
+            res.redirect("/login.html"); //status(200).send({ username });
+        }
+        catch (error) {
+            res.status(400).send({
+                error: error.message,
+            });
+        }
+    });
+    router.post('/login', (req, res) => {
+        var username = decodeURIComponent(req.rawBody.split("&")[0].split("=")[1]);
+        var password = decodeURIComponent(req.rawBody.split("&")[1].split("=")[1]);
+        req.body = {
+            username,
+            password
+        };
+        passport.authenticate('local', { session: false }, (error, user) => {
+            if (error || !user) {
+                res.status(400).json({ error });
+            }
+            /** This is what ends up in our JWT */
+            const payload = {
+                user: user.id,
+                isAdmin: (user.isAdmin === null ? false : user.isAdmin),
+                expires: Date.now() + PassportSetup_1.JWT_EXPIRATION_MS // parseInt(process.env.JWT_EXPIRATION_MS),
+            };
+            /** assigns payload to req.user */
+            req.login(payload, { session: false }, (error) => {
+                if (error) {
+                    res.status(400).send({ error });
+                }
+                /** generate a signed json web token and return it in the response */
+                const token = jwt.sign(JSON.stringify(payload), UserModel_2.UserModel.secret);
+                /** assign our jwt to the cookie */
+                res.cookie('jwt', token, { httpOnly: true /*, secure: true */ });
+                console.log("enable secure login");
+                res.status(200).send({ username: user.username });
+            });
+        })(req, res);
+    });
+    var loginRegister = router;
+    exports.loginRegister = loginRegister;
+    function manageToken(req, res, next) {
+        jwt.verify(req.cookies["jwt"], UserModel_2.UserModel.secret, function (err, decodedToken) {
+            if (err) {
+                //      console.log("expired")
+            }
+            else {
+                var test = PassportSetup_1.JWT_EXPIRATION_MS * 0.75;
+                if (decodedToken.expires < new Date().getTime()) {
+                    //expired
+                }
+                else if ((decodedToken.expires - test) < new Date().getTime()) { //refreh
+                    console.log("refresh Token");
+                    decodedToken.expires = Date.now() + PassportSetup_1.JWT_EXPIRATION_MS;
+                    const newToken = jwt.sign(JSON.stringify(decodedToken), UserModel_2.UserModel.secret);
+                    res.cookie("jwt", newToken, { httpOnly: true /*,secure:true*/ });
+                    req.user = decodedToken.user;
+                    req.isAdmin == decodedToken.isAdmin;
+                }
+                else {
+                    req.user = decodedToken.user;
+                    req.isAdmin == decodedToken.isAdmin;
+                }
+            }
+        });
+        next();
+    }
+    exports.manageToken = manageToken;
+});
+define("jassijs/server/Zip", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.zip = void 0;
+    function zip(req, res) {
+        var url = req.query.path;
+        let pos = url.lastIndexOf("/");
+        var name = (pos === -1 ? "data" : url.substring(pos + 1));
+        /*  new Filesystem().zipFolder("./../" + url, "/tmp/" + name + ".zip").then((data) => {
+            if (data !== undefined) {
+              res.status(500).send(data["message"]);
+              return;
+            }
+            res.sendFile("/tmp/" + name + ".zip", function (err) {
+              try {
+                fs.unlinkSync("/tmp/" + name + ".zip");
+              } catch (e) {
+                console.log("error removing ", "/tmp/" + name + ".zip");
+              }
+            });
+          });*/
+    }
+    exports.zip = zip;
+});
+define("jassijs/server/RawBody", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.rawbody = void 0;
+    function rawbody(req, res, next) {
+        var data = "";
+        req.on('data', function (chunk) { data += chunk; });
+        req.on('end', function () {
+            req.rawBody = data;
+            next();
+        });
+    }
+    exports.rawbody = rawbody;
+});
+define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.createReportDefinition = exports.doGroup = void 0;
+    //templating is slow so we chache
+    var funccache = {};
+    //https://github.com/Mottie/javascript-number-formatter/blob/master/src/format.js
+    //license https://github.com/Mottie/javascript-number-formatter/blob/master/LICENSE
+    const maskRegex = /[0-9\-+#]/;
+    const notMaskRegex = /[^\d\-+#]/g;
+    function getIndex(mask) {
+        return mask.search(maskRegex);
+    }
+    function processMask(mask = "#.##") {
+        const maskObj = {};
+        const len = mask.length;
+        const start = getIndex(mask);
+        maskObj.prefix = start > 0 ? mask.substring(0, start) : "";
+        // Reverse string: not an ideal method if there are surrogate pairs
+        const end = getIndex(mask.split("").reverse().join(""));
+        const offset = len - end;
+        const substr = mask.substring(offset, offset + 1);
+        // Add 1 to offset if mask has a trailing decimal/comma
+        const indx = offset + ((substr === "." || (substr === ",")) ? 1 : 0);
+        maskObj.suffix = end > 0 ? mask.substring(indx, len) : "";
+        maskObj.mask = mask.substring(start, indx);
+        maskObj.maskHasNegativeSign = maskObj.mask.charAt(0) === "-";
+        maskObj.maskHasPositiveSign = maskObj.mask.charAt(0) === "+";
+        // Search for group separator & decimal; anything not digit,
+        // not +/- sign, and not #
+        let result = maskObj.mask.match(notMaskRegex);
+        // Treat the right most symbol as decimal
+        maskObj.decimal = (result && result[result.length - 1]) || ".";
+        // Treat the left most symbol as group separator
+        maskObj.separator = (result && result[1] && result[0]) || ",";
+        // Split the decimal for the format string if any
+        result = maskObj.mask.split(maskObj.decimal);
+        maskObj.integer = result[0];
+        maskObj.fraction = result[1];
+        return maskObj;
+    }
+    function processValue(value, maskObj, options) {
+        let isNegative = false;
+        const valObj = {
+            value
+        };
+        if (value < 0) {
+            isNegative = true;
+            // Process only abs(), and turn on flag.
+            valObj.value = -valObj.value;
+        }
+        valObj.sign = isNegative ? "-" : "";
+        // Fix the decimal first, toFixed will auto fill trailing zero.
+        valObj.value = Number(valObj.value).toFixed(maskObj.fraction && maskObj.fraction.length);
+        // Convert number to string to trim off *all* trailing decimal zero(es)
+        valObj.value = Number(valObj.value).toString();
+        // Fill back any trailing zero according to format
+        // look for last zero in format
+        const posTrailZero = maskObj.fraction && maskObj.fraction.lastIndexOf("0");
+        let [valInteger = "0", valFraction = ""] = valObj.value.split(".");
+        if (!valFraction || (valFraction && valFraction.length <= posTrailZero)) {
+            valFraction = posTrailZero < 0
+                ? ""
+                : (Number("0." + valFraction).toFixed(posTrailZero + 1)).replace("0.", "");
+        }
+        valObj.integer = valInteger;
+        valObj.fraction = valFraction;
+        addSeparators(valObj, maskObj);
+        // Remove negative sign if result is zero
+        if (valObj.result === "0" || valObj.result === "") {
+            // Remove negative sign if result is zero
+            isNegative = false;
+            valObj.sign = "";
+        }
+        if (!isNegative && maskObj.maskHasPositiveSign) {
+            valObj.sign = "+";
+        }
+        else if (isNegative && maskObj.maskHasPositiveSign) {
+            valObj.sign = "-";
+        }
+        else if (isNegative) {
+            valObj.sign = options && options.enforceMaskSign && !maskObj.maskHasNegativeSign
+                ? ""
+                : "-";
+        }
+        return valObj;
+    }
+    function addSeparators(valObj, maskObj) {
+        valObj.result = "";
+        // Look for separator
+        const szSep = maskObj.integer.split(maskObj.separator);
+        // Join back without separator for counting the pos of any leading 0
+        const maskInteger = szSep.join("");
+        const posLeadZero = maskInteger && maskInteger.indexOf("0");
+        if (posLeadZero > -1) {
+            while (valObj.integer.length < (maskInteger.length - posLeadZero)) {
+                valObj.integer = "0" + valObj.integer;
+            }
+        }
+        else if (Number(valObj.integer) === 0) {
+            valObj.integer = "";
+        }
+        // Process the first group separator from decimal (.) only, the rest ignore.
+        // get the length of the last slice of split result.
+        const posSeparator = (szSep[1] && szSep[szSep.length - 1].length);
+        if (posSeparator) {
+            const len = valObj.integer.length;
+            const offset = len % posSeparator;
+            for (let indx = 0; indx < len; indx++) {
+                valObj.result += valObj.integer.charAt(indx);
+                // -posSeparator so that won't trail separator on full length
+                if (!((indx - offset + 1) % posSeparator) && indx < len - posSeparator) {
+                    valObj.result += maskObj.separator;
+                }
+            }
+        }
+        else {
+            valObj.result = valObj.integer;
+        }
+        valObj.result += (maskObj.fraction && valObj.fraction)
+            ? maskObj.decimal + valObj.fraction
+            : "";
+        return valObj;
+    }
+    function _format(mask, value, options = {}) {
+        if (!mask || isNaN(Number(value))) {
+            // Invalid inputs
+            return value;
+        }
+        const maskObj = processMask(mask);
+        const valObj = processValue(value, maskObj, options);
+        return maskObj.prefix + valObj.sign + valObj.result + maskObj.suffix;
+    }
+    ;
+    ///////////////////////////////////END https://github.com/Mottie/javascript-number-formatter/blob/master/src/format.js
+    //add 0 before
+    function v(str, num) {
+        str = str.toString();
+        while (str.length < num) {
+            str = "0" + str;
+        }
+        return str;
+    }
+    //simple dateformat perhaps we should use moments
+    //now we do something basics
+    function formatDate(format, date) {
+        return format.
+            replace("DD", v(date.getDate(), 2)).
+            replace("D", date.getDate().toString()).
+            replace("MM", v(date.getMonth(), 2)).
+            replace("YYYY", date.getFullYear().toString()).
+            replace("YY", (date.getFullYear() % 100).toString()).
+            replace("A", date.getHours() > 12 ? "PM" : "AM").
+            replace("hh", v(date.getHours(), 2)).
+            replace("h", (date.getHours() % 12).toString()).
+            replace("mm", v(date.getMinutes(), 2)).
+            replace("ss", v(date.getSeconds(), 2));
+    }
+    //clone the obj depp
+    function clone(obj) {
+        if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
+            return obj;
+        if (obj instanceof Date || typeof obj === "object")
+            var temp = new obj.constructor(); //or new Date(obj);
+        else
+            var temp = obj.constructor();
+        for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                obj['isActiveClone'] = null;
+                temp[key] = clone(obj[key]);
+                delete obj['isActiveClone'];
+            }
+        }
+        return temp;
+    }
+    //replace the params in the string
+    //@param {boolean} returnValues - if true the templatevalues would be returned not the replaces string
+    //@ts-ignore
+    String.prototype.replaceTemplate = function (params, returnValues) {
+        const names = Object.keys(params);
+        const vals = Object.values(params);
+        addGroupFuncions(names, vals);
+        for (let x = 0; x < vals.length; x++) {
+            if (typeof vals[x] === "function") {
+                vals[x] = vals[x].bind(params);
+            }
+        }
+        let stag = "";
+        if (returnValues) {
+            names.push("tag");
+            stag = "tag";
+            vals.push(function tag(strings, values) {
+                return values;
+            });
+        }
+        var func = funccache[names.join(",") + this];
+        if (func === undefined) { //create functions is slow so cache
+            func = new Function(...names, `return ${stag}\`${this}\`;`);
+            funccache[names.join(",") + this] = func;
+        }
+        return func(...vals);
+    };
+    //get the member of the data
+    function getVar(data, member) {
+        var ergebnis = member.toString().match(/\$\{(\w||\.)*\}/g);
+        if (!ergebnis)
+            member = "${" + member + "}";
+        var ob = member.replaceTemplate(data, true);
+        return ob;
+    }
+    //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
+    function replacePageInformation(def) {
+        if (def.background && typeof def.background !== "function") {
+            let d = JSON.stringify(def.background);
+            def.background = function (currentPage, pageSize) {
+                let sret = d.replaceAll("{{currentPage}}", currentPage);
+                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
+                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
+                return JSON.parse(sret);
+            };
+        }
+        if (def.header && typeof def.header !== "function") {
+            let d = JSON.stringify(def.header);
+            def.header = function (currentPage, pageCount) {
+                let sret = d.replaceAll("{{currentPage}}", currentPage);
+                sret = sret.replaceAll("{{pageCount}}", pageCount);
+                return JSON.parse(sret);
+            };
+        }
+        if (def.footer && typeof def.footer !== "function") {
+            let d = JSON.stringify(def.footer);
+            def.footer = function (currentPage, pageCount, pageSize) {
+                let sret = d.replaceAll("{{currentPage}}", currentPage);
+                sret = sret.replaceAll("{{pageCount}}", pageCount);
+                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
+                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
+                return JSON.parse(sret);
+            };
+        }
+    }
+    //sort the group with groupfields
+    function groupSort(group, name, groupfields, groupid = 0) {
+        var ret = { entries: [], name: name };
+        if (groupid > 0)
+            ret["groupfield"] = groupfields[groupid - 1];
+        if (Array.isArray(group)) {
+            group.forEach((neu) => ret.entries.push(neu));
+        }
+        else {
+            for (var key in group) {
+                var neu = group[key];
+                ret.entries.push(groupSort(neu, key, groupfields, groupid + 1));
+            }
+            ret.entries = ret.entries.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
+        }
+        return ret;
+    }
+    /**
+     * groups and sort the entries
+     * @param {any[]} entries - the entries to group
+     * @param {string[]} groupfields - the fields where the entries are grouped
+     */
+    function doGroup(entries, groupfields) {
+        var ret = {};
+        for (var e = 0; e < entries.length; e++) {
+            var entry = entries[e];
+            let parent = ret;
+            for (var x = 0; x < groupfields.length; x++) {
+                var groupname = entry[groupfields[x]];
+                if (x < groupfields.length - 1) { //undergroups does exists
+                    if (!parent[groupname])
+                        parent[groupname] = {};
+                }
+                else { //last group contaons the data
+                    if (!parent[groupname])
+                        parent[groupname] = [];
+                    parent[groupname].push(entry);
+                }
+                parent = parent[groupname];
+            }
+        }
+        //sort
+        var sorted = groupSort(ret, "main", groupfields);
+        return sorted;
+    }
+    exports.doGroup = doGroup;
+    //replace the datatable {datable:...} to table:{}
+    function replaceDatatable(def, data) {
+        var header = def.datatable.header;
+        var footer = def.datatable.footer;
+        var dataexpr = def.datatable.dataforeach;
+        var groups = def.datatable.groups;
+        var body = def.datatable.body;
+        var groupexpr = [];
+        def.table = clone(def.datatable);
+        def.table.body = [];
+        delete def.table.header;
+        delete def.table.footer;
+        delete def.table.dataforeach;
+        delete def.table.groups;
+        if (header)
+            def.table.body.push(header);
+        if (groups === undefined || groups.length === 0) {
+            def.table.body.push({
+                foreach: dataexpr,
+                do: body
+            });
+        }
+        else {
+            var parent = {};
+            var toadd = {
+                foreach: "group1 in datatablegroups.entries",
+                do: parent
+            };
+            def.table.body.push(toadd);
+            for (var x = 0; x < groups.length; x++) {
+                groupexpr.push(groups[x].expression);
+                if (x < groups.length - 1) {
+                    parent.foreach = "group" + (x + 2).toString() + " in group" + (x + 1).toString() + ".entries";
+                }
+                else {
+                    parent.foreach = dataexpr.split(" ")[0] + " in group" + (x + 1).toString() + ".entries";
+                }
+                if (groups[x].header && groups[x].header.length > 0) {
+                    parent.dofirst = groups[x].header;
+                }
+                if (groups[x].footer && groups[x].footer.length > 0) {
+                    parent.dolast = groups[x].footer;
+                }
+                if (x < groups.length - 1) {
+                    parent.do = {};
+                    parent = parent.do;
+                }
+                else {
+                    parent.do = body;
+                }
+            }
+            var arr = getArrayFromForEach(def.datatable.dataforeach, data);
+            data.datatablegroups = doGroup(arr, groupexpr);
+        }
+        delete def.datatable.dataforeach;
+        if (footer)
+            def.table.body.push(footer);
+        //delete data[variable];
+        delete def.datatable.header;
+        delete def.datatable.footer;
+        delete def.datatable.foreach;
+        delete def.datatable.groups;
+        delete def.datatable.body;
+        for (var key in def.datatable) {
+            def.table[key] = def.datatable[key];
+        }
+        delete def.datatable;
+    }
+    //get the array for the foreach statement in the data
+    function getArrayFromForEach(foreach, data) {
+        var sarr = foreach.split(" in ")[1];
+        var arr;
+        if (sarr === undefined) {
+            arr = data === null || data === void 0 ? void 0 : data.items; //we get the main array
+        }
+        else {
+            arr = getVar(data, sarr);
+        }
+        return arr;
+    }
+    //replace templates e.g. ${name} with the data
+    function replaceTemplates(def, data, param = undefined) {
+        if (def === undefined)
+            return;
+        if (def.datatable !== undefined) {
+            replaceDatatable(def, data);
+        }
+        if (def.format) {
+            var val = def.text.replaceTemplate(data, true);
+            if (val === undefined)
+                return "";
+            else if (typeof val == 'number') {
+                def.text = _format(def.format, val, {});
+            }
+            else if (val.getMonth) {
+                def.text = formatDate(def.format, val);
+            }
+            delete def.format;
+        }
+        if (def.foreach !== undefined) {
+            //resolve foreach
+            //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
+            if ((param === null || param === void 0 ? void 0 : param.parentArray) === undefined) {
+                throw "foreach is not surounded by an Array";
+            }
+            var variable = def.foreach.split(" in ")[0];
+            var arr = getArrayFromForEach(def.foreach, data);
+            if ((param === null || param === void 0 ? void 0 : param.parentArrayPos) === undefined) {
+                param.parentArrayPos = param === null || param === void 0 ? void 0 : param.parentArray.indexOf(def);
+                param === null || param === void 0 ? void 0 : param.parentArray.splice(param.parentArrayPos, 1);
+            }
+            for (let x = 0; x < arr.length; x++) {
+                data[variable] = arr[x];
+                delete def.foreach;
+                var copy;
+                if (def.dofirst && x === 0) { //render only forfirst
+                    copy = clone(def.dofirst);
+                    copy = replaceTemplates(copy, data, param);
+                    if (copy !== undefined)
+                        param.parentArray.splice(param.parentArrayPos++, 0, copy);
+                }
+                if (def.do)
+                    copy = clone(def.do);
+                else
+                    copy = clone(def);
+                copy = replaceTemplates(copy, data, param);
+                if (copy !== undefined)
+                    param.parentArray.splice(param.parentArrayPos++, 0, copy);
+                if (def.dolast && x === arr.length - 1) { //render only forlast
+                    copy = clone(def.dolast);
+                    copy = replaceTemplates(copy, data, param);
+                    if (copy !== undefined)
+                        param.parentArray.splice(param.parentArrayPos++, 0, copy);
+                }
+            }
+            delete data[variable];
+            return undefined;
+        }
+        else if (Array.isArray(def)) {
+            for (var a = 0; a < def.length; a++) {
+                if (def[a].foreach !== undefined) {
+                    replaceTemplates(def[a], data, { parentArray: def });
+                    a--;
+                }
+                else
+                    def[a] = replaceTemplates(def[a], data, { parentArray: def });
+            }
+            return def;
+        }
+        else if (typeof def === "string") {
+            var ergebnis = def.toString().match(/\$\{/g);
+            if (ergebnis !== null) {
+                def = def.replaceTemplate(data);
+                //	for (var e = 0; e < ergebnis.length; e++) {
+                //		def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
+                //	}
+            }
+            return def;
+        }
+        else { //object	
+            for (var key in def) {
+                def[key] = replaceTemplates(def[key], data);
+            }
+            delete def.editTogether; //RText is only used for editing report
+        }
+        return def;
+    }
+    /**
+     * create an pdfmake-definition from an jassijs-report-definition, fills data and parameter in the report
+     * @param {string} definition - the jassijs-report definition
+     * @param {any} [data] - the data which are filled in the report (optional)
+     * @param {any} [parameter] - the parameter which are filled in the report (otional)
+     */
+    function createReportDefinition(definition, data, parameter) {
+        definition = clone(definition); //this would be modified
+        if (data !== undefined)
+            data = clone(data); //this would be modified
+        if (data === undefined && definition.data !== undefined) {
+            data = definition.data;
+        }
+        //parameter could be in data
+        if (data !== undefined && data.parameter !== undefined && parameter !== undefined) {
+            throw new Error("parameter would override data.parameter");
+        }
+        if (Array.isArray(data)) {
+            data = { items: data }; //so we can do data.parameter
+        }
+        if (parameter !== undefined) {
+            data.parameter = parameter;
+        }
+        //parameter could be in definition
+        if (data !== undefined && data.parameter !== undefined && definition.parameter !== undefined) {
+            throw new Error("definition.parameter would override data.parameter");
+        }
+        if (definition.parameter !== undefined) {
+            data.parameter = definition.parameter;
+        }
+        definition.content = replaceTemplates(definition.content, data);
+        if (definition.background)
+            definition.background = replaceTemplates(definition.background, data);
+        if (definition.header)
+            definition.header = replaceTemplates(definition.header, data);
+        if (definition.footer)
+            definition.footer = replaceTemplates(definition.footer, data);
+        replacePageInformation(definition);
+        delete definition.data;
+        return definition;
+        // delete definition.parameter;
+    }
+    exports.createReportDefinition = createReportDefinition;
+    //add aggregate functions for grouping
+    function addGroupFuncions(names, values) {
+        names.push("sum");
+        values.push(sum);
+        names.push("count");
+        values.push(count);
+        names.push("max");
+        values.push(max);
+        names.push("min");
+        values.push(min);
+        names.push("avg");
+        values.push(avg);
+    }
+    function aggr(group, field, data) {
+        var ret = 0;
+        if (!Array.isArray(group) && group.entries === undefined)
+            throw new Error("sum is valid only in arrays and groups");
+        var sfield = field;
+        if (field.indexOf("${") === -1) {
+            sfield = "${" + sfield + "}";
+        }
+        if (Array.isArray(group)) {
+            for (var x = 0; x < group.length; x++) {
+                var ob = group[x];
+                if (ob.entries !== undefined)
+                    aggr(ob.entries, field, data);
+                else {
+                    var val = sfield.replaceTemplate(ob, true);
+                    data.func(data, val === undefined ? 0 : Number.parseFloat(val));
+                }
+            }
+        }
+        else {
+            aggr(group.entries, field, data); //group
+        }
+        return data;
+    }
+    //sum the field in the group
+    function sum(group, field) {
+        return aggr(group, field, {
+            ret: 0,
+            func: (data, num) => {
+                data.ret = data.ret + num;
+            }
+        }).ret;
+    }
+    //count the field in the group
+    function count(group, field) {
+        return aggr(group, field, {
+            ret: 0,
+            func: (data, num) => {
+                data.ret = data.ret + 1;
+            }
+        }).ret;
+    }
+    //get the maximum of the field in the group
+    function max(group, field) {
+        return aggr(group, field, {
+            ret: Number.MIN_VALUE,
+            func: (data, num) => {
+                if (num > data.ret)
+                    data.ret = num;
+            }
+        }).ret;
+    }
+    //get the minimum of the field in the group
+    function min(group, field) {
+        return aggr(group, field, {
+            ret: Number.MAX_VALUE,
+            func: (data, num) => {
+                if (num < data.ret)
+                    data.ret = num;
+            }
+        }).ret;
+    }
+    //get the minimum of the field in the group
+    function avg(group, field) {
+        var ret = aggr(group, field, {
+            ret: 0,
+            count: 0,
+            func: (data, num) => {
+                data.ret = data.ret + num;
+                data.count++;
+            }
+        });
+        return ret.ret / ret.count;
+    }
+    function test() {
+        var ff = _format("####,##", 50.22, {});
+        var hh = formatDate("DD.MM.YYYY hh:mm:ss", new Date());
+        var hh = formatDate("YY-MM-DD h:mm:ss A", new Date());
+        var sampleData = [
+            { id: 1, customer: "Fred", city: "Frankfurt", age: 51 },
+            { id: 8, customer: "Alma", city: "Dresden", age: 70 },
+            { id: 3, customer: "Heinz", city: "Frankfurt", age: 33 },
+            { id: 2, customer: "Fred", city: "Frankfurt", age: 88 },
+            { id: 6, customer: "Max", city: "Dresden", age: 3 },
+            { id: 4, customer: "Heinz", city: "Frankfurt", age: 64 },
+            { id: 5, customer: "Max", city: "Dresden", age: 54 },
+            { id: 7, customer: "Alma", city: "Dresden", age: 33 },
+            { id: 9, customer: "Otto", city: "Berlin", age: 21 }
+        ];
+        var h = {
+            all: doGroup(sampleData, ["city", "customer"]),
+            k: 5,
+            ho() {
+                return this.k + 1;
+            }
+        };
+        //@ts-ignore
+        var s = "${Math.round(avg(all,'age'),2)}".replaceTemplate(h, true);
+        s = "${k}".replaceTemplate(h, true);
+        s = "${ho()}".replaceTemplate(h, true);
+    }
+    exports.test = test;
+});
+define("jassijs_report/TestServerreport", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.fill = void 0;
+    var reportdesign = {
+        content: [
+            {
+                datatable: {
+                    widths: ["auto", "auto", 140],
+                    header: [
+                        {
+                            bold: true,
+                            italics: true,
+                            font: "Asap",
+                            text: "name2233"
+                        },
+                        "lastname",
+                        ""
+                    ],
+                    footer: ["", "", "\n"],
+                    dataforeach: "person",
+                    body: [
+                        "${person.name}",
+                        "${person.lastname}",
+                        "${person.fullname()}"
+                    ]
+                }
+            }
+        ]
+    };
+    async function fill(parameter) {
+        var data = [
+            { name: "Aoron", lastname: "Müllera", fullname() { return this.name + ", " + this.lastname; } },
+            { name: "Heino", lastname: "Brechtp", fullname() { return this.name + ", " + this.lastname; } }
+        ];
+        if ((parameter === null || parameter === void 0 ? void 0 : parameter.sort) === "name")
+            data = data.sort((a, b) => { return a.name.localeCompare(b.name); });
+        if ((parameter === null || parameter === void 0 ? void 0 : parameter.sort) === "lastname")
+            data = data.sort((a, b) => { return a.lastname.localeCompare(b.lastname); });
+        return {
+            reportdesign,
+            data
+        };
+    }
+    exports.fill = fill;
+    async function test() {
+        return await fill(undefined);
+    }
+    exports.test = test;
+});
+//ok
+define("jassijs_report/DoServerreport", ["require", "exports", "fs", "jassijs/remote/Server", "jassijs_report/remote/pdfmakejassi"], function (require, exports, fs, Server_3, pdfmakejassi_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DoServerreport = void 0;
+    var https = require('https');
+    var path = require('path');
+    var pdfMakePrinter = require('pdfmake/src/printer');
+    class DoServerreport {
+        createPdfBinary(pdfDoc, callback) {
+            var printer = new pdfMakePrinter(this.fontDescriptors);
+            var doc = printer.createPdfKitDocument(pdfDoc);
+            var chunks = [];
+            var result;
+            doc.on('data', function (chunk) {
+                chunks.push(chunk);
+            });
+            doc.on('end', function () {
+                result = Buffer.concat(chunks);
+                callback(result.toString('base64'));
+            });
+            doc.end();
+        }
+        async getDesign(path, parameter) {
+            var fill = (await new Promise((resolve_20, reject_20) => { require([path], resolve_20, reject_20); })).fill;
+            var content = await fill(parameter);
+            return content;
+        }
+        async download(url, dest) {
+            return await new Promise((resolve, reject) => {
+                const file = fs.createWriteStream(dest, { flags: "wx" });
+                const request = https.get(url, response => {
+                    if (response.statusCode === 200) {
+                        response.pipe(file);
+                    }
+                    else {
+                        file.close();
+                        fs.unlink(dest, () => { }); // Delete temp file
+                        reject(`Server responded with ${response.statusCode}: ${response.statusMessage}`);
+                    }
+                });
+                request.on("error", err => {
+                    file.close();
+                    fs.unlink(dest, () => { }); // Delete temp file
+                    reject(err.message);
+                });
+                file.on("finish", () => {
+                    resolve(undefined);
+                });
+                file.on("error", err => {
+                    file.close();
+                    if (err.code === "EEXIST") {
+                        reject("File already exists");
+                    }
+                    else {
+                        fs.unlink(dest, () => { }); // Delete temp file
+                        reject(err.message);
+                    }
+                });
+            });
+        }
+        async registerFonts(data) {
+            this.fontDescriptors = { /*
+                Roboto: {
+                    normal: path.join(__dirname, '..', '..', '/jassijs_report/fonts/Roboto-Regular.ttf'),
+                    bold: path.join(__dirname, '..', '..', '/jassijs_report/fonts/Roboto-Medium.ttf'),
+                    italics: path.join(__dirname, '..', '..', '/jassijs_report/fonts/Roboto-Italic.ttf'),
+                    bolditalics: path.join(__dirname, '..', '..', '/jassijs_report/fonts/Roboto-MediumItalic.ttf')
+                    
+                }*/};
+            //        this.download('http://i3.ytimg.com/vi/J---aiyznGQ/mqdefault.jpg',
+            //              path.join(__dirname, '..', '..', '/client/cat.jpg'));
+            var fonts = ["Roboto"];
+            JSON.stringify(data, (key, value) => {
+                if (key === "font" && value !== "") {
+                    fonts.push(value);
+                }
+                return value;
+            });
+            /*  if (!fontDescriptors) {
+                  fontDescriptors = {
+                      Roboto: {
+                          normal: 'Roboto-Regular.ttf',
+                          bold: 'Roboto-Medium.ttf',
+                          italics: 'Roboto-Italic.ttf',
+                          bolditalics: 'Roboto-MediumItalic.ttf'
+                      }
+                  };
+              }*/
+            if (!fs.existsSync(path.join(__dirname, '..', '..', '/jassijs_report/fonts'))) {
+                fs.mkdirSync(path.join(__dirname, '..', '..', '/jassijs_report/fonts'));
+            }
+            for (var x = 0; x < fonts.length; x++) {
+                var font = fonts[x];
+                var base = "https://cdn.jsdelivr.net/gh/xErik/pdfmake-fonts-google@master/lib/ofl" + "/" + font.toLowerCase(); //abeezee/ABeeZee-Italic.ttf
+                if (font == "Roboto")
+                    base = "https://raw.githubusercontent.com/bpampuch/pdfmake/master/examples/fonts";
+                this.fontDescriptors[font] = {};
+                var fname = path.join(__dirname, '..', '..', '/jassijs_report/fonts/' + font + '-Regular.ttf');
+                this.fontDescriptors[font].normal = fname;
+                if (!fs.existsSync(fname)) {
+                    await this.download(base + "/" + font + "-Regular.ttf", fname);
+                }
+                var fname = path.join(__dirname, '..', '..', '/jassijs_report/fonts/' + font + '-Bold.ttf');
+                this.fontDescriptors[font].bold = fname;
+                if (!fs.existsSync(fname)) {
+                    await this.download(base + "/" + font + (font === "Roboto" ? "-Medium.ttf" : "-Bold.ttf"), fname);
+                }
+                var fname = path.join(__dirname, '..', '..', '/jassijs_report/fonts/' + font + '-Italic.ttf');
+                this.fontDescriptors[font].italics = fname;
+                if (!fs.existsSync(fname)) {
+                    await this.download(base + "/" + font + "-Italic.ttf", fname);
+                }
+                var fname = path.join(__dirname, '..', '..', '/jassijs_report/fonts/' + font + '-BoldItalic.ttf');
+                this.fontDescriptors[font].bolditalics = fname;
+                if (!fs.existsSync(fname)) {
+                    await this.download(base + "/" + font + (font === "Roboto" ? "-MediumItalic.ttf" : "-BoldItalic.ttf"), fname);
+                }
+            }
+        }
+        async getBase64LastTestResult() {
+            var data = Server_3.Server.lastTestServersideFileResult;
+            await this.registerFonts(data.reportdesign);
+            data = (0, pdfmakejassi_1.createReportDefinition)(data.reportdesign, data.data, data.parameter);
+            var ret = await new Promise((resolve) => {
+                this.createPdfBinary(data, resolve);
+            });
+            return ret;
+        }
+        async getBase64(file, parameter) {
+            var data = await this.getDesign(file, parameter);
+            await this.registerFonts(data.reportdesign);
+            data = (0, pdfmakejassi_1.createReportDefinition)(data.reportdesign, data.data, data.parameter);
+            var ret = await new Promise((resolve) => {
+                this.createPdfBinary(data, resolve);
+            });
+            return ret;
+        }
+    }
+    exports.DoServerreport = DoServerreport;
+});
+define("jassijs/server/UpdatePackage", ["require", "exports", "fs"], function (require, exports, fs) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.updatePackage = void 0;
+    var fpath = require('path');
+    /**
+     * updates serviceworker and create files in root package
+     */
+    function updatePackage() {
+        var client_path = "./client";
+        var module_path = "./node_modules/jassijs/client";
+        if (!fs.existsSync(client_path)) {
+            fs.mkdirSync(client_path);
+        }
+        if (!fs.existsSync(client_path + "/js")) {
+            fs.mkdirSync(client_path + "/js");
+        }
+        // if(!fs.existsSync("./jassijs.json")){
+        //     fs.copyFileSync(module_path.replace("/client","")+"/jassijs.json", "./jassijs.json");
+        //  }
+        if (!fs.existsSync("./tsconfig.json")) {
+            fs.copyFileSync(module_path.replace("/client", "") + "/tsconfig.json", "./tsconfig.json");
+        }
+        if (fs.existsSync(module_path)) {
+            var list = fs.readdirSync(module_path);
+            list.forEach(function (filename) {
+                if (!fs.lstatSync(module_path + "/" + filename).isDirectory()) {
+                    if (!fs.existsSync(client_path + "/" + filename)) {
+                        fs.copyFileSync(module_path + "/" + filename, client_path + "/" + filename);
+                    }
+                    if (filename === "jassistart.js" || filename === "service-worker.js") {
+                        if (fs.statSync(module_path + "/" + filename).mtime.getTime() > fs.statSync(client_path + "/" + filename).mtime.getTime()) {
+                            //update serviceworker if newer
+                            console.log("update " + filename);
+                            fs.copyFileSync(module_path + "/" + filename, client_path + "/" + filename);
+                        }
+                    }
+                }
+            });
+        }
+        if (!fs.existsSync(client_path + "/js/app.js")) {
+            fs.copyFileSync(module_path + "/" + "/js/app.js", client_path + "/" + "/js/app.js");
+        }
+    }
+    exports.updatePackage = updatePackage;
+});
+define("jassijs/server/FileTools", ["require", "exports", "fs", "jassijs/server/Filesystem", "jassijs/remote/Config"], function (require, exports, fs, Filesystem_5, Config_7) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.staticsecurefiles = exports.staticfiles = exports.syncRemoteFiles = void 0;
+    let resolve = require('path').resolve;
+    function copyFile(f1, f2) {
+        try {
+            if (fs.existsSync(f1) && f1.endsWith(".ts") && !fs.statSync(f1).isDirectory()) {
+                if (!fs.existsSync(f2) || (fs.statSync(f1).mtimeMs > fs.statSync(f2).mtimeMs)) {
+                    console.log("sync " + f1 + "->" + f2);
+                    var dirname = require('path').dirname(f2);
+                    if (!fs.existsSync(dirname)) {
+                        fs.mkdirSync(dirname, { recursive: true });
+                    }
+                    fs.copyFileSync(f1, f2);
+                }
+            }
+        }
+        catch (ex) {
+            console.error(ex);
+            debugger;
+        }
+    }
+    /**
+    *  each remote file on server and client should be the same
+    */
+    async function checkRemoteFiles() {
+        var path = new Filesystem_5.default().path;
+        var modules = Config_7.config.server.modules;
+        for (var m in modules) {
+            var files = await new Filesystem_5.default().dirFiles("./" + m + "/remote", [".ts"]);
+            var filess = await new Filesystem_5.default().dirFiles("./" + m + "/server", [".ts"]);
+            for (let x = 0; x < filess.length; x++) {
+                var file = filess[x];
+                var code = fs.readFileSync(file, 'utf-8');
+                if (code.indexOf("//synchronize-server-client") === 0)
+                    files.push(file);
+            }
+            for (let x = 0; x < files.length; x++) {
+                var file = files[x];
+                var clientfile = file.replace("./", path + "/");
+                if (!fs.existsSync(clientfile)) {
+                    console.error(clientfile + " not exists");
+                }
+                else {
+                    if (fs.statSync(file).mtimeMs !== fs.statSync(clientfile).mtimeMs) {
+                        if (fs.statSync(file).mtimeMs > fs.statSync(clientfile).mtimeMs) {
+                            console.error(clientfile + " is not up to date " + file + " is newer");
+                        }
+                        else {
+                            console.error(file + " is not up to date " + clientfile + " is newer");
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function syncRemoteFiles() {
+        /*await*/ checkRemoteFiles();
+        //server remote
+        var path = new Filesystem_5.default().path;
+        fs.watch(path, { recursive: true }, (eventType, filename) => {
+            if (!filename)
+                return;
+            var file = filename.replaceAll("\\", "/");
+            var paths = file.split("/");
+            if (eventType === "change" && paths.length > 1 && (paths[1] === "remote" || paths[1] === "server")) {
+                setTimeout(() => {
+                    if (paths[1] === "server") {
+                        if (fs.existsSync(file) && !fs.statSync(file).isDirectory()) {
+                            var code = fs.readFileSync(file, 'utf-8');
+                            if (code.indexOf("//synchronize-server-client") !== 0)
+                                return;
+                        }
+                    }
+                    var f2 = "./" + file;
+                    var f1 = path + "/" + file;
+                    copyFile(f1, f2);
+                }, 200);
+            }
+        });
+        //client remote
+        fs.watch("./", { recursive: true }, (eventType, filename) => {
+            if (!filename)
+                return;
+            var file = filename.replaceAll("\\", "/");
+            var paths = file.split("/");
+            if (eventType === "change" && paths.length > 1 && paths[1] === "remote" || paths[1] === "server") {
+                setTimeout(() => {
+                    if (paths[1] === "server") {
+                        if (fs.existsSync(file) && !fs.statSync(file).isDirectory()) {
+                            var code = fs.readFileSync(file, 'utf-8');
+                            if (code.indexOf("//synchronize-server-client") !== 0)
+                                return;
+                        }
+                    }
+                    var f1 = "./" + file;
+                    var f2 = path + "/" + file;
+                    copyFile(f1, f2);
+                }, 200);
+            }
+        });
+    }
+    exports.syncRemoteFiles = syncRemoteFiles;
+    var modules = undefined;
+    function staticfiles(req, res, next) {
+        var path = new Filesystem_5.default().path;
+        var modules = Config_7.config.server.modules;
+        // console.log(req.path);
+        let sfile = path + req.path;
+        if (sfile.indexOf("Settings.ts") > -1) { //&&!passport.authenticate("jwt", { session: false })){
+            next();
+            return;
+        }
+        if (!fs.existsSync(sfile) && sfile.startsWith("./client")) {
+            for (var key in modules) {
+                if ((sfile.startsWith("./client/" + key) || sfile.startsWith("./client/js/" + key)) && fs.existsSync("./node_modules/" + key + "/client" + req.path)) {
+                    sfile = "./node_modules/" + key + "/client" + req.path;
+                    break;
+                }
+            }
+            //sfile="./node_modules/_uw/"+req.path;
+        }
+        if (fs.existsSync(sfile)) {
+            // let code=fs.readFileSync(this.path+"/"+req.path);
+            let dat = fs.statSync(sfile).mtime.getTime();
+            if (req.query.lastcachedate === dat.toString()) {
+                res.set('X-Custom-UpToDate', 'true');
+                res.send("");
+            }
+            else {
+                res.sendFile(resolve(sfile), {
+                    headers: {
+                        'X-Custom-Date': dat.toString(),
+                        'Cache-Control': 'max-age=1',
+                        'Last-Modified': fs.statSync(sfile).mtime.toUTCString()
+                    }
+                });
+            }
+        }
+        else {
+            next();
+        }
+        var s = 1;
+    }
+    exports.staticfiles = staticfiles;
+    function staticsecurefiles(req, res, next) {
+        var path = new Filesystem_5.default().path;
+        modules = Config_7.config.server.modules;
+        // console.log(req.path);
+        let sfile = new Filesystem_5.default().path + req.path;
+        if (sfile.indexOf("Settings.ts") > -1) { //&&!passport.authenticate("jwt", { session: false })){
+            if (!req.isAuthenticated()) {
+                res.send(401, 'not logged in');
+                return;
+            }
+        }
+        if (!fs.existsSync(sfile) && sfile.startsWith("./client")) {
+            for (var key in modules) {
+                if ((sfile.startsWith("./client/" + key) || sfile.startsWith("./client/js/" + key)) && fs.existsSync("./node_modules/" + key + "/client" + req.path)) {
+                    sfile = "./node_modules/" + key + "/client" + req.path;
+                    break;
+                }
+            }
+        }
+        if (fs.existsSync(sfile)) {
+            // let code=fs.readFileSync(this.path+"/"+req.path);
+            let dat = fs.statSync(sfile).mtime.getTime();
+            if (req.query.lastcachedate === dat.toString()) {
+                res.set('X-Custom-UpToDate', 'true');
+                res.send("");
+            }
+            else {
+                res.sendFile(resolve(sfile), {
+                    headers: { 'X-Custom-Date': dat.toString() }
+                });
+            }
+        }
+        else {
+            next();
+        }
+        var s = 1;
+    }
+    exports.staticsecurefiles = staticsecurefiles;
+});
+define("jassijs/server/JassiServer", ["require", "exports", "express", "jassijs/server/PassportLoginRegister", "jassijs/server/DoRemoteProtocol", "jassijs/server/RawBody", "jassijs/server/RegistryIndexer", "jassijs/server/UpdatePackage", "jassijs/server/FileTools", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/server/PassportSetup"], function (require, exports, express, PassportLoginRegister_1, DoRemoteProtocol_1, RawBody_1, RegistryIndexer_2, UpdatePackage_1, FileTools_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    global.window = {};
+    global.$ = {};
+    require("app-module-path").addPath("./js");
+    const passport = require("passport");
+    const cookieParser = require("cookie-parser");
+    const https = require("https");
+    class JassiConnectionProperties {
+    }
+    /**
+     * starts jassi server
+     * @param properties
+     * @param expressApp
+     * @returns expressApp
+     */
+    function JassiServer(properties = {}, expressApp = undefined) {
+        let app = expressApp;
+        (0, UpdatePackage_1.updatePackage)();
+        if (app === undefined)
+            app = express();
+        if (properties.updeateRegistryOnStart !== false)
+            new RegistryIndexer_2.ServerIndexer().updateRegistry();
+        if (properties.syncRemoteFiles !== false) {
+            try {
+                (0, FileTools_1.syncRemoteFiles)();
+            }
+            catch (_a) {
+                console.log("could not sync remotefiles");
+            }
+        }
+        app.use(FileTools_1.staticfiles);
+        app.use(RawBody_1.rawbody);
+        app.set('etag', 'strong');
+        // app.use(installGetRequest);
+        app.use(passport.initialize());
+        app.use(cookieParser());
+        app.use("/user", PassportLoginRegister_1.loginRegister);
+        app.use(PassportLoginRegister_1.manageToken);
+        app.use(FileTools_1.staticsecurefiles, passport.authenticate("jwt", { session: false }));
+        app.post('/remoteprotocol', passport.authenticate("jwt", { session: false }), DoRemoteProtocol_1.remoteProtocol);
+        /* if (properties.allowDownloadAsZip!==false)
+             app.get('/zip', passport.authenticate("jwt", { session: false }), zip);*/
+        const PORT = (process.env.PORT || 5000);
+        app.listen(PORT, () => console.log(`Listening on ${PORT} ->browse http://localhost:${PORT}/index.html`));
+        return app;
+    }
+    exports.default = JassiServer;
+});
+/*
+if(process.env.PORT){
+  app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+}else{
+  var server=https.createServer({
+    key:fs.readFileSync("mycert/uwei.selfhost.key"),
+    cert:fs.readFileSync("mycert/uwei.selfhost.crt")
+    //pfx:fs.readFileSync("mycert/mycert.pfx"),
+    //passphrase:"j@ssi"
+  },app);
+  server.listen(PORT,()=>{
+    console.log(`Listening on ${PORT}`)
+  })
+}*/
+//process.env.PORT
+//this file is autogenerated don't modify
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
+    "jassijs/remote/Classes.ts": {
+        "date": 1682795551717.3792,
+        "jassijs.remote.JassiError": {},
+        "jassijs.remote.Classes": {}
+    },
+    "jassijs/remote/ClientError.ts": {
+        "date": 1655556930000,
+        "jassijs.remote.ClientError": {}
+    },
+    "jassijs/remote/Database.ts": {
+        "date": 1655556796000,
+        "jassijs.remote.Database": {}
+    },
+    "jassijs/remote/DatabaseTools.ts": {
+        "date": 1681309880654.3965,
+        "jassijs.remote.DatabaseTools": {
+            "@members": {
+                "runSQL": {
+                    "ValidateFunctionParameter": []
+                }
+            }
+        }
+    },
+    "jassijs/remote/DBArray.ts": {
+        "date": 1655556796000,
+        "jassijs.remote.DBArray": {}
+    },
+    "jassijs/remote/DBObject.ts": {
+        "date": 1681317354018.0388,
+        "jassijs.remote.DBObject": {}
+    },
+    "jassijs/remote/DBObjectQuery.ts": {
+        "date": 1623876714000
+    },
+    "jassijs/remote/Extensions.ts": {
+        "date": 1626209336000
+    },
+    "jassijs/remote/FileNode.ts": {
+        "date": 1655556796000,
+        "jassijs.remote.FileNode": {}
+    },
+    "jassijs/remote/hallo.ts": {
+        "date": 1622985410000
+    },
+    "jassijs/remote/Jassi.ts": {
+        "date": 1682794538158.105
+    },
+    "jassijs/remote/JassijsGlobal.ts": {
+        "date": 1655549782000
+    },
+    "jassijs/remote/ObjectTransaction.ts": {
+        "date": 1622985414000
+    },
+    "jassijs/remote/Registry.ts": {
+        "date": 1682773797218.1587
+    },
+    "jassijs/remote/RemoteObject.ts": {
+        "date": 1655556866000,
+        "jassijs.remote.RemoteObject": {}
+    },
+    "jassijs/remote/RemoteProtocol.ts": {
+        "date": 1655556796000,
+        "jassijs.remote.RemoteProtocol": {}
+    },
+    "jassijs/remote/security/Group.ts": {
+        "date": 1681322755236.7244,
+        "jassijs.security.Group": {
+            "$DBObject": [
+                {
+                    "name": "jassijs_group"
+                }
+            ],
+            "@members": {
+                "id": {
+                    "ValidateIsInt": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "PrimaryColumn": []
+                },
+                "name": {
+                    "ValidateIsString": [],
+                    "Column": []
+                },
+                "parentRights": {
+                    "ValidateIsArray": [
+                        {
+                            "optional": true,
+                            "type": "function"
+                        }
+                    ],
+                    "JoinTable": [],
+                    "ManyToMany": [
+                        "function",
+                        "function"
+                    ]
+                },
+                "rights": {
+                    "ValidateIsArray": [
+                        {
+                            "optional": true,
+                            "type": "function"
+                        }
+                    ],
+                    "JoinTable": [],
+                    "ManyToMany": [
+                        "function",
+                        "function"
+                    ]
+                },
+                "users": {
+                    "ValidateIsArray": [
+                        {
+                            "optional": true,
+                            "type": "function"
+                        }
+                    ],
+                    "ManyToMany": [
+                        "function",
+                        "function"
+                    ]
+                }
+            }
+        }
+    },
+    "jassijs/remote/security/ParentRight.ts": {
+        "date": 1681581396308.1873,
+        "jassijs.security.ParentRight": {
+            "$DBObject": [
+                {
+                    "name": "jassijs_parentright"
+                }
+            ],
+            "@members": {
+                "id": {
+                    "ValidateIsInt": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "PrimaryGeneratedColumn": []
+                },
+                "name": {
+                    "ValidateIsString": [],
+                    "Column": []
+                },
+                "classname": {
+                    "ValidateIsString": [],
+                    "Column": []
+                },
+                "i1": {
+                    "ValidateIsNumber": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "Column": [
+                        {
+                            "nullable": true
+                        }
+                    ]
+                },
+                "i2": {
+                    "ValidateIsNumber": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "Column": [
+                        {
+                            "nullable": true
+                        }
+                    ]
+                },
+                "s1": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "Column": [
+                        {
+                            "nullable": true
+                        }
+                    ]
+                },
+                "s2": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "Column": [
+                        {
+                            "nullable": true
+                        }
+                    ]
+                },
+                "groups": {
+                    "ValidateIsArray": [
+                        {
+                            "optional": true,
+                            "type": "function"
+                        }
+                    ],
+                    "ManyToMany": [
+                        "function",
+                        "function"
+                    ]
+                }
+            }
+        }
+    },
+    "jassijs/remote/security/Right.ts": {
+        "date": 1681322767134.66,
+        "jassijs.security.Right": {
+            "$DBObject": [
+                {
+                    "name": "jassijs_right"
+                }
+            ],
+            "@members": {
+                "id": {
+                    "ValidateIsInt": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "PrimaryColumn": []
+                },
+                "name": {
+                    "ValidateIsString": [],
+                    "Column": []
+                },
+                "groups": {
+                    "ValidateIsArray": [
+                        {
+                            "optional": true,
+                            "type": "function"
+                        }
+                    ],
+                    "ManyToMany": [
+                        "function",
+                        "function"
+                    ]
+                }
+            }
+        }
+    },
+    "jassijs/remote/security/Rights.ts": {
+        "date": 1655556796000,
+        "jassijs.security.Rights": {}
+    },
+    "jassijs/remote/security/Setting.ts": {
+        "date": 1681316435162.0532,
+        "jassijs.security.Setting": {
+            "$DBObject": [
+                {
+                    "name": "jassijs_setting"
+                }
+            ],
+            "@members": {
+                "id": {
+                    "ValidateIsInt": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "PrimaryColumn": []
+                },
+                "data": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "Column": [
+                        {
+                            "nullable": true
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "jassijs/remote/security/User.ts": {
+        "date": 1681329602964.0217,
+        "jassijs.security.User": {
+            "$DBObject": [
+                {
+                    "name": "jassijs_user"
+                }
+            ],
+            "@members": {
+                "id": {
+                    "ValidateIsNumber": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "PrimaryGeneratedColumn": []
+                },
+                "email": {
+                    "ValidateIsString": [],
+                    "Column": []
+                },
+                "password": {
+                    "ValidateIsString": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "Column": [
+                        {
+                            "select": false
+                        }
+                    ]
+                },
+                "groups": {
+                    "ValidateIsArray": [
+                        {
+                            "optional": true,
+                            "type": "function"
+                        }
+                    ],
+                    "JoinTable": [],
+                    "ManyToMany": [
+                        "function",
+                        "function"
+                    ]
+                },
+                "isAdmin": {
+                    "ValidateIsBoolean": [
+                        {
+                            "optional": true
+                        }
+                    ],
+                    "Column": [
+                        {
+                            "nullable": true
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "jassijs/remote/Settings.ts": {
+        "date": 1681315774170.6409,
+        "jassijs.remote.Settings": {
+            "@members": {
+                "remove": {
+                    "ValidateFunctionParameter": []
+                },
+                "save": {
+                    "ValidateFunctionParameter": []
+                },
+                "saveAll": {
+                    "ValidateFunctionParameter": []
+                }
+            }
+        }
+    },
+    "jassijs/remote/Test.ts": {
+        "date": 1655556930000,
+        "jassijs.remote.Test": {}
+    },
+    "jassijs/remote/Transaction.ts": {
+        "date": 1655556866000,
+        "jassijs.remote.Transaction": {}
+    },
+    "jassijs/server/Compile.ts": {
+        "date": 1682711291459.0598
+    },
+    "jassijs/server/DBManager.ts": {
+        "date": 1682710550782.2158,
+        "jassijs/server/DBManager": {
+            "$Serverservice": [
+                {
+                    "name": "db",
+                    "getInstance": "function"
+                }
+            ]
+        }
+    },
+    "jassijs/server/DoRemoteProtocol.ts": {
+        "date": 1682362433279.5454
+    },
+    "jassijs/server/Filesystem.ts": {
+        "date": 1682794700454.372,
+        "jassijs.server.Filesystem": {
+            "$Serverservice": [
+                {
+                    "name": "filesystem",
+                    "getInstance": "function"
+                }
+            ]
+        }
+    },
+    "jassijs/server/Indexer.ts": {
+        "date": 1682792930299.4324
+    },
+    "jassijs/server/JassiServer.ts": {
+        "date": 1682449512016.267
+    },
+    "jassijs/server/PassportLoginRegister.ts": {
+        "date": 1680946666515.8162
+    },
+    "jassijs/server/PassportSetup.ts": {
+        "date": 1680946687665.4827
+    },
+    "jassijs/server/RawBody.ts": {
+        "date": 1654195782000
+    },
+    "jassijs/server/RegistryIndexer.ts": {
+        "date": 1682793076438.2163
+    },
+    "jassijs/server/Zip.ts": {
+        "date": 1622984046000
+    },
+    "jassijs/UserModel.ts": {
+        "date": 1622984046000
+    },
+    "jassijs/util/DatabaseSchema.ts": {
+        "date": 1611490792000
+    },
+    "jassijs/remote/Validator.ts": {
+        "date": 1681322647267.7717
+    },
+    "jassijs/remote/Server.ts": {
+        "date": 1682794608034.317,
+        "jassijs.remote.Server": {
+            "@members": {
+                "dir": {
+                    "ValidateFunctionParameter": []
+                },
+                "zip": {
+                    "ValidateFunctionParameter": []
+                },
+                "loadFiles": {
+                    "ValidateFunctionParameter": []
+                },
+                "loadFile": {
+                    "ValidateFunctionParameter": []
+                },
+                "saveFiles": {
+                    "ValidateFunctionParameter": []
+                },
+                "saveFile": {
+                    "ValidateFunctionParameter": []
+                },
+                "testServersideFile": {
+                    "ValidateFunctionParameter": []
+                },
+                "removeServerModul": {
+                    "ValidateFunctionParameter": []
+                },
+                "delete": {
+                    "ValidateFunctionParameter": []
+                },
+                "rename": {
+                    "ValidateFunctionParameter": []
+                },
+                "createFile": {
+                    "ValidateFunctionParameter": []
+                },
+                "createFolder": {
+                    "ValidateFunctionParameter": []
+                },
+                "createModule": {
+                    "ValidateFunctionParameter": []
+                }
+            }
+        }
+    },
+    "jassijs/remote/Serverservice.ts": {
+        "date": 1682715263974.073
+    },
+    "jassijs/index.d.ts": {
+        "date": 1681918735844.9463
+    },
+    "jassijs/server/UpdatePackage.ts": {
+        "date": 1682701331180.3745
+    },
+    "jassijs/remote/Config.ts": {
+        "date": 1682795184566.359
+    },
+    "jassijs/server/NativeAdapter.ts": {
+        "date": 1682711333963.896
+    },
+    "jassijs/server/FileTools.ts": {
+        "date": 1682792900059.5854
+    },
+    "jassijs/server/Reloader.ts": {
+        "date": 1682793104106.3633
+    },
+    "jassijs/server/DBManagerExt.ts": {
+        "date": 1682717755128.099
+    },
+    "jassijs/server/TypeORMListener.ts": {
+        "date": 1682718172595.0825,
+        "jassijs.server.TypeORMListener": {
+            "EventSubscriber": []
+        }
+    },
+    "jassijs/server/DatabaseSchema.ts": {
+        "date": 1682241708158.535
+    },
+    "jassijs/server/ext/EmpyDeclaration.ts": {
+        "date": 1682275347821.4524
+    },
+    "jassijs/server/ext/jszip.ts": {
+        "date": 1657714030000
+    },
+    "jassijs/server/Installserver.ts": {
+        "date": 1682613879220.7644
+    },
+    "jassijs/server/LocalProtocol.ts": {
+        "date": 1682365334193.8733
+    },
+    "jassijs/server/Testuser.ts": {
+        "date": 1655556794000,
+        "Testuser": {
+            "$DBObject": [],
+            "@members": {
+                "id": {
+                    "PrimaryColumn": []
+                },
+                "firstname": {
+                    "Column": []
+                },
+                "lastname": {
+                    "Column": []
+                }
+            }
+        }
+    }
+};
+define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_29, Classes_15) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DBArray = void 0;
+    let cl = Classes_15.classes; //force Classes.
+    let DBArray = class DBArray
+    /**
+    * Array for jassijs.base.DBObject's
+    * can be saved to db
+    * @class jassijs.base.DBArray
+    */
+     extends Array {
+        constructor(...args) {
+            super(...args);
+        }
+        /**
+         * adds an object
+         * if the object is linked to an other object then update this
+         * @param {object} ob - the object to add
+         */
+        add(ob) {
+            if (ob === undefined || ob === null)
+                throw new Classes_15.JassiError("Error cannot add object null");
+            this.push(ob);
+            if (this._parentObject !== undefined) {
+                //set linked object
+                var link = jassijs.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
+                if (link !== undefined && link.type === "array") { //array can not connected){
+                    var test = ob._objectProperties[link.name]; //do not resolve!
+                    if (test !== undefined && test.unresolvedclassname === undefined) {
+                        if (test.indexOf(this._parentObject) < 0)
+                            test.add(this._parentObject);
+                    }
+                }
+                if (link !== undefined && link.type === "object") {
+                    var test = ob.__objectProperties[link.name]; //do not resolve!
+                    if (test !== undefined && test.unresolvedclassname !== undefined && test !== this) {
+                        ob._setObjectProperty(link.name, this._parentObject);
+                    }
+                }
+            }
+        }
+        /**
+         * for compatibility
+         */
+        async resolve() {
+            //Object was already resolved   
+            return this;
+        }
+        /**
+         * remove an object
+         * if the object is linked to an other object then update this
+         * @param {object} ob - the object to remove
+         */
+        remove(ob) {
+            var pos = this.indexOf(ob);
+            if (pos >= 0)
+                this.splice(pos, 1);
+            if (this._parentObject !== undefined) {
+                //set linked object
+                var link = jassijs.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
+                if (link !== undefined && link.type === "array") { //array can not connected){
+                    var test = ob._objectProperties[link.name]; //do not resolve!
+                    if (test !== undefined && test.unresolvedclassname === undefined) {
+                        if (test.indexOf(this._parentObject) >= 0)
+                            test.remove(this._parentObject);
+                    }
+                }
+                if (link !== undefined && link.type === "object") {
+                    var test = ob._getObjectProperty(link.name);
+                    if (test !== undefined && test.unresolvedclassname !== undefined && test !== this) {
+                        ob._setObjectProperty(link.name, null);
+                    }
+                }
+            }
+        }
+    };
+    DBArray = __decorate([
+        (0, Registry_29.$Class)("jassijs.remote.DBArray"),
+        __metadata("design:paramtypes", [Object])
+    ], DBArray);
+    exports.DBArray = DBArray;
+});
+define("jassijs/remote/Modules", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.modules = void 0;
+    class Modules {
+        constructor() {
+            if (!window.document) {
+                var fs = require("fs");
+                var all = JSON.parse(fs.readFileSync('./client/jassijs.json', 'utf-8'));
+                Object.assign(this, all);
+            }
+        }
+    }
+    var modules = new Modules();
+    exports.modules = modules;
+});
+define("jassijs/remote/hallo", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.OO = void 0;
+    class KK {
+    }
+    class OO {
+        constructor() {
+            this.hallo = "";
+        }
+        static test() {
+            //  var result = Reflect.getOwnMetadata("design:type", OO,"hallo");
+            //  var result = Reflect.getMetadata("design:type", OO,"hallo");
+            //  var jj=Reflect.getMetadataKeys(OO);
+            //  var jj2=Reflect.getOwnMetadataKeys(OO);
+        }
+    }
+    exports.OO = OO;
+});
+define("client/jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, typeorm_3, Classes_16, Registry_30, User_3, Registry_31, Serverservice_12) {
+    "use strict";
+    var DBManager_2;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DBManager = void 0;
+    const parser = require('js-sql-parser');
+    const passwordIteration = 10000;
+    var _instance = undefined;
+    let DBManager = DBManager_2 = class DBManager {
+        static async getConOpts() {
+            var stype = "postgres";
+            var shost = "localhost";
+            var suser = "postgres";
+            var spass = "ja$$1";
+            var iport = 5432;
+            var sdb = "jassi";
+            //the default is the sqlite3
+            //this is the default way: define an environment var DATABASSE_URL
+            //type://user:password@hostname:port/database
+            //eg: postgres://abcknhlveqwqow:polc78b98e8cd7168d35a66e392d2de6a8d5710e854c084ff47f90643lce2876@ec2-174-102-251-1.compute-1.amazonaws.com:5432/dcpqmp4rcmu182
+            //@ts-ignore
+            var test = process.env.DATABASE_URL;
+            if (test !== undefined) {
+                var all = test.split(":");
+                stype = all[0];
+                if (stype === "postgresql")
+                    stype = "postgres";
+                var h = all[2].split("@");
+                shost = h[1];
+                iport = Number(all[3].split("/")[0]);
+                suser = all[1].replace("//", "");
+                spass = h[0];
+                sdb = all[3].split("/")[1];
+            }
+            var dbclasses = [];
+            var dbobjects = await Registry_30.default.getJSONData("$DBObject");
+            for (var o = 0; o < dbobjects.length; o++) {
+                var clname = dbobjects[o].classname;
+                dbclasses.push(await Classes_16.classes.loadClass(clname));
+                //var fname = dbobjects[o].filename;
+                //dbfiles.push("js/" + fname.replace(".ts", ".js"));
+            }
+            var opt = {
+                //@ts-ignore
+                "type": stype,
+                "host": shost,
+                "port": iport,
+                "username": suser,
+                "password": spass,
+                "database": sdb,
+                //"synchronize": true,
+                "logging": false,
+                "entities": dbclasses
+                //"js/client/remote/de/**/*.js"
+                // "migrations": [
+                //    "src/migration/**/*.ts"
+                // ],
+                // "subscribers": [
+                //    "src/subscriber/**/*.ts"
+                // ]
+            };
+            return opt;
+        }
+        static async _get() {
+            if (_instance === undefined) {
+                _instance = new DBManager_2();
+            }
+            await _instance.waitForConnection;
+            return _instance;
+        }
+        async open() {
+            var _initrunning = undefined;
+            var test = (0, typeorm_3.getMetadataArgsStorage)();
+            try {
+                var opts = await DBManager_2.getConOpts();
+                _initrunning = (0, typeorm_3.createConnection)(opts);
+                await _initrunning;
+            }
+            catch (err1) {
+                try {
+                    _initrunning = undefined;
+                    //@ts-ignore //heroku need this
+                    opts.ssl = {
+                        rejectUnauthorized: false
+                    };
+                    //          opts["ssl"] = true; 
+                    _initrunning = (0, typeorm_3.createConnection)(opts);
+                    await _initrunning;
+                }
+                catch (err) {
+                    console.log("DB corrupt - revert the last change");
+                    console.error(err1);
+                    console.error(err);
+                    _instance = undefined;
+                    _initrunning = undefined;
+                    if (err.message === "The server does not support SSL connections") {
+                        throw err1;
+                        console.error(err1);
+                    }
+                    else {
+                        throw err;
+                        console.error(err);
+                    }
+                }
+            }
+            try {
+                var con = (0, typeorm_3.getConnection)();
+                for (var x = 0; x < 500; x++) { //sometimes on reconnect the connection is not ready
+                    if (con.isConnected)
+                        break;
+                    else
+                        await new Promise((resolve) => setTimeout(() => resolve(undefined), 10));
+                }
+                console.log(con.isConnected);
+                await this.mySync();
+            }
+            catch (err) {
+                console.log("DB Schema could not be saved");
+                throw err;
+            }
+            //wait for connection ready
+            await _initrunning;
+            //on server we convert decimal type to Number https://github.com/brianc/node-postgres/issues/811
+            //@ts-ignore
+            if ((window === null || window === void 0 ? void 0 : window.document) === undefined) {
+                try {
+                    //@ts-ignore
+                    var types = (await new Promise((resolve_21, reject_21) => { require(['pg'], resolve_21, reject_21); })).types;
+                    types.setTypeParser(1700, function (val) {
+                        return parseFloat(val);
+                    });
+                }
+                catch (_a) {
+                }
+            }
+            return this;
+        }
+        async mySync() {
+            var con = (0, typeorm_3.getConnection)();
+            //@ts-ignore
+            var schem = await new Promise((resolve_22, reject_22) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_22, reject_22); });
+            var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
+            schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"] = async function () {
+                //try{
+                await this.createNewTables();
+                await this.addNewColumns();
+                await this.updatePrimaryKeys();
+                await this.updateExistColumns();
+                await this.createNewIndices();
+                await this.createNewChecks();
+                await this.createNewExclusions();
+                await this.createCompositeUniqueConstraints();
+                await this.createForeignKeys();
+                await this.createViews();
+                /*}catch(err){
+                  this.prototype._error_=err;
+                  }*/
+            };
+            //  var h=Reflect.getMetadata("design:type",AR.prototype,"id");
+            await con.synchronize();
+            //if(schem.RdbmsSchemaBuilder.prototype["_error_"])
+            //throw schem.RdbmsSchemaBuilder.prototype["_error_"]; 
+            //con.driver.
+        }
+        static async clearMetadata() {
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().checks);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().columns);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().discriminatorValues);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().embeddeds);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().entityListeners);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().entityRepositories);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().entitySubscribers);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().exclusions);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().tables);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().generations);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().indices);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().inheritances);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().joinColumns);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().joinTables);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().namingStrategies);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().relationCounts);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().relationIds);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().relations);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().tables);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().transactionEntityManagers);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().transactionRepositories);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().trees);
+            DBManager_2.clearArray((0, typeorm_3.getMetadataArgsStorage)().uniques);
+        }
+        async renewConnection() {
+            if (this.waitForConnection !== undefined)
+                await this.waitForConnection;
+            this.waitForConnection = new Promise((resolve) => { }); //never resolve
+            await this.destroyConnection(false);
+            this.waitForConnection = this.open();
+        }
+        async destroyConnection(waitForCompleteOpen = true) {
+            if (waitForCompleteOpen)
+                await this.waitForConnection;
+            try {
+                var con = await (0, typeorm_3.getConnection)();
+                await con.close();
+            }
+            catch (err) {
+                debugger;
+            }
+            await DBManager_2.clearMetadata();
+        }
+        static clearArray(arr) {
+            while (arr.length > 0) {
+                arr.pop();
+            }
+        }
+        constructor() {
+            this.waitForConnection = undefined;
+            Object.freeze(_instance);
+            this.waitForConnection = this.open();
+        }
+        connection() {
+            return (0, typeorm_3.getConnection)();
+        }
+        async runSQL(context, sql, parameters = undefined) {
+            var ret = (await this.waitForConnection).connection().query(sql, parameters);
+            return ret;
+        }
+        async remove(context, entity) {
+            var test = await (await this.waitForConnection).checkParentRight(context, entity, [entity["id"]]);
+            if (test === false)
+                throw new Classes_16.JassiError("you are not allowed to delete " + Classes_16.classes.getClassName(entity) + " with id " + entity["id"]);
+            await this.connection().manager.remove(entity);
+        }
+        async addSaveTransaction(context, entity) {
+            await this.waitForConnection;
+            if (context.objecttransaction) {
+                let ot = context.objecttransaction;
+                if (!ot.savelist) {
+                    ot.savelist = [entity];
+                    ot.saveresolve = [];
+                    ot.addFunctionFinally(async () => {
+                        ot.savereturn = await this.connection().manager.save(ot.savelist);
+                        for (let x = 0; x < ot.savereturn.length; x++) {
+                            delete ot.savereturn[x].password;
+                            ot.saveresolve[x](ot.savereturn[x]);
+                        }
+                    });
+                }
+                else
+                    ot.savelist.push(entity);
+                return new Promise((resolve) => {
+                    ot.saveresolve.push(resolve);
+                    ot.transactionResolved(context);
+                    ot.checkFinally();
+                });
+            }
+        }
+        /**
+       * insert a new object
+       * @param obj - the object to insert
+       */
+        async insert(context, obj) {
+            (await this.waitForConnection);
+            await this._checkParentRightsForSave(context, obj);
+            if (context.objecttransaction) {
+                return this.addSaveTransaction(context, obj);
+            }
+            if (obj.id !== undefined) {
+                if ((await this.connection().manager.findOne(obj.constructor, obj.id)) !== undefined) {
+                    throw new Classes_16.JassiError("object is already in DB: " + obj.id);
+                }
+            }
+            //@ts-ignore
+            var ret = await this.connection().manager.insert(obj.constructor, obj);
+            //save also relations
+            let retob = await this.save(context, obj);
+            return retob;
+        }
+        async save(context, entity, options) {
+            await this.waitForConnection;
+            await this._checkParentRightsForSave(context, entity);
+            if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
+                if (Classes_16.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
+                    entity.password = await new Promise((resolve) => {
+                        const crypto = require('crypto');
+                        const salt = crypto.randomBytes(8).toString('base64');
+                        crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
+                            if (err)
+                                throw err;
+                            resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
+                        });
+                    });
+                }
+            }
+            if (context.objecttransaction && options === undefined) {
+                return this.addSaveTransaction(context, entity);
+            }
+            var ret = await this.connection().manager.save(entity, options);
+            //delete entity.password;
+            //delete ret["password"];
+            //@ts-ignore
+            return ret === null || ret === void 0 ? void 0 : ret.id;
+        }
+        async _checkParentRightsForSave(context, entity) {
+            var _a;
+            await this.waitForConnection;
+            if ((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)
+                return;
+            //Check if the object self has restrictions
+            var cl = Classes_16.classes.getClass(Classes_16.classes.getClassName(entity));
+            if (entity["id"] !== undefined) {
+                var exist = await this.connection().manager.findOne(cl, entity["id"]);
+                if (exist !== undefined) {
+                    var t = await this.checkParentRight(context, cl, [entity["id"]]);
+                    if (!t) {
+                        throw new Classes_16.JassiError("you are not allowed to save " + Classes_16.classes.getClassName(cl) + " with id " + entity["id"]);
+                    }
+                }
+            }
+            //check if the field of parentRight is set
+            if (Registry_30.default.getMemberData("$CheckParentRight") !== undefined) {
+                var data = Registry_30.default.getMemberData("$CheckParentRight")[Classes_16.classes.getClassName(entity)];
+                for (var key in data) {
+                    if (entity[key] === undefined) {
+                        throw new Classes_16.JassiError("the CheckParentRight field " + key + " must not be undefined");
+                    }
+                }
+            }
+            var vdata = this.connection().getMetadata(cl);
+            //Check if the relations fields have restrictions
+            for (var r = 0; r < vdata.relations.length; r++) {
+                var rel = vdata.relations[r];
+                var data = entity[rel.propertyName];
+                if (data !== undefined && !Array.isArray(data)) {
+                    let cl = rel.type;
+                    var t = await this.checkParentRight(context, cl, [data["id"]]);
+                    if (!t) {
+                        throw new Classes_16.JassiError("you are not allowed to save " + Classes_16.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                    }
+                }
+                if (data !== undefined && Array.isArray(data)) {
+                    let cl = rel.type;
+                    var arr = [];
+                    for (let x = 0; x < data.length; x++) {
+                        arr.push(data[x].id);
+                    }
+                    let t = await this.checkParentRight(context, cl, arr);
+                    if (!t) {
+                        throw new Classes_16.JassiError("you are not allowed to save " + Classes_16.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                    }
+                }
+                /* var tp=await p1.__proto__.constructor;
+                 var test=await this.connection().manager.findOne(tp,902);
+                 var ob=await this.connection().manager.preload(tp,p1);
+                 if(ob===undefined){//does not exists in DB
+                   ob=p1;
+                 }*/
+            }
+        }
+        /**
+         * Finds first entity that matches given conditions.
+         */
+        async findOne(context, entityClass, p1, p2) {
+            if (typeof p1 === "string" || typeof p1 === "number") { //search by id
+                p1 = { id: p1 };
+            }
+            var ret = await this.find(context, entityClass, p1);
+            if (ret === undefined || ret.length === 0)
+                return undefined;
+            else
+                return ret[0];
+            //return this.connection().manager.findOne(entityClass,id,options);
+            // else
+            //return this.connection().manager.findOne(entityClass, p1, p2);
+        }
+        /**
+          * Finds first entity that matches given conditions.
+          */
+        async find(context, entityClass, p1) {
+            //return this.connection().manager.findOne(entityClass,id,options);
+            // else
+            await this.waitForConnection;
+            var options = p1;
+            var onlyColumns = options === null || options === void 0 ? void 0 : options.onlyColumns;
+            var clname = Classes_16.classes.getClassName(entityClass);
+            var cl = Classes_16.classes.getClass(clname);
+            var relations = new RelationInfo(context, clname, this);
+            var allRelations = this.resolveWildcharInRelations(clname, options === null || options === void 0 ? void 0 : options.relations);
+            if (options && options.relations) {
+                relations.addRelations(context, allRelations, true);
+            }
+            var ret = await this.connection().manager.createQueryBuilder().
+                select("me").from(cl, "me");
+            if (options)
+                ret = relations.addWhere(context, options.where, options.whereParams, ret);
+            options === null || options === void 0 ? true : delete options.where;
+            options === null || options === void 0 ? true : delete options.whereParams;
+            options === null || options === void 0 ? true : delete options.onlyColumns;
+            ret = relations.addWhereBySample(context, options, ret);
+            ret = relations.join(ret);
+            if (!context.request.user.isAdmin)
+                ret = await relations.addParentRightDestriction(context, ret);
+            if (options === null || options === void 0 ? void 0 : options.skip) {
+                ret.skip(options.skip);
+                delete options.skip;
+            }
+            if (options === null || options === void 0 ? void 0 : options.take) {
+                ret.take(options.take);
+                delete options.take;
+            }
+            if (options === null || options === void 0 ? void 0 : options.order) {
+                for (var key in options === null || options === void 0 ? void 0 : options.order) {
+                    ret.addOrderBy("\"me_" + key + "\"", options.order[key]);
+                }
+                delete options.order;
+            }
+            var test = ret.getSql();
+            let objs = await ret.getMany();
+            if (objs && onlyColumns) {
+                objs.forEach((ob) => {
+                    for (var key in ob) {
+                        if (onlyColumns.indexOf(key) === -1 && allRelations.indexOf(key) === -1 && key !== "id")
+                            ob[key] = undefined;
+                    }
+                });
+            }
+            return objs;
+            // return await this.connection().manager.find(entityClass, p1);
+        }
+        resolveWildcharInRelations(classname, relation) {
+            var ret = [];
+            if (!relation)
+                return ret;
+            for (let r = 0; r < relation.length; r++) {
+                if (relation[r] === "*") {
+                    var vdata = (0, typeorm_3.getConnection)().getMetadata(Classes_16.classes.getClass(classname));
+                    for (var re = 0; re < vdata.relations.length; re++) {
+                        var s = vdata.relations[re].propertyName;
+                        if (ret.indexOf(s) === -1)
+                            ret.push(s);
+                    }
+                }
+                else
+                    ret.push(relation[r]);
+            }
+            return ret;
+        }
+        async createUser(context, username, password) {
+            await this.waitForConnection;
+            //var hh=getConnection().manager.findOne(User,{ email: username });
+            if (await (0, typeorm_3.getConnection)().manager.findOne(User_3.User, { email: username }) !== undefined) {
+                throw new Error("User already exists");
+            }
+            const user = new User_3.User();
+            user.email = username;
+            user.password = password;
+            //first user would be admin
+            if (await this.connection().manager.findOne(User_3.User) === undefined) {
+                user.isAdmin = true;
+            }
+            //password is encrypted when saving
+            /* await new Promise((resolve) => {
+              const crypto = require('crypto');
+        
+              const salt = crypto.randomBytes(8).toString('base64');
+              crypto.pbkdf2(password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
+                if (err) throw err;
+                resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
+              });
+            })*/
+            await this.save(context, user);
+            delete user.password;
+            return user;
+        }
+        async login(context, user, password) {
+            await this.waitForConnection;
+            /* const users = await this.connection().getRepository(User)
+             .createQueryBuilder()
+             .select("user.id", "id")
+             //.addSelect("user.password")
+             .getMany();*/
+            var ret = await this.connection().manager.createQueryBuilder().
+                select("me").from(User_3.User, "me").addSelect("me.password").
+                andWhere("me.email=:email", { email: user });
+            /* if (options)
+               ret = relations.addWhere(<string>options.where, options.whereParams, ret);
+         
+             ret = relations.addWhereBySample(options, ret);
+             ret = relations.join(ret);
+             ret = await relations.addParentRightDestriction(ret);*/
+            var auser = await ret.getOne();
+            if (!auser || !password)
+                return undefined;
+            let pw = auser.password.split(":");
+            let iteration = parseInt(pw[0]);
+            let salt = pw[1];
+            var test = await new Promise((resolve) => {
+                const crypto = require('crypto');
+                crypto.pbkdf2(password, salt, iteration, 512, 'sha512', (err, derivedKey) => {
+                    if (err)
+                        throw err;
+                    resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
+                });
+            });
+            if (test === auser.password) {
+                delete auser.password;
+                return auser;
+            }
+            else {
+                delete auser.password;
+            }
+            return undefined;
+        }
+        async checkParentRight(context, entityClass, ids) {
+            await this.waitForConnection;
+            var clname = Classes_16.classes.getClassName(entityClass);
+            var cl = Classes_16.classes.getClass(clname);
+            var relations = new RelationInfo(context, clname, this);
+            var ret = await this.connection().manager.createQueryBuilder().
+                select("me").from(cl, "me");
+            ret = relations.join(ret);
+            ret.andWhere("me.id IN (:...ids)", { ids: ids });
+            if (!context.request.user.isAdmin)
+                ret = await relations.addParentRightDestriction(context, ret);
+            var tt = ret.getSql();
+            var test = await ret.getCount();
+            return test === ids.length;
+        }
+    };
+    DBManager = DBManager_2 = __decorate([
+        (0, Serverservice_12.$Serverservice)({ name: "db", getInstance: async () => { return DBManager_2._get(); } }),
+        (0, Registry_31.$Class)("jassijs/server/DBManager"),
+        __metadata("design:paramtypes", [])
+    ], DBManager);
+    exports.DBManager = DBManager;
+    class RelationInfo {
+        constructor(context, className, dbmanager) {
+            this.counter = 100;
+            this.className = className;
+            this.dbmanager = dbmanager;
+            this.relations = {};
+            var testPR = Registry_30.default.getData("$ParentRights", className);
+            this.relations[""] = {
+                name: "",
+                className: className,
+                fullPath: "",
+                parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
+                doSelect: true
+            };
+            this.addRelationsFromParentRights(context, "");
+        }
+        addRelationsFromParentRights(context, relationname) {
+            var pr = this.relations[relationname];
+            if (Registry_30.default.getMemberData("$CheckParentRight") !== undefined) {
+                var data = Registry_30.default.getMemberData("$CheckParentRight")[pr.className];
+                if (data !== undefined) {
+                    var membername = "";
+                    for (var key in data) {
+                        membername = key;
+                    }
+                    var r = relationname + (relationname === "" ? "" : ".") + membername;
+                    this.addRelations(context, [r], false);
+                    this.addRelationsFromParentRights(context, r);
+                }
+            }
+        }
+        _getRelationFromProperty(property) {
+            var keys = property.split(".");
+            var path = "me";
+            for (var x = 0; x < keys.length; x++) {
+                if (x + 1 === keys.length)
+                    path = path + ".";
+                else
+                    path = path + "_";
+                path = path + keys[x];
+            }
+            return path;
+        }
+        /**
+         * add an andWhere to the sql-Query to check the parent rights
+         * @param builder
+         */
+        join(builder) {
+            var ret = builder;
+            for (var key in this.relations) {
+                if (key !== "") {
+                    /* var keys = key.split(".");
+                     var path = "me";
+                     for (var x = 0; x < keys.length; x++) {
+             
+                       if (x + 1 === keys.length)
+                         path = path + ".";
+                       else
+                         path = path + "_";
+                       path = path + keys[x];
+                     }*/
+                    var path = this._getRelationFromProperty(key);
+                    if (this.relations[key].doSelect)
+                        ret = ret.leftJoinAndSelect(path, "me_" + key.replaceAll(".", "_"));
+                    else
+                        ret = ret.leftJoin(path, "me_" + key.replaceAll(".", "_"));
+                }
+            }
+            return ret;
+        }
+        /**
+         * add an andWhere to the sql-Query to check the parent rights
+         * @param builder
+         */
+        async addParentRightDestriction(context, builder) {
+            var username = "a@b.com";
+            var ret = builder;
+            //first we get the sql from User-Rights we had to check 
+            var kk = context.request.user;
+            var userid = context.request.user.user;
+            var query = this.dbmanager.connection().createQueryBuilder().
+                select("me").from(Classes_16.classes.getClass("jassijs.security.ParentRight"), "me").
+                leftJoin("me.groups", "me_groups").
+                leftJoin("me_groups.users", "me_groups_users");
+            query = query.andWhere("me_groups_users.id=:theUserId", { theUserId: userid });
+            var doBr = false;
+            query = query.andWhere(new typeorm_3.Brackets((entr) => {
+                var parentrights = undefined;
+                for (var relationname in this.relations) {
+                    var relation = this.relations[relationname];
+                    if (relation.parentRights !== undefined) {
+                        for (var x = 0; x < relation.parentRights.length; x++) {
+                            doBr = true;
+                            var right = relation.parentRights[x];
+                            var param = {};
+                            param["classname" + this.counter] = relation.className;
+                            param["name" + this.counter] = right.name;
+                            entr.orWhere("me.classname=:classname" + this.counter + " and me.name=:name" + this.counter, param);
+                            this.counter++;
+                        }
+                    }
+                }
+                if (!doBr) {
+                    doBr = true;
+                    entr.orWhere("me.classname=me.classname");
+                }
+            }));
+            var debug = query.getSql();
+            var parentRights = await query.getMany();
+            for (var relationname in this.relations) {
+                var relation = this.relations[relationname];
+                if (relation.parentRights !== undefined) {
+                    ret = ret.andWhere(new typeorm_3.Brackets((qu) => {
+                        for (var p = 0; p < relation.parentRights.length; p++) {
+                            var pr = relation.parentRights[p];
+                            var found = false;
+                            for (var z = 0; z < parentRights.length; z++) {
+                                var oneRight = parentRights[z];
+                                if (oneRight.name === pr.name && oneRight.classname === relation.className) {
+                                    var sql = pr.sqlToCheck;
+                                    //modify sql that params are unique
+                                    var param = {};
+                                    for (var field in oneRight) {
+                                        if (field !== "classname" && field !== "groups" && field !== "name") {
+                                            sql = sql.replaceAll(":" + field, ":" + field + this.counter);
+                                            if (relation.fullPath !== "")
+                                                sql = sql.replaceAll("me.", "\"me_" + relation.fullPath.replaceAll(".", "_") + "\".");
+                                            param[field + this.counter] = oneRight[field];
+                                        }
+                                    }
+                                    qu.orWhere(sql, param);
+                                    found = true;
+                                    this.counter++;
+                                }
+                            }
+                            if (!found) {
+                                qu.andWhere("me.id>1 and me.id<1", param); //no right exists
+                            }
+                        }
+                    }));
+                }
+            }
+            return ret;
+        }
+        _checkExpression(context, node) {
+            if (node.operator !== undefined) {
+                this._parseNode(context, node);
+            }
+            //replace id to me.id and ar.zeile.id to me_ar_zeile.id
+            if (node.type === "Identifier" && !node.value.startsWith("xxxparams")) {
+                var name = node.value;
+                var path = this._getRelationFromProperty(name);
+                /*      var keys = name.split(".");
+                      var path = "me";
+                      for (var x = 0; x < keys.length; x++) {
+                
+                        if (x + 1 === keys.length)
+                          path = path + ".";
+                        else
+                          path = path + "_";
+                        path = path + keys[x];
+                      }*/
+                node.value = path;
+                var pack = path.split(".")[0].substring(3);
+                if (pack !== "")
+                    this.addRelations(context, [pack], false);
+            }
+            var _this = this;
+            if (node.type === "SimpleExprParentheses") {
+                node.value.value.forEach(element => {
+                    _this._parseNode(context, element);
+                });
+            }
+        }
+        _parseNode(context, node) {
+            /* if (node.operator !== undefined) {
+               var left = node.left;
+               var right = node.right;
+               this._checkExpression(context, left);
+               this._checkExpression(context, right);
+             }*/
+            var left = node.left;
+            var right = node.right;
+            if (node.left !== undefined) {
+                this._checkExpression(context, left);
+            }
+            if (node.right !== undefined) {
+                this._checkExpression(context, right);
+            }
+        }
+        addWhereBySample(context, param, builder) {
+            var ret = builder;
+            for (var key in param) {
+                if (key === "cache" || key === "join" || key === "loadEagerRelations" || key === "loadRelationids" || key == "lock" || key == "order" ||
+                    key === "relations" || key === "select" || key === "skip" || key === "take" || key === "where" || key === "withDeleted") {
+                    continue;
+                }
+                //this should prevent sql injection
+                var test = /[A-Z,a-z][A-Z,a-z,0-9,\.]*/g.exec(key);
+                if (test === null || test[0] !== key)
+                    throw new Classes_16.JassiError("could not set property " + key + " in where clause");
+                var field = this._getRelationFromProperty(key);
+                var pack = field.split(".")[0].substring(3);
+                if (pack !== "")
+                    this.addRelations(context, [pack], false);
+                var placeholder = "pp" + this.counter++;
+                var par = {};
+                par[placeholder] = param[key];
+                ret = ret.andWhere(field + "=:" + placeholder, par);
+            }
+            return ret;
+            /* var dummyselect = "select * from k where ";
+             //we must replace because parsing Exception
+             var ast = parser.parse(dummyselect + sql.replaceAll(":","xxxparams"));
+             this._parseNode(ast.value.where);
+             var newsql=parser.stringify(ast).replaceAll("xxxparams",":");
+             ret.andWhere(newsql.substring(dummyselect.length),whereParams);
+             return ret;*/
+        }
+        addWhere(context, sql, whereParams, builder) {
+            var ret = builder;
+            if (sql === undefined)
+                return ret;
+            var dummyselect = "select * from k where ";
+            //we must replace because parsing Exception
+            var fullSQL = dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams");
+            fullSQL = fullSQL.replaceAll("\" AS TEXT", " AS_TEXT\"");
+            var ast = parser.parse(fullSQL);
+            this._parseNode(context, ast.value.where);
+            var newsql = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
+            newsql = newsql.replaceAll(" AS_TEXT\"", "\" AS TEXT");
+            ret.andWhere(newsql.substring(dummyselect.length), whereParams);
+            return ret;
+        }
+        addRelations(context, relations, doselect) {
+            var _a;
+            if (relations === undefined)
+                return;
+            for (var z = 0; z < relations.length; z++) {
+                var relation = relations[z];
+                var all = relation.split(".");
+                var curPath = "";
+                var parentPath = "";
+                var curClassname = this.className;
+                for (var x = 0; x < all.length; x++) {
+                    parentPath = curPath;
+                    curPath = curPath + (curPath === "" ? "" : ".") + all[x];
+                    if (this.relations[curPath] === undefined) {
+                        var vdata = this.dbmanager.connection().getMetadata(Classes_16.classes.getClass(curClassname));
+                        //read type
+                        var membername = all[x];
+                        for (var r = 0; r < vdata.relations.length; r++) {
+                            var rel = vdata.relations[r];
+                            if (rel.propertyName === membername) {
+                                var clname = Classes_16.classes.getClassName(rel.type);
+                                var testPR = Registry_30.default.getData("$ParentRights", clname);
+                                this.relations[curPath] = {
+                                    className: Classes_16.classes.getClassName(rel.type),
+                                    name: membername,
+                                    fullPath: curPath,
+                                    parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
+                                    doSelect: doselect
+                                };
+                            }
+                        }
+                        //Parentrights
+                        membername = "";
+                        if (!((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)) {
+                            if (Registry_30.default.getMemberData("$CheckParentRight") !== undefined) {
+                                var data = Registry_30.default.getMemberData("$CheckParentRight")[curClassname];
+                                for (var key in data) {
+                                    membername = key;
+                                }
+                            }
+                        }
+                        if (membername !== "") {
+                            for (var r = 0; r < vdata.relations.length; r++) {
+                                var rel = vdata.relations[r];
+                                if (rel.propertyName === membername) {
+                                    var clname = Classes_16.classes.getClassName(rel.type);
+                                    var testPR = Registry_30.default.getData("$ParentRights", clname);
+                                    var mpath = parentPath + (parentPath === "" ? "" : ".") + membername;
+                                    this.relations[mpath] = {
+                                        className: Classes_16.classes.getClassName(rel.type),
+                                        name: membername,
+                                        fullPath: mpath,
+                                        parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
+                                        doSelect: doselect
+                                    };
+                                }
+                            }
+                        }
+                    }
+                    else if (doselect) {
+                        this.relations[curPath].doSelect = true;
+                    }
+                    curClassname = this.relations[curPath].className;
+                }
+            }
+        }
+    }
+});
+define("jassijs/server/ext/jszip", ["require", "exports", "jszip"], function (require, exports, JSZip) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <amd-dependency path="jszip" name="JSZip"/>
+    JSZip.support.nodebuffer = undefined; //we hacked window.Buffer
+    exports.default = JSZip;
+});
+define("client/jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/util/Reloader"], function (require, exports, Classes_17, Config_8, Reloader_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.transpile = exports.reloadJSAll = exports.dozip = exports.test = exports.exists = exports.myfs = exports.ts = void 0;
+    //@ts-ignore
+    Config_8.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
+        require("jassijs/server/NativeAdapter").ts = window.ts;
+    });
+    var ts = window.ts;
+    exports.ts = ts;
+    class Stats {
+    }
+    class FileEntry {
+    }
+    async function downloadFile(file) {
+        return await new Promise((resolve, reject) => {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open('GET', file.replace("./client", ""), true);
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4) {
+                    if (xmlHttp.status === 200)
+                        resolve(xmlHttp.responseText);
+                    else
+                        resolve(undefined);
+                }
+                ;
+            };
+            xmlHttp.onerror = (err) => {
+                resolve(undefined);
+            };
+            xmlHttp.send(null);
+        });
+    }
+    ;
+    class FS {
+        static async getDB() {
+            if (FS.db)
+                return FS.db;
+            var req = window.indexedDB.open("jassi", 1);
+            req.onupgradeneeded = function (event) {
+                var db = event.target["result"];
+                var objectStore = db.createObjectStore("files", { keyPath: "id" });
+            };
+            FS.db = await new Promise((resolve) => {
+                req.onsuccess = (ev) => { resolve(ev.target["result"]); };
+            });
+            var root = await FS._loadFileEntry(FS.db, ".");
+            if (root === undefined)
+                await FS._mkdir(FS.db, ".");
+            return FS.db;
+        }
+        constructor() {
+        }
+        static async _readdir(db, folder, withSubfolders = false, fullPath = false) {
+            let transaction = db.transaction('files', 'readonly');
+            const store = transaction.objectStore('files');
+            var ret = await store.openCursor(IDBKeyRange.bound(folder + "/", folder + "0", true, true)); //0 is the first char after /
+            var all = [];
+            if (!folder.endsWith("/"))
+                folder = folder + "/";
+            await new Promise((resolve) => {
+                ret.onsuccess = ev => {
+                    var el = ev.target["result"];
+                    if (el) {
+                        if (el.value.id.startsWith(folder)) {
+                            var test = el.value.id.substring(folder.length);
+                            if (test.indexOf("/") === -1 || withSubfolders === true) { //no sub folders
+                                if (fullPath)
+                                    all.push(el.value.id.substring(folder.length));
+                                else
+                                    all.push(el.value.id.substring(folder.length));
+                            }
+                        }
+                        //if (curdir === "" || el.value.id === curdir || el.value.id.startsWith(curdir + "/"))
+                        el.continue();
+                    }
+                    else
+                        resolve(undefined);
+                };
+                ret.onerror = ev => {
+                    resolve(undefined);
+                };
+            });
+            return all;
+        }
+        async readdir(folder) {
+            var db = await FS.getDB();
+            return await FS._readdir(db, folder);
+        }
+        ;
+        async readFile(file, format, fallback = true) {
+            var ret = await this.loadFileEntry(file);
+            //fallback to Server
+            if (fallback && ret === undefined) {
+                var test = await downloadFile(file);
+                if (test !== undefined || test === "Unauthorized")
+                    ret = { data: test, date: undefined, id: "" };
+            }
+            if (ret === undefined)
+                throw new Classes_17.JassiError(file + " not exists");
+            if (ret.isDirectory)
+                throw new Classes_17.JassiError("could notz read file" + file + " ...is a directory");
+            return ret.data;
+        }
+        ;
+        async stat(file) {
+            var ret = await this.loadFileEntry(file);
+            return {
+                isDirectory() { return ret.isDirectory; },
+                mtimeMs: ret.date
+            };
+        }
+        ;
+        getDirectoryname(path) {
+            return path.substring(0, path.lastIndexOf("/"));
+        }
+        static async _mkdir(db, filename) {
+            let transaction = db.transaction('files', 'readwrite');
+            const store = transaction.objectStore('files');
+            var el = {
+                data: undefined,
+                id: filename,
+                isDirectory: true,
+                date: Date.now()
+            };
+            store.add(el);
+            transaction.onerror = (en) => {
+                debugger;
+            };
+            await new Promise((resolve) => { transaction.oncomplete = resolve; });
+        }
+        async mkdir(filename, options) {
+            var test = await this.loadFileEntry(filename);
+            if (test)
+                throw new Classes_17.JassiError(filename + " allready exists");
+            var parent = this.getDirectoryname(filename);
+            if (parent === "")
+                return;
+            if ((options === null || options === void 0 ? void 0 : options.recursive) && (!await exists(parent)))
+                await this.mkdir(parent, options);
+            if (!await exists(parent))
+                throw new Classes_17.JassiError("parentfolder not exists: " + parent);
+            var db = await FS.getDB();
+            await FS._mkdir(db, filename);
+        }
+        ;
+        async loadFileEntry(fileName) {
+            var db = await FS.getDB();
+            return await FS._loadFileEntry(db, fileName);
+        }
+        static async _loadFileEntry(db, fileName) {
+            let transaction = db.transaction('files', 'readonly');
+            const store = transaction.objectStore('files');
+            var ret = await store.get(fileName);
+            var r = await new Promise((resolve) => {
+                ret.onsuccess = ev => { resolve(ret.result); };
+                ret.onerror = ev => { resolve(undefined); };
+            });
+            return r;
+        }
+        async writeFile(file, data) {
+            var db = await FS.getDB();
+            let exists = await this.loadFileEntry(file);
+            let transaction = db.transaction('files', 'readwrite');
+            const store = transaction.objectStore('files');
+            var el = new FileEntry();
+            el.id = file;
+            el.data = data;
+            el.isDirectory = false;
+            el.date = Date.now();
+            if (exists)
+                store.put(el);
+            else
+                store.add(el);
+            await new Promise((resolve) => { transaction.oncomplete = resolve; });
+        }
+        ;
+        async rename(oldPath, newPath) {
+            var db = await FS.getDB();
+            var entr = await this.loadFileEntry(oldPath);
+            if (entr === undefined)
+                throw new Classes_17.JassiError("Error rename src not exists " + oldPath);
+            var dest = await this.loadFileEntry(newPath);
+            if (dest !== undefined)
+                throw new Classes_17.JassiError("Error rename dest already exists " + newPath);
+            if (entr.isDirectory === false) {
+                await this.unlink(entr.id);
+                await this.writeFile(newPath, entr.data);
+            }
+            else {
+                var all = await FS._readdir(db, oldPath, true, true);
+                all.push(oldPath);
+                all = all.sort((a, b) => a.localeCompare(b));
+                for (var x = 0; x < all.length; x++) {
+                    var fe = await this.loadFileEntry(all[x]);
+                    var newname = all[x].replace(oldPath, newPath);
+                    if (fe.isDirectory)
+                        await this.mkdir(newname);
+                    else
+                        await this.writeFile(newname, fe.data);
+                    await FS._removeEntry(db, fe);
+                }
+            }
+        }
+        static async _removeEntry(db, entr) {
+            let transaction = db.transaction('files', 'readwrite');
+            const store = transaction.objectStore('files');
+            store.delete(entr.id);
+            await new Promise((resolve) => { transaction.oncomplete = resolve; });
+        }
+        async unlink(file) {
+            var db = await FS.getDB();
+            var entr = await this.loadFileEntry(file);
+            if (entr === undefined)
+                throw new Classes_17.JassiError("could not delete " + file + " - file not exists");
+            if (entr.isDirectory)
+                throw new Classes_17.JassiError("could not delete directory " + file + " - use rmdir ");
+            return await FS._removeEntry(db, entr);
+        }
+        async rmdir(dirName, options) {
+            var db = await FS.getDB();
+            var entr = await this.loadFileEntry(dirName);
+            if (entr === undefined)
+                throw new Classes_17.JassiError("could not delete " + file + " - directory not exists");
+            if (!entr.isDirectory)
+                throw new Classes_17.JassiError("could not delete file " + file + " - use unlink");
+            var files = await FS._readdir(FS.db, dirName, true, true);
+            if (options === null || options === void 0 ? void 0 : options.recursive) {
+            }
+            else {
+                if (files.length > 0)
+                    throw new Classes_17.JassiError("could not delete " + dirName + " directory is not empty");
+            }
+            for (var x = 0; x < files.length; x++) {
+                var file = files[x];
+                var entr = await this.loadFileEntry(file);
+                await FS._removeEntry(db, entr);
+            }
+            /*var db = await FS.getDB();
+            var entr = await this.loadFileEntry(file);
+            if (entr === undefined)
+                throw new JassiError("could not delete " + file + " - file not exists");
+            let transaction = db.transaction('files', 'readwrite');
+            const store = transaction.objectStore('files');
+            store.delete(entr.id);
+            await new Promise((resolve) => { transaction.oncomplete = resolve })*/
+        }
+        async exists(filename) {
+            var db = await FS.getDB();
+            let exists = await new FS().loadFileEntry(filename);
+            return exists !== undefined;
+        }
+    }
+    var myfs = new FS();
+    exports.myfs = myfs;
+    async function exists(filename) {
+        return new FS()["exists"](filename);
+    }
+    exports.exists = exists;
+    async function test(tt) {
+        var fs = new FS();
+        var testfolder = "./dasisteinfestfolder";
+        var testfile = "./dasisteintestfile.js";
+        await fs.writeFile(testfile, "var a=10;");
+        tt.expectEqual(!(await fs.stat(testfile)).isDirectory());
+        tt.expectEqual(await exists(testfile));
+        tt.expectEqual((await fs.readFile(testfile)) === "var a=10;");
+        var hh = await fs.readdir(".");
+        tt.expectEqual(hh.length > 0);
+        await fs.rename(testfile, testfile + ".txt");
+        tt.expectEqual(await exists(testfile + ".txt"));
+        await fs.rename(testfile + ".txt", testfile);
+        await fs.unlink(testfile);
+        tt.expectEqual(!await exists(testfile));
+        tt.expectErrorAsync(async () => await fs.unlink("./hallo.js"));
+        if (await exists(testfolder))
+            await fs.rmdir(testfolder, { recursive: true });
+        await fs.mkdir(testfolder + "/hh", { recursive: true });
+        await fs.writeFile(testfolder + "/hh/h.txt", "Hallo");
+        await fs.rename(testfolder, testfolder + "1");
+        tt.expectEqual(await exists(testfolder + "1"));
+        tt.expectEqual(!await exists(testfolder));
+        await fs.rename(testfolder + "1", testfolder);
+        tt.expectEqual(!await exists(testfolder + "1"));
+        tt.expectEqual(await exists(testfolder));
+        //tt.expectErrorAsync(async () => await fs.rmdir(testfolder));
+        //await fs.rmdir(testfolder, { recursive: true })
+        debugger;
+    }
+    exports.test = test;
+    async function dozip(directoryname, serverdir = undefined) {
+        //@ts-ignore
+        var JSZip = (await new Promise((resolve_23, reject_23) => { require(["jassijs/server/ext/jszip"], resolve_23, reject_23); })).default;
+        if (serverdir)
+            throw new Error("serverdir is unsupported on localserver");
+        var zip = new JSZip();
+        var files = await this.dirEntry(directoryname);
+        for (let x = 0; x < files.length; x++) {
+            if (files[x].isDirectory)
+                zip.folder(files[x].id);
+            else
+                zip.file(files[x].id, files[x].data);
+        }
+        var ret = await zip.generateAsync({ type: "base64" });
+        //var ret = await zip.generateAsync({ type: "base64" });
+        return ret;
+    }
+    exports.dozip = dozip;
+    async function reloadJSAll(filenames, afterUnload) {
+        return Reloader_2.Reloader.instance.reloadJSAll(filenames, afterUnload);
+    }
+    exports.reloadJSAll = reloadJSAll;
+    async function transpile(fileName, inServerdirectory = undefined) {
+        var tp = await new Promise((resolve) => {
+            Config_8.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
+                resolve(ts1);
+            });
+        });
+        var content = await myfs.readFile(fileName);
+        var data = await tp.Typescript.instance.transpile(fileName, content);
+        for (var x = 0; x < data.fileNames.length; x++) {
+            var fname = "./" + data.fileNames[x];
+            if (!await exists(myfs.getDirectoryname(fname)))
+                await myfs.mkdir(myfs.getDirectoryname(fname), { recursive: true });
+            await myfs.writeFile(fname, data.contents[x]);
+        }
+    }
+    exports.transpile = transpile;
+});
+define("client/jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "client/jassijs/server/NativeAdapter"], function (require, exports, Registry_32, typeorm_4, NativeAdapter_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TypeORMListener = void 0;
+    //listener for code changes
+    /*Reloader.instance.addEventCodeReloaded(async function (files: string[]) {
+        var dbobjects = await registry.getJSONData("$DBObject");
+        var reload = false;
+        for (var x = 0; x < files.length; x++) {
+            var file = files[x];
+            dbobjects.forEach((data) => {
+                if (data.filename === file+".ts")
+                    reload = true;
+            });
+        }
+        if(reload){
+            (await serverservices.db).renewConnection();
+        }
+    });*/
+    let TypeORMListener = class TypeORMListener {
+        saveDB(event) {
+            if (this.savetimer) {
+                clearTimeout(this.savetimer);
+                this.savetimer = undefined;
+            }
+            this.savetimer = setTimeout(() => {
+                var data = event.connection.driver.export();
+                NativeAdapter_4.myfs.writeFile("./client/__default.db", data);
+                console.log("save DB");
+            }, 300);
+        }
+        /**
+         * Called after entity is loaded.
+         */
+        afterLoad(entity) {
+            // console.log(`AFTER ENTITY LOADED: `, entity);
+        }
+        /**
+         * Called before post insertion.
+         */
+        beforeInsert(event) {
+            //console.log(`BEFORE POST INSERTED: `, event.entity);
+        }
+        /**
+         * Called after entity insertion.
+         */
+        afterInsert(event) {
+            this.saveDB(event);
+            //console.log(`AFTER ENTITY INSERTED: `, event.entity);
+        }
+        /**
+         * Called before entity update.
+         */
+        beforeUpdate(event) {
+            //console.log(`BEFORE ENTITY UPDATED: `, event.entity);
+        }
+        /**
+         * Called after entity update.
+         */
+        afterUpdate(event) {
+            this.saveDB(event);
+            //console.log(`AFTER ENTITY UPDATED: `, event.entity);
+        }
+        /**
+         * Called before entity removal.
+         */
+        beforeRemove(event) {
+            // console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+        }
+        /**
+         * Called after entity removal.
+         */
+        afterRemove(event) {
+            //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+            this.saveDB(event);
+        }
+        /**
+         * Called before transaction start.
+         */
+        beforeTransactionStart(event) {
+            // console.log(`BEFORE TRANSACTION STARTED: `, event);
+        }
+        /**
+         * Called after transaction start.
+         */
+        afterTransactionStart(event /*: TransactionStartEvent*/) {
+            //console.log(`AFTER TRANSACTION STARTED: `, event);
+        }
+        /**
+         * Called before transaction commit.
+         */
+        beforeTransactionCommit(event /*: TransactionCommitEvent*/) {
+            // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
+        }
+        /**
+         * Called after transaction commit.
+         */
+        afterTransactionCommit(event /*: TransactionCommitEvent*/) {
+            //console.log(`AFTER TRANSACTION COMMITTED: `, event);
+        }
+        /**
+         * Called before transaction rollback.
+         */
+        beforeTransactionRollback(event /*: TransactionRollbackEvent*/) {
+            //   console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
+        }
+        /**
+         * Called after transaction rollback.
+         */
+        afterTransactionRollback(event /*: TransactionRollbackEvent*/) {
+            // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
+        }
+    };
+    TypeORMListener = __decorate([
+        (0, typeorm_4.EventSubscriber)(),
+        (0, Registry_32.$Class)("jassijs.server.TypeORMListener")
+    ], TypeORMListener);
+    exports.TypeORMListener = TypeORMListener;
+});
+define("client/jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "client/jassijs/server/DBManager", "client/jassijs/server/TypeORMListener", "typeorm", "client/jassijs/server/NativeAdapter"], function (require, exports, Classes_18, Database_2, Registry_33, DBManager_3, TypeORMListener_1, typeorm_5, NativeAdapter_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.extendDBManager = void 0;
+    function extendDBManager() {
+        //create Admin User if doesn't a user exists 
+        DBManager_3.DBManager.prototype["hasLoaded"] = async function () {
+            var User = await Classes_18.classes.loadClass("jassijs.security.User");
+            //@ts-ignore
+            var us = User.findOne();
+            if (us) {
+                us = new User();
+                us.email = "admin";
+                us.password = "jassi";
+                us.isAdmin = true;
+                await us.save();
+            }
+        };
+        DBManager_3.DBManager.prototype["login"] = async function (context, user, password) {
+            try {
+                var User = await Classes_18.classes.loadClass("jassijs.security.User");
+                var ret = await this.connection().manager.createQueryBuilder().
+                    select("me").from(User, "me").addSelect("me.password").
+                    andWhere("me.email=:email", { email: user });
+                var auser = await ret.getOne();
+                if (!auser || !password)
+                    return undefined;
+                if (auser.password === password) {
+                    delete auser.password;
+                    return auser;
+                }
+            }
+            catch (err) {
+                err = err;
+            }
+            return undefined;
+        };
+        //@ts-ignore
+        DBManager_3.DBManager["getConOpts"] = async function () {
+            var dbclasses = [];
+            const initSqlJs = window["SQL"];
+            const SQL = await window["SQL"]({
+                // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+                // You can omit locateFile completely when running in node
+                locateFile: file => `https://sql.js.org/dist/${file}`
+            });
+            var dbobjects = await Registry_33.default.getJSONData("$DBObject");
+            var dbfiles = [];
+            for (var o = 0; o < dbobjects.length; o++) {
+                var clname = dbobjects[o].classname;
+                try {
+                    dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
+                    dbclasses.push(await Classes_18.classes.loadClass(clname));
+                }
+                catch (err) {
+                    console.log(err);
+                    throw err;
+                }
+            }
+            //@ts-ignore
+            DBManager_3.DBManager.clearMetadata();
+            Database_2.db.fillDecorators();
+            var tcl = await Classes_18.classes.loadClass("jassijs.server.TypeORMListener");
+            //@ts-ignore 
+            new typeorm_5.EventSubscriber()(tcl);
+            var Filesystem = await Classes_18.classes.loadClass("jassijs.server.Filesystem");
+            var data = undefined;
+            if (await (0, NativeAdapter_5.exists)("./client/__default.db"))
+                data = await NativeAdapter_5.myfs.readFile("./client/__default.db", undefined, false);
+            var opt = {
+                database: data,
+                type: "sqljs",
+                subscribers: [TypeORMListener_1.TypeORMListener],
+                "entities": dbclasses
+            };
+            return opt;
+        };
+    }
+    exports.extendDBManager = extendDBManager;
+});
+define("client/jassijs/server/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_19, Database_3, typeorm_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
+    function addDecorater(decoratername, delegate, ...args) {
+        return function (...fargs) {
+            var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
+            var clname = Classes_19.classes.getClassName(con);
+            var field = fargs.length == 1 ? "this" : fargs[1];
+            Database_3.db._setMetadata(con, field, decoratername, args, fargs, delegate);
+            if (delegate)
+                delegate(...args)(...fargs);
+        };
+    }
+    function Entity(...param) {
+        //DEntity(param)(pclass, ...params);
+        return addDecorater("Entity", typeorm_6.Entity, ...param);
+    }
+    exports.Entity = Entity;
+    function PrimaryGeneratedColumn(...param) {
+        return addDecorater("PrimaryGeneratedColumn", typeorm_6.PrimaryGeneratedColumn, ...param);
+    }
+    exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
+    function JoinColumn(...param) {
+        return addDecorater("JoinColumn", typeorm_6.JoinColumn, ...param);
+    }
+    exports.JoinColumn = JoinColumn;
+    function JoinTable(...param) {
+        return addDecorater("JoinTable", typeorm_6.JoinTable, ...param);
+    }
+    exports.JoinTable = JoinTable;
+    function Column(...param) {
+        return addDecorater("Column", typeorm_6.Column, ...param);
+    }
+    exports.Column = Column;
+    function PrimaryColumn(...param) {
+        return addDecorater("PrimaryColumn", typeorm_6.PrimaryColumn, ...param);
+    }
+    exports.PrimaryColumn = PrimaryColumn;
+    function OneToOne(...param) {
+        return addDecorater("OneToOne", typeorm_6.OneToOne, ...param);
+    }
+    exports.OneToOne = OneToOne;
+    function OneToMany(...param) {
+        return addDecorater("OneToMany", typeorm_6.OneToMany, ...param);
+    }
+    exports.OneToMany = OneToMany;
+    function ManyToOne(...param) {
+        return addDecorater("ManyToOne", typeorm_6.ManyToOne, ...param);
+    }
+    exports.ManyToOne = ManyToOne;
+    function ManyToMany(...param) {
+        return addDecorater("ManyToMany", typeorm_6.ManyToMany, ...param);
+    }
+    exports.ManyToMany = ManyToMany;
+});
+//export function Entity(options?: EntityOptions): Function;
+//export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
+define("client/jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice"], function (require, exports, Registry_34, Classes_20, Serverservice_13) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports._execute = exports.remoteProtocol = void 0;
+    function remoteProtocol(request, response) {
+        execute(request, response);
+    }
+    exports.remoteProtocol = remoteProtocol;
+    async function checkSimulateUser(context, request) {
+        var rights = (await new Promise((resolve_24, reject_24) => { require(["jassijs/remote/security/Rights"], resolve_24, reject_24); })).default;
+        var test = request.cookies["simulateUser"];
+        if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
+            var db = await Serverservice_13.serverservices.db;
+            var user = await db.login(context, context.request.cookies["simulateUser"], context.request.cookies["simulateUserPassword"]);
+            if (!user) {
+                console.log("simulateUser not found");
+                return;
+            }
+            request.user.user = user.id;
+            request.user.isAdmin = (user.isAdmin === null ? false : user.isAdmin);
+            if (!user)
+                throw new Classes_20.JassiError("simulateUser not logged in");
+        }
+    }
+    async function execute(request, res) {
+        var RemoteProtocol = (await new Promise((resolve_25, reject_25) => { require(["jassijs/remote/RemoteProtocol"], resolve_25, reject_25); })).RemoteProtocol;
+        var context = {
+            isServer: true,
+            request: request
+        };
+        var val = await _execute(request.rawBody, request, context);
+        var s = new RemoteProtocol().stringify(val);
+        if (s === undefined)
+            s = "$$undefined$$";
+        res.send(s);
+    }
+    async function _execute(protext, request, context) {
+        // await new Promise((resolve)=>{docls(request,response,resolve)});
+        var RemoteProtocol = (await new Promise((resolve_26, reject_26) => { require(["jassijs/remote/RemoteProtocol"], resolve_26, reject_26); })).RemoteProtocol;
+        var prot = new RemoteProtocol();
+        var vdata = await prot.parse(protext);
+        Object.assign(prot, vdata);
+        var files = Registry_34.default.getAllFilesForService("$Class", prot.classname);
+        if (files === undefined || files.length === 0) {
+            throw new Classes_20.JassiError("file for " + prot.classname + " not found");
+        }
+        var file = files[0];
+        var path = file.split("/");
+        if (path.length < 2 || path[1] !== "remote")
+            throw new Classes_20.JassiError("only remote packages can be loadeded");
+        file = file.replace(".ts", "");
+        //var ret = await import(file);
+        var C = await Classes_20.classes.loadClass(prot.classname);
+        ///await Promise.resolve().then(() => require.main.require(file));
+        //var C = classes.getClass(prot.classname);
+        if (prot._this === "static") {
+            try {
+                await checkSimulateUser(context, request);
+                if (prot.parameter === undefined)
+                    ret = await (C[prot.method](context));
+                else
+                    ret = await (C[prot.method](...prot.parameter, context));
+            }
+            catch (ex) {
+                console.error(ex.stack);
+                var msg = ex.message;
+                if (!msg)
+                    msg = ex;
+                if (!ex)
+                    ex = "";
+                ret = {
+                    "**throw error**": msg
+                };
+            }
+            return ret;
+        }
+        else {
+            var obj = new C();
+            if (prot._this !== undefined)
+                Object.assign(obj, prot._this);
+            var ret = undefined;
+            try {
+                await checkSimulateUser(context, request);
+                if (prot.parameter === undefined)
+                    ret = await (obj[prot.method](context));
+                else
+                    ret = await (obj[prot.method](...prot.parameter, context));
+            }
+            catch (ex) {
+                if (!(ex instanceof Classes_20.JassiError)) {
+                    console.error(ex.stack);
+                }
+                var msg = ex.message;
+                if (!msg)
+                    msg = ex;
+                if (!ex)
+                    ex = "";
+                ret = {
+                    "**throw error**": msg
+                };
+            }
+            return ret;
+        }
+    }
+    exports._execute = _execute;
+});
+define("client/jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/Indexer", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "jassijs/remote/Config"], function (require, exports, Indexer_2, Serverservice_14, NativeAdapter_6, Config_9) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ServerIndexer = void 0;
+    class ServerIndexer extends Indexer_2.Indexer {
+        async updateRegistry() {
+            //client modules
+            var path = (await Serverservice_14.serverservices.filesystem).path;
+            var modules = Config_9.config.modules;
+            for (var m in modules) {
+                if ((await (0, NativeAdapter_6.exists)(path + "/" + modules[m]) && !modules[m].endsWith(".js") && modules[m].indexOf(".js?")) === -1) //.js are internet modules
+                    await this.updateModul(path, m, false);
+            }
+            //server modules
+            modules = Config_9.config.server.modules;
+            for (var m in modules) {
+                if (await (0, NativeAdapter_6.exists)("./" + modules[m]) && !modules[m].endsWith(".js")) //.js are internet modules
+                    await this.updateModul(".", m, true);
+            }
+            return;
+        }
+        async dirFiles(modul, path, extensions, ignore = []) {
+            var jsFiles = await (await Serverservice_14.serverservices.filesystem).dirFiles(path, extensions, ignore);
+            return jsFiles;
+        }
+        async writeFile(name, content) {
+            if (!name.startsWith("./"))
+                name = "./" + name;
+            await NativeAdapter_6.myfs.writeFile(name, content);
+        }
+        async createDirectory(name) {
+            if (!name.startsWith("./"))
+                name = "./" + name;
+            await NativeAdapter_6.myfs.mkdir(name, { recursive: true });
+            return;
+        }
+        async getFileTime(filename) {
+            if (!filename.startsWith("./"))
+                filename = "./" + filename;
+            var stats = await NativeAdapter_6.myfs.stat(filename);
+            return stats.mtimeMs;
+        }
+        async fileExists(filename) {
+            if (!filename.startsWith("./"))
+                filename = "./" + filename;
+            return await (0, NativeAdapter_6.exists)(filename);
+        }
+        async readFile(filename) {
+            if (!filename.startsWith("./"))
+                filename = "./" + filename;
+            return NativeAdapter_6.myfs.readFile(filename, 'utf-8');
+        }
+    }
+    exports.ServerIndexer = ServerIndexer;
+});
+//@ts-ignore
+define("client/jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Classes_21, Registry_35) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.$Serverservice = exports.beforeServiceLoad = exports.ServerserviceProperties = void 0;
+    class ServerserviceProperties {
+    }
+    exports.ServerserviceProperties = ServerserviceProperties;
+    var runningServerservices = {};
+    exports.runningServerservices = runningServerservices;
+    var beforeServiceLoadHandler = [];
+    function beforeServiceLoad(func) {
+        beforeServiceLoadHandler.push(func);
+    }
+    exports.beforeServiceLoad = beforeServiceLoad;
+    var serverservices = new Proxy(runningServerservices, {
+        get(target, prop, receiver) {
+            return new Promise(async (resolve, reject) => {
+                var khsdf = runningServerservices;
+                if (target[prop]) {
+                    resolve(target[prop]);
+                }
+                else {
+                    var all = await Registry_35.default.getJSONData("$Serverservice");
+                    for (var x = 0; x < all.length; x++) {
+                        var serv = all[x];
+                        var name = serv.params[0].name;
+                        if (name === prop) {
+                            var classname = serv.classname;
+                            var cl = await Registry_35.default.getJSONData("$Class", classname);
+                            //@ts-ignore
+                            if (require.main) { //nodes load project class from module
+                                /*for (var jfile in require.cache) {
+                                    if(jfile.replaceAll("\\","/").endsWith(serv.filename.substring(0,serv.filename.length-2)+"js")){
+                                        delete require.cache[jfile];
+                                    }
+                                }*/
+                                //@ts-ignore
+                                await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
+                            }
+                            else {
+                                await Classes_21.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
+                            }
+                            var props = Registry_35.default.getData("$Serverservice", classname)[0].params[0];
+                            for (var x = 0; x < beforeServiceLoadHandler.length; x++) {
+                                await beforeServiceLoadHandler[x](prop, props);
+                            }
+                            var instance = props.getInstance();
+                            target[prop] = instance;
+                            resolve(instance);
+                            return;
+                        }
+                    }
+                }
+                reject("serverservice not found:" + prop);
+            });
+        }
+    });
+    exports.serverservices = serverservices;
+    function $Serverservice(properties) {
+        return function (pclass) {
+            Registry_35.default.register("$Serverservice", pclass, properties);
+        };
+    }
+    exports.$Serverservice = $Serverservice;
+    var doNotReloadModule = true;
+    exports.doNotReloadModule = doNotReloadModule;
+});
+define("client/jassijs/server/Filesystem", ["require", "exports", "client/jassijs/server/RegistryIndexer", "jassijs/remote/Registry", "client/jassijs/remote/Serverservice", "client/jassijs/server/NativeAdapter", "jassijs/remote/Config"], function (require, exports, RegistryIndexer_3, Registry_36, Serverservice_15, NativeAdapter_7, Config_10) {
+    "use strict";
+    var Filesystem_6;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
+    let Filesystem = Filesystem_6 = class Filesystem {
+        constructor() {
+            this.path = "./client";
+        }
+        _pathForFile(fileName, fromServerdirectory = undefined) {
+            if (fileName.startsWith("/"))
+                fileName = fileName.substring(1);
+            var path = this.path + "/" + fileName;
+            if (fromServerdirectory)
+                path = "./" + fileName.replace("$serverside/", "");
+            return path;
+        }
+        /*   _getDirectory(file:string,main:FileNode[]):FileNode[]{
+               var paths:string[]=file.split("/");
+               var parent=main;
+               for(let p=0;p<paths.length-1;p++){
+                   for(let x=0;x<parent.length;x++){
+                       if(parent[x].name===paths[p]){
+                           parent=parent[x].files;
+                           continue;
+                       }
+                   }
+               }
+               return parent;
+           }*/
+        async dir(curdir = "", appendDate = false, parentPath = this.path, parent = undefined) {
+            try {
+                var _this = this;
+                var modules = Config_10.config.server.modules;
+                if (parent === undefined) {
+                    parent = { name: "", files: [] };
+                }
+                //var parent:FileNode[]=_this._getDirectory(file,results);
+                var list = await NativeAdapter_7.myfs.readdir(parentPath + (curdir === "" ? "" : ("/" + curdir)));
+                for (var xx = 0; xx < list.length; xx++) {
+                    var filename = list[xx];
+                    var file = curdir + (curdir === "" ? "" : '/') + filename;
+                    if (file !== "js" && file !== "tmp") { //compiled js
+                        var stat = await NativeAdapter_7.myfs.stat(parentPath + "/" + file);
+                        if (stat && stat.isDirectory()) {
+                            var newDir = { name: filename, files: [] };
+                            parent.files.push(newDir);
+                            /* Recurse into a subdirectory */
+                            if (ignore.indexOf(file) === -1)
+                                await _this.dir(file, appendDate, parentPath, newDir);
+                        }
+                        else {
+                            let dat = "";
+                            let toAdd = { name: filename };
+                            if (appendDate === true)
+                                toAdd.date = (await NativeAdapter_7.myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
+                            // if (file.toLowerCase().endsWith(".ts"))
+                            parent.files.push(toAdd);
+                            /* if (file.toLowerCase().endsWith(".js")) {
+                                 if (!await exists(file.replace(".js", ".ts"))) {
+                                     parent.files.push(toAdd);
+                                 }
+                             }
+                             if (file.toLowerCase().endsWith(".json"))
+                                 parent.files.push(toAdd);*/
+                        }
+                    }
+                }
+                ;
+                //add files in node modules
+                if (parent.name === "" && parentPath === "./client") {
+                    for (var key in modules) {
+                        if (await (0, NativeAdapter_7.exists)("./node_modules/" + key + "/client")) {
+                            var addFiles = await this.dir("client", appendDate, "./node_modules/" + key);
+                            var temp = {};
+                            for (var x = 0; x < parent.files.length; x++) {
+                                var entr = parent.files[x];
+                                temp[entr.name] = entr;
+                            }
+                            for (var x = 0; x < addFiles.files.length; x++) {
+                                if (temp[addFiles.files[x].name] === undefined) {
+                                    parent.files.push(addFiles.files[x]);
+                                    //addFiles.files[x].isNode_module=true;
+                                }
+                            }
+                        }
+                    }
+                }
+                return parent;
+            }
+            catch (err) {
+                throw err;
+            }
+        }
+        async loadFile(fileName) {
+            var fromServerdirectory = fileName.startsWith("$serverside/");
+            let file = this._pathForFile(fileName, fromServerdirectory);
+            return await NativeAdapter_7.myfs.readFile(file, 'utf-8');
+        }
+        async loadFiles(fileNames) {
+            var ret = {};
+            for (var x = 0; x < fileNames.length; x++) {
+                ret[fileNames[x]] = await NativeAdapter_7.myfs.readFile(this._pathForFile(fileNames[x]), 'utf-8');
+                /* await myfs.readFile(path+"/"+fileName, {encoding: 'utf-8'}, function(err,data){
+                    if (!err) {
+                        response.send( data);
+                  //    response.writeHead(200, {'Content-Type': 'text/html'});
+                    //  response.write(data);
+                    }else{
+                      return response.send(err);
+                    }
+                  });*/
+            }
+            return ret;
+            //  return ret;
+        }
+        async dirFiles(dir, extensions, ignore = []) {
+            var results = [];
+            if (!await (0, NativeAdapter_7.exists)(dir))
+                return results;
+            var list = await NativeAdapter_7.myfs.readdir(dir);
+            var _this = this;
+            for (let l = 0; l < list.length; l++) {
+                let file = list[l];
+                if (ignore.indexOf(file) !== -1)
+                    continue;
+                file = dir + '/' + file;
+                var stat = await NativeAdapter_7.myfs.stat(file);
+                if (stat && stat.isDirectory()) {
+                    /* Recurse into a subdirectory */
+                    var arr = await _this.dirFiles(file, extensions);
+                    results = results.concat(arr);
+                }
+                else {
+                    /* Is a file */
+                    for (var x = 0; x < extensions.length; x++) {
+                        if (file.toLowerCase().endsWith(extensions[x]) && results.indexOf(file) === -1) {
+                            results.push(file);
+                        }
+                    }
+                }
+            }
+            ;
+            return results;
+        }
+        async zip(directoryname, serverdir = undefined) {
+            return await (0, NativeAdapter_7.dozip)(directoryname, serverdir);
+        }
+        //Reset ORM config
+        /**
+         * create a folder
+         * @param foldername - the name of the new file
+         */
+        async createFolder(foldername) {
+            var newpath = this._pathForFile(foldername);
+            if (await (0, NativeAdapter_7.exists)(newpath))
+                return foldername + " allready await exists";
+            try {
+                await NativeAdapter_7.myfs.mkdir(newpath, { recursive: true });
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            return "";
+        }
+        /**
+         * create a module
+         * @param modulname - the name of the module
+      
+         */
+        async createModule(modulename) {
+            var newpath = this._pathForFile(modulename);
+            try {
+                //create folder
+                if (!await (0, NativeAdapter_7.exists)(newpath))
+                    await NativeAdapter_7.myfs.mkdir(newpath, { recursive: true });
+                //create remotefolder
+                //if (!await exists(newpath + "/remote"))
+                //    await myfs.mkdir(newpath + "/remote", { recursive: true });
+                if (!await (0, NativeAdapter_7.exists)(newpath + "/modul.ts")) {
+                    await this.saveFiles([modulename + "/modul.js", "js/" + modulename + "/modul.js"], [
+                        "export default {}",
+                        'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'
+                    ]);
+                }
+                if (!await (0, NativeAdapter_7.exists)(newpath + "/registry.js")) {
+                    await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], [
+                        'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
+                        'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
+                    ]);
+                }
+                /* if (!await exists("./" + modulename))
+                     await myfs.mkdir("./" + modulename, { recursive: true });
+                 if (!await exists("./js/" + modulename))
+                     await myfs.mkdir("./js/" + modulename, { recursive: true });
+                 if (!await exists("./" + modulename + "/remote"))
+                     await myfs.mkdir("./" + modulename + "/remote", { recursive: true });
+                 if (!await exists("./" + modulename + "/registry.js")) {
+                     await myfs.writeFile("./" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+                     await myfs.writeFile("./js/" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+     
+                 }*/
+                //update client jassijs.json
+                if (!Config_10.config.modules[modulename])
+                    Config_10.config.jsonData.modules[modulename] = modulename;
+                await Config_10.config.saveJSON();
+                //this.createRemoteModulIfNeeded(modulename);
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            return "";
+        }
+        /**
+         * create a file
+         * @param filename - the name of the new file
+         * @param content - then content
+         */
+        async createFile(filename, content) {
+            var newpath = this._pathForFile(filename);
+            var parent = this.getDirectoryname(newpath);
+            if (await (0, NativeAdapter_7.exists)(newpath))
+                return filename + " allready await exists";
+            try {
+                if (!await (0, NativeAdapter_7.exists)(parent))
+                    await NativeAdapter_7.myfs.mkdir(parent, { recursive: true });
+                await NativeAdapter_7.myfs.writeFile(newpath, content);
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            return "";
+        }
+        /**
+         * renames a file or directory
+         * @param oldfile - old filename
+         * @param newfile - new filename
+         */
+        async rename(oldfile, newfile) {
+            var oldpath = this._pathForFile(oldfile);
+            var newpath = this._pathForFile(newfile);
+            if (!await (0, NativeAdapter_7.exists)(oldpath))
+                return oldfile + " not await exists";
+            if (await (0, NativeAdapter_7.exists)(newpath))
+                return newfile + " already await exists";
+            try {
+                /*  if(fs.lstatSync(oldpath).isDirectory()
+                     await myfs.rmdir((oldpath, newpath);
+                  else*/
+                await NativeAdapter_7.myfs.rename(oldpath, newpath);
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            await new RegistryIndexer_3.ServerIndexer().updateRegistry();
+            return "";
+        }
+        /**
+        * deletes a server module
+        * @param modul - to delete
+        */
+        async removeServerModul(modul) {
+            delete Config_10.config.jsonData.server.modules[modul];
+            await Config_10.config.saveJSON();
+            if (await (0, NativeAdapter_7.exists)(modul)) {
+                await NativeAdapter_7.myfs.rmdir(modul, { recursive: true });
+            }
+            return "";
+        }
+        /**
+        * deletes a file or directory
+        * @param file - old filename
+        */
+        async remove(file) {
+            var path = this._pathForFile(file);
+            if (!await (0, NativeAdapter_7.exists)(path))
+                return file + " not await exists";
+            try {
+                if ((await NativeAdapter_7.myfs.stat(path)).isDirectory()) {
+                    //update client jassijs.json if removing client module 
+                    if (Config_10.config.modules[file]) {
+                        delete Config_10.config.jsonData.modules[file];
+                        await Config_10.config.saveJSON();
+                    }
+                    await NativeAdapter_7.myfs.rmdir(path, { recursive: true });
+                }
+                else
+                    await NativeAdapter_7.myfs.unlink(path);
+            }
+            catch (ex) {
+                return ex.message;
+            }
+            await new RegistryIndexer_3.ServerIndexer().updateRegistry();
+            return "";
+        }
+        /**
+         * create modul in ./jassijs.json
+         * @param modul
+         */
+        async createRemoteModulIfNeeded(modul) {
+            if (!Config_10.config.jsonData.server.modules[modul]) {
+                Config_10.config.jsonData.server.modules[modul] = modul;
+                await Config_10.config.saveJSON();
+            }
+        }
+        getDirectoryname(ppath) {
+            var path = ppath.replaceAll("\\", "/");
+            return path.substring(0, path.lastIndexOf("/"));
+        }
+        /**
+         * save files +
+         * transpile remote files and
+         * reload the remote files in server if needed
+         * update db schema
+         * the changes would be reverted if there are errors
+         * @param fileNames
+         * @param contents
+         * @returns "" or the error
+         */
+        async saveFiles(fileNames, contents, rollbackonerror = true) {
+            var ret = "";
+            var rollbackcontents = [];
+            var modules = Config_10.config.server.modules;
+            var remoteFiles = [];
+            for (var x = 0; x < fileNames.length; x++) {
+                let fileName = fileNames[x];
+                var fromServerdirectory = fileName.startsWith("$serverside/");
+                var path = this.getDirectoryname(this._pathForFile(fileName, fromServerdirectory)); // require('path').dirname(this._pathForFile(fileName,fromServerdirectory));
+                //check if file is node_module
+                for (var key in modules) {
+                    if (((path + "/").startsWith("./client/" + key + "/")) && await (0, NativeAdapter_7.exists)("./node_modules/" + key)) {
+                        return "packages in node_modules could not be saved";
+                    }
+                }
+                try {
+                    await NativeAdapter_7.myfs.mkdir(path, { recursive: true });
+                }
+                catch (err) {
+                }
+                if (await (0, NativeAdapter_7.exists)(this._pathForFile(fileName, fromServerdirectory))) {
+                    rollbackcontents.push(await NativeAdapter_7.myfs.readFile(this._pathForFile(fileName, fromServerdirectory), 'utf-8'));
+                }
+                else {
+                    rollbackcontents.push(undefined); //this file would be killed at revert
+                }
+                if (contents[x] === undefined)
+                    await NativeAdapter_7.myfs.unlink(this._pathForFile(fileName, fromServerdirectory)); //remove file on revert
+                else {
+                    await NativeAdapter_7.myfs.writeFile(this._pathForFile(fileName, fromServerdirectory), contents[x]);
+                    //transpile remoteCode for Server
+                    let spath = fileName.split("/");
+                    if ((fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote")) && fileName.toLowerCase().endsWith(".ts")) {
+                        var fneu = fileName.replace("$serverside/", "");
+                        let rpath = this.getDirectoryname("./" + fneu);
+                        try {
+                            await NativeAdapter_7.myfs.mkdir(rpath, { recursive: true });
+                        }
+                        catch (err) {
+                        }
+                        await NativeAdapter_7.myfs.writeFile("./" + fneu, contents[x]);
+                        if (spath.length > 1 && spath[0] !== "$serverside")
+                            await this.createRemoteModulIfNeeded(spath[0]);
+                        (0, NativeAdapter_7.transpile)(fneu, fromServerdirectory);
+                    }
+                }
+            }
+            await new RegistryIndexer_3.ServerIndexer().updateRegistry();
+            var remotecodeincluded = false;
+            for (var f = 0; f < fileNames.length; f++) {
+                var fileName = fileNames[f];
+                if (contents[f] === undefined)
+                    continue;
+                var spath = fileName.split("/");
+                var fromServerdirectory = fileName.startsWith("$serverside/");
+                if (fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote") && fileName.toLowerCase().endsWith(".ts")) {
+                    var remotecodeincluded = true;
+                    remoteFiles.push(fileName.substring(0, fileName.length - 3));
+                    // }
+                }
+            }
+            ;
+            try {
+                if (remotecodeincluded) {
+                    await (0, NativeAdapter_7.reloadJSAll)(remoteFiles, async () => {
+                        if (Serverservice_15.runningServerservices["db"]) {
+                            (await Serverservice_15.serverservices.db).renewConnection();
+                        }
+                    });
+                }
+            }
+            catch (err) {
+                var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                console.error(err.stack);
+                return err + "DB corrupt changes are reverted " + restore;
+            }
+            if (remotecodeincluded) {
+                await Registry_36.default.reload();
+            }
+            if (remotecodeincluded && rollbackonerror) { //verify DB-Schema
+                try {
+                    await Serverservice_15.serverservices.db;
+                }
+                catch (err) {
+                    var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                    console.error(err.stack);
+                    return err + "DB corrupt changes are reverted " + restore;
+                }
+            }
+            return ret;
+        }
+        async saveFile(fileName, content) {
+            try {
+                var fdir = this.getDirectoryname(this._pathForFile(fileName));
+                // var fdir = path.substring(0,path.lastIndexOf("/"));//fpath.dirname(path).split(fpath.sep).pop();
+                await NativeAdapter_7.myfs.mkdir(fdir, { recursive: true });
+            }
+            catch (err) {
+            }
+            await NativeAdapter_7.myfs.writeFile(this.path + "/" + fileName, content);
+            /*
+            if(fileName.endsWith(".ts")){
+                new Compile().transpile(fileName,function(done){
+                    var kk=Compile.lastModifiedTSFiles[0];
+                    if(Compile.lastModifiedTSFiles.indexOf(fileName)>-1){
+                        var pos=Compile.lastModifiedTSFiles.indexOf(fileName);
+                        Compile.lastModifiedTSFiles.splice(pos, 1);
+                    }
+                    response.send(done)
+                    
+                });
+                return;
+                 }*/
+            await new RegistryIndexer_3.ServerIndexer().updateRegistry();
+            //TODO $this->updateRegistry();
+        }
+    };
+    Filesystem.allModules = {};
+    Filesystem = Filesystem_6 = __decorate([
+        (0, Serverservice_15.$Serverservice)({ name: "filesystem", getInstance: async () => { return new Filesystem_6(); } }),
+        (0, Registry_36.$Class)("jassijs.server.Filesystem")
+    ], Filesystem);
+    exports.default = Filesystem;
+});
+define("client/jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_22, Config_11, Serverservice_16, NativeAdapter_8) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Indexer = void 0;
+    class Indexer {
+        async updateModul(root, modul, isserver) {
+            var path = root + (root === "" ? "" : "/") + modul;
+            //create empty if needed
+            var text = "{}";
+            if (await this.fileExists(path + "/registry.js")) {
+                text = await this.readFile(path + "/registry.js");
+                if (!isserver) {
+                    text = text.substring(text.indexOf("default:") + 8);
+                    text = text.substring(0, text.lastIndexOf("}") - 1);
+                    text = text.substring(0, text.lastIndexOf("}") - 1);
+                }
+                else {
+                    text = text.substring(text.indexOf("default=") + 8);
+                }
+            }
+            try {
+                var index = JSON.parse(text);
+            }
+            catch (_a) {
+                console.log("error read modul " + modul + "- create new");
+                index = {};
+            }
+            //remove deleted files
+            for (var key in index) {
+                if (!(await this.fileExists(root + (root === "" ? "" : "/") + key))) {
+                    delete index[key];
+                }
+            }
+            var jsFiles = await this.dirFiles(modul, path, [".ts"], ["node_modules"]);
+            for (let x = 0; x < jsFiles.length; x++) {
+                var jsFile = jsFiles[x];
+                var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
+                if (fileName === undefined)
+                    continue;
+                var entry = index[fileName];
+                if (entry === undefined) {
+                    entry = {};
+                    entry.date = undefined;
+                    index[fileName] = entry;
+                }
+                if (await this.fileExists(root + (root === "" ? "" : "/") + fileName)) {
+                    var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
+                    if (dat !== entry.date) {
+                        var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
+                        var sourceFile = NativeAdapter_8.ts.createSourceFile('hallo.ts', text, NativeAdapter_8.ts.ScriptTarget.ES5, true);
+                        var outDecorations = [];
+                        entry = {};
+                        entry.date = undefined;
+                        index[fileName] = entry;
+                        this.collectAnnotations(sourceFile, entry);
+                        // findex(Filesystem.path + "/" + jsFile);
+                        entry.date = dat;
+                    }
+                }
+            }
+            if (!isserver) { //write client
+                var text = JSON.stringify(index, undefined, "\t");
+                text = "//this file is autogenerated don't modify\n" +
+                    'define("' + modul + '/registry",["require"], function(require) {\n' +
+                    ' return {\n' +
+                    '  default: ' + text + "\n" +
+                    ' }\n' +
+                    '});';
+                var jsdir = "js/" + path;
+                var fpath = (await (Serverservice_16.serverservices.filesystem)).path;
+                if (fpath !== undefined)
+                    jsdir = path.replace(fpath, fpath + "/js");
+                if (!(await this.fileExists(jsdir)))
+                    await this.createDirectory(jsdir);
+                await this.writeFile(jsdir + "/registry.js", text);
+                await this.writeFile(path + "/registry.js", text);
+            }
+            else { //write server
+                var modules = Config_11.config.server.modules;
+                for (let smodul in modules) {
+                    if (modul === smodul) {
+                        var text = JSON.stringify(index, undefined, "\t");
+                        if (text !== "{}") {
+                            text = '"use strict:"\n' +
+                                "//this file is autogenerated don't modify\n" +
+                                'Object.defineProperty(exports, "__esModule", { value: true });\n' +
+                                'exports.default=' + text;
+                            var jsdir = "js/" + modul;
+                            if (!(await this.fileExists(jsdir)))
+                                await this.createDirectory(jsdir);
+                            await this.writeFile(jsdir + "/registry.js", text);
+                            await this.writeFile(modul + "/registry.js", text);
+                        }
+                    }
+                }
+            }
+        }
+        convertArgument(arg) {
+            if (arg === undefined)
+                return undefined;
+            if (arg.kind === NativeAdapter_8.ts.SyntaxKind.ObjectLiteralExpression) {
+                var ret = {};
+                var props = arg.properties;
+                if (props !== undefined) {
+                    for (var p = 0; p < props.length; p++) {
+                        ret[props[p].name.text] = this.convertArgument(props[p].initializer);
+                    }
+                }
+                return ret;
+            }
+            else if (arg.kind === NativeAdapter_8.ts.SyntaxKind.StringLiteral) {
+                return arg.text;
+            }
+            else if (arg.kind === NativeAdapter_8.ts.SyntaxKind.ArrayLiteralExpression) {
+                let ret = [];
+                for (var p = 0; p < arg.elements.length; p++) {
+                    ret.push(this.convertArgument(arg.elements[p]));
+                }
+                return ret;
+            }
+            else if (arg.kind === NativeAdapter_8.ts.SyntaxKind.Identifier) {
+                return arg.text;
+            }
+            else if (arg.kind === NativeAdapter_8.ts.SyntaxKind.TrueKeyword) {
+                return true;
+            }
+            else if (arg.kind === NativeAdapter_8.ts.SyntaxKind.FalseKeyword) {
+                return false;
+            }
+            else if (arg.kind === NativeAdapter_8.ts.SyntaxKind.NumericLiteral) {
+                return Number(arg.text);
+            }
+            else if (arg.kind === NativeAdapter_8.ts.SyntaxKind.ArrowFunction || arg.kind === NativeAdapter_8.ts.SyntaxKind.FunctionExpression) {
+                return "function";
+            }
+            throw new Classes_22.JassiError("Error typ not found");
+        }
+        collectAnnotations(node, outDecorations, depth = 0) {
+            var _a;
+            //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
+            if (node.kind === NativeAdapter_8.ts.SyntaxKind.ClassDeclaration) {
+                if (node.decorators !== undefined) {
+                    var dec = {};
+                    var sclass = undefined;
+                    for (let x = 0; x < node.decorators.length; x++) {
+                        var decnode = node.decorators[x];
+                        var ex = decnode.expression;
+                        if (ex.expression === undefined) {
+                            dec[ex.text] = []; //Annotation without parameter
+                        }
+                        else {
+                            if (ex.expression.text === "$Class")
+                                sclass = this.convertArgument(ex.arguments[0]);
+                            else {
+                                if (dec[ex.expression.text] === undefined) {
+                                    dec[ex.expression.text] = [];
+                                }
+                                for (var a = 0; a < ex.arguments.length; a++) {
+                                    dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                }
+                            }
+                        }
+                    }
+                    if (sclass !== undefined)
+                        outDecorations[sclass] = dec;
+                    //@members.value.$Property=[{name:string}]
+                    for (let x = 0; x < node["members"].length; x++) {
+                        var member = node["members"][x];
+                        var membername = (_a = node["members"][x].name) === null || _a === void 0 ? void 0 : _a.escapedText;
+                        if (member.decorators !== undefined) {
+                            if (!dec["@members"])
+                                dec["@members"] = {};
+                            var decm = {};
+                            dec["@members"][membername] = decm;
+                            for (let x = 0; x < member.decorators.length; x++) {
+                                var decnode = member.decorators[x];
+                                var ex = decnode.expression;
+                                if (ex.expression === undefined) {
+                                    decm[ex.text] = []; //Annotation without parameter
+                                }
+                                else {
+                                    if (ex.expression.text === "$Property") {
+                                        //do nothing;
+                                    }
+                                    else {
+                                        if (decm[ex.expression.text] === undefined) {
+                                            decm[ex.expression.text] = [];
+                                        }
+                                        for (var a = 0; a < ex.arguments.length; a++) {
+                                            decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                        }
+                                    }
+                                }
+                            }
+                            if (Object.keys(dec["@members"][membername]).length === 0) {
+                                delete dec["@members"][membername];
+                            }
+                        }
+                    }
+                }
+            }
+            depth++;
+            node.getChildren().forEach(c => this.collectAnnotations(c, outDecorations, depth));
+        }
+    }
+    exports.Indexer = Indexer;
+});
+define("client/jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Server", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_2, Server_4, Serverservice_17, js_cookie_1, DoRemoteProtocol_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.localExec = exports.test = exports.messageReceived = void 0;
+    async function messageReceived(param) {
+        var config = param.data;
+        var cookies = (0, js_cookie_1.getJSON)();
+        var myRequest = {
+            cookies,
+            rawBody: JSON.stringify(config.data),
+            user: {
+                isAdmin: true,
+                user: 1
+            }
+        };
+        await (0, DoRemoteProtocol_2.remoteProtocol)(myRequest, {
+            send(msg) {
+                navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: config.id, data: msg });
+            }
+        });
+        /*  var debugservermethods = [];//["saveFiles", "dir"];//["dir"];//for testing run on server
+          if (debugservermethods.indexOf(data.method) > -1) {
+              navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: config.id, data: "***POST_TO_SERVER***" });
+              return;
+          }
+      
+          
+          var data = config.data;
+          var clname = data.classname;
+          var classes = (await import("jassijs/remote/Classes")).classes;
+          var DBObject = await classes.loadClass("jassijs.remote.DBObject");
+          var ret;
+      
+          {
+              var sret = await localExec(data);
+              ret = new RemoteProtocol().stringify(sret);
+              if (ret === undefined)
+                  ret = "$$undefined$$";
+          }*/
+    }
+    exports.messageReceived = messageReceived;
+    //var stest = '{"url":"remoteprotocol?1682187030801","type":"post","dataType":"text","data":"{\\"__clname__\\":\\"jassijs.remote.RemoteProtocol\\",\\"classname\\":\\"de.remote.MyRemoteObject\\",\\"_this\\":{\\"__clname__\\":\\"de.remote.MyRemoteObject\\",\\"__refid__\\":1},\\"parameter\\":[\\"Kurt\\"],\\"method\\":\\"sayHello\\",\\"__refid__\\":0}"}';
+    //var config = JSON.parse(stest);
+    async function test() {
+        var jj = await new Server_4.Server().zip("");
+        // var gg=await texec(config, undefined);
+        // debugger;
+    }
+    exports.test = test;
+    /*async function texec(config, object) {
+        return await new Promise((resolve, reject) => {
+            //@ts-ignore
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', config.url, true);
+            xhr.setRequestHeader("Content-Type", "text");
+    
+            xhr.onload = function (data) {
+                if (this.status === 200)
+                    resolve(this.responseText);
+                else
+                    reject(this);
+            };
+    
+            xhr.send(config.data);
+            xhr.onerror = function (data) {
+                reject(data);
+            };
+        }
+        );
+        //return await $.ajax(config, object);
+    }
+    RemoteProtocol.prototype.exec2 = async function (config, ob) {
+        var clname = JSON.parse(config.data).classname;
+        var classes = (await import("jassijs/remote/Classes")).classes;
+        var DBObject = await classes.loadClass("jassijs.remote.DBObject");
+        var ret;
+    
+        var data = JSON.parse(config.data);
+        var debugservermethods = [];//["dir"];//for testing run on server
+        if (debugservermethods.indexOf(data.method) > -1) {
+            ret = await $.ajax(config);
+        } else {
+            var sret = await localExec(data);
+            ret = new RemoteProtocol().stringify(sret);
+            if (ret === undefined)
+                ret = "$$undefined$$";
+        }
+      
+        return ret;
+    }*/
+    async function localExec(prot, context = undefined) {
+        var classes = (await new Promise((resolve_27, reject_27) => { require(["jassijs/remote/Classes"], resolve_27, reject_27); })).classes;
+        var p = new RemoteProtocol_2.RemoteProtocol();
+        var C = await classes.loadClass(prot.classname);
+        if (context === undefined) {
+            context = {
+                isServer: true,
+                request: {
+                    user: {
+                        isAdmin: true,
+                        user: 1
+                    }
+                }
+            };
+            var Cookies = (await new Promise((resolve_28, reject_28) => { require(["jassijs/util/Cookies"], resolve_28, reject_28); })).Cookies;
+            if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
+                var man = await Serverservice_17.serverservices.db;
+                var user = await man.login(context, Cookies.get("simulateUser"), Cookies.get("simulateUserPassword"));
+                if (user === undefined) {
+                    throw Error("simulated login failed");
+                }
+                else {
+                    context.request.user.user = user.id;
+                    context.request.user.isAdmin = user.isAdmin ? true : false;
+                }
+            }
+        }
+        if (prot._this === "static") {
+            try {
+                //await checkSimulateUser(request);
+                if (prot.parameter === undefined)
+                    ret = await (C[prot.method](context));
+                else
+                    ret = await (C[prot.method](...prot.parameter, context));
+            }
+            catch (ex) {
+                console.error(ex.stack);
+                var msg = ex.message;
+                if (!msg)
+                    msg = ex;
+                if (!ex)
+                    ex = "";
+                ret = {
+                    "**throw error**": msg
+                };
+            }
+            //var s = new RemoteProtocol().stringify(ret);
+            return ret;
+        }
+        else {
+            var obj = new C();
+            //if(runAfterCreation){
+            //    obj=runAfterCreation(obj);
+            //}
+            if (prot._this !== undefined)
+                Object.assign(obj, prot._this);
+            var ret = undefined;
+            try {
+                //await checkSimulateUser(request);
+                if (prot.parameter === undefined)
+                    ret = await (obj[prot.method](context));
+                else
+                    ret = await (obj[prot.method](...prot.parameter, context));
+            }
+            catch (ex) {
+                console.error(ex.stack);
+                var msg = ex.message;
+                if (!msg)
+                    msg = ex;
+                if (!ex)
+                    ex = "";
+                ret = {
+                    "**throw error**": msg
+                };
+            }
+            //var s = new RemoteProtocol().stringify(ret);
+            return ret;
+        }
+    }
+    exports.localExec = localExec;
+});
+define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Registry_37, typeorm_7, Reloader_3, Registry_38, Serverservice_18, NativeAdapter_9) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TypeORMListener = void 0;
+    //listener for code changes
+    Reloader_3.Reloader.instance.addEventCodeReloaded(async function (files) {
+        var dbobjects = await Registry_38.default.getJSONData("$DBObject");
+        var reload = false;
+        for (var x = 0; x < files.length; x++) {
+            var file = files[x];
+            dbobjects.forEach((data) => {
+                if (data.filename === file + ".ts")
+                    reload = true;
+            });
+        }
+        if (reload) {
+            (await Serverservice_18.serverservices.db).renewConnection();
+        }
+    });
+    let TypeORMListener = class TypeORMListener {
+        saveDB(event) {
+            if (this.savetimer) {
+                clearTimeout(this.savetimer);
+                this.savetimer = undefined;
+            }
+            this.savetimer = setTimeout(() => {
+                var data = event.connection.driver.export();
+                NativeAdapter_9.myfs.writeFile("./client/__default.db", data);
+                console.log("save DB");
+            }, 300);
+        }
+        /**
+         * Called after entity is loaded.
+         */
+        afterLoad(entity) {
+            // console.log(`AFTER ENTITY LOADED: `, entity);
+        }
+        /**
+         * Called before post insertion.
+         */
+        beforeInsert(event) {
+            //console.log(`BEFORE POST INSERTED: `, event.entity);
+        }
+        /**
+         * Called after entity insertion.
+         */
+        afterInsert(event) {
+            this.saveDB(event);
+            //console.log(`AFTER ENTITY INSERTED: `, event.entity);
+        }
+        /**
+         * Called before entity update.
+         */
+        beforeUpdate(event) {
+            //console.log(`BEFORE ENTITY UPDATED: `, event.entity);
+        }
+        /**
+         * Called after entity update.
+         */
+        afterUpdate(event) {
+            this.saveDB(event);
+            //console.log(`AFTER ENTITY UPDATED: `, event.entity);
+        }
+        /**
+         * Called before entity removal.
+         */
+        beforeRemove(event) {
+            // console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+        }
+        /**
+         * Called after entity removal.
+         */
+        afterRemove(event) {
+            //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+            this.saveDB(event);
+        }
+        /**
+         * Called before transaction start.
+         */
+        beforeTransactionStart(event) {
+            // console.log(`BEFORE TRANSACTION STARTED: `, event);
+        }
+        /**
+         * Called after transaction start.
+         */
+        afterTransactionStart(event /*: TransactionStartEvent*/) {
+            //console.log(`AFTER TRANSACTION STARTED: `, event);
+        }
+        /**
+         * Called before transaction commit.
+         */
+        beforeTransactionCommit(event /*: TransactionCommitEvent*/) {
+            // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
+        }
+        /**
+         * Called after transaction commit.
+         */
+        afterTransactionCommit(event /*: TransactionCommitEvent*/) {
+            //console.log(`AFTER TRANSACTION COMMITTED: `, event);
+        }
+        /**
+         * Called before transaction rollback.
+         */
+        beforeTransactionRollback(event /*: TransactionRollbackEvent*/) {
+            //   console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
+        }
+        /**
+         * Called after transaction rollback.
+         */
+        afterTransactionRollback(event /*: TransactionRollbackEvent*/) {
+            // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
+        }
+    };
+    TypeORMListener = __decorate([
+        (0, typeorm_7.EventSubscriber)(),
+        (0, Registry_37.$Class)("jassijs.server.TypeORMListener")
+    ], TypeORMListener);
+    exports.TypeORMListener = TypeORMListener;
+});
+define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/server/DBManager", "jassijs/server/TypeORMListener", "typeorm", "jassijs/server/NativeAdapter"], function (require, exports, Classes_23, Database_4, Registry_39, DBManager_4, TypeORMListener_2, typeorm_8, NativeAdapter_10) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.extendDBManager = void 0;
+    function extendDBManager() {
+        //create Admin User if doesn't a user exists 
+        DBManager_4.DBManager.prototype["hasLoaded"] = async function () {
+            var User = await Classes_23.classes.loadClass("jassijs.security.User");
+            //@ts-ignore
+            var us = User.findOne();
+            if (us) {
+                us = new User();
+                us.email = "admin";
+                us.password = "jassi";
+                us.isAdmin = true;
+                await us.save();
+            }
+        };
+        DBManager_4.DBManager.prototype["login"] = async function (context, user, password) {
+            try {
+                var User = await Classes_23.classes.loadClass("jassijs.security.User");
+                var ret = await this.connection().manager.createQueryBuilder().
+                    select("me").from(User, "me").addSelect("me.password").
+                    andWhere("me.email=:email", { email: user });
+                var auser = await ret.getOne();
+                if (!auser || !password)
+                    return undefined;
+                if (auser.password === password) {
+                    delete auser.password;
+                    return auser;
+                }
+            }
+            catch (err) {
+                err = err;
+            }
+            return undefined;
+        };
+        //@ts-ignore
+        DBManager_4.DBManager["getConOpts"] = async function () {
+            var dbclasses = [];
+            const initSqlJs = window["SQL"];
+            const SQL = await window["SQL"]({
+                // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+                // You can omit locateFile completely when running in node
+                locateFile: file => `https://sql.js.org/dist/${file}`
+            });
+            var dbobjects = await Registry_39.default.getJSONData("$DBObject");
+            var dbfiles = [];
+            for (var o = 0; o < dbobjects.length; o++) {
+                var clname = dbobjects[o].classname;
+                try {
+                    dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
+                    dbclasses.push(await Classes_23.classes.loadClass(clname));
+                }
+                catch (err) {
+                    console.log(err);
+                    throw err;
+                }
+            }
+            //@ts-ignore
+            DBManager_4.DBManager.clearMetadata();
+            Database_4.db.fillDecorators();
+            var tcl = await Classes_23.classes.loadClass("jassijs.server.TypeORMListener");
+            //@ts-ignore 
+            new typeorm_8.EventSubscriber()(tcl);
+            var Filesystem = await Classes_23.classes.loadClass("jassijs.server.Filesystem");
+            var data = await NativeAdapter_10.myfs.readFile("./client/__default.db");
+            var opt = {
+                database: data,
+                type: "sqljs",
+                subscribers: [TypeORMListener_2.TypeORMListener],
+                "entities": dbclasses
+            };
+            return opt;
+        };
+    }
+    exports.extendDBManager = extendDBManager;
+});
+define("client/jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Serverservice", "client/jassijs/server/LocalProtocol"], function (require, exports, Serverservice_19, LocalProtocol_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    //
+    var load = Serverservice_19.serverservices;
+    //throw new Error("Kkk"); 
+    navigator.serviceWorker.controller.postMessage({
+        type: 'ACTIVATE_REMOTEPROTCOL'
+    });
+    navigator.serviceWorker.addEventListener("message", (evt) => {
+        var _a;
+        if (((_a = evt.data) === null || _a === void 0 ? void 0 : _a.type) === "REQUEST_REMOTEPROTCOL") {
+            (0, LocalProtocol_1.messageReceived)(evt);
+        }
+    });
+    (0, Serverservice_19.beforeServiceLoad)(async (name, service) => {
+        if (name === "db") {
+            var man = (await new Promise((resolve_29, reject_29) => { require(["jassijs/server/DBManagerExt"], resolve_29, reject_29); }));
+            man.extendDBManager();
+        }
+    });
+    var ret = {
+        //search for file in local-DB and undefine this files 
+        //so this files could be loaded from local-DB
+        autostart: async function () {
+            var Filesystem = (await new Promise((resolve_30, reject_30) => { require(["jassijs/server/Filesystem"], resolve_30, reject_30); })).default;
+            var files = await new Filesystem().dirFiles("", ["js", "ts"]);
+            files.forEach((fname) => {
+                if (!fname.startsWith("js/")) {
+                    var name = fname.substring(0, fname.length - 3);
+                    requirejs.undef(name);
+                }
+            });
+        }
+    };
+    exports.default = { ret };
+    requirejs.undef("jassijs/util/DatabaseSchema");
+    define("jassijs/util/DatabaseSchema", ["jassijs/server/DatabaseSchema"], function (to) {
+        return to;
+    });
+});
+/*define("jassijs/server/DoRemoteProtocol", ["jassijs/server/LocalProtocol"], function (locprot) {
+    return {
+        _execute: async function (protext, request, context) {
+            var prot = JSON.parse(protext);
+            return await locprot.localExec(prot, context);
+        }
+    }
+})*/
+/*
+define("jassijs/server/Filesystem", ["jassijs/server/Filesystem"], function (fs) {
+    return fs
+
+})*/
+//DatabaseSchema
+define("client/jassijs/server/Testuser", ["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Registry"], function (require, exports, DatabaseSchema_7, DBObject_7, Registry_40) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Testuser = void 0;
+    let Testuser = class Testuser {
+    };
+    __decorate([
+        (0, DatabaseSchema_7.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], Testuser.prototype, "id", void 0);
+    __decorate([
+        (0, DatabaseSchema_7.Column)(),
+        __metadata("design:type", String)
+    ], Testuser.prototype, "firstname", void 0);
+    __decorate([
+        (0, DatabaseSchema_7.Column)(),
+        __metadata("design:type", String)
+    ], Testuser.prototype, "lastname", void 0);
+    Testuser = __decorate([
+        (0, DBObject_7.$DBObject)(),
+        (0, Registry_40.$Class)("Testuser")
+    ], Testuser);
+    exports.Testuser = Testuser;
+});
+define("client/jassijs/server/ext/EmpyDeclaration", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("client/jassijs/server/ext/jszip", ["require", "exports", "jszip"], function (require, exports, JSZip) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <amd-dependency path="jszip" name="JSZip"/>
+    JSZip.support.nodebuffer = undefined; //we hacked window.Buffer
+    exports.default = JSZip;
+});
+/*
+
+/// <amd-dependency path="typeorm/index" name="to"/>
+/// <amd-dependency path="typeorm/platform/PlatformTools" name="pf"/>
+/// <amd-dependency path="window.SQL" name="sql"/>
+/// <amd-dependency path="reflect-metadata" name="buffer"/>
+declare var to;
+
+//define("typeorm",["typeorm/index","typeorm/platform/PlatformTools","window.SQL","reflect-metadata"],function(to,pf,sql,buffer){
+
+
+
+//"buffer":"https://cdn.jsdelivr.net/npm/buffer@6.0.3/index",
+window.Buffer=class Buffer{
+    static isBuffer(ob){
+        return false;
+    }
+}
+window.global=window;
+
+   pf.PlatformTools.type="browser";
+    window.SQL=sql;
+    
+    export {to};
+
+*/
+define("sha.js", [], () => { return {}; });
+define("dotenv", [], () => { return {}; });
+define("chalk", [], () => { return {}; });
+define("cli-highlight", [], () => { return {}; });
+define("events", [], () => { return {}; });
+define("stream", [], () => { return {}; });
+define("mkdirp", [], () => { return {}; });
+define("glob", [], () => { return {}; });
+define("app-root-path", [], () => { return {}; });
+define("debug", [], () => { return {}; });
+define("js-yaml", [], () => { return {}; });
+define("xml2js", [], () => { return {}; });
+define("path", [], () => { return {}; });
+define("fs", [], () => { return {}; });
+//"buffer":"https://cdn.jsdelivr.net/npm/buffer@6.0.3/index",
+window.Buffer = class Buffer {
+    static isBuffer(ob) {
+        return false;
+    }
+};
+window.global = window;
+define("typeorm", ["typeorm/index", "typeorm/platform/PlatformTools", "window.SQL", "reflect-metadata"], function (to, pf, sql, buffer) {
+    pf.PlatformTools.type = "browser";
+    window.SQL = sql;
+    return to;
+});
+//# sourceMappingURL=jassijs-server.js.map

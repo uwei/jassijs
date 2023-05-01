@@ -1,6 +1,6 @@
 {
   "compilerOptions": { 
-    "baseUrl": "./jassijs_localserver",
+    "baseUrl": "./",
     "allowJs": true,
     //"checkJs":false,
     "target": "es2017",
@@ -11,20 +11,28 @@
       "dom",
       "es5"
     ],
+   
     "inlineSources": true,
-    "outFile": "./dist/test.js",
-    "rootDir": "./",
+    "outFile": "./dist/jassijs-server.js",
+    "rootDirs":["./"],
     "paths": {
-      "jassijs/*":["client/jassijs/*"]
+      //"client/jassijs/server":["./jassijs/server"]
+      //"jassijs":["client/jassijs/**/**.*"]
     },
      "sourceMap": true,
 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
+
+  "exclude": [
+    "./jassijs/server/**/**.*",
+    "./jassijs/modul*.*",
+  ],
   "include":[
-    "./jassijs/remote/**.*",
-    "./de"
+    "./jassijs/**/**.*",
+    "./jassijs/modul*.*",
+   "./client/jassijs/server/**/**.*"
 ],
 
 }

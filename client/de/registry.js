@@ -11,7 +11,7 @@ define("de/registry",["require"], function(require) {
 		"de/Dialog2": {}
 	},
 	"de/DialogKunde.ts": {
-		"date": 1681114662568,
+		"date": 1681114662567.8584,
 		"de.DialogKunde": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -37,7 +37,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/KundeView.ts": {
-		"date": 1680709479415,
+		"date": 1680709479414.7283,
 		"de.KundeView": {
 			"$DBObjectView": [
 				{
@@ -66,7 +66,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/AR.ts": {
-		"date": 1681557287008,
+		"date": 1681557287007.899,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -113,7 +113,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1680947290781,
+		"date": 1680947290781.214,
 		"de.ARZeile": {
 			"$DBObject": [],
 			"@members": {
@@ -148,7 +148,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1681316844059,
+		"date": 1681316844059.0078,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -298,7 +298,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1656077196000
 	},
 	"de/TH.ts": {
-		"date": 1682186441295
+		"date": 1682186441294.5808
 	},
 	"de/TTDialog.ts": {
 		"date": 1655556796000,
@@ -308,7 +308,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1657973728000
 	},
 	"de/remote/MyRemoteObject.ts": {
-		"date": 1682192454974,
+		"date": 1682192454973.8457,
 		"de.remote.MyRemoteObject": {
 			"@members": {
 				"sayHello": {
@@ -321,7 +321,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/test.ts": {
-		"date": 1681301004034
+		"date": 1681301004034.3408
 	},
 	"de/ReportKunden.ts": {
 		"date": 1655556796000,
@@ -330,10 +330,10 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/TestProt.ts": {
-		"date": 1682190808387
+		"date": 1682190808386.7695
 	},
 	"de/aa.ts": {
-		"date": 1682369481262
+		"date": 1682369481262.4434
 	}
 }
  }

@@ -61,7 +61,7 @@ export async function _execute(protext: string, request, context: Context): Prom
     var files = registry.getAllFilesForService("$Class", prot.classname);
 
     if (files === undefined || files.length === 0) {
-        return "file for " + prot.classname + " not found";
+        throw new JassiError("file for " + prot.classname + " not found");
     }
     var file: string = files[0];
     var path = file.split("/");

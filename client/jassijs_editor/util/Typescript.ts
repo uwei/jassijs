@@ -7,7 +7,7 @@ import { Editor } from "jassijs/ui/PropertyEditors/Editor";
 
 @$Class("jassijs_editor.util.Typescript")
 export class Typescript {
-    static instance:Typescript;
+    static instance: Typescript;
     waitForInited: Promise<boolean>;
     tsWorker: monaco.languages.typescript.TypeScriptWorker;
 
@@ -29,7 +29,7 @@ export class Typescript {
         moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
-        typeRoots:["./node_modules/@types"]
+        typeRoots: ["./node_modules/@types"]
     }
     public isInited(file) {
 
@@ -83,7 +83,7 @@ export class Typescript {
             "baseUrl": "./",
             "module": monaco.languages.typescript.ModuleKind.AMD,
             "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
-            typeRoots:["./node_modules/@types"],
+            typeRoots: ["./node_modules/@types"],
             rootDir: "./",
             "sourceMap": true,
             "outDir": "./js",
@@ -115,86 +115,91 @@ export class Typescript {
      * functions which uses the languageservice are blocked until ready
      */
     async initService(): Promise<boolean> {
-        if (Typescript._isInited !== undefined)
-            return;
-        Typescript._isInited = false;
-        Typescript.initMonaco();
-        //@ts-ignore
-        //  import("jassijs/ext/typescript").then(async function(ts1) {
-        Typescript.ts = ts;
-
-        var _this = this;
-        var f: { [path: string]: FileNode } = (await new Server().dir(true)).resolveChilds();
-
-        var nodeFiles = await this.includeModulTypes();
-        //Load all files to in cache
-        //node_modules with ajax - so we kann cache 
-        var myfiles = [];
-        for (let x in f) {
-            let fname = f[x].fullpath;
-            let fdat = f[x].date;
-
-
-            //include js in jassijs/ext
-            if (fname.startsWith("node_modules"))
-                continue;
-            if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
-                if (fname.toLocaleLowerCase().endsWith(".js")) {
-                    monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
-                }
-                if (fdat === undefined) {
-                    nodeFiles[fname] = new Server().loadFile(fname);
-                } else {
-                    nodeFiles[fname] = $.ajax({
-                        url: fname,
-                        beforeSend: function (request) {
-                            request.setRequestHeader("X-Custom-FromCache", fdat);
-                        },
-                        dataType: "text"
-                    });
-                }
-                //}
-            }
-        }
-        //load TS sources
-
-        //wait for each nodefiles
-        var code = {};
-        for (let key in nodeFiles) {
-            code[key] = await nodeFiles[key];
-
-        }
-        for (let key in nodeFiles) {
-            //monaco
-
+        try {
+            if (Typescript._isInited !== undefined)
+                return;
+            Typescript._isInited = false;
+            Typescript.initMonaco();
             //@ts-ignore
-            //	
-            var type = "typescript";
+            //  import("jassijs/ext/typescript").then(async function(ts1) {
+            Typescript.ts = ts;
 
-            if (key.toLocaleLowerCase().endsWith(".ts")) {
-                  
-                //
-                if (this.initInIdle) {
-                    var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
-                    //console.log(key);
-                    if (!monaco.editor.getModel(ffile))
-                        monaco.editor.createModel(code[key], "typescript", ffile);
-                    //});
-                } else {
-                    
-                    monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
+            var _this = this;
+            var f: { [path: string]: FileNode } = (await new Server().dir(true)).resolveChilds();
+
+            var nodeFiles = await this.includeModulTypes();
+            //Load all files to in cache
+            //node_modules with ajax - so we kann cache 
+            var myfiles = [];
+            for (let x in f) {
+                let fname = f[x].fullpath;
+                let fdat = f[x].date;
+
+
+                //include js in jassijs/ext
+                if (fname.startsWith("node_modules"))
+                    continue;
+                if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
+                    if (fname.toLocaleLowerCase().endsWith(".js")) {
+                        monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
+                    }
+                    if (fdat === undefined) {
+                        nodeFiles[fname] = new Server().loadFile(fname);
+                    } else {
+                        nodeFiles[fname] = $.ajax({
+                            url: fname,
+                            beforeSend: function (request) {
+                                request.setRequestHeader("X-Custom-FromCache", fdat);
+                            },
+                            dataType: "text"
+                        });
+                    }
+                    //}
                 }
             }
-            if (key.toLocaleLowerCase().endsWith(".json"))
-                type = "json";
+            //load TS sources
 
+            //wait for each nodefiles
+            var code = {};
+            for (let key in nodeFiles) {
+                code[key] = await nodeFiles[key];
+
+            }
+            for (let key in nodeFiles) {
+                //monaco
+
+                //@ts-ignore
+                //	
+                var type = "typescript";
+
+                if (key.toLocaleLowerCase().endsWith(".ts")) {
+
+                    //
+                    if (this.initInIdle) {
+                        var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
+                        //console.log(key);
+                        if (!monaco.editor.getModel(ffile))
+                            monaco.editor.createModel(code[key], "typescript", ffile);
+                        //});
+                    } else {
+
+                        monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
+                    }
+                }
+                if (key.toLocaleLowerCase().endsWith(".json"))
+                    type = "json";
+
+            }
+            //initialize monaco
+            //if (!this.initInIdle)
+                monaco.editor.createModel("var a=1;", "typescript", monaco.Uri.from({ path: "/__mydummy.ts", scheme: 'file' }));
+            this.tsWorker = await (await monaco.languages.typescript.getTypeScriptWorker())()
+            Typescript._isInited = true;
+            return true;
+        } catch (err) {
+            debugger;
+            throw err;
         }
-        //initialize monaco
-        if (!this.initInIdle)
-            monaco.editor.createModel("var a=1;", "typescript", monaco.Uri.from({ path: "/__mydummy.ts", scheme: 'file' }));
-        this.tsWorker = await (await monaco.languages.typescript.getTypeScriptWorker())()
-        Typescript._isInited = true;
-        return true;
     }
     /**
      * unused
@@ -442,5 +447,5 @@ export class Typescript {
 }
 //@ts-ignore
 var typescript: Typescript = new Typescript();
-Typescript.instance=typescript;
+Typescript.instance = typescript;
 export default typescript;

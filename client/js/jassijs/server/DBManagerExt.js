@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "./DBManager", "./TypeORMListener", "typeorm"], function (require, exports, Classes_1, Database_1, Registry_1, DBManager_1, TypeORMListener_1, typeorm_1) {
+define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "./DBManager", "./TypeORMListener", "typeorm", "./NativeAdapter"], function (require, exports, Classes_1, Database_1, Registry_1, DBManager_1, TypeORMListener_1, typeorm_1, NativeAdapter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendDBManager = void 0;
@@ -64,7 +64,9 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database
             //@ts-ignore 
             new typeorm_1.EventSubscriber()(tcl);
             var Filesystem = await Classes_1.classes.loadClass("jassijs.server.Filesystem");
-            var data = await new Filesystem().loadFile("__default.db");
+            var data = undefined;
+            if (await (0, NativeAdapter_1.exists)("./client/__default.db"))
+                data = await NativeAdapter_1.myfs.readFile("./client/__default.db", undefined, false);
             var opt = {
                 database: data,
                 type: "sqljs",

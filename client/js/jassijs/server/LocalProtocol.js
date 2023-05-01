@@ -1,10 +1,10 @@
-define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Server", "jassijs/remote/Serverservice", "jassijs/util/Cookies", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_1, Server_1, Serverservice_1, Cookies_1, DoRemoteProtocol_1) {
+define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Server", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_1, Server_1, Serverservice_1, js_cookie_1, DoRemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.localExec = exports.test = exports.messageReceived = void 0;
     async function messageReceived(param) {
         var config = param.data;
-        var cookies = Cookies_1.Cookies.getJSON();
+        var cookies = (0, js_cookie_1.getJSON)();
         var myRequest = {
             cookies,
             rawBody: JSON.stringify(config.data),

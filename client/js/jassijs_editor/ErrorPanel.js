@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/Notify", "jassijs/ui/Component"], function (require, exports, Panel_1, Errors_1, Registry_1, Button_1, Router_1, Actions_1, Notify_1, Component_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/Notify", "jassijs/ui/Component", "jassijs/remote/Config"], function (require, exports, Panel_1, Errors_1, Registry_1, Button_1, Router_1, Actions_1, Notify_1, Component_1, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.ErrorPanel = void 0;
@@ -156,8 +156,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 if (line === "" || col === "" || u === "")
                     return url;
                 var ismodul = false;
-                for (var mod in jassijs.modules) {
-                    if (jassijs.modules[mod] === u)
+                for (var mod in Config_1.config.modules) {
+                    if (Config_1.config.modules[mod] === u)
                         ismodul = true;
                 }
                 if (u.indexOf("/js/") > -1 || ismodul) {

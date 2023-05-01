@@ -10,7 +10,7 @@ import { User } from "jassijs/remote/security/User";
 import { Context } from "jassijs/remote/RemoteObject";
 import { $Class } from "jassijs/remote/Registry";
 import { $Serverservice } from "jassijs/remote/Serverservice";
-import { Console } from "console";
+
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 
@@ -126,6 +126,7 @@ export class DBManager {
 
       } catch (err) {
         console.log("DB corrupt - revert the last change");
+        console.error(err1); 
         console.error(err);
         _instance = undefined;
         _initrunning = undefined;
