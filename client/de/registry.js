@@ -2,6 +2,9 @@
 define("de/registry",["require"], function(require) {
  return {
   default: {
+	"de/aa.ts": {
+		"date": 1682369481262.4434
+	},
 	"de/Dialog.ts": {
 		"date": 1655755202000,
 		"de/Dialog": {}
@@ -256,6 +259,19 @@ define("de/registry",["require"], function(require) {
 			}
 		}
 	},
+	"de/remote/MyRemoteObject.ts": {
+		"date": 1682192454973.8457,
+		"de.remote.MyRemoteObject": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"sayHello2": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
+	},
 	"de/remote/MyUser.ts": {
 		"date": 1656072680000,
 		"de.MyUser": {
@@ -286,6 +302,15 @@ define("de/registry",["require"], function(require) {
 			"@members": {}
 		}
 	},
+	"de/ReportKunden.ts": {
+		"date": 1655556796000,
+		"de.ReportKunde": {
+			"@members": {}
+		}
+	},
+	"de/test.ts": {
+		"date": 1681301004034.3408
+	},
 	"de/TestDialogBinder.ts": {
 		"date": 1655556796000,
 		"de/TestDialogBinder": {}
@@ -294,8 +319,14 @@ define("de/registry",["require"], function(require) {
 		"date": 1655556796000,
 		"de/TestDialogBinder": {}
 	},
+	"de/TestEmployees.ts": {
+		"date": 1657973728000
+	},
 	"de/TestExtension.ts": {
 		"date": 1656077196000
+	},
+	"de/TestProt.ts": {
+		"date": 1682190808386.7695
 	},
 	"de/TH.ts": {
 		"date": 1682186441294.5808
@@ -303,37 +334,6 @@ define("de/registry",["require"], function(require) {
 	"de/TTDialog.ts": {
 		"date": 1655556796000,
 		"de/TTDialog": {}
-	},
-	"de/TestEmployees.ts": {
-		"date": 1657973728000
-	},
-	"de/remote/MyRemoteObject.ts": {
-		"date": 1682192454973.8457,
-		"de.remote.MyRemoteObject": {
-			"@members": {
-				"sayHello": {
-					"ValidateFunctionParameter": []
-				},
-				"sayHello2": {
-					"ValidateFunctionParameter": []
-				}
-			}
-		}
-	},
-	"de/test.ts": {
-		"date": 1681301004034.3408
-	},
-	"de/ReportKunden.ts": {
-		"date": 1655556796000,
-		"de.ReportKunde": {
-			"@members": {}
-		}
-	},
-	"de/TestProt.ts": {
-		"date": 1682190808386.7695
-	},
-	"de/aa.ts": {
-		"date": 1682369481262.4434
 	}
 }
  }
