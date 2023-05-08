@@ -499,6 +499,9 @@ define("tests/modul", ["require", "exports"], function (require, exports) {
 define("tests/registry", ["require"], function (require) {
     return {
         default: {
+            "tests/BigDataTest.ts": {
+                "date": 1659171562000
+            },
             "tests/DBTests.ts": {
                 "date": 1624296652000
             },
@@ -508,6 +511,45 @@ define("tests/registry", ["require"], function (require) {
             "tests/remote/T.ts": {
                 "date": 1681570949861.1401,
                 "tests.remote.T": {}
+            },
+            "tests/remote/TestBigData.ts": {
+                "date": 1656620694000,
+                "tests.TestBigData": {
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryGeneratedColumn": []
+                        },
+                        "name": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "name2": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "number1": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "number2": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        }
+                    }
+                }
             },
             "tests/remote/TestCustomer.ts": {
                 "date": 1656073036000,
@@ -602,48 +644,6 @@ define("tests/registry", ["require"], function (require) {
             },
             "tests/TestReport.ts": {
                 "date": 1623864074000
-            },
-            "tests/remote/TestBigData.ts": {
-                "date": 1656620694000,
-                "tests.TestBigData": {
-                    "$DBObject": [],
-                    "@members": {
-                        "id": {
-                            "PrimaryGeneratedColumn": []
-                        },
-                        "name": {
-                            "Column": [
-                                {
-                                    "nullable": true
-                                }
-                            ]
-                        },
-                        "name2": {
-                            "Column": [
-                                {
-                                    "nullable": true
-                                }
-                            ]
-                        },
-                        "number1": {
-                            "Column": [
-                                {
-                                    "nullable": true
-                                }
-                            ]
-                        },
-                        "number2": {
-                            "Column": [
-                                {
-                                    "nullable": true
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "tests/BigDataTest.ts": {
-                "date": 1659171562000
             }
         }
     };

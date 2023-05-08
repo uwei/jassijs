@@ -5951,6 +5951,12 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1655556794000,
                 "jassijs_report.designer.SimpleReportDesigner": {}
             },
+            "jassijs_report/ext/pdfjs.ts": {
+                "date": 1657714200000
+            },
+            "jassijs_report/ext/pdfmake.ts": {
+                "date": 1657714352000
+            },
             "jassijs_report/modul.ts": {
                 "date": 1655329710000
             },
@@ -6011,6 +6017,43 @@ define("jassijs_report/registry", ["require"], function (require) {
             "jassijs_report/remote/pdfmakejassi.ts": {
                 "date": 1634336644000
             },
+            "jassijs_report/remote/RComponent.ts": {
+                "date": 1656016830000,
+                "jassijs_report.ReportComponent": {
+                    "$Property": [
+                        {
+                            "hideBaseClassProperties": true
+                        }
+                    ],
+                    "@members": {}
+                }
+            },
+            "jassijs_report/remote/ServerReport.ts": {
+                "date": 1681315929902.2598,
+                "jassijs_report.remote.ServerReport": {
+                    "@members": {
+                        "getDesign": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "getBase64": {
+                            "ValidateFunctionParameter": []
+                        }
+                    }
+                }
+            },
+            "jassijs_report/Report.ts": {
+                "date": 1656501702000,
+                "jassijs_report.remote.Report": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "createActions": {
+                            "$Actions": []
+                        }
+                    }
+                }
+            },
             "jassijs_report/ReportDesign.ts": {
                 "date": 1656015000000,
                 "jassijs_report.InfoProperties": {
@@ -6050,6 +6093,28 @@ define("jassijs_report/registry", ["require"], function (require) {
             },
             "jassijs_report/ReportDesignGlobal.ts": {
                 "date": 1655397714000
+            },
+            "jassijs_report/Reports.ts": {
+                "date": 1657978946000,
+                "jassijs_report/Reports": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "show": {
+                            "$Action": [
+                                {
+                                    "name": "Tools/Reports",
+                                    "icon": "mdi mdi-chart-box-outline"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "jassijs_report/ReportViewer.ts": {
+                "date": 1681571041226.5884,
+                "jassijs_report/ReportViewer": {}
             },
             "jassijs_report/RGroupTablerow.ts": {
                 "date": 1656073104000,
@@ -6258,77 +6323,6 @@ define("jassijs_report/registry", ["require"], function (require) {
                         {
                             "name": "test/Sample Serverreport",
                             "serverReportPath": "jassijs_report/TestServerreport"
-                        }
-                    ],
-                    "@members": {}
-                }
-            },
-            "jassijs_report/Report.ts": {
-                "date": 1656501702000,
-                "jassijs_report.remote.Report": {
-                    "$ActionProvider": [
-                        "jassijs.base.ActionNode"
-                    ],
-                    "@members": {
-                        "createActions": {
-                            "$Actions": []
-                        }
-                    }
-                }
-            },
-            "jassijs_report/remote/ServerReport.ts": {
-                "date": 1681315929902.2598,
-                "jassijs_report.remote.ServerReport": {
-                    "@members": {
-                        "getDesign": {
-                            "ValidateFunctionParameter": []
-                        },
-                        "getBase64": {
-                            "ValidateFunctionParameter": []
-                        }
-                    }
-                }
-            },
-            "jassijs_report/Reports.ts": {
-                "date": 1657978946000,
-                "jassijs_report/Reports": {
-                    "$ActionProvider": [
-                        "jassijs.base.ActionNode"
-                    ],
-                    "@members": {
-                        "show": {
-                            "$Action": [
-                                {
-                                    "name": "Tools/Reports",
-                                    "icon": "mdi mdi-chart-box-outline"
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "jassijs_report/ReportViewer.ts": {
-                "date": 1681571041226.5884,
-                "jassijs_report/ReportViewer": {}
-            },
-            "jassijs_report/ext/Pdfjs.ts": {
-                "date": 1657714199577
-            },
-            "jassijs_report/ext/Pdfmake.ts": {
-                "date": 1657714350894
-            },
-            "jassijs_report/ext/pdfjs.ts": {
-                "date": 1657714200000
-            },
-            "jassijs_report/ext/pdfmake.ts": {
-                "date": 1657714352000
-            },
-            "jassijs_report/remote/RComponent.ts": {
-                "date": 1656016830000,
-                "jassijs_report.ReportComponent": {
-                    "$Property": [
-                        {
-                            "hideBaseClassProperties": true
                         }
                     ],
                     "@members": {}

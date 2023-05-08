@@ -1,20 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dozip = exports.exists = exports.myfs = void 0;
+exports.transpile = exports.reloadJSAll = exports.dozip = exports.exists = exports.myfs = exports.ts = void 0;
 const fs = require("fs");
 var myfs = fs.promises;
 exports.myfs = myfs;
+const ts = require("typescript");
+exports.ts = ts;
 const JSZip = require("jszip");
 const Classes_1 = require("jassijs/remote/Classes");
 const Filesystem_1 = require("./Filesystem");
+const Reloader_1 = require("./Reloader");
+const Compile_1 = require("./Compile");
 class Stats {
 }
 class FS {
-    async readdirSync(folder) {
+    async readdir(folder) {
         return [""];
     }
     ;
-    async readFileSync(file, format) {
+    async readFile(file, format) {
         return "";
     }
     ;
@@ -25,24 +29,24 @@ class FS {
     createWriteStream(...any) {
         throw new Classes_1.JassiError("Not supported");
     }
-    async mkdir(file) {
+    async mkdir(file, option) {
     }
     ;
-    async writeFileSync(file, data) {
+    async writeFile(file, data) {
     }
     ;
-    async renameSync(oldPath, newPath) {
+    async rename(oldPath, newPath) {
     }
-    async unlinkSync(file) {
+    async unlink(file) {
     }
-    async copyFileSync(src, dest) {
+    async copyFile(src, dest) {
         throw new Classes_1.JassiError("Not supported");
     }
     watch(...any) {
         throw new Classes_1.JassiError("Not supported");
     }
     ;
-    async rmdirSync(dirName, options) {
+    async rmdir(dirName, options) {
     }
 }
 async function exists(filename) {
@@ -104,4 +108,12 @@ async function zipFolder(folder, outfile, parent = undefined) {
     }
     return parent;
 }
+async function reloadJSAll(filenames, afterUnload) {
+    return new Reloader_1.Reloader().reloadJSAll(filenames, afterUnload);
+}
+exports.reloadJSAll = reloadJSAll;
+async function transpile(fileName, inServerdirectory = undefined) {
+    await new Compile_1.Compile().transpile(fileName, inServerdirectory);
+}
+exports.transpile = transpile;
 //# sourceMappingURL=NativeAdapter.js.map

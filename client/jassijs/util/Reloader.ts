@@ -189,7 +189,8 @@ export class Reloader {
             myrequire(allfiles, function (...ret) {
                 async function run() {
                     for (let f = 0; f < allfiles.length; f++) {
-                        _this.migrateModul(allModules, allfiles[f], ret[f]);
+                        if(ret&&!ret[x].doNotReloadModule)
+                            _this.migrateModul(allModules, allfiles[f], ret[f]);
                     }
                     for (let i = 0; i < _this.listener.length; i++) {
                        

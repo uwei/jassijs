@@ -14,6 +14,8 @@ import { ContextMenu } from "jassijs/ui/ContextMenu";
 import { CSSProperties } from "jassijs/ui/CSSProperties";
 import windows from "jassijs/base/Windows";
 import { config } from "jassijs/remote/Config";
+import { createHandle, deleteHandle } from "jassijs/server/LocalFS";
+import { Reloader } from "jassijs/util/Reloader";
 //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
 @$ActionProvider("jassijs.remote.FileNode")
 @$Class("jassijs_editor.ui.FileActions")
@@ -165,6 +167,37 @@ export class FileActions {
             await FileExplorer.instance?.refresh();
             FileExplorer.instance?.tree.activateKey(key);
         }
+    }
+    private static async  reloadFilesystem(enableLocalFS) {
+        await new Promise((resolve)=>{
+            config.serverrequire(["jassijs/server/NativeAdapter","jassijs/server/LocalFS","jassijs/server/FS"],(native,localFS,FS)=>{
+                if(enableLocalFS){
+                native.myfs=new localFS.LocalFS();
+                native.exists=localFS.exists;
+                }else{
+                    native.myfs=new FS.FS();
+                    native.exists=FS.exists;
+                        
+                }
+                    resolve(undefined);
+               
+            })
+    
+        });
+    } 
+    @$Action({ name: "Map local folder",isEnabled:(entr)=>entr[0].name==="client"&&config.serverrequire!==undefined})
+    static async mapLocalFolder(all: FileNode[], foldername = undefined) {
+        await createHandle();
+        config.isLocalFolderMapped=true;
+        await FileActions.reloadFilesystem(true);
+        await FileActions.refresh(all);
+    }
+    @$Action({ name: "Close local folder",isEnabled:(entr)=>entr[0].name==="client"&&config.isLocalFolderMapped})
+    static async closeLocalFolder(all: FileNode[], foldername = undefined) {
+        await deleteHandle();
+        config.isLocalFolderMapped=true;
+        await FileActions.reloadFilesystem(false);
+        await FileActions.refresh(all);
     }
     @$Action({ name: "Rename" })
     static async rename(all: FileNode[], foldername = undefined) {

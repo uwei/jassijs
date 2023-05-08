@@ -73,7 +73,7 @@ export function extendDBManager(){
        
         var data=undefined;
         if(await exists("./client/__default.db"))
-             data=await myfs.readFile("./client/__default.db",undefined,false);
+             data=await myfs.readFile("./client/__default.db","binary",false);
       
         var opt = {
             database: data,

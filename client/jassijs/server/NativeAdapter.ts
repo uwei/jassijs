@@ -2,8 +2,8 @@ import { JassiError, classes } from "jassijs/remote/Classes";
 import { config } from "jassijs/remote/Config";
 import { Test } from "jassijs/remote/Test";
 import { Reloader } from "jassijs/util/Reloader";
-import { FS, exists } from "./FS";
-
+import { FS, exists as fsexists } from "./FS";
+import { LocalFS,exists as lfsexists } from "./LocalFS";
 
 //@ts-ignore
 config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
@@ -11,45 +11,17 @@ config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
 });
 var ts = window.ts;
 export { ts }
-
-export {exists}
+var exists=fsexists;
 
 var myfs = new FS();
+if(config.isLocalFolderMapped){
+    myfs=<any>new LocalFS();
+    exists=lfsexists;
+}
+export {exists}
 export { myfs };
 
-export async function test(tt: Test) {
-    var fs = new FS();
 
-    var testfolder = "./dasisteinfestfolder";
-    var testfile = "./dasisteintestfile.js";
-
-    await fs.writeFile(testfile, "var a=10;");
-    tt.expectEqual(!(await fs.stat(testfile)).isDirectory())
-    tt.expectEqual(await exists(testfile));
-    tt.expectEqual((await fs.readFile(testfile)) === "var a=10;");
-    var hh = await fs.readdir(".");
-    tt.expectEqual(hh.length > 0);
-    await fs.rename(testfile, testfile + ".txt");
-    tt.expectEqual(await exists(testfile + ".txt"));
-    await fs.rename(testfile + ".txt", testfile);
-
-    await fs.unlink(testfile);
-    tt.expectEqual(!await exists(testfile));
-    tt.expectErrorAsync(async () => await fs.unlink("./hallo.js"));
-    if (await exists(testfolder))
-        await fs.rmdir(testfolder, { recursive: true });
-    await fs.mkdir(testfolder + "/hh", { recursive: true });
-    await fs.writeFile(testfolder + "/hh/h.txt", "Hallo");
-    await fs.rename(testfolder, testfolder + "1");
-    tt.expectEqual(await exists(testfolder + "1"));
-    tt.expectEqual(!await exists(testfolder));
-    await fs.rename(testfolder + "1", testfolder);
-    tt.expectEqual(!await exists(testfolder + "1"));
-    tt.expectEqual(await exists(testfolder));
-    //tt.expectErrorAsync(async () => await fs.rmdir(testfolder));
-    //await fs.rmdir(testfolder, { recursive: true })
-    debugger;
-}
 
 export async function dozip(directoryname: string, serverdir: boolean = undefined): Promise<string> {
     //@ts-ignore
@@ -92,3 +64,5 @@ export async function transpile(fileName: string, inServerdirectory: boolean = u
 
 }
 
+var doNotReloadModule=true;
+export { doNotReloadModule};

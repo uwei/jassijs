@@ -5,6 +5,7 @@ class Config {
     constructor() {
         if (!window.document) {
             this.isServer = true;
+            //@ts-ignore
             var fs = require("fs");
             this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
         }
@@ -19,6 +20,7 @@ class Config {
     async reload() {
         if (!window.document) {
             this.isServer = true;
+            //@ts-ignore
             var fs = require("fs");
             this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
         }

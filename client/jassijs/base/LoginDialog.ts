@@ -1,6 +1,7 @@
 import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
 import "jassijs/ext/jquerylib";
 import { Component } from "jassijs/ui/Component";
+
 var queue = [];
 export function doAfterLogin(resolve, prot: RemoteProtocol) {
     queue.push([resolve, prot]);
@@ -21,6 +22,7 @@ async function check(dialog:HTMLIFrameElement, win: Window) {
             data[0](await data[1].call());
         }
         queue = [];
+
         navigator.serviceWorker.controller.postMessage({
             type: 'LOGGED_IN'
         });//, [channel.port2]);

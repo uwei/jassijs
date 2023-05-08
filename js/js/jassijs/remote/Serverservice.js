@@ -41,7 +41,7 @@ var serverservices = new Proxy(runningServerservices, {
                             await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                         }
                         else {
-                            Classes_1.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
+                            await Classes_1.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
                         }
                         var props = Registry_1.default.getData("$Serverservice", classname)[0].params[0];
                         for (var x = 0; x < beforeServiceLoadHandler.length; x++) {

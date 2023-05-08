@@ -1306,6 +1306,9 @@ declare module "jassijs_editor/FileExplorer" {
         static newFolder(all: FileNode[], filename?: string): Promise<void>;
         static newModule(all: FileNode[]): Promise<void>;
         static dodelete(all: FileNode[], withwarning?: boolean): Promise<void>;
+        private static reloadFilesystem;
+        static mapLocalFolder(all: FileNode[], foldername?: any): Promise<void>;
+        static closeLocalFolder(all: FileNode[], foldername?: any): Promise<void>;
         static rename(all: FileNode[], foldername?: any): Promise<void>;
         static refresh(all: FileNode[]): Promise<void>;
         static open(all: FileNode[]): Promise<void>;

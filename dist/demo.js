@@ -1562,6 +1562,9 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1655726456000,
                 "demo.Testmenu": {}
             },
+            "demo/TestProTable.ts": {
+                "date": 1681563005343.9316
+            },
             "demo/Testtable.ts": {
                 "date": 1681590320376.6711
             },
@@ -1579,9 +1582,6 @@ define("demo/registry", ["require"], function (require) {
             "demo/TreeTable.ts": {
                 "date": 1681590899857.6982,
                 "demo.TreeTable": {}
-            },
-            "demo/TestProTable.ts": {
-                "date": 1681563005343.9316
             },
             "demo/_test1.ts": {
                 "date": 1670673960000

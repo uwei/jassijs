@@ -3,7 +3,7 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1657651684000,
+		"date": 1683397288936.7078,
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/AcePanelSimple.ts": {
@@ -114,7 +114,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"date": 1681572585833.658
 	},
 	"jassijs_editor/FileExplorer.ts": {
-		"date": 1682797304269.3555,
+		"date": 1683485300727.978,
 		"jassijs_editor.ui.FileActions": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -157,6 +157,22 @@ define("jassijs_editor/registry",["require"], function(require) {
 					"$Action": [
 						{
 							"name": "Delete"
+						}
+					]
+				},
+				"mapLocalFolder": {
+					"$Action": [
+						{
+							"name": "Map local folder",
+							"isEnabled": "function"
+						}
+					]
+				},
+				"closeLocalFolder": {
+					"$Action": [
+						{
+							"name": "Close local folder",
+							"isEnabled": "function"
 						}
 					]
 				},

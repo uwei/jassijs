@@ -6116,13 +6116,13 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
     }
     exports.test = test;
 });
-define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows", "jassijs/remote/Config"], function (require, exports, Registry_24, Tree_2, Panel_9, Textbox_1, Server_5, Router_5, Actions_4, OptionDialog_2, ContextMenu_2, Windows_4, Config_3) {
+define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows", "jassijs/remote/Config", "jassijs/server/LocalFS"], function (require, exports, Registry_24, Tree_2, Panel_9, Textbox_1, Server_5, Router_5, Actions_4, OptionDialog_2, ContextMenu_2, Windows_4, Config_3, LocalFS_1) {
     "use strict";
-    var FileExplorer_1;
+    var FileActions_1, FileExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.FileExplorer = exports.FileActions = void 0;
     //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
-    let FileActions = class FileActions {
+    let FileActions = FileActions_1 = class FileActions {
         static async newFile(all, fileName = undefined, code = "", open = false) {
             var _a, _b, _c, _d;
             if (all.length === 0 || !all[0].isDirectory())
@@ -6243,6 +6243,33 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
                 (_c = FileExplorer.instance) === null || _c === void 0 ? void 0 : _c.tree.activateKey(key);
             }
         }
+        static async reloadFilesystem(enableLocalFS) {
+            await new Promise((resolve) => {
+                Config_3.config.serverrequire(["jassijs/server/NativeAdapter", "jassijs/server/LocalFS", "jassijs/server/FS"], (native, localFS, FS) => {
+                    if (enableLocalFS) {
+                        native.myfs = new localFS.LocalFS();
+                        native.exists = localFS.exists;
+                    }
+                    else {
+                        native.myfs = new FS.FS();
+                        native.exists = FS.exists;
+                    }
+                    resolve(undefined);
+                });
+            });
+        }
+        static async mapLocalFolder(all, foldername = undefined) {
+            await (0, LocalFS_1.createHandle)();
+            Config_3.config.isLocalFolderMapped = true;
+            await FileActions_1.reloadFilesystem(true);
+            await FileActions_1.refresh(all);
+        }
+        static async closeLocalFolder(all, foldername = undefined) {
+            await (0, LocalFS_1.deleteHandle)();
+            Config_3.config.isLocalFolderMapped = true;
+            await FileActions_1.reloadFilesystem(false);
+            await FileActions_1.refresh(all);
+        }
         static async rename(all, foldername = undefined) {
             var _a, _b, _c;
             if (all.length !== 1)
@@ -6338,6 +6365,18 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:returntype", Promise)
     ], FileActions, "dodelete", null);
     __decorate([
+        (0, Actions_4.$Action)({ name: "Map local folder", isEnabled: (entr) => entr[0].name === "client" && Config_3.config.serverrequire !== undefined }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array, Object]),
+        __metadata("design:returntype", Promise)
+    ], FileActions, "mapLocalFolder", null);
+    __decorate([
+        (0, Actions_4.$Action)({ name: "Close local folder", isEnabled: (entr) => entr[0].name === "client" && Config_3.config.isLocalFolderMapped }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array, Object]),
+        __metadata("design:returntype", Promise)
+    ], FileActions, "closeLocalFolder", null);
+    __decorate([
         (0, Actions_4.$Action)({ name: "Rename" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Object]),
@@ -6359,7 +6398,7 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], FileActions, "open", null);
-    FileActions = __decorate([
+    FileActions = FileActions_1 = __decorate([
         (0, Actions_4.$ActionProvider)("jassijs.remote.FileNode"),
         (0, Registry_24.$Class)("jassijs_editor.ui.FileActions")
     ], FileActions);
@@ -7585,7 +7624,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1657651684000,
+                "date": 1683397288936.7078,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
@@ -7626,45 +7665,31 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1656017274000,
                 "jassijs_editor.ComponentPalette": {}
             },
-            "jassijs_editor/Debugger.ts": {
-                "date": 1656019586000,
-                "jassijs_editor.Debugger": {}
-            },
-            "jassijs_editor/modul.ts": {
-                "date": 1681572587537.0356
-            },
-            "jassijs_editor/MonacoPanel.ts": {
-                "date": 1681487384261.6387,
-                "jassijs_editor.MonacoPanel": {}
-            },
-            "jassijs_editor/StartEditor.ts": {
-                "date": 1681571254206.555
-            },
-            "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1657925428000,
-                "jassijs_editor.util.DragAndDropper": {}
-            },
-            "jassijs_editor/util/Parser.ts": {
-                "date": 1681569989717.5266,
-                "jassijs_editor.util.Parser": {}
-            },
-            "jassijs_editor/util/Resizer.ts": {
-                "date": 1656018240000,
-                "jassijs_editor.util.Resizer": {}
-            },
-            "jassijs_editor/util/TSSourceMap.ts": {
-                "date": 1682794838048.3022,
-                "jassijs_editor.util.TSSourceMap": {}
-            },
-            "jassijs_editor/util/Typescript.ts": {
-                "date": 1682798301506.315,
-                "jassijs_editor.util.Typescript": {}
-            },
-            "jassijs_editor/ext/Monaco.ts": {
-                "date": 1657653558211
-            },
-            "jassijs_editor/ext/monaco.ts": {
-                "date": 1681572585833.658
+            "jassijs_editor/ComponentSpy.ts": {
+                "date": 1681570600553.5786,
+                "jassijs_editor.ui.ComponentSpy": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "dummy": {
+                            "$Action": [
+                                {
+                                    "name": "Administration",
+                                    "icon": "mdi mdi-account-cog-outline"
+                                }
+                            ]
+                        },
+                        "showDialog": {
+                            "$Action": [
+                                {
+                                    "name": "Administration/Spy Components",
+                                    "icon": "mdi mdi-police-badge"
+                                }
+                            ]
+                        }
+                    }
+                }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
                 "date": 1681557203337.6318,
@@ -7684,9 +7709,9 @@ define("jassijs_editor/registry", ["require"], function (require) {
                     }
                 }
             },
-            "jassijs_editor/util/DatabaseSchema.ts": {
-                "date": 1681569386435.7656,
-                "jassijs_editor.util.DatabaseSchema": {}
+            "jassijs_editor/Debugger.ts": {
+                "date": 1656019586000,
+                "jassijs_editor.Debugger": {}
             },
             "jassijs_editor/ErrorPanel.ts": {
                 "date": 1682794807313.8018,
@@ -7705,6 +7730,140 @@ define("jassijs_editor/registry", ["require"], function (require) {
                         }
                     }
                 }
+            },
+            "jassijs_editor/ext/monaco.ts": {
+                "date": 1681572585833.658
+            },
+            "jassijs_editor/FileExplorer.ts": {
+                "date": 1683485300727.978,
+                "jassijs_editor.ui.FileActions": {
+                    "$ActionProvider": [
+                        "jassijs.remote.FileNode"
+                    ],
+                    "@members": {
+                        "newFile": {
+                            "$Action": [
+                                {
+                                    "name": "New/File",
+                                    "icon": "mdi mdi-file",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "download": {
+                            "$Action": [
+                                {
+                                    "name": "Download",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "newFolder": {
+                            "$Action": [
+                                {
+                                    "name": "New/Folder",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "newModule": {
+                            "$Action": [
+                                {
+                                    "name": "New/Module",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "dodelete": {
+                            "$Action": [
+                                {
+                                    "name": "Delete"
+                                }
+                            ]
+                        },
+                        "mapLocalFolder": {
+                            "$Action": [
+                                {
+                                    "name": "Map local folder",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "closeLocalFolder": {
+                            "$Action": [
+                                {
+                                    "name": "Close local folder",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "rename": {
+                            "$Action": [
+                                {
+                                    "name": "Rename"
+                                }
+                            ]
+                        },
+                        "refresh": {
+                            "$Action": [
+                                {
+                                    "name": "Refresh"
+                                }
+                            ]
+                        },
+                        "open": {
+                            "$Action": [
+                                {
+                                    "name": "Open",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "jassijs.ui.FileExplorer": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "show": {
+                            "$Action": [
+                                {
+                                    "name": "Windows/Development/Files",
+                                    "icon": "mdi mdi-file-tree"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "jassijs_editor/modul.ts": {
+                "date": 1681572587537.0356
+            },
+            "jassijs_editor/MonacoPanel.ts": {
+                "date": 1681487384261.6387,
+                "jassijs_editor.MonacoPanel": {}
+            },
+            "jassijs_editor/SearchExplorer.ts": {
+                "date": 1681590244603.8452,
+                "jassijs_editor.ui.SearchExplorer": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "show": {
+                            "$Action": [
+                                {
+                                    "name": "Windows/Development/Search",
+                                    "icon": "mdi mdi-folder-search-outline"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "jassijs_editor/StartEditor.ts": {
+                "date": 1681571254206.555
             },
             "jassijs_editor/template/TemplateDBDialog.ts": {
                 "date": 1681570390412.55,
@@ -7784,110 +7943,21 @@ define("jassijs_editor/registry", ["require"], function (require) {
                     }
                 }
             },
-            "jassijs_editor/FileExplorer.ts": {
-                "date": 1682797304269.3555,
-                "jassijs_editor.ui.FileActions": {
-                    "$ActionProvider": [
-                        "jassijs.remote.FileNode"
-                    ],
-                    "@members": {
-                        "newFile": {
-                            "$Action": [
-                                {
-                                    "name": "New/File",
-                                    "icon": "mdi mdi-file",
-                                    "isEnabled": "function"
-                                }
-                            ]
-                        },
-                        "download": {
-                            "$Action": [
-                                {
-                                    "name": "Download",
-                                    "isEnabled": "function"
-                                }
-                            ]
-                        },
-                        "newFolder": {
-                            "$Action": [
-                                {
-                                    "name": "New/Folder",
-                                    "isEnabled": "function"
-                                }
-                            ]
-                        },
-                        "newModule": {
-                            "$Action": [
-                                {
-                                    "name": "New/Module",
-                                    "isEnabled": "function"
-                                }
-                            ]
-                        },
-                        "dodelete": {
-                            "$Action": [
-                                {
-                                    "name": "Delete"
-                                }
-                            ]
-                        },
-                        "rename": {
-                            "$Action": [
-                                {
-                                    "name": "Rename"
-                                }
-                            ]
-                        },
-                        "refresh": {
-                            "$Action": [
-                                {
-                                    "name": "Refresh"
-                                }
-                            ]
-                        },
-                        "open": {
-                            "$Action": [
-                                {
-                                    "name": "Open",
-                                    "isEnabled": "function"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "jassijs.ui.FileExplorer": {
-                    "$ActionProvider": [
-                        "jassijs.base.ActionNode"
-                    ],
-                    "@members": {
-                        "show": {
-                            "$Action": [
-                                {
-                                    "name": "Windows/Development/Files",
-                                    "icon": "mdi mdi-file-tree"
-                                }
-                            ]
-                        }
-                    }
-                }
+            "jassijs_editor/util/DatabaseSchema.ts": {
+                "date": 1681569386435.7656,
+                "jassijs_editor.util.DatabaseSchema": {}
             },
-            "jassijs_editor/SearchExplorer.ts": {
-                "date": 1681590244603.8452,
-                "jassijs_editor.ui.SearchExplorer": {
-                    "$ActionProvider": [
-                        "jassijs.base.ActionNode"
-                    ],
-                    "@members": {
-                        "show": {
-                            "$Action": [
-                                {
-                                    "name": "Windows/Development/Search",
-                                    "icon": "mdi mdi-folder-search-outline"
-                                }
-                            ]
-                        }
-                    }
-                }
+            "jassijs_editor/util/DragAndDropper.ts": {
+                "date": 1657925428000,
+                "jassijs_editor.util.DragAndDropper": {}
+            },
+            "jassijs_editor/util/Parser.ts": {
+                "date": 1681569989717.5266,
+                "jassijs_editor.util.Parser": {}
+            },
+            "jassijs_editor/util/Resizer.ts": {
+                "date": 1656018240000,
+                "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
                 "date": 1681570126438.5786,
@@ -7906,31 +7976,13 @@ define("jassijs_editor/registry", ["require"], function (require) {
                     }
                 }
             },
-            "jassijs_editor/ComponentSpy.ts": {
-                "date": 1681570600553.5786,
-                "jassijs_editor.ui.ComponentSpy": {
-                    "$ActionProvider": [
-                        "jassijs.base.ActionNode"
-                    ],
-                    "@members": {
-                        "dummy": {
-                            "$Action": [
-                                {
-                                    "name": "Administration",
-                                    "icon": "mdi mdi-account-cog-outline"
-                                }
-                            ]
-                        },
-                        "showDialog": {
-                            "$Action": [
-                                {
-                                    "name": "Administration/Spy Components",
-                                    "icon": "mdi mdi-police-badge"
-                                }
-                            ]
-                        }
-                    }
-                }
+            "jassijs_editor/util/TSSourceMap.ts": {
+                "date": 1682794838048.3022,
+                "jassijs_editor.util.TSSourceMap": {}
+            },
+            "jassijs_editor/util/Typescript.ts": {
+                "date": 1682798301506.315,
+                "jassijs_editor.util.Typescript": {}
             }
         }
     };

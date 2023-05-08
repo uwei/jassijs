@@ -66,7 +66,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database
             var Filesystem = await Classes_1.classes.loadClass("jassijs.server.Filesystem");
             var data = undefined;
             if (await (0, NativeAdapter_1.exists)("./client/__default.db"))
-                data = await NativeAdapter_1.myfs.readFile("./client/__default.db", undefined, false);
+                data = await NativeAdapter_1.myfs.readFile("./client/__default.db", "binary", false);
             var opt = {
                 database: data,
                 type: "sqljs",

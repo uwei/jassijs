@@ -2040,6 +2040,42 @@ define("northwind/registry", ["require"], function (require) {
                     "@members": {}
                 }
             },
+            "northwind/CustomerOrders.ts": {
+                "date": 1656502358000,
+                "northwind/CustomerOrders": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "showDialog": {
+                            "$Action": [
+                                {
+                                    "name": "Northwind/Customer Orders",
+                                    "icon": "mdi-script-text-play-outline"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "northwind/CustomerPhoneList.ts": {
+                "date": 1681640212625.8901,
+                "northwind/CustomerPhoneList": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "showDialog": {
+                            "$Action": [
+                                {
+                                    "name": "Northwind/Customer Phone List",
+                                    "icon": "mdi-script-text-play-outline"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
             "northwind/CustomerView.ts": {
                 "date": 1682164037473.795,
                 "northwind/CustomerView": {
@@ -2117,6 +2153,24 @@ define("northwind/registry", ["require"], function (require) {
                         }
                     ],
                     "@members": {}
+                }
+            },
+            "northwind/ProductList.ts": {
+                "date": 1657475060000,
+                "northwind/ProductList": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "showDialog": {
+                            "$Action": [
+                                {
+                                    "name": "Northwind/Product List",
+                                    "icon": "mdi mdi-reproduction"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/ProductView.ts": {
@@ -3031,50 +3085,6 @@ define("northwind/registry", ["require"], function (require) {
                     }
                 }
             },
-            "northwind/ShippersView.ts": {
-                "date": 1656683118000,
-                "northwind.ShippersView": {
-                    "$DBObjectView": [
-                        {
-                            "classname": "northwind.Shippers",
-                            "actionname": "Northwind/Shippers",
-                            "icon": "mdi mdi-truck-delivery"
-                        }
-                    ],
-                    "@members": {}
-                }
-            },
-            "northwind/SuppliersView.ts": {
-                "date": 1656683258000,
-                "northwind.SuppliersView": {
-                    "$DBObjectView": [
-                        {
-                            "classname": "northwind.Suppliers",
-                            "actionname": "Northwind/Suppliers",
-                            "icon": "mdi mdi-office-building-outline"
-                        }
-                    ],
-                    "@members": {}
-                }
-            },
-            "northwind/CustomerOrders.ts": {
-                "date": 1656502358000,
-                "northwind/CustomerOrders": {
-                    "$ActionProvider": [
-                        "jassijs.base.ActionNode"
-                    ],
-                    "@members": {
-                        "showDialog": {
-                            "$Action": [
-                                {
-                                    "name": "Northwind/Customer Orders",
-                                    "icon": "mdi-script-text-play-outline"
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
             "northwind/reports/CustomerLabels.ts": {
                 "date": 1656456456000,
                 "nothwind.CustomerLabels": {
@@ -3100,40 +3110,30 @@ define("northwind/registry", ["require"], function (require) {
                     }
                 }
             },
-            "northwind/CustomerPhoneList.ts": {
-                "date": 1681640212625.8901,
-                "northwind/CustomerPhoneList": {
-                    "$ActionProvider": [
-                        "jassijs.base.ActionNode"
-                    ],
-                    "@members": {
-                        "showDialog": {
-                            "$Action": [
-                                {
-                                    "name": "Northwind/Customer Phone List",
-                                    "icon": "mdi-script-text-play-outline"
-                                }
-                            ]
+            "northwind/ShippersView.ts": {
+                "date": 1656683118000,
+                "northwind.ShippersView": {
+                    "$DBObjectView": [
+                        {
+                            "classname": "northwind.Shippers",
+                            "actionname": "Northwind/Shippers",
+                            "icon": "mdi mdi-truck-delivery"
                         }
-                    }
+                    ],
+                    "@members": {}
                 }
             },
-            "northwind/ProductList.ts": {
-                "date": 1657475060000,
-                "northwind/ProductList": {
-                    "$ActionProvider": [
-                        "jassijs.base.ActionNode"
-                    ],
-                    "@members": {
-                        "showDialog": {
-                            "$Action": [
-                                {
-                                    "name": "Northwind/Product List",
-                                    "icon": "mdi mdi-reproduction"
-                                }
-                            ]
+            "northwind/SuppliersView.ts": {
+                "date": 1656683258000,
+                "northwind.SuppliersView": {
+                    "$DBObjectView": [
+                        {
+                            "classname": "northwind.Suppliers",
+                            "actionname": "Northwind/Suppliers",
+                            "icon": "mdi mdi-office-building-outline"
                         }
-                    }
+                    ],
+                    "@members": {}
                 }
             }
         }

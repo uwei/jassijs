@@ -1,4 +1,5 @@
 import { JassiError } from "jassijs/remote/Classes";
+import { Test } from "jassijs/remote/Test";
 class Stats {
     mtimeMs: number;
     isDirectory: () => boolean;
@@ -259,4 +260,38 @@ async function downloadFile(file: string) {
 
 export async function exists(filename: string): Promise<boolean> {
     return new FS()["exists"](filename);
+}
+
+export async function test(tt: Test) {
+    var fs = new FS();
+
+    var testfolder = "./dasisteinfestfolder";
+    var testfile = "./dasisteintestfile.js";
+
+    await fs.writeFile(testfile, "var a=10;");
+    tt.expectEqual(!(await fs.stat(testfile)).isDirectory())
+    tt.expectEqual(await exists(testfile));
+    tt.expectEqual((await fs.readFile(testfile)) === "var a=10;");
+    var hh = await fs.readdir(".");
+    tt.expectEqual(hh.length > 0);
+    await fs.rename(testfile, testfile + ".txt");
+    tt.expectEqual(await exists(testfile + ".txt"));
+    await fs.rename(testfile + ".txt", testfile);
+
+    await fs.unlink(testfile);
+    tt.expectEqual(!await exists(testfile));
+    tt.expectErrorAsync(async () => await fs.unlink("./hallo.js"));
+    if (await exists(testfolder))
+        await fs.rmdir(testfolder, { recursive: true });
+    await fs.mkdir(testfolder + "/hh", { recursive: true });
+    await fs.writeFile(testfolder + "/hh/h.txt", "Hallo");
+    await fs.rename(testfolder, testfolder + "1");
+    tt.expectEqual(await exists(testfolder + "1"));
+    tt.expectEqual(!await exists(testfolder));
+    await fs.rename(testfolder + "1", testfolder);
+    tt.expectEqual(!await exists(testfolder + "1"));
+    tt.expectEqual(await exists(testfolder));
+    //tt.expectErrorAsync(async () => await fs.rmdir(testfolder));
+    //await fs.rmdir(testfolder, { recursive: true })
+    debugger;
 }

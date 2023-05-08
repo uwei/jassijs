@@ -5,6 +5,71 @@ class JassijsStarter {
     cssFiles = {};
     //config data
     config;
+    async enableLocaldir() {
+        var req = indexedDB.open("handles", 3);
+        req.onupgradeneeded = function (ev) {
+            var db = ev.target["result"];
+            var objectStore = db.createObjectStore("handles");
+        }
+        var db = await new Promise((res) => {
+            req.onsuccess = (ev) => {
+                res(ev.target["result"])
+            };
+        });
+        let transaction = db.transaction("handles", 'readwrite');
+        const store = transaction.objectStore("handles");
+        var ret = await store.get("handle");
+        var fileHandle = await new Promise((resolve) => {
+            ret.onsuccess = ev => { resolve(ret.result) }
+        });
+        if (fileHandle) {
+            return await new Promise((resolve) => {
+                var buttonOpen = document.createElement("input");
+                var buttonClose = document.createElement("input");
+                window.enableFileSystem = async () => {
+                    const options = { mode: 'readwrite' };
+                    document.body.removeChild(document.getElementById("loadlocalFolder"));
+                    document.body.removeChild(document.getElementById("closelocalFolder"));
+
+                    if ((await fileHandle.queryPermission(options)) === 'granted') {
+                        resolve(fileHandle);
+                    }
+                    if ((await fileHandle.requestPermission(options)) === 'granted') {
+                        resolve(fileHandle);
+                    } else
+                        resolve(undefined);
+                }
+                window.closeFileSystem = async () => {
+                    
+                    var req = window.indexedDB.open("handles", 3);
+                    var db = await new Promise((resolve) => {
+                        req.onupgradeneeded = function (event) {
+                            var db = event.target["result"];
+                            var objectStore = db.createObjectStore("handles");
+                        }
+                        req.onsuccess = (ev) => {
+                            resolve(ev.target["result"])
+                        };
+                    });
+                    let transaction = db.transaction('handles', 'readwrite');
+                    const store = transaction.objectStore('handles');
+                    store.delete("handle");
+                    await new Promise((resolve) => { transaction.oncomplete = resolve })
+
+                    document.body.removeChild(document.getElementById("loadlocalFolder"));
+                    document.body.removeChild(document.getElementById("closelocalFolder"));
+                    resolve(undefined);
+                }
+
+                document.body.appendChild(buttonOpen);
+                document.body.appendChild(buttonClose);
+
+                buttonOpen.outerHTML = '<input type="button" id="loadlocalFolder" onclick="enableFileSystem()" value="load ' + fileHandle.name + '">';
+                buttonClose.outerHTML = '<input type="button" id="closelocalFolder" onclick="closeFileSystem()" value="close ' + fileHandle.name + '">';
+
+            })
+        }
+    }
     registerServiceWorker() {
 
         var http = new XMLHttpRequest();
@@ -30,7 +95,7 @@ class JassijsStarter {
     async loadText(url) {
         return new Promise((resolve) => {
             let oReq = new XMLHttpRequest();
-            oReq.open("GET", url);
+            oReq.open("GET", url+"?3");
             oReq.onerror = () => {
                 resolve(undefined);
             };
@@ -165,7 +230,7 @@ class JassijsStarter {
         await Promise.all(all);
     }
 
-    async runContext(modules, myRequire, contextname, configtext,otherRequire) {
+    async runContext(modules, myRequire, contextname, configtext, otherRequire,isLocalFolderMapped) {
         if (modules === undefined || modules.length === 0)
             return;
         await this.loadInternetModules(modules, myRequire);
@@ -189,7 +254,7 @@ class JassijsStarter {
 
             myRequire(all, function (remoteJassi, config, ...res) {
                 config.config.init(configtext);
-
+                config.config.isLocalFolderMapped=isLocalFolderMapped;
                 if (contextname === "server") {
                     //window.jassijs.modules = _this.config.modules;
                     config.config.isServer = true;
@@ -232,6 +297,7 @@ class JassijsStarter {
         });
     }
     async run() {
+        
         var configtext = await this.loadText(this.configFile);
         var requireconfig = {};
         let modules;
@@ -247,6 +313,8 @@ class JassijsStarter {
 
 
         }
+        if(data.runServerInBrowser===true)
+            var localDir=await this.enableLocaldir();
         await this.loadRequirejs(requireconfig);
         requirejs.config({
             waitSeconds: 200,
@@ -261,9 +329,9 @@ class JassijsStarter {
         var context = JSON.parse(JSON.stringify(require.s.contexts._.config))
         context.context = "server";
         let serverRequire = requirejs.config(context);
-        if(data.runServerInBrowser)
-            await this.runContext(servermodules, serverRequire, "server", configtext,requirejs);
-        this.runContext(modules, requirejs, "_", configtext,serverRequire);
+        if (data.runServerInBrowser)
+            await this.runContext(servermodules, serverRequire, "server", configtext, requirejs,localDir!==undefined);
+        this.runContext(modules, requirejs, "_", configtext, serverRequire,localDir!==undefined);
 
 
 
