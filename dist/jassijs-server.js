@@ -534,7 +534,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1683050189346.0103
             },
             "jassijs/server/Compile.ts": {
-                "date": 1683647529314.346
+                "date": 1683659462332.0166
             }
         }
     };
@@ -3981,6 +3981,7 @@ define("client/jassijs/server/Compile", ["require", "exports", "jassijs/server/N
                 //"outDir":"js",
                 allowJs: true,
                 sourceMap: true,
+                inlineSources: true,
                 moduleResolution: 2,
                 skipLibCheck: true,
                 rootDir: "./",

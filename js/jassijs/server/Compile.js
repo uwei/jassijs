@@ -31,6 +31,7 @@ class Compile {
             //"outDir":"js",
             allowJs: true,
             sourceMap: true,
+            inlineSources: true,
             moduleResolution: 2,
             skipLibCheck: true,
             rootDir: "./",

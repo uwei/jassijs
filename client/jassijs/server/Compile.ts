@@ -33,11 +33,12 @@ export class Compile {
   serverConfig() {
     var ret: ts.CompilerOptions = {
       baseUrl: "./",
-      target: 4,
+      target: 4, 
       module: ts.ModuleKind.CommonJS,
       //"outDir":"js",
       allowJs: true,
       sourceMap: true,
+      inlineSources:true,
       moduleResolution: 2,
       skipLibCheck: true,
       rootDir:"./",
