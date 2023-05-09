@@ -80,11 +80,11 @@ export class Panel extends Container implements PanelConfig {
     }
     max() {
         if (this._id == "body") {
-            this.domWrapper.style.width="100%";
-            this.domWrapper.style.height="calc(100vh - 2px)";
+            this.domWrapper.style.width = "100%";
+            this.domWrapper.style.height = "calc(100vh - 2px)";
         } else {
-            this.domWrapper.style.width= "100%";
-            this.domWrapper.style.height="100%";
+            this.domWrapper.style.width = "100%";
+            this.domWrapper.style.height = "100%";
         }
     }
     extensionCalled(action: ExtensionAction) {
@@ -160,10 +160,12 @@ export class Panel extends Container implements PanelConfig {
                 }
             }
         } else {
-            for (var x = 0; x < this._components.length; x++) {
-                var comp = this._components[x];
-                DesignDummy.destroyIfNeeded(comp, "beforeComponent");
+            if (this._components) {
+                for (var x = 0; x < this._components.length; x++) {
+                    var comp = this._components[x];
+                    DesignDummy.destroyIfNeeded(comp, "beforeComponent");
 
+                }
             }
         }
 

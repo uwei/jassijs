@@ -1,36 +1,9 @@
 declare module "demoreports/12-Foreach" {
     export function test(): {
         reportdesign: {
-            content: (string | {
-                table: {
-                    body: {
-                        foreach: string;
-                        do: {
-                            foreach: string;
-                            dofirst: (string | {
-                                bold: boolean;
-                                text: string;
-                                colSpan: number;
-                            })[];
-                            do: {
-                                foreach: string;
-                                dofirst: (string | {
-                                    text: string;
-                                    colSpan: number;
-                                })[];
-                                do: string[];
-                                dolast: string[];
-                            };
-                            dolast: string[];
-                        };
-                    }[];
-                };
-            })[];
+            content: {};
         };
-        data: {
-            entries: any[];
-            name: any;
-        };
+        data: any;
     };
 }
 declare module "demoreports/modul" {

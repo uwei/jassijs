@@ -99,9 +99,11 @@ export class Container extends Component implements Omit<ContainerConfig, "child
         component._parent = undefined;
         if (component.domWrapper !== undefined)
             component.domWrapper._parent = undefined;
+        if(this._components){
         var pos = this._components.indexOf(component);
         if (pos >= 0)
             this._components.splice(pos, 1);
+        }
         let posd = this.designDummies?.indexOf(component);
         if (posd >= 0)
             this.designDummies.splice(posd, 1);

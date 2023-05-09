@@ -154,9 +154,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
                 }
             }
             else {
-                for (var x = 0; x < this._components.length; x++) {
-                    var comp = this._components[x];
-                    DesignDummy_1.DesignDummy.destroyIfNeeded(comp, "beforeComponent");
+                if (this._components) {
+                    for (var x = 0; x < this._components.length; x++) {
+                        var comp = this._components[x];
+                        DesignDummy_1.DesignDummy.destroyIfNeeded(comp, "beforeComponent");
+                    }
                 }
             }
         }

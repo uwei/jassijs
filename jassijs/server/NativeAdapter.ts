@@ -121,6 +121,3 @@ export async function reloadJSAll(filenames: string[], afterUnload: () => {}) {
     return new Reloader().reloadJSAll(filenames,afterUnload);
 }
 
-export async function   transpile(fileName: string,inServerdirectory:boolean=undefined) {
-    await new Compile().transpile(fileName,inServerdirectory);
-}

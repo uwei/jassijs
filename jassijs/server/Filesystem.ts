@@ -4,8 +4,9 @@ import { FileNode } from 'jassijs/remote/FileNode';
 import { ServerIndexer } from './RegistryIndexer';
 import registry, { $Class } from 'jassijs/remote/Registry';
 import { $Serverservice, runningServerservices, serverservices } from '../remote/Serverservice';
-import { dozip, myfs, exists, reloadJSAll, transpile } from './NativeAdapter';
+import { dozip, myfs, exists, reloadJSAll } from './NativeAdapter';
 import { config } from 'jassijs/remote/Config';
+import { Compile } from './Compile';
 
 
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"]
@@ -375,12 +376,12 @@ export default class Filesystem {
                     let rpath = this.getDirectoryname("./" + fneu);
                     try {
                         await myfs.mkdir(rpath, { recursive: true });
-                    } catch (err) {
+                    } catch (err) { 
                     }
                     await myfs.writeFile("./" + fneu, contents[x]);
                     if (spath.length > 1 && spath[0] !== "$serverside")
                         await this.createRemoteModulIfNeeded(spath[0]);
-                    transpile(fneu, fromServerdirectory);
+                        new Compile().transpileServercode(fneu, fromServerdirectory);
                 }
             }
         }

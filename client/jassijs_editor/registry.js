@@ -114,7 +114,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"date": 1681572585833.658
 	},
 	"jassijs_editor/FileExplorer.ts": {
-		"date": 1683485300727.978,
+		"date": 1683575948644.66,
 		"jassijs_editor.ui.FileActions": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -360,7 +360,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1682798301506.315,
+		"date": 1683646811514.5037,
 		"jassijs_editor.util.Typescript": {}
 	}
 }

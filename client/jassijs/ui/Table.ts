@@ -1,5 +1,5 @@
 import registry, { $Class } from "jassijs/remote/Registry";
-import "jassijs/ext/tabulator";
+//import "jassijs/ext/tabulator";
 import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 import { $Property } from "jassijs/ui/Property";
 import { Component, $UIComponent } from "jassijs/ui/Component";

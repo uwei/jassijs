@@ -47,13 +47,13 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657656778000
             },
             "jassijs/ext/tabulator.ts": {
-                "date": 1681586871430.2693
+                "date": 1683657411531.5576
             },
             "jassijs/ext/tinymce.ts": {
                 "date": 1657658562000
             },
             "jassijs/modul.ts": {
-                "date": 1682930130364.68
+                "date": 1683648573373.3384
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1682795551717.3792,
@@ -538,7 +538,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657714030000
             },
             "jassijs/server/Filesystem.ts": {
-                "date": 1682807745323.753,
+                "date": 1683563646221.8352,
                 "jassijs.server.Filesystem": {
                     "$Serverservice": [
                         {
@@ -549,7 +549,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/FS.ts": {
-                "date": 1683125894877.5718
+                "date": 1683563356650.9514
             },
             "jassijs/server/Indexer.ts": {
                 "date": 1682806194944.4678
@@ -670,7 +670,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1656417348000,
+                "date": 1683645500298.757,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
@@ -999,7 +999,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1655672402000,
+                "date": 1683645539963.3816,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {}
                 },
@@ -1300,7 +1300,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1681640550943.4778,
+                "date": 1683658583312.6,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -1439,6 +1439,9 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/server/LocalFS.ts": {
                 "date": 1683483467365.1172
+            },
+            "jassijs/server/Compile.ts": {
+                "date": 1683647529314.346
             }
         }
     };

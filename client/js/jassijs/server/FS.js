@@ -106,7 +106,7 @@ define(["require", "exports", "jassijs/remote/Classes"], function (require, expo
         async mkdir(filename, options) {
             var test = await this.loadFileEntry(filename);
             if (test)
-                throw new Classes_1.JassiError(filename + " allready exists");
+                return; //throw new JassiError(filename + " allready exists");
             var parent = this.getDirectoryname(filename);
             if (parent === "")
                 return;

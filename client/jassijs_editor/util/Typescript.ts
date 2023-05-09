@@ -4,6 +4,7 @@ import { Server } from "jassijs/remote/Server";
 import { FileNode } from "jassijs/remote/FileNode";
 import "jassijs_editor/ext/monaco";
 import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+import { config } from "jassijs/remote/Config";
 
 @$Class("jassijs_editor.util.Typescript")
 export class Typescript {
@@ -98,11 +99,11 @@ export class Typescript {
     //load  d.ts from modulpackage
     private async includeModulTypes() {
         var nodeFiles = {}
-        for (var mod in jassijs.modules) {
-            var config = (await import(mod + "/modul")).default;
-            if (config.types) {
-                for (var key in config.types) {
-                    var file = config.types[key];
+        for (var mod in config.modules) {
+            var config1 = (await import(mod + "/modul")).default;
+            if (config1.types) {
+                for (var key in config1.types) {
+                    var file = config1.types[key];
                     nodeFiles[key] = new Server().loadFile(file);
 
                 }

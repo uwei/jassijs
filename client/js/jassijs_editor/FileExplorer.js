@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows", "jassijs/remote/Config", "jassijs/server/LocalFS"], function (require, exports, Registry_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, ContextMenu_1, Windows_1, Config_1, LocalFS_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows", "jassijs/remote/Config"], function (require, exports, Registry_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, ContextMenu_1, Windows_1, Config_1) {
     "use strict";
     var FileActions_1, FileExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -150,13 +150,25 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
             });
         }
         static async mapLocalFolder(all, foldername = undefined) {
-            await (0, LocalFS_1.createHandle)();
+            await new Promise((resolve) => {
+                Config_1.config.serverrequire(["jassijs/server/LocalFS"], (localFS) => {
+                    localFS.createHandle().then((res) => {
+                        resolve(undefined);
+                    });
+                });
+            });
             Config_1.config.isLocalFolderMapped = true;
             await FileActions_1.reloadFilesystem(true);
             await FileActions_1.refresh(all);
         }
         static async closeLocalFolder(all, foldername = undefined) {
-            await (0, LocalFS_1.deleteHandle)();
+            await new Promise((resolve) => {
+                Config_1.config.serverrequire(["jassijs/server/LocalFS"], (localFS) => {
+                    localFS.deleteHandle().then((res) => {
+                        resolve(undefined);
+                    });
+                });
+            });
             Config_1.config.isLocalFolderMapped = true;
             await FileActions_1.reloadFilesystem(false);
             await FileActions_1.refresh(all);

@@ -260,7 +260,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/MyRemoteObject.ts": {
-		"date": 1682192454973.8457,
+		"date": 1683563215195.641,
 		"de.remote.MyRemoteObject": {
 			"@members": {
 				"sayHello": {

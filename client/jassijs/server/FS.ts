@@ -114,7 +114,7 @@ export class FS {
     async mkdir(filename: string, options?: { recursive?: boolean }) {
         var test = await this.loadFileEntry(filename);
         if (test)
-            throw new JassiError(filename + " allready exists");
+            return;//throw new JassiError(filename + " allready exists");
         var parent = this.getDirectoryname(filename);
         if (parent === "")
             return;

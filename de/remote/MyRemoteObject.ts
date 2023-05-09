@@ -18,7 +18,7 @@ export class MyRemoteObject extends RemoteObject{
             return await this.call(this, this.sayHello, name,context);
         } else {
             console.log(await this.tt("hallo"));
-            return "Hello "+name;  //this would be execute on server  
+            return "Hello3 "+name;  //this would be execute on server  
         }
     }
     @ValidateFunctionParameter()
@@ -31,6 +31,6 @@ export class MyRemoteObject extends RemoteObject{
     }
 }
 export async function test(){
-    console.log(await new MyRemoteObject().sayHello("Kurt"));
+    console.log(await new MyRemoteObject().sayHello("Kurtt"));
    // console.log(await MyRemoteObject.sayHello2("5"));
 }

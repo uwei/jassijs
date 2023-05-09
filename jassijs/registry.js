@@ -374,7 +374,7 @@ exports.default={
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1682933011024.6155
+		"date": 1683647529314.346
 	},
 	"jassijs/server/DBManager.ts": {
 		"date": 1682710550782.2158,
@@ -391,7 +391,7 @@ exports.default={
 		"date": 1682362433279.5454
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1682807745323.753,
+		"date": 1683563646221.8352,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -490,7 +490,7 @@ exports.default={
 		"date": 1683393357596.9873
 	},
 	"jassijs/server/NativeAdapter.ts": {
-		"date": 1682806209363.9146
+		"date": 1683562436365.431
 	},
 	"jassijs/server/FileTools.ts": {
 		"date": 1682792900059.5854

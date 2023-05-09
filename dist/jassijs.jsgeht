@@ -81,7 +81,7 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
                 'tabulator-tables': "jassijs/ext/tabulator",
                 //"tabulatorext":'jassijs/ext/tabulator',
                 // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
-                "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect",
+                "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect"
             }
         },
         server: {
@@ -132,7 +132,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655549184000
             },
             "jassijs/base/LoginDialog.ts": {
-                "date": 1681316975343.1028
+                "date": 1683051934903.0696
             },
             "jassijs/base/PropertyEditorService.ts": {
                 "date": 1657571268000,
@@ -146,8 +146,26 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657655076000,
                 "jassijs.base.Windows": {}
             },
+            "jassijs/ext/goldenlayout.ts": {
+                "date": 1657655070000
+            },
+            "jassijs/ext/jquerylib.ts": {
+                "date": 1657655350000
+            },
+            "jassijs/ext/papaparse.ts": {
+                "date": 1657656072000
+            },
+            "jassijs/ext/spectrum.ts": {
+                "date": 1657656778000
+            },
+            "jassijs/ext/tabulator.ts": {
+                "date": 1683657411531.5576
+            },
+            "jassijs/ext/tinymce.ts": {
+                "date": 1657658562000
+            },
             "jassijs/modul.ts": {
-                "date": 1682930130364.68
+                "date": 1683648573373.3384
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1682795551717.3792,
@@ -157,6 +175,9 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/remote/ClientError.ts": {
                 "date": 1655556930000,
                 "jassijs.remote.ClientError": {}
+            },
+            "jassijs/remote/Config.ts": {
+                "date": 1683393357596.9873
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
@@ -198,6 +219,9 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/remote/jassijsGlobal.ts": {
                 "date": 1655549782000
+            },
+            "jassijs/remote/Modules.ts": {
+                "date": 1682799474543.8716
             },
             "jassijs/remote/ObjectTransaction.ts": {
                 "date": 1622985414000
@@ -542,6 +566,9 @@ define("jassijs/registry", ["require"], function (require) {
                     }
                 }
             },
+            "jassijs/remote/Serverservice.ts": {
+                "date": 1682715263974.073
+            },
             "jassijs/remote/Settings.ts": {
                 "date": 1681315774170.6409,
                 "jassijs.remote.Settings": {
@@ -565,6 +592,9 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/remote/Transaction.ts": {
                 "date": 1655556866000,
                 "jassijs.remote.Transaction": {}
+            },
+            "jassijs/remote/Validator.ts": {
+                "date": 1681322647267.7717
             },
             "jassijs/security/GroupView.ts": {
                 "date": 1681328190943.8904,
@@ -591,6 +621,84 @@ define("jassijs/registry", ["require"], function (require) {
                         }
                     ],
                     "@members": {}
+                }
+            },
+            "jassijs/server/DatabaseSchema.ts": {
+                "date": 1682241708158.535
+            },
+            "jassijs/server/DBManager.ts": {
+                "date": 1682710550782.2158,
+                "jassijs/server/DBManager": {
+                    "$Serverservice": [
+                        {
+                            "name": "db",
+                            "getInstance": "function"
+                        }
+                    ]
+                }
+            },
+            "jassijs/server/DBManagerExt.ts": {
+                "date": 1683399517699.4033
+            },
+            "jassijs/server/DoRemoteProtocol.ts": {
+                "date": 1682802877109.1504
+            },
+            "jassijs/server/ext/EmpyDeclaration.ts": {
+                "date": 1682275347821.4524
+            },
+            "jassijs/server/ext/jszip.ts": {
+                "date": 1657714030000
+            },
+            "jassijs/server/Filesystem.ts": {
+                "date": 1683563646221.8352,
+                "jassijs.server.Filesystem": {
+                    "$Serverservice": [
+                        {
+                            "name": "filesystem",
+                            "getInstance": "function"
+                        }
+                    ]
+                }
+            },
+            "jassijs/server/FS.ts": {
+                "date": 1683563356650.9514
+            },
+            "jassijs/server/Indexer.ts": {
+                "date": 1682806194944.4678
+            },
+            "jassijs/server/Installserver.ts": {
+                "date": 1682930462690.898
+            },
+            "jassijs/server/LocalProtocol.ts": {
+                "date": 1682804261351.0828
+            },
+            "jassijs/server/NativeAdapter.ts": {
+                "date": 1683484262227.9492
+            },
+            "jassijs/server/RegistryIndexer.ts": {
+                "date": 1682799790211.1238
+            },
+            "jassijs/server/Testuser.ts": {
+                "date": 1655556794000,
+                "Testuser": {
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "firstname": {
+                            "Column": []
+                        },
+                        "lastname": {
+                            "Column": []
+                        }
+                    }
+                }
+            },
+            "jassijs/server/TypeORMListener.ts": {
+                "date": 1682885924481.5344,
+                "jassijs.server.TypeORMListener": {
+                    "EventSubscriber": []
                 }
             },
             "jassijs/ui/ActionNodeMenu.ts": {
@@ -674,7 +782,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1656417348000,
+                "date": 1683645500298.757,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
@@ -687,6 +795,27 @@ define("jassijs/registry", ["require"], function (require) {
                             "editableChildComponents": [
                                 "menu"
                             ]
+                        }
+                    ],
+                    "@members": {}
+                }
+            },
+            "jassijs/ui/converters/DateTimeConverter.ts": {
+                "date": 1681559012450.2312,
+                "jassijs.ui.converters.DateTimeConverterProperies": {
+                    "@members": {}
+                },
+                "jassijs.ui.converters.DateTimeConverter": {
+                    "$Converter": [
+                        {
+                            "name": "datetime"
+                        }
+                    ],
+                    "$Property": [
+                        {
+                            "name": "new",
+                            "type": "json",
+                            "componentType": "jassijs.ui.converters.DateTimeConverterProperties"
                         }
                     ],
                     "@members": {}
@@ -982,7 +1111,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1655672402000,
+                "date": 1683645539963.3816,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {}
                 },
@@ -1158,6 +1287,22 @@ define("jassijs/registry", ["require"], function (require) {
                     }
                 }
             },
+            "jassijs/ui/PropertyEditors/JsonArrayEditor.ts": {
+                "date": 1656960820000,
+                "jassijs.ui.PropertyEditors.JsonArrayEditor": {
+                    "$PropertyEditor": [
+                        [
+                            "jsonarray"
+                        ]
+                    ]
+                },
+                "jassijs.ui.JsonArrayEditor.TestProperties": {
+                    "@members": {}
+                },
+                "jassijs.ui.JsonArrayEditor.TestProperties2": {
+                    "@members": {}
+                }
+            },
             "jassijs/ui/PropertyEditors/JsonEditor.ts": {
                 "date": 1658349512000,
                 "jassijs.ui.PropertyEditors.JsonEditor": {
@@ -1183,6 +1328,10 @@ define("jassijs/registry", ["require"], function (require) {
                         ]
                     ]
                 }
+            },
+            "jassijs/ui/PropertyEditors/TableColumnImport.ts": {
+                "date": 1657049000000,
+                "jassijs/ui/PropertyEditors/TableColumnImport": {}
             },
             "jassijs/ui/Repeater.ts": {
                 "date": 1681564938694.8254,
@@ -1263,7 +1412,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1681640550943.4778,
+                "date": 1683657378923.3022,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -1389,7 +1538,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1682847928972.837,
+                "date": 1683484383885.6277,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {
@@ -1400,172 +1549,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657655420000,
                 "jassijs.util.Tools": {}
             },
-            "jassijs/ui/PropertyEditors/JsonArrayEditor.ts": {
-                "date": 1656960820000,
-                "jassijs.ui.PropertyEditors.JsonArrayEditor": {
-                    "$PropertyEditor": [
-                        [
-                            "jsonarray"
-                        ]
-                    ]
-                },
-                "jassijs.ui.JsonArrayEditor.TestProperties": {
-                    "@members": {}
-                },
-                "jassijs.ui.JsonArrayEditor.TestProperties2": {
-                    "@members": {}
-                }
+            "jassijs/server/LocalFS.ts": {
+                "date": 1683483467365.1172
             },
-            "jassijs/ui/PropertyEditors/TableColumnImport.ts": {
-                "date": 1657049000000,
-                "jassijs/ui/PropertyEditors/TableColumnImport": {}
-            },
-            "jassijs/ext/Goldenlayout.ts": {
-                "date": 1657655068257
-            },
-            "jassijs/ext/Jquerylib.ts": {
-                "date": 1657655348617
-            },
-            "jassijs/ext/Papaparse.ts": {
-                "date": 1657656070445
-            },
-            "jassijs/ext/Spectrum.ts": {
-                "date": 1657656777955
-            },
-            "jassijs/ext/Tabulator.ts": {
-                "date": 1657657498568
-            },
-            "jassijs/ext/Tinymce.ts": {
-                "date": 1657658560377
-            },
-            "jassijs/ext/goldenlayout.ts": {
-                "date": 1657655070000
-            },
-            "jassijs/ext/jquerylib.ts": {
-                "date": 1657655350000
-            },
-            "jassijs/ext/papaparse.ts": {
-                "date": 1657656072000
-            },
-            "jassijs/ext/spectrum.ts": {
-                "date": 1657656778000
-            },
-            "jassijs/ext/tabulator.ts": {
-                "date": 1681586871430.2693
-            },
-            "jassijs/ext/tinymce.ts": {
-                "date": 1657658562000
-            },
-            "jassijs/ui/converters/DateTimeConverter.ts": {
-                "date": 1681559012450.2312,
-                "jassijs.ui.converters.DateTimeConverterProperies": {
-                    "@members": {}
-                },
-                "jassijs.ui.converters.DateTimeConverter": {
-                    "$Converter": [
-                        {
-                            "name": "datetime"
-                        }
-                    ],
-                    "$Property": [
-                        {
-                            "name": "new",
-                            "type": "json",
-                            "componentType": "jassijs.ui.converters.DateTimeConverterProperties"
-                        }
-                    ],
-                    "@members": {}
-                }
-            },
-            "jassijs/remote/Validator.ts": {
-                "date": 1681322647267.7717
-            },
-            "jassijs/remote/Serverservice.ts": {
-                "date": 1682715263974.073
-            },
-            "jassijs/remote/Config.ts": {
-                "date": 1682889087734.386
-            },
-            "jassijs/server/DatabaseSchema.ts": {
-                "date": 1682241708158.535
-            },
-            "jassijs/server/DBManager.ts": {
-                "date": 1682710550782.2158,
-                "jassijs/server/DBManager": {
-                    "$Serverservice": [
-                        {
-                            "name": "db",
-                            "getInstance": "function"
-                        }
-                    ]
-                }
-            },
-            "jassijs/server/DBManagerExt.ts": {
-                "date": 1682718007760.5872
-            },
-            "jassijs/server/ext/EmpyDeclaration.ts": {
-                "date": 1682275347821.4524
-            },
-            "jassijs/server/ext/jszip.ts": {
-                "date": 1657714030000
-            },
-            "jassijs/server/Indexer.ts": {
-                "date": 1682806194944.4678
-            },
-            "jassijs/server/Installserver.ts": {
-                "date": 1682930462690.898
-            },
-            "jassijs/server/LocalProtocol.ts": {
-                "date": 1682804261351.0828
-            },
-            "jassijs/server/RegistryIndexer.ts": {
-                "date": 1682799790211.1238
-            },
-            "jassijs/server/Testuser.ts": {
-                "date": 1655556794000,
-                "Testuser": {
-                    "$DBObject": [],
-                    "@members": {
-                        "id": {
-                            "PrimaryColumn": []
-                        },
-                        "firstname": {
-                            "Column": []
-                        },
-                        "lastname": {
-                            "Column": []
-                        }
-                    }
-                }
-            },
-            "jassijs/server/TypeORMListener.ts": {
-                "date": 1682885924481.5344,
-                "jassijs.server.TypeORMListener": {
-                    "EventSubscriber": []
-                }
-            },
-            "jassijs/server/DoRemoteProtocol.ts": {
-                "date": 1682802877109.1504
-            },
-            "jassijs/server/NativeAdapter.ts": {
-                "date": 1682930434231.358
-            },
-            "jassijs/server/Filesystem.ts": {
-                "date": 1682807745323.753,
-                "jassijs.server.Filesystem": {
-                    "$Serverservice": [
-                        {
-                            "name": "filesystem",
-                            "getInstance": "function"
-                        }
-                    ]
-                }
-            },
-            "jassijs/remote/Modules.ts": {
-                "date": 1682799474543.8716
-            },
-            "jassijs/server/FS.ts": {
-                "date": 1682930344917.084
+            "jassijs/server/Compile.ts": {
+                "date": 1683647529314.346
             }
         }
     };
@@ -1940,7 +1928,8 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", 
                 myrequire(allfiles, function (...ret) {
                     async function run() {
                         for (let f = 0; f < allfiles.length; f++) {
-                            _this.migrateModul(allModules, allfiles[f], ret[f]);
+                            if (ret && !ret[x].doNotReloadModule)
+                                _this.migrateModul(allModules, allfiles[f], ret[f]);
                         }
                         for (let i = 0; i < _this.listener.length; i++) {
                             await _this.listener[i](allfiles);
@@ -2024,7 +2013,7 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", 
 define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.exists = exports.FS = void 0;
+    exports.test = exports.exists = exports.FS = void 0;
     class Stats {
     }
     class FileEntry {
@@ -2129,7 +2118,7 @@ define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes"], fu
         async mkdir(filename, options) {
             var test = await this.loadFileEntry(filename);
             if (test)
-                throw new Classes_1.JassiError(filename + " allready exists");
+                return; //throw new JassiError(filename + " allready exists");
             var parent = this.getDirectoryname(filename);
             if (parent === "")
                 return;
@@ -2273,6 +2262,359 @@ define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes"], fu
         return new FS()["exists"](filename);
     }
     exports.exists = exists;
+    async function test(tt) {
+        var fs = new FS();
+        var testfolder = "./dasisteinfestfolder";
+        var testfile = "./dasisteintestfile.js";
+        await fs.writeFile(testfile, "var a=10;");
+        tt.expectEqual(!(await fs.stat(testfile)).isDirectory());
+        tt.expectEqual(await exists(testfile));
+        tt.expectEqual((await fs.readFile(testfile)) === "var a=10;");
+        var hh = await fs.readdir(".");
+        tt.expectEqual(hh.length > 0);
+        await fs.rename(testfile, testfile + ".txt");
+        tt.expectEqual(await exists(testfile + ".txt"));
+        await fs.rename(testfile + ".txt", testfile);
+        await fs.unlink(testfile);
+        tt.expectEqual(!await exists(testfile));
+        tt.expectErrorAsync(async () => await fs.unlink("./hallo.js"));
+        if (await exists(testfolder))
+            await fs.rmdir(testfolder, { recursive: true });
+        await fs.mkdir(testfolder + "/hh", { recursive: true });
+        await fs.writeFile(testfolder + "/hh/h.txt", "Hallo");
+        await fs.rename(testfolder, testfolder + "1");
+        tt.expectEqual(await exists(testfolder + "1"));
+        tt.expectEqual(!await exists(testfolder));
+        await fs.rename(testfolder + "1", testfolder);
+        tt.expectEqual(!await exists(testfolder + "1"));
+        tt.expectEqual(await exists(testfolder));
+        //tt.expectErrorAsync(async () => await fs.rmdir(testfolder));
+        //await fs.rmdir(testfolder, { recursive: true })
+        debugger;
+    }
+    exports.test = test;
+});
+define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.createHandle = exports.deleteHandle = exports.exists = exports.LocalFS = void 0;
+    class Stats {
+    }
+    class FileEntry {
+    }
+    class LocalFS {
+        static async getDB() {
+            if (LocalFS.db)
+                return LocalFS.db;
+            var req = window.indexedDB.open("handles", 3);
+            var db = await new Promise((resolve) => {
+                req.onupgradeneeded = function (event) {
+                    var db = event.target["result"];
+                    var objectStore = db.createObjectStore("handles");
+                };
+                req.onsuccess = (ev) => {
+                    resolve(ev.target["result"]);
+                };
+            });
+            let transaction = db.transaction("handles", 'readwrite');
+            const store = transaction.objectStore("handles");
+            var ret = await store.get("handle");
+            var r = await new Promise((resolve) => {
+                ret.onsuccess = ev => { resolve(ret.result); };
+                ret.onerror = ev => { resolve(undefined); };
+            });
+            return r;
+        }
+        constructor() {
+        }
+        async readdir(folder) {
+            var handle = await this.loadFileEntry(folder);
+            var ret = [];
+            var entries = await handle.entries();
+            var en = await entries.next();
+            while (!en.done) {
+                ret.push(en.value[0]);
+                en = await entries.next();
+            }
+            return ret;
+            //return await FS._readdir(db, folder);
+        }
+        ;
+        async readFile(file, format, fallback = true) {
+            var ret = await this.loadFileEntry(file);
+            //fallback to Server
+            if (fallback && ret === undefined) {
+                var test = await downloadFile(file);
+                if (test !== undefined || test === "Unauthorized")
+                    ret = { data: test, date: undefined, id: "" };
+            }
+            if (ret === undefined)
+                throw new Classes_2.JassiError(file + " not exists");
+            if (ret.kind !== "file")
+                throw new Classes_2.JassiError("could notz read file" + file + " ...is a directory");
+            var ff = await ret.getFile();
+            var text;
+            if (format === "binary")
+                text = new Uint8Array(await ff.arrayBuffer());
+            else
+                text = await ff.text();
+            return text;
+        }
+        ;
+        async stat(file) {
+            var ret = await this.loadFileEntry(file);
+            if (ret.getFile !== undefined) {
+                var st = await ret.getFile();
+                return {
+                    isDirectory() { return false; },
+                    mtimeMs: st.lastModified
+                };
+            }
+            else {
+                return {
+                    isDirectory() { return true; },
+                    mtimeMs: undefined
+                };
+            }
+        }
+        ;
+        getDirectoryname(path) {
+            return path.substring(0, path.lastIndexOf("/"));
+        }
+        async mkdir(filename, options) {
+            var test = await this.loadFileEntry(filename);
+            if (test)
+                throw new Classes_2.JassiError(filename + " allready exists");
+            var parent = this.getDirectoryname(filename);
+            if (parent === "")
+                return;
+            var parentDir = await this.loadFileEntry(parent);
+            if ((options === null || options === void 0 ? void 0 : options.recursive) && (!await exists(parent))) {
+                //recursive
+                await this.mkdir(parent, options);
+                parentDir = await this.loadFileEntry(parent);
+            }
+            if (!await exists(parent))
+                throw new Classes_2.JassiError("parentfolder not exists: " + parent);
+            var simpleFilename = filename.substring(parent.length + 1);
+            await parentDir.getDirectoryHandle(simpleFilename, { create: true });
+        }
+        ;
+        async loadFileEntry(fileName) {
+            var handle = await LocalFS.getDB();
+            if (fileName.startsWith("./"))
+                fileName = fileName.substring(2);
+            if (fileName.startsWith("."))
+                fileName = fileName.substring(1);
+            if (fileName === "")
+                return handle;
+            var paths = fileName.split("/");
+            var ret = handle;
+            for (var x = 0; x < paths.length; x++) {
+                try {
+                    ret = await ret.getDirectoryHandle(paths[x]);
+                }
+                catch (_a) {
+                    try {
+                        ret = await ret.getFileHandle(paths[x]);
+                    }
+                    catch (_b) {
+                        return undefined;
+                    }
+                }
+            }
+            return ret;
+        }
+        async saveHandle(handle) {
+            var db = await LocalFS.getDB();
+            let transaction = db.transaction("handles", 'readwrite');
+            const store = transaction.objectStore("handles");
+            var ret = await store.get(handle.name);
+            var r = await new Promise((resolve) => {
+                ret.onsuccess = ev => { resolve(ret.result); };
+                ret.onerror = ev => { resolve(undefined); };
+            });
+            if (r)
+                store.put(handle);
+            else
+                store.add(handle, "handle");
+        }
+        async writeFile(file, data) {
+            var folder = this.getDirectoryname(file);
+            var simpleFilename = file.substring(folder.length + 1);
+            var handle = await this.loadFileEntry(folder);
+            var writer = await handle.getFileHandle(simpleFilename, { create: true });
+            var writable = await writer.createWritable();
+            await writable.write(data);
+            await writable.close();
+        }
+        ;
+        async rename(oldPath, newPath) {
+            var entr = await this.loadFileEntry(oldPath);
+            if (entr === undefined)
+                throw new Classes_2.JassiError("Error rename src not exists " + oldPath);
+            var dest = await this.loadFileEntry(newPath);
+            if (dest !== undefined)
+                throw new Classes_2.JassiError("Error rename dest already exists " + newPath);
+            if (entr.kind === "file") {
+                var file = await entr.getFile();
+                var text = await this.readFile(oldPath);
+                await this.writeFile(newPath, text);
+                await this.unlink(oldPath);
+            }
+            else {
+                throw new Classes_2.JassiError("is not Supported");
+            }
+        }
+        async unlink(file) {
+            var entr = await this.loadFileEntry(file);
+            if (entr === undefined)
+                throw new Classes_2.JassiError("could not delete " + file + " - file not exists");
+            if (entr.isDirectory)
+                throw new Classes_2.JassiError("could not delete directory " + file + " - use rmdir ");
+            var sdir = this.getDirectoryname(file);
+            var folder = await this.loadFileEntry(sdir);
+            var simpleFilename = file.substring(sdir.length + 1);
+            await folder.removeEntry(simpleFilename);
+            //await entr.remove();
+        }
+        async rmdir(dirName, options) {
+            var entr = await this.loadFileEntry(dirName);
+            if (entr === undefined)
+                throw new Classes_2.JassiError("could not delete " + dirName + " - directory not exists");
+            if (entr.kind != "directory")
+                throw new Classes_2.JassiError("could not delete file " + dirName + " - use unlink");
+            var folder = this.getDirectoryname(dirName);
+            var simpleFilename = dirName.substring(folder.length + 1);
+            var folderEntr = await this.loadFileEntry(folder);
+            await folderEntr.removeEntry(simpleFilename, options);
+        }
+        async exists(filename) {
+            var db = await LocalFS.getDB();
+            let exists = await this.loadFileEntry(filename);
+            return exists !== undefined;
+        }
+    }
+    exports.LocalFS = LocalFS;
+    async function downloadFile(file) {
+        return await new Promise((resolve, reject) => {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open('GET', file.replace("./client", ""), true);
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4) {
+                    if (xmlHttp.status === 200)
+                        resolve(xmlHttp.responseText);
+                    else
+                        resolve(undefined);
+                }
+                ;
+            };
+            xmlHttp.onerror = (err) => {
+                resolve(undefined);
+            };
+            xmlHttp.send(null);
+        });
+    }
+    ;
+    async function exists(filename) {
+        return await new LocalFS()["exists"](filename);
+    }
+    exports.exists = exists;
+    async function verifyPermission(fileHandle, readWrite) {
+        const options = {};
+        if (readWrite) {
+            options.mode = 'readwrite';
+        }
+        // Check if permission was already granted. If so, return true.
+        if ((await fileHandle.queryPermission(options)) === 'granted') {
+            return true;
+        }
+        // Request permission. If the user grants permission, return true.
+        if ((await fileHandle.requestPermission(options)) === 'granted') {
+            return true;
+        }
+        // The user didn't grant permission, so return false.
+        return false;
+    }
+    async function deleteHandle() {
+        var req = window.indexedDB.open("handles", 3);
+        var db = await new Promise((resolve) => {
+            req.onupgradeneeded = function (event) {
+                var db = event.target["result"];
+                var objectStore = db.createObjectStore("handles");
+            };
+            req.onsuccess = (ev) => {
+                resolve(ev.target["result"]);
+            };
+        });
+        let transaction = db.transaction('handles', 'readwrite');
+        const store = transaction.objectStore('handles');
+        store.delete("handle");
+        await new Promise((resolve) => { transaction.oncomplete = resolve; });
+    }
+    exports.deleteHandle = deleteHandle;
+    async function createHandle() {
+        var handle = await window.showDirectoryPicker();
+        if (handle === undefined)
+            return;
+        if (!await verifyPermission(handle, true))
+            return;
+        var req = window.indexedDB.open("handles", 3);
+        var db = await new Promise((resolve) => {
+            req.onupgradeneeded = function (event) {
+                var db = event.target["result"];
+                var objectStore = db.createObjectStore("handles");
+            };
+            req.onsuccess = (ev) => {
+                resolve(ev.target["result"]);
+            };
+        });
+        let transaction = db.transaction("handles", 'readwrite');
+        const store = transaction.objectStore("handles");
+        var ret = await store.get(handle.name);
+        var r = await new Promise((resolve) => {
+            ret.onsuccess = ev => { resolve(ret.result); };
+            ret.onerror = ev => { resolve(undefined); };
+        });
+        if (r)
+            store.put(handle);
+        else
+            store.add(handle, "handle");
+    }
+    exports.createHandle = createHandle;
+    async function test(tt) {
+        var fs = new LocalFS();
+        // var hh = await fs.readdir(".");
+        var testfolder = "./dasisteinfestfolder";
+        var testfile = "./dasisteintestfile.js";
+        await fs.writeFile(testfile, "var a=10;");
+        tt.expectEqual(await exists(testfile));
+        tt.expectEqual(!await exists(testfile + "lkjkljh"));
+        tt.expectEqual(!(await fs.stat(testfile)).isDirectory());
+        tt.expectEqual((await fs.stat(".")).isDirectory());
+        tt.expectEqual((await fs.readFile(testfile)) === "var a=10;");
+        var hh = await fs.readdir(".");
+        tt.expectEqual(hh.length > 0);
+        await fs.rename(testfile, testfile + ".txt");
+        tt.expectEqual(await exists(testfile + ".txt"));
+        await fs.rename(testfile + ".txt", testfile);
+        await fs.unlink(testfile);
+        tt.expectEqual(!await exists(testfile));
+        tt.expectErrorAsync(async () => await fs.unlink("./hallo.js"));
+        if (await exists(testfolder))
+            await fs.rmdir(testfolder, { recursive: true });
+        await fs.mkdir(testfolder + "/hh", { recursive: true });
+        await fs.writeFile(testfolder + "/hh/h.txt", "Hallo");
+        await fs.rmdir(testfolder, { recursive: true });
+        //  await fs.rename(testfolder, testfolder + "1");
+        //tt.expectEqual(await exists(testfolder + "1"));
+        //tt.expectEqual(!await exists(testfolder));
+        // await fs.rename(testfolder + "1", testfolder);
+        // tt.expectEqual(!await exists(testfolder + "1"));
+        // tt.expectEqual(await exists(testfolder));
+        debugger;
+    }
+    exports.test = test;
 });
 define("jassijs/server/ext/jszip", ["require", "exports", "jszip"], function (require, exports, JSZip) {
     "use strict";
@@ -2281,50 +2623,24 @@ define("jassijs/server/ext/jszip", ["require", "exports", "jszip"], function (re
     JSZip.support.nodebuffer = undefined; //we hacked window.Buffer
     exports.default = JSZip;
 });
-define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Config", "jassijs/util/Reloader", "jassijs/server/FS"], function (require, exports, Config_2, Reloader_2, FS_1) {
+define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Config", "jassijs/util/Reloader", "jassijs/server/FS", "jassijs/server/LocalFS"], function (require, exports, Config_2, Reloader_2, FS_1, LocalFS_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.transpile = exports.reloadJSAll = exports.dozip = exports.test = exports.myfs = exports.exists = exports.ts = void 0;
-    Object.defineProperty(exports, "exists", { enumerable: true, get: function () { return FS_1.exists; } });
+    exports.doNotReloadModule = exports.transpile = exports.reloadJSAll = exports.dozip = exports.myfs = exports.exists = exports.ts = void 0;
     //@ts-ignore
     Config_2.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
         require("jassijs/server/NativeAdapter").ts = window.ts;
     });
     var ts = window.ts;
     exports.ts = ts;
+    var exists = FS_1.exists;
+    exports.exists = exists;
     var myfs = new FS_1.FS();
     exports.myfs = myfs;
-    async function test(tt) {
-        var fs = new FS_1.FS();
-        var testfolder = "./dasisteinfestfolder";
-        var testfile = "./dasisteintestfile.js";
-        await fs.writeFile(testfile, "var a=10;");
-        tt.expectEqual(!(await fs.stat(testfile)).isDirectory());
-        tt.expectEqual(await (0, FS_1.exists)(testfile));
-        tt.expectEqual((await fs.readFile(testfile)) === "var a=10;");
-        var hh = await fs.readdir(".");
-        tt.expectEqual(hh.length > 0);
-        await fs.rename(testfile, testfile + ".txt");
-        tt.expectEqual(await (0, FS_1.exists)(testfile + ".txt"));
-        await fs.rename(testfile + ".txt", testfile);
-        await fs.unlink(testfile);
-        tt.expectEqual(!await (0, FS_1.exists)(testfile));
-        tt.expectErrorAsync(async () => await fs.unlink("./hallo.js"));
-        if (await (0, FS_1.exists)(testfolder))
-            await fs.rmdir(testfolder, { recursive: true });
-        await fs.mkdir(testfolder + "/hh", { recursive: true });
-        await fs.writeFile(testfolder + "/hh/h.txt", "Hallo");
-        await fs.rename(testfolder, testfolder + "1");
-        tt.expectEqual(await (0, FS_1.exists)(testfolder + "1"));
-        tt.expectEqual(!await (0, FS_1.exists)(testfolder));
-        await fs.rename(testfolder + "1", testfolder);
-        tt.expectEqual(!await (0, FS_1.exists)(testfolder + "1"));
-        tt.expectEqual(await (0, FS_1.exists)(testfolder));
-        //tt.expectErrorAsync(async () => await fs.rmdir(testfolder));
-        //await fs.rmdir(testfolder, { recursive: true })
-        debugger;
+    if (Config_2.config.isLocalFolderMapped) {
+        exports.myfs = myfs = new LocalFS_1.LocalFS();
+        exports.exists = exists = LocalFS_1.exists;
     }
-    exports.test = test;
     async function dozip(directoryname, serverdir = undefined) {
         //@ts-ignore
         var JSZip = (await new Promise((resolve_3, reject_3) => { require(["jassijs/server/ext/jszip"], resolve_3, reject_3); })).default;
@@ -2357,12 +2673,14 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
         var data = await tp.Typescript.instance.transpile(fileName, content);
         for (var x = 0; x < data.fileNames.length; x++) {
             var fname = "./" + data.fileNames[x];
-            if (!await (0, FS_1.exists)(myfs.getDirectoryname(fname)))
+            if (!await exists(myfs.getDirectoryname(fname)))
                 await myfs.mkdir(myfs.getDirectoryname(fname), { recursive: true });
             await myfs.writeFile(fname, data.contents[x]);
         }
     }
     exports.transpile = transpile;
+    var doNotReloadModule = true;
+    exports.doNotReloadModule = doNotReloadModule;
 });
 define("jassijs/remote/Config", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -2372,6 +2690,7 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
         constructor() {
             if (!window.document) {
                 this.isServer = true;
+                //@ts-ignore
                 var fs = require("fs");
                 this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
             }
@@ -2386,6 +2705,7 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
         async reload() {
             if (!window.document) {
                 this.isServer = true;
+                //@ts-ignore
                 var fs = require("fs");
                 this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
             }
@@ -2439,7 +2759,7 @@ define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Registr
     exports.FileNode = FileNode;
 });
 //@ts-ignore
-define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Classes_2, Registry_6) {
+define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Classes_3, Registry_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.$Serverservice = exports.beforeServiceLoad = exports.ServerserviceProperties = void 0;
@@ -2479,7 +2799,7 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
                                 await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                             }
                             else {
-                                await Classes_2.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
+                                await Classes_3.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
                             }
                             var props = Registry_6.default.getData("$Serverservice", classname)[0].params[0];
                             for (var x = 0; x < beforeServiceLoadHandler.length; x++) {
@@ -2506,7 +2826,7 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
     var doNotReloadModule = true;
     exports.doNotReloadModule = doNotReloadModule;
 });
-define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_3, Config_3, Serverservice_1, NativeAdapter_1) {
+define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_4, Config_3, Serverservice_1, NativeAdapter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -2641,7 +2961,7 @@ define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes"
             else if (arg.kind === NativeAdapter_1.ts.SyntaxKind.ArrowFunction || arg.kind === NativeAdapter_1.ts.SyntaxKind.FunctionExpression) {
                 return "function";
             }
-            throw new Classes_3.JassiError("Error typ not found");
+            throw new Classes_4.JassiError("Error typ not found");
         }
         collectAnnotations(node, outDecorations, depth = 0) {
             var _a;
@@ -2768,7 +3088,197 @@ define("jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/
     }
     exports.ServerIndexer = ServerIndexer;
 });
-define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/RegistryIndexer", "jassijs/remote/Registry", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "jassijs/remote/Config"], function (require, exports, RegistryIndexer_1, Registry_7, Serverservice_3, NativeAdapter_3, Config_5) {
+//synchronize-server-client
+define("jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAdapter", "jassijs/remote/Classes"], function (require, exports, NativeAdapter_3, Classes_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Compile = void 0;
+    //var chokidar = require('chokidar');
+    /*var path = "./../public_html";
+    const formatHost: ts.FormatDiagnosticsHost = {
+      getCanonicalFileName: path => path,
+      getCurrentDirectory: ts.sys.getCurrentDirectory,
+      getNewLine: () => ts.sys.newLine
+    };
+    var events = require('events');*/
+    /**
+     * compile
+     */
+    class Compile {
+        //private static clientWatcherIsRunning: boolean = false;
+        //public static eventEmitter = new events.EventEmitter();
+        constructor() {
+            this.lastCompiledTSFiles = [];
+        }
+        serverConfig() {
+            var ret = {
+                baseUrl: "./",
+                target: 4,
+                module: NativeAdapter_3.ts.ModuleKind.CommonJS,
+                //"outDir":"js",
+                allowJs: true,
+                sourceMap: true,
+                moduleResolution: 2,
+                skipLibCheck: true,
+                rootDir: "./",
+                emitDecoratorMetadata: true,
+                experimentalDecorators: true,
+                noResolve: true
+            };
+            return ret;
+        }
+        ;
+        getDirectoryname(ppath) {
+            var path = ppath.replaceAll("\\", "/");
+            return path.substring(0, path.lastIndexOf("/"));
+        }
+        async dirFiles(dirname, skip, ret) {
+            var files = await NativeAdapter_3.myfs.readdir(dirname);
+            for (var x = 0; x < files.length; x++) {
+                var fname = dirname + "/" + files[x];
+                var stat = await NativeAdapter_3.myfs.stat(fname);
+                if (skip.indexOf(dirname) === -1) {
+                    if (stat.isDirectory()) {
+                        await this.dirFiles(fname, skip, ret);
+                    }
+                    else {
+                        if (fname.endsWith(".js") || fname.endsWith(".ts"))
+                            ret[fname /*.replace("./client/","./")*/] = await NativeAdapter_3.myfs.readFile(fname, "utf-8");
+                    }
+                }
+            }
+        }
+        async readRegistry(file, isServer) {
+            var text = await NativeAdapter_3.myfs.readFile(file, "utf-8");
+            if (!isServer) {
+                text = text.substring(text.indexOf("default:") + 8);
+                text = text.substring(0, text.lastIndexOf("}") - 1);
+                text = text.substring(0, text.lastIndexOf("}") - 1);
+            }
+            else {
+                text = text.substring(text.indexOf("default=") + 8);
+            }
+            var index = JSON.parse(text);
+            return index;
+        }
+        async createRegistry(modul, isServer, exclude, includeClientRegistry, files) {
+            var index = await this.readRegistry("./" + (isServer ? "" : "client/") + modul + "/registry.js", isServer);
+            var newIndex = {};
+            for (var key in index) {
+                if (!key.startsWith(exclude))
+                    newIndex[key] = index[key];
+            }
+            if (includeClientRegistry !== undefined) {
+                var indexc = await this.readRegistry("./client/" + modul + "/registry.js", false);
+                for (var key in indexc) {
+                    if (key.startsWith(includeClientRegistry))
+                        newIndex[key] = index[key];
+                }
+            }
+            var text = JSON.stringify(newIndex, undefined, "\t");
+            text = "//this file is autogenerated don't modify\n" +
+                'define("' + modul + '/registry",["require"], function(require) {\n' +
+                ' return {\n' +
+                '  default: ' + text + "\n" +
+                ' }\n' +
+                '});';
+            files["./" + modul + "/registry.js"] = text;
+        }
+        async readModuleCode(modul, isServer) {
+            var fileNames = {};
+            if (isServer === false) {
+                await this.dirFiles("./client/" + modul, ["./client/" + modul + "/server", "./client/" + modul + "/registry.js"], fileNames);
+                await this.createRegistry(modul, isServer, modul + "/server", undefined, fileNames);
+            }
+            else {
+                await this.dirFiles("./" + modul, ["./" + modul + "/server", "./" + modul + "/registry.js"], fileNames);
+                await this.dirFiles("./client/" + modul + "/server", [], fileNames);
+                await this.createRegistry(modul, isServer, modul + "/server", modul + "/server", fileNames);
+            }
+            return fileNames;
+        }
+        async transpileModul(modul, isServer) {
+            var code = await this.readModuleCode(modul, isServer);
+            var writing = [];
+            var host = {
+                getSourceFile: (fileName, languageVersion, onError) => {
+                    var scode = code["./" + fileName];
+                    if (scode === undefined)
+                        debugger;
+                    return NativeAdapter_3.ts.createSourceFile(fileName, scode, languageVersion);
+                },
+                getDefaultLibFileName: (defaultLibOptions) => "",
+                writeFile: (filename, content) => {
+                    writing.push(NativeAdapter_3.myfs.writeFile(filename, content));
+                },
+                getCurrentDirectory: () => "/",
+                getDirectories: (path) => [],
+                fileExists: (fileName) => {
+                    return code["./" + fileName] !== undefined;
+                },
+                readFile: (fileName) => {
+                    return code["./" + fileName];
+                },
+                getCanonicalFileName: (fileName) => fileName,
+                useCaseSensitiveFileNames: () => true,
+                getNewLine: () => "\n",
+                getEnvironmentVariable: () => "" // do nothing
+            };
+            var files = Object.keys(code);
+            var opts = this.serverConfig();
+            opts.declaration = true;
+            opts.outFile = "./dist/" + modul + (isServer ? "-server" : "") + ".js";
+            opts.module = NativeAdapter_3.ts.ModuleKind.AMD;
+            if (!isServer) {
+                opts.rootDir = "./client";
+            }
+            var program = NativeAdapter_3.ts.createProgram(files, opts, host);
+            let emitResult = program.emit();
+            await Promise.all(writing);
+            console.log(modul + " " + isServer + " fertig");
+        }
+        async transpileServercode(fileName, inServerdirectory = undefined) {
+            //outDir":"js",
+            let spath = fileName.split("/");
+            if (!inServerdirectory && spath.length < 2 && spath[1] !== "remote") {
+                throw new Classes_5.JassiError("fileName must startswith remote");
+            }
+            var path = ".";
+            var data = await NativeAdapter_3.myfs.readFile(path + "/" + fileName, 'utf-8');
+            var options;
+            //if (inServerdirectory === true)
+            options = this.serverConfig();
+            options.outDir = "js";
+            if (require.main === undefined) //in Browser
+                options.module = NativeAdapter_3.ts.ModuleKind.AMD;
+            //const parsedCmd = ts.getParsedCommandLineOfConfigFile("./tsconfig.json", undefined, host);
+            /// const { options } = parsedCmd;
+            var outPath = "./js";
+            var fdir = outPath + "/" + fileName;
+            fdir = fdir.substring(0, fdir.lastIndexOf("/"));
+            await NativeAdapter_3.myfs.mkdir(fdir, { recursive: true });
+            var prefix = "";
+            for (let x = 0; x < fileName.split("/").length; x++) {
+                prefix = "../" + prefix;
+            }
+            var content = NativeAdapter_3.ts.transpileModule(data, {
+                compilerOptions: options,
+                fileName: prefix + fileName
+            });
+            var pathname = "./" + this.getDirectoryname(fileName);
+            if (!await (0, NativeAdapter_3.exists)(pathname)) {
+                await NativeAdapter_3.myfs.mkdir(pathname, { recursive: true });
+            }
+            //if (!inServerdirectory)
+            //  await myfs.copyFile(new Filesystem().path + "/" + fileName, fileName);
+            await NativeAdapter_3.myfs.writeFile(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
+            await NativeAdapter_3.myfs.writeFile(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
+        }
+    }
+    exports.Compile = Compile;
+    Compile.lastModifiedTSFiles = [];
+});
+define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/RegistryIndexer", "jassijs/remote/Registry", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "jassijs/remote/Config", "jassijs/server/Compile"], function (require, exports, RegistryIndexer_1, Registry_7, Serverservice_3, NativeAdapter_4, Config_5, Compile_1) {
     "use strict";
     var Filesystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2806,12 +3316,12 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
                     parent = { name: "", files: [] };
                 }
                 //var parent:FileNode[]=_this._getDirectory(file,results);
-                var list = await NativeAdapter_3.myfs.readdir(parentPath + (curdir === "" ? "" : ("/" + curdir)));
+                var list = await NativeAdapter_4.myfs.readdir(parentPath + (curdir === "" ? "" : ("/" + curdir)));
                 for (var xx = 0; xx < list.length; xx++) {
                     var filename = list[xx];
                     var file = curdir + (curdir === "" ? "" : '/') + filename;
                     if (file !== "js" && file !== "tmp") { //compiled js
-                        var stat = await NativeAdapter_3.myfs.stat(parentPath + "/" + file);
+                        var stat = await NativeAdapter_4.myfs.stat(parentPath + "/" + file);
                         if (stat && stat.isDirectory()) {
                             var newDir = { name: filename, files: [] };
                             parent.files.push(newDir);
@@ -2823,7 +3333,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
                             let dat = "";
                             let toAdd = { name: filename };
                             if (appendDate === true)
-                                toAdd.date = (await NativeAdapter_3.myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
+                                toAdd.date = (await NativeAdapter_4.myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
                             // if (file.toLowerCase().endsWith(".ts"))
                             parent.files.push(toAdd);
                             /* if (file.toLowerCase().endsWith(".js")) {
@@ -2840,7 +3350,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
                 //add files in node modules
                 if (parent.name === "" && parentPath === "./client") {
                     for (var key in modules) {
-                        if (await (0, NativeAdapter_3.exists)("./node_modules/" + key + "/client")) {
+                        if (await (0, NativeAdapter_4.exists)("./node_modules/" + key + "/client")) {
                             var addFiles = await this.dir("client", appendDate, "./node_modules/" + key);
                             var temp = {};
                             for (var x = 0; x < parent.files.length; x++) {
@@ -2865,12 +3375,12 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
         async loadFile(fileName) {
             var fromServerdirectory = fileName.startsWith("$serverside/");
             let file = this._pathForFile(fileName, fromServerdirectory);
-            return await NativeAdapter_3.myfs.readFile(file, 'utf-8');
+            return await NativeAdapter_4.myfs.readFile(file, 'utf-8');
         }
         async loadFiles(fileNames) {
             var ret = {};
             for (var x = 0; x < fileNames.length; x++) {
-                ret[fileNames[x]] = await NativeAdapter_3.myfs.readFile(this._pathForFile(fileNames[x]), 'utf-8');
+                ret[fileNames[x]] = await NativeAdapter_4.myfs.readFile(this._pathForFile(fileNames[x]), 'utf-8');
                 /* await myfs.readFile(path+"/"+fileName, {encoding: 'utf-8'}, function(err,data){
                     if (!err) {
                         response.send( data);
@@ -2886,16 +3396,16 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
         }
         async dirFiles(dir, extensions, ignore = []) {
             var results = [];
-            if (!await (0, NativeAdapter_3.exists)(dir))
+            if (!await (0, NativeAdapter_4.exists)(dir))
                 return results;
-            var list = await NativeAdapter_3.myfs.readdir(dir);
+            var list = await NativeAdapter_4.myfs.readdir(dir);
             var _this = this;
             for (let l = 0; l < list.length; l++) {
                 let file = list[l];
                 if (ignore.indexOf(file) !== -1)
                     continue;
                 file = dir + '/' + file;
-                var stat = await NativeAdapter_3.myfs.stat(file);
+                var stat = await NativeAdapter_4.myfs.stat(file);
                 if (stat && stat.isDirectory()) {
                     /* Recurse into a subdirectory */
                     var arr = await _this.dirFiles(file, extensions);
@@ -2914,7 +3424,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
             return results;
         }
         async zip(directoryname, serverdir = undefined) {
-            return await (0, NativeAdapter_3.dozip)(directoryname, serverdir);
+            return await (0, NativeAdapter_4.dozip)(directoryname, serverdir);
         }
         //Reset ORM config
         /**
@@ -2923,10 +3433,10 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
          */
         async createFolder(foldername) {
             var newpath = this._pathForFile(foldername);
-            if (await (0, NativeAdapter_3.exists)(newpath))
+            if (await (0, NativeAdapter_4.exists)(newpath))
                 return foldername + " allready await exists";
             try {
-                await NativeAdapter_3.myfs.mkdir(newpath, { recursive: true });
+                await NativeAdapter_4.myfs.mkdir(newpath, { recursive: true });
             }
             catch (ex) {
                 return ex.message;
@@ -2942,18 +3452,18 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
             var newpath = this._pathForFile(modulename);
             try {
                 //create folder
-                if (!await (0, NativeAdapter_3.exists)(newpath))
-                    await NativeAdapter_3.myfs.mkdir(newpath, { recursive: true });
+                if (!await (0, NativeAdapter_4.exists)(newpath))
+                    await NativeAdapter_4.myfs.mkdir(newpath, { recursive: true });
                 //create remotefolder
                 //if (!await exists(newpath + "/remote"))
                 //    await myfs.mkdir(newpath + "/remote", { recursive: true });
-                if (!await (0, NativeAdapter_3.exists)(newpath + "/modul.ts")) {
+                if (!await (0, NativeAdapter_4.exists)(newpath + "/modul.ts")) {
                     await this.saveFiles([modulename + "/modul.js", "js/" + modulename + "/modul.js"], [
                         "export default {}",
                         'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'
                     ]);
                 }
-                if (!await (0, NativeAdapter_3.exists)(newpath + "/registry.js")) {
+                if (!await (0, NativeAdapter_4.exists)(newpath + "/registry.js")) {
                     await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], [
                         'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
                         'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
@@ -2989,12 +3499,12 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
         async createFile(filename, content) {
             var newpath = this._pathForFile(filename);
             var parent = this.getDirectoryname(newpath);
-            if (await (0, NativeAdapter_3.exists)(newpath))
+            if (await (0, NativeAdapter_4.exists)(newpath))
                 return filename + " allready await exists";
             try {
-                if (!await (0, NativeAdapter_3.exists)(parent))
-                    await NativeAdapter_3.myfs.mkdir(parent, { recursive: true });
-                await NativeAdapter_3.myfs.writeFile(newpath, content);
+                if (!await (0, NativeAdapter_4.exists)(parent))
+                    await NativeAdapter_4.myfs.mkdir(parent, { recursive: true });
+                await NativeAdapter_4.myfs.writeFile(newpath, content);
             }
             catch (ex) {
                 return ex.message;
@@ -3009,15 +3519,15 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
         async rename(oldfile, newfile) {
             var oldpath = this._pathForFile(oldfile);
             var newpath = this._pathForFile(newfile);
-            if (!await (0, NativeAdapter_3.exists)(oldpath))
+            if (!await (0, NativeAdapter_4.exists)(oldpath))
                 return oldfile + " not await exists";
-            if (await (0, NativeAdapter_3.exists)(newpath))
+            if (await (0, NativeAdapter_4.exists)(newpath))
                 return newfile + " already await exists";
             try {
                 /*  if(fs.lstatSync(oldpath).isDirectory()
                      await myfs.rmdir((oldpath, newpath);
                   else*/
-                await NativeAdapter_3.myfs.rename(oldpath, newpath);
+                await NativeAdapter_4.myfs.rename(oldpath, newpath);
             }
             catch (ex) {
                 return ex.message;
@@ -3032,8 +3542,8 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
         async removeServerModul(modul) {
             delete Config_5.config.jsonData.server.modules[modul];
             await Config_5.config.saveJSON();
-            if (await (0, NativeAdapter_3.exists)(modul)) {
-                await NativeAdapter_3.myfs.rmdir(modul, { recursive: true });
+            if (await (0, NativeAdapter_4.exists)(modul)) {
+                await NativeAdapter_4.myfs.rmdir(modul, { recursive: true });
             }
             return "";
         }
@@ -3043,19 +3553,19 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
         */
         async remove(file) {
             var path = this._pathForFile(file);
-            if (!await (0, NativeAdapter_3.exists)(path))
+            if (!await (0, NativeAdapter_4.exists)(path))
                 return file + " not await exists";
             try {
-                if ((await NativeAdapter_3.myfs.stat(path)).isDirectory()) {
+                if ((await NativeAdapter_4.myfs.stat(path)).isDirectory()) {
                     //update client jassijs.json if removing client module 
                     if (Config_5.config.modules[file]) {
                         delete Config_5.config.jsonData.modules[file];
                         await Config_5.config.saveJSON();
                     }
-                    await NativeAdapter_3.myfs.rmdir(path, { recursive: true });
+                    await NativeAdapter_4.myfs.rmdir(path, { recursive: true });
                 }
                 else
-                    await NativeAdapter_3.myfs.unlink(path);
+                    await NativeAdapter_4.myfs.unlink(path);
             }
             catch (ex) {
                 return ex.message;
@@ -3098,39 +3608,39 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
                 var path = this.getDirectoryname(this._pathForFile(fileName, fromServerdirectory)); // require('path').dirname(this._pathForFile(fileName,fromServerdirectory));
                 //check if file is node_module
                 for (var key in modules) {
-                    if (((path + "/").startsWith("./client/" + key + "/")) && await (0, NativeAdapter_3.exists)("./node_modules/" + key)) {
+                    if (((path + "/").startsWith("./client/" + key + "/")) && await (0, NativeAdapter_4.exists)("./node_modules/" + key)) {
                         return "packages in node_modules could not be saved";
                     }
                 }
                 try {
-                    await NativeAdapter_3.myfs.mkdir(path, { recursive: true });
+                    await NativeAdapter_4.myfs.mkdir(path, { recursive: true });
                 }
                 catch (err) {
                 }
-                if (await (0, NativeAdapter_3.exists)(this._pathForFile(fileName, fromServerdirectory))) {
-                    rollbackcontents.push(await NativeAdapter_3.myfs.readFile(this._pathForFile(fileName, fromServerdirectory), 'utf-8'));
+                if (await (0, NativeAdapter_4.exists)(this._pathForFile(fileName, fromServerdirectory))) {
+                    rollbackcontents.push(await NativeAdapter_4.myfs.readFile(this._pathForFile(fileName, fromServerdirectory), 'utf-8'));
                 }
                 else {
                     rollbackcontents.push(undefined); //this file would be killed at revert
                 }
                 if (contents[x] === undefined)
-                    await NativeAdapter_3.myfs.unlink(this._pathForFile(fileName, fromServerdirectory)); //remove file on revert
+                    await NativeAdapter_4.myfs.unlink(this._pathForFile(fileName, fromServerdirectory)); //remove file on revert
                 else {
-                    await NativeAdapter_3.myfs.writeFile(this._pathForFile(fileName, fromServerdirectory), contents[x]);
+                    await NativeAdapter_4.myfs.writeFile(this._pathForFile(fileName, fromServerdirectory), contents[x]);
                     //transpile remoteCode for Server
                     let spath = fileName.split("/");
                     if ((fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote")) && fileName.toLowerCase().endsWith(".ts")) {
                         var fneu = fileName.replace("$serverside/", "");
                         let rpath = this.getDirectoryname("./" + fneu);
                         try {
-                            await NativeAdapter_3.myfs.mkdir(rpath, { recursive: true });
+                            await NativeAdapter_4.myfs.mkdir(rpath, { recursive: true });
                         }
                         catch (err) {
                         }
-                        await NativeAdapter_3.myfs.writeFile("./" + fneu, contents[x]);
+                        await NativeAdapter_4.myfs.writeFile("./" + fneu, contents[x]);
                         if (spath.length > 1 && spath[0] !== "$serverside")
                             await this.createRemoteModulIfNeeded(spath[0]);
-                        (0, NativeAdapter_3.transpile)(fneu, fromServerdirectory);
+                        new Compile_1.Compile().transpileServercode(fneu, fromServerdirectory);
                     }
                 }
             }
@@ -3151,7 +3661,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
             ;
             try {
                 if (remotecodeincluded) {
-                    await (0, NativeAdapter_3.reloadJSAll)(remoteFiles, async () => {
+                    await (0, NativeAdapter_4.reloadJSAll)(remoteFiles, async () => {
                         if (Serverservice_3.runningServerservices["db"]) {
                             (await Serverservice_3.serverservices.db).renewConnection();
                         }
@@ -3182,11 +3692,11 @@ define("jassijs/server/Filesystem", ["require", "exports", "jassijs/server/Regis
             try {
                 var fdir = this.getDirectoryname(this._pathForFile(fileName));
                 // var fdir = path.substring(0,path.lastIndexOf("/"));//fpath.dirname(path).split(fpath.sep).pop();
-                await NativeAdapter_3.myfs.mkdir(fdir, { recursive: true });
+                await NativeAdapter_4.myfs.mkdir(fdir, { recursive: true });
             }
             catch (err) {
             }
-            await NativeAdapter_3.myfs.writeFile(this.path + "/" + fileName, content);
+            await NativeAdapter_4.myfs.writeFile(this.path + "/" + fileName, content);
             /*
             if(fileName.endsWith(".ts")){
                 new Compile().transpile(fileName,function(done){
@@ -3649,7 +4159,7 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
     exports.migrateModul = migrateModul;
 });
 //jassijs.registry=registry;
-define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_8, Registry_9, Classes_4) {
+define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_8, Registry_9, Classes_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Actions = exports.$ActionProvider = exports.$Action = exports.$Actions = exports.ActionProperties = void 0;
@@ -3690,7 +4200,7 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
                     men.onclick(function (evt) {
                         ac.run([node]);
                     });*/
-            var sclass = Classes_4.classes.getClassName(vdata[0]);
+            var sclass = Classes_6.classes.getClassName(vdata[0]);
             var allclasses = (await Registry_8.default.getJSONData("$ActionProvider")).filter(entr => entr.params[0] === sclass);
             //await registry.loadAllFilesForEntries(allclasses);
             //let data = registry.getData("$ActionProvider");
@@ -3700,7 +4210,7 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
                 for (let name in mem) {
                     let ac = mem[name][0][0];
                     if (ac.isEnabled !== undefined || ac.run !== undefined) { //we musst load the class
-                        await Classes_4.classes.loadClass(entr.classname);
+                        await Classes_6.classes.loadClass(entr.classname);
                         ac = Registry_8.default.getMemberData("$Action")[entr.classname][name][0][0];
                     }
                     if (ac.isEnabled !== undefined) {
@@ -3713,13 +4223,13 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
                         name: ac.name,
                         icon: ac.icon,
                         call: ac.run ? ac.run : async (...param) => {
-                            (await Classes_4.classes.loadClass(sclassname))[sname](...param);
+                            (await Classes_6.classes.loadClass(sclassname))[sname](...param);
                         }
                     });
                 }
                 mem = Registry_8.default.getJSONMemberData("$Actions")[entr.classname];
                 for (let name in mem) {
-                    let acs = await (await Classes_4.classes.loadClass(entr.classname))[name]();
+                    let acs = await (await Classes_6.classes.loadClass(entr.classname))[name]();
                     for (let x = 0; x < acs.length; x++) {
                         let ac = acs[x];
                         if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
@@ -3855,14 +4365,14 @@ define("jassijs/ext/jquerylib", ["require", "exports", "jquery", "jquery.ui", "j
         $.datepicker.setDefaults($.datepicker.regional[navigator.language.split("-")[0]]);
     });
 });
-define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_13, Registry_14, Classes_5) {
+define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_13, Registry_14, Classes_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Property = exports.$Property = void 0;
     function $Property(property = undefined) {
         return function (target, propertyKey, descriptor) {
             //debugger;
-            var test = Classes_5.classes.getClassName(target);
+            var test = Classes_7.classes.getClassName(target);
             if (propertyKey === undefined)
                 Registry_14.default.registerMember("$Property", target.prototype, "new", property); //allow registerMember in class definition
             else
@@ -3886,7 +4396,7 @@ define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Registry", 
     ], Property);
     exports.Property = Property;
 });
-define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_15, Property_1, Classes_6, Registry_16) {
+define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_15, Property_1, Classes_8, Registry_16) {
     "use strict";
     var ComponentDescriptor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3927,7 +4437,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
                     var hideBaseClassProperties = false;
                     do {
                         family.push(type);
-                        var sclass = Classes_6.classes.getClassName(type);
+                        var sclass = Classes_8.classes.getClassName(type);
                         if (Registry_16.default.getMemberData("$Property") === undefined)
                             return cache;
                         var props = Registry_16.default.getMemberData("$Property")[sclass];
@@ -3954,7 +4464,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
                                             else if (tp.name === "Function")
                                                 prop.type = "function";
                                             else
-                                                prop.type = Classes_6.classes.getClassName(tp);
+                                                prop.type = Classes_8.classes.getClassName(tp);
                                         }
                                     }
                                     if (prop.type === undefined && prop.hide !== true)
@@ -3988,7 +4498,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
          **/
         static getEditableComponents(component, idFromLabel, includeFrozenContainer, flag) {
             var ret = "";
-            var sclass = Classes_6.classes.getClassName(component);
+            var sclass = Classes_8.classes.getClassName(component);
             var props = Registry_16.default.getData("$UIComponent")[sclass];
             if (!props) {
                 props = props = Registry_16.default.getData("$ReportComponent")[sclass];
@@ -4022,11 +4532,11 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
             var type;
             if (ret === undefined) {
                 ret = {};
-                sclass = Classes_6.classes.getClassName(ob);
+                sclass = Classes_8.classes.getClassName(ob);
                 type = ob.constructor;
             }
             else {
-                sclass = Classes_6.classes.getClassName(type);
+                sclass = Classes_8.classes.getClassName(type);
             }
             var found = false;
             if (Registry_16.default.getData("$UIComponent", sclass) !== undefined && Registry_16.default.getData("$UIComponent", sclass)[0] !== undefined) {
@@ -4278,7 +4788,7 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Regist
     ], CSSProperties);
     exports.CSSProperties = CSSProperties;
 });
-define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties"], function (require, exports, Registry_18, Property_3, Registry_19, Classes_7, CSSProperties_1) {
+define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties"], function (require, exports, Registry_18, Property_3, Registry_19, Classes_9, CSSProperties_1) {
     "use strict";
     var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4479,7 +4989,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             //add _this to the dom element
             var lid = "j" + Registry_19.default.nextID();
             var st = 'style="display: inline-block"';
-            if (this instanceof Classes_7.classes.getClass("jassijs.ui.Container")) {
+            if (this instanceof Classes_9.classes.getClass("jassijs.ui.Container")) {
                 st = "";
             }
             if (properties !== undefined && properties.noWrapper === true) {
@@ -4650,7 +5160,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             if (this._contextMenu !== undefined)
                 this._contextMenu.unregisterComponent(this);
             if (value !== undefined) {
-                var ContextMenu = Classes_7.classes.getClass("jassijs.ui.ContextMenu");
+                var ContextMenu = Classes_9.classes.getClass("jassijs.ui.ContextMenu");
                 if (value instanceof ContextMenu === false) {
                     throw new Error("value is not of type jassijs.ui.ContextMenu");
                 }
@@ -4838,7 +5348,7 @@ define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ui/Component"
     }
     exports.test = test;
 });
-define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_20, Classes_8) {
+define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_20, Classes_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteProtocol = void 0;
@@ -4853,7 +5363,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
             var ref = [];
             return JSON.stringify(obj, function (key, value) {
                 var val = {};
-                var clname = value === null ? undefined : Classes_8.classes.getClassName(value);
+                var clname = value === null ? undefined : Classes_10.classes.getClassName(value);
                 var k = clname;
                 if (k !== undefined) {
                     val.__clname__ = clname;
@@ -4915,7 +5425,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
        */
         async call() {
             if (jassijs.isServer)
-                throw new Classes_8.JassiError("should be called on client");
+                throw new Classes_10.JassiError("should be called on client");
             var sdataObject = undefined;
             var url = "remoteprotocol?" + Date.now();
             var _this = this;
@@ -4949,7 +5459,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                 return undefined;
             var retval = await this.parse(ret);
             if (retval["**throw error**"] !== undefined) {
-                throw new Classes_8.JassiError(retval["**throw error**"]);
+                throw new Classes_10.JassiError(retval["**throw error**"]);
             }
             return retval;
         }
@@ -4974,7 +5484,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
             });
             //all classes must be loaded
             for (var x = 0; x < allclassnames.length; x++) {
-                await Classes_8.classes.loadClass(allclassnames[x]);
+                await Classes_10.classes.loadClass(allclassnames[x]);
             }
             return JSON.parse(text, function (key, value) {
                 var val = value;
@@ -4985,7 +5495,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                     if (val === undefined) {
                         //TODO import types from js
                         //create dummy
-                        var type = Classes_8.classes.getClass(value.__clname__);
+                        var type = Classes_10.classes.getClass(value.__clname__);
                         //@ts-ignore
                         var test = type._createObject === undefined ? undefined : type._createObject(val);
                         if (test !== undefined)
@@ -5002,7 +5512,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                         }
                         else {
                             //TODO import types from js
-                            var type = Classes_8.classes.getClass(value.__clname__);
+                            var type = Classes_10.classes.getClass(value.__clname__);
                             //@ts-ignore
                             var test = type._createObject === undefined ? undefined : type._createObject(value);
                             if (test !== undefined)
@@ -5052,7 +5562,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
     }
 });
 //jassijs.register("classes", "de.B", B);
-define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, Registry_21, Classes_9, RemoteProtocol_1) {
+define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, Registry_21, Classes_11, RemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteObject = exports.Context = void 0;
@@ -5062,10 +5572,10 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Reg
     let RemoteObject = class RemoteObject {
         static async call(method, ...parameter) {
             if (jassijs.isServer)
-                throw new Classes_9.JassiError("should be called on client");
+                throw new Classes_11.JassiError("should be called on client");
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];
-            prot.classname = Classes_9.classes.getClassName(this);
+            prot.classname = Classes_11.classes.getClassName(this);
             prot._this = "static";
             prot.parameter = parameter;
             prot.method = method.name;
@@ -5086,10 +5596,10 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Reg
         }
         async call(_this, method, ...parameter) {
             if (jassijs.isServer)
-                throw new Classes_9.JassiError("should be called on client");
+                throw new Classes_11.JassiError("should be called on client");
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];
-            prot.classname = Classes_9.classes.getClassName(this);
+            prot.classname = Classes_11.classes.getClassName(this);
             prot._this = _this;
             prot.parameter = parameter;
             prot.method = method.name;
@@ -5112,7 +5622,7 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Reg
     ], RemoteObject);
     exports.RemoteObject = RemoteObject;
 });
-define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_22, Classes_10) {
+define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_22, Classes_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.db = exports.Database = exports.TypeDef = void 0;
@@ -5139,14 +5649,14 @@ define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Registr
             ;
         }
         removeOld(oclass) {
-            var name = Classes_10.classes.getClassName(oclass);
+            var name = Classes_12.classes.getClassName(oclass);
             this.typeDef.forEach((value, key) => {
-                var testname = Classes_10.classes.getClassName(key);
+                var testname = Classes_12.classes.getClassName(key);
                 if (testname === name && key !== oclass)
                     this.typeDef.delete(key);
             });
             this.decoratorCalls.forEach((value, key) => {
-                var testname = Classes_10.classes.getClassName(key);
+                var testname = Classes_12.classes.getClassName(key);
                 if (testname === name && key !== oclass) {
                     this.decoratorCalls.delete(key);
                 }
@@ -5193,7 +5703,7 @@ define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Registr
     var db = new Database();
     exports.db = db;
 });
-define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Database", "jassijs/remote/Classes"], function (require, exports, Database_1, Classes_11) {
+define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Database", "jassijs/remote/Classes"], function (require, exports, Database_1, Classes_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
@@ -5202,7 +5712,7 @@ define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Dat
     function addDecorater(decoratername, ...args) {
         return function (...fargs) {
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
-            var clname = Classes_11.classes.getClassName(con);
+            var clname = Classes_13.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
             Database_1.db._setMetadata(con, field, decoratername, args, fargs, undefined);
         };
@@ -5287,7 +5797,7 @@ define("jassijs/remote/ObjectTransaction", ["require", "exports"], function (req
     }
     exports.ObjectTransaction = ObjectTransaction;
 });
-define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice"], function (require, exports, Registry_23, Classes_12, Serverservice_4) {
+define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice"], function (require, exports, Registry_23, Classes_14, Serverservice_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports._execute = exports.remoteProtocol = void 0;
@@ -5308,7 +5818,7 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
             request.user.user = user.id;
             request.user.isAdmin = (user.isAdmin === null ? false : user.isAdmin);
             if (!user)
-                throw new Classes_12.JassiError("simulateUser not logged in");
+                throw new Classes_14.JassiError("simulateUser not logged in");
         }
     }
     async function execute(request, res) {
@@ -5331,15 +5841,15 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
         Object.assign(prot, vdata);
         var files = Registry_23.default.getAllFilesForService("$Class", prot.classname);
         if (files === undefined || files.length === 0) {
-            throw new Classes_12.JassiError("file for " + prot.classname + " not found");
+            throw new Classes_14.JassiError("file for " + prot.classname + " not found");
         }
         var file = files[0];
         var path = file.split("/");
         if (path.length < 2 || path[1] !== "remote")
-            throw new Classes_12.JassiError("only remote packages can be loadeded");
+            throw new Classes_14.JassiError("only remote packages can be loadeded");
         file = file.replace(".ts", "");
         //var ret = await import(file);
-        var C = await Classes_12.classes.loadClass(prot.classname);
+        var C = await Classes_14.classes.loadClass(prot.classname);
         ///await Promise.resolve().then(() => require.main.require(file));
         //var C = classes.getClass(prot.classname);
         if (prot._this === "static") {
@@ -5376,7 +5886,7 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
                     ret = await (obj[prot.method](...prot.parameter, context));
             }
             catch (ex) {
-                if (!(ex instanceof Classes_12.JassiError)) {
+                if (!(ex instanceof Classes_14.JassiError)) {
                     console.error(ex.stack);
                 }
                 var msg = ex.message;
@@ -5902,15 +6412,15 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
     exports.test = test;
     var l;
 });
-define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database", "jassijs/remote/Validator", "jassijs/remote/Serverservice"], function (require, exports, Registry_25, Classes_13, RemoteObject_3, Registry_26, DatabaseSchema_1, Database_2, Validator_1, Serverservice_5) {
+define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database", "jassijs/remote/Validator", "jassijs/remote/Serverservice"], function (require, exports, Registry_25, Classes_15, RemoteObject_3, Registry_26, DatabaseSchema_1, Database_2, Validator_1, Serverservice_5) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObject = exports.MyFindManyOptions = exports.$DBObject = void 0;
-    let cl = Classes_13.classes; //force Classes
+    let cl = Classes_15.classes; //force Classes
     function $DBObject(options) {
         return function (pclass, ...params) {
-            var classname = Classes_13.classes.getClassName(pclass);
+            var classname = Classes_15.classes.getClassName(pclass);
             if (!options)
                 options = {};
             if (!options.name)
@@ -5956,7 +6466,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
         static addToCache(ob) {
             if (ob === undefined)
                 return undefined;
-            var clname = Classes_13.classes.getClassName(ob);
+            var clname = Classes_15.classes.getClassName(ob);
             var cl = DBObject_1.cache[clname];
             if (cl === undefined) {
                 cl = {};
@@ -5968,7 +6478,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
             DBObject_1.cache[classname] = {};
         }
         removeFromCache() {
-            var clname = Classes_13.classes.getClassName(this);
+            var clname = Classes_15.classes.getClassName(this);
             if (!DBObject_1.cache[clname])
                 return;
             delete DBObject_1.cache[clname][this.id.toString()];
@@ -5983,7 +6493,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
             }
             var ret = cl[ob.id];
             if (ret === undefined) {
-                ret = new (Classes_13.classes.getClass(ob.__clname__))();
+                ret = new (Classes_15.classes.getClass(ob.__clname__))();
                 cl[ob.id] = ret;
             }
             return ret;
@@ -6025,7 +6535,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
             });
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 if (this.id !== undefined) {
-                    var cname = Classes_13.classes.getClassName(this);
+                    var cname = Classes_15.classes.getClassName(this);
                     /* var cl = DBObject.cache[cname];
                      if (cl === undefined) {
                          cl = {};
@@ -6035,14 +6545,14 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
                     if (cached === undefined) {
                         DBObject_1.addToCache(this); //must be cached before inserting, so the new properties are introduced to the existing
                         if (this.isAutoId())
-                            throw new Classes_13.JassiError("autoid - load the object  before saving or remove id");
+                            throw new Classes_15.JassiError("autoid - load the object  before saving or remove id");
                         else
                             return await this.call(this, this._createObjectInDB, context);
                         //}//fails if the Object is saved before loading 
                     }
                     else {
                         if (cached !== this) {
-                            throw new Classes_13.JassiError("the object must be loaded before save");
+                            throw new Classes_15.JassiError("the object must be loaded before save");
                         }
                     }
                     DBObject_1.addToCache(this);
@@ -6054,7 +6564,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
                 }
                 else {
                     if (!this.isAutoId()) {
-                        throw new Classes_13.JassiError("error while saving the Id is not set");
+                        throw new Classes_15.JassiError("error while saving the Id is not set");
                     }
                     else {
                         var newob = this._replaceObjectWithId(this);
@@ -6072,7 +6582,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
         }
         async _createObjectInDB(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                throw new Classes_13.JassiError("createObject could oly be called on server");
+                throw new Classes_15.JassiError("createObject could oly be called on server");
             }
             else {
                 return (await Serverservice_5.serverservices.db).insert(context, this);
@@ -6100,7 +6610,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
         async remove(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 //@ts-ignore
-                var cl = DBObject_1.cache[Classes_13.classes.getClassName(this)];
+                var cl = DBObject_1.cache[Classes_15.classes.getClassName(this)];
                 if (cl !== undefined) {
                     delete cl[this.id];
                 }
@@ -6124,12 +6634,12 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
     ], DBObject);
     exports.DBObject = DBObject;
     async function test() {
-        var h = Database_2.db.getMetadata(Classes_13.classes.getClass("de.Kunde"));
+        var h = Database_2.db.getMetadata(Classes_15.classes.getClass("de.Kunde"));
         // debugger;
     }
     exports.test = test;
 });
-define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Classes_14, Registry_27) {
+define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Classes_16, Registry_27) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectQuery = exports.$DBObjectQuery = exports.DBObjectQueryProperties = void 0;
@@ -6138,7 +6648,7 @@ define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Cl
     exports.DBObjectQueryProperties = DBObjectQueryProperties;
     function $DBObjectQuery(property) {
         return function (target, propertyKey, descriptor) {
-            var test = Classes_14.classes.getClassName(target);
+            var test = Classes_16.classes.getClassName(target);
             Registry_27.default.registerMember("$DBObjectQuery", target, propertyKey, property);
         };
     }
@@ -6148,7 +6658,7 @@ define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Cl
             return undefined;
         }
         static async getQueries(classname) {
-            var cl = await Classes_14.classes.loadClass(classname);
+            var cl = await Classes_16.classes.loadClass(classname);
             var ret = [];
             var all = Registry_27.default.getMemberData("$DBObjectQuery");
             var queries = all[classname];
@@ -6173,7 +6683,7 @@ define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Cl
     }
     exports.test = test;
 });
-define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Classes", "jassijs/remote/Validator"], function (require, exports, DBObject_2, Registry_28, DatabaseSchema_2, Classes_15, Validator_2) {
+define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Classes", "jassijs/remote/Validator"], function (require, exports, DBObject_2, Registry_28, DatabaseSchema_2, Classes_17, Validator_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Setting = void 0;
@@ -6182,19 +6692,19 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
             super();
         }
         async save(context = undefined) {
-            throw new Classes_15.JassiError("not suported");
+            throw new Classes_17.JassiError("not suported");
         }
         static async findOne(options = undefined, context = undefined) {
-            throw new Classes_15.JassiError("not suported");
+            throw new Classes_17.JassiError("not suported");
         }
         static async find(options = undefined, context = undefined) {
-            throw new Classes_15.JassiError("not suported");
+            throw new Classes_17.JassiError("not suported");
         }
         /**
         * reload the object from jassijs.db
         */
         async remove(context = undefined) {
-            throw new Classes_15.JassiError("not suported");
+            throw new Classes_17.JassiError("not suported");
         }
     };
     __decorate([
@@ -6235,7 +6745,7 @@ define("jassijs/ui/Notify", ["require", "exports", "jquery", "jquery.notify"], f
     }
     exports.notifyAddStyle = notifyAddStyle;
 });
-define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Validator", "jassijs/remote/Config"], function (require, exports, Registry_29, RemoteObject_4, FileNode_1, Classes_16, Serverservice_6, Validator_3, Config_7) {
+define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Validator", "jassijs/remote/Config"], function (require, exports, Registry_29, RemoteObject_4, FileNode_1, Classes_18, Serverservice_6, Validator_3, Config_7) {
     "use strict";
     var Server_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6380,7 +6890,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 await this.fillFilesInMapIfNeeded();
                 if (!fromServerdirectory && Server_1.filesInMap[fileName]) {
                     //perhabs the files ar in localserver?
-                    var Filesystem = Classes_16.classes.getClass("jassijs_localserver.Filesystem");
+                    var Filesystem = Classes_18.classes.getClass("jassijs_localserver.Filesystem");
                     if (Filesystem && (await new Filesystem().loadFileEntry(fileName) !== undefined)) {
                         //use ajax
                     }
@@ -6403,7 +6913,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw new Classes_16.JassiError("only admins can loadFile from Serverdirectory");
+                    throw new Classes_18.JassiError("only admins can loadFile from Serverdirectory");
                 var rett = await (await Serverservice_6.serverservices.filesystem).loadFile(fileName);
                 return rett;
             }
@@ -6424,7 +6934,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     var content = contents[f];
                     if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                         //var tss = await import("jassijs_editor/util/Typescript");
-                        var tss = await Classes_16.classes.loadClass("jassijs_editor.util.Typescript");
+                        var tss = await Classes_18.classes.loadClass("jassijs_editor.util.Typescript");
                         var rets = await tss.instance.transpile(fileName, content);
                         allfileNames = allfileNames.concat(rets.fileNames);
                         allcontents = allcontents.concat(rets.contents);
@@ -6452,13 +6962,13 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     new Promise((resolve_18, reject_18) => { require(["jassijs/ui/Notify"], resolve_18, reject_18); }).then((el) => {
                         el.notify(fileName + " not saved", "error", { position: "bottom right" });
                     });
-                    throw new Classes_16.JassiError(res);
+                    throw new Classes_18.JassiError(res);
                 }
                 return res;
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw new Classes_16.JassiError("only admins can saveFiles");
+                    throw new Classes_18.JassiError("only admins can saveFiles");
                 var ret = (await Serverservice_6.serverservices.filesystem).saveFiles(fileNames, contents, true);
                 return ret;
             }
@@ -6482,7 +6992,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
        **/
         async testServersideFile(name, context = undefined) {
             if (!name.startsWith("$serverside/"))
-                throw new Classes_16.JassiError(name + " is not a serverside file");
+                throw new Classes_18.JassiError(name + " is not a serverside file");
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 var ret = await this.call(this, this.testServersideFile, name, context);
                 //@ts-ignore
@@ -6491,7 +7001,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             }
             else {
                 if (!context.request.user.isAdmin) {
-                    throw new Classes_16.JassiError("only admins can delete");
+                    throw new Classes_18.JassiError("only admins can delete");
                 }
                 //@ts-ignore
                 var test = (await new Promise((resolve_19, reject_19) => { require([name.replaceAll("$serverside/", "")], resolve_19, reject_19); })).test;
@@ -6512,7 +7022,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw new Classes_16.JassiError("only admins can delete");
+                    throw new Classes_18.JassiError("only admins can delete");
                 return (await Serverservice_6.serverservices.filesystem).removeServerModul(name);
             }
         }
@@ -6528,7 +7038,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw new Classes_16.JassiError("only admins can delete");
+                    throw new Classes_18.JassiError("only admins can delete");
                 return (await Serverservice_6.serverservices.filesystem).remove(name);
             }
         }
@@ -6544,7 +7054,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw new Classes_16.JassiError("only admins can rename");
+                    throw new Classes_18.JassiError("only admins can rename");
                 return (await Serverservice_6.serverservices.filesystem).rename(oldname, newname);
                 ;
             }
@@ -6585,7 +7095,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw new Classes_16.JassiError("only admins can createFile");
+                    throw new Classes_18.JassiError("only admins can createFile");
                 return (await Serverservice_6.serverservices.filesystem).createFile(filename, content);
             }
         }
@@ -6601,7 +7111,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw new Classes_16.JassiError("only admins can createFolder");
+                    throw new Classes_18.JassiError("only admins can createFolder");
                 return (await Serverservice_6.serverservices.filesystem).createFolder(foldername);
             }
         }
@@ -6614,7 +7124,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw new Classes_16.JassiError("only admins can createFolder");
+                    throw new Classes_18.JassiError("only admins can createFolder");
                 return (await Serverservice_6.serverservices.filesystem).createModule(modulname);
             }
         }
@@ -7218,9 +7728,11 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
             component._parent = undefined;
             if (component.domWrapper !== undefined)
                 component.domWrapper._parent = undefined;
-            var pos = this._components.indexOf(component);
-            if (pos >= 0)
-                this._components.splice(pos, 1);
+            if (this._components) {
+                var pos = this._components.indexOf(component);
+                if (pos >= 0)
+                    this._components.splice(pos, 1);
+            }
             let posd = (_a = this.designDummies) === null || _a === void 0 ? void 0 : _a.indexOf(component);
             if (posd >= 0)
                 this.designDummies.splice(posd, 1);
@@ -8034,9 +8546,11 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Registry", "ja
                 }
             }
             else {
-                for (var x = 0; x < this._components.length; x++) {
-                    var comp = this._components[x];
-                    DesignDummy_2.DesignDummy.destroyIfNeeded(comp, "beforeComponent");
+                if (this._components) {
+                    for (var x = 0; x < this._components.length; x++) {
+                        var comp = this._components[x];
+                        DesignDummy_2.DesignDummy.destroyIfNeeded(comp, "beforeComponent");
+                    }
                 }
             }
         }
@@ -9843,7 +10357,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
     }
     exports.test = test;
 });
-define("jassijs/base/PropertyEditorService", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_50, Classes_17, Registry_51) {
+define("jassijs/base/PropertyEditorService", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_50, Classes_19, Registry_51) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.propertyeditor = exports.PropertyEditorService = void 0;
@@ -9869,13 +10383,13 @@ define("jassijs/base/PropertyEditorService", ["require", "exports", "jassijs/rem
                 var dat = await Registry_51.default.getJSONData("$PropertyEditor");
                 for (var x = 0; x < dat.length; x++) {
                     if (dat[x].params[0].indexOf(type) !== -1) {
-                        await Classes_17.classes.loadClass(dat[x].classname);
+                        await Classes_19.classes.loadClass(dat[x].classname);
                     }
                 }
                 if (this.data[type] === undefined)
                     throw "PropertyEditor not found for type:" + type;
             }
-            return Classes_17.classes.loadClass(this.data[type]);
+            return Classes_19.classes.loadClass(this.data[type]);
         }
         /**
          * creates PropertyEditor for type
@@ -9897,14 +10411,14 @@ define("jassijs/base/PropertyEditorService", ["require", "exports", "jassijs/rem
                 else
                     sclass = this.data[property.type][0];
             }
-            var oclass = Classes_17.classes.getClass(sclass);
+            var oclass = Classes_19.classes.getClass(sclass);
             if (oclass)
                 return new (oclass)(property, propertyEditor);
             throw new Error("class not loaded " + sclass);
             //return new LoadingEditor(property,propertyEditor,classes.loadClass(sclass));
         }
         register(oclass, types) {
-            var name = Classes_17.classes.getClassName(oclass);
+            var name = Classes_19.classes.getClassName(oclass);
             for (var x = 0; x < types.length; x++) {
                 if (this.data[types[x]] === undefined)
                     this.data[types[x]] = [];
@@ -10275,7 +10789,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
     }
     exports.test = test;
 });
-define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/util/Cookies", "jassijs/ui/Component", "jassijs/ext/goldenlayout"], function (require, exports, Panel_2, Registry_53, ComponentDescriptor_3, Classes_18, Cookies_1, Component_12, goldenlayout_2) {
+define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/util/Cookies", "jassijs/ui/Component", "jassijs/ext/goldenlayout"], function (require, exports, Panel_2, Registry_53, ComponentDescriptor_3, Classes_20, Cookies_1, Component_12, goldenlayout_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Windows = void 0;
@@ -10547,7 +11061,7 @@ define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassi
                     urltags.push(props[p]);
                 }
             }
-            var url = "#do=" + Classes_18.classes.getClassName(comp);
+            var url = "#do=" + Classes_20.classes.getClassName(comp);
             for (var x = 0; x < urltags.length; x++) {
                 url = url + "&" + urltags[x].name + "=" + comp[urltags[x].name];
             }
@@ -10612,7 +11126,7 @@ define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassi
 //  jassijs.windows._init();
 //  });
 //return Component.constructor;
-define("jassijs/base/Router", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/ComponentDescriptor", "jassijs/base/Windows"], function (require, exports, Registry_54, Classes_19, ComponentDescriptor_4, Windows_1) {
+define("jassijs/base/Router", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/ComponentDescriptor", "jassijs/base/Windows"], function (require, exports, Registry_54, Classes_21, ComponentDescriptor_4, Windows_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.router = exports.Router = void 0;
@@ -10644,7 +11158,7 @@ define("jassijs/base/Router", ["require", "exports", "jassijs/remote/Registry", 
             if (params.do !== undefined) {
                 var clname = params.do;
                 //load js file
-                Classes_19.classes.loadClass(clname).then(function (cl) {
+                Classes_21.classes.loadClass(clname).then(function (cl) {
                     if (cl === undefined)
                         return;
                     var props = ComponentDescriptor_4.ComponentDescriptor.describe(cl).fields;
@@ -10811,11 +11325,11 @@ define("jassijs/remote/ClientError", ["require", "exports", "jassijs/remote/Regi
     ], ClientError);
     exports.ClientError = ClientError;
 });
-define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_56, Classes_20) {
+define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_56, Classes_22) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBArray = void 0;
-    let cl = Classes_20.classes; //force Classes.
+    let cl = Classes_22.classes; //force Classes.
     let DBArray = class DBArray
     /**
     * Array for jassijs.base.DBObject's
@@ -10833,7 +11347,7 @@ define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Registry
          */
         add(ob) {
             if (ob === undefined || ob === null)
-                throw new Classes_20.JassiError("Error cannot add object null");
+                throw new Classes_22.JassiError("Error cannot add object null");
             this.push(ob);
             if (this._parentObject !== undefined) {
                 //set linked object
@@ -10894,7 +11408,7 @@ define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Registry
     ], DBArray);
     exports.DBArray = DBArray;
 });
-define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_57, RemoteObject_6, Classes_21, Serverservice_8, Validator_5) {
+define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_57, RemoteObject_6, Classes_23, Serverservice_8, Validator_5) {
     "use strict";
     var DatabaseTools_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -10907,18 +11421,18 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Re
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw new Classes_21.JassiError("only admins can delete");
+                    throw new Classes_23.JassiError("only admins can delete");
                 return (await Serverservice_8.serverservices.db).runSQL(context, sql, parameter);
             }
         }
         static async dropTables(tables) {
             for (var i = 0; i < tables.length; i++) {
                 if ((/[A-Z,a-z,_,0-9]+/g).exec(tables[i])[0] !== tables[i]) {
-                    throw new Classes_21.JassiError(tables[i] + " is not a valid tablename");
+                    throw new Classes_23.JassiError(tables[i] + " is not a valid tablename");
                 }
             }
             if (tables.length === 0) {
-                throw new Classes_21.JassiError("no tables to drop");
+                throw new Classes_23.JassiError("no tables to drop");
             }
             return await DatabaseTools_1.runSQL("DROP TABLE " + tables.join(","));
         }
@@ -11916,7 +12430,7 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Split, Panel_3, Registry_66, Component_14, Property_14, Classes_22) {
+define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Split, Panel_3, Registry_66, Component_14, Property_14, Classes_24) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.BoxPanel = void 0;
@@ -12018,7 +12532,7 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Pan
     ], BoxPanel);
     exports.BoxPanel = BoxPanel;
     async function test() {
-        var HTMLPanel = await Classes_22.classes.loadClass("jassijs.ui.HTMLPanel");
+        var HTMLPanel = await Classes_24.classes.loadClass("jassijs.ui.HTMLPanel");
         var ret = new BoxPanel();
         var me = {};
         ret["me"] = me;
@@ -12038,7 +12552,7 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Pan
     exports.test = test;
     ;
 });
-define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ui/Notify"], function (require, exports, Button_3, BoxPanel_1, Registry_67, Panel_4, Databinder_1, Component_15, Registry_68, Classes_23, Property_15, Notify_2) {
+define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ui/Notify"], function (require, exports, Button_3, BoxPanel_1, Registry_67, Panel_4, Databinder_1, Component_15, Registry_68, Classes_25, Property_15, Notify_2) {
     "use strict";
     var DBObjectView_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -12072,8 +12586,8 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
          * create a new object
          */
         createObject() {
-            var clname = Registry_68.default.getData("$DBObjectView", Classes_23.classes.getClassName(this))[0].params[0].classname;
-            var cl = Classes_23.classes.getClass(clname);
+            var clname = Registry_68.default.getData("$DBObjectView", Classes_25.classes.getClassName(this))[0].params[0].classname;
+            var cl = Classes_25.classes.getClass(clname);
             this["value"] = new cl();
             this.callEvent("created", this["value"]);
             return this["value"];
@@ -12118,8 +12632,8 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
                 return;
             ob.remove();
             //set obj to null
-            var clname = Registry_68.default.getData("$DBObjectView", Classes_23.classes.getClassName(this))[0].params[0].classname;
-            var cl = Classes_23.classes.getClass(clname);
+            var clname = Registry_68.default.getData("$DBObjectView", Classes_25.classes.getClassName(this))[0].params[0].classname;
+            var cl = Classes_25.classes.getClass(clname);
             this["value"] = new cl();
             this.callEvent("deleted", ob);
         }
@@ -12395,7 +12909,7 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
     }
     exports.test = test;
 });
-define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter", "tabulator-tables"], function (require, exports, Registry_71, DataComponent_4, Property_18, Component_17, Textbox_5, Classes_24, tabulator_tables_1, DateTimeConverter_1, Numberformatter_3) {
+define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter", "tabulator-tables"], function (require, exports, Registry_71, DataComponent_4, Property_18, Component_17, Textbox_5, Classes_26, tabulator_tables_1, DateTimeConverter_1, Numberformatter_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -12553,7 +13067,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
             // debugger;
             var _this = this;
             return new Promise((resolve) => {
-                Classes_24.classes.loadClass(_this._lazyLoadOption.classname).then((cl) => {
+                Classes_26.classes.loadClass(_this._lazyLoadOption.classname).then((cl) => {
                     var newSort = undefined;
                     var tt = _this.table.getSorters();
                     if (tt) {
@@ -13096,7 +13610,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
     }
     exports.test = test;
 });
-define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, Registry_72, Panel_5, Registry_73, Classes_25, BoxPanel_2, Actions_1, Windows_2) {
+define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, Registry_72, Panel_5, Registry_73, Classes_27, BoxPanel_2, Actions_1, Windows_2) {
     "use strict";
     var DBObjectDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -13136,7 +13650,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
         }
         async update() {
             //DBTable
-            var cl = await Classes_25.classes.loadClass(this._dbclassname);
+            var cl = await Classes_27.classes.loadClass(this._dbclassname);
             var _this = this;
             //@ts-ignore
             // this.data = await cl.find();
@@ -13146,7 +13660,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
             for (var x = 0; x < data.length; x++) {
                 var param = data[x].params[0];
                 if (param.classname === this.dbclassname) {
-                    var cl = await Classes_25.classes.loadClass(data[x].classname);
+                    var cl = await Classes_27.classes.loadClass(data[x].classname);
                     this.me.IDDBView.removeAll();
                     this.view = new cl();
                     this.me.table1.options = {
@@ -13308,7 +13822,7 @@ define("jassijs/security/GroupView", ["require", "exports", "jassijs/ui/converte
     }
     exports.test = test;
 });
-define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_75, Component_18, DataComponent_5, Property_20, Classes_26) {
+define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_75, Component_18, DataComponent_5, Property_20, Classes_28) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Select = void 0;
@@ -13535,8 +14049,8 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "j
     ], Select);
     exports.Select = Select;
     async function test() {
-        var Panel = Classes_26.classes.getClass("jassijs.ui.Panel");
-        var Button = Classes_26.classes.getClass("jassijs.ui.Button");
+        var Panel = Classes_28.classes.getClass("jassijs.ui.Panel");
+        var Button = Classes_28.classes.getClass("jassijs.ui.Button");
         var me = {};
         var pan = new Panel();
         var bt = new Button();
@@ -13704,7 +14218,7 @@ define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/Select", 
     }
     exports.test = test;
 });
-define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, typeorm_1, Classes_27, Registry_78, User_3, Registry_79, Serverservice_9) {
+define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, typeorm_1, Classes_29, Registry_78, User_3, Registry_79, Serverservice_9) {
     "use strict";
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -13742,7 +14256,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             var dbobjects = await Registry_78.default.getJSONData("$DBObject");
             for (var o = 0; o < dbobjects.length; o++) {
                 var clname = dbobjects[o].classname;
-                dbclasses.push(await Classes_27.classes.loadClass(clname));
+                dbclasses.push(await Classes_29.classes.loadClass(clname));
                 //var fname = dbobjects[o].filename;
                 //dbfiles.push("js/" + fname.replace(".ts", ".js"));
             }
@@ -13932,7 +14446,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
         async remove(context, entity) {
             var test = await (await this.waitForConnection).checkParentRight(context, entity, [entity["id"]]);
             if (test === false)
-                throw new Classes_27.JassiError("you are not allowed to delete " + Classes_27.classes.getClassName(entity) + " with id " + entity["id"]);
+                throw new Classes_29.JassiError("you are not allowed to delete " + Classes_29.classes.getClassName(entity) + " with id " + entity["id"]);
             await this.connection().manager.remove(entity);
         }
         async addSaveTransaction(context, entity) {
@@ -13971,7 +14485,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             }
             if (obj.id !== undefined) {
                 if ((await this.connection().manager.findOne(obj.constructor, obj.id)) !== undefined) {
-                    throw new Classes_27.JassiError("object is already in DB: " + obj.id);
+                    throw new Classes_29.JassiError("object is already in DB: " + obj.id);
                 }
             }
             //@ts-ignore
@@ -13984,7 +14498,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             await this.waitForConnection;
             await this._checkParentRightsForSave(context, entity);
             if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
-                if (Classes_27.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
+                if (Classes_29.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
                     entity.password = await new Promise((resolve) => {
                         const crypto = require('crypto');
                         const salt = crypto.randomBytes(8).toString('base64');
@@ -14011,22 +14525,22 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             if ((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)
                 return;
             //Check if the object self has restrictions
-            var cl = Classes_27.classes.getClass(Classes_27.classes.getClassName(entity));
+            var cl = Classes_29.classes.getClass(Classes_29.classes.getClassName(entity));
             if (entity["id"] !== undefined) {
                 var exist = await this.connection().manager.findOne(cl, entity["id"]);
                 if (exist !== undefined) {
                     var t = await this.checkParentRight(context, cl, [entity["id"]]);
                     if (!t) {
-                        throw new Classes_27.JassiError("you are not allowed to save " + Classes_27.classes.getClassName(cl) + " with id " + entity["id"]);
+                        throw new Classes_29.JassiError("you are not allowed to save " + Classes_29.classes.getClassName(cl) + " with id " + entity["id"]);
                     }
                 }
             }
             //check if the field of parentRight is set
             if (Registry_78.default.getMemberData("$CheckParentRight") !== undefined) {
-                var data = Registry_78.default.getMemberData("$CheckParentRight")[Classes_27.classes.getClassName(entity)];
+                var data = Registry_78.default.getMemberData("$CheckParentRight")[Classes_29.classes.getClassName(entity)];
                 for (var key in data) {
                     if (entity[key] === undefined) {
-                        throw new Classes_27.JassiError("the CheckParentRight field " + key + " must not be undefined");
+                        throw new Classes_29.JassiError("the CheckParentRight field " + key + " must not be undefined");
                     }
                 }
             }
@@ -14039,7 +14553,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                     let cl = rel.type;
                     var t = await this.checkParentRight(context, cl, [data["id"]]);
                     if (!t) {
-                        throw new Classes_27.JassiError("you are not allowed to save " + Classes_27.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                        throw new Classes_29.JassiError("you are not allowed to save " + Classes_29.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
                     }
                 }
                 if (data !== undefined && Array.isArray(data)) {
@@ -14050,7 +14564,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                     }
                     let t = await this.checkParentRight(context, cl, arr);
                     if (!t) {
-                        throw new Classes_27.JassiError("you are not allowed to save " + Classes_27.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                        throw new Classes_29.JassiError("you are not allowed to save " + Classes_29.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
                     }
                 }
                 /* var tp=await p1.__proto__.constructor;
@@ -14086,8 +14600,8 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             await this.waitForConnection;
             var options = p1;
             var onlyColumns = options === null || options === void 0 ? void 0 : options.onlyColumns;
-            var clname = Classes_27.classes.getClassName(entityClass);
-            var cl = Classes_27.classes.getClass(clname);
+            var clname = Classes_29.classes.getClassName(entityClass);
+            var cl = Classes_29.classes.getClass(clname);
             var relations = new RelationInfo(context, clname, this);
             var allRelations = this.resolveWildcharInRelations(clname, options === null || options === void 0 ? void 0 : options.relations);
             if (options && options.relations) {
@@ -14137,7 +14651,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                 return ret;
             for (let r = 0; r < relation.length; r++) {
                 if (relation[r] === "*") {
-                    var vdata = (0, typeorm_1.getConnection)().getMetadata(Classes_27.classes.getClass(classname));
+                    var vdata = (0, typeorm_1.getConnection)().getMetadata(Classes_29.classes.getClass(classname));
                     for (var re = 0; re < vdata.relations.length; re++) {
                         var s = vdata.relations[re].propertyName;
                         if (ret.indexOf(s) === -1)
@@ -14217,8 +14731,8 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
         }
         async checkParentRight(context, entityClass, ids) {
             await this.waitForConnection;
-            var clname = Classes_27.classes.getClassName(entityClass);
-            var cl = Classes_27.classes.getClass(clname);
+            var clname = Classes_29.classes.getClassName(entityClass);
+            var cl = Classes_29.classes.getClass(clname);
             var relations = new RelationInfo(context, clname, this);
             var ret = await this.connection().manager.createQueryBuilder().
                 select("me").from(cl, "me");
@@ -14318,7 +14832,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             var kk = context.request.user;
             var userid = context.request.user.user;
             var query = this.dbmanager.connection().createQueryBuilder().
-                select("me").from(Classes_27.classes.getClass("jassijs.security.ParentRight"), "me").
+                select("me").from(Classes_29.classes.getClass("jassijs.security.ParentRight"), "me").
                 leftJoin("me.groups", "me_groups").
                 leftJoin("me_groups.users", "me_groups_users");
             query = query.andWhere("me_groups_users.id=:theUserId", { theUserId: userid });
@@ -14437,7 +14951,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                 //this should prevent sql injection
                 var test = /[A-Z,a-z][A-Z,a-z,0-9,\.]*/g.exec(key);
                 if (test === null || test[0] !== key)
-                    throw new Classes_27.JassiError("could not set property " + key + " in where clause");
+                    throw new Classes_29.JassiError("could not set property " + key + " in where clause");
                 var field = this._getRelationFromProperty(key);
                 var pack = field.split(".")[0].substring(3);
                 if (pack !== "")
@@ -14485,16 +14999,16 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                     parentPath = curPath;
                     curPath = curPath + (curPath === "" ? "" : ".") + all[x];
                     if (this.relations[curPath] === undefined) {
-                        var vdata = this.dbmanager.connection().getMetadata(Classes_27.classes.getClass(curClassname));
+                        var vdata = this.dbmanager.connection().getMetadata(Classes_29.classes.getClass(curClassname));
                         //read type
                         var membername = all[x];
                         for (var r = 0; r < vdata.relations.length; r++) {
                             var rel = vdata.relations[r];
                             if (rel.propertyName === membername) {
-                                var clname = Classes_27.classes.getClassName(rel.type);
+                                var clname = Classes_29.classes.getClassName(rel.type);
                                 var testPR = Registry_78.default.getData("$ParentRights", clname);
                                 this.relations[curPath] = {
-                                    className: Classes_27.classes.getClassName(rel.type),
+                                    className: Classes_29.classes.getClassName(rel.type),
                                     name: membername,
                                     fullPath: curPath,
                                     parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
@@ -14516,11 +15030,11 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                             for (var r = 0; r < vdata.relations.length; r++) {
                                 var rel = vdata.relations[r];
                                 if (rel.propertyName === membername) {
-                                    var clname = Classes_27.classes.getClassName(rel.type);
+                                    var clname = Classes_29.classes.getClassName(rel.type);
                                     var testPR = Registry_78.default.getData("$ParentRights", clname);
                                     var mpath = parentPath + (parentPath === "" ? "" : ".") + membername;
                                     this.relations[mpath] = {
-                                        className: Classes_27.classes.getClassName(rel.type),
+                                        className: Classes_29.classes.getClassName(rel.type),
                                         name: membername,
                                         fullPath: mpath,
                                         parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
@@ -14539,7 +15053,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
         }
     }
 });
-define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs/server/NativeAdapter"], function (require, exports, Registry_80, typeorm_2, NativeAdapter_4) {
+define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs/server/NativeAdapter"], function (require, exports, Registry_80, typeorm_2, NativeAdapter_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
@@ -14566,7 +15080,7 @@ define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/
             }
             this.savetimer = setTimeout(() => {
                 var data = event.connection.driver.export();
-                NativeAdapter_4.myfs.writeFile("./client/__default.db", data);
+                NativeAdapter_5.myfs.writeFile("./client/__default.db", data);
                 console.log("save DB");
             }, 300);
         }
@@ -14658,14 +15172,14 @@ define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
 });
-define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/server/DBManager", "jassijs/server/TypeORMListener", "typeorm", "jassijs/server/NativeAdapter"], function (require, exports, Classes_28, Database_4, Registry_81, DBManager_2, TypeORMListener_1, typeorm_3, NativeAdapter_5) {
+define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/server/DBManager", "jassijs/server/TypeORMListener", "typeorm", "jassijs/server/NativeAdapter"], function (require, exports, Classes_30, Database_4, Registry_81, DBManager_2, TypeORMListener_1, typeorm_3, NativeAdapter_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendDBManager = void 0;
     function extendDBManager() {
         //create Admin User if doesn't a user exists 
         DBManager_2.DBManager.prototype["hasLoaded"] = async function () {
-            var User = await Classes_28.classes.loadClass("jassijs.security.User");
+            var User = await Classes_30.classes.loadClass("jassijs.security.User");
             //@ts-ignore
             var us = User.findOne();
             if (us) {
@@ -14678,7 +15192,7 @@ define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Cla
         };
         DBManager_2.DBManager.prototype["login"] = async function (context, user, password) {
             try {
-                var User = await Classes_28.classes.loadClass("jassijs.security.User");
+                var User = await Classes_30.classes.loadClass("jassijs.security.User");
                 var ret = await this.connection().manager.createQueryBuilder().
                     select("me").from(User, "me").addSelect("me.password").
                     andWhere("me.email=:email", { email: user });
@@ -14710,7 +15224,7 @@ define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Cla
                 var clname = dbobjects[o].classname;
                 try {
                     dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
-                    dbclasses.push(await Classes_28.classes.loadClass(clname));
+                    dbclasses.push(await Classes_30.classes.loadClass(clname));
                 }
                 catch (err) {
                     console.log(err);
@@ -14720,13 +15234,13 @@ define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Cla
             //@ts-ignore
             DBManager_2.DBManager.clearMetadata();
             Database_4.db.fillDecorators();
-            var tcl = await Classes_28.classes.loadClass("jassijs.server.TypeORMListener");
+            var tcl = await Classes_30.classes.loadClass("jassijs.server.TypeORMListener");
             //@ts-ignore 
             new typeorm_3.EventSubscriber()(tcl);
-            var Filesystem = await Classes_28.classes.loadClass("jassijs.server.Filesystem");
+            var Filesystem = await Classes_30.classes.loadClass("jassijs.server.Filesystem");
             var data = undefined;
-            if (await (0, NativeAdapter_5.exists)("./client/__default.db"))
-                data = await NativeAdapter_5.myfs.readFile("./client/__default.db", undefined, false);
+            if (await (0, NativeAdapter_6.exists)("./client/__default.db"))
+                data = await NativeAdapter_6.myfs.readFile("./client/__default.db", "binary", false);
             var opt = {
                 database: data,
                 type: "sqljs",
@@ -14738,14 +15252,14 @@ define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Cla
     }
     exports.extendDBManager = extendDBManager;
 });
-define("jassijs/server/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_29, Database_5, typeorm_4) {
+define("jassijs/server/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_31, Database_5, typeorm_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
     function addDecorater(decoratername, delegate, ...args) {
         return function (...fargs) {
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
-            var clname = Classes_29.classes.getClassName(con);
+            var clname = Classes_31.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
             Database_5.db._setMetadata(con, field, decoratername, args, fargs, delegate);
             if (delegate)
@@ -15458,7 +15972,7 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_86, Menu_3, InvisibleComponent_2, Component_22, Classes_30, Property_25, Actions_3, MenuItem_3) {
+define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_86, Menu_3, InvisibleComponent_2, Component_22, Classes_32, Property_25, Actions_3, MenuItem_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;
@@ -15687,10 +16201,10 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry
     ], ContextMenu);
     exports.ContextMenu = ContextMenu;
     async function test() {
-        var Panel = Classes_30.classes.getClass("jassijs.ui.Panel");
-        var Button = Classes_30.classes.getClass("jassijs.ui.Button");
-        var MenuItem = Classes_30.classes.getClass("jassijs.ui.MenuItem");
-        var FileNode = Classes_30.classes.getClass("jassijs.remote.FileNode");
+        var Panel = Classes_32.classes.getClass("jassijs.ui.Panel");
+        var Button = Classes_32.classes.getClass("jassijs.ui.Button");
+        var MenuItem = Classes_32.classes.getClass("jassijs.ui.MenuItem");
+        var FileNode = Classes_32.classes.getClass("jassijs.remote.FileNode");
         var bt = new Button();
         var cmen = new ContextMenu();
         var men = new MenuItem();
@@ -17089,7 +17603,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Regist
     ], VariablePanel);
     exports.VariablePanel = VariablePanel;
 });
-define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Registry_95, Table_2, Panel_11, Button_5, Textbox_8, Property_28, Component_26, Classes_31) {
+define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Registry_95, Table_2, Panel_11, Button_5, Textbox_8, Property_28, Component_26, Classes_33) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.ObjectChooser = void 0;
@@ -17205,7 +17719,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
             return this._value;
         }
         async loadObjects(classname) {
-            var cl = await Classes_31.classes.loadClass(classname);
+            var cl = await Classes_33.classes.loadClass(classname);
             return await cl.find();
         }
         set items(value) {
@@ -17308,7 +17822,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Panel_12, BoxPanel_3, HTMLPanel_3, Button_6, Registry_96, Property_29, Textbox_9, Classes_32) {
+define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Panel_12, BoxPanel_3, HTMLPanel_3, Button_6, Registry_96, Property_29, Textbox_9, Classes_34) {
     "use strict";
     var OptionDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17385,7 +17899,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
             ret.options = options;
             ret.layout();
             if (properties !== undefined) {
-                var PropertyEditor = await Classes_32.classes.loadClass("jassijs.ui.PropertyEditor");
+                var PropertyEditor = await Classes_34.classes.loadClass("jassijs.ui.PropertyEditor");
                 ret.me.propertyEditor = new PropertyEditor(undefined);
                 ret.me.propertyEditor.width = "100%";
                 ret.me.propertyEditor.height = "100%";
@@ -17926,7 +18440,7 @@ define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassi
     ], BooleanEditor);
     exports.BooleanEditor = BooleanEditor;
 });
-define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ext/jquerylib"], function (require, exports, Registry_103, Editor_3, Button_8, PropertyEditor_3, Tools_2, Classes_33, Property_33) {
+define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ext/jquerylib"], function (require, exports, Registry_103, Editor_3, Button_8, PropertyEditor_3, Tools_2, Classes_35, Property_33) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.JsonEditor = void 0;
@@ -17987,7 +18501,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
                 //var str = Tools.objectToJson(propEditor.value, space);
                 var str = Tools_2.Tools.stringObjectToJson(propEditor.codeChanges, space);
                 if (_this.property.name === "new") {
-                    var shortClassname = Classes_33.classes.getClassName(_this._ob).split(".")[Classes_33.classes.getClassName(_this._ob).split(".").length - 1];
+                    var shortClassname = Classes_35.classes.getClassName(_this._ob).split(".")[Classes_35.classes.getClassName(_this._ob).split(".").length - 1];
                     str = "new " + shortClassname + "(" + str + ")";
                 }
                 if (_this.property.constructorClass !== undefined) {
@@ -18004,7 +18518,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
                 }
                 var newvalue = propEditor.value;
                 if (_this.property.constructorClass !== undefined) {
-                    var cl = Classes_33.classes.getClass(_this.property.constructorClass);
+                    var cl = Classes_35.classes.getClass(_this.property.constructorClass);
                     newvalue = new cl(propEditor.value);
                 }
                 if (typeof (_this._ob[_this.property.name]) === "function")
@@ -18073,7 +18587,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         async getInitialPropertyValue(code) {
             var newvalue = undefined;
             if (this.property.componentType) {
-                let newclass = Classes_33.classes.getClass(this.property.componentType);
+                let newclass = Classes_35.classes.getClass(this.property.componentType);
                 newvalue = new newclass();
             }
             else {
@@ -18236,7 +18750,7 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });
-define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_3, Editor_4, JsonEditor_1, Tools_3, StringConverter_1, Registry_105, Panel_15, Textbox_11, Registry_106, ComponentDescriptor_7, Classes_34) {
+define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_3, Editor_4, JsonEditor_1, Tools_3, StringConverter_1, Registry_105, Panel_15, Textbox_11, Registry_106, ComponentDescriptor_7, Classes_36) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClassSelectorEditor = void 0;
@@ -18281,11 +18795,11 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
                 var file = converter.classname.replaceAll(".", "/");
                 var stype = file.split("/")[file.split("/").length - 1];
                 _this.propertyEditor.addImportIfNeeded(stype, file);
-                Classes_34.classes.loadClass(converter.classname).then((pclass) => {
+                Classes_36.classes.loadClass(converter.classname).then((pclass) => {
                     _this.propertyEditor.setPropertyInDesign(_this.property.name, new pclass());
                 });
             }
-            Classes_34.classes.loadClass(converter.classname).then((cl) => {
+            Classes_36.classes.loadClass(converter.classname).then((cl) => {
                 var _a;
                 var meta = (_a = ComponentDescriptor_7.ComponentDescriptor.describe(cl)) === null || _a === void 0 ? void 0 : _a.fields;
                 for (var x = 0; x < meta.length; x++) {
@@ -18316,7 +18830,7 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
                    });*/
                 for (var x = 0; x < converters.length; x++) {
                     var con = converters[x];
-                    var cname = Classes_34.classes.getClassName(con.oclass);
+                    var cname = Classes_36.classes.getClassName(con.oclass);
                     var name = cname;
                     if (con.params[0] && con.params[0].name !== undefined)
                         name = con.params[0].name;
@@ -18549,7 +19063,7 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Editor_6, Select_5, Classes_35, Registry_108) {
+define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Editor_6, Select_5, Classes_37, Registry_108) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSelectorEditor = void 0;
@@ -18576,7 +19090,7 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
         set ob(ob) {
             super.ob = ob;
             var scomponentType = this.property.componentType.replace("[", "").replace("]", "");
-            var data = this.propertyEditor.getVariablesForType(Classes_35.classes.getClass(scomponentType));
+            var data = this.propertyEditor.getVariablesForType(Classes_37.classes.getClass(scomponentType));
             this.component.items = data === undefined ? [] : data;
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (this.property.componentType.indexOf("[") === 0 && value) {
@@ -18629,7 +19143,7 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
     }
     exports.test = test;
 });
-define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_7, Registry_109, Panel_16, Textbox_13, ObjectChooser_1, Classes_36) {
+define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_7, Registry_109, Panel_16, Textbox_13, ObjectChooser_1, Classes_38) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectEditor = void 0;
@@ -18694,7 +19208,7 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
             return this.component;
         }
         async loadObject(id) {
-            var tp = await Classes_36.classes.loadClass(this.property.componentType);
+            var tp = await Classes_38.classes.loadClass(this.property.componentType);
             return await tp["findOne"](parseInt(id));
         }
         /**
@@ -19448,7 +19962,7 @@ define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "j
     }
     exports.test = test;
 });
-define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_12, NumberConverter_3, Textbox_19, BoxPanel_6, Select_8, Table_4, Registry_118, Panel_20, papaparse_1, Database_6, Registry_119, Classes_37, DBObject_8, Actions_7, Router_2, Server_4, Transaction_1) {
+define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_12, NumberConverter_3, Textbox_19, BoxPanel_6, Select_8, Table_4, Registry_118, Panel_20, papaparse_1, Database_6, Registry_119, Classes_39, DBObject_8, Actions_7, Router_2, Server_4, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -19466,7 +19980,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
             var _a;
             var _this = this;
             var html = "<option></option>";
-            var meta = (_a = Database_6.db.getMetadata(await Classes_37.classes.loadClass(this.me.select.value))) === null || _a === void 0 ? void 0 : _a.fields;
+            var meta = (_a = Database_6.db.getMetadata(await Classes_39.classes.loadClass(this.me.select.value))) === null || _a === void 0 ? void 0 : _a.fields;
             var lkeys = [];
             for (var key in meta) {
                 if (key === "this")
@@ -19491,7 +20005,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
             await Registry_119.default.loadAllFilesForService("$DBObject");
             var data = Registry_119.default.getData("$DBObject");
             data.forEach((entr) => {
-                cls.push(Classes_37.classes.getClassName(entr.oclass));
+                cls.push(Classes_39.classes.getClassName(entr.oclass));
             });
             this.me.select.items = cls;
             //debug
@@ -19595,7 +20109,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
                 }
             }
             imp.readData(ret);
-            var _meta = (_a = Database_6.db.getMetadata(await Classes_37.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
+            var _meta = (_a = Database_6.db.getMetadata(await Classes_39.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var meta = {};
             for (let k in _meta) {
                 meta[k.toLowerCase()] = k;
@@ -19645,10 +20159,10 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         }
         async _doimport(data, dbclass, fromLine, assignedfields, beforeSave) {
             var _a;
-            var Type = Classes_37.classes.getClass(dbclass);
+            var Type = Classes_39.classes.getClass(dbclass);
             //read objects so we can read from cache
             let nil = await Type["find"]();
-            var meta = (_a = Database_6.db.getMetadata(await Classes_37.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
+            var meta = (_a = Database_6.db.getMetadata(await Classes_39.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var members = Registry_119.default.getMemberData("design:type")[dbclass];
             var allObjects = [];
             var from = fromLine;

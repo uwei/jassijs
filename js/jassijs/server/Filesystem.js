@@ -12,6 +12,7 @@ const Registry_1 = require("jassijs/remote/Registry");
 const Serverservice_1 = require("../remote/Serverservice");
 const NativeAdapter_1 = require("./NativeAdapter");
 const Config_1 = require("jassijs/remote/Config");
+const Compile_1 = require("./Compile");
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
 let Filesystem = Filesystem_1 = class Filesystem {
     constructor() {
@@ -370,7 +371,7 @@ let Filesystem = Filesystem_1 = class Filesystem {
                     await NativeAdapter_1.myfs.writeFile("./" + fneu, contents[x]);
                     if (spath.length > 1 && spath[0] !== "$serverside")
                         await this.createRemoteModulIfNeeded(spath[0]);
-                    (0, NativeAdapter_1.transpile)(fneu, fromServerdirectory);
+                    new Compile_1.Compile().transpileServercode(fneu, fromServerdirectory);
                 }
             }
         }

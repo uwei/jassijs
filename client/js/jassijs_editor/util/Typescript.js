@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Server_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Server_1, Config_1) {
     "use strict";
     var Typescript_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -73,11 +73,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
         //load  d.ts from modulpackage
         async includeModulTypes() {
             var nodeFiles = {};
-            for (var mod in jassijs.modules) {
-                var config = (await new Promise((resolve_1, reject_1) => { require([mod + "/modul"], resolve_1, reject_1); })).default;
-                if (config.types) {
-                    for (var key in config.types) {
-                        var file = config.types[key];
+            for (var mod in Config_1.config.modules) {
+                var config1 = (await new Promise((resolve_1, reject_1) => { require([mod + "/modul"], resolve_1, reject_1); })).default;
+                if (config1.types) {
+                    for (var key in config1.types) {
+                        var file = config1.types[key];
                         nodeFiles[key] = new Server_1.Server().loadFile(file);
                     }
                 }

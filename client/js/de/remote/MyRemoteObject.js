@@ -26,7 +26,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             }
             else {
                 console.log(await this.tt("hallo"));
-                return "Hello " + name; //this would be execute on server  
+                return "Hello3 " + name; //this would be execute on server  
             }
         }
         static async sayHello2(name, context = undefined) {
@@ -63,7 +63,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
     ], MyRemoteObject);
     exports.MyRemoteObject = MyRemoteObject;
     async function test() {
-        console.log(await new MyRemoteObject().sayHello("Kurt"));
+        console.log(await new MyRemoteObject().sayHello("Kurtt"));
         // console.log(await MyRemoteObject.sayHello2("5"));
     }
     exports.test = test;

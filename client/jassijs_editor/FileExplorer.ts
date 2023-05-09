@@ -14,7 +14,7 @@ import { ContextMenu } from "jassijs/ui/ContextMenu";
 import { CSSProperties } from "jassijs/ui/CSSProperties";
 import windows from "jassijs/base/Windows";
 import { config } from "jassijs/remote/Config";
-import { createHandle, deleteHandle } from "jassijs/server/LocalFS";
+
 import { Reloader } from "jassijs/util/Reloader";
 //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
 @$ActionProvider("jassijs.remote.FileNode")
@@ -187,14 +187,28 @@ export class FileActions {
     } 
     @$Action({ name: "Map local folder",isEnabled:(entr)=>entr[0].name==="client"&&config.serverrequire!==undefined})
     static async mapLocalFolder(all: FileNode[], foldername = undefined) {
-        await createHandle();
+        await new Promise((resolve)=>{
+            config.serverrequire(["jassijs/server/LocalFS"],(localFS)=>{
+                localFS.createHandle().then((res)=>{
+                    resolve(undefined);
+                })
+            })
+    
+        });
         config.isLocalFolderMapped=true;
         await FileActions.reloadFilesystem(true);
         await FileActions.refresh(all);
     }
     @$Action({ name: "Close local folder",isEnabled:(entr)=>entr[0].name==="client"&&config.isLocalFolderMapped})
     static async closeLocalFolder(all: FileNode[], foldername = undefined) {
-        await deleteHandle();
+        await new Promise((resolve)=>{
+            config.serverrequire(["jassijs/server/LocalFS"],(localFS)=>{
+                localFS.deleteHandle().then((res)=>{
+                    resolve(undefined);
+                })
+            })
+    
+        });
         config.isLocalFolderMapped=true;
         await FileActions.reloadFilesystem(false);
         await FileActions.refresh(all);
@@ -344,7 +358,9 @@ export class FileExplorer extends Panel {
     }
 
 
+    
 }
+
 export function test() {
     var exp = new FileExplorer();
     exp.height = 100;
