@@ -4,7 +4,6 @@
 	"modules": {
 		"jassijs":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassijs.js",
 		"jassijs_report": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassijs_report.js",
-		"jassijs_localserver": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassijs_localserver.js",
 		"jassijs_editor": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassijs_editor.js",
 		"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js",
 		"demo": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/demo.js",
@@ -12,7 +11,7 @@
 	},
 	"server": {
 		"modules": {
-			"jassijs": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassijs.js?version=newest",
+			"jassijs": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassijs-server.js?version=newest",
 			"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js?version=newest",
 			"tests":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/tests.js"
 		}
