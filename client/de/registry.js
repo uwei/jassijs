@@ -151,7 +151,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1681316844059.0078,
+		"date": 1684176927995.9285,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -216,6 +216,13 @@ define("de/registry",["require"], function(require) {
 					]
 				},
 				"land": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"test": {
 					"Column": [
 						{
 							"nullable": true

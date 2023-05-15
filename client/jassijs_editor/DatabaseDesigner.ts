@@ -65,7 +65,7 @@ export class DatabaseDesigner extends Panel {
                 //@ts-ignore
                 { title: "type", field: "type", editor: "select", editorParams: this.allTypes },
                 //@ts-ignore
-                { title: "nullable", field: "nullable", editor: "tick", editorParams: { tristate: false } },
+                { title: "nullable", field: "nullable", editor: "tickCross", editorParams: { tristate: false } },
                 
                 {
                     //@ts-ignore

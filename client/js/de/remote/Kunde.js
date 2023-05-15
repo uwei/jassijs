@@ -109,6 +109,10 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
         __metadata("design:type", String)
     ], Kunde.prototype, "land", void 0);
     __decorate([
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], Kunde.prototype, "test", void 0);
+    __decorate([
         (0, DBObjectQuery_1.$DBObjectQuery)({ name: "Alle nach Namen", description: "Kundenliste nach Namen" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),

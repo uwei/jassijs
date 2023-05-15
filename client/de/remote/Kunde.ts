@@ -8,7 +8,6 @@ import { $ParentRights } from "jassijs/remote/security/Rights";
 import { Context } from "jassijs/remote/RemoteObject";
 import { ValidateIsInt } from "jassijs/remote/Validator";
 import { serverservices } from "jassijs/remote/Serverservice";
-
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 @$ParentRights([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
         description: {
@@ -17,14 +16,14 @@ import { serverservices } from "jassijs/remote/Serverservice";
             i2: "bis"
         } }])
 @$DBObject()
-@$Class("de.Kunde")  
+@$Class("de.Kunde")
 export class Kunde extends DBObject implements ExtensionProvider {
     @PrimaryColumn()
     declare id: number;
-    @Column() 
+    @Column()
     vorname: string;
     @Column()
-    nachname: string; 
+    nachname: string;
     @Column()
     strasse: string;
     @Column()
@@ -59,7 +58,7 @@ export class Kunde extends DBObject implements ExtensionProvider {
                 for (var x = 0; x < kunden.length; x++) {
                     // notify("bewerte..." + kunden[x].vorname, "info", { position: "right" });
                     //	alert("bewerten..."+kunden[x].vorname);
-                } 
+                }
             }
         });
     }
@@ -71,12 +70,12 @@ export class Kunde extends DBObject implements ExtensionProvider {
     static async alleKundenNachNummer(): Promise<any[]> {
         return await Kunde.find({ order: "id" });
     }
-    static async find(options = undefined,context:Context=undefined): Promise<any[]> {
+    static async find(options = undefined, context: Context = undefined): Promise<any[]> {
         if (!context?.isServer) {
-            return await this.call(this.find, options,context);
-        } 
+            return await this.call(this.find, options, context);
+        }
         else {
-            return await (await serverservices.db).find(context,this, options);
+            return await (await serverservices.db).find(context, this, options);
         }
     }
     static async sample() {
@@ -94,26 +93,26 @@ export class Kunde extends DBObject implements ExtensionProvider {
         await kunde4.save();
         //jassijs.db.delete(kunde);
     }
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     land: string;
+    @Column({	nullable: true})
+    test: string;
 }
 export async function test() {
     //var g=test.extFunc2();   
     //var h=test.extFunc();
-    
     //await Kunde.sample();
     var k = <Kunde>await Kunde.findOne({ id: 1 });
-    if(k===undefined)
-        k=new Kunde();
-    k.id=1;
+    if (k === undefined)
+        k = new Kunde();
+    k.id = 1;
     k.vorname = "Ella";
-    k.land="Deutschland";
+    k.land = "Deutschland";
     k.nachname = "Klotz";
     k.ort = "Mainz";
     k.PLZ = "99992";
-    var tt=await k.validate(k);
+    var tt = await k.validate(k);
     k.save();
-
     //	new de.Kunde().generate();
     //jassijs.db.uploadType(de.Kunde);
 }
