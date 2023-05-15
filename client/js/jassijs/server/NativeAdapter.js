@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Config", "jassijs/util/Reloader", "./FS", "./LocalFS"], function (require, exports, Config_1, Reloader_1, FS_1, LocalFS_1) {
+define(["require", "exports", "jassijs/remote/Config", "./FS", "./LocalFS"], function (require, exports, Config_1, FS_1, LocalFS_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.doNotReloadModule = exports.transpile = exports.reloadJSAll = exports.dozip = exports.myfs = exports.exists = exports.ts = void 0;
@@ -35,7 +35,12 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/util/Reloader", 
     }
     exports.dozip = dozip;
     async function reloadJSAll(filenames, afterUnload) {
-        return Reloader_1.Reloader.instance.reloadJSAll(filenames, afterUnload);
+        var Reloader = await new Promise((resolve) => {
+            Config_1.config.clientrequire(["jassijs/util/Reloader"], r => {
+                resolve(r);
+            });
+        });
+        return Reloader.Reloader.instance.reloadJSAll(filenames, afterUnload, true);
     }
     exports.reloadJSAll = reloadJSAll;
     async function transpile(fileName, inServerdirectory = undefined) {

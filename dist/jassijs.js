@@ -1640,7 +1640,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657714030000
             },
             "jassijs/server/Filesystem.ts": {
-                "date": 1683563646221.8352,
+                "date": 1684173726541.016,
                 "jassijs.server.Filesystem": {
                     "$Serverservice": [
                         {
@@ -1663,7 +1663,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1682804261351.0828
             },
             "jassijs/server/NativeAdapter.ts": {
-                "date": 1683484262227.9492
+                "date": 1684175697272.767
             },
             "jassijs/server/RegistryIndexer.ts": {
                 "date": 1682799790211.1238
@@ -2543,7 +2543,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1683483467365.1172
             },
             "jassijs/server/Compile.ts": {
-                "date": 1683647529314.346
+                "date": 1684173592469.7722
             }
         }
     };
@@ -16769,7 +16769,7 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", 
         async reloadJS(fileName) {
             await this.reloadJSAll([fileName]);
         }
-        async reloadJSAll(fileNames, afterUnload = undefined) {
+        async reloadJSAll(fileNames, afterUnload = undefined, useServerRequire = false) {
             //classname->file
             var files = {};
             let allModules = {};
@@ -16852,7 +16852,7 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", 
                 //save all modules
             }
             var myrequire;
-            if (require.defined("jassijs/server/Installserver")) {
+            if (require.defined("jassijs/server/Installserver") || useServerRequire) {
                 myrequire = Config_4.config.serverrequire;
             }
             else {
@@ -18695,7 +18695,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1683484383885.6277,
+                "date": 1684176415109.4226,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {

@@ -479,7 +479,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657714030000
             },
             "jassijs/server/Filesystem.ts": {
-                "date": 1683563646221.8352,
+                "date": 1684173726541.016,
                 "jassijs.server.Filesystem": {
                     "$Serverservice": [
                         {
@@ -502,7 +502,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1682365334193.8733
             },
             "jassijs/server/NativeAdapter.ts": {
-                "date": 1683562436365.431
+                "date": 1684173749623.2202
             },
             "jassijs/server/RegistryIndexer.ts": {
                 "date": 1682799790211.1238
@@ -534,7 +534,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1683050189346.0103
             },
             "jassijs/server/Compile.ts": {
-                "date": 1683659462332.0166
+                "date": 1684173592469.7722
             }
         }
     };
@@ -3952,7 +3952,7 @@ define("jassijs/util/DatabaseSchema", ["require", "exports", "typeorm"], functio
 //export function Entity(options?: EntityOptions): Function;
 //export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
 //synchronize-server-client
-define("client/jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAdapter", "jassijs/remote/Classes"], function (require, exports, NativeAdapter_1, Classes_11) {
+define("jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAdapter", "jassijs/remote/Classes"], function (require, exports, NativeAdapter_1, Classes_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Compile = void 0;
@@ -3996,7 +3996,9 @@ define("client/jassijs/server/Compile", ["require", "exports", "jassijs/server/N
             var path = ppath.replaceAll("\\", "/");
             return path.substring(0, path.lastIndexOf("/"));
         }
-        async dirFiles(dirname, skip, ret) {
+        async dirFiles(dirname, skip, ret, replaceClientFileName = false) {
+            if (!await NativeAdapter_1.exists(dirname))
+                return;
             var files = await NativeAdapter_1.myfs.readdir(dirname);
             for (var x = 0; x < files.length; x++) {
                 var fname = dirname + "/" + files[x];
@@ -4007,7 +4009,10 @@ define("client/jassijs/server/Compile", ["require", "exports", "jassijs/server/N
                     }
                     else {
                         if (fname.endsWith(".js") || fname.endsWith(".ts"))
-                            ret[fname /*.replace("./client/","./")*/] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
+                            if (replaceClientFileName)
+                                ret[fname.replace("./client/", "./")] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
+                            else
+                                ret[fname] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
                     }
                 }
             }
@@ -4056,7 +4061,8 @@ define("client/jassijs/server/Compile", ["require", "exports", "jassijs/server/N
             }
             else {
                 await this.dirFiles("./" + modul, ["./" + modul + "/server", "./" + modul + "/registry.js"], fileNames);
-                await this.dirFiles("./client/" + modul + "/server", [], fileNames);
+                await this.dirFiles("./client/" + modul + "/server", [], fileNames, true);
+                fileNames["./" + modul + "/modul.ts"] = await NativeAdapter_1.myfs.readFile("./client/" + modul + "/modul.ts", "utf-8");
                 await this.createRegistry(modul, isServer, modul + "/server", modul + "/server", fileNames);
             }
             return fileNames;
@@ -4113,6 +4119,7 @@ define("client/jassijs/server/Compile", ["require", "exports", "jassijs/server/N
             //if (inServerdirectory === true)
             options = this.serverConfig();
             options.outDir = "js";
+            //@ts-ignore
             if (require.main === undefined) //in Browser
                 options.module = NativeAdapter_1.ts.ModuleKind.AMD;
             //const parsedCmd = ts.getParsedCommandLineOfConfigFile("./tsconfig.json", undefined, host);
@@ -4142,7 +4149,7 @@ define("client/jassijs/server/Compile", ["require", "exports", "jassijs/server/N
     exports.Compile = Compile;
     Compile.lastModifiedTSFiles = [];
 });
-define("client/jassijs/server/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_12, Database_2, typeorm_2) {
+define("jassijs/server/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_12, Database_2, typeorm_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.EntityOptions = exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
@@ -4201,7 +4208,7 @@ define("client/jassijs/server/DatabaseSchema", ["require", "exports", "jassijs/r
 });
 //export function Entity(options?: EntityOptions): Function;
 //export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
-define("client/jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, typeorm_3, Classes_13, Registry_26, User_2, Registry_27, Serverservice_5) {
+define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry", "jassijs/remote/Serverservice"], function (require, exports, typeorm_3, Classes_13, Registry_26, User_2, Registry_27, Serverservice_5) {
     "use strict";
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -5037,7 +5044,7 @@ define("client/jassijs/server/DBManager", ["require", "exports", "typeorm", "jas
         }
     }
 });
-define("client/jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "./DBManager", "./TypeORMListener", "typeorm", "./NativeAdapter"], function (require, exports, Classes_14, Database_3, Registry_28, DBManager_2, TypeORMListener_1, typeorm_4, NativeAdapter_2) {
+define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "./DBManager", "./TypeORMListener", "typeorm", "./NativeAdapter"], function (require, exports, Classes_14, Database_3, Registry_28, DBManager_2, TypeORMListener_1, typeorm_4, NativeAdapter_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendDBManager = void 0;
@@ -5117,7 +5124,7 @@ define("client/jassijs/server/DBManagerExt", ["require", "exports", "jassijs/rem
     }
     exports.extendDBManager = extendDBManager;
 });
-define("client/jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice"], function (require, exports, Registry_29, Classes_15, Serverservice_6) {
+define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice"], function (require, exports, Registry_29, Classes_15, Serverservice_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports._execute = exports.remoteProtocol = void 0;
@@ -5286,7 +5293,7 @@ define("typeorm", ["typeorm/index", "typeorm/platform/PlatformTools", "window.SQ
     window.SQL = sql;
     return to;
 });
-define("client/jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", "jassijs/remote/Registry", "../remote/Serverservice", "./NativeAdapter", "jassijs/remote/Config", "./Compile"], function (require, exports, RegistryIndexer_1, Registry_30, Serverservice_7, NativeAdapter_3, Config_4, Compile_1) {
+define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", "jassijs/remote/Registry", "../remote/Serverservice", "./NativeAdapter", "jassijs/remote/Config", "./Compile"], function (require, exports, RegistryIndexer_1, Registry_30, Serverservice_7, NativeAdapter_3, Config_4, Compile_1) {
     "use strict";
     var Filesystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -5729,7 +5736,7 @@ define("client/jassijs/server/Filesystem", ["require", "exports", "./RegistryInd
     ], Filesystem);
     exports.default = Filesystem;
 });
-define("client/jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_16) {
+define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_16) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.exists = exports.FS = void 0;
@@ -6013,7 +6020,7 @@ define("client/jassijs/server/FS", ["require", "exports", "jassijs/remote/Classe
     }
     exports.test = test;
 });
-define("client/jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_17, Config_5, Serverservice_8, NativeAdapter_4) {
+define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_17, Config_5, Serverservice_8, NativeAdapter_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -6220,7 +6227,7 @@ define("client/jassijs/server/Indexer", ["require", "exports", "jassijs/remote/C
     }
     exports.Indexer = Indexer;
 });
-define("client/jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Serverservice", "./LocalProtocol", "jassijs/remote/Config", "./FS"], function (require, exports, Serverservice_9, LocalProtocol_1, Config_6, FS_1) {
+define("jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Serverservice", "./LocalProtocol", "jassijs/remote/Config", "./FS"], function (require, exports, Serverservice_9, LocalProtocol_1, Config_6, FS_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.autostart = void 0;
@@ -6273,7 +6280,7 @@ define("jassijs/server/Filesystem", ["jassijs/server/Filesystem"], function (fs)
 
 })*/
 //DatabaseSchema
-define("client/jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_18) {
+define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_18) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.createHandle = exports.deleteHandle = exports.exists = exports.LocalFS = void 0;
@@ -6595,7 +6602,7 @@ define("client/jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/C
     }
     exports.test = test;
 });
-define("client/jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Server", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_2, Server_3, Serverservice_10, js_cookie_1, DoRemoteProtocol_1) {
+define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Server", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_2, Server_3, Serverservice_10, js_cookie_1, DoRemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.localExec = exports.test = exports.messageReceived = void 0;
@@ -6766,7 +6773,7 @@ define("client/jassijs/server/LocalProtocol", ["require", "exports", "jassijs/re
     }
     exports.localExec = localExec;
 });
-define("client/jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Config", "jassijs/util/Reloader", "./FS", "./LocalFS"], function (require, exports, Config_7, Reloader_1, FS_2, LocalFS_1) {
+define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Config", "./FS", "./LocalFS"], function (require, exports, Config_7, FS_2, LocalFS_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.doNotReloadModule = exports.transpile = exports.reloadJSAll = exports.dozip = exports.myfs = exports.exists = exports.ts = void 0;
@@ -6803,7 +6810,12 @@ define("client/jassijs/server/NativeAdapter", ["require", "exports", "jassijs/re
     }
     exports.dozip = dozip;
     async function reloadJSAll(filenames, afterUnload) {
-        return Reloader_1.Reloader.instance.reloadJSAll(filenames, afterUnload);
+        var Reloader = await new Promise((resolve) => {
+            Config_7.config.clientrequire(["jassijs/util/Reloader"], r => {
+                resolve(r);
+            });
+        });
+        return Reloader.Reloader.instance.reloadJSAll(filenames, afterUnload, true);
     }
     exports.reloadJSAll = reloadJSAll;
     async function transpile(fileName, inServerdirectory = undefined) {
@@ -6825,7 +6837,7 @@ define("client/jassijs/server/NativeAdapter", ["require", "exports", "jassijs/re
     var doNotReloadModule = true;
     exports.doNotReloadModule = doNotReloadModule;
 });
-define("client/jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/Indexer", "jassijs/remote/Serverservice", "jassijs/server//NativeAdapter", "jassijs/remote/Config"], function (require, exports, Indexer_1, Serverservice_11, NativeAdapter_5, Config_8) {
+define("jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/Indexer", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "jassijs/remote/Config"], function (require, exports, Indexer_1, Serverservice_11, NativeAdapter_5, Config_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ServerIndexer = void 0;
@@ -6880,7 +6892,7 @@ define("client/jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/
     }
     exports.ServerIndexer = ServerIndexer;
 });
-define("client/jassijs/server/Testuser", ["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Registry"], function (require, exports, DatabaseSchema_7, DBObject_7, Registry_31) {
+define("jassijs/server/Testuser", ["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Registry"], function (require, exports, DatabaseSchema_7, DBObject_7, Registry_31) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testuser = void 0;
@@ -6904,7 +6916,7 @@ define("client/jassijs/server/Testuser", ["require", "exports", "jassijs/util/Da
     ], Testuser);
     exports.Testuser = Testuser;
 });
-define("client/jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "./NativeAdapter"], function (require, exports, Registry_32, typeorm_5, NativeAdapter_6) {
+define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "./NativeAdapter"], function (require, exports, Registry_32, typeorm_5, NativeAdapter_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
@@ -7022,5 +7034,105 @@ define("client/jassijs/server/TypeORMListener", ["require", "exports", "jassijs/
         Registry_32.$Class("jassijs.server.TypeORMListener")
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
+});
+define("jassijs/modul", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var jquery_language = 'https://cdn.jsdelivr.net/gh/jquery/jquery-ui@main/ui/i18n/datepicker-' + navigator.language.split("-")[0];
+    var tinyurl = "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2";
+    exports.default = {
+        "css": {
+            "jassijs.css": "jassijs.css",
+            "materialdesignicons.min.css": "https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
+            "jquery-ui.css": "https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css",
+            "chosen.css": 'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css',
+            "goldenlayout-base.css": "https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-base.css",
+            "goldenlayout-light-theme.css": "https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-light-theme.css",
+            "contextMenu.css": 'https://rawgit.com/s-yadav/contextMenu.js/master/contextMenu.css'
+        },
+        "types": {
+            "node_modules/jquery/JQuery.d.ts": "https://cdn.jsdelivr.net/npm/@types/jquery@3.5.5/JQuery.d.ts",
+            "node_modules/jquery/JQueryStatic.d.ts": "https://cdn.jsdelivr.net/npm/@types/jquery@3.5.5/JQueryStatic.d.ts",
+            "node_modules/jquery/legacy.d.ts": "https://cdn.jsdelivr.net/npm/@types/jquery@3.5.5/legacy.d.ts",
+            "node_modules/jquery/misc.d.ts": "https://cdn.jsdelivr.net/npm/@types/jquery@3.5.5/misc.d.ts",
+            "node_modules/jqueryui/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/jqueryui/index.d.ts",
+            "node_modules/chosen-js/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/chosen-js/index.d.ts",
+            "node_modules/jquery.fancytree/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/jquery.fancytree/index.d.ts",
+            "node_modules/requirejs/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/requirejs/index.d.ts",
+            "node_modules/sizzle/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/sizzle/index.d.ts",
+            "tabulator-tables.ts": "https://cdn.jsdelivr.net/npm/@types/tabulator-tables@5.1.4/index.d.ts"
+        },
+        "require": {
+            "shim": {
+                //'tabulator-tables': ['tabulatorext'],
+                'goldenlayout': ["jquery"],
+                "jquery.choosen": ["jquery"],
+                "jquery.contextMenu": ["jquery.ui"],
+                'jquery.fancytree': ["jquery", "jquery.ui"],
+                'jquery.fancytree.dnd': ["jquery", "jquery.ui"],
+                'jquery.ui': ["jquery"],
+                'jquery.notify': ["jquery"],
+                'jquery.ui.touch': ["jquery", "jquery.ui"],
+                //            'jquery.doubletap': ["jquery"],
+                //  'jassijs/jassi': ['jquery', 'jquery.ui', /*'jquery.ui.touch'*/],
+                "spectrum": ["jquery"]
+            },
+            "paths": {
+                'intersection-observer': '//cdn.jsdelivr.net/npm/intersection-observer@0.7.0/intersection-observer.js',
+                'goldenlayout': '//cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout',
+                'jquery.choosen': '//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery',
+                'jquery.contextMenu': '//rawgit.com/s-yadav/contextMenu.js/master/contextMenu',
+                'jquery.fancytree': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/jquery.fancytree.min',
+                "jquery.fancytree.ui-deps": '//cdn.jsdelivr.net/npm/jquery.fancytree@2.38.2/dist/modules/jquery.fancytree.ui-deps',
+                'jquery.fancytree.filter': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.38.2/dist/modules/jquery.fancytree.filter',
+                'jquery.fancytree.multi': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.38.2/dist/modules/jquery.fancytree.multi',
+                'jquery.fancytree.dnd': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.dnd',
+                'jquery': '//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery',
+                'jquery.ui': '//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui',
+                'jquery.ui.touch': '//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min',
+                //use dblcklick 'jquery.doubletap': '//cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/2.0.3/jquery.mobile-events.min',
+                'jquery.notify': '//cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min',
+                'jquery.language': jquery_language,
+                'js-cookie': '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
+                'lodash': '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min',
+                "luxon": "//cdnjs.cloudflare.com/ajax/libs/luxon/3.0.1/luxon.min",
+                'papaparse': '//cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.3/papaparse.min',
+                'source.map': "https://unpkg.com/source-map@0.7.3/dist/source-map",
+                'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
+                'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
+                //'tabulatorlib': '//unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator',
+                'tabulatorlib': '//cdnjs.cloudflare.com/ajax/libs/tabulator/5.4.4/js/tabulator.min',
+                'tinymcelib': tinyurl + '/tinymce.min',
+                'tabulator-tables': "jassijs/ext/tabulator",
+                //"tabulatorext":'jassijs/ext/tabulator',
+                // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
+                "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect"
+            }
+        },
+        server: {
+            "require": {
+                "shim": {},
+                "paths": {
+                    'js-cookie': '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
+                    "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect",
+                    //localserver
+                    "jszip": "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip",
+                    "js-sql-parser": "https://cdn.jsdelivr.net/npm/js-sql-parser@1.4.1/dist/parser/sqlParser.min",
+                    "typeorm": "jassijs/server/ext/typeorm",
+                    "typeormbrowser": "https://uwei.github.io/jassijs/dist/typeorm/typeormbrowser",
+                    "window.SQL": "https://sql.js.org/dist/sql-wasm",
+                    //"jassijs/util/DatabaseSchema": "jassijs/server/DatabaseSchema"
+                }
+            },
+            "loadbeforestart": ["js-sql-parser", "typeormbrowser", "jassijs/server/Installserver"],
+        }
+        //localserver
+    };
+    window["tinyMCEPreInit"] = {
+        suffix: '.min',
+        base: tinyurl,
+        //base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3",
+        query: ''
+    };
 });
 //# sourceMappingURL=jassijs-server.js.map

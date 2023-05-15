@@ -8,5 +8,7 @@ new Compile_1.Compile().transpileModul("jassijs", false);
 new Compile_1.Compile().transpileModul("jassijs_editor", false);
 new Compile_1.Compile().transpileModul("jassijs_report", false);
 new Compile_1.Compile().transpileModul("demoreports", false);
+new Compile_1.Compile().transpileModul("northwind", true);
+new Compile_1.Compile().transpileModul("northwind", false);
 (0, JassiServer_1.default)();
 //# sourceMappingURL=main.js.map

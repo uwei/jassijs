@@ -46,7 +46,9 @@ class Compile {
         var path = ppath.replaceAll("\\", "/");
         return path.substring(0, path.lastIndexOf("/"));
     }
-    async dirFiles(dirname, skip, ret) {
+    async dirFiles(dirname, skip, ret, replaceClientFileName = false) {
+        if (!await (0, NativeAdapter_1.exists)(dirname))
+            return;
         var files = await NativeAdapter_1.myfs.readdir(dirname);
         for (var x = 0; x < files.length; x++) {
             var fname = dirname + "/" + files[x];
@@ -57,7 +59,10 @@ class Compile {
                 }
                 else {
                     if (fname.endsWith(".js") || fname.endsWith(".ts"))
-                        ret[fname /*.replace("./client/","./")*/] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
+                        if (replaceClientFileName)
+                            ret[fname.replace("./client/", "./")] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
+                        else
+                            ret[fname] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
                 }
             }
         }
@@ -106,7 +111,8 @@ class Compile {
         }
         else {
             await this.dirFiles("./" + modul, ["./" + modul + "/server", "./" + modul + "/registry.js"], fileNames);
-            await this.dirFiles("./client/" + modul + "/server", [], fileNames);
+            await this.dirFiles("./client/" + modul + "/server", [], fileNames, true);
+            fileNames["./" + modul + "/modul.ts"] = await NativeAdapter_1.myfs.readFile("./client/" + modul + "/modul.ts", "utf-8");
             await this.createRegistry(modul, isServer, modul + "/server", modul + "/server", fileNames);
         }
         return fileNames;
@@ -163,6 +169,7 @@ class Compile {
         //if (inServerdirectory === true)
         options = this.serverConfig();
         options.outDir = "js";
+        //@ts-ignore
         if (require.main === undefined) //in Browser
             options.module = NativeAdapter_1.ts.ModuleKind.AMD;
         //const parsedCmd = ts.getParsedCommandLineOfConfigFile("./tsconfig.json", undefined, host);

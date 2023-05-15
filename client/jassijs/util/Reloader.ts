@@ -69,7 +69,7 @@ export class Reloader {
         await this.reloadJSAll([fileName]);
 
     }
-    async reloadJSAll(fileNames: string[],afterUnload: () => {}=undefined) {
+    async reloadJSAll(fileNames: string[],afterUnload: () => {}=undefined,useServerRequire=false) {
         //classname->file
         var files = {};
         let allModules = {};
@@ -158,7 +158,7 @@ export class Reloader {
 
         }
         var myrequire;
-        if(require.defined("jassijs/server/Installserver")){
+        if(require.defined("jassijs/server/Installserver")||useServerRequire){
             myrequire=<any>config.serverrequire;
         }else{
             myrequire=<any>config.clientrequire;

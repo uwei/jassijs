@@ -5,8 +5,8 @@ import ts = require("typescript");
 import JSZip = require("jszip");
 import { JassiError } from 'jassijs/remote/Classes';
 import Filesystem from './Filesystem';
-import { Reloader } from './Reloader';
 import { Compile } from './Compile';
+import { Reloader } from './Reloader';
 
 
 export{ts};

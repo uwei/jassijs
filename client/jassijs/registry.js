@@ -538,7 +538,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1657714030000
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1683563646221.8352,
+		"date": 1684173726541.016,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -561,7 +561,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1682804261351.0828
 	},
 	"jassijs/server/NativeAdapter.ts": {
-		"date": 1683484262227.9492
+		"date": 1684176440317.4678
 	},
 	"jassijs/server/RegistryIndexer.ts": {
 		"date": 1682799790211.1238
@@ -1426,7 +1426,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Numberformatter": {}
 	},
 	"jassijs/util/Reloader.ts": {
-		"date": 1683484383885.6277,
+		"date": 1684176415109.4226,
 		"jassijs.util.Reloader": {}
 	},
 	"jassijs/util/Runlater.ts": {
@@ -1441,7 +1441,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1683483467365.1172
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1683659462332.0166
+		"date": 1684173592469.7722
 	}
 }
  }

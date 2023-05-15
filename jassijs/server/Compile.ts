@@ -33,15 +33,15 @@ export class Compile {
   serverConfig() {
     var ret: ts.CompilerOptions = {
       baseUrl: "./",
-      target: 4, 
+      target: 4,
       module: ts.ModuleKind.CommonJS,
       //"outDir":"js",
       allowJs: true,
       sourceMap: true,
-      inlineSources:true,
+      inlineSources: true,
       moduleResolution: 2,
       skipLibCheck: true,
-      rootDir:"./",
+      rootDir: "./",
       emitDecoratorMetadata: true,
       experimentalDecorators: true,
       noResolve: true
@@ -52,7 +52,9 @@ export class Compile {
     var path = ppath.replaceAll("\\", "/");
     return path.substring(0, path.lastIndexOf("/"));
   }
-  async dirFiles(dirname: string, skip: string[], ret) {
+  async dirFiles(dirname: string, skip: string[], ret,replaceClientFileName=false) {
+    if (!await exists(dirname)) 
+      return;
     var files = await myfs.readdir(dirname);
     for (var x = 0; x < files.length; x++) {
       var fname = dirname + "/" + files[x];
@@ -63,7 +65,10 @@ export class Compile {
           await this.dirFiles(fname, skip, ret);
         } else {
           if (fname.endsWith(".js") || fname.endsWith(".ts"))
-            ret[fname/*.replace("./client/","./")*/]=await myfs.readFile(fname,"utf-8");
+            if(replaceClientFileName)
+              ret[fname.replace("./client/","./")] = await myfs.readFile(fname, "utf-8");
+            else
+            ret[fname] = await myfs.readFile(fname, "utf-8");
         }
       }
     }
@@ -77,12 +82,13 @@ export class Compile {
     } else {
       text = text.substring(text.indexOf("default=") + 8);
     }
-    var index = JSON.parse(text); 
+    var index = JSON.parse(text);
     return index;
   }
-  async createRegistry(modul: string, isServer: boolean, exclude: string, includeClientRegistry: string,files){
+  async createRegistry(modul: string, isServer: boolean, exclude: string, includeClientRegistry: string, files) {
     var index = await this.readRegistry("./" + (isServer ? "" : "client/") + modul + "/registry.js", isServer);
     var newIndex = {};
+
     for (var key in index) {
       if (!key.startsWith(exclude))
         newIndex[key] = index[key];
@@ -102,41 +108,43 @@ export class Compile {
       '  default: ' + text + "\n" +
       ' }\n' +
       '});';
-    files["./"+modul + "/registry.js"]=text;
+    files["./" + modul + "/registry.js"] = text;
   }
   async readModuleCode(modul, isServer) {
-    var fileNames: { [file: string]: string }={};
+    var fileNames: { [file: string]: string } = {};
     if (isServer === false) {
-        await this.dirFiles("./client/" + modul, ["./client/" + modul + "/server", "./client/" + modul + "/registry.js"], fileNames);
-        await this.createRegistry(modul, isServer, modul + "/server",undefined,fileNames);
+      await this.dirFiles("./client/" + modul, ["./client/" + modul + "/server", "./client/" + modul + "/registry.js"], fileNames);
+      await this.createRegistry(modul, isServer, modul + "/server", undefined, fileNames);
     } else {
-        await this.dirFiles("./" + modul, ["./" + modul + "/server", "./" + modul + "/registry.js"], fileNames);
-        await this.dirFiles("./client/" + modul + "/server", [], fileNames);
-         await this.createRegistry(modul, isServer, modul + "/server", modul + "/server",fileNames);
+      await this.dirFiles("./" + modul, ["./" + modul + "/server", "./" + modul + "/registry.js"], fileNames);
+      await this.dirFiles("./client/" + modul + "/server", [], fileNames,true);
+      fileNames["./" + modul + "/modul.ts"] = await myfs.readFile("./client/" + modul + "/modul.ts", "utf-8");
+
+      await this.createRegistry(modul, isServer, modul + "/server", modul + "/server", fileNames);
     }
     return fileNames;
   }
-  async transpileModul(modul,isServer) {
+  async transpileModul(modul, isServer) {
     var code = await this.readModuleCode(modul, isServer);
-    var writing=[];
+    var writing = [];
     var host: ts.CompilerHost = {
       getSourceFile: (fileName: string, languageVersion: ts.ScriptTarget, onError?: (message: string) => void) => {
-        var scode = code["./"+fileName];
-        if(scode===undefined)
+        var scode = code["./" + fileName];
+        if (scode === undefined)
           debugger;
         return ts.createSourceFile(fileName, scode, languageVersion);
       },
       getDefaultLibFileName: (defaultLibOptions: ts.CompilerOptions) => "",//"/" + ts.getDefaultLibFileName(defaultLibOptions),
-      writeFile: (filename,content) => { 
-        writing.push(myfs.writeFile(filename,content));
+      writeFile: (filename, content) => {
+        writing.push(myfs.writeFile(filename, content));
       }, // do nothing
       getCurrentDirectory: () => "/",
       getDirectories: (path: string) => [],
       fileExists: (fileName: string) => {
-        return code["./"+fileName] !== undefined;
+        return code["./" + fileName] !== undefined;
       },
       readFile: (fileName: string) => {
-        return code["./"+fileName];
+        return code["./" + fileName];
       },
       getCanonicalFileName: (fileName: string) => fileName,
       useCaseSensitiveFileNames: () => true,
@@ -144,19 +152,19 @@ export class Compile {
       getEnvironmentVariable: () => "" // do nothing
     };
 
-    var files=Object.keys(code);
-    var opts=this.serverConfig();
-    opts.declaration=true;
-    opts.outFile="./dist/" + modul + (isServer ? "-server" : "") + ".js";
+    var files = Object.keys(code);
+    var opts = this.serverConfig();
+    opts.declaration = true;
+    opts.outFile = "./dist/" + modul + (isServer ? "-server" : "") + ".js";
     opts.module = ts.ModuleKind.AMD;
-    if(!isServer){
-      opts.rootDir="./client"
+    if (!isServer) {
+      opts.rootDir = "./client"
     }
-    var program=ts.createProgram(files,opts,host);
-  
+    var program = ts.createProgram(files, opts, host);
+
     let emitResult = program.emit();
     await Promise.all(writing);
-    console.log(modul+" "+isServer+" fertig");
+    console.log(modul + " " + isServer + " fertig");
   }
   async transpileServercode(fileName: string, inServerdirectory: boolean = undefined) {
     //outDir":"js",
@@ -165,12 +173,13 @@ export class Compile {
       throw new JassiError("fileName must startswith remote");
     }
     var path = ".";
-    var data = await myfs.readFile(path + "/" + fileName,  'utf-8' );
+    var data = await myfs.readFile(path + "/" + fileName, 'utf-8');
 
     var options: ts.CompilerOptions;
     //if (inServerdirectory === true)
     options = this.serverConfig();
     options.outDir = "js";
+    //@ts-ignore
     if (require.main === undefined)//in Browser
       options.module = ts.ModuleKind.AMD;
     //const parsedCmd = ts.getParsedCommandLineOfConfigFile("./tsconfig.json", undefined, host);

@@ -1,7 +1,7 @@
 import { JassiError, classes } from "jassijs/remote/Classes";
 import { config } from "jassijs/remote/Config";
 import { Test } from "jassijs/remote/Test";
-import { Reloader } from "jassijs/util/Reloader";
+
 import { FS, exists as fsexists } from "./FS";
 import { LocalFS,exists as lfsexists } from "./LocalFS";
 
@@ -43,7 +43,12 @@ export async function dozip(directoryname: string, serverdir: boolean = undefine
 }
 
 export async function reloadJSAll(filenames: string[], afterUnload: () => {}) {
-    return Reloader.instance.reloadJSAll(filenames, afterUnload);
+    var Reloader=<any>await new Promise((resolve)=>{
+        config.clientrequire(["jassijs/util/Reloader"], r => {
+            resolve(r);
+        })
+    });
+    return Reloader.Reloader.instance.reloadJSAll(filenames, afterUnload,true);
 }
 
 export async function transpile(fileName: string, inServerdirectory: boolean = undefined) {

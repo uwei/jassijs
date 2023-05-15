@@ -71,7 +71,7 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
         async reloadJS(fileName) {
             await this.reloadJSAll([fileName]);
         }
-        async reloadJSAll(fileNames, afterUnload = undefined, useServerRequire = false) {
+        async reloadJSAll(fileNames, afterUnload = undefined) {
             //classname->file
             var files = {};
             let allModules = {};
@@ -154,7 +154,7 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
                 //save all modules
             }
             var myrequire;
-            if (require.defined("jassijs/server/Installserver") || useServerRequire) {
+            if (require.defined("jassijs/server/Installserver")) {
                 myrequire = Config_1.config.serverrequire;
             }
             else {
