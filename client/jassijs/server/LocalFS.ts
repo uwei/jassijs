@@ -1,5 +1,6 @@
 import { JassiError } from "jassijs/remote/Classes";
 import { Test } from "jassijs/remote/Test";
+import { config } from "jassijs/remote/Config";
 class Stats {
     mtimeMs: number;
     isDirectory: () => boolean;
@@ -306,6 +307,8 @@ export async function createHandle() {
         store.add(handle, "handle");
 }
 export async function test(tt: Test) {
+     if(!config.isLocalFolderMapped)
+        return;
     var fs = new LocalFS();
     // var hh = await fs.readdir(".");
     var testfolder = "./dasisteinfestfolder";

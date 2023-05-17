@@ -1167,7 +1167,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.ClientError": {}
             },
             "jassijs/remote/Config.ts": {
-                "date": 1683393357596.9873
+                "date": 1684360937483.7693
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
@@ -1511,7 +1511,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1682794608034.317,
+                "date": 1684360945769.3875,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -1651,7 +1651,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/FS.ts": {
-                "date": 1683563356650.9514
+                "date": 1684358272275.7686
             },
             "jassijs/server/Indexer.ts": {
                 "date": 1682806194944.4678
@@ -1660,7 +1660,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1682930462690.898
             },
             "jassijs/server/LocalProtocol.ts": {
-                "date": 1682804261351.0828
+                "date": 1684358642243.9634
             },
             "jassijs/server/NativeAdapter.ts": {
                 "date": 1684176440317.4678
@@ -2528,7 +2528,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1684176415109.4226,
+                "date": 1684357545886.423,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {
@@ -2540,7 +2540,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Tools": {}
             },
             "jassijs/server/LocalFS.ts": {
-                "date": 1683483467365.1172
+                "date": 1684358614464.595
             },
             "jassijs/server/Compile.ts": {
                 "date": 1684173592469.7722
@@ -2715,8 +2715,9 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
                 this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
             }
             else {
-                var myfs = (await new Promise((resolve_6, reject_6) => { require(["jassijs/server/NativeAdapter"], resolve_6, reject_6); })).myfs;
-                this.init(await myfs.readFile('./client/jassijs.json', 'utf-8'));
+                var Server = (await new Promise((resolve_6, reject_6) => { require(["jassijs/remote/Server"], resolve_6, reject_6); })).Server;
+                var text = await new Server().loadFile("jassijs.json");
+                this.init(text);
             }
         }
         async saveJSON() {
@@ -4924,9 +4925,13 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 return (await Serverservice_3.serverservices.filesystem).createFolder(foldername);
             }
         }
-        async createModule(modulname, context = undefined) {
+        async createModule(modulename, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createModule, modulname, context);
+                var ret = await this.call(this, this.createModule, modulename, context);
+                if (!Config_3.config.modules[modulename]) {
+                    //config.jsonData.modules[modulename] = modulename;
+                    await Config_3.config.reload();
+                }
                 //@ts-ignore
                 //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
                 return ret;
@@ -4934,7 +4939,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_13.JassiError("only admins can createFolder");
-                return (await Serverservice_3.serverservices.filesystem).createModule(modulname);
+                return (await Serverservice_3.serverservices.filesystem).createModule(modulename);
             }
         }
         static async mytest(context = undefined) {
@@ -16785,7 +16790,7 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", 
                     jassijs.myRequire(fileName);
                     continue;
                 }
-                if (fileName.toLocaleLowerCase().endsWith("json")) {
+                if (fileName.toLocaleLowerCase().endsWith("json") || fileName.toLocaleLowerCase().endsWith("html")) {
                     continue;
                 }
                 if (fileNameBlank.endsWith(".js"))
@@ -17412,7 +17417,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.ClientError": {}
             },
             "jassijs/remote/Config.ts": {
-                "date": 1683393357596.9873
+                "date": 1684360937483.7693
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
@@ -17756,7 +17761,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1682794608034.317,
+                "date": 1684360945769.3875,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -18695,7 +18700,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1684176415109.4226,
+                "date": 1684357545886.423,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {

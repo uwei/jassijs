@@ -1,5 +1,6 @@
 import { JassiError } from "jassijs/remote/Classes";
 import { Test } from "jassijs/remote/Test";
+import { config } from "jassijs/remote/Config";
 class Stats {
     mtimeMs: number;
     isDirectory: () => boolean;
@@ -263,6 +264,8 @@ export async function exists(filename: string): Promise<boolean> {
 }
 
 export async function test(tt: Test) {
+    if(config.serverrequire===undefined)
+        return;
     var fs = new FS();
 
     var testfolder = "./dasisteinfestfolder";

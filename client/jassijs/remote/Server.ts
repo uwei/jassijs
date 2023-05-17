@@ -8,7 +8,7 @@ import { ValidateFunctionParameter, ValidateIsArray, ValidateIsBoolean, Validate
 import { config } from "./Config";
 
 
- 
+
 
 @$Class("jassijs.remote.Server")
 export class Server extends RemoteObject {
@@ -108,7 +108,7 @@ export class Server extends RemoteObject {
     */
     @ValidateFunctionParameter()
     async dir(@ValidateIsBoolean({ optional: true }) withDate: boolean = false, context: Context = undefined): Promise<FileNode> {
-        
+
         if (!context?.isServer) {
             var ret: FileNode;
             if ((await Server.isOnline(context)) === true)
@@ -119,7 +119,7 @@ export class Server extends RemoteObject {
             ret.fullpath = "";//root
             let r = this._convertFileNode(ret);
             return r;
-        } else { 
+        } else {
             var rett = await (await serverservices.filesystem).dir("", withDate);
             return rett;
             // return ["jassijs/base/ChromeDebugger.ts"];
@@ -140,7 +140,7 @@ export class Server extends RemoteObject {
      * @returns {string} content of the file
      */
     @ValidateFunctionParameter()
-    async loadFiles(@ValidateIsArray({ type: tp=>String }) fileNames: string[], context: Context = undefined): Promise<{ [id: string]: string }> {
+    async loadFiles(@ValidateIsArray({ type: tp => String }) fileNames: string[], context: Context = undefined): Promise<{ [id: string]: string }> {
         if (!context?.isServer) {
             return <{ [id: string]: string }>await this.call(this, this.loadFiles, fileNames, context);
         } else {
@@ -194,7 +194,7 @@ export class Server extends RemoteObject {
     * @param [{string}] contents
     */
     @ValidateFunctionParameter()
-    async saveFiles(@ValidateIsArray({ type: type=>String }) fileNames: string[], @ValidateIsArray({ type:  type=>String}) contents: string[], context: Context = undefined): Promise<string> {
+    async saveFiles(@ValidateIsArray({ type: type => String }) fileNames: string[], @ValidateIsArray({ type: type => String }) contents: string[], context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
             var allfileNames: string[] = [];
             var allcontents: string[] = [];
@@ -206,13 +206,13 @@ export class Server extends RemoteObject {
                 var content = contents[f];
                 if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
 
-                   //var tss = await import("jassijs_editor/util/Typescript");
-                   var tss=<any> await classes.loadClass("jassijs_editor.util.Typescript");
-                   var rets = await tss.instance.transpile(fileName, content);
-                   
-                   allfileNames = allfileNames.concat(rets.fileNames);
+                    //var tss = await import("jassijs_editor/util/Typescript");
+                    var tss = <any>await classes.loadClass("jassijs_editor.util.Typescript");
+                    var rets = await tss.instance.transpile(fileName, content);
+
+                    allfileNames = allfileNames.concat(rets.fileNames);
                     allcontents = allcontents.concat(rets.contents);
-                    alltsfiles.push(fileName); 
+                    alltsfiles.push(fileName);
                 } else {
                     allfileNames.push(fileName);
                     allcontents.push(content);
@@ -304,7 +304,7 @@ export class Server extends RemoteObject {
     * deletes a file or directory
     **/
     @ValidateFunctionParameter()
-    async delete(@ValidateIsString()  name: string, context: Context = undefined): Promise<string> {
+    async delete(@ValidateIsString() name: string, context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
             var ret = await this.call(this, this.delete, name, context);
             //@ts-ignore
@@ -319,7 +319,7 @@ export class Server extends RemoteObject {
     /**
      * renames a file or directory
      **/
-     @ValidateFunctionParameter()
+    @ValidateFunctionParameter()
     async rename(@ValidateIsString() oldname: string, @ValidateIsString() newname: string, context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
             var ret = await this.call(this, this.rename, oldname, newname, context);
@@ -328,10 +328,10 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             if (!context.request.user.isAdmin)
-                throw new JassiError("only admins can rename"); 
+                throw new JassiError("only admins can rename");
             return (await serverservices.filesystem).rename(oldname, newname);;
         }
-    } 
+    }
     /**
     * is the nodes server running 
     **/
@@ -357,7 +357,7 @@ export class Server extends RemoteObject {
     /**
      * creates a file 
      **/
-     @ValidateFunctionParameter()
+    @ValidateFunctionParameter()
     async createFile(@ValidateIsString() filename: string, content: string, context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
             var ret = await this.call(this, this.createFile, filename, content, context);
@@ -388,16 +388,20 @@ export class Server extends RemoteObject {
         }
     }
     @ValidateFunctionParameter()
-    async createModule(@ValidateIsString() modulname: string, context: Context = undefined): Promise<string> {
+    async createModule(@ValidateIsString() modulename: string, context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
-            var ret = await this.call(this, this.createModule, modulname, context);
+            var ret = await this.call(this, this.createModule, modulename, context);
+            if (!config.modules[modulename]){
+                //config.jsonData.modules[modulename] = modulename;
+                await config.reload();
+            }
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can createFolder");
-            return (await serverservices.filesystem).createModule(modulname);
+            return (await serverservices.filesystem).createModule(modulename);
         }
     }
     static async mytest(context: Context = undefined) {

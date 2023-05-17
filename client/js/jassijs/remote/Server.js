@@ -380,9 +380,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return (await Serverservice_1.serverservices.filesystem).createFolder(foldername);
             }
         }
-        async createModule(modulname, context = undefined) {
+        async createModule(modulename, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createModule, modulname, context);
+                var ret = await this.call(this, this.createModule, modulename, context);
+                if (!Config_1.config.modules[modulename]) {
+                    //config.jsonData.modules[modulename] = modulename;
+                    await Config_1.config.reload();
+                }
                 //@ts-ignore
                 //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
                 return ret;
@@ -390,7 +394,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can createFolder");
-                return (await Serverservice_1.serverservices.filesystem).createModule(modulname);
+                return (await Serverservice_1.serverservices.filesystem).createModule(modulename);
             }
         }
         static async mytest(context = undefined) {

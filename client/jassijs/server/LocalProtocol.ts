@@ -53,7 +53,7 @@ export async function messageReceived(param) {
 
 //var config = JSON.parse(stest);
 export async function test() {
-    var jj = await new Server().zip("");
+    //var jj = await new Server().zip("");
     // var gg=await texec(config, undefined);
     // debugger;
 }

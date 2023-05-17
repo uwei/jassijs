@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_1) {
+define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config"], function (require, exports, Classes_1, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.exists = exports.FS = void 0;
@@ -251,6 +251,8 @@ define(["require", "exports", "jassijs/remote/Classes"], function (require, expo
     }
     exports.exists = exists;
     async function test(tt) {
+        if (Config_1.config.serverrequire === undefined)
+            return;
         var fs = new FS();
         var testfolder = "./dasisteinfestfolder";
         var testfile = "./dasisteintestfile.js";

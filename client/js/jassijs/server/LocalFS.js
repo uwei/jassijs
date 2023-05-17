@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_1) {
+define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config"], function (require, exports, Classes_1, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.createHandle = exports.deleteHandle = exports.exists = exports.LocalFS = void 0;
@@ -289,6 +289,8 @@ define(["require", "exports", "jassijs/remote/Classes"], function (require, expo
     }
     exports.createHandle = createHandle;
     async function test(tt) {
+        if (!Config_1.config.isLocalFolderMapped)
+            return;
         var fs = new LocalFS();
         // var hh = await fs.readdir(".");
         var testfolder = "./dasisteinfestfolder";

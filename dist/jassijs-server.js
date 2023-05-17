@@ -395,7 +395,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1681322647267.7717
             },
             "jassijs/remote/Server.ts": {
-                "date": 1682794608034.317,
+                "date": 1684360945769.3875,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -447,7 +447,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1681918735844.9463
             },
             "jassijs/remote/Config.ts": {
-                "date": 1683393357596.9873
+                "date": 1684360937483.7693
             },
             "jassijs/remote/Modules.ts": {
                 "date": 1682799474543.8716
@@ -706,8 +706,9 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
                 this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
             }
             else {
-                var myfs = (await new Promise((resolve_3, reject_3) => { require(["jassijs/server/NativeAdapter"], resolve_3, reject_3); })).myfs;
-                this.init(await myfs.readFile('./client/jassijs.json', 'utf-8'));
+                var Server = (await new Promise((resolve_3, reject_3) => { require(["jassijs/remote/Server"], resolve_3, reject_3); })).Server;
+                var text = await new Server().loadFile("jassijs.json");
+                this.init(text);
             }
         }
         async saveJSON() {
@@ -2915,9 +2916,13 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 return (await Serverservice_3.serverservices.filesystem).createFolder(foldername);
             }
         }
-        async createModule(modulname, context = undefined) {
+        async createModule(modulename, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createModule, modulname, context);
+                var ret = await this.call(this, this.createModule, modulename, context);
+                if (!Config_3.config.modules[modulename]) {
+                    //config.jsonData.modules[modulename] = modulename;
+                    await Config_3.config.reload();
+                }
                 //@ts-ignore
                 //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
                 return ret;
@@ -2925,7 +2930,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_9.JassiError("only admins can createFolder");
-                return (await Serverservice_3.serverservices.filesystem).createModule(modulname);
+                return (await Serverservice_3.serverservices.filesystem).createModule(modulename);
             }
         }
         static async mytest(context = undefined) {
@@ -5736,7 +5741,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
     ], Filesystem);
     exports.default = Filesystem;
 });
-define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_16) {
+define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config"], function (require, exports, Classes_16, Config_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.exists = exports.FS = void 0;
@@ -5989,6 +5994,8 @@ define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes"], fu
     }
     exports.exists = exists;
     async function test(tt) {
+        if (Config_5.config.serverrequire === undefined)
+            return;
         var fs = new FS();
         var testfolder = "./dasisteinfestfolder";
         var testfile = "./dasisteintestfile.js";
@@ -6020,7 +6027,7 @@ define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes"], fu
     }
     exports.test = test;
 });
-define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_17, Config_5, Serverservice_8, NativeAdapter_4) {
+define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_17, Config_6, Serverservice_8, NativeAdapter_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -6098,7 +6105,7 @@ define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes"
                 await this.writeFile(path + "/registry.js", text);
             }
             else { //write server
-                var modules = Config_5.config.server.modules;
+                var modules = Config_6.config.server.modules;
                 for (let smodul in modules) {
                     if (modul === smodul) {
                         var text = JSON.stringify(index, undefined, "\t");
@@ -6227,7 +6234,7 @@ define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes"
     }
     exports.Indexer = Indexer;
 });
-define("jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Serverservice", "./LocalProtocol", "jassijs/remote/Config", "./FS"], function (require, exports, Serverservice_9, LocalProtocol_1, Config_6, FS_1) {
+define("jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Serverservice", "./LocalProtocol", "jassijs/remote/Config", "./FS"], function (require, exports, Serverservice_9, LocalProtocol_1, Config_7, FS_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.autostart = void 0;
@@ -6256,12 +6263,12 @@ define("jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Se
             fname = fname.replace("./client/", "");
             if (!fname.startsWith("./client/js/")) {
                 var name = fname.substring(0, fname.length - 3);
-                Config_6.config.serverrequire.undef(name);
+                Config_7.config.serverrequire.undef(name);
             }
         }
     };
     exports.autostart = autostart;
-    Config_6.config.serverrequire.undef("jassijs/util/DatabaseSchema");
+    Config_7.config.serverrequire.undef("jassijs/util/DatabaseSchema");
     define("jassijs/util/DatabaseSchema", ["jassijs/server/DatabaseSchema"], function (to) {
         return to;
     });
@@ -6280,7 +6287,7 @@ define("jassijs/server/Filesystem", ["jassijs/server/Filesystem"], function (fs)
 
 })*/
 //DatabaseSchema
-define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"], function (require, exports, Classes_18) {
+define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config"], function (require, exports, Classes_18, Config_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.createHandle = exports.deleteHandle = exports.exists = exports.LocalFS = void 0;
@@ -6571,6 +6578,8 @@ define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"
     }
     exports.createHandle = createHandle;
     async function test(tt) {
+        if (!Config_8.config.isLocalFolderMapped)
+            return;
         var fs = new LocalFS();
         // var hh = await fs.readdir(".");
         var testfolder = "./dasisteinfestfolder";
@@ -6604,7 +6613,7 @@ define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"
     }
     exports.test = test;
 });
-define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Server", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_2, Server_3, Serverservice_10, js_cookie_1, DoRemoteProtocol_1) {
+define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_2, Serverservice_10, js_cookie_1, DoRemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.localExec = exports.test = exports.messageReceived = void 0;
@@ -6648,7 +6657,7 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
     //var stest = '{"url":"remoteprotocol?1682187030801","type":"post","dataType":"text","data":"{\\"__clname__\\":\\"jassijs.remote.RemoteProtocol\\",\\"classname\\":\\"de.remote.MyRemoteObject\\",\\"_this\\":{\\"__clname__\\":\\"de.remote.MyRemoteObject\\",\\"__refid__\\":1},\\"parameter\\":[\\"Kurt\\"],\\"method\\":\\"sayHello\\",\\"__refid__\\":0}"}';
     //var config = JSON.parse(stest);
     async function test() {
-        var jj = await new Server_3.Server().zip("");
+        //var jj = await new Server().zip("");
         // var gg=await texec(config, undefined);
         // debugger;
     }
@@ -6775,12 +6784,12 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
     }
     exports.localExec = localExec;
 });
-define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Config", "./FS", "./LocalFS"], function (require, exports, Config_7, FS_2, LocalFS_1) {
+define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Config", "./FS", "./LocalFS"], function (require, exports, Config_9, FS_2, LocalFS_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.doNotReloadModule = exports.transpile = exports.reloadJSAll = exports.dozip = exports.myfs = exports.exists = exports.ts = void 0;
     //@ts-ignore
-    Config_7.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
+    Config_9.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
         require("jassijs/server/NativeAdapter").ts = window.ts;
     });
     var ts = window.ts;
@@ -6789,7 +6798,7 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
     exports.exists = exists;
     var myfs = new FS_2.FS();
     exports.myfs = myfs;
-    if (Config_7.config.isLocalFolderMapped) {
+    if (Config_9.config.isLocalFolderMapped) {
         exports.myfs = myfs = new LocalFS_1.LocalFS();
         exports.exists = exists = LocalFS_1.exists;
     }
@@ -6813,7 +6822,7 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
     exports.dozip = dozip;
     async function reloadJSAll(filenames, afterUnload) {
         var Reloader = await new Promise((resolve) => {
-            Config_7.config.clientrequire(["jassijs/util/Reloader"], r => {
+            Config_9.config.clientrequire(["jassijs/util/Reloader"], r => {
                 resolve(r);
             });
         });
@@ -6822,7 +6831,7 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
     exports.reloadJSAll = reloadJSAll;
     async function transpile(fileName, inServerdirectory = undefined) {
         var tp = await new Promise((resolve) => {
-            Config_7.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
+            Config_9.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
                 resolve(ts1);
             });
         });
@@ -6839,7 +6848,7 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
     var doNotReloadModule = true;
     exports.doNotReloadModule = doNotReloadModule;
 });
-define("jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/Indexer", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "jassijs/remote/Config"], function (require, exports, Indexer_1, Serverservice_11, NativeAdapter_5, Config_8) {
+define("jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/Indexer", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "jassijs/remote/Config"], function (require, exports, Indexer_1, Serverservice_11, NativeAdapter_5, Config_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ServerIndexer = void 0;
@@ -6847,13 +6856,13 @@ define("jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/
         async updateRegistry() {
             //client modules
             var path = (await Serverservice_11.serverservices.filesystem).path;
-            var modules = Config_8.config.modules;
+            var modules = Config_10.config.modules;
             for (var m in modules) {
                 if ((await NativeAdapter_5.exists(path + "/" + modules[m]) && !modules[m].endsWith(".js") && modules[m].indexOf(".js?")) === -1) //.js are internet modules
                     await this.updateModul(path, m, false);
             }
             //server modules
-            modules = Config_8.config.server.modules;
+            modules = Config_10.config.server.modules;
             for (var m in modules) {
                 if (await NativeAdapter_5.exists("./" + modules[m]) && !modules[m].endsWith(".js")) //.js are internet modules
                     await this.updateModul(".", m, true);

@@ -29,7 +29,7 @@ class MyContainer extends BoxPanel {
         this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed."
     }
 }
-@$ActionProvider("jassijs_editor.remote.FileNode")
+@$ActionProvider("jassijs.remote.FileNode")
 @$Class("jassijs_editor.ui.TestAction")
 export class TestAction {
     @$Action({

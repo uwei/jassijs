@@ -3,7 +3,7 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1683397288936.7078,
+		"date": 1684357701191.7656,
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/AcePanelSimple.ts": {
@@ -220,7 +220,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"date": 1681572587537.0356
 	},
 	"jassijs_editor/MonacoPanel.ts": {
-		"date": 1681487384261.6387,
+		"date": 1684357485915.1328,
 		"jassijs_editor.MonacoPanel": {}
 	},
 	"jassijs_editor/SearchExplorer.ts": {
@@ -339,10 +339,10 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.Resizer": {}
 	},
 	"jassijs_editor/util/Tests.ts": {
-		"date": 1681570126438.5786,
+		"date": 1684358012771.591,
 		"jassijs_editor.ui.TestAction": {
 			"$ActionProvider": [
-				"jassijs_editor.remote.FileNode"
+				"jassijs.remote.FileNode"
 			],
 			"@members": {
 				"testNode": {

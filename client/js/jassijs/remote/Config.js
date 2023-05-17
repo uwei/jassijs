@@ -26,8 +26,9 @@ define(["require", "exports"], function (require, exports) {
                 this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
             }
             else {
-                var myfs = (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/NativeAdapter"], resolve_1, reject_1); })).myfs;
-                this.init(await myfs.readFile('./client/jassijs.json', 'utf-8'));
+                var Server = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/Server"], resolve_1, reject_1); })).Server;
+                var text = await new Server().loadFile("jassijs.json");
+                this.init(text);
             }
         }
         async saveJSON() {

@@ -118,7 +118,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
         __metadata("design:returntype", Promise)
     ], TestAction, "testNode", null);
     TestAction = TestAction_1 = __decorate([
-        (0, Actions_1.$ActionProvider)("jassijs_editor.remote.FileNode"),
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
         (0, Registry_1.$Class)("jassijs_editor.ui.TestAction")
     ], TestAction);
     exports.TestAction = TestAction;

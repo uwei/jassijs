@@ -87,7 +87,7 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
                     jassijs.myRequire(fileName);
                     continue;
                 }
-                if (fileName.toLocaleLowerCase().endsWith("json")) {
+                if (fileName.toLocaleLowerCase().endsWith("json") || fileName.toLocaleLowerCase().endsWith("html")) {
                     continue;
                 }
                 if (fileNameBlank.endsWith(".js"))

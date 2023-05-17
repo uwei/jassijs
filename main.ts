@@ -1,6 +1,6 @@
 
 import  JassiServer  from "./jassijs/server/JassiServer";
-/*import { Compile } from "jassijs/server/Compile";
+import { Compile } from "jassijs/server/Compile";
 
 //import { compilePackage } from "./jassijs/server/CreatePackage";
 
@@ -11,6 +11,6 @@ new Compile().transpileModul("jassijs_report",false);
 new Compile().transpileModul("demoreports",false);
 new Compile().transpileModul("northwind",true);
 new Compile().transpileModul("northwind",false);
-*/
+
 JassiServer();  
    

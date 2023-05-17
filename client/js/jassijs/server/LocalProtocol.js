@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Server", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_1, Server_1, Serverservice_1, js_cookie_1, DoRemoteProtocol_1) {
+define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_1, Serverservice_1, js_cookie_1, DoRemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.localExec = exports.test = exports.messageReceived = void 0;
@@ -42,7 +42,7 @@ define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/S
     //var stest = '{"url":"remoteprotocol?1682187030801","type":"post","dataType":"text","data":"{\\"__clname__\\":\\"jassijs.remote.RemoteProtocol\\",\\"classname\\":\\"de.remote.MyRemoteObject\\",\\"_this\\":{\\"__clname__\\":\\"de.remote.MyRemoteObject\\",\\"__refid__\\":1},\\"parameter\\":[\\"Kurt\\"],\\"method\\":\\"sayHello\\",\\"__refid__\\":0}"}';
     //var config = JSON.parse(stest);
     async function test() {
-        var jj = await new Server_1.Server().zip("");
+        //var jj = await new Server().zip("");
         // var gg=await texec(config, undefined);
         // debugger;
     }

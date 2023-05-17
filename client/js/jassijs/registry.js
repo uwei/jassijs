@@ -65,7 +65,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.ClientError": {}
 	},
 	"jassijs/remote/Config.ts": {
-		"date": 1683393357596.9873
+		"date": 1684360937483.7693
 	},
 	"jassijs/remote/Database.ts": {
 		"date": 1655556796000,
@@ -409,7 +409,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1682794608034.317,
+		"date": 1684360945769.3875,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
@@ -549,7 +549,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/server/FS.ts": {
-		"date": 1683563356650.9514
+		"date": 1684358272275.7686
 	},
 	"jassijs/server/Indexer.ts": {
 		"date": 1682806194944.4678
@@ -558,7 +558,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1682930462690.898
 	},
 	"jassijs/server/LocalProtocol.ts": {
-		"date": 1682804261351.0828
+		"date": 1684358642243.9634
 	},
 	"jassijs/server/NativeAdapter.ts": {
 		"date": 1684176440317.4678
@@ -1426,7 +1426,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Numberformatter": {}
 	},
 	"jassijs/util/Reloader.ts": {
-		"date": 1684176415109.4226,
+		"date": 1684357545886.423,
 		"jassijs.util.Reloader": {}
 	},
 	"jassijs/util/Runlater.ts": {
@@ -1438,7 +1438,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/server/LocalFS.ts": {
-		"date": 1684350098362.0696
+		"date": 1684358614464.595
 	},
 	"jassijs/server/Compile.ts": {
 		"date": 1684173592469.7722

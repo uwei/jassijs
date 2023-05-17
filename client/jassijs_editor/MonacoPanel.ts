@@ -244,6 +244,10 @@ export class MonacoPanel extends CodePanel {
                     stype="css";
                  if(this.file.toLocaleLowerCase().endsWith(".json"))
                     stype="json";
+                if(this.file.toLocaleLowerCase().endsWith(".html"))
+                    stype="html";
+                if(this.file.toLocaleLowerCase().endsWith(".jpg"))
+                    stype="jpg";
                 mod = monaco.editor.createModel(value, stype, ffile);
                 this._editor.setModel(mod);
                 this._editor.setValue(value);

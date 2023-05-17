@@ -25,8 +25,9 @@ class Config {
             this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
         }
         else {
-            var myfs = (await Promise.resolve().then(() => require("jassijs/server/NativeAdapter"))).myfs;
-            this.init(await myfs.readFile('./client/jassijs.json', 'utf-8'));
+            var Server = (await Promise.resolve().then(() => require("jassijs/remote/Server"))).Server;
+            var text = await new Server().loadFile("jassijs.json");
+            this.init(text);
         }
     }
     async saveJSON() {
