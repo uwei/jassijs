@@ -1663,7 +1663,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1682804261351.0828
             },
             "jassijs/server/NativeAdapter.ts": {
-                "date": 1684175697272.767
+                "date": 1684176440317.4678
             },
             "jassijs/server/RegistryIndexer.ts": {
                 "date": 1682799790211.1238
@@ -2528,7 +2528,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1683484383885.6277,
+                "date": 1684176415109.4226,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {

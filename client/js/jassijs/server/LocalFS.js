@@ -34,6 +34,8 @@ define(["require", "exports", "jassijs/remote/Classes"], function (require, expo
         async readdir(folder) {
             var handle = await this.loadFileEntry(folder);
             var ret = [];
+            if (handle === undefined)
+                return ret;
             var entries = await handle.entries();
             var en = await entries.next();
             while (!en.done) {

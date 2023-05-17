@@ -1,5 +1,5 @@
 {
-	"runServerInBrowser":false,
+	"runServerInBrowser":true,
 	"modalt": {
 		"jassijs_localserver": "jassijs_localserver",
 		"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js?version=637584105640736230",

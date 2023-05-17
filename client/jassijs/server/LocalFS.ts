@@ -44,6 +44,8 @@ export class LocalFS {
     async readdir(folder: string): Promise<string[]> {
         var handle = await this.loadFileEntry(folder);
         var ret = [];
+        if(handle===undefined)
+            return ret;
         var entries = await handle.entries();
         var en = await entries.next();
         while (!en.done) {

@@ -1438,7 +1438,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/server/LocalFS.ts": {
-		"date": 1683483467365.1172
+		"date": 1684350098362.0696
 	},
 	"jassijs/server/Compile.ts": {
 		"date": 1684173592469.7722

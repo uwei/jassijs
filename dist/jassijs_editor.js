@@ -3180,7 +3180,7 @@ define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/Box
                     //@ts-ignore
                     { title: "type", field: "type", editor: "select", editorParams: this.allTypes },
                     //@ts-ignore
-                    { title: "nullable", field: "nullable", editor: "tick", editorParams: { tristate: false } },
+                    { title: "nullable", field: "nullable", editor: "tickCross", editorParams: { tristate: false } },
                     {
                         //@ts-ignore
                         title: "relationinfo", field: "relationinfo", editor: "select",
@@ -4623,7 +4623,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-                "date": 1681557203337.6318,
+                "date": 1684176865129.497,
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -8179,7 +8179,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-                "date": 1681557203337.6318,
+                "date": 1684176865129.497,
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
