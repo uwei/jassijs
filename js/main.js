@@ -6,6 +6,7 @@ const Compile_1 = require("jassijs/server/Compile");
 new Compile_1.Compile().transpileModul("jassijs", true);
 new Compile_1.Compile().transpileModul("jassijs", false);
 new Compile_1.Compile().transpileModul("jassijs_editor", false);
+new Compile_1.Compile().transpileModul("jassijs_report", true);
 new Compile_1.Compile().transpileModul("jassijs_report", false);
 new Compile_1.Compile().transpileModul("demoreports", false);
 new Compile_1.Compile().transpileModul("northwind", true);

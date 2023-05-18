@@ -277,9 +277,10 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             }
             //@ts-ignore
             var test = (await (_a = name.replaceAll("$serverside/", ""), Promise.resolve().then(() => require(_a)))).test;
+            var ret;
             if (test)
-                Server_1.lastTestServersideFileResult = await test();
-            return Server_1.lastTestServersideFileResult;
+                ret = await test();
+            return ret;
         }
     }
     /**
@@ -413,7 +414,6 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     }
 };
 Server.isonline = undefined;
-Server.lastTestServersideFileResult = undefined;
 //files found in js.map of modules in the jassijs.json
 Server.filesInMap = undefined;
 __decorate([

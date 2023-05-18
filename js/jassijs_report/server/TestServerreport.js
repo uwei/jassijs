@@ -1,4 +1,5 @@
 "use strict";
+//synchronize-server-client
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.fill = void 0;
 var reportdesign = {
@@ -11,7 +12,7 @@ var reportdesign = {
                         bold: true,
                         italics: true,
                         font: "Asap",
-                        text: "name2233"
+                        text: "name"
                     },
                     "lastname",
                     ""

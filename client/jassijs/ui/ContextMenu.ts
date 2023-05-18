@@ -127,7 +127,7 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
                     var men = new MenuItem();
                     men["_classaction"] = true;
                     men.text = path[i];
-                    if(action.icon!==undefined)
+                    if (action.icon !== undefined)
                         men.icon = action.icon;
                     men.onclick(() => action.call(_this.value));
                     parent.add(men);
@@ -163,8 +163,6 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
         this.addEvent("beforeshow", handler);
     }
     async _callContextmenu(evt) {
-        if (evt.preventDefault !== undefined)
-            evt.preventDefault();
         this.target = evt.target;
         var cancel = this.callEvent("beforeshow", evt);
         if (cancel !== undefined) {
@@ -188,7 +186,11 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
         this.contextComponents.push(component);
         var _this = this;
         $(component.dom).contextmenu(function (evt) {
-            _this._callContextmenu(evt);
+            if (evt.preventDefault !== undefined)
+                evt.preventDefault();
+            setTimeout(() => {//timout because Table._oncontext should be called first
+                _this._callContextmenu(evt);
+            }, 10);
         });
     }
     /**

@@ -16,11 +16,8 @@ exports.default={
 			"@members": {}
 		}
 	},
-	"jassijs_report/TestServerreport.ts": {
-		"date": 1656367820000
-	},
 	"jassijs_report/remote/ServerReport.ts": {
-		"date": 1681315929902.2598,
+		"date": 1684441132383.0664,
 		"jassijs_report.remote.ServerReport": {
 			"@members": {
 				"getDesign": {
@@ -32,7 +29,10 @@ exports.default={
 			}
 		}
 	},
-	"jassijs_report/DoServerreport.ts": {
-		"date": 1656365932000
+	"jassijs_report/server/DoServerreport.ts": {
+		"date": 1684441097974.052
+	},
+	"jassijs_report/server/TestServerreport.ts": {
+		"date": 1684441410020.7559
 	}
 }

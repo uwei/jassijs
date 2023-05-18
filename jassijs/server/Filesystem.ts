@@ -376,12 +376,12 @@ export default class Filesystem {
                     let rpath = this.getDirectoryname("./" + fneu);
                     try {
                         await myfs.mkdir(rpath, { recursive: true });
-                    } catch (err) { 
+                    } catch (err) {
                     }
                     await myfs.writeFile("./" + fneu, contents[x]);
                     if (spath.length > 1 && spath[0] !== "$serverside")
                         await this.createRemoteModulIfNeeded(spath[0]);
-                        new Compile().transpileServercode(fneu, fromServerdirectory);
+                    await new Compile().transpileServercode(fneu, fromServerdirectory);
                 }
             }
         }
@@ -393,7 +393,7 @@ export default class Filesystem {
                 continue;
             var spath = fileName.split("/");
             var fromServerdirectory = fileName.startsWith("$serverside/");
-            
+
             if (fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote") && fileName.toLowerCase().endsWith(".ts")) {
                 var remotecodeincluded = true;
                 remoteFiles.push(fileName.substring(0, fileName.length - 3));

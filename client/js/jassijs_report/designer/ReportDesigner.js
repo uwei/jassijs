@@ -65,7 +65,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
                     this._codeEditor.evalServerside().then((data) => {
                         if (!data)
                             return;
-                        ServerReport_1.ServerReport.getBase64LastTestResult().then((base64) => {
+                        ServerReport_1.ServerReport.getBase64FromFile(this.codeEditor._file).then((base64) => {
                             this.pdfviewer.report = rep;
                             _this.pdfviewer.value = base64;
                         });

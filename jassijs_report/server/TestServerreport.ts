@@ -1,4 +1,4 @@
-
+//synchronize-server-client
 
 var reportdesign = {
 	content: [
@@ -10,7 +10,7 @@ var reportdesign = {
 						bold: true,
 						italics: true,
 						font: "Asap",
-						text: "name2233"
+						text: "name"
 					},
 					"lastname",
 					""

@@ -371,7 +371,7 @@ let Filesystem = Filesystem_1 = class Filesystem {
                     await NativeAdapter_1.myfs.writeFile("./" + fneu, contents[x]);
                     if (spath.length > 1 && spath[0] !== "$serverside")
                         await this.createRemoteModulIfNeeded(spath[0]);
-                    new Compile_1.Compile().transpileServercode(fneu, fromServerdirectory);
+                    await new Compile_1.Compile().transpileServercode(fneu, fromServerdirectory);
                 }
             }
         }

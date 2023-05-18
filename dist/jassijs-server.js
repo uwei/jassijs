@@ -395,7 +395,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1681322647267.7717
             },
             "jassijs/remote/Server.ts": {
-                "date": 1684360945769.3875,
+                "date": 1684441231903.9946,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -479,7 +479,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657714030000
             },
             "jassijs/server/Filesystem.ts": {
-                "date": 1684173726541.016,
+                "date": 1684401440778.645,
                 "jassijs.server.Filesystem": {
                     "$Serverservice": [
                         {
@@ -534,7 +534,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1683050189346.0103
             },
             "jassijs/server/Compile.ts": {
-                "date": 1684173592469.7722
+                "date": 1684400486213.004
             }
         }
     };
@@ -2806,9 +2806,10 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 }
                 //@ts-ignore
                 var test = (await new Promise((resolve_12, reject_12) => { require([name.replaceAll("$serverside/", "")], resolve_12, reject_12); })).test;
+                var ret;
                 if (test)
-                    Server_1.lastTestServersideFileResult = await test();
-                return Server_1.lastTestServersideFileResult;
+                    ret = await test();
+                return ret;
             }
         }
         /**
@@ -2942,7 +2943,6 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         }
     };
     Server.isonline = undefined;
-    Server.lastTestServersideFileResult = undefined;
     //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
     __decorate([
@@ -5660,7 +5660,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
                         await NativeAdapter_3.myfs.writeFile("./" + fneu, contents[x]);
                         if (spath.length > 1 && spath[0] !== "$serverside")
                             await this.createRemoteModulIfNeeded(spath[0]);
-                        new Compile_1.Compile().transpileServercode(fneu, fromServerdirectory);
+                        await new Compile_1.Compile().transpileServercode(fneu, fromServerdirectory);
                     }
                 }
             }

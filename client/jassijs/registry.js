@@ -409,7 +409,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1684360945769.3875,
+		"date": 1684441231903.9946,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
@@ -538,7 +538,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1657714030000
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1684173726541.016,
+		"date": 1684401440778.645,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -674,7 +674,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {
-		"date": 1682279142121.4165,
+		"date": 1684403125221.828,
 		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{
@@ -1028,7 +1028,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1681571237085.608,
+		"date": 1684400196837.17,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {}
@@ -1426,7 +1426,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Numberformatter": {}
 	},
 	"jassijs/util/Reloader.ts": {
-		"date": 1684357545886.423,
+		"date": 1684441724016.6287,
 		"jassijs.util.Reloader": {}
 	},
 	"jassijs/util/Runlater.ts": {
@@ -1441,7 +1441,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1684358614464.595
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1684173592469.7722
+		"date": 1684400486213.004
 	}
 }
  }

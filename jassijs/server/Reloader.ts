@@ -13,11 +13,14 @@ export class Reloader {
         root = root + (root.endsWith("/js") ? "/" : "/js/");
         // root = root.substring(0, root.length - "jassijs/remote/Classes.js".length);
         var jfiles = [];
+        var serversidefile=filenames[0].startsWith("$serverside/")?filenames[0].substring("$serverside/".length):undefined;
+        
         for (var modul in modules) {//undef all modules
             for (var jfile in require.cache) {
                 if (jfile.indexOf("TestServerreport") > -1)
                     jfile = jfile;
-                if (jfile.replaceAll("\\", "/").indexOf("/" + modul + "/remote/") > -1)/* ||
+                if (jfile.replaceAll("\\", "/").indexOf("/" + modul + "/remote/") > -1||(serversidefile&&jfile.replaceAll("\\", "/").endsWith(serversidefile+".js")))
+                /* ||
                      (fromServerdirectory && jfile.replaceAll("\\", "/").replaceAll("$serverside/", "").
                          endsWith("/js/" + fileName.replaceAll("$serverside/", "").replace(".ts", ".js"))))*/ {
                     //save Modules
@@ -44,7 +47,7 @@ export class Reloader {
         }
         for (let k = 0; k < jfiles.length; k++) {
             let jfile = jfiles[k];
-            if (require.cache[jfile].exports.doNotReloadModule) {
+            if (require.cache[jfile]?.exports?.doNotReloadModule) {
 
             } else
                 delete require.cache[jfile];

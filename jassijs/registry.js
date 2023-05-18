@@ -374,7 +374,7 @@ exports.default={
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1684173592469.7722
+		"date": 1684400486213.004
 	},
 	"jassijs/server/DBManager.ts": {
 		"date": 1682710550782.2158,
@@ -391,7 +391,7 @@ exports.default={
 		"date": 1682362433279.5454
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1684173726541.016,
+		"date": 1684401440778.645,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -432,7 +432,7 @@ exports.default={
 		"date": 1681322647267.7717
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1684360945769.3875,
+		"date": 1684441231903.9946,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
@@ -496,7 +496,7 @@ exports.default={
 		"date": 1682792900059.5854
 	},
 	"jassijs/server/Reloader.ts": {
-		"date": 1682793104106.3633
+		"date": 1684435440280.355
 	},
 	"jassijs/server/DBManagerExt.ts": {
 		"date": 1682717755128.099

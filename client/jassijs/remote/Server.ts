@@ -13,7 +13,7 @@ import { config } from "./Config";
 @$Class("jassijs.remote.Server")
 export class Server extends RemoteObject {
     private static isonline: Promise<boolean> = undefined;
-    static lastTestServersideFileResult = undefined;
+   
     //files found in js.map of modules in the jassijs.json
     public static filesInMap: { [name: string]: { modul: string, id: number } } = undefined;
     constructor() {
@@ -278,9 +278,10 @@ export class Server extends RemoteObject {
             }
             //@ts-ignore
             var test = (await import(name.replaceAll("$serverside/", ""))).test;
+            var ret;
             if (test)
-                Server.lastTestServersideFileResult = await test();
-            return Server.lastTestServersideFileResult;
+                ret = await test();
+            return ret;
 
         }
     }

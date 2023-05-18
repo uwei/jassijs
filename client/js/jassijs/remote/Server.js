@@ -270,9 +270,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 }
                 //@ts-ignore
                 var test = (await new Promise((resolve_3, reject_3) => { require([name.replaceAll("$serverside/", "")], resolve_3, reject_3); })).test;
+                var ret;
                 if (test)
-                    Server_1.lastTestServersideFileResult = await test();
-                return Server_1.lastTestServersideFileResult;
+                    ret = await test();
+                return ret;
             }
         }
         /**
@@ -406,7 +407,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         }
     };
     Server.isonline = undefined;
-    Server.lastTestServersideFileResult = undefined;
     //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
     __decorate([

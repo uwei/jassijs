@@ -68,7 +68,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                     this._codeEditor.evalServerside().then((data) => {
                         if (!data)
                             return;
-                        ServerReport_1.ServerReport.getBase64LastTestResult().then((base64) => {
+                        ServerReport_1.ServerReport.getBase64FromFile(this.codeEditor._file).then((base64) => {
                             this.pdfviewer.report = rep;
                             _this.pdfviewer.value = base64;
                         });
@@ -1799,7 +1799,7 @@ define("jassijs_report/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1680803515410.1963,
+                "date": 1684440710650.4395,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -1884,7 +1884,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/remote/ServerReport.ts": {
-                "date": 1681315929902.2598,
+                "date": 1684441132383.0664,
                 "jassijs_report.remote.ServerReport": {
                     "@members": {
                         "getDesign": {
@@ -2172,16 +2172,22 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/test/ServerReport.ts": {
-                "date": 1656501738000,
+                "date": 1684401086547.6228,
                 "jassijs_report.test.ServerReport": {
                     "$Report": [
                         {
                             "name": "test/Sample Serverreport",
-                            "serverReportPath": "jassijs_report/TestServerreport"
+                            "serverReportPath": "jassijs_report/server/TestServerreport"
                         }
                     ],
                     "@members": {}
                 }
+            },
+            "jassijs_report/server/TestServerreport.ts": {
+                "date": 1684441410020.7559
+            },
+            "jassijs_report/server/DoServerreport.ts": {
+                "date": 1684441369461.1033
             }
         }
     };
@@ -3401,7 +3407,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
     ], RComponent);
     exports.RComponent = RComponent;
 });
-define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Validator"], function (require, exports, Registry_11, RemoteObject_1, Validator_1) {
+define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Server", "jassijs/remote/Validator"], function (require, exports, Registry_11, RemoteObject_1, Server_1, Validator_1) {
     "use strict";
     var ServerReport_2, _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3413,7 +3419,7 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
             }
             else {
                 //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/DoServerreport"], resolve_2, reject_2); })).DoServerreport;
+                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/server/DoServerreport"], resolve_2, reject_2); })).DoServerreport;
                 ServerReport_2.cacheLastParameter[path] = parameter;
                 return await new DoServerreport().getDesign(path, parameter);
             }
@@ -3424,20 +3430,21 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
             }
             else {
                 //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/DoServerreport"], resolve_3, reject_3); })).DoServerreport;
+                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); })).DoServerreport;
                 if (parameter == "useLastCachedParameter")
                     parameter = ServerReport_2.cacheLastParameter[path];
                 return await new DoServerreport().getBase64(path, parameter);
             }
         }
-        static async getBase64LastTestResult(context = undefined) {
+        static async getBase64FromFile(file, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_2.call(this.getBase64LastTestResult, context);
+                return await ServerReport_2.call(this.getBase64FromFile, file, context);
             }
             else {
-                //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_4, reject_4) => { require(["jassijs_report/DoServerreport"], resolve_4, reject_4); })).DoServerreport;
-                return await new DoServerreport().getBase64LastTestResult();
+                var res = await new Server_1.Server().testServersideFile(file.substring(0, file.length - 3), context);
+                //@ts-ignore 
+                var DoServerreport = (await new Promise((resolve_4, reject_4) => { require(["jassijs_report/server/DoServerreport"], resolve_4, reject_4); })).DoServerreport;
+                return await new DoServerreport().getBase64FromData(res);
             }
         }
     };
@@ -3461,7 +3468,7 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
     ], ServerReport);
     exports.ServerReport = ServerReport;
     async function test() {
-        var ret = await ServerReport.getBase64("jassijs_report/TestServerreport", { sort: "name" });
+        var ret = await ServerReport.getBase64("jassijs_report/server/TestServerreport", { sort: "name" });
         return ret;
         //    console.log(await new ServerReport().sayHello("Kurt"));
     }
@@ -6982,7 +6989,7 @@ define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_repor
         __metadata("design:type", String)
     ], ServerReport.prototype, "sort", void 0);
     ServerReport = __decorate([
-        Report_3.$Report({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/TestServerreport" }),
+        Report_3.$Report({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/server/TestServerreport" }),
         Registry_31.$Class("jassijs_report.test.ServerReport")
     ], ServerReport);
     exports.ServerReport = ServerReport;
@@ -6998,7 +7005,7 @@ define("jassijs_report/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1680803515410.1963,
+                "date": 1684440710650.4395,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -7083,7 +7090,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/remote/ServerReport.ts": {
-                "date": 1681315929902.2598,
+                "date": 1684441132383.0664,
                 "jassijs_report.remote.ServerReport": {
                     "@members": {
                         "getDesign": {
@@ -7371,12 +7378,12 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/test/ServerReport.ts": {
-                "date": 1656501738000,
+                "date": 1684401086547.6228,
                 "jassijs_report.test.ServerReport": {
                     "$Report": [
                         {
                             "name": "test/Sample Serverreport",
-                            "serverReportPath": "jassijs_report/TestServerreport"
+                            "serverReportPath": "jassijs_report/server/TestServerreport"
                         }
                     ],
                     "@members": {}

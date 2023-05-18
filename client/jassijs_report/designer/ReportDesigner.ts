@@ -81,7 +81,7 @@ export class ReportDesigner extends ComponentDesigner {
                 this._codeEditor.evalServerside().then((data) => {
                     if (!data)
                         return;
-                    ServerReport.getBase64LastTestResult().then((base64) => {
+                    ServerReport.getBase64FromFile(this.codeEditor._file).then((base64) => {
                         this.pdfviewer.report = rep;
                         _this.pdfviewer.value = base64
                     });

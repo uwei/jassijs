@@ -636,7 +636,7 @@ export class PropertyEditor extends Panel {
         } else {
             var text = this.codeEditor.value;
             var val = this.codeEditor.getObjectFromVariable("this");
-            if (text)
+            if (text&&this.parser)
                 this.parser.parse(text); 
             // this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
         }

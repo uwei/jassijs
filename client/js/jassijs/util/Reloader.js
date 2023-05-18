@@ -78,6 +78,7 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
             var allfiles = [];
             for (let ff = 0; ff < fileNames.length; ff++) {
                 var fileName = fileNames[ff];
+                fileName = fileName.replace("$serverside/", "");
                 var fileNameBlank = fileName;
                 if (fileName.toLocaleLowerCase().endsWith("css")) {
                     /*var node=document.getElementById("-->"+fileName);
