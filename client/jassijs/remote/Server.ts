@@ -33,19 +33,21 @@ export class Server extends RemoteObject {
         }
         return ret;
     }
-    async fillFilesInMapIfNeeded() {
-        if (Server.filesInMap)
+    private async fillMapModules( ret,serverModules) {
+        var modules=config.modules;
+        if(serverModules===true)
+            modules=config.server?.modules;
+        if(modules===undefined)
             return;
-        var ret = {};
-        for (var mod in config.modules) {
+        for (var mod in modules) {
             if (jassijs?.options?.Server?.filterModulInFilemap) {
                 if (jassijs?.options?.Server?.filterModulInFilemap.indexOf(mod) === -1)
                     continue;
             }
-            if (config.modules[mod].endsWith(".js") || config.modules[mod].indexOf(".js?") > -1) {
-                let mapname = config.modules[mod].split("?")[0] + ".map";
-                if (config.modules[mod].indexOf(".js?") > -1)
-                    mapname = mapname + "?" + config.modules[mod].split("?")[1];
+            if (modules[mod].endsWith(".js") || modules[mod].indexOf(".js?") > -1) {
+                let mapname = modules[mod].split("?")[0] + ".map";
+                if (modules[mod].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + modules[mod].split("?")[1];
                 var code = await $.ajax({ url: mapname, dataType: "text" })
                 var data = JSON.parse(code);
                 var files = data.sources;
@@ -56,19 +58,29 @@ export class Server extends RemoteObject {
                             continue;
                     }
                     if (fname.endsWith)
-                        ret[fname] = {
+                        ret[(serverModules?"$serverside/":"")+ fname] = {
                             id: x,
                             modul: mod
                         };
                 }
             }
         }
+
+    }
+    async fillFilesInMapIfNeeded() {
+        if (Server.filesInMap)
+            return;
+        var ret = {};
+        await this.fillMapModules(ret,false);
+        await this.fillMapModules(ret,true);
         Server.filesInMap = ret;
 
     }
     async addFilesFromMap(root: FileNode) {
         await this.fillFilesInMapIfNeeded();
         for (var fname in Server.filesInMap) {
+            if(fname.startsWith("$serverside"))
+                continue;
             let path = fname.split("/");
             var parent = root;
             for (let p = 0; p < path.length; p++) {
@@ -158,14 +170,28 @@ export class Server extends RemoteObject {
         var fromServerdirectory = fileName.startsWith("$serverside/");
         if (!context?.isServer) {
             await this.fillFilesInMapIfNeeded();
-            if (!fromServerdirectory && Server.filesInMap[fileName]) {
-                //perhabs the files ar in localserver?
-                var Filesystem = classes.getClass("jassijs_localserver.Filesystem");
-                if (Filesystem && (await new Filesystem().loadFileEntry(fileName) !== undefined)) {
+            if (Server.filesInMap[fileName]) {
+                var foundOnLocalserver=false;
+                if(config.serverrequire){
+                    var r=<any>await new Promise((resolve)=>{
+                        config.serverrequire(["jassijs/server/NativeAdapter"],(adapter)=>{
+                            resolve(adapter);
+                        });
+                    });
+                    var fname="./client/"+fileName;
+                    if(fromServerdirectory)
+                        fname=fileName.replace("$serverside/","./");
+                    if(r.exists&&await r.exists(fname)){
+                        foundOnLocalserver=true;
+                    }
+                }
+                if(foundOnLocalserver){
                     //use ajax
-                } else {
+                } else { 
                     var found = Server.filesInMap[fileName];
                     let mapname = config.modules[found.modul].split("?")[0] + ".map";
+                    if(fromServerdirectory)
+                        mapname = config.server.modules[found.modul].split("?")[0] + ".map";
                     if (config.modules[found.modul].indexOf(".js?") > -1)
                         mapname = mapname + "?" + config.modules[found.modul].split("?")[1];
                     var code = await this.loadFile(mapname, context);

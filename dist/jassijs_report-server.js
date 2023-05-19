@@ -42,7 +42,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/server/TestServerreport.ts": {
-                "date": 1684441410020.7559
+                "date": 1684501451913.4646
             },
             "jassijs_report/server/DoServerreport.ts": {
                 "date": 1684441097974.052

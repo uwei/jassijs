@@ -38,42 +38,53 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         }
         return ret;
     }
-    async fillFilesInMapIfNeeded() {
-        var _a, _b, _c, _d, _e, _f;
-        if (Server_1.filesInMap)
+    async fillMapModules(ret, serverModules) {
+        var _a, _b, _c, _d, _e, _f, _g;
+        var modules = Config_1.config.modules;
+        if (serverModules === true)
+            modules = (_a = Config_1.config.server) === null || _a === void 0 ? void 0 : _a.modules;
+        if (modules === undefined)
             return;
-        var ret = {};
-        for (var mod in Config_1.config.modules) {
-            if ((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
-                if (((_d = (_c = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
+        for (var mod in modules) {
+            if ((_c = (_b = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _b === void 0 ? void 0 : _b.Server) === null || _c === void 0 ? void 0 : _c.filterModulInFilemap) {
+                if (((_e = (_d = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _d === void 0 ? void 0 : _d.Server) === null || _e === void 0 ? void 0 : _e.filterModulInFilemap.indexOf(mod)) === -1)
                     continue;
             }
-            if (Config_1.config.modules[mod].endsWith(".js") || Config_1.config.modules[mod].indexOf(".js?") > -1) {
-                let mapname = Config_1.config.modules[mod].split("?")[0] + ".map";
-                if (Config_1.config.modules[mod].indexOf(".js?") > -1)
-                    mapname = mapname + "?" + Config_1.config.modules[mod].split("?")[1];
+            if (modules[mod].endsWith(".js") || modules[mod].indexOf(".js?") > -1) {
+                let mapname = modules[mod].split("?")[0] + ".map";
+                if (modules[mod].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + modules[mod].split("?")[1];
                 var code = await $.ajax({ url: mapname, dataType: "text" });
                 var data = JSON.parse(code);
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
                     let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                    if (((_f = (_e = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _e === void 0 ? void 0 : _e.Server) === null || _f === void 0 ? void 0 : _f.filterSytemfilesInFilemap) === true) {
+                    if (((_g = (_f = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _f === void 0 ? void 0 : _f.Server) === null || _g === void 0 ? void 0 : _g.filterSytemfilesInFilemap) === true) {
                         if (fname.endsWith("/modul.js") || fname.endsWith("/registry.js"))
                             continue;
                     }
                     if (fname.endsWith)
-                        ret[fname] = {
+                        ret[(serverModules ? "$serverside/" : "") + fname] = {
                             id: x,
                             modul: mod
                         };
                 }
             }
         }
+    }
+    async fillFilesInMapIfNeeded() {
+        if (Server_1.filesInMap)
+            return;
+        var ret = {};
+        await this.fillMapModules(ret, false);
+        await this.fillMapModules(ret, true);
         Server_1.filesInMap = ret;
     }
     async addFilesFromMap(root) {
         await this.fillFilesInMapIfNeeded();
         for (var fname in Server_1.filesInMap) {
+            if (fname.startsWith("$serverside"))
+                continue;
             let path = fname.split("/");
             var parent = root;
             for (let p = 0; p < path.length; p++) {
@@ -159,15 +170,29 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         var fromServerdirectory = fileName.startsWith("$serverside/");
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             await this.fillFilesInMapIfNeeded();
-            if (!fromServerdirectory && Server_1.filesInMap[fileName]) {
-                //perhabs the files ar in localserver?
-                var Filesystem = Classes_1.classes.getClass("jassijs_localserver.Filesystem");
-                if (Filesystem && (await new Filesystem().loadFileEntry(fileName) !== undefined)) {
+            if (Server_1.filesInMap[fileName]) {
+                var foundOnLocalserver = false;
+                if (Config_1.config.serverrequire) {
+                    var r = await new Promise((resolve) => {
+                        Config_1.config.serverrequire(["jassijs/server/NativeAdapter"], (adapter) => {
+                            resolve(adapter);
+                        });
+                    });
+                    var fname = "./client/" + fileName;
+                    if (fromServerdirectory)
+                        fname = fileName.replace("$serverside/", "./");
+                    if (r.exists && await r.exists(fname)) {
+                        foundOnLocalserver = true;
+                    }
+                }
+                if (foundOnLocalserver) {
                     //use ajax
                 }
                 else {
                     var found = Server_1.filesInMap[fileName];
                     let mapname = Config_1.config.modules[found.modul].split("?")[0] + ".map";
+                    if (fromServerdirectory)
+                        mapname = Config_1.config.server.modules[found.modul].split("?")[0] + ".map";
                     if (Config_1.config.modules[found.modul].indexOf(".js?") > -1)
                         mapname = mapname + "?" + Config_1.config.modules[found.modul].split("?")[1];
                     var code = await this.loadFile(mapname, context);

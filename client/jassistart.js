@@ -328,6 +328,7 @@ class JassijsStarter {
 
         var context = JSON.parse(JSON.stringify(require.s.contexts._.config))
         context.context = "server";
+        context.urlArgs="server=1";
         let serverRequire;
         if (data.runServerInBrowser){
             serverRequire = requirejs.config(context);

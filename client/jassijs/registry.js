@@ -409,7 +409,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1684441231903.9946,
+		"date": 1684495486704.761,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
