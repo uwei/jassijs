@@ -11,6 +11,9 @@ define("tests/registry",["require"], function(require) {
 	"tests/FileActionsTests.ts": {
 		"date": 1681570098013.4062
 	},
+	"tests/modul.ts": {
+		"date": 1684511828591.2788
+	},
 	"tests/remote/T.ts": {
 		"date": 1681570949861.1401,
 		"tests.remote.T": {}
@@ -136,7 +139,7 @@ define("tests/registry",["require"], function(require) {
 		"date": 1624999038000
 	},
 	"tests/RemoteModulTests.ts": {
-		"date": 1681570902833.9443
+		"date": 1684512326082.0193
 	},
 	"tests/ServerTests.ts": {
 		"date": 1656077954000
@@ -144,9 +147,6 @@ define("tests/registry",["require"], function(require) {
 	"tests/TestDialog.ts": {
 		"date": 1656079688000,
 		"tests/TestDialog": {}
-	},
-	"tests/TestReport.ts": {
-		"date": 1623864074000
 	}
 }
  }

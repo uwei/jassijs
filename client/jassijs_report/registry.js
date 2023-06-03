@@ -339,6 +339,12 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1656016430000,
 		"jassijs_report.RUnknown": {}
 	},
+	"jassijs_report/server/DoServerreport.ts": {
+		"date": 1684441369461.1033
+	},
+	"jassijs_report/server/TestServerreport.ts": {
+		"date": 1684501451913.4646
+	},
 	"jassijs_report/SimpleReportEditor.ts": {
 		"date": 1655637342000,
 		"jassi_report.SimpleReportEditor": {}
@@ -386,12 +392,6 @@ define("jassijs_report/registry",["require"], function(require) {
 			],
 			"@members": {}
 		}
-	},
-	"jassijs_report/server/TestServerreport.ts": {
-		"date": 1684501451913.4646
-	},
-	"jassijs_report/server/DoServerreport.ts": {
-		"date": 1684441369461.1033
 	}
 }
  }

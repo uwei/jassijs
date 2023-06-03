@@ -50,6 +50,7 @@ class JassiConnectionProperties {
  * @returns expressApp
  */
 export default function JassiServer(properties: JassiConnectionProperties = {}, expressApp = undefined) {
+
   let app = expressApp;
   updatePackage(); 
   if (app === undefined)

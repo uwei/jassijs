@@ -200,6 +200,19 @@ exports.default={
 			}
 		}
 	},
+	"de/remote/MyRemoteObject.ts": {
+		"date": 1683563215195.641,
+		"de.remote.MyRemoteObject": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"sayHello2": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
+	},
 	"de/remote/MyUser.ts": {
 		"date": 1656072680000,
 		"de.MyUser": {
@@ -217,19 +230,6 @@ exports.default={
 				},
 				"age": {
 					"Column": []
-				}
-			}
-		}
-	},
-	"de/remote/MyRemoteObject.ts": {
-		"date": 1683563215195.641,
-		"de.remote.MyRemoteObject": {
-			"@members": {
-				"sayHello": {
-					"ValidateFunctionParameter": []
-				},
-				"sayHello2": {
-					"ValidateFunctionParameter": []
 				}
 			}
 		}

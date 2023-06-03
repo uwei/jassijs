@@ -1,22 +1,3 @@
-declare module "tests/BigDataTest" {
-    export function test2(): any;
-}
-declare module "tests/DBTests" {
-    import { Test } from "jassijs/remote/Test";
-    export function clearDB(test: Test): any;
-    export function insertSample(test: Test): any;
-    export function test(test: Test): any;
-}
-declare module "tests/FileActionsTests" {
-    import { Test } from "jassijs/remote/Test";
-    export function test(t: Test): any;
-}
-declare module "tests/modul" {
-    const _default: {
-        require: {};
-    };
-    export default _default;
-}
 declare module "tests/remote/T" {
     import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
     export class T extends RemoteObject {
@@ -69,24 +50,9 @@ declare module "tests/remote/TestOrderDetails" {
     }
     export function test(): any;
 }
-declare module "tests/RemoteModulTests" {
-    import { Test } from "jassijs/remote/Test";
-    export function test(teste: Test): any;
-}
-declare module "tests/ServerTests" {
-    import { Test } from "jassijs/remote/Test";
-    export function test(tests: Test): any;
-}
-declare module "tests/TestDialog" {
-    import { Button } from "jassijs/ui/Button";
-    import { Panel } from "jassijs/ui/Panel";
-    type Me = {
-        button?: Button;
+declare module "tests/modul" {
+    const _default: {
+        require: {};
     };
-    export class TestDialog extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
-    }
-    export function test(): unknown;
+    export default _default;
 }
