@@ -269,6 +269,9 @@ define("tests/registry", ["require"], function (require) {
             "tests/FileActionsTests.ts": {
                 "date": 1681570098013.4062
             },
+            "tests/modul.ts": {
+                "date": 1684511828591.2788
+            },
             "tests/remote/T.ts": {
                 "date": 1681570949861.1401,
                 "tests.remote.T": {}
@@ -402,9 +405,6 @@ define("tests/registry", ["require"], function (require) {
             "tests/TestDialog.ts": {
                 "date": 1656079688000,
                 "tests/TestDialog": {}
-            },
-            "tests/modul.ts": {
-                "date": 1684511828591.2788
             }
         }
     };
@@ -695,6 +695,9 @@ define("tests/registry", ["require"], function (require) {
             "tests/FileActionsTests.ts": {
                 "date": 1681570098013.4062
             },
+            "tests/modul.ts": {
+                "date": 1684511828591.2788
+            },
             "tests/remote/T.ts": {
                 "date": 1681570949861.1401,
                 "tests.remote.T": {}
@@ -828,9 +831,6 @@ define("tests/registry", ["require"], function (require) {
             "tests/TestDialog.ts": {
                 "date": 1656079688000,
                 "tests/TestDialog": {}
-            },
-            "tests/modul.ts": {
-                "date": 1684511828591.2788
             }
         }
     };

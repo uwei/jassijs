@@ -1613,6 +1613,9 @@ define("jassijs/registry", ["require"], function (require) {
                     "@members": {}
                 }
             },
+            "jassijs/server/Compile.ts": {
+                "date": 1684400486213.004
+            },
             "jassijs/server/DatabaseSchema.ts": {
                 "date": 1682241708158.535
             },
@@ -1654,10 +1657,13 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1684358272275.7686
             },
             "jassijs/server/Indexer.ts": {
-                "date": 1682806194944.4678
+                "date": 1684514738036.0193
             },
             "jassijs/server/Installserver.ts": {
                 "date": 1682930462690.898
+            },
+            "jassijs/server/LocalFS.ts": {
+                "date": 1684358614464.595
             },
             "jassijs/server/LocalProtocol.ts": {
                 "date": 1684358642243.9634
@@ -2538,12 +2544,6 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/util/Tools.ts": {
                 "date": 1657655420000,
                 "jassijs.util.Tools": {}
-            },
-            "jassijs/server/LocalFS.ts": {
-                "date": 1684358614464.595
-            },
-            "jassijs/server/Compile.ts": {
-                "date": 1684400486213.004
             }
         }
     };

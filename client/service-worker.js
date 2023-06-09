@@ -113,6 +113,9 @@ function getMimeType(filename) {
     type = "video/mp2t";
   if (filename.endsWith(".map"))
     type = "text/html; charset=utf-8";
+  if (filename.endsWith(".css"))
+    type = "text/css; charset=utf-8";
+    
   return type;
 }
 
