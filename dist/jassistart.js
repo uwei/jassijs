@@ -328,9 +328,12 @@ class JassijsStarter {
 
         var context = JSON.parse(JSON.stringify(require.s.contexts._.config))
         context.context = "server";
-        let serverRequire = requirejs.config(context);
-        if (data.runServerInBrowser)
+        context.urlArgs="server=1";
+        let serverRequire;
+        if (data.runServerInBrowser){
+            serverRequire = requirejs.config(context);
             await this.runContext(servermodules, serverRequire, "server", configtext, requirejs,localDir!==undefined);
+        }
         this.runContext(modules, requirejs, "_", configtext, serverRequire,localDir!==undefined);
 
 
