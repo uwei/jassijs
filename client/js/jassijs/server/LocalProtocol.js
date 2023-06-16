@@ -3,11 +3,11 @@ define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/S
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.localExec = exports.test = exports.messageReceived = void 0;
     async function messageReceived(param) {
-        var config = param.data;
+        var configm = param.data;
         var cookies = (0, js_cookie_1.getJSON)();
         var myRequest = {
             cookies,
-            rawBody: JSON.stringify(config.data),
+            rawBody: JSON.stringify(configm.data),
             user: {
                 isAdmin: true,
                 user: 1
@@ -15,7 +15,7 @@ define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/S
         };
         await (0, DoRemoteProtocol_1.remoteProtocol)(myRequest, {
             send(msg) {
-                navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: config.id, data: msg });
+                navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: configm.id, data: msg });
             }
         });
         /*  var debugservermethods = [];//["saveFiles", "dir"];//["dir"];//for testing run on server

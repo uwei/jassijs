@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Config", "./FS", "./LocalFS"], function (require, exports, Config_1, FS_1, LocalFS_1) {
+define(["require", "exports", "jassijs/remote/Config", "./FS", "./LocalFS", "./Reloader"], function (require, exports, Config_1, FS_1, LocalFS_1, Reloader_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.doNotReloadModule = exports.transpile = exports.reloadJSAll = exports.dozip = exports.myfs = exports.exists = exports.ts = void 0;
@@ -35,12 +35,13 @@ define(["require", "exports", "jassijs/remote/Config", "./FS", "./LocalFS"], fun
     }
     exports.dozip = dozip;
     async function reloadJSAll(filenames, afterUnload) {
-        var Reloader = await new Promise((resolve) => {
-            Config_1.config.clientrequire(["jassijs/util/Reloader"], r => {
+        return Reloader_1.Reloader.instance.reloadJSAll(filenames, afterUnload, true);
+        /*var Reloader=<any>await new Promise((resolve)=>{
+            config.clientrequire(["jassijs/util/Reloader"], r => {
                 resolve(r);
-            });
+            })
         });
-        return Reloader.Reloader.instance.reloadJSAll(filenames, afterUnload, true);
+        return Reloader.Reloader.instance.reloadJSAll(filenames, afterUnload,true);*/
     }
     exports.reloadJSAll = reloadJSAll;
     async function transpile(fileName, inServerdirectory = undefined) {

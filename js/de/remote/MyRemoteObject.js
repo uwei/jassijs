@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.MyRemoteObject = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
@@ -42,27 +41,27 @@ let MyRemoteObject = class MyRemoteObject extends RemoteObject_1.RemoteObject {
     }
 };
 __decorate([
-    __param(0, Validator_1.ValidateIsString()),
+    __param(0, (0, Validator_1.ValidateIsString)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MyRemoteObject.prototype, "tt", null);
 __decorate([
-    Validator_1.ValidateFunctionParameter(),
-    __param(0, Validator_1.ValidateIsString()),
+    (0, Validator_1.ValidateFunctionParameter)(),
+    __param(0, (0, Validator_1.ValidateIsString)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_a = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _a : Object]),
+    __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], MyRemoteObject.prototype, "sayHello", null);
 __decorate([
-    Validator_1.ValidateFunctionParameter(),
-    __param(0, Validator_1.ValidateIsString()),
+    (0, Validator_1.ValidateFunctionParameter)(),
+    __param(0, (0, Validator_1.ValidateIsString)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_b = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _b : Object]),
+    __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], MyRemoteObject, "sayHello2", null);
 MyRemoteObject = __decorate([
-    Registry_1.$Class("de.remote.MyRemoteObject")
+    (0, Registry_1.$Class)("de.remote.MyRemoteObject")
 ], MyRemoteObject);
 exports.MyRemoteObject = MyRemoteObject;
 async function test() {

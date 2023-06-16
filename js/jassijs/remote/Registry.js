@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.migrateModul = exports.Registry = exports.$register = exports.$Class = void 0;
+const Config_1 = require("jassijs/remote/Config");
 require("reflect-metadata");
-const Config_1 = require("./Config");
 function $Class(longclassname) {
     return function (pclass) {
         registry.register("$Class", pclass, longclassname);
@@ -258,16 +258,20 @@ class Registry {
             }
         }
         else { //on client
+            // var config=(await import("./Config")).config;
+            //   this.isServer=config.isServer;
             var all = {};
             var modules = Config_1.config.modules;
             var myrequire;
-            if (require.defined("jassijs/server/Installserver")) {
+            if (Config_1.config.isServer) {
+                //if(require.defined("jassijs/server/Installserver")){
                 myrequire = Config_1.config.serverrequire;
                 modules = Config_1.config.server.modules;
             }
             else {
                 myrequire = Config_1.config.clientrequire;
             }
+            this.isServer = Config_1.config.isServer;
             for (let modul in modules) {
                 if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
                     myrequire.undef(modul + "/registry");

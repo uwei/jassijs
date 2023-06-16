@@ -6,8 +6,10 @@ import { classes, JassiError } from "jassijs/remote/Classes";
 import { Context } from "jassijs/remote/RemoteObject";
 import { serverservices } from "jassijs/remote/Serverservice";
 
-export function remoteProtocol(request, response) {
+import { config } from "jassijs/remote/Config";
 
+export function remoteProtocol(request, response) {
+   
     execute(request, response);
 }
 async function checkSimulateUser(context: Context, request) {
@@ -50,7 +52,7 @@ async function execute(request, res) {
 }
 export async function _execute(protext: string, request, context: Context): Promise<string> {
     // await new Promise((resolve)=>{docls(request,response,resolve)});
-
+    var h=config;
     var RemoteProtocol = (await import("jassijs/remote/RemoteProtocol")).RemoteProtocol;
 
 

@@ -73,7 +73,7 @@ async function dozip(directoryname, serverdir = undefined) {
         fs.mkdirSync("./tmp");
     }
     let filename = directoryname.split("/")[directoryname.split("/").length - 1] + zipid++;
-    await zipFolder(root + "/" + directoryname, "./tmp/" + filename + ".zip");
+    await this.zipFolder(root + "/" + directoryname, "./tmp/" + filename + ".zip");
     var data = fs.readFileSync("./tmp/" + filename + ".zip"); //,'binary');
     fs.unlinkSync("./tmp/" + filename + ".zip");
     //let buff = new Buffer(data);
@@ -102,7 +102,7 @@ async function zipFolder(folder, outfile, parent = undefined) {
         }
     }
     if (isRoot) {
-        var d = await writeZip(parent, outfile);
+        var d = await this.writeZip(parent, outfile);
         return d;
     }
     return parent;

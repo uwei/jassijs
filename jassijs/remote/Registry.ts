@@ -1,9 +1,8 @@
 
+import { config } from "jassijs/remote/Config";
 import "reflect-metadata";
-import { config } from "./Config";
 
-
-
+ 
 export function $Class(longclassname: string): Function {
     return function (pclass) {
         registry.register("$Class", pclass, longclassname);
@@ -256,7 +255,6 @@ export class Registry {
         this.jsondata = { $Class: {} };
         this.jsondataMembers = {};
         var _this = this;
-
         var modultext = "";
         //@ts-ignore
         if (window?.document === undefined) { //on server
@@ -291,15 +289,19 @@ export class Registry {
             }
 
         } else { //on client
+           // var config=(await import("./Config")).config;
+         //   this.isServer=config.isServer;
             var all = {};
             var modules=config.modules;
             var myrequire;
-            if(require.defined("jassijs/server/Installserver")){
+            if(config.isServer){
+            //if(require.defined("jassijs/server/Installserver")){
                 myrequire=<any>config.serverrequire;
                 modules=config.server.modules;
             }else{
                 myrequire=<any>config.clientrequire;
             }
+            this.isServer=config.isServer;
             for (let modul in modules) {
                 if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
                     myrequire.undef(modul + "/registry");

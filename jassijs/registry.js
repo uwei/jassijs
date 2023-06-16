@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"jassijs/remote/Classes.ts": {
-		"date": 1682795551717.3792,
+		"date": 1686759602692.1987,
 		"jassijs.remote.JassiError": {},
 		"jassijs.remote.Classes": {}
 	},
@@ -56,7 +56,7 @@ exports.default={
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1682847812388.982
+		"date": 1686762488408.2798
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1655556866000,
@@ -487,13 +487,13 @@ exports.default={
 		"date": 1682701331180.3745
 	},
 	"jassijs/remote/Config.ts": {
-		"date": 1684360937483.7693
+		"date": 1686853236319.6326
 	},
 	"jassijs/server/NativeAdapter.ts": {
 		"date": 1684173749623.2202
 	},
 	"jassijs/server/FileTools.ts": {
-		"date": 1682792900059.5854
+		"date": 1686763429575.1462
 	},
 	"jassijs/server/Reloader.ts": {
 		"date": 1684435440280.355

@@ -1,7 +1,6 @@
 
 import registry from "jassijs/remote/Registry";
 
-
 @$Class("jassijs.remote.JassiError")
 export class JassiError extends Error{
     constructor(msg:string){
@@ -37,6 +36,8 @@ export class Classes {
      */
 
     async loadClass(classname: string) {
+
+        var config=(await import("./Config")).config;
         var cl = await registry.getJSONData("$Class", classname);
         if (cl === undefined) {
             try {

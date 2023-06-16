@@ -105,11 +105,32 @@ function syncRemoteFiles() {
 }
 exports.syncRemoteFiles = syncRemoteFiles;
 var modules = undefined;
+var runServerInBrowser = undefined;
 function staticfiles(req, res, next) {
     var path = new Filesystem_1.default().path;
     var modules = Config_1.config.server.modules;
     // console.log(req.path);
     let sfile = path + req.path;
+    /* if (req?.query?.server === "1") {
+         if (runServerInBrowser === undefined)
+             runServerInBrowser = JSON.parse(fs.readFileSync("./client/jassijs.json", "utf8")).runServerInBrowser;
+ 
+         var found = undefined;
+         for (var key in modules) {
+             if ((req.path.startsWith("/" + key + "/") || req.path.startsWith("/js/" + key)) && fs.existsSync("./" + req.path)) {
+                 found = "." + req.path;
+                 break;
+             }
+         }
+ 
+ 
+         if (found === undefined || runServerInBrowser !== true) {
+             console.log("not allowed");
+             next();
+             return;
+         } else
+             sfile = found;
+     }*/
     if (sfile.indexOf("Settings.ts") > -1) { //&&!passport.authenticate("jwt", { session: false })){
         next();
         return;

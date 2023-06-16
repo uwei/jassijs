@@ -8,13 +8,14 @@ import  {getJSON} from "js-cookie";
 import { remoteProtocol } from "jassijs/server/DoRemoteProtocol";
 
 
+
 export async function messageReceived(param) {
 
-    var config = param.data;
+    var configm = param.data;
     var cookies = getJSON();
     var myRequest = {
         cookies,
-        rawBody:JSON.stringify(config.data),
+        rawBody:JSON.stringify(configm.data),
         user: {
             isAdmin: true,
             user: 1
@@ -23,7 +24,7 @@ export async function messageReceived(param) {
     };
     await remoteProtocol(myRequest,{
         send(msg){
-            navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: config.id, data: msg });
+            navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: configm.id, data: msg });
         }
     });
   /*  var debugservermethods = [];//["saveFiles", "dir"];//["dir"];//for testing run on server

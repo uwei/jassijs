@@ -44,6 +44,7 @@ let Classes = class Classes {
      */
     async loadClass(classname) {
         var _a, _b;
+        var config = (await Promise.resolve().then(() => require("./Config"))).config;
         var cl = await Registry_1.default.getJSONData("$Class", classname);
         if (cl === undefined) {
             try {

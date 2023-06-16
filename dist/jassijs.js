@@ -1158,7 +1158,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1683648573373.3384
             },
             "jassijs/remote/Classes.ts": {
-                "date": 1682795551717.3792,
+                "date": 1686759602692.1987,
                 "jassijs.remote.JassiError": {},
                 "jassijs.remote.Classes": {}
             },
@@ -1167,7 +1167,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.ClientError": {}
             },
             "jassijs/remote/Config.ts": {
-                "date": 1684360937483.7693
+                "date": 1686853236319.6326
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
@@ -1217,7 +1217,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985414000
             },
             "jassijs/remote/Registry.ts": {
-                "date": 1682847812388.982
+                "date": 1686762488408.2798
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1655556866000,
@@ -1634,7 +1634,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1683399517699.4033
             },
             "jassijs/server/DoRemoteProtocol.ts": {
-                "date": 1682802877109.1504
+                "date": 1686853327645.093
             },
             "jassijs/server/ext/EmpyDeclaration.ts": {
                 "date": 1682275347821.4524
@@ -1657,7 +1657,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1684358272275.7686
             },
             "jassijs/server/Indexer.ts": {
-                "date": 1684514738036.0193
+                "date": 1684515211873.0342
             },
             "jassijs/server/Installserver.ts": {
                 "date": 1682930462690.898
@@ -1666,7 +1666,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1684358614464.595
             },
             "jassijs/server/LocalProtocol.ts": {
-                "date": 1684358642243.9634
+                "date": 1686757418088.172
             },
             "jassijs/server/NativeAdapter.ts": {
                 "date": 1684176440317.4678
@@ -2584,6 +2584,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
          * @param classname - the class to load
          */
         async loadClass(classname) {
+            var config = (await new Promise((resolve_4, reject_4) => { require(["./Config"], resolve_4, reject_4); })).config;
             var cl = await Registry_9.default.getJSONData("$Class", classname);
             if (cl === undefined) {
                 try {
@@ -2593,7 +2594,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
                         await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                     }
                     else {
-                        await new Promise((resolve_4, reject_4) => { require([classname.replaceAll(".", "/")], resolve_4, reject_4); });
+                        await new Promise((resolve_5, reject_5) => { require([classname.replaceAll(".", "/")], resolve_5, reject_5); });
                     }
                 }
                 catch (err) {
@@ -2618,7 +2619,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
                     var imp = await Promise.resolve().then(() => require.main.require(file.replace(".ts", "")));
                 }
                 else {
-                    var imp = await new Promise((resolve_5, reject_5) => { require([file.replace(".ts", "")], resolve_5, reject_5); });
+                    var imp = await new Promise((resolve_6, reject_6) => { require([file.replace(".ts", "")], resolve_6, reject_6); });
                 }
             }
             return this.getClass(classname);
@@ -2715,15 +2716,16 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
                 this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
             }
             else {
-                var Server = (await new Promise((resolve_6, reject_6) => { require(["jassijs/remote/Server"], resolve_6, reject_6); })).Server;
+                var Server = (await new Promise((resolve_7, reject_7) => { require(["jassijs/remote/Server"], resolve_7, reject_7); })).Server;
                 var text = await new Server().loadFile("jassijs.json");
                 this.init(text);
             }
         }
         async saveJSON() {
-            var myfs = (await new Promise((resolve_7, reject_7) => { require(["jassijs/server/NativeAdapter"], resolve_7, reject_7); })).myfs;
-            await myfs.writeFile('./client/jassijs.json', JSON.stringify(this.jsonData, undefined, "\t"));
-            this.init(await myfs.readFile('./client/jassijs.json'));
+            var myfs = (await new Promise((resolve_8, reject_8) => { require(["jassijs/server/NativeAdapter"], resolve_8, reject_8); })).myfs;
+            var fname = './client/jassijs.json';
+            await myfs.writeFile(fname, JSON.stringify(this.jsonData, undefined, "\t"));
+            this.init(await myfs.readFile(fname));
         }
     }
     exports.Config = Config;
@@ -3535,7 +3537,7 @@ define("jassijs/remote/ObjectTransaction", ["require", "exports"], function (req
     }
     exports.ObjectTransaction = ObjectTransaction;
 });
-define("jassijs/remote/Registry", ["require", "exports", "./Config", "reflect-metadata"], function (require, exports, Config_1) {
+define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config", "reflect-metadata"], function (require, exports, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.migrateModul = exports.Registry = exports.$register = exports.$Class = void 0;
@@ -3767,8 +3769,8 @@ define("jassijs/remote/Registry", ["require", "exports", "./Config", "reflect-me
             //@ts-ignore
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
                 //@ts-ignore 
-                var fs = await new Promise((resolve_8, reject_8) => { require(['fs'], resolve_8, reject_8); });
-                var Filesystem = await new Promise((resolve_9, reject_9) => { require(["jassijs/server/Filesystem"], resolve_9, reject_9); });
+                var fs = await new Promise((resolve_9, reject_9) => { require(['fs'], resolve_9, reject_9); });
+                var Filesystem = await new Promise((resolve_10, reject_10) => { require(["jassijs/server/Filesystem"], resolve_10, reject_10); });
                 var modules = Config_1.config.server.modules;
                 for (let modul in modules) {
                     try {
@@ -3794,16 +3796,20 @@ define("jassijs/remote/Registry", ["require", "exports", "./Config", "reflect-me
                 }
             }
             else { //on client
+                // var config=(await import("./Config")).config;
+                //   this.isServer=config.isServer;
                 var all = {};
                 var modules = Config_1.config.modules;
                 var myrequire;
-                if (require.defined("jassijs/server/Installserver")) {
+                if (Config_1.config.isServer) {
+                    //if(require.defined("jassijs/server/Installserver")){
                     myrequire = Config_1.config.serverrequire;
                     modules = Config_1.config.server.modules;
                 }
                 else {
                     myrequire = Config_1.config.clientrequire;
                 }
+                this.isServer = Config_1.config.isServer;
                 for (let modul in modules) {
                     if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
                         myrequire.undef(modul + "/registry");
@@ -4071,12 +4077,12 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
             });
         }
         static async simulateUser(user = undefined, password = undefined) {
-            var rights = (await new Promise((resolve_10, reject_10) => { require(["jassijs/remote/security/Rights"], resolve_10, reject_10); })).default;
+            var rights = (await new Promise((resolve_11, reject_11) => { require(["jassijs/remote/security/Rights"], resolve_11, reject_11); })).default;
             //	if(await rights.isAdmin()){
             //		throw new Error("not an admin")
             //	}
             //@ts-ignore
-            var Cookies = (await new Promise((resolve_11, reject_11) => { require(["jassijs/util/Cookies"], resolve_11, reject_11); })).Cookies;
+            var Cookies = (await new Promise((resolve_12, reject_12) => { require(["jassijs/util/Cookies"], resolve_12, reject_12); })).Cookies;
             if (user === undefined) {
                 Cookies.remove("simulateUser", {});
                 Cookies.remove("simulateUserPassword", {});
@@ -4129,7 +4135,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                 if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                     redirect = new Promise((resolve) => {
                         //@ts-ignore
-                        new Promise((resolve_12, reject_12) => { require(["jassijs/base/LoginDialog"], resolve_12, reject_12); }).then((lib) => {
+                        new Promise((resolve_13, reject_13) => { require(["jassijs/base/LoginDialog"], resolve_13, reject_13); }).then((lib) => {
                             lib.doAfterLogin(resolve, _this);
                         });
                     });
@@ -4783,7 +4789,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
                 if (res === "") {
                     //@ts-ignore
-                    new Promise((resolve_13, reject_13) => { require(["jassijs/ui/Notify"], resolve_13, reject_13); }).then((el) => {
+                    new Promise((resolve_14, reject_14) => { require(["jassijs/ui/Notify"], resolve_14, reject_14); }).then((el) => {
                         el.notify(fileName + " saved", "info", { position: "bottom right" });
                     });
                     //if (!fromServerdirectory) {
@@ -4794,7 +4800,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 }
                 else {
                     //@ts-ignore
-                    new Promise((resolve_14, reject_14) => { require(["jassijs/ui/Notify"], resolve_14, reject_14); }).then((el) => {
+                    new Promise((resolve_15, reject_15) => { require(["jassijs/ui/Notify"], resolve_15, reject_15); }).then((el) => {
                         el.notify(fileName + " not saved", "error", { position: "bottom right" });
                     });
                     throw new Classes_13.JassiError(res);
@@ -4839,7 +4845,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     throw new Classes_13.JassiError("only admins can delete");
                 }
                 //@ts-ignore
-                var test = (await new Promise((resolve_15, reject_15) => { require([name.replaceAll("$serverside/", "")], resolve_15, reject_15); })).test;
+                var test = (await new Promise((resolve_16, reject_16) => { require([name.replaceAll("$serverside/", "")], resolve_16, reject_16); })).test;
                 var ret;
                 if (test)
                     ret = await test();
@@ -5543,7 +5549,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
             else {
                 //@ts-ignore
                 //@ts-ignore
-                var ObjectTransaction = (await new Promise((resolve_16, reject_16) => { require(["jassijs/remote/ObjectTransaction"], resolve_16, reject_16); })).ObjectTransaction;
+                var ObjectTransaction = (await new Promise((resolve_17, reject_17) => { require(["jassijs/remote/ObjectTransaction"], resolve_17, reject_17); })).ObjectTransaction;
                 var ot = new ObjectTransaction();
                 ot.statements = [];
                 let ret = [];
@@ -5564,7 +5570,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
         }
         async doServerStatement(statements, ot /*:ObjectTransaction*/, num, context) {
             //@ts-ignore
-            var _execute = (await new Promise((resolve_17, reject_17) => { require(["jassijs/server/DoRemoteProtocol"], resolve_17, reject_17); }))._execute;
+            var _execute = (await new Promise((resolve_18, reject_18) => { require(["jassijs/server/DoRemoteProtocol"], resolve_18, reject_18); }))._execute;
             var _this = this;
             var newcontext = {};
             Object.assign(newcontext, context);
@@ -6374,7 +6380,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
     ], Button);
     exports.Button = Button;
     async function test() {
-        var Panel = (await (new Promise((resolve_18, reject_18) => { require(["jassijs/ui/Panel"], resolve_18, reject_18); }))).Panel;
+        var Panel = (await (new Promise((resolve_19, reject_19) => { require(["jassijs/ui/Panel"], resolve_19, reject_19); }))).Panel;
         var pan = new Panel();
         var but = new Button();
         but.text = "Hallo";
@@ -10411,7 +10417,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
     exports.ObjectChooser = ObjectChooser;
     async function test() {
         // kk.o=0;
-        var User = (await new Promise((resolve_19, reject_19) => { require(["jassijs/remote/security/User"], resolve_19, reject_19); })).User;
+        var User = (await new Promise((resolve_20, reject_20) => { require(["jassijs/remote/security/User"], resolve_20, reject_20); })).User;
         var dlg = new ObjectChooser();
         dlg.items = "jassijs.security.User";
         dlg.value = (await User.findOne());
@@ -12831,7 +12837,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
                             ic.setAttribute("style", "display:none");
                     }
                 });
-                var file = (await new Promise((resolve_20, reject_20) => { require(["jassijs/modul"], resolve_20, reject_20); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
+                var file = (await new Promise((resolve_21, reject_21) => { require(["jassijs/modul"], resolve_21, reject_21); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
                 var text = await $.ajax({ method: "get", url: file, crossDomain: true, contentType: "text/plain" });
                 var all = text.split("}.");
                 var html = "";
@@ -15773,7 +15779,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Regist
             this.debugpoints = {};
         }
         async createTable() {
-            var Table = (await new Promise((resolve_21, reject_21) => { require(["jassijs/ui/Table"], resolve_21, reject_21); })).Table;
+            var Table = (await new Promise((resolve_22, reject_22) => { require(["jassijs/ui/Table"], resolve_22, reject_22); })).Table;
             this.table = new Table({
                 dataTreeChildFunction: function (obj) {
                     var ret = [];
@@ -17436,7 +17442,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1683648573373.3384
             },
             "jassijs/remote/Classes.ts": {
-                "date": 1682795551717.3792,
+                "date": 1686759602692.1987,
                 "jassijs.remote.JassiError": {},
                 "jassijs.remote.Classes": {}
             },
@@ -17445,7 +17451,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.ClientError": {}
             },
             "jassijs/remote/Config.ts": {
-                "date": 1684360937483.7693
+                "date": 1686853236319.6326
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
@@ -17495,7 +17501,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985414000
             },
             "jassijs/remote/Registry.ts": {
-                "date": 1682847812388.982
+                "date": 1686762488408.2798
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1655556866000,

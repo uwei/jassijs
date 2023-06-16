@@ -33,8 +33,9 @@ define(["require", "exports"], function (require, exports) {
         }
         async saveJSON() {
             var myfs = (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/NativeAdapter"], resolve_2, reject_2); })).myfs;
-            await myfs.writeFile('./client/jassijs.json', JSON.stringify(this.jsonData, undefined, "\t"));
-            this.init(await myfs.readFile('./client/jassijs.json'));
+            var fname = './client/jassijs.json';
+            await myfs.writeFile(fname, JSON.stringify(this.jsonData, undefined, "\t"));
+            this.init(await myfs.readFile(fname));
         }
     }
     exports.Config = Config;

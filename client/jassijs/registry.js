@@ -56,7 +56,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1683648573373.3384
 	},
 	"jassijs/remote/Classes.ts": {
-		"date": 1682795551717.3792,
+		"date": 1686759602692.1987,
 		"jassijs.remote.JassiError": {},
 		"jassijs.remote.Classes": {}
 	},
@@ -65,7 +65,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.ClientError": {}
 	},
 	"jassijs/remote/Config.ts": {
-		"date": 1684360937483.7693
+		"date": 1686853236319.6326
 	},
 	"jassijs/remote/Database.ts": {
 		"date": 1655556796000,
@@ -115,7 +115,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1682847812388.982
+		"date": 1686762488408.2798
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1655556866000,
@@ -532,7 +532,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1683399517699.4033
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
-		"date": 1682802877109.1504
+		"date": 1686853327645.093
 	},
 	"jassijs/server/ext/EmpyDeclaration.ts": {
 		"date": 1682275347821.4524
@@ -564,10 +564,10 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1684358614464.595
 	},
 	"jassijs/server/LocalProtocol.ts": {
-		"date": 1684358642243.9634
+		"date": 1686757418088.172
 	},
 	"jassijs/server/NativeAdapter.ts": {
-		"date": 1684176440317.4678
+		"date": 1686927797632.6648
 	},
 	"jassijs/server/RegistryIndexer.ts": {
 		"date": 1682799790211.1238
@@ -1442,6 +1442,10 @@ define("jassijs/registry",["require"], function(require) {
 	"jassijs/util/Tools.ts": {
 		"date": 1657655420000,
 		"jassijs.util.Tools": {}
+	},
+	"jassijs/server/Reloader.ts": {
+		"date": 1686927694634.5686,
+		"jassijs.server.Reloader": {}
 	}
 }
  }

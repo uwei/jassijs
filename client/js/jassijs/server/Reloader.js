@@ -71,13 +71,14 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
         async reloadJS(fileName) {
             await this.reloadJSAll([fileName]);
         }
-        async reloadJSAll(fileNames, afterUnload = undefined) {
+        async reloadJSAll(fileNames, afterUnload = undefined, useServerRequire = false) {
             //classname->file
             var files = {};
             let allModules = {};
             var allfiles = [];
             for (let ff = 0; ff < fileNames.length; ff++) {
                 var fileName = fileNames[ff];
+                fileName = fileName.replace("$serverside/", "");
                 var fileNameBlank = fileName;
                 if (fileName.toLocaleLowerCase().endsWith("css")) {
                     /*var node=document.getElementById("-->"+fileName);
@@ -87,7 +88,7 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
                     jassijs.myRequire(fileName);
                     continue;
                 }
-                if (fileName.toLocaleLowerCase().endsWith("json")) {
+                if (fileName.toLocaleLowerCase().endsWith("json") || fileName.toLocaleLowerCase().endsWith("html")) {
                     continue;
                 }
                 if (fileNameBlank.endsWith(".js"))
@@ -154,7 +155,7 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
                 //save all modules
             }
             var myrequire;
-            if (require.defined("jassijs/server/Installserver")) {
+            if (require.defined("jassijs/server/Installserver") || useServerRequire) {
                 myrequire = Config_1.config.serverrequire;
             }
             else {
@@ -260,7 +261,7 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
-        (0, Registry_1.$Class)("jassijs.util.Reloader"),
+        (0, Registry_1.$Class)("jassijs.server.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
     exports.Reloader = Reloader;

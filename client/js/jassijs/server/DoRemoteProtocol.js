@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice"], function (require, exports, Registry_1, Classes_1, Serverservice_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Config"], function (require, exports, Registry_1, Classes_1, Serverservice_1, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports._execute = exports.remoteProtocol = void 0;
@@ -36,6 +36,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
     }
     async function _execute(protext, request, context) {
         // await new Promise((resolve)=>{docls(request,response,resolve)});
+        var h = Config_1.config;
         var RemoteProtocol = (await new Promise((resolve_3, reject_3) => { require(["jassijs/remote/RemoteProtocol"], resolve_3, reject_3); })).RemoteProtocol;
         var prot = new RemoteProtocol();
         var vdata = await prot.parse(protext);

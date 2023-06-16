@@ -104,11 +104,33 @@ export function syncRemoteFiles() {
     })
 }
 var modules = undefined;
+var runServerInBrowser = undefined;
 export function staticfiles(req, res, next) {
     var path = new Filesystem().path;
     var modules = config.server.modules;
     // console.log(req.path);
     let sfile = path + req.path;
+   /* if (req?.query?.server === "1") {
+        if (runServerInBrowser === undefined)
+            runServerInBrowser = JSON.parse(fs.readFileSync("./client/jassijs.json", "utf8")).runServerInBrowser;
+
+        var found = undefined;
+        for (var key in modules) {
+            if ((req.path.startsWith("/" + key + "/") || req.path.startsWith("/js/" + key)) && fs.existsSync("./" + req.path)) {
+                found = "." + req.path;
+                break;
+            }
+        }
+
+
+        if (found === undefined || runServerInBrowser !== true) {
+            console.log("not allowed");
+            next();
+            return;
+        } else
+            sfile = found;
+    }*/
+
     if (sfile.indexOf("Settings.ts") > -1) {//&&!passport.authenticate("jwt", { session: false })){
         next();
         return;
@@ -146,7 +168,7 @@ export function staticfiles(req, res, next) {
 }
 export function staticsecurefiles(req, res, next) {
     var path = new Filesystem().path;
-     modules = config.server.modules;
+    modules = config.server.modules;
     // console.log(req.path);
     let sfile = new Filesystem().path + req.path;
     if (sfile.indexOf("Settings.ts") > -1) {//&&!passport.authenticate("jwt", { session: false })){

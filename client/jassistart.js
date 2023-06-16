@@ -95,7 +95,7 @@ class JassijsStarter {
     async loadText(url) {
         return new Promise((resolve) => {
             let oReq = new XMLHttpRequest();
-            oReq.open("GET", url+"?3");
+            oReq.open("GET", url);
             oReq.onerror = () => {
                 resolve(undefined);
             };

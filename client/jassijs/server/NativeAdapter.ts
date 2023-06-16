@@ -4,6 +4,7 @@ import { Test } from "jassijs/remote/Test";
 
 import { FS, exists as fsexists } from "./FS";
 import { LocalFS,exists as lfsexists } from "./LocalFS";
+import { Reloader } from "./Reloader";
 
 //@ts-ignore
 config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
@@ -43,12 +44,13 @@ export async function dozip(directoryname: string, serverdir: boolean = undefine
 }
 
 export async function reloadJSAll(filenames: string[], afterUnload: () => {}) {
-    var Reloader=<any>await new Promise((resolve)=>{
+    return Reloader.instance.reloadJSAll(filenames, afterUnload,true);
+    /*var Reloader=<any>await new Promise((resolve)=>{
         config.clientrequire(["jassijs/util/Reloader"], r => {
             resolve(r);
         })
     });
-    return Reloader.Reloader.instance.reloadJSAll(filenames, afterUnload,true);
+    return Reloader.Reloader.instance.reloadJSAll(filenames, afterUnload,true);*/
 }
 
 export async function transpile(fileName: string, inServerdirectory: boolean = undefined) {
