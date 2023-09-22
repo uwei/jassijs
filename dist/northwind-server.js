@@ -12,7 +12,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/remote/Categories.ts": {
-                "date": 1681228125820.6907,
+                "date": 1681228126000,
                 "northwind.Categories": {
                     "$DBObject": [],
                     "@members": {
@@ -62,7 +62,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Customer.ts": {
-                "date": 1681125122612.413,
+                "date": 1681125124000,
                 "northwind.Customer": {
                     "$DBObject": [],
                     "@members": {
@@ -158,7 +158,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1681322812009.5984,
+                "date": 1681322814000,
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
@@ -368,7 +368,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/OrderDetails.ts": {
-                "date": 1681322820166.7048,
+                "date": 1681322822000,
                 "northwind.OrderDetails": {
                     "$DBObject": [],
                     "@members": {
@@ -427,7 +427,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1681322833004.22,
+                "date": 1681322834000,
                 "northwind.Orders": {
                     "$DBObject": [],
                     "@members": {
@@ -605,7 +605,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Products.ts": {
-                "date": 1681322711342.5818,
+                "date": 1681322712000,
                 "northwind.Products": {
                     "$DBObject": [],
                     "@members": {
@@ -723,7 +723,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Shippers.ts": {
-                "date": 1681236441210.0747,
+                "date": 1681236442000,
                 "northwind.Shippers": {
                     "$DBObject": [],
                     "@members": {
@@ -763,7 +763,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Suppliers.ts": {
-                "date": 1681236514329.6885,
+                "date": 1681236516000,
                 "northwind.Suppliers": {
                     "$DBObject": [],
                     "@members": {

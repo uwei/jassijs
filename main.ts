@@ -9,7 +9,7 @@ import { Compile } from "jassijs/server/Compile";
 new Compile().transpileModul("jassijs",true);
 new Compile().transpileModul("jassijs",false);
 new Compile().transpileModul("jassijs_editor",false);
-new Compile().transpileModul("jassijs_report",true;
+new Compile().transpileModul("jassijs_report",true);
 new Compile().transpileModul("jassijs_report",false);
 new Compile().transpileModul("demoreports",false);
 new Compile().transpileModul("northwind",true);

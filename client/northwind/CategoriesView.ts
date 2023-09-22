@@ -25,10 +25,11 @@ export class CategoriesView extends DBObjectView {
     declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
     declare value: Categories;
-    constructor() {
+    constructor(config) {
         super();
         // this.me = {}; //this is called in objectdialog
         this.layout(this.me);
+
     }
     get title() {
         return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
@@ -39,7 +40,7 @@ export class CategoriesView extends DBObjectView {
         me.name = new Textbox();
         me.description = new Textarea();
         me.panel1 = new Panel();
-        me.table1 = new Table();
+        me.table1 = new Table({data:this.value});
         this.me.main.config({ children: [
                 me.boxpanel1.config({
                     children: [
@@ -68,13 +69,16 @@ export class CategoriesView extends DBObjectView {
                 me.table1.config({
                     height: "100%",
                     bindItems: [me.databinder, "Products"],
-                    width: "100%"
+                    width: "100%",
+                    tooltip: "e"
                 })
             ] });
     }
 }
 export async function test() {
     var ret = new CategoriesView();
-    ret["value"] = <Categories>await Categories.findOne({ relations: ["*"] });
+    var data = <Categories>await Categories.findOne({ relations: ["*"] });
+    ret.config({ value: data });
+    //    ret["value"] = 
     return ret;
 }

@@ -54,7 +54,7 @@ async function createRegistry(modul, isServer, exclude, includeClientRegistry = 
         '  default: ' + text + "\n" +
         ' }\n' +
         '});';
-    if (!await (0, NativeAdapter_1.exists)("./tmp/" + modul))
+    if (!await NativeAdapter_1.exists("./tmp/" + modul))
         await NativeAdapter_1.myfs.mkdir("./tmp/" + modul, { recursive: true });
     var ret = "./tmp/" + modul + "/registry.js";
     await NativeAdapter_1.myfs.writeFile(ret, text);

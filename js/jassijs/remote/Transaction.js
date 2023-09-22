@@ -135,7 +135,7 @@ let Transaction = class Transaction extends RemoteObject_1.RemoteObject {
     }
 };
 Transaction = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.Transaction")
+    Registry_1.$Class("jassijs.remote.Transaction")
 ], Transaction);
 exports.Transaction = Transaction;
 //# sourceMappingURL=Transaction.js.map

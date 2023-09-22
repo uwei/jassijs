@@ -71,7 +71,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
         this.onfocus((e) => _this.focuscalled(e));
         // this.converter = undefined;
     }
-
+   
     config(config: TextboxConfig): Textbox {
         super.config(config);
         return this;
@@ -131,6 +131,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
         var v = value;
         if (this.converter)
             v = this.converter.objectToFormatedString(v);
+      
         this.dom.value = v === undefined ? "" : v;
     }
     @$Property({ type: "string" })

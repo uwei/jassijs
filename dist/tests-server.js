@@ -12,7 +12,7 @@ define("tests/registry", ["require"], function (require) {
     return {
         default: {
             "tests/remote/T.ts": {
-                "date": 1681570949861.1401,
+                "date": 1681570950000,
                 "tests.remote.T": {}
             },
             "tests/remote/TestBigData.ts": {

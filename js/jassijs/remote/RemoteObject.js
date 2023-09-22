@@ -62,7 +62,7 @@ let RemoteObject = class RemoteObject {
     }
 };
 RemoteObject = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.RemoteObject")
+    Registry_1.$Class("jassijs.remote.RemoteObject")
 ], RemoteObject);
 exports.RemoteObject = RemoteObject;
 //# sourceMappingURL=RemoteObject.js.map

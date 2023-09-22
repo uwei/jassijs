@@ -3,14 +3,14 @@ define("demo/registry",["require"], function(require) {
  return {
   default: {
 	"demo/DelTest.ts": {
-		"date": 1681563012791.259
+		"date": 1681563014000
 	},
 	"demo/Dialog.ts": {
 		"date": 1655851716000,
 		"demo/Dialog": {}
 	},
 	"demo/Dialog2.ts": {
-		"date": 1657715414000,
+		"date": 1695239901541.8835,
 		"demo/Dialog2": {}
 	},
 	"demo/EmptyDialog.ts": {
@@ -21,7 +21,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1634240084000
 	},
 	"demo/MemoryTest.ts": {
-		"date": 1681590022384.015
+		"date": 1681590024000
 	},
 	"demo/modul.ts": {
 		"date": 1612818334000
@@ -33,22 +33,22 @@ define("demo/registry",["require"], function(require) {
 		"date": 1656018452000
 	},
 	"demo/ReportInvoice.ts": {
-		"date": 1681590033016.9358,
+		"date": 1681590034000,
 		"demo.ReportInvoice": {}
 	},
 	"demo/ReportInvoice2.ts": {
-		"date": 1681590037723.6914,
+		"date": 1681590038000,
 		"demo.ReportInvoice": {}
 	},
 	"demo/ReportStyle.ts": {
-		"date": 1681590042799.431
+		"date": 1681590044000
 	},
 	"demo/StyleDialog.ts": {
 		"date": 1655556794000,
 		"demo/StyleDialog": {}
 	},
 	"demo/TableContextmenu.ts": {
-		"date": 1681590827947.2778
+		"date": 1681590828000
 	},
 	"demo/TestComponent.ts": {
 		"date": 1655843270000,
@@ -69,16 +69,16 @@ define("demo/registry",["require"], function(require) {
 		"demo.Testcontextmenu": {}
 	},
 	"demo/Testdatatable.ts": {
-		"date": 1681590287285.2383
+		"date": 1681590288000
 	},
 	"demo/Testdatatable1.ts": {
-		"date": 1681590296070.9636
+		"date": 1681590298000
 	},
 	"demo/Testdatatable2.ts": {
-		"date": 1681590305213.099
+		"date": 1681590306000
 	},
 	"demo/Testdatatable3.ts": {
-		"date": 1681590312663.8284
+		"date": 1681590314000
 	},
 	"demo/TestImage.ts": {
 		"date": 1633792454000
@@ -91,10 +91,10 @@ define("demo/registry",["require"], function(require) {
 		"demo.Testmenu": {}
 	},
 	"demo/TestProTable.ts": {
-		"date": 1681563005343.9316
+		"date": 1681563006000
 	},
 	"demo/Testtable.ts": {
-		"date": 1681590320376.6711
+		"date": 1681590322000
 	},
 	"demo/TestTree.ts": {
 		"date": 1655843318000,
@@ -108,7 +108,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1634384688000
 	},
 	"demo/TreeTable.ts": {
-		"date": 1681590899857.6982,
+		"date": 1681590900000,
 		"demo.TreeTable": {}
 	},
 	"demo/_test1.ts": {

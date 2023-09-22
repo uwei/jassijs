@@ -2,6 +2,7 @@
   "compilerOptions": { 
     "baseUrl": "./",
     "allowJs": true,
+    "jsx": "react",
     //"checkJs":false,
     "target": "es2017",
     "module": "amd",

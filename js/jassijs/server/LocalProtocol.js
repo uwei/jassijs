@@ -17,7 +17,7 @@ async function messageReceived(param) {
             user: 1
         }
     };
-    await (0, DoRemoteProtocol_1.remoteProtocol)(myRequest, {
+    await DoRemoteProtocol_1.remoteProtocol(myRequest, {
         send(msg) {
             navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: config.id, data: msg });
         }

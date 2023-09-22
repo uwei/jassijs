@@ -56,21 +56,21 @@ let ServerReport = ServerReport_1 = class ServerReport extends RemoteObject_1.Re
 };
 ServerReport.cacheLastParameter = {};
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], ServerReport, "getDesign", null);
 __decorate([
-    (0, Validator_1.ValidateFunctionParameter)(),
-    __param(0, (0, Validator_1.ValidateIsString)()),
+    Validator_1.ValidateFunctionParameter(),
+    __param(0, Validator_1.ValidateIsString()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], ServerReport, "getBase64", null);
 ServerReport = ServerReport_1 = __decorate([
-    (0, Registry_1.$Class)("jassijs_report.remote.ServerReport")
+    Registry_1.$Class("jassijs_report.remote.ServerReport")
 ], ServerReport);
 exports.ServerReport = ServerReport;
 async function test() {

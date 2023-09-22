@@ -60,6 +60,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 "baseUrl": "./",
                 "module": monaco.languages.typescript.ModuleKind.AMD,
                 "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
+                jsx: monaco.languages.typescript.JsxEmit.React,
                 typeRoots: ["./node_modules/@types"],
                 rootDir: "./",
                 "sourceMap": true,
@@ -416,6 +417,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
         outDir: "./js",
         allowJs: true,
         moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
+        jsx: monaco.languages.typescript.JsxEmit.React,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
         typeRoots: ["./node_modules/@types"]

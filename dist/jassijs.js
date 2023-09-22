@@ -1109,7 +1109,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.ActionNode": {}
             },
             "jassijs/base/Actions.ts": {
-                "date": 1681570166877.989,
+                "date": 1681570168000,
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/CurrentSettings.ts": {
@@ -1122,7 +1122,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655549184000
             },
             "jassijs/base/LoginDialog.ts": {
-                "date": 1683051934903.0696
+                "date": 1683051936000
             },
             "jassijs/base/PropertyEditorService.ts": {
                 "date": 1657571268000,
@@ -1149,16 +1149,16 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657656778000
             },
             "jassijs/ext/tabulator.ts": {
-                "date": 1683657411531.5576
+                "date": 1683657412000
             },
             "jassijs/ext/tinymce.ts": {
                 "date": 1657658562000
             },
             "jassijs/modul.ts": {
-                "date": 1683648573373.3384
+                "date": 1683648574000
             },
             "jassijs/remote/Classes.ts": {
-                "date": 1686759602692.1987,
+                "date": 1686759604000,
                 "jassijs.remote.JassiError": {},
                 "jassijs.remote.Classes": {}
             },
@@ -1167,14 +1167,14 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.ClientError": {}
             },
             "jassijs/remote/Config.ts": {
-                "date": 1686853236319.6326
+                "date": 1686853238000
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
                 "jassijs.remote.Database": {}
             },
             "jassijs/remote/DatabaseTools.ts": {
-                "date": 1681309880654.3965,
+                "date": 1681309882000,
                 "jassijs.remote.DatabaseTools": {
                     "@members": {
                         "runSQL": {
@@ -1188,7 +1188,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.DBArray": {}
             },
             "jassijs/remote/DBObject.ts": {
-                "date": 1681317354018.0388,
+                "date": 1681317356000,
                 "jassijs.remote.DBObject": {}
             },
             "jassijs/remote/DBObjectQuery.ts": {
@@ -1205,19 +1205,19 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985410000
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1682794538158.105
+                "date": 1682794540000
             },
             "jassijs/remote/jassijsGlobal.ts": {
                 "date": 1655549782000
             },
             "jassijs/remote/Modules.ts": {
-                "date": 1682799474543.8716
+                "date": 1682799476000
             },
             "jassijs/remote/ObjectTransaction.ts": {
                 "date": 1622985414000
             },
             "jassijs/remote/Registry.ts": {
-                "date": 1686762488408.2798
+                "date": 1686762490000
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1655556866000,
@@ -1228,7 +1228,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.RemoteProtocol": {}
             },
             "jassijs/remote/security/Group.ts": {
-                "date": 1682888734579.9475,
+                "date": 1682888736000,
                 "jassijs.security.Group": {
                     "$DBObject": [
                         {
@@ -1290,7 +1290,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/ParentRight.ts": {
-                "date": 1681581396308.1873,
+                "date": 1681581398000,
                 "jassijs.security.ParentRight": {
                     "$DBObject": [
                         {
@@ -1378,7 +1378,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/Right.ts": {
-                "date": 1681322767134.66,
+                "date": 1681322768000,
                 "jassijs.security.Right": {
                     "$DBObject": [
                         {
@@ -1418,7 +1418,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.security.Rights": {}
             },
             "jassijs/remote/security/Setting.ts": {
-                "date": 1681316435162.0532,
+                "date": 1681316436000,
                 "jassijs.security.Setting": {
                     "$DBObject": [
                         {
@@ -1450,7 +1450,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/User.ts": {
-                "date": 1681329602964.0217,
+                "date": 1681329604000,
                 "jassijs.security.User": {
                     "$DBObject": [
                         {
@@ -1511,7 +1511,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1684495486704.761,
+                "date": 1684495488000,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -1557,10 +1557,10 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Serverservice.ts": {
-                "date": 1682715263974.073
+                "date": 1682715264000
             },
             "jassijs/remote/Settings.ts": {
-                "date": 1681315774170.6409,
+                "date": 1681315776000,
                 "jassijs.remote.Settings": {
                     "@members": {
                         "remove": {
@@ -1584,10 +1584,10 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Transaction": {}
             },
             "jassijs/remote/Validator.ts": {
-                "date": 1681322647267.7717
+                "date": 1681322648000
             },
             "jassijs/security/GroupView.ts": {
-                "date": 1681328190943.8904,
+                "date": 1681328192000,
                 "jassijs/security/GroupView": {
                     "$DBObjectView": [
                         {
@@ -1600,7 +1600,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/security/UserView.ts": {
-                "date": 1681330005862.2002,
+                "date": 1681330006000,
                 "jassijs/security/UserView": {
                     "$DBObjectView": [
                         {
@@ -1614,13 +1614,13 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/Compile.ts": {
-                "date": 1684400486213.004
+                "date": 1684400488000
             },
             "jassijs/server/DatabaseSchema.ts": {
-                "date": 1682241708158.535
+                "date": 1682241710000
             },
             "jassijs/server/DBManager.ts": {
-                "date": 1682710550782.2158,
+                "date": 1682710552000,
                 "jassijs/server/DBManager": {
                     "$Serverservice": [
                         {
@@ -1631,19 +1631,19 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/DBManagerExt.ts": {
-                "date": 1683399517699.4033
+                "date": 1683399518000
             },
             "jassijs/server/DoRemoteProtocol.ts": {
-                "date": 1686853327645.093
+                "date": 1686853328000
             },
             "jassijs/server/ext/EmpyDeclaration.ts": {
-                "date": 1682275347821.4524
+                "date": 1682275348000
             },
             "jassijs/server/ext/jszip.ts": {
                 "date": 1657714030000
             },
             "jassijs/server/Filesystem.ts": {
-                "date": 1684401440778.645,
+                "date": 1684401442000,
                 "jassijs.server.Filesystem": {
                     "$Serverservice": [
                         {
@@ -1654,25 +1654,25 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/FS.ts": {
-                "date": 1684358272275.7686
+                "date": 1684358274000
             },
             "jassijs/server/Indexer.ts": {
-                "date": 1684515211873.0342
+                "date": 1684515212000
             },
             "jassijs/server/Installserver.ts": {
-                "date": 1682930462690.898
+                "date": 1682930464000
             },
             "jassijs/server/LocalFS.ts": {
-                "date": 1684358614464.595
+                "date": 1684358616000
             },
             "jassijs/server/LocalProtocol.ts": {
-                "date": 1686757418088.172
+                "date": 1686757420000
             },
             "jassijs/server/NativeAdapter.ts": {
-                "date": 1684176440317.4678
+                "date": 1686927798000
             },
             "jassijs/server/RegistryIndexer.ts": {
-                "date": 1682799790211.1238
+                "date": 1682799792000
             },
             "jassijs/server/Testuser.ts": {
                 "date": 1655556794000,
@@ -1692,7 +1692,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/TypeORMListener.ts": {
-                "date": 1682885924481.5344,
+                "date": 1682885926000,
                 "jassijs.server.TypeORMListener": {
                     "EventSubscriber": []
                 }
@@ -1768,7 +1768,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1664898174000,
+                "date": 1695327921869.2827,
                 "jassijs.ui.Component": {
                     "@members": {}
                 }
@@ -1778,11 +1778,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1683645500298.757,
+                "date": 1683645502000,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1684403125221.828,
+                "date": 1684403126000,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -1797,7 +1797,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/converters/DateTimeConverter.ts": {
-                "date": 1681559012450.2312,
+                "date": 1681559014000,
                 "jassijs.ui.converters.DateTimeConverterProperies": {
                     "@members": {}
                 },
@@ -1884,7 +1884,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Databinder.ts": {
-                "date": 1681560836784.5227,
+                "date": 1681560838000,
                 "jassijs.ui.Databinder": {
                     "$UIComponent": [
                         {
@@ -1895,13 +1895,13 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DataComponent.ts": {
-                "date": 1655843336000,
+                "date": 1695242062430.286,
                 "jassijs.ui.DataComponent": {
                     "@members": {}
                 }
             },
             "jassijs/ui/DBObjectDialog.ts": {
-                "date": 1681562925403.3213,
+                "date": 1681562926000,
                 "jassijs.ui.DBObjectDialog": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1985,7 +1985,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1681559039604.8079,
+                "date": 1681559040000,
                 "jassijs/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -2008,7 +2008,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DesignDummy": {}
             },
             "jassijs/ui/DockingContainer.ts": {
-                "date": 1681513933776.4065,
+                "date": 1681513934000,
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/HTMLEditorPanel.ts": {
@@ -2086,7 +2086,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655585212000
             },
             "jassijs/ui/ObjectChooser.ts": {
-                "date": 1681553936016.134,
+                "date": 1681553938000,
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -2107,7 +2107,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1683645539963.3816,
+                "date": 1683645540000,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {}
                 },
@@ -2136,7 +2136,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1684400196837.17,
+                "date": 1695319969067.791,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {}
@@ -2330,7 +2330,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/PropertyEditors/TableColumnImport": {}
             },
             "jassijs/ui/Repeater.ts": {
-                "date": 1681564938694.8254,
+                "date": 1681564940000,
                 "jassijs.ui.RepeaterDesignPanel": {
                     "$UIComponent": [
                         {
@@ -2377,7 +2377,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/SettingsDialog.ts": {
-                "date": 1681570599588.5818,
+                "date": 1681570600000,
                 "jassijs.ui.SettingsObject": {},
                 "jassijs.ui.SettingsDialog": {
                     "$ActionProvider": [
@@ -2408,7 +2408,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1683658583312.6,
+                "date": 1695241273271.6812,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -2447,7 +2447,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1657920924000,
+                "date": 1695237619068.785,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -2506,10 +2506,10 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.VariablePanel": {}
             },
             "jassijs/util/Cookies.ts": {
-                "date": 1682364418785.7334
+                "date": 1682364420000
             },
             "jassijs/util/CSVImport.ts": {
-                "date": 1681562975085.0842,
+                "date": 1681562976000,
                 "jassijs.util.CSVImport": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2534,7 +2534,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1684441724016.6287,
+                "date": 1684441726000,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {
@@ -2544,6 +2544,10 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/util/Tools.ts": {
                 "date": 1657655420000,
                 "jassijs.util.Tools": {}
+            },
+            "jassijs/server/Reloader.ts": {
+                "date": 1686927696000,
+                "jassijs.server.Reloader": {}
             }
         }
     };
@@ -6523,6 +6527,9 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
+    //vergleichen
+    //jeder bekommt componentid
+    //gehe durch baum wenn dom_component fehlt, dann ist kopiert und muss mit id von componentid gerenderd werden
     class UIComponentProperties {
     }
     exports.UIComponentProperties = UIComponentProperties;
@@ -6561,7 +6568,13 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                 this.dom._this = this;
             }
         }
+        rerender() {
+            var alt = this.dom;
+            this.init(this.lastinit, { replaceNode: this.dom });
+            this.config(this.lastconfig);
+        }
         config(config) {
+            this.lastconfig = config;
             for (var key in config) {
                 if (typeof this[key] === 'function') {
                     this[key](config[key]);
@@ -6689,10 +6702,18 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
          * @paran {object} properties - properties to init
         */
         init(dom, properties = undefined) {
+            var _a;
+            this.lastinit = dom;
             if (typeof dom === "string")
                 dom = Component_7.createHTMLElement(dom);
             //is already attached
             if (this.domWrapper !== undefined) {
+                if ((_a = properties === null || properties === void 0 ? void 0 : properties.replaceNode) === null || _a === void 0 ? void 0 : _a.parentNode) {
+                    properties === null || properties === void 0 ? void 0 : properties.replaceNode.parentNode.replaceChild(dom, properties === null || properties === void 0 ? void 0 : properties.replaceNode);
+                    this.dom = dom;
+                    this.dom.setAttribute("id", properties === null || properties === void 0 ? void 0 : properties.replaceNode.getAttribute("id"));
+                    return;
+                }
                 if (this.domWrapper.parentNode !== undefined)
                     this.domWrapper.parentNode.removeChild(this.domWrapper);
                 this.domWrapper._this = undefined;
@@ -8525,6 +8546,13 @@ define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component"
             if (this._databinder !== undefined)
                 this._databinder.add(property, this, "onchange");
         }
+        /*  rerender(){
+               if (this._databinder !== undefined) {
+                  this._databinder.remove(this);
+                  this._databinder = undefined;
+              }
+              super.rerender();
+          }*/
         destroy() {
             if (this._databinder !== undefined) {
                 this._databinder.remove(this);
@@ -11410,8 +11438,16 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
             }
             if (typeof (this._value[property]) === "function")
                 this._value[property](value);
-            else
-                this._value[property] = value;
+            else {
+                // if(property==="value"){
+                console.log("rerender");
+                //this._value.lastconfig[property]=value;
+                //this._value.rerender();
+                /* }else{
+                                 this._value[property] = value;
+     
+                 }*/
+            }
         }
         /**
          * goto source position
@@ -14025,6 +14061,16 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         config(config) {
             super.config(config);
             return this;
+        }
+        rerender() {
+            this.table.destroy();
+            if (this._databinderItems !== undefined) {
+                this._databinderItems.remove(this);
+                this._databinderItems = undefined;
+            }
+            this.table = undefined;
+            super.rerender();
+            this.options = this._lastOptions;
         }
         set options(properties) {
             var _this = this;
@@ -17393,7 +17439,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.ActionNode": {}
             },
             "jassijs/base/Actions.ts": {
-                "date": 1681570166877.989,
+                "date": 1681570168000,
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/CurrentSettings.ts": {
@@ -17406,7 +17452,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655549184000
             },
             "jassijs/base/LoginDialog.ts": {
-                "date": 1683051934903.0696
+                "date": 1683051936000
             },
             "jassijs/base/PropertyEditorService.ts": {
                 "date": 1657571268000,
@@ -17433,16 +17479,16 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657656778000
             },
             "jassijs/ext/tabulator.ts": {
-                "date": 1683657411531.5576
+                "date": 1683657412000
             },
             "jassijs/ext/tinymce.ts": {
                 "date": 1657658562000
             },
             "jassijs/modul.ts": {
-                "date": 1683648573373.3384
+                "date": 1683648574000
             },
             "jassijs/remote/Classes.ts": {
-                "date": 1686759602692.1987,
+                "date": 1686759604000,
                 "jassijs.remote.JassiError": {},
                 "jassijs.remote.Classes": {}
             },
@@ -17451,14 +17497,14 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.ClientError": {}
             },
             "jassijs/remote/Config.ts": {
-                "date": 1686853236319.6326
+                "date": 1686853238000
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
                 "jassijs.remote.Database": {}
             },
             "jassijs/remote/DatabaseTools.ts": {
-                "date": 1681309880654.3965,
+                "date": 1681309882000,
                 "jassijs.remote.DatabaseTools": {
                     "@members": {
                         "runSQL": {
@@ -17472,7 +17518,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.DBArray": {}
             },
             "jassijs/remote/DBObject.ts": {
-                "date": 1681317354018.0388,
+                "date": 1681317356000,
                 "jassijs.remote.DBObject": {}
             },
             "jassijs/remote/DBObjectQuery.ts": {
@@ -17489,19 +17535,19 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985410000
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1682794538158.105
+                "date": 1682794540000
             },
             "jassijs/remote/jassijsGlobal.ts": {
                 "date": 1655549782000
             },
             "jassijs/remote/Modules.ts": {
-                "date": 1682799474543.8716
+                "date": 1682799476000
             },
             "jassijs/remote/ObjectTransaction.ts": {
                 "date": 1622985414000
             },
             "jassijs/remote/Registry.ts": {
-                "date": 1686762488408.2798
+                "date": 1686762490000
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1655556866000,
@@ -17512,7 +17558,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.RemoteProtocol": {}
             },
             "jassijs/remote/security/Group.ts": {
-                "date": 1682888734579.9475,
+                "date": 1682888736000,
                 "jassijs.security.Group": {
                     "$DBObject": [
                         {
@@ -17574,7 +17620,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/ParentRight.ts": {
-                "date": 1681581396308.1873,
+                "date": 1681581398000,
                 "jassijs.security.ParentRight": {
                     "$DBObject": [
                         {
@@ -17662,7 +17708,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/Right.ts": {
-                "date": 1681322767134.66,
+                "date": 1681322768000,
                 "jassijs.security.Right": {
                     "$DBObject": [
                         {
@@ -17702,7 +17748,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.security.Rights": {}
             },
             "jassijs/remote/security/Setting.ts": {
-                "date": 1681316435162.0532,
+                "date": 1681316436000,
                 "jassijs.security.Setting": {
                     "$DBObject": [
                         {
@@ -17734,7 +17780,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/User.ts": {
-                "date": 1681329602964.0217,
+                "date": 1681329604000,
                 "jassijs.security.User": {
                     "$DBObject": [
                         {
@@ -17795,7 +17841,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1684495486704.761,
+                "date": 1684495488000,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -17841,10 +17887,10 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Serverservice.ts": {
-                "date": 1682715263974.073
+                "date": 1682715264000
             },
             "jassijs/remote/Settings.ts": {
-                "date": 1681315774170.6409,
+                "date": 1681315776000,
                 "jassijs.remote.Settings": {
                     "@members": {
                         "remove": {
@@ -17868,10 +17914,10 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Transaction": {}
             },
             "jassijs/remote/Validator.ts": {
-                "date": 1681322647267.7717
+                "date": 1681322648000
             },
             "jassijs/security/GroupView.ts": {
-                "date": 1681328190943.8904,
+                "date": 1681328192000,
                 "jassijs/security/GroupView": {
                     "$DBObjectView": [
                         {
@@ -17884,7 +17930,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/security/UserView.ts": {
-                "date": 1681330005862.2002,
+                "date": 1681330006000,
                 "jassijs/security/UserView": {
                     "$DBObjectView": [
                         {
@@ -17968,7 +18014,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1664898174000,
+                "date": 1695327921869.2827,
                 "jassijs.ui.Component": {
                     "@members": {}
                 }
@@ -17978,11 +18024,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1683645500298.757,
+                "date": 1683645502000,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1684403125221.828,
+                "date": 1684403126000,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -17997,7 +18043,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/converters/DateTimeConverter.ts": {
-                "date": 1681559012450.2312,
+                "date": 1681559014000,
                 "jassijs.ui.converters.DateTimeConverterProperies": {
                     "@members": {}
                 },
@@ -18084,7 +18130,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Databinder.ts": {
-                "date": 1681560836784.5227,
+                "date": 1681560838000,
                 "jassijs.ui.Databinder": {
                     "$UIComponent": [
                         {
@@ -18095,13 +18141,13 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DataComponent.ts": {
-                "date": 1655843336000,
+                "date": 1695242062430.286,
                 "jassijs.ui.DataComponent": {
                     "@members": {}
                 }
             },
             "jassijs/ui/DBObjectDialog.ts": {
-                "date": 1681562925403.3213,
+                "date": 1681562926000,
                 "jassijs.ui.DBObjectDialog": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -18185,7 +18231,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1681559039604.8079,
+                "date": 1681559040000,
                 "jassijs/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -18208,7 +18254,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DesignDummy": {}
             },
             "jassijs/ui/DockingContainer.ts": {
-                "date": 1681513933776.4065,
+                "date": 1681513934000,
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/HTMLEditorPanel.ts": {
@@ -18286,7 +18332,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655585212000
             },
             "jassijs/ui/ObjectChooser.ts": {
-                "date": 1681553936016.134,
+                "date": 1681553938000,
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -18307,7 +18353,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1683645539963.3816,
+                "date": 1683645540000,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {}
                 },
@@ -18336,7 +18382,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1684400196837.17,
+                "date": 1695319969067.791,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {}
@@ -18530,7 +18576,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/PropertyEditors/TableColumnImport": {}
             },
             "jassijs/ui/Repeater.ts": {
-                "date": 1681564938694.8254,
+                "date": 1681564940000,
                 "jassijs.ui.RepeaterDesignPanel": {
                     "$UIComponent": [
                         {
@@ -18577,7 +18623,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/SettingsDialog.ts": {
-                "date": 1681570599588.5818,
+                "date": 1681570600000,
                 "jassijs.ui.SettingsObject": {},
                 "jassijs.ui.SettingsDialog": {
                     "$ActionProvider": [
@@ -18608,7 +18654,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1683658583312.6,
+                "date": 1695241273271.6812,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -18647,7 +18693,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1657920924000,
+                "date": 1695237619068.785,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -18706,10 +18752,10 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.VariablePanel": {}
             },
             "jassijs/util/Cookies.ts": {
-                "date": 1682364418785.7334
+                "date": 1682364420000
             },
             "jassijs/util/CSVImport.ts": {
-                "date": 1681562975085.0842,
+                "date": 1681562976000,
                 "jassijs.util.CSVImport": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -18734,7 +18780,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1684441724016.6287,
+                "date": 1684441726000,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {

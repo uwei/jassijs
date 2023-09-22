@@ -124,8 +124,8 @@ let TypeORMListener = class TypeORMListener {
     }
 };
 TypeORMListener = __decorate([
-    (0, typeorm_1.EventSubscriber)(),
-    (0, Registry_1.$Class)("jassijs.server.TypeORMListener")
+    typeorm_1.EventSubscriber(),
+    Registry_1.$Class("jassijs.server.TypeORMListener")
 ], TypeORMListener);
 exports.TypeORMListener = TypeORMListener;
 //# sourceMappingURL=TypeORMListener.js.map

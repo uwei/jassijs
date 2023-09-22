@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Extensions_1 = require("jassijs/remote/Extensions");
-Extensions_1.extensions.annotateMember("de.Kunde", "extField", String, (0, DatabaseSchema_1.Column)({ nullable: true }));
+Extensions_1.extensions.annotateMember("de.Kunde", "extField", String, DatabaseSchema_1.Column({ nullable: true }));
 //  de.Kunde.prototype.extFunc=function(){return 6;}
 let KundeExt = class KundeExt {
     get hello2() {
@@ -34,8 +34,8 @@ let KundeExt = class KundeExt {
     }
 };
 KundeExt = __decorate([
-    (0, Extensions_1.$Extension)("de.Kunde"),
-    (0, Registry_1.$Class)("de.KundeExt")
+    Extensions_1.$Extension("de.Kunde"),
+    Registry_1.$Class("de.KundeExt")
 ], KundeExt);
 //Hack for tabulator.js
 KundeExt.prototype.extFunc["match"] = function () { return false; };

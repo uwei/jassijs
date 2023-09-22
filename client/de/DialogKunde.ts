@@ -63,6 +63,7 @@ export class DialogKunde extends Panel {
         return this.value === undefined ? "Kunde" : "Kunde " + this.value.id;
     }
     layout(me: Me) {
+       
         var test = new Kunde();
         me.idvorname = new Textbox("red");
         me.idid = new Textbox();
@@ -83,7 +84,7 @@ export class DialogKunde extends Panel {
         me.binder.definePropertyFor(this, "value");
         me.idvorname.x = 5;
         me.idvorname.y = 35;
-        me.idvorname.bind=[me.binder, "vorname"];
+        me.idvorname.bind = [me.binder, "vorname"];
         me.idvorname.width = 145;
         me.idvorname.autocommit = false;
         me.idvorname.label = "Vorname";
@@ -91,24 +92,23 @@ export class DialogKunde extends Panel {
         this.add(me.idvorname);
         me.idid.x = 5;
         me.idid.y = 5;
-        me.idid.bind=[me.binder, "id"];
+        me.idid.bind = [me.binder, "id"];
         me.idid.width = 145;
         me.idid.converter = new NumberConverter();
         this.add(me.idid);
         me.idnachname.label = "Nachname";
         me.idnachname.y = 75;
         me.idnachname.x = 5;
-        me.idnachname.bind=[me.binder, "nachname"];
+        me.idnachname.bind = [me.binder, "nachname"];
         me.idnachname.width = 160;
         me.idnachname.autocommit = true;
         this.add(me.idnachname);
         me.idtable = new Table({
-            
             movableColumns: false
         });
-        me.idtable.table.on("cellDblClick",function (event: any, group: any) {
-                alert(8);
-            })
+        me.idtable.table.on("cellDblClick", function (event: any, group: any) {
+            alert(8);
+        });
         /**/
         me.idtable.width = 275;
         me.idtable.height = 195;
@@ -118,7 +118,7 @@ export class DialogKunde extends Panel {
         });
         me.idtable.x = 5;
         me.idtable.y = 160;
-        me.idtable.bind=[me.binder, "this"];
+        me.idtable.bind = [me.binder, "this"];
         me.idtable.autocommit = true;
         me.checkPanel = new Panel();
         me.checkPanel.height = 120;
@@ -151,7 +151,7 @@ export class DialogKunde extends Panel {
         this.add(me.binder);
         me.objectchooser1.x = 10;
         me.objectchooser1.y = 130;
-        me.objectchooser1.bind=[me.binder, "this"];
+        me.objectchooser1.bind = [me.binder, "this"];
         me.objectchooser1.items = "de.Kunde";
         me.objectchooser1.height = 25;
         me.objectchooser1.width = 25;
@@ -177,7 +177,7 @@ export class DialogKunde extends Panel {
         me.select1.x = 40;
         me.select1.y = 130;
         me.select1.width = 195;
-        me.select1.bind=[me.binder, "this"];
+        me.select1.bind = [me.binder, "this"];
         me.select1.display = "nachname";
         me.select1.autocommit = true;
         this.add(me.boxpanel1);
@@ -201,18 +201,18 @@ export class DialogKunde extends Panel {
             me.textbox3 = new Textbox();
             me.textbox2 = new Textbox();
             me.textbox2.width = 40;
-            me.textbox2.bind=[me.repeater1.design.databinder, "strasse"];
+            me.textbox2.bind = [me.repeater1.design.databinder, "strasse"];
             me.textbox3.width = "38";
-            me.textbox3.bind=[me.repeater1.design.databinder, "id"];
+            me.textbox3.bind = [me.repeater1.design.databinder, "id"];
             me.repeater1.design.add(me.textbox2);
             me.repeater1.design.add(me.textbox3);
             me.repeater1.design.add(me.button1);
         });
-        me.repeater1.bind=[me.binder, "rechnungen"];
+        me.repeater1.bind = [me.binder, "rechnungen"];
         me.repeater1.x = 410;
         me.repeater1.y = 175;
         me.repeater1.label = "Repeater";
-        me.textbox1.bind=[me.binder, "nachname"];
+        me.textbox1.bind = [me.binder, "nachname"];
         me.textbox1.height = 15;
         me.testcomponent1.me.button4.text = "kk2";
         this.setdata();

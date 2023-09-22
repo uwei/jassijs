@@ -36,7 +36,7 @@ let FileNode = class FileNode {
     }
 };
 FileNode = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.FileNode"),
+    Registry_1.$Class("jassijs.remote.FileNode"),
     __metadata("design:paramtypes", [String])
 ], FileNode);
 exports.FileNode = FileNode;

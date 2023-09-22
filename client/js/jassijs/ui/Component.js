@@ -15,6 +15,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
+    //vergleichen
+    //jeder bekommt componentid
+    //gehe durch baum wenn dom_component fehlt, dann ist kopiert und muss mit id von componentid gerenderd werden
     class UIComponentProperties {
     }
     exports.UIComponentProperties = UIComponentProperties;
@@ -53,7 +56,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.dom._this = this;
             }
         }
+        rerender() {
+            var alt = this.dom;
+            this.init(this.lastinit, { replaceNode: this.dom });
+            this.config(this.lastconfig);
+        }
         config(config) {
+            this.lastconfig = config;
             for (var key in config) {
                 if (typeof this[key] === 'function') {
                     this[key](config[key]);
@@ -181,10 +190,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
          * @paran {object} properties - properties to init
         */
         init(dom, properties = undefined) {
+            var _a;
+            this.lastinit = dom;
             if (typeof dom === "string")
                 dom = Component_1.createHTMLElement(dom);
             //is already attached
             if (this.domWrapper !== undefined) {
+                if ((_a = properties === null || properties === void 0 ? void 0 : properties.replaceNode) === null || _a === void 0 ? void 0 : _a.parentNode) {
+                    properties === null || properties === void 0 ? void 0 : properties.replaceNode.parentNode.replaceChild(dom, properties === null || properties === void 0 ? void 0 : properties.replaceNode);
+                    this.dom = dom;
+                    this.dom.setAttribute("id", properties === null || properties === void 0 ? void 0 : properties.replaceNode.getAttribute("id"));
+                    return;
+                }
                 if (this.domWrapper.parentNode !== undefined)
                     this.domWrapper.parentNode.removeChild(this.domWrapper);
                 this.domWrapper._this = undefined;

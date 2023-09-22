@@ -751,8 +751,16 @@ export class PropertyEditor extends Panel {
         }
         if (typeof (this._value[property]) === "function")
             this._value[property](value);
-        else
-            this._value[property] = value;
+        else{
+           // if(property==="value"){
+                console.log("rerender");
+                //this._value.lastconfig[property]=value;
+                //this._value.rerender();
+           /* }else{
+                            this._value[property] = value;
+
+            }*/
+        }
 
     }
     /**

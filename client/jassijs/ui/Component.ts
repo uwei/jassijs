@@ -7,8 +7,8 @@ import { CSSProperties } from "jassijs/ui/CSSProperties";
 
 //import { CSSProperties } from "jassijs/ui/Style";
 
-jassijs.includeCSSFile( "jassijs.css");
-jassijs.includeCSSFile( "materialdesignicons.min.css");
+jassijs.includeCSSFile("jassijs.css");
+jassijs.includeCSSFile("materialdesignicons.min.css");
 
 declare global {
     interface Element {
@@ -18,7 +18,9 @@ declare global {
 
 }
 
-
+//vergleichen
+//jeder bekommt componentid
+//gehe durch baum wenn dom_component fehlt, dann ist kopiert und muss mit id von componentid gerenderd werden
 
 export class UIComponentProperties {
 
@@ -45,6 +47,7 @@ export function $UIComponent(properties: UIComponentProperties): Function {
 export class ComponentCreateProperties {
     id?: string;
     noWrapper?: boolean;
+    replaceNode?: any;
 }
 
 export interface ComponentConfig {
@@ -138,7 +141,13 @@ export class Component implements ComponentConfig {
             this.dom._this = this;
         }
     }
+    rerender(){
+        var alt=this.dom;
+        this.init(this.lastinit,{replaceNode:this.dom});
+        this.config(this.lastconfig);
+    }
     config(config: ComponentConfig): Component {
+        this.lastconfig = config;
         for (var key in config) {
             if (typeof this[key] === 'function') {
                 this[key](config[key]);
@@ -230,7 +239,7 @@ export class Component implements ComponentConfig {
          };*/
         return handler;
     }
-    off(eventname: string, handler: EventListenerOrEventListenerObject=undefined) {
+    off(eventname: string, handler: EventListenerOrEventListenerObject = undefined) {
         this.dom.removeEventListener(eventname, handler);
     }
     private static cloneAttributes(target, source) {
@@ -256,13 +265,13 @@ export class Component implements ComponentConfig {
      * create an Element from an htmlstring e.g. createDom("<input/>")
      */
     static createHTMLElement(html: string): HTMLElement {
-        var lower=html.toLocaleLowerCase();
-        if(lower.startsWith("<td")||lower.startsWith("<tr")){
+        var lower = html.toLocaleLowerCase();
+        if (lower.startsWith("<td") || lower.startsWith("<tr")) {
             const template = document.createElement("template");
             template.innerHTML = html;
             const node = template.content.firstElementChild;
-            return<HTMLElement> node;
-        }else
+            return <HTMLElement>node;
+        } else
             return <HTMLElement>document.createRange().createContextualFragment(html).children[0];
     }
     /**
@@ -271,14 +280,24 @@ export class Component implements ComponentConfig {
      * @paran {object} properties - properties to init
     */
     init(dom: HTMLElement | string, properties: ComponentCreateProperties = undefined) {
+        this.lastinit = dom;
         if (typeof dom === "string")
             dom = Component.createHTMLElement(dom);
         //is already attached
         if (this.domWrapper !== undefined) {
+            if (properties?.replaceNode?.parentNode) {
+                properties?.replaceNode.parentNode.replaceChild(dom, properties?.replaceNode);
+                this.dom = dom;
+                
+                this.dom.setAttribute("id", properties?.replaceNode.getAttribute("id"));
+                return;
+            }
             if (this.domWrapper.parentNode !== undefined)
                 this.domWrapper.parentNode.removeChild(this.domWrapper);
             this.domWrapper._this = undefined;
         }
+
+
         if (this.dom !== undefined) {
             this.__dom._this = undefined;
         }
@@ -291,12 +310,12 @@ export class Component implements ComponentConfig {
         //   jassijs.componentSpy.unwatch(this);
         // }
         this.dom = dom;
-        this._id = "j"+registry.nextID();
+        this._id = "j" + registry.nextID();
         this.dom.setAttribute("id", this._id);
         /** @member {Object.<string,function>} - all event handlers*/
         this._eventHandler = {};
         //add _this to the dom element
-        var lid = "j"+registry.nextID();
+        var lid = "j" + registry.nextID();
         var st = 'style="display: inline-block"';
         if (this instanceof classes.getClass("jassijs.ui.Container")) {
             st = "";
@@ -383,17 +402,17 @@ export class Component implements ComponentConfig {
 
     @$Property()
     get hidden(): boolean {
-        return (this.dom.getAttribute("hidden")==="");
+        return (this.dom.getAttribute("hidden") === "");
     }
     set hidden(value: boolean) {
-        if(value)
-            this.dom.setAttribute("hidden","");
+        if (value)
+            this.dom.setAttribute("hidden", "");
         else
             this.dom.removeAttribute("hidden");
     }
 
 
-    set width(value: string|number) { //the Code
+    set width(value: string | number) { //the Code
         //  if($.isNumeric(value))
         if (value === undefined)
             value = "";
@@ -410,7 +429,7 @@ export class Component implements ComponentConfig {
         //  
     }
     @$Property({ type: "string" })
-    get width():string {
+    get width(): string {
         if (this.domWrapper.style.width !== undefined)
             return this.domWrapper.style.width;
         return this.dom.style.width.replace("px", "");

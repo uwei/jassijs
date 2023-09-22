@@ -3,10 +3,10 @@ define("de/registry",["require"], function(require) {
  return {
   default: {
 	"de/aa.ts": {
-		"date": 1682369481262.4434
+		"date": 1682369482000
 	},
 	"de/Dialog.ts": {
-		"date": 1655755202000,
+		"date": 1695394581342.2014,
 		"de/Dialog": {}
 	},
 	"de/Dialog2.ts": {
@@ -14,7 +14,7 @@ define("de/registry",["require"], function(require) {
 		"de/Dialog2": {}
 	},
 	"de/DialogKunde.ts": {
-		"date": 1681114662567.8584,
+		"date": 1695319709913.6096,
 		"de.DialogKunde": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -40,7 +40,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/KundeView.ts": {
-		"date": 1680709479414.7283,
+		"date": 1680709480000,
 		"de.KundeView": {
 			"$DBObjectView": [
 				{
@@ -69,7 +69,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/AR.ts": {
-		"date": 1681557287007.899,
+		"date": 1681557288000,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -116,7 +116,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1680947290781.214,
+		"date": 1680947292000,
 		"de.ARZeile": {
 			"$DBObject": [],
 			"@members": {
@@ -151,7 +151,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1684176927995.9285,
+		"date": 1684176928000,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -267,7 +267,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/MyRemoteObject.ts": {
-		"date": 1683563215195.641,
+		"date": 1683563216000,
 		"de.remote.MyRemoteObject": {
 			"@members": {
 				"sayHello": {
@@ -316,7 +316,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/test.ts": {
-		"date": 1681301004034.3408
+		"date": 1681301006000
 	},
 	"de/TestDialogBinder.ts": {
 		"date": 1655556796000,
@@ -333,10 +333,10 @@ define("de/registry",["require"], function(require) {
 		"date": 1656077196000
 	},
 	"de/TestProt.ts": {
-		"date": 1682190808386.7695
+		"date": 1682190810000
 	},
 	"de/TH.ts": {
-		"date": 1682186441294.5808
+		"date": 1682186442000
 	},
 	"de/TTDialog.ts": {
 		"date": 1655556796000,

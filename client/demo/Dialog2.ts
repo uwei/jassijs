@@ -7,34 +7,66 @@ import { StringConverter } from "jassijs/ui/converters/StringConverter";
 import { Textbox } from "jassijs/ui/Textbox";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
+import { Kunde } from "de/remote/Kunde";
 type Me = {
-    boxpanel?: BoxPanel;
+    boxpanel?: Panel;
     button?: Button;
     button2?: Button;
+    textbox?: Textbox;
+    table?: Table;
 };
 @$Class("demo/Dialog2")
 export class Dialog2 extends Panel {
     me: Me;
-    constructor() {
+    constructor(data) {
         super();
         this.me = {};
+        this.data = data;
         this.layout(this.me);
     }
     layout(me: Me) {
-        me.boxpanel = new BoxPanel();
+        me.boxpanel = new Panel();
         me.button = new Button();
         me.button2 = new Button();
+        me.textbox = new Textbox();
+        me.table = new Table({ data: this.data });
+        var _this = this;
         this.config({ children: [
                 me.boxpanel.config({
                     children: [
-                        me.button.config({ text: "button" }),
-                        me.button2.config({ text: "button" })
-                    ]
+                        me.button.config({ text: "button", x: 10, y: 50 }),
+                        me.button2.config({
+                            text: "buw",
+                            x: 70,
+                            y: 20,
+                            icon: "mdi mdi-account-box-outline",
+                            onclick: function (event) {
+                                alert(6);
+                            }
+                        }),
+                        me.textbox.config({ value: "ee", label: "s", x: 220, y: 10 }),
+                        me.table.config({
+                            x: 75,
+                            y: 70,
+                            width: 290,
+                            height: 120,
+                            label: "wwwsdwe",
+                            onblur: function (event) {
+                            },
+                            tooltip: "wes"
+                        })
+                    ],
+                    isAbsolute: true,
+                    height: 215
                 })
             ] });
     }
 }
+function kk() {
+    return "kko";
+}
 export async function test() {
-    var ret = new Dialog2();
+    var data = await Kunde.find();
+    var ret = new Dialog2(data);
     return ret;
 }

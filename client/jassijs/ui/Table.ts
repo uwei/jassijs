@@ -7,13 +7,13 @@ import { Textbox } from "jassijs/ui/Textbox";
 import { Calendar } from "jassijs/ui/Calendar";
 import { Databinder } from "jassijs/ui/Databinder";
 import { classes } from "jassijs/remote/Classes";
-import { Tabulator } from "tabulator-tables"; 
+import { Tabulator } from "tabulator-tables";
 import { DateTimeConverter, DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
-import { Numberformatter } from "jassijs/util/Numberformatter";   
+import { Numberformatter } from "jassijs/util/Numberformatter";
 export interface LazyLoadOption {
     classname: string;
     loadFunc: string;
-    pageSize?: number; 
+    pageSize?: number;
 }
 
 //@ts-ignore
@@ -22,22 +22,22 @@ export interface TableOptions extends Tabulator.Options {
     lazyLoad?: LazyLoadOption;
     items?: any[];
     columns?: MyColumnDefinition[];
-    [unknown:string]:any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
+    [unknown: string]: any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
 }
 //@ts-ignore
 export interface MyColumnDefinition extends Tabulator.ColumnDefinition {
     formatter?: MyFormatter;
     formatterParams?: MyFormatterParams;
-    editor?:MyEditor;
-    [unknown:string]:any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
+    editor?: MyEditor;
+    [unknown: string]: any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
 }
 export type MyFormatterParams = Tabulator.FormatterParams | {
     datefimeformat: DateTimeFormat;
     numberformat: "#.##0,00" | string;
-    [unknown:string]:any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
+    [unknown: string]: any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
 };
-export type MyEditor = Tabulator.Editor | "datetimeformat" | "numberformat"|any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
-export type MyFormatter = Tabulator.Formatter | "datetimeformat" | "numberformat"|any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
+export type MyEditor = Tabulator.Editor | "datetimeformat" | "numberformat" | any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
+export type MyFormatter = Tabulator.Formatter | "datetimeformat" | "numberformat" | any;//TODO hack if other modules use TableOptions then  the properties inTabulator.Options are unknown - how to I solve this?
 @$Class("jassijs.ui.TableEditorProperties")
 class TableEditorProperties {
     @$Property({ default: undefined })
@@ -101,6 +101,16 @@ export class Table extends DataComponent implements TableConfig {
         super.config(config);
         return this;
     }
+    rerender() {
+        this.table.destroy();
+           if (this._databinderItems !== undefined) {
+            this._databinderItems.remove(this);
+            this._databinderItems = undefined;
+        }
+        this.table = undefined;
+        super.rerender();
+        this.options = this._lastOptions;
+    }
     @$Property({ type: "json", componentType: "jassijs.ui.TableEditorProperties" })
     set options(properties: TableOptions) {
         var _this = this;
@@ -127,7 +137,7 @@ export class Table extends DataComponent implements TableConfig {
         if (properties.dataTreeChildField !== undefined)
             properties.dataTree = true;
         //if (properties.paginationSize !== undefined && properties.pagination == undefined)
-         //   properties.pagination = "local";
+        //   properties.pagination = "local";
         // if(properties.layoutColumnsOnNewData===undefined)
         //     properties.layoutColumnsOnNewData=true;
         if (properties.selectable === undefined)
@@ -663,7 +673,7 @@ Tabulator.extendModule("edit", "editors", {
     numberformat: function (cell, onRendered, success, cancel, editorParams) {
         var editor = document.createElement("input");
         var format = "yyyy-MM-dd";
-       // editor.setAttribute("type", "number");
+        // editor.setAttribute("type", "number");
 
         //create and style input
         editor.style.padding = "3px";
@@ -710,7 +720,7 @@ export async function test() {
         items: tabledata,
         columns: [
             { field: "id", title: "id" },
-            { field: "age", title: "age", formatter: "numberformat",formatterParams: { numberformat: "#.##0,00" }, editor: "numberformat" },
+            { field: "age", title: "age", formatter: "numberformat", formatterParams: { numberformat: "#.##0,00" }, editor: "numberformat" },
             { field: "name", title: "name", formatter: "buttonTick" },
             { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
         ]

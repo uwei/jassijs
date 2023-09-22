@@ -52,6 +52,13 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             if (this._databinder !== undefined)
                 this._databinder.add(property, this, "onchange");
         }
+        /*  rerender(){
+               if (this._databinder !== undefined) {
+                  this._databinder.remove(this);
+                  this._databinder = undefined;
+              }
+              super.rerender();
+          }*/
         destroy() {
             if (this._databinder !== undefined) {
                 this._databinder.remove(this);

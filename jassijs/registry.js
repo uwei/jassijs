@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"jassijs/remote/Classes.ts": {
-		"date": 1686759602692.1987,
+		"date": 1686759604000,
 		"jassijs.remote.JassiError": {},
 		"jassijs.remote.Classes": {}
 	},
@@ -16,7 +16,7 @@ exports.default={
 		"jassijs.remote.Database": {}
 	},
 	"jassijs/remote/DatabaseTools.ts": {
-		"date": 1681309880654.3965,
+		"date": 1681309882000,
 		"jassijs.remote.DatabaseTools": {
 			"@members": {
 				"runSQL": {
@@ -30,7 +30,7 @@ exports.default={
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1681317354018.0388,
+		"date": 1681317356000,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -47,7 +47,7 @@ exports.default={
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1682794538158.105
+		"date": 1682794540000
 	},
 	"jassijs/remote/JassijsGlobal.ts": {
 		"date": 1655549782000
@@ -56,7 +56,7 @@ exports.default={
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1686762488408.2798
+		"date": 1686762490000
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1655556866000,
@@ -67,7 +67,7 @@ exports.default={
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
-		"date": 1682888734579.9475,
+		"date": 1682888736000,
 		"jassijs.security.Group": {
 			"$DBObject": [
 				{
@@ -129,7 +129,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/ParentRight.ts": {
-		"date": 1681581396308.1873,
+		"date": 1681581398000,
 		"jassijs.security.ParentRight": {
 			"$DBObject": [
 				{
@@ -217,7 +217,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/Right.ts": {
-		"date": 1681322767134.66,
+		"date": 1681322768000,
 		"jassijs.security.Right": {
 			"$DBObject": [
 				{
@@ -257,7 +257,7 @@ exports.default={
 		"jassijs.security.Rights": {}
 	},
 	"jassijs/remote/security/Setting.ts": {
-		"date": 1681316435162.0532,
+		"date": 1681316436000,
 		"jassijs.security.Setting": {
 			"$DBObject": [
 				{
@@ -289,7 +289,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/User.ts": {
-		"date": 1681329602964.0217,
+		"date": 1681329604000,
 		"jassijs.security.User": {
 			"$DBObject": [
 				{
@@ -350,7 +350,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Settings.ts": {
-		"date": 1681315774170.6409,
+		"date": 1681315776000,
 		"jassijs.remote.Settings": {
 			"@members": {
 				"remove": {
@@ -374,10 +374,10 @@ exports.default={
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1684400486213.004
+		"date": 1684400488000
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1682710550782.2158,
+		"date": 1682710552000,
 		"jassijs/server/DBManager": {
 			"$Serverservice": [
 				{
@@ -388,10 +388,10 @@ exports.default={
 		}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
-		"date": 1682362433279.5454
+		"date": 1682362434000
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1684401440778.645,
+		"date": 1684401442000,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -402,22 +402,22 @@ exports.default={
 		}
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1684515211873.0342
+		"date": 1684515212000
 	},
 	"jassijs/server/JassiServer.ts": {
-		"date": 1684514486883.005
+		"date": 1684514488000
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
-		"date": 1680946666515.8162
+		"date": 1680946668000
 	},
 	"jassijs/server/PassportSetup.ts": {
-		"date": 1680946687665.4827
+		"date": 1680946688000
 	},
 	"jassijs/server/RawBody.ts": {
 		"date": 1654195782000
 	},
 	"jassijs/server/RegistryIndexer.ts": {
-		"date": 1682799790211.1238
+		"date": 1682799792000
 	},
 	"jassijs/server/Zip.ts": {
 		"date": 1622984046000
@@ -429,10 +429,10 @@ exports.default={
 		"date": 1611490792000
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1681322647267.7717
+		"date": 1681322648000
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1684495486704.761,
+		"date": 1684495488000,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
@@ -478,49 +478,49 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Serverservice.ts": {
-		"date": 1682715263974.073
+		"date": 1682715264000
 	},
 	"jassijs/index.d.ts": {
-		"date": 1681918735844.9463
+		"date": 1681918736000
 	},
 	"jassijs/server/UpdatePackage.ts": {
-		"date": 1682701331180.3745
+		"date": 1682701332000
 	},
 	"jassijs/remote/Config.ts": {
-		"date": 1686853236319.6326
+		"date": 1686853238000
 	},
 	"jassijs/server/NativeAdapter.ts": {
-		"date": 1684173749623.2202
+		"date": 1684173750000
 	},
 	"jassijs/server/FileTools.ts": {
-		"date": 1686763429575.1462
+		"date": 1686763430000
 	},
 	"jassijs/server/Reloader.ts": {
-		"date": 1684435440280.355
+		"date": 1684435442000
 	},
 	"jassijs/server/DBManagerExt.ts": {
-		"date": 1682717755128.099
+		"date": 1682717756000
 	},
 	"jassijs/server/TypeORMListener.ts": {
-		"date": 1682718172595.0825,
+		"date": 1682718174000,
 		"jassijs.server.TypeORMListener": {
 			"EventSubscriber": []
 		}
 	},
 	"jassijs/server/DatabaseSchema.ts": {
-		"date": 1682241708158.535
+		"date": 1682241710000
 	},
 	"jassijs/server/ext/EmpyDeclaration.ts": {
-		"date": 1682275347821.4524
+		"date": 1682275348000
 	},
 	"jassijs/server/ext/jszip.ts": {
 		"date": 1657714030000
 	},
 	"jassijs/server/Installserver.ts": {
-		"date": 1682880639293.302
+		"date": 1682880640000
 	},
 	"jassijs/server/LocalProtocol.ts": {
-		"date": 1682365334193.8733
+		"date": 1682365336000
 	},
 	"jassijs/server/Testuser.ts": {
 		"date": 1655556794000,
@@ -540,21 +540,21 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Modules.ts": {
-		"date": 1682799474543.8716
+		"date": 1682799476000
 	},
 	"jassijs/server/Cookies.ts": {
-		"date": 1682364418785.7334
+		"date": 1682364420000
 	},
 	"jassijs/server/CreatePackage.ts": {
-		"date": 1682971610774.3884
+		"date": 1682971612000
 	},
 	"jassijs/server/FS.ts": {
-		"date": 1682930344917.084
+		"date": 1682930346000
 	},
 	"jassijs/server/LocalFilesystem.ts": {
-		"date": 1683044686777.3557
+		"date": 1683044688000
 	},
 	"jassijs/server/LocalFS.ts": {
-		"date": 1683050189346.0103
+		"date": 1683050190000
 	}
 }

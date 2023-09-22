@@ -9,13 +9,13 @@ define("tests/registry",["require"], function(require) {
 		"date": 1624296652000
 	},
 	"tests/FileActionsTests.ts": {
-		"date": 1681570098013.4062
+		"date": 1681570100000
 	},
 	"tests/modul.ts": {
-		"date": 1684511828591.2788
+		"date": 1684511830000
 	},
 	"tests/remote/T.ts": {
-		"date": 1681570949861.1401,
+		"date": 1681570950000,
 		"tests.remote.T": {}
 	},
 	"tests/remote/TestBigData.ts": {
@@ -139,7 +139,7 @@ define("tests/registry",["require"], function(require) {
 		"date": 1624999038000
 	},
 	"tests/RemoteModulTests.ts": {
-		"date": 1684512326082.0193
+		"date": 1684512328000
 	},
 	"tests/ServerTests.ts": {
 		"date": 1656077954000

@@ -28,6 +28,7 @@ export class Typescript {
         outDir: "./js",
         allowJs: true,
         moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
+        jsx:monaco.languages.typescript.JsxEmit.React,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
         typeRoots: ["./node_modules/@types"]
@@ -84,6 +85,7 @@ export class Typescript {
             "baseUrl": "./",
             "module": monaco.languages.typescript.ModuleKind.AMD,
             "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
+            jsx:monaco.languages.typescript.JsxEmit.React,
             typeRoots: ["./node_modules/@types"],
             rootDir: "./",
             "sourceMap": true,

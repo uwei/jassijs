@@ -1,197 +1,201 @@
 "use strict";
+//synchronize-server-client
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Compile = void 0;
 //import ts = require('typescript');
-//import ts = require('typescript');
-const ts = require("typescript");
-const fs = require("fs");
+//import ts = require('typescript'); 
+const NativeAdapter_1 = require("jassijs/server/NativeAdapter");
 const Classes_1 = require("jassijs/remote/Classes");
-const Filesystem_1 = require("jassijs/server/Filesystem");
-var rpath = require('path');
 //var chokidar = require('chokidar');
-var path = "./../public_html";
-const formatHost = {
-    getCanonicalFileName: path => path,
-    getCurrentDirectory: ts.sys.getCurrentDirectory,
-    getNewLine: () => ts.sys.newLine
+/*var path = "./../public_html";
+const formatHost: ts.FormatDiagnosticsHost = {
+  getCanonicalFileName: path => path,
+  getCurrentDirectory: ts.sys.getCurrentDirectory,
+  getNewLine: () => ts.sys.newLine
 };
-var events = require('events');
+var events = require('events');*/
 /**
  * compile
  */
 class Compile {
+    //private static clientWatcherIsRunning: boolean = false;
+    //public static eventEmitter = new events.EventEmitter();
     constructor() {
         this.lastCompiledTSFiles = [];
     }
-    /*
-    test(response) {
-      const host: ts.ParseConfigFileHost = ts.sys as any;
-      // Fix after https://github.com/Microsoft/TypeScript/issues/18217
-      //host.onUnRecoverableConfigFileDiagnostic = printDiagnostic;
-      const parsedCmd = ts.getParsedCommandLineOfConfigFile(path + "/tsconfig.json", undefined, host);
-      const { options, fileNames } = parsedCmd;
-      var data = this.compile([path + "/jassijs/base/Registry.ts"], options);
-     
-      response.send(data);
-    }
-    compile(fileNames: string[], options: ts.CompilerOptions): string[] {
-      var ret = [];
-      let program = ts.createProgram(fileNames, options);
-      let emitResult = program.emit();
-  
-      let allDiagnostics = ts
-        .getPreEmitDiagnostics(program)
-        .concat(emitResult.diagnostics);
-  
-      allDiagnostics.forEach(diagnostic => {
-        if (diagnostic.file) {
-          let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
-            diagnostic.start!
-          );
-          let message = ts.flattenDiagnosticMessageText(
-            diagnostic.messageText,
-            "\n"
-          );
-          ret.push(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
-          // console.log(
-          // `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`
-          //);
-        } else {
-          ret.push(`${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`);
-          //        console.log(
-          //        `${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`
-          //    );
-        }
-      });
-  
-      let exitCode = emitResult.emitSkipped ? 1 : 0;
-      ret.push(`Process exiting with code '${exitCode}'.`);
-      //console.log(`Process exiting with code '${exitCode}'.`);
-      //process.exit(exitCode);
-      return ret;
-    }
-  
-    runWatcher() {
-      const configPath = ts.findConfigFile(
-        path + "/",
-        ts.sys.fileExists,
-        "tsconfig.json"
-      );
-      if (!configPath) {
-        throw new JassiError("Could not find a valid 'tsconfig.json'.");
-      }
-      const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
-      const host = ts.createWatchCompilerHost(
-        configPath,
-        {},
-        ts.sys,
-        createProgram,
-        this.reportDiagnostic.bind(this),
-        this.reportWatchStatusChanged.bind(this)
-      );
-  
-      const origCreateProgram = host.createProgram;
-      host.createProgram = (
-        rootNames: ReadonlyArray<string>,
-        options,
-        host,
-        oldProgram
-      ) => {
-        console.log("** We're about to create the program! **");
-        return origCreateProgram(rootNames, options, host, oldProgram);
-      };
-      const origPostProgramCreate = host.afterProgramCreate;
-      var test = host.trace;
-      //onWatchStatusChange
-      //readFile
-      //trace
-      host.trace = function (s: string) {
-        s = s;
-      }
-      host.afterProgramCreate = program => {
-        console.log("** We finished making the program! **");
-        origPostProgramCreate!(program);
-      };
-  
-      // `createWatchProgram` creates an initial program, watches files, and updates
-      // the program over time.
-      ts.createWatchProgram(host);
-    }
-    reportDiagnostic(diagnostic: ts.Diagnostic) {
-      console.error(
-        "Error",
-        diagnostic.code,
-        ":",
-        ts.flattenDiagnosticMessageText(
-          diagnostic.messageText,
-          formatHost.getNewLine()
-        )
-      );
-    }
-    checkNewCompiledFiles(response) {
-      var ret = { date: 0, files: [] };
-      ret.files = this.lastCompiledTSFiles;
-      this.lastCompiledTSFiles = [];
-      response.send(JSON.stringify(ret));
-      //start the watcher to compile the client code
-      var _this = this;
-      if (Compile.clientWatcherIsRunning === false) {
-        Compile.clientWatcherIsRunning = true;
-        this.runWatcher();
-        var clientTsHasChanged = function (files, text) {
-          for (let f = 0; f < files.length; f++) {
-            _this.lastCompiledTSFiles.push(files[f].replace(".ts", ".js").replace("\\", "/"));
-          }
-          console.log("client changed" + files + " " + text);
+    serverConfig() {
+        var ret = {
+            baseUrl: "./",
+            target: 4,
+            module: NativeAdapter_1.ts.ModuleKind.CommonJS,
+            //"outDir":"js",
+            allowJs: true,
+            sourceMap: true,
+            inlineSources: true,
+            moduleResolution: 2,
+            skipLibCheck: true,
+            rootDir: "./",
+            emitDecoratorMetadata: true,
+            experimentalDecorators: true,
+            noResolve: true
         };
-        Compile.eventEmitter.addListener("compiled", clientTsHasChanged);
-      }
+        return ret;
     }
-  
-    reportWatchStatusChanged(diagnostic: ts.Diagnostic) {
-      let s = ts.formatDiagnostic(diagnostic, formatHost);
-      if (diagnostic.code === 6194) {
-        Compile.eventEmitter.emit('compiled', Compile.lastModifiedTSFiles, s);
-        Compile.lastModifiedTSFiles = [];
-        //console.info(Compile.lastModifiedTSFiles);
-      }
-      console.info(s);
-    }*/
-    async transpile(fileName, inServerdirectory = undefined) {
+    ;
+    getDirectoryname(ppath) {
+        var path = ppath.replaceAll("\\", "/");
+        return path.substring(0, path.lastIndexOf("/"));
+    }
+    async dirFiles(dirname, skip, ret, replaceClientFileName = false) {
+        if (!await (0, NativeAdapter_1.exists)(dirname))
+            return;
+        var files = await NativeAdapter_1.myfs.readdir(dirname);
+        for (var x = 0; x < files.length; x++) {
+            var fname = dirname + "/" + files[x];
+            var stat = await NativeAdapter_1.myfs.stat(fname);
+            if (skip.indexOf(dirname) === -1) {
+                if (stat.isDirectory()) {
+                    await this.dirFiles(fname, skip, ret);
+                }
+                else {
+                    if (fname.endsWith(".js") || fname.endsWith(".ts"))
+                        if (replaceClientFileName)
+                            ret[fname.replace("./client/", "./")] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
+                        else
+                            ret[fname] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
+                }
+            }
+        }
+    }
+    async readRegistry(file, isServer) {
+        var text = await NativeAdapter_1.myfs.readFile(file, "utf-8");
+        if (!isServer) {
+            text = text.substring(text.indexOf("default:") + 8);
+            text = text.substring(0, text.lastIndexOf("}") - 1);
+            text = text.substring(0, text.lastIndexOf("}") - 1);
+        }
+        else {
+            text = text.substring(text.indexOf("default=") + 8);
+        }
+        var index = JSON.parse(text);
+        return index;
+    }
+    async createRegistry(modul, isServer, exclude, includeClientRegistry, files) {
+        var index = await this.readRegistry("./" + (isServer ? "" : "client/") + modul + "/registry.js", isServer);
+        var newIndex = {};
+        for (var key in index) {
+            if (!key.startsWith(exclude))
+                newIndex[key] = index[key];
+        }
+        if (includeClientRegistry !== undefined) {
+            var indexc = await this.readRegistry("./client/" + modul + "/registry.js", false);
+            for (var key in indexc) {
+                if (key.startsWith(includeClientRegistry))
+                    newIndex[key] = index[key];
+            }
+        }
+        var text = JSON.stringify(newIndex, undefined, "\t");
+        text = "//this file is autogenerated don't modify\n" +
+            'define("' + modul + '/registry",["require"], function(require) {\n' +
+            ' return {\n' +
+            '  default: ' + text + "\n" +
+            ' }\n' +
+            '});';
+        files["./" + modul + "/registry.js"] = text;
+    }
+    async readModuleCode(modul, isServer) {
+        var fileNames = {};
+        if (isServer === false) {
+            await this.dirFiles("./client/" + modul, ["./client/" + modul + "/server", "./client/" + modul + "/registry.js"], fileNames);
+            await this.createRegistry(modul, isServer, modul + "/server", undefined, fileNames);
+        }
+        else {
+            await this.dirFiles("./" + modul, ["./" + modul + "/server", "./" + modul + "/registry.js"], fileNames);
+            await this.dirFiles("./client/" + modul + "/server", [], fileNames, true);
+            fileNames["./" + modul + "/modul.ts"] = await NativeAdapter_1.myfs.readFile("./client/" + modul + "/modul.ts", "utf-8");
+            await this.createRegistry(modul, isServer, modul + "/server", modul + "/server", fileNames);
+        }
+        return fileNames;
+    }
+    async transpileModul(modul, isServer) {
+        var code = await this.readModuleCode(modul, isServer);
+        var writing = [];
+        var host = {
+            getSourceFile: (fileName, languageVersion, onError) => {
+                var scode = code["./" + fileName];
+                if (scode === undefined)
+                    debugger;
+                return NativeAdapter_1.ts.createSourceFile(fileName, scode, languageVersion);
+            },
+            getDefaultLibFileName: (defaultLibOptions) => "",
+            writeFile: (filename, content) => {
+                writing.push(NativeAdapter_1.myfs.writeFile(filename, content));
+            },
+            getCurrentDirectory: () => "/",
+            getDirectories: (path) => [],
+            fileExists: (fileName) => {
+                return code["./" + fileName] !== undefined;
+            },
+            readFile: (fileName) => {
+                return code["./" + fileName];
+            },
+            getCanonicalFileName: (fileName) => fileName,
+            useCaseSensitiveFileNames: () => true,
+            getNewLine: () => "\n",
+            getEnvironmentVariable: () => "" // do nothing
+        };
+        var files = Object.keys(code);
+        var opts = this.serverConfig();
+        opts.declaration = true;
+        opts.outFile = "./dist/" + modul + (isServer ? "-server" : "") + ".js";
+        opts.module = NativeAdapter_1.ts.ModuleKind.AMD;
+        if (!isServer) {
+            opts.rootDir = "./client";
+        }
+        var program = NativeAdapter_1.ts.createProgram(files, opts, host);
+        let emitResult = program.emit();
+        await Promise.all(writing);
+        console.log(modul + " " + isServer + " fertig");
+    }
+    async transpileServercode(fileName, inServerdirectory = undefined) {
+        //outDir":"js",
         let spath = fileName.split("/");
         if (!inServerdirectory && spath.length < 2 && spath[1] !== "remote") {
             throw new Classes_1.JassiError("fileName must startswith remote");
         }
         var path = ".";
-        var data = fs.readFileSync(path + "/" + fileName, { encoding: 'utf-8' });
-        var module = fileName.replace(".ts", "");
-        const host = ts.sys;
-        const parsedCmd = ts.getParsedCommandLineOfConfigFile("./tsconfig.json", undefined, host);
-        const { options } = parsedCmd;
-        var outPath = "js";
+        var data = await NativeAdapter_1.myfs.readFile(path + "/" + fileName, 'utf-8');
+        var options;
+        //if (inServerdirectory === true)
+        options = this.serverConfig();
+        options.outDir = "js";
+        //@ts-ignore
+        if (require.main === undefined) //in Browser
+            options.module = NativeAdapter_1.ts.ModuleKind.AMD;
+        //const parsedCmd = ts.getParsedCommandLineOfConfigFile("./tsconfig.json", undefined, host);
+        /// const { options } = parsedCmd;
+        var outPath = "./js";
         var fdir = outPath + "/" + fileName;
         fdir = fdir.substring(0, fdir.lastIndexOf("/"));
-        fs.mkdirSync(fdir, { recursive: true });
+        await NativeAdapter_1.myfs.mkdir(fdir, { recursive: true });
         var prefix = "";
         for (let x = 0; x < fileName.split("/").length; x++) {
             prefix = "../" + prefix;
         }
-        var content = ts.transpileModule(data, {
+        var content = NativeAdapter_1.ts.transpileModule(data, {
             compilerOptions: options,
             fileName: prefix + fileName
         });
-        var pathname = rpath.dirname(fileName);
-        if (!fs.existsSync(pathname)) {
-            fs.mkdirSync(pathname, { recursive: true });
+        var pathname = "./" + this.getDirectoryname(fileName);
+        if (!await (0, NativeAdapter_1.exists)(pathname)) {
+            await NativeAdapter_1.myfs.mkdir(pathname, { recursive: true });
         }
-        if (!inServerdirectory)
-            fs.copyFileSync(new Filesystem_1.default().path + "/" + fileName, fileName);
-        fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
-        fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
+        //if (!inServerdirectory)
+        //  await myfs.copyFile(new Filesystem().path + "/" + fileName, fileName);
+        await NativeAdapter_1.myfs.writeFile(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
+        await NativeAdapter_1.myfs.writeFile(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
     }
 }
 exports.Compile = Compile;
 Compile.lastModifiedTSFiles = [];
-Compile.clientWatcherIsRunning = false;
-Compile.eventEmitter = new events.EventEmitter();
 //# sourceMappingURL=Compile.js.map

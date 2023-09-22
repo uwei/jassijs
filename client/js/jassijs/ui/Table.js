@@ -52,6 +52,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             super.config(config);
             return this;
         }
+        rerender() {
+            this.table.destroy();
+            if (this._databinderItems !== undefined) {
+                this._databinderItems.remove(this);
+                this._databinderItems = undefined;
+            }
+            this.table = undefined;
+            super.rerender();
+            this.options = this._lastOptions;
+        }
         set options(properties) {
             var _this = this;
             this._lastOptions = properties;

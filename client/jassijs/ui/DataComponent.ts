@@ -68,7 +68,13 @@ export class DataComponent extends Component implements DataComponentConfig {
             this._databinder.add(property, this, "onchange");
     }
 
-
+  /*  rerender(){
+         if (this._databinder !== undefined) {
+            this._databinder.remove(this);
+            this._databinder = undefined;
+        }
+        super.rerender();
+    }*/
     destroy() {
         if (this._databinder !== undefined) {
             this._databinder.remove(this);

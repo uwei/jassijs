@@ -11,10 +11,10 @@ navigator.serviceWorker.controller.postMessage({
 navigator.serviceWorker.addEventListener("message", (evt) => {
     var _a;
     if (((_a = evt.data) === null || _a === void 0 ? void 0 : _a.type) === "REQUEST_REMOTEPROTCOL") {
-        (0, LocalProtocol_1.messageReceived)(evt);
+        LocalProtocol_1.messageReceived(evt);
     }
 });
-(0, Serverservice_1.beforeServiceLoad)(async (name, service) => {
+Serverservice_1.beforeServiceLoad(async (name, service) => {
     if (name === "db") {
         var man = (await Promise.resolve().then(() => require("jassijs/server/DBManagerExt")));
         man.extendDBManager();

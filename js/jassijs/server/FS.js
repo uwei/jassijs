@@ -7,6 +7,8 @@ class Stats {
 class FileEntry {
 }
 class FS {
+    constructor() {
+    }
     static async getDB() {
         if (FS.db)
             return FS.db;
@@ -22,8 +24,6 @@ class FS {
         if (root === undefined)
             await FS._mkdir(FS.db, ".");
         return FS.db;
-    }
-    constructor() {
     }
     static async _readdir(db, folder, withSubfolders = false, fullPath = false) {
         let transaction = db.transaction('files', 'readonly');

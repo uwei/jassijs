@@ -20,9 +20,6 @@ const Rights_1 = require("jassijs/remote/security/Rights");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
-    initExtensions() {
-        //this function would be extended
-    }
     constructor() {
         super();
         this.id = 0;
@@ -32,6 +29,9 @@ let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
         this.PLZ = "";
         this.hausnummer = 0;
         this.initExtensions();
+    }
+    initExtensions() {
+        //this function would be extended
     }
     /**
     * add here all properties for the PropertyEditor
@@ -79,66 +79,66 @@ let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    (0, DatabaseSchema_1.PrimaryColumn)(),
+    DatabaseSchema_1.PrimaryColumn(),
     __metadata("design:type", Number)
 ], Kunde.prototype, "id", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], Kunde.prototype, "vorname", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], Kunde.prototype, "nachname", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], Kunde.prototype, "strasse", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], Kunde.prototype, "PLZ", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Kunde.prototype, "ort", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", Number)
 ], Kunde.prototype, "hausnummer", void 0);
 __decorate([
-    (0, DatabaseSchema_1.OneToMany)(type => AR_1.AR, ar => ar.kunde),
+    DatabaseSchema_1.OneToMany(type => AR_1.AR, ar => ar.kunde),
     __metadata("design:type", Array)
 ], Kunde.prototype, "rechnungen", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Kunde.prototype, "land", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Kunde.prototype, "test", void 0);
 __decorate([
-    (0, DBObjectQuery_1.$DBObjectQuery)({ name: "Alle nach Namen", description: "Kundenliste nach Namen" }),
+    DBObjectQuery_1.$DBObjectQuery({ name: "Alle nach Namen", description: "Kundenliste nach Namen" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], Kunde, "alleKundenNachNachname", null);
 __decorate([
-    (0, DBObjectQuery_1.$DBObjectQuery)({ name: "Alle nach Nummer", description: "Kundenliste nach Nummer" }),
+    DBObjectQuery_1.$DBObjectQuery({ name: "Alle nach Nummer", description: "Kundenliste nach Nummer" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], Kunde, "alleKundenNachNummer", null);
 Kunde = Kunde_1 = __decorate([
-    (0, Rights_1.$ParentRights)([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
+    Rights_1.$ParentRights([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
             description: {
                 text: "Kundennummern",
                 i1: "von",
                 i2: "bis"
             } }]),
-    (0, DBObject_1.$DBObject)(),
-    (0, Registry_1.$Class)("de.Kunde"),
+    DBObject_1.$DBObject(),
+    Registry_1.$Class("de.Kunde"),
     __metadata("design:paramtypes", [])
 ], Kunde);
 exports.Kunde = Kunde;

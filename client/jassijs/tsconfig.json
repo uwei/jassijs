@@ -5,6 +5,7 @@
     //"checkJs":false,
     "target": "es2017",
     "module": "amd",
+    "jsx": "react",
     "moduleResolution": "node",
     "lib": [
       "es2016", 
