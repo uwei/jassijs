@@ -226,7 +226,7 @@ export class CodeEditor extends Panel {
         await new Server().saveFile(this._file, code);
 
 
-        var f = this._file.replace(".ts", "");
+        var f = this._file.replace(".tsx", "").replace(".ts", "");
         if (this._file?.startsWith("$serverside/")) {
 
         } else {
@@ -399,7 +399,7 @@ export class CodeEditor extends Panel {
                     e.forEach(f => values.push(f));
                 });
 
-                var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values)
+                var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".tsx", ".js").replace(".ts", ".js"), values)
                 for (var x = 0; x < tmap.length; x++) {
                     var val = values[x];
                     val.column = tmap[x].column;
@@ -556,7 +556,7 @@ export class CodeEditor extends Panel {
         var lines = code.split("\n");
         var _this = this;
         var breakpoints = _this._codePanel.getBreakpoints();
-        var filename = _this._file.replace(".ts", "$temp.ts");
+        var filename = _this._file.replace(".tsx", "$temp.tsx").replace(".ts", "$temp.ts");
         await jassijs.debugger.removeBreakpointsForFile(filename);
         for (var line in breakpoints) {
             if (breakpoints[line]) {
@@ -612,20 +612,24 @@ export class CodeEditor extends Panel {
     }
     private async saveTempFile(file: string, code: string) {
 
-
+        console.log("TODO TSX");
         //@ts-ignore 
         var tss = await import("jassijs_editor/util/Typescript");
         //@ts-ignore 
         var settings = Object.assign({},Typescript.compilerSettings);
         settings["inlineSourceMap"] = true;
         settings["inlineSources"] = true;
-        var files = await tss.default.transpile(file + ".ts", code,settings);
+        var files;
+        if(this.file.endsWith(".tsx"))
+            files = await tss.default.transpile(file + ".tsx", code,settings);
+        else
+            files = await tss.default.transpile(file + ".ts", code,settings);
 
         var codets = -1;
         var codemap = -1;
         var codejs = -1;
         for (var x = 0; x < files.fileNames.length; x++) {
-            if (files.fileNames[x].endsWith(".ts")) {
+            if (files.fileNames[x].endsWith(".ts")||files.fileNames[x].endsWith(".tsx")) {
                 codets = x;
             }
             if (files.fileNames[x].endsWith(".js.map")) {
@@ -701,7 +705,7 @@ export class CodeEditor extends Panel {
         code = code;
         var _this = this;
         var tmp = new Date().getTime();
-        var jsfile = _this._file.replace(".ts", "") + "$temp";
+        var jsfile = _this._file.replace(".tsx", "").replace(".ts", "") + "$temp";
         //await new Server().saveFile("tmp/" + _this._file, code);
         //only local - no TS File in Debugger
         await this.saveTempFile(jsfile, code);

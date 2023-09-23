@@ -175,7 +175,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         async _save(code) {
             var _a;
             await new Server_1.Server().saveFile(this._file, code);
-            var f = this._file.replace(".ts", "");
+            var f = this._file.replace(".tsx", "").replace(".ts", "");
             if ((_a = this._file) === null || _a === void 0 ? void 0 : _a.startsWith("$serverside/")) {
             }
             else {
@@ -332,7 +332,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     Object.values(cache).forEach((e) => {
                         e.forEach(f => values.push(f));
                     });
-                    var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values);
+                    var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".tsx", ".js").replace(".ts", ".js"), values);
                     for (var x = 0; x < tmap.length; x++) {
                         var val = values[x];
                         val.column = tmap[x].column;
@@ -475,7 +475,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             var lines = code.split("\n");
             var _this = this;
             var breakpoints = _this._codePanel.getBreakpoints();
-            var filename = _this._file.replace(".ts", "$temp.ts");
+            var filename = _this._file.replace(".tsx", "$temp.tsx").replace(".ts", "$temp.ts");
             await jassijs.debugger.removeBreakpointsForFile(filename);
             for (var line in breakpoints) {
                 if (breakpoints[line]) {
@@ -528,18 +528,23 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             }
         }
         async saveTempFile(file, code) {
+            console.log("TODO TSX");
             //@ts-ignore 
             var tss = await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); });
             //@ts-ignore 
             var settings = Object.assign({}, Typescript_1.Typescript.compilerSettings);
             settings["inlineSourceMap"] = true;
             settings["inlineSources"] = true;
-            var files = await tss.default.transpile(file + ".ts", code, settings);
+            var files;
+            if (this.file.endsWith(".tsx"))
+                files = await tss.default.transpile(file + ".tsx", code, settings);
+            else
+                files = await tss.default.transpile(file + ".ts", code, settings);
             var codets = -1;
             var codemap = -1;
             var codejs = -1;
             for (var x = 0; x < files.fileNames.length; x++) {
-                if (files.fileNames[x].endsWith(".ts")) {
+                if (files.fileNames[x].endsWith(".ts") || files.fileNames[x].endsWith(".tsx")) {
                     codets = x;
                 }
                 if (files.fileNames[x].endsWith(".js.map")) {
@@ -609,7 +614,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             code = code;
             var _this = this;
             var tmp = new Date().getTime();
-            var jsfile = _this._file.replace(".ts", "") + "$temp";
+            var jsfile = _this._file.replace(".tsx", "").replace(".ts", "") + "$temp";
             //await new Server().saveFile("tmp/" + _this._file, code);
             //only local - no TS File in Debugger
             await this.saveTempFile(jsfile, code);
