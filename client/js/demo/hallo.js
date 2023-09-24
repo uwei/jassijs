@@ -2,12 +2,15 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
-    var h;
     function j() {
-        var h2 = React.createElement("div", { style: { color: "green" } });
     }
     function test() {
         var h = 9;
+        /*  return <div style={{color:"green"}}>
+              hallo
+      </div>;*/
+        var ret = React.createElement("button", { style: { color: "red" }, onClick: () => alert(8) }, "Hallo");
+        return ret;
     }
     exports.test = test;
 });

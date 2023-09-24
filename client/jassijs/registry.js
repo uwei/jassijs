@@ -103,7 +103,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1682794540000
+		"date": 1695580332624.7742
 	},
 	"jassijs/remote/jassijsGlobal.ts": {
 		"date": 1655549782000
@@ -666,7 +666,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1695327921869.2827,
+		"date": 1695588862649.9673,
 		"jassijs.ui.Component": {
 			"@members": {}
 		}
@@ -676,7 +676,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1683645502000,
+		"date": 1695590706160.0225,
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {

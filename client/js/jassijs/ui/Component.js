@@ -56,6 +56,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.dom._this = this;
             }
         }
+        render() {
+            return undefined;
+        }
         rerender() {
             var alt = this.dom;
             this.init(this.lastinit, { replaceNode: this.dom });
@@ -124,11 +127,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.__dom = value;
             /** @member {dom} - the dom-element*/
             /** @member {numer}  - the id of the element */
-            this.dom.classList.add("jinlinecomponent");
-            this.dom.classList.add("jresizeable");
-            if (domalt !== undefined) {
-                domalt.classList.remove("jinlinecomponent");
-                domalt.classList.remove("jresizeable");
+            if (this.dom.classList) { //Textnode!
+                this.dom.classList.add("jinlinecomponent");
+                this.dom.classList.add("jresizeable");
+                if (domalt !== undefined) {
+                    domalt.classList.remove("jinlinecomponent");
+                    domalt.classList.remove("jresizeable");
+                }
             }
             this.dom._this = this;
         }
@@ -219,7 +224,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             // }
             this.dom = dom;
             this._id = "j" + Registry_2.default.nextID();
-            this.dom.setAttribute("id", this._id);
+            if (this.dom.setAttribute !== undefined) //Textnode
+                this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
@@ -231,7 +237,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (properties !== undefined && properties.noWrapper === true) {
                 this.domWrapper = this.dom;
                 this.domWrapper._id = this._id;
-                this.domWrapper.classList.add("jcomponent");
+                if (this.domWrapper.classList !== undefined)
+                    this.domWrapper.classList.add("jcomponent");
             }
             else {
                 /** @member {dom} - the dom element for label*/

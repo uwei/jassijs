@@ -13,6 +13,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Typescript = void 0;
     let Typescript = Typescript_1 = class Typescript {
+        constructor() {
+            this.initInIdle = true;
+            if (Typescript_1._isInited === undefined)
+                this.waitForInited = this.initService();
+        }
         isInited(file) {
             return Typescript_1._isInited === true;
         }
@@ -48,11 +53,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
             }
             return ret;
         }
-        constructor() {
-            this.initInIdle = true;
-            if (Typescript_1._isInited === undefined)
-                this.waitForInited = this.initService();
-        }
         static initMonaco() {
             /* monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
                  "baseUrl": "./",
@@ -63,7 +63,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 "baseUrl": "./",
                 "module": monaco.languages.typescript.ModuleKind.AMD,
                 "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
-                "jsx": monaco.languages.typescript.JsxEmit.React,
+                jsx: monaco.languages.typescript.JsxEmit.React,
+                jsxFactory: "createElement",
                 typeRoots: ["./node_modules/@types"],
                 rootDir: "./",
                 "sourceMap": true,
@@ -421,6 +422,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
         allowJs: true,
         moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
         jsx: monaco.languages.typescript.JsxEmit.React,
+        jsxFactory: "createElement",
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
         typeRoots: ["./node_modules/@types"]

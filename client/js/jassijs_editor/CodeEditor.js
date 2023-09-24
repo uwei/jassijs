@@ -528,7 +528,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             }
         }
         async saveTempFile(file, code) {
-            console.log("TODO TSX");
             //@ts-ignore 
             var tss = await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); });
             //@ts-ignore 

@@ -612,7 +612,6 @@ export class CodeEditor extends Panel {
     }
     private async saveTempFile(file: string, code: string) {
 
-        console.log("TODO TSX");
         //@ts-ignore 
         var tss = await import("jassijs_editor/util/Typescript");
         //@ts-ignore 

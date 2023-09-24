@@ -1,6 +1,5 @@
 
 
-
 /*declare global {
 
     export class ExtensionAction {
@@ -89,6 +88,7 @@ export class Jassi {
     includeCSSFile(modulkey:string){
         this.myRequire(this.cssFiles[modulkey]);
     }
+
     /**
      * include a global stylesheet
      * @id - the given id - important for update

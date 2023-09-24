@@ -1205,7 +1205,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985410000
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1682794540000
+                "date": 1695580332624.7742
             },
             "jassijs/remote/jassijsGlobal.ts": {
                 "date": 1655549782000
@@ -1511,7 +1511,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1684495488000,
+                "date": 1695399507170.7808,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -1768,7 +1768,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1695327921869.2827,
+                "date": 1695588862649.9673,
                 "jassijs.ui.Component": {
                     "@members": {}
                 }
@@ -1778,7 +1778,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1683645502000,
+                "date": 1695590706160.0225,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
@@ -4777,7 +4777,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     var _this = this;
                     var fileName = fileNames[f];
                     var content = contents[f];
-                    if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
+                    if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".tsx") || fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                         //var tss = await import("jassijs_editor/util/Typescript");
                         var tss = await Classes_13.classes.loadClass("jassijs_editor.util.Typescript");
                         var rets = await tss.instance.transpile(fileName, content);
@@ -6568,6 +6568,9 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                 this.dom._this = this;
             }
         }
+        render() {
+            return undefined;
+        }
         rerender() {
             var alt = this.dom;
             this.init(this.lastinit, { replaceNode: this.dom });
@@ -6636,11 +6639,13 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             this.__dom = value;
             /** @member {dom} - the dom-element*/
             /** @member {numer}  - the id of the element */
-            this.dom.classList.add("jinlinecomponent");
-            this.dom.classList.add("jresizeable");
-            if (domalt !== undefined) {
-                domalt.classList.remove("jinlinecomponent");
-                domalt.classList.remove("jresizeable");
+            if (this.dom.classList) { //Textnode!
+                this.dom.classList.add("jinlinecomponent");
+                this.dom.classList.add("jresizeable");
+                if (domalt !== undefined) {
+                    domalt.classList.remove("jinlinecomponent");
+                    domalt.classList.remove("jresizeable");
+                }
             }
             this.dom._this = this;
         }
@@ -6731,7 +6736,8 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             // }
             this.dom = dom;
             this._id = "j" + Registry_42.default.nextID();
-            this.dom.setAttribute("id", this._id);
+            if (this.dom.setAttribute !== undefined) //Textnode
+                this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
@@ -6743,7 +6749,8 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             if (properties !== undefined && properties.noWrapper === true) {
                 this.domWrapper = this.dom;
                 this.domWrapper._id = this._id;
-                this.domWrapper.classList.add("jcomponent");
+                if (this.domWrapper.classList !== undefined)
+                    this.domWrapper.classList.add("jcomponent");
             }
             else {
                 /** @member {dom} - the dom element for label*/
@@ -7247,7 +7254,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
 define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, Registry_45, Component_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Container = void 0;
+    exports.TextComponent = exports.HTMLComponent = exports.Container = void 0;
     let Container = class Container extends Component_8.Component {
         /**
          *
@@ -7372,6 +7379,148 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [Object])
     ], Container);
     exports.Container = Container;
+    var React = {
+        createElement(atype, props, ...children) {
+            var ret = new HTMLComponent();
+            ret.tag = atype;
+            ret.dom = document.createElement(atype);
+            for (var prop in props) {
+                debugger;
+                if (prop === "style") {
+                    for (var key in props.style) {
+                        var val = props.style[key];
+                        ret.dom.style[key] = val;
+                    }
+                }
+                else if (prop in ret.dom) {
+                    Reflect.set(ret.dom, prop, [props[prop]]);
+                }
+                else if (prop.toLocaleLowerCase() in ret.dom) {
+                    Reflect.set(ret.dom, prop.toLocaleLowerCase(), props[prop]);
+                }
+                else if (ret.dom.hasAttribute(prop)) {
+                    ret.dom.setAttribute(prop, props[prop]);
+                }
+            }
+            ret.init(ret.dom, { noWrapper: true });
+            if (children !== undefined) {
+                if (props === null || props === undefined)
+                    props = {};
+                props.children = children;
+                for (var x = 0; x < props.children.length; x++) {
+                    var child = props.children[x];
+                    if (typeof child === "string") {
+                        var nd = document.createTextNode(child);
+                        child = new TextComponent();
+                        child.tag = "";
+                        child.init(nd, { noWrapper: true });
+                        //child.dom = nd;
+                    }
+                    ret.add(child);
+                }
+            }
+            return ret;
+        }
+    };
+    //@ts-ignore;
+    window.React = React;
+    class HTMLComponent extends Component_8.Component {
+        constructor() {
+            super(...arguments);
+            this._components = [];
+        }
+        /**
+        * adds a component to the container
+        * @param {jassijs.ui.Component} component - the component to add
+        */
+        add(component) {
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper._parent = this;
+            /* component._parent=this;
+             component.domWrapper._parent=this;
+             if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
+                  component.domWrapper.parentNode.removeChild(component.domWrapper);
+             }*/
+            if (this["designDummyFor"])
+                this.designDummies.push(component);
+            else
+                this._components.push(component);
+            this.dom.appendChild(component.domWrapper);
+        }
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component, before) {
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper["_parent"] = this;
+            var index = this._components.indexOf(before);
+            if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
+                component.domWrapper.parentNode.removeChild(component.domWrapper);
+            }
+            if (component["designDummyFor"])
+                this.designDummies.push(component);
+            else
+                this._components.splice(index, 0, component);
+            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+        }
+        /**
+       * remove the component
+       * @param {jassijs.ui.Component} component - the component to remove
+       * @param {boolean} destroy - if true the component would be destroyed
+       */
+        remove(component, destroy = false) {
+            var _a;
+            if (destroy)
+                component.destroy();
+            component._parent = undefined;
+            if (component.domWrapper !== undefined)
+                component.domWrapper._parent = undefined;
+            if (this._components) {
+                var pos = this._components.indexOf(component);
+                if (pos >= 0)
+                    this._components.splice(pos, 1);
+            }
+            let posd = (_a = this.designDummies) === null || _a === void 0 ? void 0 : _a.indexOf(component);
+            if (posd >= 0)
+                this.designDummies.splice(posd, 1);
+            try {
+                this.dom.removeChild(component.domWrapper);
+            }
+            catch (ex) {
+            }
+        }
+        /**
+       * remove all component
+       * @param {boolean} destroy - if true the component would be destroyed
+       */
+        removeAll(destroy = undefined) {
+            while (this._components.length > 0) {
+                this.remove(this._components[0], destroy);
+            }
+        }
+        destroy() {
+            if (this._components !== undefined) {
+                var tmp = [].concat(this._components);
+                for (var k = 0; k < tmp.length; k++) {
+                    tmp[k].destroy();
+                }
+                this._components = [];
+            }
+            super.destroy();
+        }
+    }
+    exports.HTMLComponent = HTMLComponent;
+    class TextComponent extends Component_8.Component {
+    }
+    exports.TextComponent = TextComponent;
 });
 define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_46, Menu_2, InvisibleComponent_1, Component_9, Classes_18, Property_9, Actions_2, MenuItem_2) {
     "use strict";
@@ -17535,7 +17684,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985410000
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1682794540000
+                "date": 1695580332624.7742
             },
             "jassijs/remote/jassijsGlobal.ts": {
                 "date": 1655549782000
@@ -17841,7 +17990,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1684495488000,
+                "date": 1695399507170.7808,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -18014,7 +18163,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1695327921869.2827,
+                "date": 1695588862649.9673,
                 "jassijs.ui.Component": {
                     "@members": {}
                 }
@@ -18024,7 +18173,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1683645502000,
+                "date": 1695590706160.0225,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {

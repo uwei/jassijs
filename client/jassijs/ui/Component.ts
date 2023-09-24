@@ -5,6 +5,8 @@ import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { CSSProperties } from "jassijs/ui/CSSProperties";
 
+
+
 //import { CSSProperties } from "jassijs/ui/Style";
 
 jassijs.includeCSSFile("jassijs.css");
@@ -102,6 +104,9 @@ export interface ComponentConfig {
      **/
     contextMenu?;
 }
+
+
+
 @$Class("jassijs.ui.Component")
 export class Component implements ComponentConfig {
     private static _componentHook = [];
@@ -141,9 +146,14 @@ export class Component implements ComponentConfig {
             this.dom._this = this;
         }
     }
-    rerender(){
-        var alt=this.dom;
-        this.init(this.lastinit,{replaceNode:this.dom});
+
+
+    render(): React.ReactNode {
+        return undefined;
+    }
+    rerender() {
+        var alt = this.dom;
+        this.init(this.lastinit, { replaceNode: this.dom });
         this.config(this.lastconfig);
     }
     config(config: ComponentConfig): Component {
@@ -211,11 +221,13 @@ export class Component implements ComponentConfig {
         this.__dom = value;
         /** @member {dom} - the dom-element*/
         /** @member {numer}  - the id of the element */
-        this.dom.classList.add("jinlinecomponent");
-        this.dom.classList.add("jresizeable");
-        if (domalt !== undefined) {
-            domalt.classList.remove("jinlinecomponent");
-            domalt.classList.remove("jresizeable");
+        if (this.dom.classList) {//Textnode!
+            this.dom.classList.add("jinlinecomponent");
+            this.dom.classList.add("jresizeable");
+            if (domalt !== undefined) {
+                domalt.classList.remove("jinlinecomponent");
+                domalt.classList.remove("jresizeable");
+            }
         }
         this.dom._this = this;
 
@@ -288,7 +300,7 @@ export class Component implements ComponentConfig {
             if (properties?.replaceNode?.parentNode) {
                 properties?.replaceNode.parentNode.replaceChild(dom, properties?.replaceNode);
                 this.dom = dom;
-                
+
                 this.dom.setAttribute("id", properties?.replaceNode.getAttribute("id"));
                 return;
             }
@@ -311,7 +323,8 @@ export class Component implements ComponentConfig {
         // }
         this.dom = dom;
         this._id = "j" + registry.nextID();
-        this.dom.setAttribute("id", this._id);
+        if(this.dom.setAttribute!==undefined)//Textnode
+            this.dom.setAttribute("id", this._id);
         /** @member {Object.<string,function>} - all event handlers*/
         this._eventHandler = {};
         //add _this to the dom element
@@ -324,7 +337,8 @@ export class Component implements ComponentConfig {
         if (properties !== undefined && properties.noWrapper === true) {
             this.domWrapper = this.dom;
             this.domWrapper._id = this._id;
-            this.domWrapper.classList.add("jcomponent");
+            if(this.domWrapper.classList!==undefined)
+                this.domWrapper.classList.add("jcomponent");
         } else {
             /** @member {dom} - the dom element for label*/
             let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
@@ -561,3 +575,4 @@ export class Component implements ComponentConfig {
     }
 
 }
+

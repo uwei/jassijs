@@ -1,11 +1,17 @@
 
-var h:React.CSSProperties;
+import { Button } from "jassijs/ui/Button";
+import { Panel } from "jassijs/ui/Panel";
 
 function j(){
-var h2=<div style={{color:"green"}}></div>;
 
 }
 
 export function test(){
-    var h=9;
+    var h=9; 
+  /*  return <div style={{color:"green"}}>
+        hallo
+</div>;*/ 
+    var ret=<button style={{color:"red"}} onClick={()=>alert(8)} >Hallo</button>;
+    
+    return ret;
 }

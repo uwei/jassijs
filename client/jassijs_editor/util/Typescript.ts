@@ -58,10 +58,12 @@ export class Typescript {
             };
             //@ts-ignore
             var comp: any = ts.transpileModule(content, opt);
-
-            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js");
+            var extlen=3;
+            if(fileName.toLowerCase().endsWith(".tsx"))
+                extlen=4;
+            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - extlen) + ".js");
             ret.contents.push(comp.outputText);
-            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js.map");
+            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - extlen) + ".js.map");
             ret.contents.push(comp.sourceMapText);
 
         }
@@ -85,9 +87,10 @@ export class Typescript {
             "baseUrl": "./",
             "module": monaco.languages.typescript.ModuleKind.AMD,
             "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
-            jsx:monaco.languages.typescript.JsxEmit.React,
+            "jsx":monaco.languages.typescript.JsxEmit.React,
             typeRoots: ["./node_modules/@types"],
             rootDir: "./",
+
             "sourceMap": true,
             "outDir": "./js",
             emitDecoratorMetadata: true,

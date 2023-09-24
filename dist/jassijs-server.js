@@ -59,7 +59,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985410000
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1682794540000
+                "date": 1695580332624.7742
             },
             "jassijs/remote/JassijsGlobal.ts": {
                 "date": 1655549782000
@@ -395,7 +395,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1681322648000
             },
             "jassijs/remote/Server.ts": {
-                "date": 1684495488000,
+                "date": 1695399507170.7808,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -2767,7 +2767,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     var _this = this;
                     var fileName = fileNames[f];
                     var content = contents[f];
-                    if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
+                    if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".tsx") || fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                         //var tss = await import("jassijs_editor/util/Typescript");
                         var tss = await Classes_9.classes.loadClass("jassijs_editor.util.Typescript");
                         var rets = await tss.instance.transpile(fileName, content);

@@ -1061,7 +1061,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
         async _save(code) {
             var _a;
             await new Server_2.Server().saveFile(this._file, code);
-            var f = this._file.replace(".ts", "");
+            var f = this._file.replace(".tsx", "").replace(".ts", "");
             if ((_a = this._file) === null || _a === void 0 ? void 0 : _a.startsWith("$serverside/")) {
             }
             else {
@@ -1218,7 +1218,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                     Object.values(cache).forEach((e) => {
                         e.forEach(f => values.push(f));
                     });
-                    var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values);
+                    var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".tsx", ".js").replace(".ts", ".js"), values);
                     for (var x = 0; x < tmap.length; x++) {
                         var val = values[x];
                         val.column = tmap[x].column;
@@ -1361,7 +1361,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             var lines = code.split("\n");
             var _this = this;
             var breakpoints = _this._codePanel.getBreakpoints();
-            var filename = _this._file.replace(".ts", "$temp.ts");
+            var filename = _this._file.replace(".tsx", "$temp.tsx").replace(".ts", "$temp.ts");
             await jassijs.debugger.removeBreakpointsForFile(filename);
             for (var line in breakpoints) {
                 if (breakpoints[line]) {
@@ -1420,12 +1420,16 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             var settings = Object.assign({}, Typescript_2.Typescript.compilerSettings);
             settings["inlineSourceMap"] = true;
             settings["inlineSources"] = true;
-            var files = await tss.default.transpile(file + ".ts", code, settings);
+            var files;
+            if (this.file.endsWith(".tsx"))
+                files = await tss.default.transpile(file + ".tsx", code, settings);
+            else
+                files = await tss.default.transpile(file + ".ts", code, settings);
             var codets = -1;
             var codemap = -1;
             var codejs = -1;
             for (var x = 0; x < files.fileNames.length; x++) {
-                if (files.fileNames[x].endsWith(".ts")) {
+                if (files.fileNames[x].endsWith(".ts") || files.fileNames[x].endsWith(".tsx")) {
                     codets = x;
                 }
                 if (files.fileNames[x].endsWith(".js.map")) {
@@ -1495,7 +1499,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             code = code;
             var _this = this;
             var tmp = new Date().getTime();
-            var jsfile = _this._file.replace(".ts", "") + "$temp";
+            var jsfile = _this._file.replace(".tsx", "").replace(".ts", "") + "$temp";
             //await new Server().saveFile("tmp/" + _this._file, code);
             //only local - no TS File in Debugger
             await this.saveTempFile(jsfile, code);
@@ -4200,6 +4204,14 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
     exports.default = {
         "css": { "jassijs_editor.css": "jassijs_editor.css" },
         "types": {
+            "node_modules/csstype.d.ts": "https://cdn.jsdelivr.net/gh/frenic/csstype@master/index.d.ts",
+            // "node_modules/@types/csstype/index.d.ts":"https://cdn.jsdelivr.net/gh/frenic/csstype@master/index.d.ts",
+            "node_modules/@types/react/canary.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/canary.d.ts",
+            "node_modules/@types/react/experimental.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/experimental.d.ts",
+            "node_modules/@types/react/global.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/global.d.ts",
+            "node_modules/@types/react/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/index.d.ts",
+            "node_modules/@types/react/jsx-runtime.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/jsx-runtime.d.ts",
+            "node_modules/@types/react/jsx-dev-runtime.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/jsx-dev-runtime.d.ts",
             "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/monaco.d.ts",
             "node_modules/typescript/typescriptServices.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-3.7/lib/typescriptServices.d.ts"
         },
@@ -4571,7 +4583,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1682706722000,
+                "date": 1695581864386.901,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -4773,7 +4785,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/modul.ts": {
-                "date": 1681572588000
+                "date": 1695399690345.8984
             },
             "jassijs_editor/MonacoPanel.ts": {
                 "date": 1684357486000,
@@ -4916,7 +4928,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1683646812000,
+                "date": 1695586918212.458,
                 "jassijs_editor.util.Typescript": {}
             }
         }
@@ -7723,9 +7735,12 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 };
                 //@ts-ignore
                 var comp = ts.transpileModule(content, opt);
-                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js");
+                var extlen = 3;
+                if (fileName.toLowerCase().endsWith(".tsx"))
+                    extlen = 4;
+                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - extlen) + ".js");
                 ret.contents.push(comp.outputText);
-                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js.map");
+                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - extlen) + ".js.map");
                 ret.contents.push(comp.sourceMapText);
             }
             return ret;
@@ -7740,6 +7755,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 "baseUrl": "./",
                 "module": monaco.languages.typescript.ModuleKind.AMD,
                 "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
+                "jsx": monaco.languages.typescript.JsxEmit.React,
                 typeRoots: ["./node_modules/@types"],
                 rootDir: "./",
                 "sourceMap": true,
@@ -8096,6 +8112,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
         outDir: "./js",
         allowJs: true,
         moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
+        jsx: monaco.languages.typescript.JsxEmit.React,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
         typeRoots: ["./node_modules/@types"]
@@ -8127,7 +8144,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1682706722000,
+                "date": 1695581864386.901,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -8329,7 +8346,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/modul.ts": {
-                "date": 1681572588000
+                "date": 1695399690345.8984
             },
             "jassijs_editor/MonacoPanel.ts": {
                 "date": 1684357486000,
@@ -8472,7 +8489,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1683646812000,
+                "date": 1695586918212.458,
                 "jassijs_editor.util.Typescript": {}
             }
         }
