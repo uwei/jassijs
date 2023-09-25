@@ -666,7 +666,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1695588862649.9673,
+		"date": 1695670324686.1287,
 		"jassijs.ui.Component": {
 			"@members": {}
 		}
@@ -676,7 +676,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1695590706160.0225,
+		"date": 1695669039761.7732,
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {

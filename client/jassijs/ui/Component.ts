@@ -14,7 +14,7 @@ jassijs.includeCSSFile("materialdesignicons.min.css");
 
 declare global {
     interface Element {
-        _this: Component;
+        _this: Component<any>;
         _id?: string;
     }
 
@@ -105,10 +105,86 @@ export interface ComponentConfig {
     contextMenu?;
 }
 
+var React = {
 
+    createElement(atype: any, props, ...children) {
+        var ret;
+        if(props===undefined||props===null)//TODO is this right?
+            props={};
+        if (typeof atype === "string") {
+            ret = new HTMLComponent();
+            ret.tag = atype;
+            ret.dom = document.createElement(atype);
+            for (var prop in props) {
 
+                if (prop === "style") {
+                    for (var key in props.style) {
+                        var val = props.style[key];
+                        ret.dom.style[key] = val;
+                    }
+                } else if (prop in ret.dom) {
+                    Reflect.set(ret.dom, prop, [props[prop]])
+                } else if (prop.toLocaleLowerCase() in ret.dom) {
+                    Reflect.set(ret.dom, prop.toLocaleLowerCase(), props[prop])
+                } else if (ret.dom.hasAttribute(prop)) {
+                    ret.dom.setAttribute(prop, props[prop]);
+                }
+            }
+            ret.init(ret.dom, { noWrapper: true });
+        }else if(atype.constructor!==undefined){
+            ret=new atype(props);
+        }else if(typeof atype==="function"){
+            ret=atype(props);
+        }
+        if (children !== undefined) {
+            if (props === null || props === undefined)
+                props = {};
+            props.children = children;
+            for (var x = 0; x < props.children.length; x++) {
+                var child = props.children[x];
+                if (typeof child === "string") {
+
+                    var nd = document.createTextNode(child);
+                    child = new TextComponent();
+                    child.tag = "";
+                    child.init(nd, { noWrapper: true });
+                    //child.dom = nd;
+                }
+                ret.add(child);
+            }
+        }
+
+        return ret;
+    }
+}
+//@ts-ignore
+React.Component = class {
+    props;
+    constructor(props: any) {
+        this.props = props;
+    }
+};
+declare global {
+    interface React {
+        createElement(atype: any, props, ...children);
+    }
+}
+//@ts-ignore;
+window.React = React;
+//class TC <Prop>extends React.Component<Prop,{}>{
 @$Class("jassijs.ui.Component")
-export class Component implements ComponentConfig {
+//@ts-ignore
+export class Component<T = {}> extends React.Component<ComponentCreateProperties, {}> implements ComponentConfig {
+    context: any;
+    props: T;
+    state;
+    refs;
+    setState() {
+
+    }
+    forceUpdate() {
+
+    }
     private static _componentHook = [];
     _eventHandler;
     __dom: HTMLElement;
@@ -120,7 +196,7 @@ export class Component implements ComponentConfig {
     _designMode;
     _styles?: any[];
 
-    protected designDummies: Component[];
+    protected designDummies: Component<{}>[];
     /*  get domWrapper():Element{
           return this._domWrapper;
       }
@@ -137,10 +213,15 @@ export class Component implements ComponentConfig {
      * @param {string} [properties.id] -  connect to existing id (not reqired)
      * 
      */
-    constructor(properties: ComponentCreateProperties = undefined) {//id connect to existing(not reqired)
+    constructor(properties: ComponentCreateProperties | any = undefined) {//id connect to existing(not reqired)
+        super(properties, undefined);
         if (properties === undefined || properties.id === undefined) {
+            var rend = this.render();
+            if (rend) {
+                this.init((<any>rend).dom);
+            }
         } else {
-
+            debugger;
             this._id = properties.id;
             this.__dom = document.getElementById(properties.id);
             this.dom._this = this;
@@ -151,13 +232,13 @@ export class Component implements ComponentConfig {
     render(): React.ReactNode {
         return undefined;
     }
-    rerender() {
-        var alt = this.dom;
-        this.init(this.lastinit, { replaceNode: this.dom });
-        this.config(this.lastconfig);
-    }
-    config(config: ComponentConfig): Component {
-        this.lastconfig = config;
+    /*  rerender() {
+          var alt = this.dom;
+          this.init(this.lastinit, { replaceNode: this.dom });
+          this.config(this.lastconfig);
+      }*/
+    config(config: ComponentConfig): Component<T> {
+        // this.lastconfig = config;
         for (var key in config) {
             if (typeof this[key] === 'function') {
                 this[key](config[key]);
@@ -257,7 +338,7 @@ export class Component implements ComponentConfig {
     private static cloneAttributes(target, source) {
         [...source.attributes].forEach(attr => { target.setAttribute(attr.nodeName === "id" ? 'data-id' : attr.nodeName, attr.nodeValue) })
     }
-    static replaceWrapper(old: Component, newWrapper: HTMLElement) {
+    static replaceWrapper(old: Component<any>, newWrapper: HTMLElement) {
         //Component.cloneAttributes(newWrapper,old.domWrapper);
         var cls = old.domWrapper.getAttribute("class");
 
@@ -292,7 +373,7 @@ export class Component implements ComponentConfig {
      * @paran {object} properties - properties to init
     */
     init(dom: HTMLElement | string, properties: ComponentCreateProperties = undefined) {
-        this.lastinit = dom;
+        // this.lastinit = dom;
         if (typeof dom === "string")
             dom = Component.createHTMLElement(dom);
         //is already attached
@@ -323,7 +404,7 @@ export class Component implements ComponentConfig {
         // }
         this.dom = dom;
         this._id = "j" + registry.nextID();
-        if(this.dom.setAttribute!==undefined)//Textnode
+        if (this.dom.setAttribute !== undefined)//Textnode
             this.dom.setAttribute("id", this._id);
         /** @member {Object.<string,function>} - all event handlers*/
         this._eventHandler = {};
@@ -337,7 +418,7 @@ export class Component implements ComponentConfig {
         if (properties !== undefined && properties.noWrapper === true) {
             this.domWrapper = this.dom;
             this.domWrapper._id = this._id;
-            if(this.domWrapper.classList!==undefined)
+            if (this.domWrapper.classList !== undefined)
                 this.domWrapper.classList.add("jcomponent");
         } else {
             /** @member {dom} - the dom element for label*/
@@ -576,3 +657,104 @@ export class Component implements ComponentConfig {
 
 }
 
+
+
+export class HTMLComponent extends Component {
+    tag: string;
+    _components: Component[] = [];
+    _designDummy: any;
+    /**
+    * adds a component to the container
+    * @param {jassijs.ui.Component} component - the component to add
+    */
+    add(component) {//add a component to the container
+        if (component._parent !== undefined) {
+            component._parent.remove(component);
+        }
+        component._parent = this;
+        component.domWrapper._parent = this;
+
+        /* component._parent=this;
+         component.domWrapper._parent=this;
+         if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
+              component.domWrapper.parentNode.removeChild(component.domWrapper);
+         }*/
+        if (this["designDummyFor"])
+            this.designDummies.push(component);
+        else
+            this._components.push(component);
+        this.dom.appendChild(component.domWrapper);
+    }
+    /**
+     * adds a component to the container before an other component
+     * @param {jassijs.ui.Component} component - the component to add
+     * @param {jassijs.ui.Component} before - the component before then component to add
+     */
+    addBefore(component: Component, before: Component) {//add a component to the container
+        if (component._parent !== undefined) {
+            component._parent.remove(component);
+        }
+        component._parent = this;
+        component.domWrapper["_parent"] = this;
+        var index = this._components.indexOf(before);
+        if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
+            component.domWrapper.parentNode.removeChild(component.domWrapper);
+        }
+
+        if (component["designDummyFor"])
+            this.designDummies.push(component);
+        else
+            this._components.splice(index, 0, component);
+
+        before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+    }
+    /**
+   * remove the component
+   * @param {jassijs.ui.Component} component - the component to remove
+   * @param {boolean} destroy - if true the component would be destroyed
+   */
+    remove(component, destroy = false) {
+        if (destroy)
+            component.destroy();
+        component._parent = undefined;
+        if (component.domWrapper !== undefined)
+            component.domWrapper._parent = undefined;
+        if (this._components) {
+            var pos = this._components.indexOf(component);
+            if (pos >= 0)
+                this._components.splice(pos, 1);
+        }
+        let posd = this.designDummies?.indexOf(component);
+        if (posd >= 0)
+            this.designDummies.splice(posd, 1);
+        try {
+            this.dom.removeChild(component.domWrapper);
+        } catch (ex) {
+
+        }
+    }
+    /**
+   * remove all component
+   * @param {boolean} destroy - if true the component would be destroyed
+   */
+    removeAll(destroy = undefined) {
+        while (this._components.length > 0) {
+            this.remove(this._components[0], destroy);
+        }
+
+    }
+    destroy() {
+        if (this._components !== undefined) {
+            var tmp = [].concat(this._components);
+            for (var k = 0; k < tmp.length; k++) {
+                tmp[k].destroy();
+            }
+            this._components = [];
+        }
+        super.destroy();
+    }
+
+}
+export class TextComponent extends Component {
+    tag: string;
+}
