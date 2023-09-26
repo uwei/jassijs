@@ -1,4 +1,4 @@
-import { Component, ComponentCreateProperties } from "jassijs/ui/Component";
+import { Component, ComponentCreateProperties, HTMLComponent } from "jassijs/ui/Component";
 
 
 function j(){
@@ -27,7 +27,30 @@ export function test(){
         hallo
 </div>;*/ 
    // var ret=<button style={{color:"red"}} onClick={()=>alert(8)} >Hallo</button>;
-    var ret=<span><TC name="Hallo"></TC>;<TC2 name="Hallo2"></TC2> </span>
-
+    var ret:HTMLComponent=<div>
+                <div style={{display:"inline", minWidth:"5px",minHeight:"2px"}}></div>
+                <div style={{borderStyle:"ridge",borderWidth:"5px"}}>
+                <div style={{display:"inline", minWidth:"5px",minHeight:"2px"}}></div>
+                    <button>hall</button>
+                <div style={{display:"inline", minWidth:"5px",minHeight:"2px"}}></div>
+                    <button>hall</button>
+                <div style={{display:"inline", minWidth:"5px",minHeight:"2px"}}></div>
+                    <button>hall</button>
+                <div style={{display:"inline", minWidth:"5px",minHeight:"2px"}}></div>
+                </div>
+                <div style={{minWidth:"5px",minHeight:"2px"}}></div>
+                <div>
+                    <span>&nbsp;</span>
+                    <button>hall</button>
+                    <span>&nbsp;</span>
+                    <button>hall</button>
+                    <span>&nbsp;</span>
+                    <button>hall</button>
+                    <span>&nbsp;</span>
+                </div>
+                <span>&nbsp;</span>
+                
+            </div>
+    ret.domWrapper.contentEditable="true"
     return ret;
 }

@@ -1768,7 +1768,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1695588862649.9673,
+                "date": 1695670324686.1287,
                 "jassijs.ui.Component": {
                     "@members": {}
                 }
@@ -1778,7 +1778,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1695590706160.0225,
+                "date": 1695669039761.7732,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
@@ -6523,7 +6523,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     "use strict";
     var Component_7, _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Component = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
+    exports.TextComponent = exports.HTMLComponent = exports.Component = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
@@ -6542,7 +6542,71 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     class ComponentCreateProperties {
     }
     exports.ComponentCreateProperties = ComponentCreateProperties;
-    let Component = Component_7 = class Component {
+    var React = {
+        createElement(atype, props, ...children) {
+            var ret;
+            if (props === undefined || props === null) //TODO is this right?
+                props = {};
+            if (typeof atype === "string") {
+                ret = new HTMLComponent();
+                ret.tag = atype;
+                ret.dom = document.createElement(atype);
+                for (var prop in props) {
+                    if (prop === "style") {
+                        for (var key in props.style) {
+                            var val = props.style[key];
+                            ret.dom.style[key] = val;
+                        }
+                    }
+                    else if (prop in ret.dom) {
+                        Reflect.set(ret.dom, prop, [props[prop]]);
+                    }
+                    else if (prop.toLocaleLowerCase() in ret.dom) {
+                        Reflect.set(ret.dom, prop.toLocaleLowerCase(), props[prop]);
+                    }
+                    else if (ret.dom.hasAttribute(prop)) {
+                        ret.dom.setAttribute(prop, props[prop]);
+                    }
+                }
+                ret.init(ret.dom, { noWrapper: true });
+            }
+            else if (atype.constructor !== undefined) {
+                ret = new atype(props);
+            }
+            else if (typeof atype === "function") {
+                ret = atype(props);
+            }
+            if (children !== undefined) {
+                if (props === null || props === undefined)
+                    props = {};
+                props.children = children;
+                for (var x = 0; x < props.children.length; x++) {
+                    var child = props.children[x];
+                    if (typeof child === "string") {
+                        var nd = document.createTextNode(child);
+                        child = new TextComponent();
+                        child.tag = "";
+                        child.init(nd, { noWrapper: true });
+                        //child.dom = nd;
+                    }
+                    ret.add(child);
+                }
+            }
+            return ret;
+        }
+    };
+    //@ts-ignore
+    React.Component = class {
+        constructor(props) {
+            this.props = props;
+        }
+    };
+    //@ts-ignore;
+    window.React = React;
+    //class TC <Prop>extends React.Component<Prop,{}>{
+    let Component = Component_7 = 
+    //@ts-ignore
+    class Component extends React.Component {
         /*  get domWrapper():Element{
               return this._domWrapper;
           }
@@ -6560,24 +6624,34 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
          *
          */
         constructor(properties = undefined) {
+            super(properties, undefined);
             if (properties === undefined || properties.id === undefined) {
+                var rend = this.render();
+                if (rend) {
+                    this.init(rend.dom);
+                }
             }
             else {
+                debugger;
                 this._id = properties.id;
                 this.__dom = document.getElementById(properties.id);
                 this.dom._this = this;
             }
         }
+        setState() {
+        }
+        forceUpdate() {
+        }
         render() {
             return undefined;
         }
-        rerender() {
-            var alt = this.dom;
-            this.init(this.lastinit, { replaceNode: this.dom });
-            this.config(this.lastconfig);
-        }
+        /*  rerender() {
+              var alt = this.dom;
+              this.init(this.lastinit, { replaceNode: this.dom });
+              this.config(this.lastconfig);
+          }*/
         config(config) {
-            this.lastconfig = config;
+            // this.lastconfig = config;
             for (var key in config) {
                 if (typeof this[key] === 'function') {
                     this[key](config[key]);
@@ -6708,7 +6782,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         */
         init(dom, properties = undefined) {
             var _a;
-            this.lastinit = dom;
+            // this.lastinit = dom;
             if (typeof dom === "string")
                 dom = Component_7.createHTMLElement(dom);
             //is already attached
@@ -7023,10 +7097,109 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "contextMenu", null);
     Component = Component_7 = __decorate([
-        Registry_41.$Class("jassijs.ui.Component"),
-        __metadata("design:paramtypes", [ComponentCreateProperties])
+        Registry_41.$Class("jassijs.ui.Component")
+        //@ts-ignore
+        ,
+        __metadata("design:paramtypes", [Object])
     ], Component);
     exports.Component = Component;
+    class HTMLComponent extends Component {
+        constructor() {
+            super(...arguments);
+            this._components = [];
+        }
+        /**
+        * adds a component to the container
+        * @param {jassijs.ui.Component} component - the component to add
+        */
+        add(component) {
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper._parent = this;
+            /* component._parent=this;
+             component.domWrapper._parent=this;
+             if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
+                  component.domWrapper.parentNode.removeChild(component.domWrapper);
+             }*/
+            if (this["designDummyFor"])
+                this.designDummies.push(component);
+            else
+                this._components.push(component);
+            this.dom.appendChild(component.domWrapper);
+        }
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component, before) {
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper["_parent"] = this;
+            var index = this._components.indexOf(before);
+            if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
+                component.domWrapper.parentNode.removeChild(component.domWrapper);
+            }
+            if (component["designDummyFor"])
+                this.designDummies.push(component);
+            else
+                this._components.splice(index, 0, component);
+            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+        }
+        /**
+       * remove the component
+       * @param {jassijs.ui.Component} component - the component to remove
+       * @param {boolean} destroy - if true the component would be destroyed
+       */
+        remove(component, destroy = false) {
+            var _a;
+            if (destroy)
+                component.destroy();
+            component._parent = undefined;
+            if (component.domWrapper !== undefined)
+                component.domWrapper._parent = undefined;
+            if (this._components) {
+                var pos = this._components.indexOf(component);
+                if (pos >= 0)
+                    this._components.splice(pos, 1);
+            }
+            let posd = (_a = this.designDummies) === null || _a === void 0 ? void 0 : _a.indexOf(component);
+            if (posd >= 0)
+                this.designDummies.splice(posd, 1);
+            try {
+                this.dom.removeChild(component.domWrapper);
+            }
+            catch (ex) {
+            }
+        }
+        /**
+       * remove all component
+       * @param {boolean} destroy - if true the component would be destroyed
+       */
+        removeAll(destroy = undefined) {
+            while (this._components.length > 0) {
+                this.remove(this._components[0], destroy);
+            }
+        }
+        destroy() {
+            if (this._components !== undefined) {
+                var tmp = [].concat(this._components);
+                for (var k = 0; k < tmp.length; k++) {
+                    tmp[k].destroy();
+                }
+                this._components = [];
+            }
+            super.destroy();
+        }
+    }
+    exports.HTMLComponent = HTMLComponent;
+    class TextComponent extends Component {
+    }
+    exports.TextComponent = TextComponent;
 });
 define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_43, Property_8, Classes_17, Registry_44) {
     "use strict";
@@ -7254,7 +7427,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
 define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, Registry_45, Component_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TextComponent = exports.HTMLComponent = exports.Container = void 0;
+    exports.Container = void 0;
     let Container = class Container extends Component_8.Component {
         /**
          *
@@ -7379,148 +7552,6 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [Object])
     ], Container);
     exports.Container = Container;
-    var React = {
-        createElement(atype, props, ...children) {
-            var ret = new HTMLComponent();
-            ret.tag = atype;
-            ret.dom = document.createElement(atype);
-            for (var prop in props) {
-                debugger;
-                if (prop === "style") {
-                    for (var key in props.style) {
-                        var val = props.style[key];
-                        ret.dom.style[key] = val;
-                    }
-                }
-                else if (prop in ret.dom) {
-                    Reflect.set(ret.dom, prop, [props[prop]]);
-                }
-                else if (prop.toLocaleLowerCase() in ret.dom) {
-                    Reflect.set(ret.dom, prop.toLocaleLowerCase(), props[prop]);
-                }
-                else if (ret.dom.hasAttribute(prop)) {
-                    ret.dom.setAttribute(prop, props[prop]);
-                }
-            }
-            ret.init(ret.dom, { noWrapper: true });
-            if (children !== undefined) {
-                if (props === null || props === undefined)
-                    props = {};
-                props.children = children;
-                for (var x = 0; x < props.children.length; x++) {
-                    var child = props.children[x];
-                    if (typeof child === "string") {
-                        var nd = document.createTextNode(child);
-                        child = new TextComponent();
-                        child.tag = "";
-                        child.init(nd, { noWrapper: true });
-                        //child.dom = nd;
-                    }
-                    ret.add(child);
-                }
-            }
-            return ret;
-        }
-    };
-    //@ts-ignore;
-    window.React = React;
-    class HTMLComponent extends Component_8.Component {
-        constructor() {
-            super(...arguments);
-            this._components = [];
-        }
-        /**
-        * adds a component to the container
-        * @param {jassijs.ui.Component} component - the component to add
-        */
-        add(component) {
-            if (component._parent !== undefined) {
-                component._parent.remove(component);
-            }
-            component._parent = this;
-            component.domWrapper._parent = this;
-            /* component._parent=this;
-             component.domWrapper._parent=this;
-             if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
-                  component.domWrapper.parentNode.removeChild(component.domWrapper);
-             }*/
-            if (this["designDummyFor"])
-                this.designDummies.push(component);
-            else
-                this._components.push(component);
-            this.dom.appendChild(component.domWrapper);
-        }
-        /**
-         * adds a component to the container before an other component
-         * @param {jassijs.ui.Component} component - the component to add
-         * @param {jassijs.ui.Component} before - the component before then component to add
-         */
-        addBefore(component, before) {
-            if (component._parent !== undefined) {
-                component._parent.remove(component);
-            }
-            component._parent = this;
-            component.domWrapper["_parent"] = this;
-            var index = this._components.indexOf(before);
-            if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
-                component.domWrapper.parentNode.removeChild(component.domWrapper);
-            }
-            if (component["designDummyFor"])
-                this.designDummies.push(component);
-            else
-                this._components.splice(index, 0, component);
-            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
-        }
-        /**
-       * remove the component
-       * @param {jassijs.ui.Component} component - the component to remove
-       * @param {boolean} destroy - if true the component would be destroyed
-       */
-        remove(component, destroy = false) {
-            var _a;
-            if (destroy)
-                component.destroy();
-            component._parent = undefined;
-            if (component.domWrapper !== undefined)
-                component.domWrapper._parent = undefined;
-            if (this._components) {
-                var pos = this._components.indexOf(component);
-                if (pos >= 0)
-                    this._components.splice(pos, 1);
-            }
-            let posd = (_a = this.designDummies) === null || _a === void 0 ? void 0 : _a.indexOf(component);
-            if (posd >= 0)
-                this.designDummies.splice(posd, 1);
-            try {
-                this.dom.removeChild(component.domWrapper);
-            }
-            catch (ex) {
-            }
-        }
-        /**
-       * remove all component
-       * @param {boolean} destroy - if true the component would be destroyed
-       */
-        removeAll(destroy = undefined) {
-            while (this._components.length > 0) {
-                this.remove(this._components[0], destroy);
-            }
-        }
-        destroy() {
-            if (this._components !== undefined) {
-                var tmp = [].concat(this._components);
-                for (var k = 0; k < tmp.length; k++) {
-                    tmp[k].destroy();
-                }
-                this._components = [];
-            }
-            super.destroy();
-        }
-    }
-    exports.HTMLComponent = HTMLComponent;
-    class TextComponent extends Component_8.Component {
-    }
-    exports.TextComponent = TextComponent;
 });
 define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_46, Menu_2, InvisibleComponent_1, Component_9, Classes_18, Property_9, Actions_2, MenuItem_2) {
     "use strict";
@@ -18163,7 +18194,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1695588862649.9673,
+                "date": 1695670324686.1287,
                 "jassijs.ui.Component": {
                     "@members": {}
                 }
@@ -18173,7 +18204,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1695590706160.0225,
+                "date": 1695669039761.7732,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {

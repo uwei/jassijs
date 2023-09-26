@@ -1,4 +1,9 @@
-
+.testuw::after { 
+  content: "O";
+  background-color: yellow;
+  color: red;
+  font-weight: bold;
+}
 .jlabel{ 
   display:block;font-size: smaller;
 }
