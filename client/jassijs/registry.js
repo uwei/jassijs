@@ -455,7 +455,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Serverservice.ts": {
-		"date": 1682715264000
+		"date": 1695999826188.6174
 	},
 	"jassijs/remote/Settings.ts": {
 		"date": 1681315776000,
@@ -666,7 +666,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1695670324686.1287,
+		"date": 1695934708576.3948,
 		"jassijs.ui.Component": {
 			"@members": {}
 		}
@@ -1005,7 +1005,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1683645540000,
+		"date": 1695935108231.8503,
 		"jassijs.ui.PanelCreateProperties": {
 			"@members": {}
 		},
@@ -1034,7 +1034,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1695319969067.791,
+		"date": 1696000436276.2852,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {}

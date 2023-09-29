@@ -215,6 +215,7 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
      */
     constructor(properties: ComponentCreateProperties | any = undefined) {//id connect to existing(not reqired)
         super(properties, undefined);
+        this.props=properties;
         if (properties === undefined || properties.id === undefined) {
             var rend = this.render();
             if (rend) {

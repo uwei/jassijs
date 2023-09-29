@@ -629,7 +629,10 @@ export class PropertyEditor extends Panel {
      * update the parser
      */
     updateParser() {
+        
         if (this.codeEditor === undefined)
+            return;
+        if (this.codeEditor.file.endsWith(".tsx"))
             return;
         if (this.parentPropertyEditor !== undefined) {
             this.parentPropertyEditor.updateParser();
@@ -723,8 +726,8 @@ export class PropertyEditor extends Panel {
         if (doUpdate) {
             //correct spaces
             if (value && value.indexOf && value.indexOf("\n") > -1) {
-                this.codeEditor.value = this.parser.getModifiedCode();
-                this.updateParser();
+               // this.codeEditor.value = this.parser.getModifiedCode();
+               // this.updateParser();
             }
             this.codeEditor.value = this.parser.getModifiedCode();
             this.updateParser();
@@ -753,13 +756,13 @@ export class PropertyEditor extends Panel {
             this._value[property](value);
         else{
            // if(property==="value"){
-                console.log("rerender");
+             //   console.log("rerender");
                 //this._value.lastconfig[property]=value;
                 //this._value.rerender();
-           /* }else{
+           
                             this._value[property] = value;
 
-            }*/
+          
         }
 
     }

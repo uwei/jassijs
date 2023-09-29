@@ -46,9 +46,46 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         }
         getModifiedCode() {
             const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
-            const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, /*setParentNodes*/ false, ts.ScriptKind.TS);
-            const result = printer.printNode(ts.EmitHint.Unspecified, this.sourceFile, resultFile);
+            const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, /*setParentNodes*/ false, this.jsxVariables ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+            var result = printer.printNode(ts.EmitHint.Unspecified, this.sourceFile, resultFile);
+            result = this.reformatCode(result);
             return result;
+        }
+        reformatCode(code) {
+            const serviceHost = {
+                getScriptFileNames: () => [],
+                getScriptVersion: fileName => "1.0",
+                getScriptSnapshot: fileName => {
+                    return ts.ScriptSnapshot.fromString(code);
+                },
+                getCurrentDirectory: () => "",
+                getCompilationSettings: () => ({}),
+                getDefaultLibFileName: options => ts.getDefaultLibFilePath(options),
+                fileExists: (a) => false,
+                readFile: (a) => code,
+                readDirectory: (a) => []
+            };
+            var file = this.jsxVariables ? "tempdoc.tsx" : "tempdoc.ts";
+            const languageService = ts.createLanguageService(serviceHost, ts.createDocumentRegistry());
+            const textChanges = languageService.getFormattingEditsForDocument(file, {
+                convertTabsToSpaces: true,
+                //   insertSpaceAfterCommaDelimiter: true,
+                //  insertSpaceAfterKeywordsInControlFlowStatements: true,
+                // insertSpaceBeforeAndAfterBinaryOperators: true,
+                newLineCharacter: "\n",
+                indentStyle: ts.IndentStyle.Smart,
+                indentSize: 4,
+                tabSize: 4
+            });
+            let finalText = code;
+            var arr = textChanges.sort((a, b) => b.span.start - a.span.start);
+            for (var x = 0; x < arr.length; x++) {
+                var textChange = arr[x];
+                const { span } = textChange;
+                finalText = finalText.slice(0, span.start) + textChange.newText
+                    + finalText.slice(span.start + span.length);
+            }
+            return finalText;
         }
         /**
          * add a property
@@ -261,6 +298,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             }
         }
         parseProperties(node) {
+            var _this = this;
             if (ts.isVariableDeclaration(node)) {
                 var name = node.name.getText();
                 if (node.initializer !== undefined) {
@@ -274,7 +312,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 var node2;
                 var left;
                 var value;
-                var _this = this;
                 var isFunction = false;
                 if (ts.isBinaryExpression(node)) {
                     node1 = node.left;
@@ -327,7 +364,25 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 this.add(variable, prop, value, node.parent, isFunction);
             }
             else
-                node.getChildren().forEach(c => this.visitNode(c, true));
+                node.getChildren().forEach(c => _this.visitNode(c, true));
+        }
+        parseJSX(_this, node) {
+            var nd = node;
+            var jsx = _this.jsxVariables[nd.openingElement.pos - 1];
+            if (jsx === undefined)
+                jsx = _this.jsxVariables[nd.openingElement.pos];
+            if (jsx === undefined)
+                jsx = _this.jsxVariables[nd.openingElement.pos + 1];
+            if (jsx) {
+                _this.jsxVariables[jsx.name] = jsx;
+                _this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
+                for (var x = 0; x < nd.openingElement.attributes.properties.length; x++) {
+                    var prop = nd.openingElement.attributes.properties[x];
+                    var val = prop.initializer.text;
+                    _this.add(jsx.name, prop.name.text, val, prop);
+                }
+            }
+            console.log(nd.openingElement.getText(this.sourceFile));
         }
         visitNode(node, consumeProperties = undefined) {
             var _this = this;
@@ -365,10 +420,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 else
                     consumeProperties = true;
             }
+            if (node.kind === ts.SyntaxKind.JsxElement) {
+                _this.parseJSX(_this, node);
+            }
             if (consumeProperties)
                 this.parseProperties(node);
             else
-                node.getChildren().forEach(c => this.visitNode(c, consumeProperties));
+                node.getChildren().forEach(c => _this.visitNode(c, consumeProperties));
             //TODO remove this block
             /*  if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
                   this.add(node["name"].text, "", "", undefined);
@@ -403,8 +461,21 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         getClassScopeFromPosition(code, pos) {
             this.data = {};
             this.code = code;
-            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
+            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, this.jsxVariables ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
             return this.searchClassnode(this.sourceFile, pos);
+            //return this.parseold(code,onlyfunction);
+        }
+        removePos(node) {
+            var _this = this;
+            node.pos = -1;
+            node.end = -1;
+            node.forEachChild((ch) => _this.removePos(ch));
+        }
+        createNode(code) {
+            var ret = ts.createSourceFile('dummytemp.ts', code, ts.ScriptTarget.ES5, true, this.jsxVariables ? ts.ScriptKind.TSX : undefined);
+            var node = ret.statements[0].expression;
+            this.removePos(node);
+            return ret;
             //return this.parseold(code,onlyfunction);
         }
         /**
@@ -412,14 +483,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         * @param {string} code - the code
         * @param {string} onlyfunction - only the code in the function is parsed, e.g. "layout()"
         */
-        parse(code, classScope = undefined) {
+        parse(code, classScope = undefined, jsxVariables = undefined) {
             this.data = {};
+            this.jsxVariables = jsxVariables;
             this.code = code;
             if (classScope !== undefined)
                 this.classScope = classScope;
             else
                 classScope = this.classScope;
-            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
+            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, jsxVariables ? ts.ScriptKind.TSX : undefined);
             if (this.classScope === undefined)
                 this.visitNode(this.sourceFile, true);
             else
@@ -713,16 +785,22 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             else { //comp.add(a) --> comp.config({children:[a]})
                 if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
                     let node = this.data[variableName][property][0].node;
+                    this.data[variableName][property];
                     var pos = config.properties.indexOf(node);
                     config.properties[pos] = newExpression;
+                    this.data[variableName][property][0].value = value;
+                    this.data[variableName][property][0].node = newExpression;
                     this.switchToMutlilineIfNeeded(config, property, value);
                 }
                 else {
                     config.properties.push(newExpression);
+                    if (this.data[variableName][property] === undefined)
+                        this.data[variableName][property] = [{ isFunction, value, node: newExpression }];
+                    this.data[variableName][property][0].node = newExpression;
                     this.switchToMutlilineIfNeeded(config, property, value);
                 }
             }
-            console.log("correct spaces");
+            console.log("todo correct spaces");
             this.parse(this.getModifiedCode());
             //if (pos >= 0)
             //  node.parent["statements"].splice(pos, 1);
@@ -752,6 +830,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         * @param [variablescope] - if this scope is defined - the new property would be insert in this variable
         */
         setPropertyInCode(variableName, property, value, classscope, isFunction = false, replace = undefined, before = undefined, variablescope = undefined) {
+            if (this.jsxVariables)
+                return this.setPropertyInJSX(variableName, property, value, classscope, isFunction, replace, before, variablescope);
             if (this.data[variableName] === undefined)
                 this.data[variableName] = {};
             if (classscope === undefined)
@@ -783,10 +863,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 let node = this.data[variableName][property][0].node;
                 var pos = node.parent["statements"].indexOf(node);
                 node.parent["statements"][pos] = newExpression;
+                newExpression.parent = node.parent;
                 //if (pos >= 0)
                 //  node.parent["statements"].splice(pos, 1);
             }
             else { //insert new
+                debugger;
                 if (before) {
                     if (before.value === undefined)
                         throw "not implemented";
@@ -830,6 +912,112 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                         }
                         statements.splice(pos, 0, newExpression);
                     }
+                }
+            }
+        }
+        setPropertyInJSX(variableName, property, value, classscope, isFunction = false, replace = undefined, before = undefined, variablescope = undefined) {
+            //if (this.data[variableName] === undefined)
+            //    this.data[variableName] = {};
+            var newValue = typeof value === "string" ? ts.createIdentifier(value) : value;
+            var newExpression = newExpression = ts.createJsxAttribute(ts.createIdentifier(property), newValue);
+            ;
+            if (property === "new") { //me.panel1=new Panel({});
+                /*       let prop = this.data[variableName]["_new_"][0];//.substring(3)];
+                       var constr = prop.value;
+                       value = constr.substring(0, constr.indexOf("(") + 1) + value + constr.substring(constr.lastIndexOf(")"));
+                       replace = true;
+                       var left = prop.node.getText();
+                       left = left.substring(0, left.indexOf("=") - 1);
+                       property = "_new_";
+                       newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), newValue));
+                   */
+            }
+            else if (isFunction) {
+                //   newExpression = ts.createExpressionStatement(ts.createCall(
+                //     ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
+            } /*else
+                newExpression = ts.createExpressionStatement(ts.createAssignment(
+                    ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
+            */
+            if (property === "add") {
+                debugger;
+                var prop = this.data[value]["_new_"][0];
+                var classname = prop.className;
+                var node = this.createNode("<" + classname + "></" + classname + ">");
+                var parent = this.data[variableName]["_new_"][0].node;
+                node.parent = parent;
+                prop.node = node;
+                prop.value = value;
+                if (parent["children"].length > 0) {
+                    var last = parent["children"][parent["children"].length - 1];
+                    debugger;
+                    if (last === null || last === void 0 ? void 0 : last.containsOnlyTriviaWhiteSpaces) {
+                        parent["children"].splice(parent["children"].length - 1, 1);
+                    }
+                }
+                parent["children"].push(node);
+                return;
+            }
+            if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
+                let node = this.data[variableName][property][0].node;
+                var pos = node.parent["properties"].indexOf(node);
+                //node.initializer.text=newValue;
+                node.parent["properties"][pos] = newExpression;
+                newExpression.parent = node.parent;
+                this.data[variableName][property][0].node = newExpression;
+                this.data[variableName][property][0].value = value;
+                //var pos = node.parent["properties"].indexOf(node);
+                //node.parent["properties"][pos] = newValue;
+                //if (pos >= 0)
+                //  node.parent["statements"].splice(pos, 1);
+            }
+            else { //insert new
+                if (before) {
+                    /*  if (before.value === undefined)
+                          throw "not implemented";
+                      let node = undefined;
+                      for (var o = 0; o < this.data[before.variablename][before.property].length; o++) {
+                          if (this.data[before.variablename][before.property][o].value === before.value) {
+                              node = this.data[before.variablename][before.property][o].node;
+                              break;
+                          }
+                      }
+                      if (!node)
+                          throw Error("Property not found " + before.variablename + "." + before.property + " value " + before.value);
+                      var pos = node.parent["statements"].indexOf(node);
+                      if (pos >= 0)
+                          node.parent["statements"].splice(pos, 0, newExpression);*/
+                }
+                else {
+                    debugger;
+                    var parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
+                    this.data[variableName][property] = [{ node: newExpression, isFunction, value }];
+                    parent["properties"].push(newExpression);
+                    newExpression.parent = parent["properties"];
+                    /* for (let prop in this.data[variableName]) {
+                        if (prop === "_new_") {
+                            //should be in the same scope of declaration (important for repeater)
+                            statements = this.data[variableName][prop][0].node.parent["statements"];
+                            continue;
+                        }
+                        var testnode: ts.Node = this.data[variableName][prop][this.data[variableName][prop].length - 1].node;
+                        if (testnode.parent === scope["body"])
+                            lastprop = testnode;
+                    }
+                    if (lastprop) {
+                        var pos = lastprop.parent["statements"].indexOf(lastprop);
+                        if (pos >= 0)
+                            lastprop.parent["statements"].splice(pos + 1, 0, newExpression);
+                    } else {
+                        var pos = statements.length;
+                        try {
+                            if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
+                                pos--;
+                        } catch {
+    
+                        }
+                        statements.splice(pos, 0, newExpression);
+                    }*/
                 }
             }
         }
@@ -886,27 +1074,36 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 classscope = this.classScope;
             let type = fulltype.split(".")[fulltype.split(".").length - 1];
             var varname = this.getNextVariableNameForType(type, suggestedName);
-            var useMe = false;
-            if (this.data["me"] !== undefined)
-                useMe = true;
-            //var if(scopename)
-            var node = this.getNodeFromScope(classscope, variablescope);
-            //@ts-ignore
-            if (((_a = node === null || node === void 0 ? void 0 : node.parameters) === null || _a === void 0 ? void 0 : _a.length) > 0 && node.parameters[0].name.text == "me") {
-                useMe = true;
+            if (this.jsxVariables) {
+                this.data[varname] = {
+                    "_new_": [{ className: type }]
+                };
+                // this.addTypeMe(varname, type);
+                return varname;
             }
-            var prefix = useMe ? "me." : "var ";
-            if (node === undefined)
-                throw Error("no scope to insert a variable could be found");
-            var statements = node["body"] ? node["body"].statements : node["statements"];
-            for (var x = 0; x < statements.length; x++) {
-                if (!statements[x].getText().split("\n")[0].includes("new ") && !statements[x].getText().split("\n")[0].includes("var "))
-                    break;
+            else {
+                var useMe = false;
+                if (this.data["me"] !== undefined)
+                    useMe = true;
+                //var if(scopename)
+                var node = this.getNodeFromScope(classscope, variablescope);
+                //@ts-ignore
+                if (((_a = node === null || node === void 0 ? void 0 : node.parameters) === null || _a === void 0 ? void 0 : _a.length) > 0 && node.parameters[0].name.text == "me") {
+                    useMe = true;
+                }
+                var prefix = useMe ? "me." : "var ";
+                if (node === undefined)
+                    throw Error("no scope to insert a variable could be found");
+                var statements = node["body"] ? node["body"].statements : node["statements"];
+                for (var x = 0; x < statements.length; x++) {
+                    if (!statements[x].getText().split("\n")[0].includes("new ") && !statements[x].getText().split("\n")[0].includes("var "))
+                        break;
+                }
+                var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
+                statements.splice(x, 0, ts.createStatement(ass));
+                if (useMe)
+                    this.addTypeMe(varname, type);
             }
-            var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
-            statements.splice(x, 0, ts.createStatement(ass));
-            if (useMe)
-                this.addTypeMe(varname, type);
             return (useMe ? "me." : "") + varname;
         }
     };
@@ -951,14 +1148,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
     async function test() {
         tests(new Test_1.Test());
         await Typescript_1.default.waitForInited;
-        var code = Typescript_1.default.getCode("demo/Dialog2.ts");
+        var code = Typescript_1.default.getCode("demo/hallo.tsx");
         var parser = new Parser();
+        parser.parse(code, undefined, true);
+        debugger;
         // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
         // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
         //parser.parse(code, undefined);
         //code="reportdesign={k:9};";
-        parser.parse(code, [{ classname: "Dialog2", methodname: "layout" }]); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
+        // parser.parse(code,[{ classname: "Dialog2", methodname: "layout" }]);// [{ classname: "TestDialogBinder", methodname: "layout" }]);
         //    parser.setPropertyInCode("me.table","new",'new Table({\n      paginationSize: 1\n})',undefined);
         //  console.log(parser.getModifiedCode());
         // parser.removeVariablesInCode(["me.repeater"]);

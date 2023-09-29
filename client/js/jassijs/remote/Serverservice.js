@@ -19,6 +19,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry
                 var khsdf = runningServerservices;
                 if (target[prop]) {
                     resolve(target[prop]);
+                    return;
                 }
                 else {
                     var all = await Registry_1.default.getJSONData("$Serverservice");

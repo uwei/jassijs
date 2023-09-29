@@ -298,10 +298,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.variables.addAll(variables);
         }
         async fillVariablesAndSetupParser(url, root, component, cache, parser) {
-            var _a, _b, _c, _d, _e;
+            var _a, _b, _c, _d, _e, _f;
             var useThis = false;
-            if (cache[component._id] === undefined && component["__stack"] !== undefined) {
-                var lines = (_a = component["__stack"]) === null || _a === void 0 ? void 0 : _a.split("\n");
+            if (cache[component._id] === undefined && component["__stack"] !== undefined && ((_a = component === null || component === void 0 ? void 0 : component.dom) === null || _a === void 0 ? void 0 : _a.classList) && !component.dom.classList.contains("designdummy")) {
+                var lines = (_b = component["__stack"]) === null || _b === void 0 ? void 0 : _b.split("\n");
                 for (var x = 0; x < lines.length; x++) {
                     var sline = lines[x];
                     if (sline.indexOf("$temp.js") > 0) {
@@ -349,47 +349,66 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         if (foundscope)
                             break;
                     }
-                    var scope = [{ classname: (_b = root === null || root === void 0 ? void 0 : root.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }];
+                    var scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }];
                     if (foundscope)
-                        scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }, foundscope];
-                    parser.parse(this._codePanel.value, scope);
-                    //if layout is rendered and an other variable is assigned to this, then remove ths variable
-                    if (parser.classes[(_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name] && parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name].members["layout"]) {
-                        useThis = true;
-                        this.variables.addVariable("this", root);
+                        scope = [{ classname: (_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name, methodname: "layout" }, foundscope];
+                    if (this.file.toLowerCase().endsWith(".tsx")) {
+                        var autovars = {};
+                        var jsxvars = {};
+                        for (var x = 0; x < values.length; x++) {
+                            var v = values[x].component;
+                            var tag = v.tag === undefined ? v.constructor.name : v.tag;
+                            if (autovars[tag] === undefined)
+                                autovars[tag] = 1;
+                            values[x].name = tag + (autovars[tag]++);
+                            jsxvars[values[x].pos] = values[x];
+                        }
+                        parser.parse(this._codePanel.value, undefined, jsxvars);
+                        for (var x = 0; x < values.length; x++) {
+                            this.variables.addVariable(values[x].name, values[x].component, false);
+                        }
+                        // this.variables.addVariable(sname, val.component, false);
                     }
-                    for (var key in parser.data) {
-                        var com = parser.data[key];
-                        var _new_ = com["_new_"];
-                        if (_new_) {
-                            var pos = _new_[0].node.pos;
-                            var end = _new_[0].node.end;
-                            for (var x = 0; x < values.length; x++) {
-                                var val = values[x];
-                                if (val.pos >= pos && val.pos <= end) {
-                                    val.name = key;
+                    else {
+                        parser.parse(this._codePanel.value, scope);
+                        //if layout is rendered and an other variable is assigned to this, then remove ths variable
+                        if (parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name] && parser.classes[(_f = root === null || root === void 0 ? void 0 : root.constructor) === null || _f === void 0 ? void 0 : _f.name].members["layout"]) {
+                            useThis = true;
+                            this.variables.addVariable("this", root);
+                        }
+                        for (var key in parser.data) {
+                            var com = parser.data[key];
+                            var _new_ = com["_new_"];
+                            if (_new_) {
+                                var pos = _new_[0].node.pos;
+                                var end = _new_[0].node.end;
+                                for (var x = 0; x < values.length; x++) {
+                                    var val = values[x];
+                                    if (val.pos >= pos && val.pos <= end) {
+                                        val.name = key;
+                                    }
                                 }
                             }
                         }
-                    }
-                    var ignoreVar = [];
-                    for (var x = 0; x < values.length; x++) {
-                        var val = values[x];
-                        var sname = val.name;
-                        var found = false;
-                        this.variables.value.forEach((it) => {
-                            if (it.name === sname)
-                                found = true;
-                        });
-                        //sometimes does a constructor create other Components so we need the first one
-                        if (found)
-                            continue;
-                        if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                            if (ignoreVar.indexOf(sname) === -1) {
-                                if (useThis && root === val.component)
-                                    ignoreVar.push(sname); //do nothing
-                                else
-                                    this.variables.addVariable(sname, val.component, false);
+                        var ignoreVar = [];
+                        for (var x = 0; x < values.length; x++) {
+                            var val = values[x];
+                            var sname = val.name;
+                            var found = false;
+                            this.variables.value.forEach((it) => {
+                                if (it.name === sname)
+                                    found = true;
+                            });
+                            //sometimes does a constructor create other Components so we need the first one
+                            if (found)
+                                continue;
+                            if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
+                                if (ignoreVar.indexOf(sname) === -1) {
+                                    if (useThis && root === val.component)
+                                        ignoreVar.push(sname); //do nothing
+                                    else
+                                        this.variables.addVariable(sname, val.component, false);
+                                }
                             }
                         }
                     }
@@ -475,7 +494,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             var lines = code.split("\n");
             var _this = this;
             var breakpoints = _this._codePanel.getBreakpoints();
-            var filename = _this._file.replace(".tsx", "$temp.tsx").replace(".ts", "$temp.ts");
+            var filename = "";
+            if (_this._file.endsWith(".tsx"))
+                filename = _this._file.replace(".tsx", "$temp.tsx");
+            else
+                filename = _this._file.replace(".ts", "$temp.ts");
             await jassijs.debugger.removeBreakpointsForFile(filename);
             for (var line in breakpoints) {
                 if (breakpoints[line]) {

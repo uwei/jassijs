@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ext/jquerylib", "jassijs/base/PropertyEditorService"], function (require, exports, Registry_1, Panel_1, Button_1, Image_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1, Component_1) {
     "use strict";
-    var PropertyEditor_1;
+    var PropertyEditor_1, _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.PropertyEditorTestSubProperties = exports.PropertyEditor = void 0;
     let PropertyEditor = PropertyEditor_1 = class PropertyEditor extends Panel_1.Panel {
@@ -509,6 +509,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         updateParser() {
             if (this.codeEditor === undefined)
                 return;
+            if (this.codeEditor.file.endsWith(".tsx"))
+                return;
             if (this.parentPropertyEditor !== undefined) {
                 this.parentPropertyEditor.updateParser();
             }
@@ -596,8 +598,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             if (doUpdate) {
                 //correct spaces
                 if (value && value.indexOf && value.indexOf("\n") > -1) {
-                    this.codeEditor.value = this.parser.getModifiedCode();
-                    this.updateParser();
+                    // this.codeEditor.value = this.parser.getModifiedCode();
+                    // this.updateParser();
                 }
                 this.codeEditor.value = this.parser.getModifiedCode();
                 this.updateParser();
@@ -625,13 +627,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 this._value[property](value);
             else {
                 // if(property==="value"){
-                console.log("rerender");
+                //   console.log("rerender");
                 //this._value.lastconfig[property]=value;
                 //this._value.rerender();
-                /* }else{
-                                 this._value[property] = value;
-     
-                 }*/
+                this._value[property] = value;
             }
         }
         /**
@@ -822,7 +821,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
     ], TestProperties.prototype, "color", void 0);
     __decorate([
         (0, Property_1.$Property)({ type: "componentselector", componentType: "jassi.ui.Component" }),
-        __metadata("design:type", Component_1.Component)
+        __metadata("design:type", typeof (_a = typeof Component_1.Component !== "undefined" && Component_1.Component) === "function" ? _a : Object)
     ], TestProperties.prototype, "component", void 0);
     __decorate([
         (0, Property_1.$Property)({ type: "databinder" }),

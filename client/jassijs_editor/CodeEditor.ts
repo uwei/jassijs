@@ -363,7 +363,7 @@ export class CodeEditor extends Panel {
     private async fillVariablesAndSetupParser(url: string, root: Component, component: Component, cache: { [componentid: string]: [{ component: Component, line: number, column: number, pos: number, name: string }] }, parser) {
 
         var useThis = false;
-        if (cache[component._id] === undefined && component["__stack"] !== undefined) {
+        if (cache[component._id] === undefined && component["__stack"] !== undefined && component?.dom?.classList && !component.dom.classList.contains("designdummy")) {
             var lines = component["__stack"]?.split("\n");
             for (var x = 0; x < lines.length; x++) {
                 var sline: string = lines[x];
@@ -420,51 +420,68 @@ export class CodeEditor extends Panel {
                 var scope = [{ classname: root?.constructor?.name, methodname: "layout" }];
                 if (foundscope)
                     scope = [{ classname: root?.constructor?.name, methodname: "layout" }, foundscope];
+                if (this.file.toLowerCase().endsWith(".tsx")) {
+                    var autovars = {};
+                    var jsxvars = {}
+                    for (var x = 0; x < values.length; x++) {
+                        var v = values[x].component;
+                        var tag=v.tag===undefined?v.constructor.name:v.tag;
+                        if (autovars[tag] === undefined)
+                            autovars[tag] = 1;
+                        values[x].name = tag + (autovars[tag]++);
+                        jsxvars[values[x].pos] = values[x];
+                    }
+                    parser.parse(this._codePanel.value, undefined, jsxvars);
+                   for(var x=0;x<values.length;x++) {
+                        this.variables.addVariable(values[x].name, values[x].component, false);
+                    }
+                    // this.variables.addVariable(sname, val.component, false);
+                    
+                } else {
+                    parser.parse(this._codePanel.value, scope);
+                    //if layout is rendered and an other variable is assigned to this, then remove ths variable
+                    if (parser.classes[root?.constructor?.name] && parser.classes[root?.constructor?.name].members["layout"]) {
+                        useThis = true;
+                        this.variables.addVariable("this", root);
+                    }
+                    for (var key in parser.data) {
+                        var com = parser.data[key];
+                        var _new_ = com["_new_"];
+                        if (_new_) {
+                            var pos = _new_[0].node.pos;
+                            var end = _new_[0].node.end;
+                            for (var x = 0; x < values.length; x++) {
+                                var val = values[x];
+                                if (val.pos >= pos && val.pos <= end) {
+                                    val.name = key;
+                                }
+                            }
+                        }
+                    }
+                    var ignoreVar = [];
+                    for (var x = 0; x < values.length; x++) {
+                        var val = values[x];
+                        var sname = val.name;
 
-                parser.parse(this._codePanel.value, scope);
-                //if layout is rendered and an other variable is assigned to this, then remove ths variable
-                if (parser.classes[root?.constructor?.name] && parser.classes[root?.constructor?.name].members["layout"]) {
-                    useThis = true;
-                    this.variables.addVariable("this", root);
-                }
-                for (var key in parser.data) {
-                    var com = parser.data[key];
-                    var _new_ = com["_new_"];
-                    if (_new_) {
-                        var pos = _new_[0].node.pos;
-                        var end = _new_[0].node.end;
-                        for (var x = 0; x < values.length; x++) {
-                            var val = values[x];
-                            if (val.pos >= pos && val.pos <= end) {
-                                val.name = key;
+                        var found = false;
+                        this.variables.value.forEach((it) => {
+                            if (it.name === sname)
+                                found = true;
+                        });
+                        //sometimes does a constructor create other Components so we need the first one
+                        if (found)
+                            continue;
+
+                        if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
+                            if (ignoreVar.indexOf(sname) === -1) {
+                                if (useThis && root === val.component)
+                                    ignoreVar.push(sname);//do nothing
+                                else
+                                    this.variables.addVariable(sname, val.component, false);
                             }
                         }
                     }
                 }
-                var ignoreVar = [];
-                for (var x = 0; x < values.length; x++) {
-                    var val = values[x];
-                    var sname = val.name;
-
-                    var found = false;
-                    this.variables.value.forEach((it) => {
-                        if (it.name === sname)
-                            found = true;
-                    });
-                    //sometimes does a constructor create other Components so we need the first one
-                    if (found)
-                        continue;
-
-                    if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                        if (ignoreVar.indexOf(sname) === -1) {
-                            if (useThis && root === val.component)
-                                ignoreVar.push(sname);//do nothing
-                            else
-                                this.variables.addVariable(sname, val.component, false);
-                        }
-                    }
-                }
-
 
 
                 this.variables.updateCache();
@@ -556,7 +573,11 @@ export class CodeEditor extends Panel {
         var lines = code.split("\n");
         var _this = this;
         var breakpoints = _this._codePanel.getBreakpoints();
-        var filename = _this._file.replace(".tsx", "$temp.tsx").replace(".ts", "$temp.ts");
+        var filename = "";
+        if (_this._file.endsWith(".tsx"))
+            filename = _this._file.replace(".tsx", "$temp.tsx");
+        else
+            filename = _this._file.replace(".ts", "$temp.ts");
         await jassijs.debugger.removeBreakpointsForFile(filename);
         for (var line in breakpoints) {
             if (breakpoints[line]) {
@@ -589,7 +610,7 @@ export class CodeEditor extends Panel {
                 //@ts-ignore
                 if (window.reportdesign) {
                     ret = {
-                         //@ts-ignore
+                        //@ts-ignore
                         reportdesign: window.reportdesign
                     }
                 } else {
@@ -615,20 +636,20 @@ export class CodeEditor extends Panel {
         //@ts-ignore 
         var tss = await import("jassijs_editor/util/Typescript");
         //@ts-ignore 
-        var settings = Object.assign({},Typescript.compilerSettings);
+        var settings = Object.assign({}, Typescript.compilerSettings);
         settings["inlineSourceMap"] = true;
         settings["inlineSources"] = true;
         var files;
-        if(this.file.endsWith(".tsx"))
-            files = await tss.default.transpile(file + ".tsx", code,settings);
+        if (this.file.endsWith(".tsx"))
+            files = await tss.default.transpile(file + ".tsx", code, settings);
         else
-            files = await tss.default.transpile(file + ".ts", code,settings);
+            files = await tss.default.transpile(file + ".ts", code, settings);
 
         var codets = -1;
         var codemap = -1;
         var codejs = -1;
         for (var x = 0; x < files.fileNames.length; x++) {
-            if (files.fileNames[x].endsWith(".ts")||files.fileNames[x].endsWith(".tsx")) {
+            if (files.fileNames[x].endsWith(".ts") || files.fileNames[x].endsWith(".tsx")) {
                 codets = x;
             }
             if (files.fileNames[x].endsWith(".js.map")) {
@@ -690,7 +711,7 @@ export class CodeEditor extends Panel {
         if (this.file?.startsWith("$serverside/")) {
 
             var res = await this.evalServerside();
-            await this._processEvalResult(res,undefined);
+            await this._processEvalResult(res, undefined);
 
             return;
         }

@@ -25,6 +25,7 @@ var serverservices: Serverservice = <any>new Proxy(runningServerservices, {
             var khsdf=runningServerservices;
             if (target[prop]) { 
                 resolve(target[prop]); 
+                return;
             } else {
                 var all = await registry.getJSONData("$Serverservice");
                 for (var x = 0; x < all.length; x++) { 

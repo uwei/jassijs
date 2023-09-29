@@ -31,7 +31,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         */
         constructor(properties = undefined) {
             var addStyle = "";
-            var tag = properties !== undefined && properties.useSpan === true ? "span" : "div";
             if (properties != undefined && properties.id === "body") {
                 super();
                 this.dom = document.body;
@@ -43,14 +42,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
                 //            $(document.body).append(this.domWrapper); 
             }
             else {
+                if (properties === undefined)
+                    properties = {};
                 super(properties);
                 if (properties === undefined || properties.id === undefined) {
                     //super.init($('<div class="Panel"/>')[0]);
-                    super.init('<' + tag + ' class="Panel" />');
+                    //thissuper.init();
                 }
             }
             this._designMode = false;
             this.isAbsolute = false;
+        }
+        render() {
+            var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
+            return React.createElement(tag, { className: "Panel" });
         }
         config(config) {
             super.config(config);

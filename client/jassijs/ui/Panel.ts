@@ -36,7 +36,7 @@ export class Panel extends Container implements PanelConfig {
     */
     constructor(properties: PanelCreateProperties = undefined) {//id connect to existing(not reqired)
         var addStyle = "";
-        var tag = properties !== undefined && properties.useSpan === true ? "span" : "div";
+       
         if (properties != undefined && properties.id === "body") {
             super();
 
@@ -49,14 +49,21 @@ export class Panel extends Container implements PanelConfig {
 
             //            $(document.body).append(this.domWrapper); 
         } else {
+            if(properties===undefined)
+                properties={};
+                
             super(properties);
             if (properties === undefined || properties.id === undefined) {
                 //super.init($('<div class="Panel"/>')[0]);
-                super.init('<' + tag + ' class="Panel" />');
+                //thissuper.init();
             }
         }
         this._designMode = false;
         this.isAbsolute = false;
+    }
+    render(){
+        var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
+        return React.createElement(tag,{className:"Panel"});
     }
     config(config: PanelConfig): Panel {
         super.config(<ContainerConfig>config);

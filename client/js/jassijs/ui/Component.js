@@ -115,6 +115,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
          */
         constructor(properties = undefined) {
             super(properties, undefined);
+            this.props = properties;
             if (properties === undefined || properties.id === undefined) {
                 var rend = this.render();
                 if (rend) {
