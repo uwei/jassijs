@@ -1557,7 +1557,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Serverservice.ts": {
-                "date": 1682715264000
+                "date": 1695999826188.6174
             },
             "jassijs/remote/Settings.ts": {
                 "date": 1681315776000,
@@ -1724,7 +1724,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
-                "date": 1657569478000,
+                "date": 1696339497523.8098,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
                         {
@@ -1768,8 +1768,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1695670324686.1287,
+                "date": 1696352022275.8064,
                 "jassijs.ui.Component": {
+                    "@members": {}
+                },
+                "jassijs.ui.HTMLComponent": {
                     "@members": {}
                 }
             },
@@ -2107,7 +2110,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1683645540000,
+                "date": 1695935108231.8503,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {}
                 },
@@ -2136,7 +2139,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1695319969067.791,
+                "date": 1696320466897.5088,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {}
@@ -5111,6 +5114,7 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
                 var khsdf = runningServerservices;
                 if (target[prop]) {
                     resolve(target[prop]);
+                    return;
                 }
                 else {
                     var all = await Registry_29.default.getJSONData("$Serverservice");
@@ -6289,9 +6293,9 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Button = void 0;
     let Button = class Button extends Component_4.Component {
-        constructor() {
-            super();
-            super.init('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>');
+        constructor(props = {}) {
+            super(props);
+            //    super.init('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>');
         }
         config(config) {
             super.config(config);
@@ -6302,6 +6306,19 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
         }
         set dom(value) {
             super.dom = value;
+        }
+        render() {
+            return React.createElement("button", {
+                className: "Button",
+                contenteditable: false
+            }, React.createElement("span", {
+                className: "buttonspan"
+            }, React.createElement("img", {
+                style: { display: "none" },
+                className: "buttonimg"
+            }), React.createElement("span", {
+                className: "buttontext"
+            })));
         }
         onclick(handler, removeOldHandler = true) {
             if (removeOldHandler) {
@@ -6380,7 +6397,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
     Button = __decorate([
         Component_4.$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
         Registry_38.$Class("jassijs.ui.Button"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], Button);
     exports.Button = Button;
     async function test() {
@@ -6523,7 +6540,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     "use strict";
     var Component_7, _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TextComponent = exports.HTMLComponent = exports.Component = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
+    exports.TextComponent = exports.HTMLComponent = exports.Component = exports.createComponent = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
@@ -6543,54 +6560,20 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     }
     exports.ComponentCreateProperties = ComponentCreateProperties;
     var React = {
-        createElement(atype, props, ...children) {
-            var ret;
+        createElement(type, props, ...children) {
             if (props === undefined || props === null) //TODO is this right?
                 props = {};
-            if (typeof atype === "string") {
-                ret = new HTMLComponent();
-                ret.tag = atype;
-                ret.dom = document.createElement(atype);
-                for (var prop in props) {
-                    if (prop === "style") {
-                        for (var key in props.style) {
-                            var val = props.style[key];
-                            ret.dom.style[key] = val;
-                        }
-                    }
-                    else if (prop in ret.dom) {
-                        Reflect.set(ret.dom, prop, [props[prop]]);
-                    }
-                    else if (prop.toLocaleLowerCase() in ret.dom) {
-                        Reflect.set(ret.dom, prop.toLocaleLowerCase(), props[prop]);
-                    }
-                    else if (ret.dom.hasAttribute(prop)) {
-                        ret.dom.setAttribute(prop, props[prop]);
-                    }
-                }
-                ret.init(ret.dom, { noWrapper: true });
-            }
-            else if (atype.constructor !== undefined) {
-                ret = new atype(props);
-            }
-            else if (typeof atype === "function") {
-                ret = atype(props);
-            }
-            if (children !== undefined) {
-                if (props === null || props === undefined)
-                    props = {};
+            if (children) {
                 props.children = children;
-                for (var x = 0; x < props.children.length; x++) {
-                    var child = props.children[x];
-                    if (typeof child === "string") {
-                        var nd = document.createTextNode(child);
-                        child = new TextComponent();
-                        child.tag = "";
-                        child.init(nd, { noWrapper: true });
-                        //child.dom = nd;
-                    }
-                    ret.add(child);
-                }
+            }
+            var ret = {
+                props: props,
+                type: type
+            };
+            //@ts-ignore
+            for (var x = 0; x < Component._componentHook.length; x++) {
+                //@ts-ignore
+                Component._componentHook[x]("create", ret, "React.createElement");
             }
             return ret;
         }
@@ -6603,6 +6586,62 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     };
     //@ts-ignore;
     window.React = React;
+    function createComponent(node) {
+        var _a, _b, _c, _d;
+        var atype = node.type;
+        var props = node.props;
+        var ret;
+        if (typeof atype === "string") {
+            ret = new HTMLComponent(props);
+            ret.tag = atype;
+            var newdom = document.createElement(atype);
+            for (var prop in props) {
+                if (prop === "style") {
+                    for (var key in props.style) {
+                        var val = props.style[key];
+                        newdom.style[key] = val;
+                    }
+                }
+                else if (prop in newdom) {
+                    Reflect.set(newdom, prop, [props[prop]]);
+                }
+                else if (prop.toLocaleLowerCase() in newdom) {
+                    Reflect.set(newdom, prop.toLocaleLowerCase(), props[prop]);
+                } // else if (newdom.hasAttribute(prop)) {
+                newdom.setAttribute(prop, props[prop]);
+                // }
+            }
+            ret.init(newdom, { noWrapper: true });
+        }
+        else if (atype.constructor !== undefined) {
+            ret = new atype(props);
+        }
+        else if (typeof atype === "function") {
+            ret = atype(props);
+        }
+        if (((_b = (_a = node) === null || _a === void 0 ? void 0 : _a.props) === null || _b === void 0 ? void 0 : _b.children) !== undefined) {
+            if (props === null || props === undefined)
+                props = {};
+            props.children = (_d = (_c = node) === null || _c === void 0 ? void 0 : _c.props) === null || _d === void 0 ? void 0 : _d.children;
+            for (var x = 0; x < props.children.length; x++) {
+                var child = props.children[x];
+                var cchild;
+                if (typeof child === "string") {
+                    var nd = document.createTextNode(child);
+                    cchild = new TextComponent();
+                    cchild.tag = "";
+                    cchild.init(nd, { noWrapper: true });
+                    //child.dom = nd;
+                }
+                else {
+                    cchild = createComponent(child);
+                }
+                ret.add(cchild);
+            }
+        }
+        return ret;
+    }
+    exports.createComponent = createComponent;
     //class TC <Prop>extends React.Component<Prop,{}>{
     let Component = Component_7 = 
     //@ts-ignore
@@ -6625,14 +6664,15 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
          */
         constructor(properties = undefined) {
             super(properties, undefined);
+            this.props = properties;
             if (properties === undefined || properties.id === undefined) {
                 var rend = this.render();
                 if (rend) {
-                    this.init(rend.dom);
+                    var comp = createComponent(rend);
+                    this.init(comp.dom);
                 }
             }
             else {
-                debugger;
                 this._id = properties.id;
                 this.__dom = document.getElementById(properties.id);
                 this.dom._this = this;
@@ -6651,13 +6691,26 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
               this.config(this.lastconfig);
           }*/
         config(config) {
+            var con = Object.assign({}, config);
             // this.lastconfig = config;
-            for (var key in config) {
-                if (typeof this[key] === 'function') {
-                    this[key](config[key]);
+            var notfound = {};
+            for (var key in con) {
+                if (key in this) {
+                    if (typeof this[key] === 'function') {
+                        this[key](config[key]);
+                    }
+                    else {
+                        this[key] = config[key];
+                    }
                 }
-                else {
-                    this[key] = config[key];
+                else
+                    notfound[key] = con;
+            }
+            Object.assign(this.props === undefined ? {} : this.props, config);
+            if (Object.keys(notfound).length > 0) {
+                var rerender = this.render();
+                if (rerender) {
+                    this.init(createComponent(rerender).dom);
                 }
             }
             return this;
@@ -6783,6 +6836,8 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         init(dom, properties = undefined) {
             var _a;
             // this.lastinit = dom;
+            var oldwrapper = this.domWrapper;
+            var olddom = this.dom;
             if (typeof dom === "string")
                 dom = Component_7.createHTMLElement(dom);
             //is already attached
@@ -6793,8 +6848,6 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                     this.dom.setAttribute("id", properties === null || properties === void 0 ? void 0 : properties.replaceNode.getAttribute("id"));
                     return;
                 }
-                if (this.domWrapper.parentNode !== undefined)
-                    this.domWrapper.parentNode.removeChild(this.domWrapper);
                 this.domWrapper._this = undefined;
             }
             if (this.dom !== undefined) {
@@ -6809,13 +6862,13 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             //   jassijs.componentSpy.unwatch(this);
             // }
             this.dom = dom;
-            this._id = "j" + Registry_42.default.nextID();
+            this._id = olddom ? olddom.id : ("j" + Registry_42.default.nextID());
             if (this.dom.setAttribute !== undefined) //Textnode
                 this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
-            var lid = "j" + Registry_42.default.nextID();
+            var lid = oldwrapper ? oldwrapper.id : ("j" + Registry_42.default.nextID());
             var st = 'style="display: inline-block"';
             if (this instanceof Classes_16.classes.getClass("jassijs.ui.Container")) {
                 st = "";
@@ -6834,6 +6887,9 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                 this.domWrapper._id = lid;
                 this.domWrapper.appendChild(dom);
             }
+            if ((oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.parentNode) !== undefined) {
+                oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper); //removeChild(this.domWrapper);
+            }
             //append temporary so new elements must not added immediately
             if (document.getElementById("jassitemp") === null) {
                 var temp = Component_7.createHTMLElement('<template id="jassitemp"></template>');
@@ -6847,7 +6903,8 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             //if (jassijs.componentSpy !== undefined) {
             //     jassijs.componentSpy.watch(this);
             //  }
-            document.getElementById("jassitemp").appendChild(this.domWrapper);
+            if (!oldwrapper)
+                document.getElementById("jassitemp").appendChild(this.domWrapper);
         }
         set label(value) {
             if (value === undefined) {
@@ -7103,7 +7160,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [Object])
     ], Component);
     exports.Component = Component;
-    class HTMLComponent extends Component {
+    let HTMLComponent = class HTMLComponent extends Component {
         constructor() {
             super(...arguments);
             this._components = [];
@@ -7195,10 +7252,30 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             }
             super.destroy();
         }
-    }
+    };
+    HTMLComponent = __decorate([
+        Registry_41.$Class("jassijs.ui.HTMLComponent")
+    ], HTMLComponent);
     exports.HTMLComponent = HTMLComponent;
-    class TextComponent extends Component {
-    }
+    let TextComponent = class TextComponent extends Component {
+        get text() {
+            return this.dom.textContent;
+        }
+        ;
+        set text(value) {
+            var p = JSON.parse(`{"a":"` + value + '"}').a;
+            this.dom.textContent = p;
+        }
+        ;
+    };
+    __decorate([
+        Property_7.$Property(),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], TextComponent.prototype, "text", null);
+    TextComponent = __decorate([
+        Registry_41.$Class("jassijs.ui.HTMLComponent")
+    ], TextComponent);
     exports.TextComponent = TextComponent;
 });
 define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_43, Property_8, Classes_17, Registry_44) {
@@ -10818,7 +10895,6 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Registry", "ja
         */
         constructor(properties = undefined) {
             var addStyle = "";
-            var tag = properties !== undefined && properties.useSpan === true ? "span" : "div";
             if (properties != undefined && properties.id === "body") {
                 super();
                 this.dom = document.body;
@@ -10830,14 +10906,20 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Registry", "ja
                 //            $(document.body).append(this.domWrapper); 
             }
             else {
+                if (properties === undefined)
+                    properties = {};
                 super(properties);
                 if (properties === undefined || properties.id === undefined) {
                     //super.init($('<div class="Panel"/>')[0]);
-                    super.init('<' + tag + ' class="Panel" />');
+                    //thissuper.init();
                 }
             }
             this._designMode = false;
             this.isAbsolute = false;
+        }
+        render() {
+            var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
+            return React.createElement(tag, { className: "Panel" });
         }
         config(config) {
             super.config(config);
@@ -11188,7 +11270,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
                 this.codeChanges = {};
             if (value !== undefined || (value === null || value === void 0 ? void 0 : value.dom) !== undefined) {
                 //if (!$(value.dom).is(":focus"))
-                if (value.dom && document.activeElement !== value.dom)
+                if (value.dom && document.activeElement !== value.dom && value.dom.focus)
                     value.dom.focus();
             }
             if (value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
@@ -11504,6 +11586,8 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
         updateParser() {
             if (this.codeEditor === undefined)
                 return;
+            if (this.codeEditor.file.endsWith(".tsx"))
+                return;
             if (this.parentPropertyEditor !== undefined) {
                 this.parentPropertyEditor.updateParser();
             }
@@ -11591,8 +11675,8 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
             if (doUpdate) {
                 //correct spaces
                 if (value && value.indexOf && value.indexOf("\n") > -1) {
-                    this.codeEditor.value = this.parser.getModifiedCode();
-                    this.updateParser();
+                    // this.codeEditor.value = this.parser.getModifiedCode();
+                    // this.updateParser();
                 }
                 this.codeEditor.value = this.parser.getModifiedCode();
                 this.updateParser();
@@ -11620,13 +11704,10 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
                 this._value[property](value);
             else {
                 // if(property==="value"){
-                console.log("rerender");
+                //   console.log("rerender");
                 //this._value.lastconfig[property]=value;
                 //this._value.rerender();
-                /* }else{
-                                 this._value[property] = value;
-     
-                 }*/
+                this._value[property] = value;
             }
         }
         /**
@@ -18067,7 +18148,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Serverservice.ts": {
-                "date": 1682715264000
+                "date": 1695999826188.6174
             },
             "jassijs/remote/Settings.ts": {
                 "date": 1681315776000,
@@ -18150,7 +18231,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
-                "date": 1657569478000,
+                "date": 1696339497523.8098,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
                         {
@@ -18194,8 +18275,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1695670324686.1287,
+                "date": 1696352022275.8064,
                 "jassijs.ui.Component": {
+                    "@members": {}
+                },
+                "jassijs.ui.HTMLComponent": {
                     "@members": {}
                 }
             },
@@ -18533,7 +18617,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1683645540000,
+                "date": 1695935108231.8503,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {}
                 },
@@ -18562,7 +18646,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1695319969067.791,
+                "date": 1696320466897.5088,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {}

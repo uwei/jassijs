@@ -11,7 +11,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     "use strict";
     var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TextComponent = exports.HTMLComponent = exports.Component = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
+    exports.TextComponent = exports.HTMLComponent = exports.Component = exports.createComponent = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
@@ -31,54 +31,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     }
     exports.ComponentCreateProperties = ComponentCreateProperties;
     var React = {
-        createElement(atype, props, ...children) {
-            var ret;
+        createElement(type, props, ...children) {
             if (props === undefined || props === null) //TODO is this right?
                 props = {};
-            if (typeof atype === "string") {
-                ret = new HTMLComponent();
-                ret.tag = atype;
-                ret.dom = document.createElement(atype);
-                for (var prop in props) {
-                    if (prop === "style") {
-                        for (var key in props.style) {
-                            var val = props.style[key];
-                            ret.dom.style[key] = val;
-                        }
-                    }
-                    else if (prop in ret.dom) {
-                        Reflect.set(ret.dom, prop, [props[prop]]);
-                    }
-                    else if (prop.toLocaleLowerCase() in ret.dom) {
-                        Reflect.set(ret.dom, prop.toLocaleLowerCase(), props[prop]);
-                    }
-                    else if (ret.dom.hasAttribute(prop)) {
-                        ret.dom.setAttribute(prop, props[prop]);
-                    }
-                }
-                ret.init(ret.dom, { noWrapper: true });
-            }
-            else if (atype.constructor !== undefined) {
-                ret = new atype(props);
-            }
-            else if (typeof atype === "function") {
-                ret = atype(props);
-            }
-            if (children !== undefined) {
-                if (props === null || props === undefined)
-                    props = {};
+            if (children) {
                 props.children = children;
-                for (var x = 0; x < props.children.length; x++) {
-                    var child = props.children[x];
-                    if (typeof child === "string") {
-                        var nd = document.createTextNode(child);
-                        child = new TextComponent();
-                        child.tag = "";
-                        child.init(nd, { noWrapper: true });
-                        //child.dom = nd;
-                    }
-                    ret.add(child);
-                }
+            }
+            var ret = {
+                props: props,
+                type: type
+            };
+            //@ts-ignore
+            for (var x = 0; x < Component._componentHook.length; x++) {
+                //@ts-ignore
+                Component._componentHook[x]("create", ret, "React.createElement");
             }
             return ret;
         }
@@ -91,6 +57,62 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     };
     //@ts-ignore;
     window.React = React;
+    function createComponent(node) {
+        var _a, _b;
+        var atype = node.type;
+        var props = node.props;
+        var ret;
+        if (typeof atype === "string") {
+            ret = new HTMLComponent(props);
+            ret.tag = atype;
+            var newdom = document.createElement(atype);
+            for (var prop in props) {
+                if (prop === "style") {
+                    for (var key in props.style) {
+                        var val = props.style[key];
+                        newdom.style[key] = val;
+                    }
+                }
+                else if (prop in newdom) {
+                    Reflect.set(newdom, prop, [props[prop]]);
+                }
+                else if (prop.toLocaleLowerCase() in newdom) {
+                    Reflect.set(newdom, prop.toLocaleLowerCase(), props[prop]);
+                } // else if (newdom.hasAttribute(prop)) {
+                newdom.setAttribute(prop, props[prop]);
+                // }
+            }
+            ret.init(newdom, { noWrapper: true });
+        }
+        else if (atype.constructor !== undefined) {
+            ret = new atype(props);
+        }
+        else if (typeof atype === "function") {
+            ret = atype(props);
+        }
+        if (((_a = node === null || node === void 0 ? void 0 : node.props) === null || _a === void 0 ? void 0 : _a.children) !== undefined) {
+            if (props === null || props === undefined)
+                props = {};
+            props.children = (_b = node === null || node === void 0 ? void 0 : node.props) === null || _b === void 0 ? void 0 : _b.children;
+            for (var x = 0; x < props.children.length; x++) {
+                var child = props.children[x];
+                var cchild;
+                if (typeof child === "string") {
+                    var nd = document.createTextNode(child);
+                    cchild = new TextComponent();
+                    cchild.tag = "";
+                    cchild.init(nd, { noWrapper: true });
+                    //child.dom = nd;
+                }
+                else {
+                    cchild = createComponent(child);
+                }
+                ret.add(cchild);
+            }
+        }
+        return ret;
+    }
+    exports.createComponent = createComponent;
     //class TC <Prop>extends React.Component<Prop,{}>{
     let Component = Component_1 = class Component extends React.Component {
         setState() {
@@ -119,11 +141,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (properties === undefined || properties.id === undefined) {
                 var rend = this.render();
                 if (rend) {
-                    this.init(rend.dom);
+                    var comp = createComponent(rend);
+                    this.init(comp.dom);
                 }
             }
             else {
-                debugger;
                 this._id = properties.id;
                 this.__dom = document.getElementById(properties.id);
                 this.dom._this = this;
@@ -138,13 +160,26 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
               this.config(this.lastconfig);
           }*/
         config(config) {
+            var con = Object.assign({}, config);
             // this.lastconfig = config;
-            for (var key in config) {
-                if (typeof this[key] === 'function') {
-                    this[key](config[key]);
+            var notfound = {};
+            for (var key in con) {
+                if (key in this) {
+                    if (typeof this[key] === 'function') {
+                        this[key](config[key]);
+                    }
+                    else {
+                        this[key] = config[key];
+                    }
                 }
-                else {
-                    this[key] = config[key];
+                else
+                    notfound[key] = con;
+            }
+            Object.assign(this.props === undefined ? {} : this.props, config);
+            if (Object.keys(notfound).length > 0) {
+                var rerender = this.render();
+                if (rerender) {
+                    this.init(createComponent(rerender).dom);
                 }
             }
             return this;
@@ -270,6 +305,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         init(dom, properties = undefined) {
             var _a;
             // this.lastinit = dom;
+            var oldwrapper = this.domWrapper;
+            var olddom = this.dom;
             if (typeof dom === "string")
                 dom = Component_1.createHTMLElement(dom);
             //is already attached
@@ -280,8 +317,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                     this.dom.setAttribute("id", properties === null || properties === void 0 ? void 0 : properties.replaceNode.getAttribute("id"));
                     return;
                 }
-                if (this.domWrapper.parentNode !== undefined)
-                    this.domWrapper.parentNode.removeChild(this.domWrapper);
                 this.domWrapper._this = undefined;
             }
             if (this.dom !== undefined) {
@@ -296,13 +331,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             //   jassijs.componentSpy.unwatch(this);
             // }
             this.dom = dom;
-            this._id = "j" + Registry_2.default.nextID();
+            this._id = olddom ? olddom.id : ("j" + Registry_2.default.nextID());
             if (this.dom.setAttribute !== undefined) //Textnode
                 this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
-            var lid = "j" + Registry_2.default.nextID();
+            var lid = oldwrapper ? oldwrapper.id : ("j" + Registry_2.default.nextID());
             var st = 'style="display: inline-block"';
             if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
                 st = "";
@@ -321,6 +356,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.domWrapper._id = lid;
                 this.domWrapper.appendChild(dom);
             }
+            if ((oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.parentNode) !== undefined) {
+                oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper); //removeChild(this.domWrapper);
+            }
             //append temporary so new elements must not added immediately
             if (document.getElementById("jassitemp") === null) {
                 var temp = Component_1.createHTMLElement('<template id="jassitemp"></template>');
@@ -334,7 +372,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             //if (jassijs.componentSpy !== undefined) {
             //     jassijs.componentSpy.watch(this);
             //  }
-            document.getElementById("jassitemp").appendChild(this.domWrapper);
+            if (!oldwrapper)
+                document.getElementById("jassitemp").appendChild(this.domWrapper);
         }
         set label(value) {
             if (value === undefined) {
@@ -590,7 +629,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         __metadata("design:paramtypes", [Object])
     ], Component);
     exports.Component = Component;
-    class HTMLComponent extends Component {
+    let HTMLComponent = class HTMLComponent extends Component {
         constructor() {
             super(...arguments);
             this._components = [];
@@ -682,10 +721,30 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             }
             super.destroy();
         }
-    }
+    };
+    HTMLComponent = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.HTMLComponent")
+    ], HTMLComponent);
     exports.HTMLComponent = HTMLComponent;
-    class TextComponent extends Component {
-    }
+    let TextComponent = class TextComponent extends Component {
+        get text() {
+            return this.dom.textContent;
+        }
+        ;
+        set text(value) {
+            var p = JSON.parse(`{"a":"` + value + '"}').a;
+            this.dom.textContent = p;
+        }
+        ;
+    };
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], TextComponent.prototype, "text", null);
+    TextComponent = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.HTMLComponent")
+    ], TextComponent);
     exports.TextComponent = TextComponent;
 });
 //# sourceMappingURL=Component.js.map

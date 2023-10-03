@@ -1,19 +1,8 @@
-define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel"], function (require, exports, Component_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/Component"], function (require, exports, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     function j() {
-    }
-    class TC extends Component_1.Component {
-        constructor(prop) {
-            super(prop);
-        }
-        render() {
-            return React.createElement("div", null, this.props.name);
-        }
-    }
-    function TC2(data) {
-        return React.createElement("div", null, data.name);
     }
     function createDummy() {
         function allowDrop(ev) {
@@ -65,9 +54,30 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel"], funct
         console.log(ev);
         ev.preventDefault();
     }
+    var x = 1;
+    /*
+    class MyComp extends Component<Prop> {
+    
+        render() {
+            var _this=this;
+            return <div>
+                {this.props.text}
+                <button onClick={() => {
+                    _this.config({ text: "neu"+x++ });
+                }}>Click
+                </button>
+            </div>;
+        }
+    }*/
     function test() {
-        return React.createElement(Panel_1.Panel, null,
-            React.createElement("button", { width: "202", contentEditable: "false", style: { color: "red" }, height: "44" }, "hall"));
+        /*var ret=<Panel height="153">
+            <button width="202" contentEditable="false" style={{ color: "red" }} height="42">hall</button>
+            <Button text="sdfsdfsdf"></Button>
+            dddd
+        </Panel>;*/
+        var ret = React.createElement("div", null, "Hasdfgsdfgsdfgsdfg dsfgllo");
+        var comp = (0, Component_1.createComponent)(ret);
+        return comp;
     }
     exports.test = test;
 });

@@ -75,46 +75,146 @@ define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Bo
     }
     exports.test = test;
 });
-define("demo/Dialog2", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, BoxPanel_2, Button_2, Registry_2, Panel_2) {
+define("demo/Dialog2", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "de/remote/Kunde"], function (require, exports, Button_2, Table_1, Textbox_1, Registry_2, Panel_2, Kunde_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog2 = void 0;
     let Dialog2 = class Dialog2 extends Panel_2.Panel {
-        constructor() {
+        constructor(data) {
             super();
             this.me = {};
+            this.data = data;
             this.layout(this.me);
         }
         layout(me) {
-            me.boxpanel = new BoxPanel_2.BoxPanel();
+            me.boxpanel = new Panel_2.Panel();
             me.button = new Button_2.Button();
             me.button2 = new Button_2.Button();
+            me.textbox = new Textbox_1.Textbox();
+            me.table = new Table_1.Table({ data: this.data });
+            var _this = this;
             this.config({ children: [
                     me.boxpanel.config({
                         children: [
-                            me.button.config({ text: "button" }),
-                            me.button2.config({ text: "button" })
-                        ]
+                            me.button.config({ text: "button", x: 10, y: 50 }),
+                            me.button2.config({
+                                text: "buw",
+                                x: 70,
+                                y: 20,
+                                icon: "mdi mdi-account-box-outline",
+                                onclick: function (event) {
+                                    alert(6);
+                                }
+                            }),
+                            me.textbox.config({ value: "ee", label: "s", x: 220, y: 10 }),
+                            me.table.config({
+                                x: 75,
+                                y: 70,
+                                width: 290,
+                                height: 120,
+                                label: "wwwsdwe",
+                                onblur: function (event) {
+                                },
+                                tooltip: "wes"
+                            })
+                        ],
+                        isAbsolute: true,
+                        height: 215
                     })
                 ] });
         }
     };
     Dialog2 = __decorate([
         (0, Registry_2.$Class)("demo/Dialog2"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], Dialog2);
     exports.Dialog2 = Dialog2;
+    function kk() {
+        return "kko";
+    }
     async function test() {
-        var ret = new Dialog2();
+        var data = await Kunde_1.Kunde.find();
+        var ret = new Dialog2(data);
         return ret;
     }
     exports.test = test;
 });
-define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, HTMLPanel_1, Button_3, Registry_3, Panel_3) {
+define("demo/Dialog3", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/BoxPanel"], function (require, exports, Registry_3, Panel_3, Component_1, BoxPanel_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Dialog3 = void 0;
+    var x = 1;
+    class H extends Component_1.HTMLComponent {
+        render() {
+            return React.createElement("div", {
+                style: { borderStyle: "ridge", borderWidth: "5px" }
+            }); //, "Hallo" + (x++);
+        }
+    }
+    class H2 extends Component_1.HTMLComponent {
+        render() {
+            return React.createElement("u", {
+                style: { borderStyle: "ridge", borderWidth: "5px" }
+            }); //, "Hallo" + (x++));
+        }
+    }
+    let Dialog3 = class Dialog3 extends Panel_3.Panel {
+        constructor() {
+            super();
+            this.me = {};
+            this.layout(this.me);
+        }
+        layout(me) {
+            this.dom.contentEditable = "true";
+            me.p1 = new BoxPanel_2.BoxPanel();
+            me.p1.horizontal = true;
+            ;
+            me.p1.domWrapper.classList.add("testuw");
+            me.p1.domWrapper.style.borderWidth = "5px;";
+            me.p1.domWrapper.style.borderStyle = "ridge";
+            me.p2 = new Panel_3.Panel();
+            me.p2.domWrapper.style.borderWidth = "5px;";
+            me.p2.domWrapper.style.borderStyle = "ridge";
+            me.p3 = new Panel_3.Panel();
+            me.p3.domWrapper.style.borderWidth = "5px;";
+            me.p3.domWrapper.style.borderStyle = "ridge";
+            me.p4 = new H({ nowrapper: true });
+            me.p5 = new H({ nowrapper: true });
+            this.add(me.p1);
+            me.p1.add(me.p2);
+            me.p1.add(me.p3);
+            this.add(me.p4);
+            this.add(me.p5);
+            this.height = 25;
+            setTimeout(() => {
+                const selection = window.getSelection();
+                console.log(me.p2.dom.id);
+                const headerElement = document.querySelector('#' + me.p2.dom.id).childNodes[0];
+                selection.setBaseAndExtent(headerElement, 0, headerElement, 2);
+            }, 10000);
+            /*    me.p2 = new HTMLComponent({nowrapper:true});me.p2.dom=me.p2.domWrapper=Component.createHTMLElement(h);this.add(me.p2);
+                me.p3 = new HTMLComponent({nowrapper:true});me.p3.dom=me.p3.domWrapper=Component.createHTMLElement(h);this.add(me.p3);
+                me.p4 = new HTMLComponent({nowrapper:true});me.p4.dom=me.p4.domWrapper=Component.createHTMLElement(h);this.add(me.p4);
+                me.p5 = new HTMLComponent({nowrapper:true});me.p5.dom=me.p5.domWrapper=Component.createHTMLElement(h);this.add(me.p5);
+                me.p6 = new HTMLComponent({nowrapper:true});me.p6.dom=me.p6.domWrapper=Component.createHTMLElement(h);this.add(me.p6);*/
+        }
+    };
+    Dialog3 = __decorate([
+        (0, Registry_3.$Class)("demo/Dialog3"),
+        __metadata("design:paramtypes", [])
+    ], Dialog3);
+    exports.Dialog3 = Dialog3;
+    async function test() {
+        var ret = new Dialog3();
+        return ret;
+    }
+    exports.test = test;
+});
+define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, HTMLPanel_1, Button_3, Registry_4, Panel_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmptyDialog = void 0;
-    let EmptyDialog = class EmptyDialog extends Panel_3.Panel {
+    let EmptyDialog = class EmptyDialog extends Panel_4.Panel {
         constructor() {
             super();
             this.me = {};
@@ -143,7 +243,7 @@ define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassi
         }
     };
     EmptyDialog = __decorate([
-        (0, Registry_3.$Class)("demo.EmptyDialog"),
+        (0, Registry_4.$Class)("demo.EmptyDialog"),
         __metadata("design:paramtypes", [])
     ], EmptyDialog);
     exports.EmptyDialog = EmptyDialog;
@@ -206,7 +306,7 @@ define("demo/LargeReport", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Registry"], function (require, exports, Server_1, Reloader_1, Registry_4) {
+define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Registry"], function (require, exports, Server_1, Reloader_1, Registry_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MemoryTest = void 0;
@@ -222,21 +322,21 @@ define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassi
             let test = await server.loadFile("demo/DK.ts");
             await server.saveFile("demo/DK.ts", test);
             await Reloader_1.Reloader.instance.reloadJS("demo/DK.js");
-            delete Registry_4.default.data["$Class"]["demo.DK"];
+            delete Registry_5.default.data["$Class"]["demo.DK"];
             requirejs.undef("demo/DK.js");
             requirejs.undef("demo/DK");
         }
     }
     exports.MemoryTest = MemoryTest;
 });
-define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Textarea", "jassijs/ui/Table", "jassijs/ui/Style", "jassijs/ui/Repeater", "jassijs/ui/Image", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/Checkbox", "jassijs/ui/BoxPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Panel"], function (require, exports, Tree_1, Textarea_1, Table_1, Style_1, Repeater_1, Image_1, HTMLPanel_2, Databinder_1, Checkbox_1, BoxPanel_3, Textbox_1, Button_4, Panel_4) {
+define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Textarea", "jassijs/ui/Table", "jassijs/ui/Style", "jassijs/ui/Repeater", "jassijs/ui/Image", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/Checkbox", "jassijs/ui/BoxPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Panel"], function (require, exports, Tree_1, Textarea_1, Table_2, Style_1, Repeater_1, Image_1, HTMLPanel_2, Databinder_1, Checkbox_1, BoxPanel_3, Textbox_2, Button_4, Panel_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     function test() {
-        var ret = new Panel_4.Panel();
+        var ret = new Panel_5.Panel();
         var button = new Button_4.Button();
-        var textbox = new Textbox_1.Textbox();
+        var textbox = new Textbox_2.Textbox();
         var boxpanel = new BoxPanel_3.BoxPanel();
         var checkbox = new Checkbox_1.Checkbox();
         var databinder = new Databinder_1.Databinder();
@@ -244,7 +344,7 @@ define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Text
         var image = new Image_1.Image();
         var repeater = new Repeater_1.Repeater();
         var style = new Style_1.Style();
-        var table = new Table_1.Table();
+        var table = new Table_2.Table();
         var textarea = new Textarea_1.Textarea();
         var tree = new Tree_1.Tree();
         ret.add(button);
@@ -283,7 +383,7 @@ define("demo/Report1", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_5) {
+define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
@@ -344,7 +444,7 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Registry"], 
         }
     };
     ReportInvoice = __decorate([
-        (0, Registry_5.$Class)("demo.ReportInvoice"),
+        (0, Registry_6.$Class)("demo.ReportInvoice"),
         __metadata("design:paramtypes", [])
     ], ReportInvoice);
     exports.ReportInvoice = ReportInvoice;
@@ -416,7 +516,7 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Registry"], 
     }
     exports.test = test;
 });
-define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_6) {
+define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
@@ -484,7 +584,7 @@ define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Registry"],
         }
     };
     ReportInvoice = __decorate([
-        (0, Registry_6.$Class)("demo.ReportInvoice"),
+        (0, Registry_7.$Class)("demo.ReportInvoice"),
         __metadata("design:paramtypes", [])
     ], ReportInvoice);
     exports.ReportInvoice = ReportInvoice;
@@ -562,11 +662,11 @@ define("demo/ReportStyle", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Style_2, Button_5, Registry_7, Panel_5) {
+define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Style_2, Button_5, Registry_8, Panel_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.StyleDialog = void 0;
-    let StyleDialog = class StyleDialog extends Panel_5.Panel {
+    let StyleDialog = class StyleDialog extends Panel_6.Panel {
         constructor() {
             super();
             this.me = {};
@@ -588,7 +688,7 @@ define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/u
         }
     };
     StyleDialog = __decorate([
-        (0, Registry_7.$Class)("demo/StyleDialog"),
+        (0, Registry_8.$Class)("demo/StyleDialog"),
         __metadata("design:paramtypes", [])
     ], StyleDialog);
     exports.StyleDialog = StyleDialog;
@@ -598,7 +698,7 @@ define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/u
     }
     exports.test = test;
 });
-define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Table"], function (require, exports, ContextMenu_1, MenuItem_1, Table_2) {
+define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Table"], function (require, exports, ContextMenu_1, MenuItem_1, Table_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -610,7 +710,7 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
             { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
             { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
         ];
-        var tab = new Table_2.Table({
+        var tab = new Table_3.Table({
             movableColumns: true,
             items: tabledata
         });
@@ -642,11 +742,11 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
     }
     exports.test = test;
 });
-define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, Panel_6, Button_6, HTMLPanel_3, Registry_8, Component_1) {
+define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, Panel_7, Button_6, HTMLPanel_3, Registry_9, Component_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestComponent = void 0;
-    let TestComponent = class TestComponent extends Panel_6.Panel {
+    let TestComponent = class TestComponent extends Panel_7.Panel {
         constructor() {
             super();
             this.me = {};
@@ -662,7 +762,7 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
             me.htmlpanel1 = new HTMLPanel_3.HTMLPanel();
             me.button2 = new Button_6.Button();
             me.htmlpanel2 = new HTMLPanel_3.HTMLPanel();
-            me.panel2 = new Panel_6.Panel();
+            me.panel2 = new Panel_7.Panel();
             me.button3 = new Button_6.Button();
             me.button4 = new Button_6.Button();
             this.add(me.button2);
@@ -692,8 +792,8 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
         }
     };
     TestComponent = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
-        (0, Registry_8.$Class)("demo.TestComponent"),
+        (0, Component_2.$UIComponent)({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
+        (0, Registry_9.$Class)("demo.TestComponent"),
         __metadata("design:paramtypes", [])
     ], TestComponent);
     exports.TestComponent = TestComponent;
@@ -764,7 +864,7 @@ define("demo/TestList", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/TestProTable", ["require", "exports", "jassijs/ui/Table"], function (require, exports, Table_3) {
+define("demo/TestProTable", ["require", "exports", "jassijs/ui/Table"], function (require, exports, Table_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -776,7 +876,7 @@ define("demo/TestProTable", ["require", "exports", "jassijs/ui/Table"], function
              whereParams:{mftext:"%24%"}
           });
          debugger;*/
-        var tab = new Table_3.Table({
+        var tab = new Table_4.Table({
             lazyLoad: {
                 classname: "tests.TestBigData",
                 loadFunc: "find",
@@ -797,11 +897,11 @@ define("demo/TestProTable", ["require", "exports", "jassijs/ui/Table"], function
     }
     exports.test = test;
 });
-define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Registry"], function (require, exports, Panel_7, Tree_2, Registry_9) {
+define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Registry"], function (require, exports, Panel_8, Tree_2, Registry_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestTree = void 0;
-    let TestTree = class TestTree extends Panel_7.Panel {
+    let TestTree = class TestTree extends Panel_8.Panel {
         constructor() {
             super();
             this.layout();
@@ -810,12 +910,12 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
         }
     };
     TestTree = __decorate([
-        (0, Registry_9.$Class)("demo.TestTree"),
+        (0, Registry_10.$Class)("demo.TestTree"),
         __metadata("design:paramtypes", [])
     ], TestTree);
     exports.TestTree = TestTree;
     async function test() {
-        var ret = new Panel_7.Panel();
+        var ret = new Panel_8.Panel();
         var tree = new Tree_2.Tree();
         var s = { name: "Sansa", id: 1 };
         var p = { name: "Peter", id: 2 };
@@ -840,11 +940,11 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
     }
     exports.test = test;
 });
-define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_4, Upload_1, Registry_10, Panel_8, papaparse_1) {
+define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_4, Upload_1, Registry_11, Panel_9, papaparse_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestUpload = void 0;
-    let TestUpload = class TestUpload extends Panel_8.Panel {
+    let TestUpload = class TestUpload extends Panel_9.Panel {
         constructor() {
             super();
             this.me = {};
@@ -869,7 +969,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
         }
     };
     TestUpload = __decorate([
-        (0, Registry_10.$Class)("demo/TestUpload"),
+        (0, Registry_11.$Class)("demo/TestUpload"),
         __metadata("design:paramtypes", [])
     ], TestUpload);
     exports.TestUpload = TestUpload;
@@ -880,11 +980,11 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
     }
     exports.test = test;
 });
-define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Registry"], function (require, exports, Panel_9, ContextMenu_2, MenuItem_2, Button_7, Registry_11) {
+define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Registry"], function (require, exports, Panel_10, ContextMenu_2, MenuItem_2, Button_7, Registry_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Testcontextmenu = void 0;
-    let Testcontextmenu = class Testcontextmenu extends Panel_9.Panel {
+    let Testcontextmenu = class Testcontextmenu extends Panel_10.Panel {
         constructor() {
             super();
             this.me = {};
@@ -926,7 +1026,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassi
         }
     };
     Testcontextmenu = __decorate([
-        (0, Registry_11.$Class)("demo.Testcontextmenu"),
+        (0, Registry_12.$Class)("demo.Testcontextmenu"),
         __metadata("design:paramtypes", [])
     ], Testcontextmenu);
     exports.Testcontextmenu = Testcontextmenu;
@@ -1187,11 +1287,11 @@ define("demo/Testdatatable3", ["require", "exports"], function (require, exports
     }
     exports.test = test;
 });
-define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Registry"], function (require, exports, Panel_10, Menu_1, MenuItem_3, Button_8, Registry_12) {
+define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Registry"], function (require, exports, Panel_11, Menu_1, MenuItem_3, Button_8, Registry_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testmenu = void 0;
-    let Testmenu = class Testmenu extends Panel_10.Panel {
+    let Testmenu = class Testmenu extends Panel_11.Panel {
         constructor() {
             super();
             this.me = {};
@@ -1251,7 +1351,7 @@ define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/M
         }
     };
     Testmenu = __decorate([
-        (0, Registry_12.$Class)("demo.Testmenu"),
+        (0, Registry_13.$Class)("demo.Testmenu"),
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;
@@ -1291,7 +1391,7 @@ define("demo/Testtable", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Panel", "jassijs/ui/Button"], function (require, exports, Tree_3, ContextMenu_3, MenuItem_4, Panel_11, Button_9) {
+define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Panel", "jassijs/ui/Button"], function (require, exports, Tree_3, ContextMenu_3, MenuItem_4, Panel_12, Button_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -1308,7 +1408,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
             checkbox: true,
             selectMode: 2,
         });
-        me.panel = new Panel_11.Panel();
+        me.panel = new Panel_12.Panel();
         me.button = new Button_9.Button();
         me.panel["me"] = me;
         me.panel.add(me.tree);
@@ -1348,7 +1448,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
     }
     exports.test = test;
 });
-define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Table"], function (require, exports, Panel_12, Registry_13, Table_4) {
+define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Table"], function (require, exports, Panel_13, Registry_14, Table_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -1365,7 +1465,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
     class Me {
     }
     ;
-    let TreeTable = class TreeTable extends Panel_12.Panel {
+    let TreeTable = class TreeTable extends Panel_13.Panel {
         constructor() {
             super();
             this.me = new Me();
@@ -1378,7 +1478,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
             var t = new Person("Thomas", 5);
             var c = new Person("Christoph", 4, [u, t]);
             s.childs = [c];
-            me.tab = new Table_4.Table({
+            me.tab = new Table_5.Table({
                 items: [c],
                 dataTreeChildFunction: "t"
             });
@@ -1415,7 +1515,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
                         }
                     }
                 }
-                me.tab = new Table_4.Table({
+                me.tab = new Table_5.Table({
                     dataTree: true,
                     dataTreeChildField: "__treechilds",
                     dataTreeRowExpanded: function (row) {
@@ -1451,7 +1551,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
         }
     };
     TreeTable = __decorate([
-        (0, Registry_13.$Class)("demo.TreeTable"),
+        (0, Registry_14.$Class)("demo.TreeTable"),
         __metadata("design:paramtypes", [])
     ], TreeTable);
     exports.TreeTable = TreeTable;
@@ -1463,6 +1563,82 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
     exports.test = test;
 });
 var a = 2;
+define("demo/hallo", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel"], function (require, exports, Component_3, Panel_14) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    function j() {
+    }
+    class TC extends Component_3.Component {
+        constructor(prop) {
+            super(prop);
+        }
+        render() {
+            return <div>{this.props.name}</div>;
+        }
+    }
+    function TC2(data) {
+        return <div>{data.name}</div>;
+    }
+    function createDummy() {
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        function drag(ev) {
+            var child = ev.target;
+            ev.dataTransfer.setDragImage(child.nextSibling, 20, 20);
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+        }
+        function keydown(ev) {
+            console.log(ev);
+        }
+        var ret = <span className="designdummy" draggable="true" onDragStart={drag} onKeyDown={keydown} style={{
+                verticalAlign: "text-top", display: "inline-block",
+                minWidth: "8px", minHeight: "5px", backgroundColor: "red"
+            }}>
+    </span>;
+        //ret.dom.removeEventListener("keydown", keydown);
+        //    ret.dom.addEventListener("keydown", (ev)=>keydown(ev));
+        ret.dom.classList.remove("jcomponent");
+        return ret;
+    }
+    function correctdummy(node) {
+        var _a, _b, _c, _d;
+        for (var x = 0; x < node.childNodes.length; x++) {
+            var el = node.childNodes[x];
+            if (x % 2 === 0 && !((_a = el.classList) === null || _a === void 0 ? void 0 : _a.contains("designdummy"))) {
+                el.parentNode.insertBefore(createDummy().dom, el);
+            }
+            if (x % 2 === 1 && ((_b = el.classList) === null || _b === void 0 ? void 0 : _b.contains("designdummy"))) {
+                el.remove();
+                x = x - 1;
+            }
+            if (!((_c = el.classList) === null || _c === void 0 ? void 0 : _c.contains("designdummy"))) {
+                correctdummy(el);
+            }
+        }
+        if (node.childNodes.length === 0 || ((_d = node.childNodes[node.childNodes.length - 1].classList) === null || _d === void 0 ? void 0 : _d.contains("dummy"))) {
+            if (node.append !== undefined)
+                node.append(createDummy());
+        }
+    }
+    function keydown(ev) {
+        console.log(ev);
+        ev.preventDefault();
+    }
+    function test() {
+        return <Panel_14.Panel>
+        <button width="202" contentEditable="false" style={{ color: "red" }} height="44">hall</button>
+
+    </Panel_14.Panel>;
+    }
+    exports.test = test;
+});
 define("demo/modul", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1475,14 +1651,14 @@ define("demo/registry", ["require"], function (require) {
     return {
         default: {
             "demo/DelTest.ts": {
-                "date": 1681563012791.259
+                "date": 1681563014000
             },
             "demo/Dialog.ts": {
                 "date": 1655851716000,
                 "demo/Dialog": {}
             },
             "demo/Dialog2.ts": {
-                "date": 1657715414000,
+                "date": 1695239901541.8835,
                 "demo/Dialog2": {}
             },
             "demo/EmptyDialog.ts": {
@@ -1493,7 +1669,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1634240084000
             },
             "demo/MemoryTest.ts": {
-                "date": 1681590022384.015
+                "date": 1681590024000
             },
             "demo/modul.ts": {
                 "date": 1612818334000
@@ -1505,22 +1681,22 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1656018452000
             },
             "demo/ReportInvoice.ts": {
-                "date": 1681590033016.9358,
+                "date": 1681590034000,
                 "demo.ReportInvoice": {}
             },
             "demo/ReportInvoice2.ts": {
-                "date": 1681590037723.6914,
+                "date": 1681590038000,
                 "demo.ReportInvoice": {}
             },
             "demo/ReportStyle.ts": {
-                "date": 1681590042799.431
+                "date": 1681590044000
             },
             "demo/StyleDialog.ts": {
                 "date": 1655556794000,
                 "demo/StyleDialog": {}
             },
             "demo/TableContextmenu.ts": {
-                "date": 1681590827947.2778
+                "date": 1681590828000
             },
             "demo/TestComponent.ts": {
                 "date": 1655843270000,
@@ -1541,16 +1717,16 @@ define("demo/registry", ["require"], function (require) {
                 "demo.Testcontextmenu": {}
             },
             "demo/Testdatatable.ts": {
-                "date": 1681590287285.2383
+                "date": 1681590288000
             },
             "demo/Testdatatable1.ts": {
-                "date": 1681590296070.9636
+                "date": 1681590298000
             },
             "demo/Testdatatable2.ts": {
-                "date": 1681590305213.099
+                "date": 1681590306000
             },
             "demo/Testdatatable3.ts": {
-                "date": 1681590312663.8284
+                "date": 1681590314000
             },
             "demo/TestImage.ts": {
                 "date": 1633792454000
@@ -1563,10 +1739,10 @@ define("demo/registry", ["require"], function (require) {
                 "demo.Testmenu": {}
             },
             "demo/TestProTable.ts": {
-                "date": 1681563005343.9316
+                "date": 1681563006000
             },
             "demo/Testtable.ts": {
-                "date": 1681590320376.6711
+                "date": 1681590322000
             },
             "demo/TestTree.ts": {
                 "date": 1655843318000,
@@ -1580,11 +1756,18 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1634384688000
             },
             "demo/TreeTable.ts": {
-                "date": 1681590899857.6982,
+                "date": 1681590900000,
                 "demo.TreeTable": {}
             },
             "demo/_test1.ts": {
                 "date": 1670673960000
+            },
+            "demo/TestContent.ts": {
+                "date": 1695418663423.5051
+            },
+            "demo/Dialog3.ts": {
+                "date": 1695762474246.062,
+                "demo/Dialog3": {}
             }
         }
     };

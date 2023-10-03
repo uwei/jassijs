@@ -478,7 +478,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Serverservice.ts": {
-		"date": 1682715264000
+		"date": 1695999826188.6174
 	},
 	"jassijs/index.d.ts": {
 		"date": 1681918736000

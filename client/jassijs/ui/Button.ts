@@ -23,9 +23,10 @@ export interface ButtonConfig extends ComponentConfig{
 @$Class("jassijs.ui.Button")
 export class Button extends Component implements ButtonConfig {
    
-    constructor() {
-        super();
-        super.init('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>');
+    constructor(props={}) {
+        super(props);
+        //    super.init('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>');
+    
     }
     config(config:ButtonConfig):Button {
         super.config(<ComponentConfig>config);
@@ -37,6 +38,21 @@ export class Button extends Component implements ButtonConfig {
 
     set dom(value: HTMLButtonElement) {
         super.dom=value;
+    }
+    render(){
+        return React.createElement("button",{
+                                        className:"Button",
+                                        contenteditable:false},
+                React.createElement("span",{
+                                className:"buttonspan"
+                                },React.createElement("img",{
+                                    style:{display: "none"},
+                                    className:"buttonimg"}),
+                                  React.createElement("span",{
+                                    className:"buttontext"
+                                  })
+                )
+        );
     }
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler, removeOldHandler: boolean = true) {

@@ -421,22 +421,13 @@ export class CodeEditor extends Panel {
                 if (foundscope)
                     scope = [{ classname: root?.constructor?.name, methodname: "layout" }, foundscope];
                 if (this.file.toLowerCase().endsWith(".tsx")) {
-                    var autovars = {};
-                    var jsxvars = {}
+
+                    parser.parse(this._codePanel.value, undefined, values);
                     for (var x = 0; x < values.length; x++) {
-                        var v = values[x].component;
-                        var tag=v.tag===undefined?v.constructor.name:v.tag;
-                        if (autovars[tag] === undefined)
-                            autovars[tag] = 1;
-                        values[x].name = tag + (autovars[tag]++);
-                        jsxvars[values[x].pos] = values[x];
-                    }
-                    parser.parse(this._codePanel.value, undefined, jsxvars);
-                   for(var x=0;x<values.length;x++) {
                         this.variables.addVariable(values[x].name, values[x].component, false);
                     }
                     // this.variables.addVariable(sname, val.component, false);
-                    
+
                 } else {
                     parser.parse(this._codePanel.value, scope);
                     //if layout is rendered and an other variable is assigned to this, then remove ths variable
@@ -503,7 +494,13 @@ export class CodeEditor extends Panel {
             //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
             //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
             //   var Parser = classes.getClass("jassijs_editor.base.Parser");
-            var ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
+
+            var ComponentDesigner;
+            if (this.file.toLowerCase().endsWith(".tsx"))
+                ComponentDesigner = await classes.loadClass("jassijs_editor.HtmlDesigner");
+            else
+                ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
+
             var Parser = await classes.loadClass("jassijs_editor.util.Parser");
             var parser = new Parser();
             // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
@@ -518,7 +515,7 @@ export class CodeEditor extends Panel {
             _this._design["designedComponent"] = ret;
 
             await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
-            _this._design["editDialog"](true);
+            (<any>_this._design).editDialog(true);
             //});
         } else if (ret["reportdesign"] !== undefined) {
             var Parser = await classes.loadClass("jassijs_editor.util.Parser");
@@ -594,40 +591,55 @@ export class CodeEditor extends Panel {
         //@ts-ignore
         if (data.test !== undefined || window.reportdesign) {
             //capure created Components
-            function hook(name, component: Component) {
-                try {
-                    throw new Error("getstack");
-                } catch (ex) {
-                    if (ex?.stack?.indexOf("$temp.js") != -1)
-                        component["__stack"] = ex.stack;
-                }
-            }
-            Component.onComponentCreated(hook);
-            var ret;
-            if (data.test) {
-                ret = await data.test(new Test());
-            } else {
-                //@ts-ignore
-                if (window.reportdesign) {
-                    ret = {
-                        //@ts-ignore
-                        reportdesign: window.reportdesign
+            function hook(name, component: Component, react) {
+                if (name === "create") {
+                    var ex = new Error();
+                    if (ex?.stack?.indexOf("$temp.js") != -1) {
+                        if (react === "React.createElement") {
+                            if (component?.props === undefined)
+                                component.props = {};
+                            component.props["__stack"] = ex.stack;
+                        } else {
+                            //
+                            if (component?.props?.["__stack"]) {
+                                component["__stack"] = component.props["__stack"];
+                                delete component.props["__stack"];
+                            } else
+                                component["__stack"] = ex.stack;
+                        }
                     }
-                } else {
-                    Component.offComponentCreated(hook);
-                    return;
                 }
             }
+            try {
+                Component.onComponentCreated(hook);
+                var ret;
+                if (data.test) {
+                    ret = await data.test(new Test());
+                } else {
+                    //@ts-ignore
+                    if (window.reportdesign) {
+                        ret = {
+                            //@ts-ignore
+                            reportdesign: window.reportdesign
+                        }
+                    } else {
+                        Component.offComponentCreated(hook);
+                        return;
+                    }
+                }
 
-            // Promise.resolve(ret).then(async function(ret) {
-            if (ret !== undefined) {
+                // Promise.resolve(ret).then(async function(ret) {
+                if (ret !== undefined) {
 
-                await this._processEvalResult(ret, filename);
+                    await this._processEvalResult(ret, filename);
+                    // Component.offComponentCreated(hook);
+
+                }
+
+                //  });
+            } finally {
                 Component.offComponentCreated(hook);
-
             }
-            Component.offComponentCreated(hook);
-            //  });
         }
 
     }

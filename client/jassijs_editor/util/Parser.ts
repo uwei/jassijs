@@ -86,13 +86,13 @@ export class Parser {
             readFile: (a) => code,
             readDirectory: (a) => []
         };
-        var file=this.jsxVariables?"tempdoc.tsx":"tempdoc.ts";
+        var file = this.jsxVariables ? "tempdoc.tsx" : "tempdoc.ts";
         const languageService = ts.createLanguageService(serviceHost, ts.createDocumentRegistry());
         const textChanges = languageService.getFormattingEditsForDocument(file, {
             convertTabsToSpaces: true,
-         //   insertSpaceAfterCommaDelimiter: true,
-          //  insertSpaceAfterKeywordsInControlFlowStatements: true,
-           // insertSpaceBeforeAndAfterBinaryOperators: true,
+            //   insertSpaceAfterCommaDelimiter: true,
+            //  insertSpaceAfterKeywordsInControlFlowStatements: true,
+            // insertSpaceBeforeAndAfterBinaryOperators: true,
             newLineCharacter: "\n",
             indentStyle: ts.IndentStyle.Smart,
             indentSize: 4,
@@ -100,9 +100,9 @@ export class Parser {
         });
 
         let finalText = code;
-        var arr=textChanges.sort((a, b) => b.span.start - a.span.start);
-        for (var x=0;x<arr.length;x++) {
-            var textChange=arr[x];
+        var arr = textChanges.sort((a, b) => b.span.start - a.span.start);
+        for (var x = 0; x < arr.length; x++) {
+            var textChange = arr[x];
             const { span } = textChange;
             finalText = finalText.slice(0, span.start) + textChange.newText
                 + finalText.slice(span.start + span.length);
@@ -118,11 +118,12 @@ export class Parser {
      * @param {string} value  - code - the value
      * @param node - the node of the statement
      */
-    private add(variable: string, property: string, value: string, node: ts.Node, isFunction = false) {
+    private add(variable: string, property: string, value: string, node: ts.Node, isFunction = false, trim = true) {
 
         if (value === undefined || value === null)
             return;
-        value = value.trim();
+        if (trim)
+            value = value.trim();
         property = property.trim();
         if (this.data[variable] === undefined) {
             this.data[variable] = {};
@@ -402,13 +403,33 @@ export class Parser {
             jsx = _this.jsxVariables[nd.openingElement.pos + 1];
         if (jsx) {
             _this.jsxVariables[jsx.name] = jsx;
+            nd["jname"] = jsx.name;
             _this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
             for (var x = 0; x < nd.openingElement.attributes.properties.length; x++) {
                 var prop = nd.openingElement.attributes.properties[x];
-                var val = prop.initializer.text;
-                _this.add(jsx.name, prop.name.text, val, prop);
+                var val = prop["initializer"].text;
+                _this.add(jsx.name, (<any>prop.name).text, val, prop);
             }
-
+            if ((<any>node.parent)?.jname !== undefined) {
+                _this.add((<any>node.parent)?.jname, "add", jsx.name, node);
+            }
+            //mark textnodes
+            for (var x = 0; x < nd.children.length; x++) {
+                var ch = nd.children[x];
+                if (ch.kind === ts.SyntaxKind.JsxText) {
+                    var varname = this.getNextVariableNameForType("text", "text");
+                    var stext = JSON.stringify(ch.text);
+                    _this.add(varname, "_new_", stext, ch, false, false);
+                    _this.add(varname, "text", stext, ch, false, false);
+                    var chvar = {
+                        pos: ch.pos,
+                        component: _this.jsxVariables[jsx.name].component._components[x],
+                        name: varname
+                    };
+                    _this.jsxVariables[varname] = chvar;
+                    this.jsxVariables.__orginalarray__.push(chvar);
+                }
+            }
         }
 
 
@@ -509,8 +530,22 @@ export class Parser {
         var ret = ts.createSourceFile('dummytemp.ts', code, ts.ScriptTarget.ES5, true, this.jsxVariables ? ts.ScriptKind.TSX : undefined);
         var node = ret.statements[0].expression;
         this.removePos(node);
-        return ret;
+        return node;
         //return this.parseold(code,onlyfunction);
+    }
+    initJSXVariables(values: any[]) {
+        var autovars = {};
+        var jsxvars = {}
+        for (var x = 0; x < values.length; x++) {
+            var v = values[x].component;
+            var tag = v.tag === undefined ? v.constructor.name : v.tag;
+            if (autovars[tag] === undefined)
+                autovars[tag] = 1;
+            values[x].name = this.getNextVariableNameForType(tag);//tag + (autovars[tag]++);
+            jsxvars[values[x].pos] = values[x];
+        }
+        this.jsxVariables = jsxvars;
+        this.jsxVariables.__orginalarray__ = values;
     }
     /**
     * parse the code 
@@ -519,7 +554,8 @@ export class Parser {
     */
     parse(code: string, classScope: { classname: string, methodname: string }[] = undefined, jsxVariables: any = undefined) {
         this.data = {};
-        this.jsxVariables = jsxVariables;
+        if (jsxVariables)
+            this.initJSXVariables(jsxVariables);
         this.code = code;
         if (classScope !== undefined)
             this.classScope = classScope;
@@ -983,7 +1019,6 @@ export class Parser {
                 ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
         */
         if (property === "add") {
-            debugger;
             var prop = this.data[value]["_new_"][0];
             var classname = prop.className;
 
@@ -993,16 +1028,48 @@ export class Parser {
 
             prop.node = node;
             prop.value = value;
-            if(parent["children"].length>0){
-                var last=parent["children"][parent["children"].length-1];
-                debugger;
-                if(last?.containsOnlyTriviaWhiteSpaces){
-                    parent["children"].splice(parent["children"].length-1,1);
+            if (before) {
+                let found = undefined;
+                let ofound = -1;
+                for (var o = 0; o < this.data[before.variablename][before.property].length; o++) {
+                    if (this.data[before.variablename][before.property][o].value === before.value) {
+                        found = this.data[before.variablename][before.property][o].node;
+                        ofound = o;
+                        break;
+                    }
+                }
+                var pos = parent["children"].indexOf(found);
+                parent["children"].splice(pos, 0, node);
+                parent["children"].splice(pos + 1, 0, ts.createJsxText("\n", true));
+
+                this.data[variableName]["add"].splice(ofound, 0, {
+                    node: node,
+                    value: value,
+                    isFunction: false
+                });
+                //this.data[variableName]["add"][0].node;
+
+            } else {
+                parent["children"].push(node);
+                parent["children"].push(ts.createJsxText("\n", true));
+                this.add(variableName, "add", <string>value, node);
+            }
+            return;
+        }
+        if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
+            if (property === "text") {
+                var svalue = <string>value;
+                var old=this.data[variableName][property][0].node.text;
+                svalue = JSON.parse(`{"a":` + svalue + "}").a;
+                if (svalue.length === svalue.trim().length) {
+                    svalue = old.substring(0, old.length -old.trimStart().length) + svalue + old.substring(old.length -(old.length -old.trimEnd().length));
                 }
                
+                //correct spaces linebrak are lost in html editing
+               
+                this.data[variableName][property][0].value =JSON.stringify(svalue);
+                this.data[variableName][property][0].node.text = svalue;
             }
-            parent["children"].push(node);
-
             return;
         }
         if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) {//edit existing
@@ -1035,7 +1102,7 @@ export class Parser {
                   if (pos >= 0)
                       node.parent["statements"].splice(pos, 0, newExpression);*/
             } else {
-                debugger;
+
                 var parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
                 this.data[variableName][property] = [{ node: newExpression, isFunction, value }];
                 parent["properties"].push(newExpression);

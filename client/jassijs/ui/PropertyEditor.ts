@@ -307,7 +307,7 @@ export class PropertyEditor extends Panel {
             this.codeChanges = {};
         if (value !== undefined || value?.dom !== undefined) {
             //if (!$(value.dom).is(":focus"))
-            if (value.dom && document.activeElement !== value.dom)
+            if (value.dom && document.activeElement !== value.dom&&value.dom.focus)
                 (<HTMLElement>value.dom).focus();
         }
         if (value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {

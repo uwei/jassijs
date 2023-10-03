@@ -452,6 +452,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
             }
         }
+        createDragAndDropper() {
+            return new DragAndDropper_1.DragAndDropper();
+        }
         /**
          * dialog edit mode
          * @param {boolean} enable - if true allow resizing and drag and drop
@@ -503,7 +506,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 else
                     allcomponents = this.variables.getEditableComponents(component);
                 //this._installTinyEditor();
-                this._draganddropper = new DragAndDropper_1.DragAndDropper();
+                this._draganddropper = this.createDragAndDropper();
                 this._resizer = new Resizer_1.Resizer();
                 this._resizer.draganddropper = this._draganddropper;
                 this._resizer.onelementselected = function (elementIDs, e) {
@@ -528,18 +531,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 };
                 this._resizer.install(component, allcomponents);
                 allcomponents = this.variables.getEditableComponents(component, true);
-                this._draganddropper.install(component, allcomponents);
-                this._draganddropper.onpropertychanged = function (component, top, left, oldParent, newParent, beforeComponent) {
-                    _this.moveComponent(component, top, left, oldParent, newParent, beforeComponent);
-                };
-                this._draganddropper.onpropertyadded = function (type, component, top, left, newParent, beforeComponent) {
-                    _this.createComponent(type, component, top, left, newParent, beforeComponent);
-                };
-                this._draganddropper.isDragEnabled = function (event, ui) {
-                    if (_this._resizer === undefined)
-                        return false;
-                    return _this._resizer.componentUnderCursor !== undefined;
-                };
+                if (this._draganddropper) {
+                    this._draganddropper.install(component, allcomponents);
+                    this._draganddropper.onpropertychanged = function (component, top, left, oldParent, newParent, beforeComponent) {
+                        _this.moveComponent(component, top, left, oldParent, newParent, beforeComponent);
+                    };
+                    this._draganddropper.onpropertyadded = function (type, component, top, left, newParent, beforeComponent) {
+                        _this.createComponent(type, component, top, left, newParent, beforeComponent);
+                    };
+                    this._draganddropper.isDragEnabled = function (event, ui) {
+                        if (_this._resizer === undefined)
+                            return false;
+                        return _this._resizer.componentUnderCursor !== undefined;
+                    };
+                }
             }
             else {
             }

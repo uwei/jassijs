@@ -353,17 +353,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     if (foundscope)
                         scope = [{ classname: (_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name, methodname: "layout" }, foundscope];
                     if (this.file.toLowerCase().endsWith(".tsx")) {
-                        var autovars = {};
-                        var jsxvars = {};
-                        for (var x = 0; x < values.length; x++) {
-                            var v = values[x].component;
-                            var tag = v.tag === undefined ? v.constructor.name : v.tag;
-                            if (autovars[tag] === undefined)
-                                autovars[tag] = 1;
-                            values[x].name = tag + (autovars[tag]++);
-                            jsxvars[values[x].pos] = values[x];
-                        }
-                        parser.parse(this._codePanel.value, undefined, jsxvars);
+                        parser.parse(this._codePanel.value, undefined, values);
                         for (var x = 0; x < values.length; x++) {
                             this.variables.addVariable(values[x].name, values[x].component, false);
                         }
@@ -430,7 +420,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
                 //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
                 //   var Parser = classes.getClass("jassijs_editor.base.Parser");
-                var ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
+                var ComponentDesigner;
+                if (this.file.toLowerCase().endsWith(".tsx"))
+                    ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.HtmlDesigner");
+                else
+                    ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
                 var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
                 var parser = new Parser();
                 // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
@@ -443,7 +437,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 _this._design.connectParser(parser);
                 _this._design["designedComponent"] = ret;
                 await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
-                _this._design["editDialog"](true);
+                _this._design.editDialog(true);
                 //});
             }
             else if (ret["reportdesign"] !== undefined) {
@@ -513,41 +507,57 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             //@ts-ignore
             if (data.test !== undefined || window.reportdesign) {
                 //capure created Components
-                function hook(name, component) {
-                    var _a;
-                    try {
-                        throw new Error("getstack");
-                    }
-                    catch (ex) {
-                        if (((_a = ex === null || ex === void 0 ? void 0 : ex.stack) === null || _a === void 0 ? void 0 : _a.indexOf("$temp.js")) != -1)
-                            component["__stack"] = ex.stack;
+                function hook(name, component, react) {
+                    var _a, _b;
+                    if (name === "create") {
+                        var ex = new Error();
+                        if (((_a = ex === null || ex === void 0 ? void 0 : ex.stack) === null || _a === void 0 ? void 0 : _a.indexOf("$temp.js")) != -1) {
+                            if (react === "React.createElement") {
+                                if ((component === null || component === void 0 ? void 0 : component.props) === undefined)
+                                    component.props = {};
+                                component.props["__stack"] = ex.stack;
+                            }
+                            else {
+                                //
+                                if ((_b = component === null || component === void 0 ? void 0 : component.props) === null || _b === void 0 ? void 0 : _b["__stack"]) {
+                                    component["__stack"] = component.props["__stack"];
+                                    delete component.props["__stack"];
+                                }
+                                else
+                                    component["__stack"] = ex.stack;
+                            }
+                        }
                     }
                 }
-                Component_1.Component.onComponentCreated(hook);
-                var ret;
-                if (data.test) {
-                    ret = await data.test(new Test_1.Test());
-                }
-                else {
-                    //@ts-ignore
-                    if (window.reportdesign) {
-                        ret = {
-                            //@ts-ignore
-                            reportdesign: window.reportdesign
-                        };
+                try {
+                    Component_1.Component.onComponentCreated(hook);
+                    var ret;
+                    if (data.test) {
+                        ret = await data.test(new Test_1.Test());
                     }
                     else {
-                        Component_1.Component.offComponentCreated(hook);
-                        return;
+                        //@ts-ignore
+                        if (window.reportdesign) {
+                            ret = {
+                                //@ts-ignore
+                                reportdesign: window.reportdesign
+                            };
+                        }
+                        else {
+                            Component_1.Component.offComponentCreated(hook);
+                            return;
+                        }
                     }
+                    // Promise.resolve(ret).then(async function(ret) {
+                    if (ret !== undefined) {
+                        await this._processEvalResult(ret, filename);
+                        // Component.offComponentCreated(hook);
+                    }
+                    //  });
                 }
-                // Promise.resolve(ret).then(async function(ret) {
-                if (ret !== undefined) {
-                    await this._processEvalResult(ret, filename);
+                finally {
                     Component_1.Component.offComponentCreated(hook);
                 }
-                Component_1.Component.offComponentCreated(hook);
-                //  });
             }
         }
         async saveTempFile(file, code) {

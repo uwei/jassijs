@@ -441,7 +441,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Serverservice.ts": {
-                "date": 1682715264000
+                "date": 1695999826188.6174
             },
             "jassijs/index.d.ts": {
                 "date": 1681918736000
@@ -3101,6 +3101,7 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
                 var khsdf = runningServerservices;
                 if (target[prop]) {
                     resolve(target[prop]);
+                    return;
                 }
                 else {
                     var all = await Registry_21.default.getJSONData("$Serverservice");

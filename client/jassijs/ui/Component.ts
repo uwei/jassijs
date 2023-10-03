@@ -105,56 +105,27 @@ export interface ComponentConfig {
     contextMenu?;
 }
 
+
 var React = {
 
-    createElement(atype: any, props, ...children) {
-        var ret;
-        if(props===undefined||props===null)//TODO is this right?
-            props={};
-        if (typeof atype === "string") {
-            ret = new HTMLComponent();
-            ret.tag = atype;
-            ret.dom = document.createElement(atype);
-            for (var prop in props) {
-
-                if (prop === "style") {
-                    for (var key in props.style) {
-                        var val = props.style[key];
-                        ret.dom.style[key] = val;
-                    }
-                } else if (prop in ret.dom) {
-                    Reflect.set(ret.dom, prop, [props[prop]])
-                } else if (prop.toLocaleLowerCase() in ret.dom) {
-                    Reflect.set(ret.dom, prop.toLocaleLowerCase(), props[prop])
-                } else if (ret.dom.hasAttribute(prop)) {
-                    ret.dom.setAttribute(prop, props[prop]);
-                }
-            }
-            ret.init(ret.dom, { noWrapper: true });
-        }else if(atype.constructor!==undefined){
-            ret=new atype(props);
-        }else if(typeof atype==="function"){
-            ret=atype(props);
-        }
-        if (children !== undefined) {
-            if (props === null || props === undefined)
-                props = {};
+    createElement(type: any, props, ...children) {
+       
+        if (props === undefined || props === null)//TODO is this right?
+            props = {};
+        if (children) {
             props.children = children;
-            for (var x = 0; x < props.children.length; x++) {
-                var child = props.children[x];
-                if (typeof child === "string") {
-
-                    var nd = document.createTextNode(child);
-                    child = new TextComponent();
-                    child.tag = "";
-                    child.init(nd, { noWrapper: true });
-                    //child.dom = nd;
-                }
-                ret.add(child);
-            }
         }
-
+        var ret = {
+            props: props,
+            type: type
+        }
+         //@ts-ignore
+        for (var x = 0; x < Component._componentHook.length; x++) {
+            //@ts-ignore
+            Component._componentHook[x]("create", ret,"React.createElement");
+        }
         return ret;
+
     }
 }
 //@ts-ignore
@@ -171,6 +142,58 @@ declare global {
 }
 //@ts-ignore;
 window.React = React;
+export function createComponent(node: React.ReactNode) {//node: { key: string, props: any, type: any }):Component {
+    var atype = (<any>node).type;
+    var props = (<any>node).props;
+    var ret;
+    if (typeof atype === "string") {
+        ret = new HTMLComponent(props);
+        ret.tag = atype;
+        var newdom= document.createElement(atype);
+        for (var prop in props) {
+
+            if (prop === "style") {
+                for (var key in props.style) {
+                    var val = props.style[key];
+                    newdom.style[key] = val;
+                }
+            } else if (prop in newdom) {
+                Reflect.set(newdom, prop, [props[prop]])
+            } else if (prop.toLocaleLowerCase() in newdom) {
+                Reflect.set(newdom, prop.toLocaleLowerCase(), props[prop])
+            }// else if (newdom.hasAttribute(prop)) {
+                newdom.setAttribute(prop, props[prop]);
+           // }
+        }
+        ret.init(newdom, { noWrapper: true});
+    } else if (atype.constructor !== undefined) {
+        ret = new atype(props);
+    } else if (typeof atype === "function") {
+        ret = atype(props);
+    }
+    if ((<any>node)?.props?.children !== undefined) {
+        if (props === null || props === undefined)
+            props = {};
+        props.children = (<any>node)?.props?.children;
+        for (var x = 0; x < props.children.length; x++) {
+            var child = props.children[x];
+            var cchild;
+            if (typeof child === "string") {
+
+                var nd = document.createTextNode(child);
+                cchild = new TextComponent();
+                cchild.tag = "";
+                cchild.init(nd, { noWrapper: true });
+                //child.dom = nd;
+            } else {
+                cchild = createComponent(child);
+            }
+            ret.add(cchild);
+        }
+    }
+    return ret;
+
+}
 //class TC <Prop>extends React.Component<Prop,{}>{
 @$Class("jassijs.ui.Component")
 //@ts-ignore
@@ -215,14 +238,14 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
      */
     constructor(properties: ComponentCreateProperties | any = undefined) {//id connect to existing(not reqired)
         super(properties, undefined);
-        this.props=properties;
+        this.props = properties;
         if (properties === undefined || properties.id === undefined) {
             var rend = this.render();
             if (rend) {
-                this.init((<any>rend).dom);
+                var comp = createComponent(rend);
+                this.init((<any>comp).dom);
             }
         } else {
-            debugger;
             this._id = properties.id;
             this.__dom = document.getElementById(properties.id);
             this.dom._this = this;
@@ -238,13 +261,26 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
           this.init(this.lastinit, { replaceNode: this.dom });
           this.config(this.lastconfig);
       }*/
-    config(config: ComponentConfig): Component<T> {
+    config(config: T): Component<T> {
+        var con = Object.assign({}, config);
         // this.lastconfig = config;
-        for (var key in config) {
-            if (typeof this[key] === 'function') {
-                this[key](config[key]);
-            } else {
-                this[key] = config[key];
+        var notfound = {}
+        for (var key in con) {
+            if (key in this) {
+                if (typeof this[key] === 'function') {
+                    this[key](config[key]);
+                } else {
+                    this[key] = config[key];
+                }
+            } else
+                notfound[key] = con;
+        }
+        Object.assign(this.props===undefined?{}:this.props,config);
+        if (Object.keys(notfound).length > 0) {
+            var rerender = this.render();
+            if (rerender) {
+
+                this.init(createComponent(rerender).dom);
             }
         }
         return this;
@@ -375,6 +411,8 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
     */
     init(dom: HTMLElement | string, properties: ComponentCreateProperties = undefined) {
         // this.lastinit = dom;
+        var oldwrapper = this.domWrapper;
+        var olddom = this.dom;
         if (typeof dom === "string")
             dom = Component.createHTMLElement(dom);
         //is already attached
@@ -386,8 +424,7 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
                 this.dom.setAttribute("id", properties?.replaceNode.getAttribute("id"));
                 return;
             }
-            if (this.domWrapper.parentNode !== undefined)
-                this.domWrapper.parentNode.removeChild(this.domWrapper);
+
             this.domWrapper._this = undefined;
         }
 
@@ -404,13 +441,13 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
         //   jassijs.componentSpy.unwatch(this);
         // }
         this.dom = dom;
-        this._id = "j" + registry.nextID();
+        this._id = olddom?olddom.id:("j" + registry.nextID());
         if (this.dom.setAttribute !== undefined)//Textnode
             this.dom.setAttribute("id", this._id);
         /** @member {Object.<string,function>} - all event handlers*/
         this._eventHandler = {};
         //add _this to the dom element
-        var lid = "j" + registry.nextID();
+        var lid =oldwrapper?oldwrapper.id:("j" + registry.nextID());
         var st = 'style="display: inline-block"';
         if (this instanceof classes.getClass("jassijs.ui.Container")) {
             st = "";
@@ -429,6 +466,9 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
             this.domWrapper._id = lid;
             this.domWrapper.appendChild(dom);
         }
+        if (oldwrapper?.parentNode !== undefined) {
+            oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper);//removeChild(this.domWrapper);
+        }
         //append temporary so new elements must not added immediately
         if (document.getElementById("jassitemp") === null) {
             var temp = Component.createHTMLElement('<template id="jassitemp"></template>');
@@ -442,7 +482,8 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
         //if (jassijs.componentSpy !== undefined) {
         //     jassijs.componentSpy.watch(this);
         //  }
-        document.getElementById("jassitemp").appendChild(this.domWrapper);
+        if(!oldwrapper)
+            document.getElementById("jassitemp").appendChild(this.domWrapper);
 
     }
 
@@ -659,7 +700,7 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
 }
 
 
-
+@$Class("jassijs.ui.HTMLComponent")
 export class HTMLComponent extends Component {
     tag: string;
     _components: Component[] = [];
@@ -756,6 +797,14 @@ export class HTMLComponent extends Component {
     }
 
 }
+@$Class("jassijs.ui.HTMLComponent")
 export class TextComponent extends Component {
-    tag: string;
+    @$Property()
+     get text(){
+        return this.dom.textContent;
+    };
+    set text(value: string){
+         var p=JSON.parse(`{"a":"`+value+'"}').a;
+        this.dom.textContent=p;
+    };
 }

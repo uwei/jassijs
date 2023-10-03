@@ -1,23 +1,12 @@
 import { Button } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
-import { Component,ComponentCreateProperties,HTMLComponent } from "jassijs/ui/Component";
+import { Component,ComponentCreateProperties,createComponent,HTMLComponent } from "jassijs/ui/Component";
 import { Panel } from "jassijs/ui/Panel";
 function j() {
 }
 interface Prop {
     name?: string;
-}
-class TC extends Component<Prop> {
-    constructor(prop: Prop) {
-        super(prop);
-    }
-    render(): JSX.Element {
-        return <div>{this.props.name}</div>;
-    }
-}
-function TC2(data: Prop) {
-    return <div>{data.name}</div>;
 }
 function createDummy(): HTMLElement {
     function allowDrop(ev) {
@@ -69,9 +58,34 @@ function keydown(ev) {
     console.log(ev);
     ev.preventDefault();
 }
-export function test() {
-    return <Panel>
-        <button width="202" contentEditable="false" style={{ color: "red" }} height="44">hall</button>
+interface Prop {
+    text?: string;
+}
+var x=1;
+/*
+class MyComp extends Component<Prop> {
 
-    </Panel>;
+    render() {
+        var _this=this;
+        return <div>
+            {this.props.text}
+            <button onClick={() => {
+                _this.config({ text: "neu"+x++ });
+            }}>Click
+            </button>
+        </div>;
+    }
+}*/
+export function test() {
+    /*var ret=<Panel height="153">
+        <button width="202" contentEditable="false" style={{ color: "red" }} height="42">hall</button>
+        <Button text="sdfsdfsdf"></Button>
+        dddd
+    </Panel>;*/
+    var ret=<div>
+        
+        Hasdfgsdfgsdfgsdfg dsfgllo
+    </div>;
+    var comp=createComponent(ret);
+    return comp;
 }

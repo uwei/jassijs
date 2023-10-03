@@ -622,7 +622,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Button.ts": {
-		"date": 1657569478000,
+		"date": 1696339497523.8098,
 		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
@@ -666,8 +666,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1695934708576.3948,
+		"date": 1696352022275.8064,
 		"jassijs.ui.Component": {
+			"@members": {}
+		},
+		"jassijs.ui.HTMLComponent": {
 			"@members": {}
 		}
 	},
@@ -1034,7 +1037,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1696000436276.2852,
+		"date": 1696320466897.5088,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {}

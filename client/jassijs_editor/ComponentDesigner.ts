@@ -26,7 +26,7 @@ class ClipboardData {
     children: { [name: string]: string[] } = {};
     properties: { [name: string]: { [propname: string]: any[] } } = {};
     types: { [name: string]: string } = {};
-    allChilds:string[]=[];
+    allChilds: string[] = [];
 }
 
 
@@ -155,7 +155,7 @@ export class ComponentDesigner extends Panel {
         });
         this._designToolbar.add(this.cutButton);
 
-      
+
         this.copyButton = new Button();
         this.copyButton.icon = "mdi mdi-content-copy mdi-18px";
         this.copyButton.tooltip = "Copy (Ctrl+Shift+C)";
@@ -176,15 +176,15 @@ export class ComponentDesigner extends Panel {
         this.inlineEditorPanel = new Panel();
         this.inlineEditorPanel._id = "i" + this.inlineEditorPanel._id;
         this.inlineEditorPanel.dom.setAttribute("id", this.inlineEditorPanel._id);
-        this.inlineEditorPanel.dom.style.display="inline";
-        this.inlineEditorPanel.domWrapper.style.display="inline";
+        this.inlineEditorPanel.dom.style.display = "inline";
+        this.inlineEditorPanel.domWrapper.style.display = "inline";
         this.inlineEditorPanel.dom.classList.add("InlineEditorPanel");
 
         //   box.height=40;
         box.add(this._designToolbar);
         box.add(this.inlineEditorPanel);
         this.add(box);
-        this._designPlaceholder.domWrapper.style.position="relative";
+        this._designPlaceholder.domWrapper.style.position = "relative";
         this.add(this._designPlaceholder);
 
     }
@@ -193,8 +193,8 @@ export class ComponentDesigner extends Panel {
    */
     registerKeys() {
         var _this = this;
-        this._codeEditor._design.dom.tabindex= "1";
-        this._codeEditor._design.dom.addEventListener("keydown",function (evt) {
+        this._codeEditor._design.dom.tabindex = "1";
+        this._codeEditor._design.dom.addEventListener("keydown", function (evt) {
             if (evt.keyCode === 115 && evt.shiftKey) {//F4
                 // var thiss=this._this._id;
                 // var editor = ace.edit(this._this._id);
@@ -213,17 +213,17 @@ export class ComponentDesigner extends Panel {
                 evt.preventDefault();
                 return false;
             }
-            if (evt.keyCode === 46|| (evt.keyCode === 88 && evt.ctrlKey&&evt.shiftKey)) {//Del or Ctrl X)
+            if (evt.keyCode === 46 || (evt.keyCode === 88 && evt.ctrlKey && evt.shiftKey)) {//Del or Ctrl X)
                 _this.cutComponent();
                 evt.preventDefault();
                 return false;
             }
-           if (evt.keyCode === 67 && evt.ctrlKey&&evt.shiftKey) {//Ctrl+C
+            if (evt.keyCode === 67 && evt.ctrlKey && evt.shiftKey) {//Ctrl+C
                 _this.copy();
                 evt.preventDefault();
                 return false;
             }
-           if (evt.keyCode === 86 && evt.ctrlKey&&evt.shiftKey) {//Ctrl+V
+            if (evt.keyCode === 86 && evt.ctrlKey && evt.shiftKey) {//Ctrl+V
                 _this.paste();
                 evt.preventDefault();
                 return false;
@@ -277,17 +277,17 @@ export class ComponentDesigner extends Panel {
      * removes the selected component
      */
     async cutComponent() {
-        var text=await this.copy();
-        if(await navigator.clipboard.readText()!==text){
+        var text = await this.copy();
+        if (await navigator.clipboard.readText() !== text) {
             alert("could not copy to Clipboard.")
             return;
         }
         var clip: ClipboardData = JSON.parse(text);//to Clipboard
-       
+
         var all = [];
         for (var x = 0; x < clip.allChilds.length; x++) {
             var varname = clip.allChilds[x];//this._codeEditor.getVariableFromObject(todel);
-            var todel=this._codeEditor.getObjectFromVariable(varname);
+            var todel = this._codeEditor.getObjectFromVariable(varname);
             if (varname !== "this") {
                 if (todel?.domWrapper?._parent !== undefined) {
                     todel.domWrapper._parent.remove(todel);
@@ -357,7 +357,7 @@ export class ComponentDesigner extends Panel {
         await navigator.clipboard.writeText(text);
         return text;
     }
-    private async pasteComponent(clip: ClipboardData, target: Container, before: Component,varname: string, variablelistold: any[], variablelistnew: any[]) {
+    private async pasteComponent(clip: ClipboardData, target: Container, before: Component, varname: string, variablelistold: any[], variablelistnew: any[]) {
         var _this = this;
         var created: Component;
         if (clip.properties[varname] !== undefined && clip.properties[varname]["_new_"] !== undefined) {
@@ -371,10 +371,10 @@ export class ComponentDesigner extends Panel {
             var newcomp = { createFromType: clip.types[varname] };
             await classes.loadClass(clip.types[varname]);
             var svarname = varname.split(".")[varname.split(".").length - 1];
-           
+
             created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, before, false, svarname);
             variablelistold.push(varname);
-            var newvarname=_this._codeEditor.getVariableFromObject(created);
+            var newvarname = _this._codeEditor.getVariableFromObject(created);
             variablelistnew.push(newvarname);
             //correct designdummy
             for (var t = 0; t < target._components.length; t++) {
@@ -391,7 +391,7 @@ export class ComponentDesigner extends Panel {
         }
         if (clip.children[varname] !== undefined) {
             for (var k = 0; k < clip.children[varname].length; k++) {
-                await _this.pasteComponent(clip, <Container>created,undefined, clip.children[varname][k], variablelistold, variablelistnew);
+                await _this.pasteComponent(clip, <Container>created, undefined, clip.children[varname][k], variablelistold, variablelistnew);
             }
         }
         return created;
@@ -407,12 +407,12 @@ export class ComponentDesigner extends Panel {
         for (var x = 0; x < clip.varNamesToCopy.length; x++) {
             var varname = clip.varNamesToCopy[x];
             var target: Container = _this._propertyEditor.value;
-            if(target._components!==undefined)
-                await _this.pasteComponent(clip, target, undefined,varname, variablelistold, variablelistnew);
-            else{
-               // if(x===0)
+            if (target._components !== undefined)
+                await _this.pasteComponent(clip, target, undefined, varname, variablelistold, variablelistnew);
+            else {
+                // if(x===0)
                 //    before=target;
-                await _this.pasteComponent(clip, target._parent, target,varname, variablelistold, variablelistnew);
+                await _this.pasteComponent(clip, target._parent, target, varname, variablelistold, variablelistnew);
             }
             //set properties
         }
@@ -520,13 +520,14 @@ export class ComponentDesigner extends Panel {
             }
         }
     }
+    createDragAndDropper(): DragAndDropper {
+        return new DragAndDropper();
+    }
     /**
      * dialog edit mode
      * @param {boolean} enable - if true allow resizing and drag and drop 
      */
     editDialog(enable) {
-
-
         var _this = this;
         this.editMode = enable;
         this.editButton.toggle(!this.editMode);
@@ -538,7 +539,7 @@ export class ComponentDesigner extends Panel {
         var component = this._designPlaceholder._components[0];
         //switch designmode
         var comps = component.dom.querySelectorAll(".jcomponent");
-        comps.forEach((c)=>c.classList.add("jdesignmode"));
+        comps.forEach((c) => c.classList.add("jdesignmode"));
         for (var c = 0; c < comps.length; c++) {
 
             if (comps[c]._this["extensionCalled"] !== undefined) {
@@ -576,7 +577,7 @@ export class ComponentDesigner extends Panel {
             } else
                 allcomponents = this.variables.getEditableComponents(component);
             //this._installTinyEditor();
-            this._draganddropper = new DragAndDropper();
+            this._draganddropper = this.createDragAndDropper();
             this._resizer = new Resizer();
             this._resizer.draganddropper = this._draganddropper;
 
@@ -603,19 +604,21 @@ export class ComponentDesigner extends Panel {
             };
             this._resizer.install(component, allcomponents);
             allcomponents = this.variables.getEditableComponents(component, true);
-            this._draganddropper.install(component, allcomponents);
-            this._draganddropper.onpropertychanged = function (component, top, left, oldParent, newParent, beforeComponent) {
-                _this.moveComponent(component, top, left, oldParent, newParent, beforeComponent);
-            }
-            this._draganddropper.onpropertyadded = function (type, component, top, left, newParent, beforeComponent) {
-                _this.createComponent(type, component, top, left, newParent, beforeComponent);
+            if (this._draganddropper) {
+                this._draganddropper.install(component, allcomponents);
+                this._draganddropper.onpropertychanged = function (component, top, left, oldParent, newParent, beforeComponent) {
+                    _this.moveComponent(component, top, left, oldParent, newParent, beforeComponent);
+                }
+                this._draganddropper.onpropertyadded = function (type, component, top, left, newParent, beforeComponent) {
+                    _this.createComponent(type, component, top, left, newParent, beforeComponent);
 
-            }
+                }
 
-            this._draganddropper.isDragEnabled = function (event, ui) {
-                if (_this._resizer === undefined)
-                    return false;
-                return _this._resizer.componentUnderCursor !== undefined;
+                this._draganddropper.isDragEnabled = function (event, ui) {
+                    if (_this._resizer === undefined)
+                        return false;
+                    return _this._resizer.componentUnderCursor !== undefined;
+                }
             }
         } else {
 

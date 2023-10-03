@@ -1014,14 +1014,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             }
             if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
                 if (property === "text") {
+                    debugger;
                     var svalue = value;
-                    var old = this.data[variableName][property][0].node.text;
                     svalue = JSON.parse(`{"a":` + svalue + "}").a;
                     if (svalue.length === svalue.trim().length) {
-                        svalue = old.substring(0, old.length - old.trimStart().length) + svalue + old.substring(old.length - (old.length - old.trimEnd().length));
+                        svalue = old.substring(0, old.length - old.trimStart().length) + svalue + old.substring(old.length - old.trimEnd().length);
                     }
                     //correct spaces linebrak are lost in html editing
-                    this.data[variableName][property][0].value = JSON.stringify(svalue);
+                    this.data[variableName][property][0].value = '""'+JSON.stringify(svalue)+'"';
                     this.data[variableName][property][0].node.text = svalue;
                 }
                 return;
