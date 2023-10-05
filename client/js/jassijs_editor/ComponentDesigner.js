@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Registry_1, Panel_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_1, DragAndDropper_1, ComponentDescriptor_1, Classes_1, BoxPanel_1) {
     "use strict";
+    var ComponentDesigner_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = void 0;
     //import { Parser } from "./util/Parser";
@@ -21,7 +22,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.allChilds = [];
         }
     }
-    let ComponentDesigner = class ComponentDesigner extends Panel_1.Panel {
+    let ComponentDesigner = ComponentDesigner_1 = class ComponentDesigner extends Panel_1.Panel {
         constructor() {
             super();
             this._codeEditor = undefined;
@@ -645,7 +646,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     _this.variables.updateCache();*/
                 }
             }
-            var varvalue = new (Classes_1.classes.getClass(type));
+            var varvalue;
+            if (Classes_1.classes.getClassName(component) === type)
+                varvalue = component;
+            else
+                varvalue = new (Classes_1.classes.getClass(type));
             var varname = _this.createVariable(type, scope, varvalue, suggestedName);
             if (this._propertyEditor.codeEditor !== undefined) {
                 var newName = _this._codeEditor.getVariableFromObject(newParent);
@@ -763,6 +768,74 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
             }
         }
+        static createDummy() {
+            var dummy;
+            //  if (ComponentDesigner.beforeDummy === undefined) {
+            dummy = document.createElement("span");
+            dummy.contentEditable = "false";
+            dummy.draggable = true;
+            dummy.classList.add("_dummy_");
+            dummy.onclick = (ev) => console.log(ev);
+            dummy.ondrop = (ev) => { ev.preventDefault(); var data = ev.dataTransfer.getData("text"); };
+            dummy.ondragover = (ev) => ev.preventDefault();
+            dummy.ondragstart = ev => {
+                ev.dataTransfer.setDragImage(event.target.nd, 20, 20);
+                ev.dataTransfer.setData("text", "Hallo");
+            };
+            dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
+            dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+            dummy.style.fontSize = "7px";
+            dummy.style.position = "absolute";
+            dummy.onmouseenter = (e) => {
+                e.target.nd._sicbgc_ = e.target.nd.style.backgroundColor;
+                e.target.nd.style.backgroundColor = "rgba(245,234,39,0.2)";
+            };
+            dummy.onmouseleave = (e) => e.target.nd.style.backgroundColor = e.target.nd._sicbgc_;
+            //   ComponentDesigner.beforeDummy = dummy;
+            // }
+            // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
+            return dummy;
+        }
+        static insertDummies(node, root, arr, rootRect) {
+            if (node._dummyholder === true)
+                return;
+            if (root === undefined)
+                root = node;
+            if (node.getClientRects === undefined)
+                return;
+            var rect = node.getClientRects()[0];
+            rect = {
+                left: rect.left - rootRect.left + window.scrollX,
+                top: rect.top - rootRect.top + window.scrollY
+            };
+            if (node === null || node === void 0 ? void 0 : node.nd)
+                return;
+            if (!node._dummy_) {
+                var dummy = ComponentDesigner_1.createDummy();
+                dummy.nd = node;
+                dummy.title = node.outerHTML;
+                node._dummy_ = dummy;
+                arr.push(dummy);
+            }
+            var newTop = rect.top;
+            var newLeft = rect.left;
+            node.myTop = rect.top;
+            node.myLeft = rect.left;
+            if (node.parentNode._dummy_) {
+                var rp = {
+                    top: node.parentNode.myTop,
+                    left: node.parentNode.myLeft,
+                };
+                if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.left + 5) {
+                    newLeft = parseInt(node.parentNode._dummy_.style.left.replace("px", "")) + 8;
+                }
+            }
+            node._dummy_.style.top = newTop + "px";
+            node._dummy_.style.left = newLeft + "px";
+            for (var x = 0; x < node.childNodes.length; x++) {
+                ComponentDesigner_1.insertDummies(node.childNodes[x], root, arr, rootRect);
+            }
+        }
         /**
          * @member {jassijs.ui.Component} - the designed component
          */
@@ -788,8 +861,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             while (this.inlineEditorPanel.dom.firstChild) {
                 this.inlineEditorPanel.dom.firstChild.remove();
             }
+            this.updateDummies();
             //var parser=new jassijs.ui.PropertyEditor.Parser();
             //parser.parse(_this.value);
+        }
+        updateDummies() {
+            var arr = [];
+            var component = this._componentExplorer.value;
+            if (component.dom.dummyholder === undefined) {
+                component.dom.dummyholder = document.createElement("span");
+                component.dom.dummyholder._dummyholder = true;
+                component.dom.prepend(component.dom.dummyholder);
+            }
+            ComponentDesigner_1.insertDummies(component.dom, undefined, arr, component.dom.getClientRects()[0]);
+            component.dom.dummyholder.append(...arr);
         }
         get designedComponent() {
             return this._designPlaceholder._components[0];
@@ -810,7 +895,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             super.destroy();
         }
     };
-    ComponentDesigner = __decorate([
+    ComponentDesigner = ComponentDesigner_1 = __decorate([
         (0, Registry_1.$Class)("jassijs_editor.ComponentDesigner"),
         __metadata("design:paramtypes", [])
     ], ComponentDesigner);

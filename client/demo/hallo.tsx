@@ -1,3 +1,7 @@
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
 import { Button } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
@@ -81,10 +85,14 @@ export function test() {
         <button width="202" contentEditable="false" style={{ color: "red" }} height="42">hall</button>
         <Button text="sdfsdfsdf"></Button>
         dddd
-    </Panel>;*/
-    var ret=<div>
+    </Panel>;
+   */
+    var ret=<div text="fsdf">
+        <div>
+            sdfsdfsdf
+        </div>sdfsd
         
-        Hasdfgsdfgsdfgsdfg dsfgllo
+
     </div>;
     var comp=createComponent(ret);
     return comp;

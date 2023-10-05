@@ -797,7 +797,7 @@ export class HTMLComponent extends Component {
     }
 
 }
-@$Class("jassijs.ui.HTMLComponent")
+@$Class("jassijs.ui.TextComponent")
 export class TextComponent extends Component {
     @$Property()
      get text(){

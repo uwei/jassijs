@@ -15,7 +15,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1696347111892.4827,
+		"date": 1696450228045.2976,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {}
@@ -33,7 +33,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1696347155080.7212,
+		"date": 1696532790324.96,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
@@ -331,7 +331,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1696353219538.5442,
+		"date": 1696534692234.4597,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
@@ -364,7 +364,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.Typescript": {}
 	},
 	"jassijs_editor/HtmlDesigner.ts": {
-		"date": 1696353303189.37,
+		"date": 1696533188852.2512,
 		"jassijs_editor.HtmlDesigner": {}
 	}
 }

@@ -512,7 +512,7 @@ export class CodeEditor extends Panel {
             }
             //@ts-ignore
             _this._design.connectParser(parser);
-            _this._design["designedComponent"] = ret;
+            (<any>_this._design).designedComponent = ret;
 
             await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
             (<any>_this._design).editDialog(true);

@@ -17,6 +17,7 @@ import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import { classes } from "jassijs/remote/Classes";
 import { Container } from "jassijs/ui/Container";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
+
 //import { Parser } from "./util/Parser";
 
 
@@ -38,7 +39,7 @@ export class ComponentDesigner extends Panel {
     _propertyEditor: PropertyEditor;
     _errors: ErrorPanel;
     _componentPalette: ComponentPalette;
-    _componentExplorer: ComponentExplorer;
+    _componentExplorer: ComponentExplorer; dummy
     _invisibleComponents: CodeEditorInvisibleComponents;
     _designToolbar: Panel;
     _designPlaceholder: Panel;
@@ -61,6 +62,7 @@ export class ComponentDesigner extends Panel {
         this.editMode = true;
 
     }
+
     connectParser(parser) {
         this._propertyEditor.parser = parser;
     }
@@ -721,7 +723,11 @@ export class ComponentDesigner extends Panel {
                 _this.variables.updateCache();*/
             }
         }
-        var varvalue = new (classes.getClass(type));
+        var varvalue;
+        if (classes.getClassName(component) === type)
+            varvalue = component;
+        else
+            varvalue = new (classes.getClass(type));
         var varname = _this.createVariable(type, scope, varvalue, suggestedName);
         if (this._propertyEditor.codeEditor !== undefined) {
 
@@ -846,7 +852,76 @@ export class ComponentDesigner extends Panel {
         }
 
     }
+    static createDummy() {
+        var dummy: HTMLSpanElement;
+        //  if (ComponentDesigner.beforeDummy === undefined) {
+        dummy = <HTMLSpanElement>document.createElement("span");
+        dummy.contentEditable = "false";
+        dummy.draggable = true;
+        dummy.classList.add("_dummy_");
+        dummy.onclick = (ev) => console.log(ev);
+        dummy.ondrop = (ev) => { ev.preventDefault(); var data = ev.dataTransfer.getData("text"); };
+        dummy.ondragover = (ev) => ev.preventDefault();
+        dummy.ondragstart = ev => {
+            ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
+            ev.dataTransfer.setData("text", "Hallo");
+        }
+        dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
+        dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+        dummy.style.fontSize = "7px";
+        dummy.style.position = "absolute";
+        dummy.onmouseenter = (e) => {
+            (<any>e.target).nd._sicbgc_ = (<any>e.target).nd.style.backgroundColor;
+            (<any>e.target).nd.style.backgroundColor = "rgba(245,234,39,0.2)";
+        }
+        dummy.onmouseleave = (e) => (<any>e.target).nd.style.backgroundColor = (<any>e.target).nd._sicbgc_;
+        //   ComponentDesigner.beforeDummy = dummy;
+        // }
+        // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
+        return dummy;
+    }
+    static insertDummies(node: HTMLElement, root: HTMLElement, arr, rootRect: DOMRect) {
+        if ((<any>node)._dummyholder === true)
+            return;
+        if (root === undefined)
+            root = node;
+        if (node.getClientRects === undefined)
+            return;
 
+        var rect = node.getClientRects()[0];
+        rect = <any>{
+            left: rect.left - rootRect.left + window.scrollX,
+            top: rect.top - rootRect.top + window.scrollY
+        }
+        if ((<any>node)?.nd)
+            return;
+        if (!(<any>node)._dummy_) {
+            var dummy = ComponentDesigner.createDummy();
+            (<any>dummy).nd = node;
+            dummy.title = node.outerHTML;
+            (<any>node)._dummy_ = dummy;
+            arr.push(dummy);
+        }
+        var newTop = rect.top;
+        var newLeft = rect.left;
+        (<any>node).myTop = rect.top;
+        (<any>node).myLeft = rect.left;
+
+        if ((<any>node.parentNode)._dummy_) {
+            var rp = {
+                top: (<any>node.parentNode).myTop,
+                left: (<any>node.parentNode).myLeft,
+            }
+            if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.left + 5) {
+                newLeft = parseInt((<any>node.parentNode)._dummy_.style.left.replace("px", "")) + 8;
+            }
+        }
+        (<any>node)._dummy_.style.top = newTop + "px";
+        (<any>node)._dummy_.style.left = newLeft + "px";
+        for (var x = 0; x < node.childNodes.length; x++) {
+            ComponentDesigner.insertDummies(<any>node.childNodes[x], root, arr, rootRect);
+        }
+    }
     /**
      * @member {jassijs.ui.Component} - the designed component
      */
@@ -876,9 +951,21 @@ export class ComponentDesigner extends Panel {
         while (this.inlineEditorPanel.dom.firstChild) {
             this.inlineEditorPanel.dom.firstChild.remove();
         }
+        this.updateDummies();
 
         //var parser=new jassijs.ui.PropertyEditor.Parser();
         //parser.parse(_this.value);
+    }
+    updateDummies() {
+        var arr = [];
+        var component=this._componentExplorer.value;
+        if ((<any>component.dom).dummyholder === undefined) {
+            (<any>component.dom).dummyholder = document.createElement("span");
+            (<any>component.dom).dummyholder._dummyholder = true;
+            component.dom.prepend((<any>component.dom).dummyholder);
+        }
+        ComponentDesigner.insertDummies(component.dom, undefined, arr, component.dom.getClientRects()[0]);
+        (<any>component.dom).dummyholder.append(...arr);
     }
     get designedComponent() {
         return this._designPlaceholder._components[0];

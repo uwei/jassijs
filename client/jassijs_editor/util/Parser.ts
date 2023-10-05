@@ -402,6 +402,7 @@ export class Parser {
         if (jsx === undefined)
             jsx = _this.jsxVariables[nd.openingElement.pos + 1];
         if (jsx) {
+            jsx.name=this.getNextVariableNameForType(jsx.name);
             _this.jsxVariables[jsx.name] = jsx;
             nd["jname"] = jsx.name;
             _this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
@@ -413,21 +414,32 @@ export class Parser {
             if ((<any>node.parent)?.jname !== undefined) {
                 _this.add((<any>node.parent)?.jname, "add", jsx.name, node);
             }
+            //node.getChildren().forEach(c => _this.visitNode(c, consumeProperties));
             //mark textnodes
+            var counttrivial=0;
             for (var x = 0; x < nd.children.length; x++) {
                 var ch = nd.children[x];
                 if (ch.kind === ts.SyntaxKind.JsxText) {
-                    var varname = this.getNextVariableNameForType("text", "text");
-                    var stext = JSON.stringify(ch.text);
-                    _this.add(varname, "_new_", stext, ch, false, false);
-                    _this.add(varname, "text", stext, ch, false, false);
-                    var chvar = {
-                        pos: ch.pos,
-                        component: _this.jsxVariables[jsx.name].component._components[x],
-                        name: varname
-                    };
-                    _this.jsxVariables[varname] = chvar;
-                    this.jsxVariables.__orginalarray__.push(chvar);
+                    if(ch.containsOnlyTriviaWhiteSpaces){
+                        counttrivial++;
+                    }else{
+                        var varname = this.getNextVariableNameForType("text", "text");
+                        var stext = JSON.stringify(ch.text);
+                        _this.add(varname, "_new_", stext, ch, false, false);
+                        _this.add(varname, "text", stext, ch, false, false);
+                        //if ((<any>node.parent)?.jname !== undefined) {
+                        _this.add(jsx.name, "add", varname, ch);
+                        // }
+                        var chvar = {
+                            pos: ch.pos,
+                            component: _this.jsxVariables[jsx.name].component._components[x-counttrivial],
+                            name: varname
+                        };
+                        _this.jsxVariables[varname] = chvar;
+                        this.jsxVariables.__orginalarray__.push(chvar);
+                    }
+                } else {
+                    _this.visitNode(ch, {});// consumeProperties)
                 }
             }
         }
@@ -472,6 +484,7 @@ export class Parser {
         if (node.kind === ts.SyntaxKind.JsxElement) {
 
             _this.parseJSX(_this, node);
+            return;
         }
 
 
@@ -791,7 +804,7 @@ export class Parser {
         if (varname === undefined)
             varname = type.split(".")[type.split(".").length - 1].toLowerCase();
         for (var counter = 1; counter < 1000; counter++) {
-            if (this.data.me === undefined || this.data.me[varname + (counter === 1 ? "" : counter)] === undefined)
+            if ( this.data[varname + (counter === 1 ? "" : counter)]===undefined&& (this.data.me === undefined || this.data.me[varname + (counter === 1 ? "" : counter)] === undefined))
                 break;
         }
         return varname + (counter === 1 ? "" : counter);
@@ -1021,8 +1034,18 @@ export class Parser {
         if (property === "add") {
             var prop = this.data[value]["_new_"][0];
             var classname = prop.className;
-
-            var node = this.createNode("<" + classname + "></" + classname + ">");
+            if (classname === "HTMLComponent")
+                classname = prop.tag;
+            var node;
+            if (classname === "text") {
+                
+                node = ts.createJsxText(<string>"", false);
+                this.add(value, "text", <string>"", node);
+            } else {
+                node = this.createNode("<" + classname + "></" + classname + ">");
+                if (classname === "br")
+                    node = this.createNode("<" + classname + "/>");
+            }
             var parent = this.data[variableName]["_new_"][0].node;
             node.parent = parent;
 
@@ -1059,15 +1082,15 @@ export class Parser {
         if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
             if (property === "text") {
                 var svalue = <string>value;
-                var old=this.data[variableName][property][0].node.text;
+                var old =this.data[variableName][property][0].node.text;
                 svalue = JSON.parse(`{"a":` + svalue + "}").a;
                 if (svalue.length === svalue.trim().length) {
-                    svalue = old.substring(0, old.length -old.trimStart().length) + svalue + old.substring(old.length -(old.length -old.trimEnd().length));
+                    svalue = old.substring(0, old.length - old.trimStart().length) + svalue + old.substring(old.length - (old.length - old.trimEnd().length));
                 }
-               
+
                 //correct spaces linebrak are lost in html editing
-               
-                this.data[variableName][property][0].value =JSON.stringify(svalue);
+
+                this.data[variableName][property][0].value = JSON.stringify(svalue);
                 this.data[variableName][property][0].node.text = svalue;
             }
             return;
@@ -1127,7 +1150,7 @@ export class Parser {
                         if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
                             pos--;
                     } catch {
-
+        
                     }
                     statements.splice(pos, 0, newExpression);
                 }*/
@@ -1189,12 +1212,12 @@ export class Parser {
         if (classscope === undefined)
             classscope = this.classScope;
         let type = fulltype.split(".")[fulltype.split(".").length - 1];
-
+        type=type === "TextComponent" ? "text" : type;
         var varname = this.getNextVariableNameForType(type, suggestedName);
 
         if (this.jsxVariables) {
             this.data[varname] = {
-                "_new_": [{ className: type }]
+                "_new_": [{ className: type, tag: suggestedName }]
             }
             // this.addTypeMe(varname, type);
             return varname;

@@ -23,6 +23,11 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             if (node !== document)
                 this.getParentList(node.parentNode, list);
         }
+        /*set designedComponent(component) {
+            alert(8);
+            super.designedComponent=component;
+            
+        }*/
         registerKeys() {
             return;
             var _this = this;
@@ -97,18 +102,23 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
         removeNode(from, frompos, to, topos) {
             if (from === to) {
                 var neu = to.textContent;
-                to.textContent = neu.substring(0, frompos) + "" + neu.substring(topos);
+                this.changeText(to, neu.substring(0, frompos) + "" + neu.substring(topos));
             }
             else {
                 this.deleteNodeBetween(from, to);
-                from.textContent = from.textContent.substring(0, frompos);
-                to.textContent = to.textContent.substring(topos);
+                this.changeText(from, from.textContent.substring(0, frompos));
+                this.changeText(to, to.textContent.substring(topos));
             }
             var range = document.createRange();
             var selection = getSelection();
             range.setStart(from, frompos);
             selection.removeAllRanges();
             selection.addRange(range);
+        }
+        changeText(node, text) {
+            var varname = this._propertyEditor.getVariableFromObject(node._this);
+            this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+            node.textContent = text;
         }
         keydown(e) {
             var sel = document.getSelection();
@@ -130,9 +140,17 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 var node = anchorNode;
                 var v1 = old.substring(0, anchorOffset);
                 var v2 = old.substring(focusOffset);
-                node.textContent = v2;
-                var enter = node.parentNode.insertBefore(document.createElement("br"), node);
-                var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
+                this.changeText(node, v2);
+                var enter = (0, Component_1.createComponent)(React.createElement("br"));
+                var comp = node._this;
+                var br = this.createComponent("jassijs.ui.HTMLComponent", enter, undefined, undefined, comp._parent, comp, true, "br");
+                var nd = document.createTextNode(v1);
+                var comp2 = new Component_1.TextComponent();
+                comp2.init(nd, { noWrapper: true });
+                var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, br, true, "text");
+                this.changeText(text2.dom, v1);
+                //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
+                // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
                 return;
             }
             if (e.code === "Delete") {
@@ -170,15 +188,14 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 else {
                     this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
                 }
-                var varname = this._propertyEditor.getVariableFromObject(anchorNode._this);
-                this._propertyEditor.setPropertyInCode("text", '"' + neu + '"', true, varname);
-                anchorNode.textContent = neu;
+                this.changeText(anchorNode, neu);
                 e.preventDefault();
                 var range = document.createRange();
                 range.setStart(anchorNode, anchorOffset + 1);
                 sel.removeAllRanges();
                 sel.addRange(range);
             }
+            this.updateDummies();
         }
     };
     HtmlDesigner = __decorate([
@@ -191,7 +208,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             contenteditable: "true"
         }, "Hallo", "Du");
         var ret = (0, Component_1.createComponent)(dom);
-        ret.dom.addEventListener("keydown", keydown);
+        //ret.dom.addEventListener("keydown", keydown);
         //windows.add(ret, "Hallo");
         return ret;
     }

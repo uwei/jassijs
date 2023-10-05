@@ -1768,11 +1768,12 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1696352022275.8064,
+                "date": 1696362084085.7065,
                 "jassijs.ui.Component": {
                     "@members": {}
                 },
-                "jassijs.ui.HTMLComponent": {
+                "jassijs.ui.HTMLComponent": {},
+                "jassijs.ui.TextComponent": {
                     "@members": {}
                 }
             },
@@ -7274,7 +7275,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [String])
     ], TextComponent.prototype, "text", null);
     TextComponent = __decorate([
-        Registry_41.$Class("jassijs.ui.HTMLComponent")
+        Registry_41.$Class("jassijs.ui.TextComponent")
     ], TextComponent);
     exports.TextComponent = TextComponent;
 });
@@ -18275,11 +18276,12 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1696352022275.8064,
+                "date": 1696362084085.7065,
                 "jassijs.ui.Component": {
                     "@members": {}
                 },
-                "jassijs.ui.HTMLComponent": {
+                "jassijs.ui.HTMLComponent": {},
+                "jassijs.ui.TextComponent": {
                     "@members": {}
                 }
             },

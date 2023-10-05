@@ -435,7 +435,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
                 //@ts-ignore
                 _this._design.connectParser(parser);
-                _this._design["designedComponent"] = ret;
+                _this._design.designedComponent = ret;
                 await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
                 _this._design.editDialog(true);
                 //});

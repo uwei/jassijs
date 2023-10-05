@@ -1,23 +1,30 @@
 import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
 import { $Class } from "jassijs/remote/Registry";
-import { createComponent } from "jassijs/ui/Component";
+import { Component, createComponent, HTMLComponent, TextComponent } from "jassijs/ui/Component";
+import { Container } from "jassijs/ui/Container";
 
 @$Class("jassijs_editor.HtmlDesigner")
 export class HtmlDesigner extends ComponentDesigner {
 
-    constructor(){
+    constructor() {
         super();
-        var _this=this;
-        this._designPlaceholder.dom.addEventListener("keydown", (ev=>_this.keydown(ev)));
-        this._designPlaceholder.dom.contentEditable="true";
+        var _this = this;
+        this._designPlaceholder.dom.addEventListener("keydown", (ev => _this.keydown(ev)));
+        this._designPlaceholder.dom.contentEditable = "true";
     }
     private getParentList(node: Node, list: Node[]) {
         list.push(node);
         if (node !== <any>document)
             this.getParentList(<any>node.parentNode, list);
     }
-     registerKeys() {
-         return;
+   
+    /*set designedComponent(component) {
+        alert(8);
+        super.designedComponent=component;
+        
+    }*/
+    registerKeys() {
+        return;
         var _this = this;
         this._codeEditor._design.dom.tabindex = "1";
         this._codeEditor._design.dom.addEventListener("keydown", function (evt) {
@@ -91,17 +98,22 @@ export class HtmlDesigner extends ComponentDesigner {
     private removeNode(from: Node, frompos: number, to: Node, topos: number) {
         if (from === to) {
             var neu = to.textContent;
-            to.textContent = neu.substring(0, frompos) + "" + neu.substring(topos);
+            this.changeText(to, neu.substring(0, frompos) + "" + neu.substring(topos));
         } else {
             this.deleteNodeBetween(from, to);
-            from.textContent = from.textContent.substring(0, frompos);
-            to.textContent = to.textContent.substring(topos);
+            this.changeText(from, from.textContent.substring(0, frompos));
+            this.changeText(to, to.textContent.substring(topos));
         }
         var range = document.createRange();
         var selection = getSelection();
         range.setStart(from, frompos);
         selection.removeAllRanges();
         selection.addRange(range);
+    }
+    private changeText(node: Node, text: string) {
+        var varname = this._propertyEditor.getVariableFromObject((<any>node)._this);
+        this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+        node.textContent = text;
     }
     private keydown(e: KeyboardEvent) {
         var sel = document.getSelection();
@@ -122,14 +134,21 @@ export class HtmlDesigner extends ComponentDesigner {
 
         if (e.keyCode === 13) {
             e.preventDefault();
-
             var old = anchorNode.textContent;
             var node = anchorNode;
             var v1 = old.substring(0, anchorOffset);
             var v2 = old.substring(focusOffset);
-            node.textContent = v2;
-            var enter = node.parentNode.insertBefore(document.createElement("br"), node);
-            var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
+            this.changeText(node, v2);
+            var enter = createComponent(React.createElement("br"));
+            var comp: Component = (<any>node)._this;
+            var br = this.createComponent("jassijs.ui.HTMLComponent", enter, undefined, undefined, comp._parent, comp, true, "br")
+            var nd = document.createTextNode(v1);
+            var comp2 = new TextComponent();
+            comp2.init(<any>nd, { noWrapper: true });
+            var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, br, true, "text");
+            this.changeText(text2.dom, v1);
+            //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
+            // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
             return;
         }
         if (e.code === "Delete") {
@@ -168,10 +187,8 @@ export class HtmlDesigner extends ComponentDesigner {
                 this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
 
             }
-            var varname=this._propertyEditor.getVariableFromObject((<any>anchorNode)._this);
-            this._propertyEditor.setPropertyInCode("text", '"'+neu+'"',true,varname);
 
-            anchorNode.textContent = neu;
+            this.changeText(anchorNode, neu);
             e.preventDefault();
             var range = document.createRange();
             range.setStart(anchorNode, anchorOffset + 1);
@@ -179,6 +196,7 @@ export class HtmlDesigner extends ComponentDesigner {
             sel.addRange(range);
 
         }
+         this.updateDummies();
     }
 }
 export function test() {
@@ -189,8 +207,8 @@ export function test() {
     },
         "Hallo", "Du");
 
-    var ret = createComponent(dom);
-    ret.dom.addEventListener("keydown", keydown);
+     var ret = createComponent(dom);
+    //ret.dom.addEventListener("keydown", keydown);
     //windows.add(ret, "Hallo");
     return ret;
 }

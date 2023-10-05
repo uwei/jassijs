@@ -74,8 +74,11 @@ define(["require", "exports", "jassijs/ui/Component"], function (require, export
             <button width="202" contentEditable="false" style={{ color: "red" }} height="42">hall</button>
             <Button text="sdfsdfsdf"></Button>
             dddd
-        </Panel>;*/
-        var ret = React.createElement("div", null, "Hasdfgsdfgsdfgsdfg dsfgllo");
+        </Panel>;
+       */
+        var ret = React.createElement("div", { text: "fsdf" },
+            React.createElement("div", null, "sdfsdfsdf"),
+            "sdfsd");
         var comp = (0, Component_1.createComponent)(ret);
         return comp;
     }

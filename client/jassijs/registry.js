@@ -666,11 +666,12 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1696352022275.8064,
+		"date": 1696362084085.7065,
 		"jassijs.ui.Component": {
 			"@members": {}
 		},
-		"jassijs.ui.HTMLComponent": {
+		"jassijs.ui.HTMLComponent": {},
+		"jassijs.ui.TextComponent": {
 			"@members": {}
 		}
 	},

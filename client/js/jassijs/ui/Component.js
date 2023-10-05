@@ -743,7 +743,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         __metadata("design:paramtypes", [String])
     ], TextComponent.prototype, "text", null);
     TextComponent = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.HTMLComponent")
+        (0, Registry_1.$Class)("jassijs.ui.TextComponent")
     ], TextComponent);
     exports.TextComponent = TextComponent;
 });

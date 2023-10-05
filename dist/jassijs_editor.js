@@ -1321,7 +1321,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 }
                 //@ts-ignore
                 _this._design.connectParser(parser);
-                _this._design["designedComponent"] = ret;
+                _this._design.designedComponent = ret;
                 await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
                 _this._design.editDialog(true);
                 //});
@@ -1968,6 +1968,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
 });
 define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Registry_10, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, ComponentDescriptor_1, Classes_3, BoxPanel_1) {
     "use strict";
+    var ComponentDesigner_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = void 0;
     //import { Parser } from "./util/Parser";
@@ -1980,7 +1981,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.allChilds = [];
         }
     }
-    let ComponentDesigner = class ComponentDesigner extends Panel_4.Panel {
+    let ComponentDesigner = ComponentDesigner_1 = class ComponentDesigner extends Panel_4.Panel {
         constructor() {
             super();
             this._codeEditor = undefined;
@@ -2604,7 +2605,11 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     _this.variables.updateCache();*/
                 }
             }
-            var varvalue = new (Classes_3.classes.getClass(type));
+            var varvalue;
+            if (Classes_3.classes.getClassName(component) === type)
+                varvalue = component;
+            else
+                varvalue = new (Classes_3.classes.getClass(type));
             var varname = _this.createVariable(type, scope, varvalue, suggestedName);
             if (this._propertyEditor.codeEditor !== undefined) {
                 var newName = _this._codeEditor.getVariableFromObject(newParent);
@@ -2722,6 +2727,75 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 }
             }
         }
+        static createDummy() {
+            var dummy;
+            //  if (ComponentDesigner.beforeDummy === undefined) {
+            dummy = document.createElement("span");
+            dummy.contentEditable = "false";
+            dummy.draggable = true;
+            dummy.classList.add("_dummy_");
+            dummy.onclick = (ev) => console.log(ev);
+            dummy.ondrop = (ev) => { ev.preventDefault(); var data = ev.dataTransfer.getData("text"); };
+            dummy.ondragover = (ev) => ev.preventDefault();
+            dummy.ondragstart = ev => {
+                ev.dataTransfer.setDragImage(event.target.nd, 20, 20);
+                ev.dataTransfer.setData("text", "Hallo");
+            };
+            dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
+            dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+            dummy.style.fontSize = "7px";
+            dummy.style.position = "absolute";
+            dummy.onmouseenter = (e) => {
+                e.target.nd._sicbgc_ = e.target.nd.style.backgroundColor;
+                e.target.nd.style.backgroundColor = "rgba(245,234,39,0.2)";
+            };
+            dummy.onmouseleave = (e) => e.target.nd.style.backgroundColor = e.target.nd._sicbgc_;
+            //   ComponentDesigner.beforeDummy = dummy;
+            // }
+            // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
+            return dummy;
+        }
+        static insertDummies(node, root, arr, rootRect) {
+            var _a;
+            if (node._dummyholder === true)
+                return;
+            if (root === undefined)
+                root = node;
+            if (node.getClientRects === undefined)
+                return;
+            var rect = node.getClientRects()[0];
+            rect = {
+                left: rect.left - rootRect.left + window.scrollX,
+                top: rect.top - rootRect.top + window.scrollY
+            };
+            if ((_a = node) === null || _a === void 0 ? void 0 : _a.nd)
+                return;
+            if (!node._dummy_) {
+                var dummy = ComponentDesigner_1.createDummy();
+                dummy.nd = node;
+                dummy.title = node.outerHTML;
+                node._dummy_ = dummy;
+                arr.push(dummy);
+            }
+            var newTop = rect.top;
+            var newLeft = rect.left;
+            node.myTop = rect.top;
+            node.myLeft = rect.left;
+            if (node.parentNode._dummy_) {
+                var rp = {
+                    top: node.parentNode.myTop,
+                    left: node.parentNode.myLeft,
+                };
+                if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.left + 5) {
+                    newLeft = parseInt(node.parentNode._dummy_.style.left.replace("px", "")) + 8;
+                }
+            }
+            node._dummy_.style.top = newTop + "px";
+            node._dummy_.style.left = newLeft + "px";
+            for (var x = 0; x < node.childNodes.length; x++) {
+                ComponentDesigner_1.insertDummies(node.childNodes[x], root, arr, rootRect);
+            }
+        }
         /**
          * @member {jassijs.ui.Component} - the designed component
          */
@@ -2747,8 +2821,20 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             while (this.inlineEditorPanel.dom.firstChild) {
                 this.inlineEditorPanel.dom.firstChild.remove();
             }
+            this.updateDummies();
             //var parser=new jassijs.ui.PropertyEditor.Parser();
             //parser.parse(_this.value);
+        }
+        updateDummies() {
+            var arr = [];
+            var component = this._componentExplorer.value;
+            if (component.dom.dummyholder === undefined) {
+                component.dom.dummyholder = document.createElement("span");
+                component.dom.dummyholder._dummyholder = true;
+                component.dom.prepend(component.dom.dummyholder);
+            }
+            ComponentDesigner_1.insertDummies(component.dom, undefined, arr, component.dom.getClientRects()[0]);
+            component.dom.dummyholder.append(...arr);
         }
         get designedComponent() {
             return this._designPlaceholder._components[0];
@@ -2769,7 +2855,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             super.destroy();
         }
     };
-    ComponentDesigner = __decorate([
+    ComponentDesigner = ComponentDesigner_1 = __decorate([
         Registry_10.$Class("jassijs_editor.ComponentDesigner"),
         __metadata("design:paramtypes", [])
     ], ComponentDesigner);
@@ -4236,11 +4322,11 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
     }
     exports.test = test;
 });
-define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, ComponentDesigner_1, Registry_19, Component_5) {
+define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, ComponentDesigner_2, Registry_19, Component_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HtmlDesigner = void 0;
-    let HtmlDesigner = class HtmlDesigner extends ComponentDesigner_1.ComponentDesigner {
+    let HtmlDesigner = class HtmlDesigner extends ComponentDesigner_2.ComponentDesigner {
         constructor() {
             super();
             var _this = this;
@@ -4252,6 +4338,11 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             if (node !== document)
                 this.getParentList(node.parentNode, list);
         }
+        /*set designedComponent(component) {
+            alert(8);
+            super.designedComponent=component;
+            
+        }*/
         registerKeys() {
             return;
             var _this = this;
@@ -4326,18 +4417,23 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
         removeNode(from, frompos, to, topos) {
             if (from === to) {
                 var neu = to.textContent;
-                to.textContent = neu.substring(0, frompos) + "" + neu.substring(topos);
+                this.changeText(to, neu.substring(0, frompos) + "" + neu.substring(topos));
             }
             else {
                 this.deleteNodeBetween(from, to);
-                from.textContent = from.textContent.substring(0, frompos);
-                to.textContent = to.textContent.substring(topos);
+                this.changeText(from, from.textContent.substring(0, frompos));
+                this.changeText(to, to.textContent.substring(topos));
             }
             var range = document.createRange();
             var selection = getSelection();
             range.setStart(from, frompos);
             selection.removeAllRanges();
             selection.addRange(range);
+        }
+        changeText(node, text) {
+            var varname = this._propertyEditor.getVariableFromObject(node._this);
+            this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+            node.textContent = text;
         }
         keydown(e) {
             var sel = document.getSelection();
@@ -4359,9 +4455,17 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 var node = anchorNode;
                 var v1 = old.substring(0, anchorOffset);
                 var v2 = old.substring(focusOffset);
-                node.textContent = v2;
-                var enter = node.parentNode.insertBefore(document.createElement("br"), node);
-                var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
+                this.changeText(node, v2);
+                var enter = Component_5.createComponent(React.createElement("br"));
+                var comp = node._this;
+                var br = this.createComponent("jassijs.ui.HTMLComponent", enter, undefined, undefined, comp._parent, comp, true, "br");
+                var nd = document.createTextNode(v1);
+                var comp2 = new Component_5.TextComponent();
+                comp2.init(nd, { noWrapper: true });
+                var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, br, true, "text");
+                this.changeText(text2.dom, v1);
+                //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
+                // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
                 return;
             }
             if (e.code === "Delete") {
@@ -4399,15 +4503,14 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 else {
                     this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
                 }
-                var varname = this._propertyEditor.getVariableFromObject(anchorNode._this);
-                this._propertyEditor.setPropertyInCode("text", '"' + neu + '"', true, varname);
-                anchorNode.textContent = neu;
+                this.changeText(anchorNode, neu);
                 e.preventDefault();
                 var range = document.createRange();
                 range.setStart(anchorNode, anchorOffset + 1);
                 sel.removeAllRanges();
                 sel.addRange(range);
             }
+            this.updateDummies();
         }
     };
     HtmlDesigner = __decorate([
@@ -4420,7 +4523,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             contenteditable: "true"
         }, "Hallo", "Du");
         var ret = Component_5.createComponent(dom);
-        ret.dom.addEventListener("keydown", keydown);
+        //ret.dom.addEventListener("keydown", keydown);
         //windows.add(ret, "Hallo");
         return ret;
     }
@@ -4811,7 +4914,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1696347111892.4827,
+                "date": 1696450228045.2976,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -4829,7 +4932,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1696347155080.7212,
+                "date": 1696532790324.96,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -5127,7 +5230,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1696353219538.5442,
+                "date": 1696534692234.4597,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -5160,7 +5263,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1696353303189.37,
+                "date": 1696533188852.2512,
                 "jassijs_editor.HtmlDesigner": {}
             }
         }
@@ -6759,6 +6862,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (jsx === undefined)
                 jsx = _this.jsxVariables[nd.openingElement.pos + 1];
             if (jsx) {
+                jsx.name = this.getNextVariableNameForType(jsx.name);
                 _this.jsxVariables[jsx.name] = jsx;
                 nd["jname"] = jsx.name;
                 _this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
@@ -6770,21 +6874,34 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.jname) !== undefined) {
                     _this.add((_b = node.parent) === null || _b === void 0 ? void 0 : _b.jname, "add", jsx.name, node);
                 }
+                //node.getChildren().forEach(c => _this.visitNode(c, consumeProperties));
                 //mark textnodes
+                var counttrivial = 0;
                 for (var x = 0; x < nd.children.length; x++) {
                     var ch = nd.children[x];
                     if (ch.kind === ts.SyntaxKind.JsxText) {
-                        var varname = this.getNextVariableNameForType("text", "text");
-                        var stext = JSON.stringify(ch.text);
-                        _this.add(varname, "_new_", stext, ch, false, false);
-                        _this.add(varname, "text", stext, ch, false, false);
-                        var chvar = {
-                            pos: ch.pos,
-                            component: _this.jsxVariables[jsx.name].component._components[x],
-                            name: varname
-                        };
-                        _this.jsxVariables[varname] = chvar;
-                        this.jsxVariables.__orginalarray__.push(chvar);
+                        if (ch.containsOnlyTriviaWhiteSpaces) {
+                            counttrivial++;
+                        }
+                        else {
+                            var varname = this.getNextVariableNameForType("text", "text");
+                            var stext = JSON.stringify(ch.text);
+                            _this.add(varname, "_new_", stext, ch, false, false);
+                            _this.add(varname, "text", stext, ch, false, false);
+                            //if ((<any>node.parent)?.jname !== undefined) {
+                            _this.add(jsx.name, "add", varname, ch);
+                            // }
+                            var chvar = {
+                                pos: ch.pos,
+                                component: _this.jsxVariables[jsx.name].component._components[x - counttrivial],
+                                name: varname
+                            };
+                            _this.jsxVariables[varname] = chvar;
+                            this.jsxVariables.__orginalarray__.push(chvar);
+                        }
+                    }
+                    else {
+                        _this.visitNode(ch, {}); // consumeProperties)
                     }
                 }
             }
@@ -6828,6 +6945,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             }
             if (node.kind === ts.SyntaxKind.JsxElement) {
                 _this.parseJSX(_this, node);
+                return;
             }
             if (consumeProperties)
                 this.parseProperties(node);
@@ -7144,7 +7262,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (varname === undefined)
                 varname = type.split(".")[type.split(".").length - 1].toLowerCase();
             for (var counter = 1; counter < 1000; counter++) {
-                if (this.data.me === undefined || this.data.me[varname + (counter === 1 ? "" : counter)] === undefined)
+                if (this.data[varname + (counter === 1 ? "" : counter)] === undefined && (this.data.me === undefined || this.data.me[varname + (counter === 1 ? "" : counter)] === undefined))
                     break;
             }
             return varname + (counter === 1 ? "" : counter);
@@ -7363,7 +7481,18 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (property === "add") {
                 var prop = this.data[value]["_new_"][0];
                 var classname = prop.className;
-                var node = this.createNode("<" + classname + "></" + classname + ">");
+                if (classname === "HTMLComponent")
+                    classname = prop.tag;
+                var node;
+                if (classname === "text") {
+                    node = ts.createJsxText("", false);
+                    this.add(value, "text", "", node);
+                }
+                else {
+                    node = this.createNode("<" + classname + "></" + classname + ">");
+                    if (classname === "br")
+                        node = this.createNode("<" + classname + "/>");
+                }
                 var parent = this.data[variableName]["_new_"][0].node;
                 node.parent = parent;
                 prop.node = node;
@@ -7464,7 +7593,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                             if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
                                 pos--;
                         } catch {
-    
+            
                         }
                         statements.splice(pos, 0, newExpression);
                     }*/
@@ -7523,10 +7652,11 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (classscope === undefined)
                 classscope = this.classScope;
             let type = fulltype.split(".")[fulltype.split(".").length - 1];
+            type = type === "TextComponent" ? "text" : type;
             var varname = this.getNextVariableNameForType(type, suggestedName);
             if (this.jsxVariables) {
                 this.data[varname] = {
-                    "_new_": [{ className: type }]
+                    "_new_": [{ className: type, tag: suggestedName }]
                 };
                 // this.addTypeMe(varname, type);
                 return varname;
@@ -8642,7 +8772,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1696347111892.4827,
+                "date": 1696450228045.2976,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -8660,7 +8790,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1696347155080.7212,
+                "date": 1696532790324.96,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -8958,7 +9088,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1696353219538.5442,
+                "date": 1696534692234.4597,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -8991,7 +9121,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1696353303189.37,
+                "date": 1696533188852.2512,
                 "jassijs_editor.HtmlDesigner": {}
             }
         }
