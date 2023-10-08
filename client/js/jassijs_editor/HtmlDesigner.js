@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, ComponentDesigner_1, Registry_1, Component_1) {
+define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes"], function (require, exports, ComponentDesigner_1, Registry_1, Component_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HtmlDesigner = void 0;
@@ -17,11 +17,39 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             var _this = this;
             this._designPlaceholder.dom.addEventListener("keydown", (ev => _this.keydown(ev)));
             this._designPlaceholder.dom.contentEditable = "true";
+            this._designPlaceholder.dom.addEventListener("drop", (ev) => _this.ondrop(ev));
         }
         getParentList(node, list) {
             list.push(node);
             if (node !== document)
                 this.getParentList(node.parentNode, list);
+        }
+        ondrop(ev) {
+            var _this = this;
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var range;
+            if (document.caretRangeFromPoint) {
+                // edge, chrome, android
+                range = document.caretRangeFromPoint(ev.clientX, ev.clientY);
+            }
+            else {
+                // firefox
+                var pos = [ev.rangeParent, ev.rangeOffset];
+                range = document.createRange();
+                range.setStart(...pos);
+                range.setEnd(...pos);
+            }
+            var selection = document.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            if (data.indexOf('"createFromType":') > -1) {
+                var toCreate = JSON.parse(data);
+                var cl = Classes_1.classes.getClass(toCreate.createFromType);
+                var newComponent = new cl();
+                _this.insertComponent(newComponent, selection);
+                _this.updateDummies();
+            }
         }
         /*set designedComponent(component) {
             alert(8);
@@ -120,6 +148,22 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
             node.textContent = text;
         }
+        insertComponent(component, sel = document.getSelection(), suggestedvarname = undefined) {
+            var anchorNode = sel.anchorNode;
+            var old = anchorNode.textContent;
+            var node = anchorNode;
+            var v1 = old.substring(0, sel.anchorOffset);
+            var v2 = old.substring(sel.focusOffset);
+            this.changeText(node, v2);
+            var comp = node._this;
+            var br = this.createComponent(Classes_1.classes.getClassName(component), component, undefined, undefined, comp._parent, comp, true, suggestedvarname);
+            var nd = document.createTextNode(v1);
+            var comp2 = new Component_1.TextComponent();
+            comp2.init(nd, { noWrapper: true });
+            var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, br, true, "text");
+            this.changeText(text2.dom, v1);
+            this.updateDummies();
+        }
         keydown(e) {
             var sel = document.getSelection();
             var position = sel.anchorNode.compareDocumentPosition(sel.focusNode);
@@ -136,19 +180,8 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             }
             if (e.keyCode === 13) {
                 e.preventDefault();
-                var old = anchorNode.textContent;
-                var node = anchorNode;
-                var v1 = old.substring(0, anchorOffset);
-                var v2 = old.substring(focusOffset);
-                this.changeText(node, v2);
                 var enter = (0, Component_1.createComponent)(React.createElement("br"));
-                var comp = node._this;
-                var br = this.createComponent("jassijs.ui.HTMLComponent", enter, undefined, undefined, comp._parent, comp, true, "br");
-                var nd = document.createTextNode(v1);
-                var comp2 = new Component_1.TextComponent();
-                comp2.init(nd, { noWrapper: true });
-                var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, br, true, "text");
-                this.changeText(text2.dom, v1);
+                this.insertComponent(enter, sel, "br");
                 //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
                 // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
                 return;

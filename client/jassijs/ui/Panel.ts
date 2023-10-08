@@ -1,30 +1,28 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Container, ContainerConfig } from "jassijs/ui/Container";
-import { Component, $UIComponent, ComponentCreateProperties, ComponentConfig } from "jassijs/ui/Component";
+import { Container, ContainerProperties } from "jassijs/ui/Container";
+import { Component, $UIComponent, ComponentProperties, ComponentProperties } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
 import { Image } from "jassijs/ui/Image";
 import { DesignDummy } from "jassijs/ui/DesignDummy";
 
-@$Class("jassijs.ui.PanelCreateProperties")
-export class PanelCreateProperties extends ComponentCreateProperties {
-    @$Property({ default: false })
-    useSpan?: boolean;
-}
-export interface PanelConfig extends ContainerConfig {
+@$Class("jassijs.ui.PanelProperties")
+export class PanelProperties extends ContainerProperties {
     /**
       * @param {boolean} the elements are ordered absolute
       **/
+    @$Property()
     isAbsolute?: boolean;
-
+    @$Property({ default: false })
+    useSpan?: boolean;
 }
 
 
 
 @$UIComponent({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] })
 @$Class("jassijs.ui.Panel")
-@$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelCreateProperties" })
+@$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
 //@$Property({ name: "new/useSpan", type: "boolean", default: false })
-export class Panel extends Container implements PanelConfig {
+export class Panel<T extends PanelProperties = {}> extends Container<T> implements PanelProperties {
     _isAbsolute: boolean;
     private _activeComponentDesigner: any;
     /**
@@ -34,41 +32,16 @@ export class Panel extends Container implements PanelConfig {
     * @param {boolean} [properties.useSpan] -  use span not div
     * 
     */
-    constructor(properties: PanelCreateProperties = undefined) {//id connect to existing(not reqired)
-        var addStyle = "";
-       
-        if (properties != undefined && properties.id === "body") {
-            super();
-
-            this.dom = document.body;
-            this.domWrapper = this.dom;
-            /** @member {numer}  - the id of the element */
-            this._id = "body";
-            this.dom.id = "body";
-            //super.init($('<div class="Panel" style="border:1px solid #ccc;"/>')[0]);
-
-            //            $(document.body).append(this.domWrapper); 
-        } else {
-            if(properties===undefined)
-                properties={};
-                
-            super(properties);
-            if (properties === undefined || properties.id === undefined) {
-                //super.init($('<div class="Panel"/>')[0]);
-                //thissuper.init();
-            }
-        }
+    constructor(properties: T = undefined) {//id connect to existing(not reqired)
+        super(properties);
         this._designMode = false;
-        this.isAbsolute = false;
+        this.isAbsolute = properties?.isAbsolute === true;
     }
-    render(){
+    render() {
         var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
-        return React.createElement(tag,{className:"Panel"});
+        return React.createElement(tag, { className: "Panel" });
     }
-    config(config: PanelConfig): Panel {
-        super.config(<ContainerConfig>config);
-        return this;
-    }
+
     set isAbsolute(value: boolean) {
         this._isAbsolute = value;
         if (value)

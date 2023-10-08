@@ -12,7 +12,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Select = void 0;
     jassijs.includeCSSFile("chosen.css");
-    let SelectCreateProperties = class SelectCreateProperties extends Component_1.ComponentCreateProperties {
+    let SelectCreateProperties = class SelectCreateProperties extends Component_1.ComponentProperties {
     };
     __decorate([
         (0, Property_1.$Property)({ default: false }),

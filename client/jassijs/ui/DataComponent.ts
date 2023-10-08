@@ -1,27 +1,31 @@
 
-import { Component, ComponentConfig } from "jassijs/ui/Component";
+import { Component, ComponentProperties } from "jassijs/ui/Component";
 import { Databinder } from "jassijs/ui/Databinder";
 import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
 
-export interface DataComponentConfig extends ComponentConfig {
+@$Class("jassijs.ui.DataComponentProperties")
+export class DataComponentProperties extends ComponentProperties {
     /**
         * binds a component to a databinder
         * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
         *         {string} property - the property to bind]
         */
+    @$Property({ type: "databinder" })
     bind?: any[];
     /**
    * @member {bool} autocommit -  if true the databinder will update the value on every change
    *                              if false the databinder will update the value on databinder.toForm 
    */
+   @$Property()
     autocommit?: boolean;
     value?: any;
 }
 
 var tmpDatabinder = undefined;
 @$Class("jassijs.ui.DataComponent")
-export class DataComponent extends Component implements DataComponentConfig {
+@$Property({ name: "new", type: "json", componentType: "jassijs.ui.DataComponentProperties" })
+export class DataComponent<T extends DataComponentProperties> extends Component<T> implements DataComponentProperties {
     _autocommit: boolean;
     _databinder: Databinder;
 
@@ -37,11 +41,8 @@ export class DataComponent extends Component implements DataComponentConfig {
         super(properties);
         this._autocommit = false;
     }
-    config(config: DataComponentConfig): DataComponent {
-        super.config(config);
-        return this;
-    }
-    @$Property()
+   
+   
     get autocommit(): boolean {
         return this._autocommit;
     }
@@ -53,7 +54,7 @@ export class DataComponent extends Component implements DataComponentConfig {
     /**
      * @param [databinder:jassijs.ui.Databinder,"propertyToBind"]
      */
-    @$Property({ type: "databinder" })
+    
     set bind(databinder: any[]) {
         if(databinder===undefined){
             if(this._databinder!==undefined){

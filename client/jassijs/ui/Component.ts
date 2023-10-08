@@ -9,13 +9,14 @@ import { CSSProperties } from "jassijs/ui/CSSProperties";
 
 //import { CSSProperties } from "jassijs/ui/Style";
 
-jassijs.includeCSSFile("jassijs.css");
+jassijs.includeCSSFile("jassijs.css"); 
 jassijs.includeCSSFile("materialdesignicons.min.css");
-
+ 
 declare global {
     interface Element {
         _this: Component<any>;
         _id?: string;
+        _thisOther:Component<any>[];
     }
 
 }
@@ -40,76 +41,101 @@ export class UIComponentProperties {
      * allcomponents 
      */
     editableChildComponents?: string[];
+
 }
 export function $UIComponent(properties: UIComponentProperties): Function {
     return function (pclass) {
         registry.register("$UIComponent", pclass, properties);
     }
 }
-export class ComponentCreateProperties {
-    id?: string;
-    noWrapper?: boolean;
-    replaceNode?: any;
-}
 
-export interface ComponentConfig {
+@$Class("jassijs.ui.ComponentProperties")
+export class ComponentProperties {
     /**
     * called if the component get the focus
     * @param {function} handler - the function which is executed
     */
+    @$Property({ default: "function(event){\n\t\n}" })
     onfocus?(handler);
     /**
     * called if the component lost the focus
     * @param {function} handler - the function which is executed
     */
+     @$Property({ default: "function(event){\n\t\n}" })
     onblur?(handler);
     /**
      * @member {string} - the label over the component
      */
+    @$Property({ description: "adds a label above the component" })
     label?: string;
     /**
    * @member {string} - tooltip for the component
    */
+    @$Property({ description: "tooltip are displayed on mouse over" })
     tooltip?: string;
     /**
     * @member {number} - the left absolute position
     */
+    @$Property()
     x?: number;
     /**
      * @member {number|string} - the top absolute position
      */
+    @$Property()
     y?: number;
     /**
      * @member {boolean} - component is hidden
      */
+    @$Property()
     hidden?: boolean;
     /**
    * @member {string|number} - the width of the component 
    * e.g. 50 or "100%"
    */
+     @$Property({ type: "string" })
     width?: string | number;
     /**
      * @member {string|number} - the height of the component 
      * e.g. 50 or "100%"
      */
+     @$Property({ type: "string" })
     height?: string | number;
     /**
      * ccc-Properties
      */
+ 
+    @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
     css?: CSSProperties;
+    @$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" })
     styles?: any[];
 
     /**
      * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
      **/
+    @$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" })
     contextMenu?;
+    /*
+    ** Component has no Wrapper around the dom-Element dom=domWrapper
+    */
+    noWrapper?: boolean;
+    replaceNode?: any;
+  /*    //React things - we don't need it
+    context: any;
+    state;
+    refs;
+    setState() {
+        throw new Error("not implemented");
+    }
+    forceUpdate() {
+        throw new Error("not implemented");
+    }*/
 }
 
 
 var React = {
 
     createElement(type: any, props, ...children) {
-       
+
         if (props === undefined || props === null)//TODO is this right?
             props = {};
         if (children) {
@@ -119,10 +145,10 @@ var React = {
             props: props,
             type: type
         }
-         //@ts-ignore
+        //@ts-ignore
         for (var x = 0; x < Component._componentHook.length; x++) {
             //@ts-ignore
-            Component._componentHook[x]("create", ret,"React.createElement");
+            Component._componentHook[x]("create", ret, "React.createElement");
         }
         return ret;
 
@@ -135,12 +161,21 @@ React.Component = class {
         this.props = props;
     }
 };
+export {React};
 declare global {
+interface Window {
+fetch:(url: string, options?: {}) => Promise<any>
+}
+}
+declare global {
+    interface Window {
+        React:any;
+    }
     interface React {
         createElement(atype: any, props, ...children);
     }
 }
-//@ts-ignore;
+
 window.React = React;
 export function createComponent(node: React.ReactNode) {//node: { key: string, props: any, type: any }):Component {
     var atype = (<any>node).type;
@@ -149,7 +184,7 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
     if (typeof atype === "string") {
         ret = new HTMLComponent(props);
         ret.tag = atype;
-        var newdom= document.createElement(atype);
+        var newdom = document.createElement(atype);
         for (var prop in props) {
 
             if (prop === "style") {
@@ -161,11 +196,11 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
                 Reflect.set(newdom, prop, [props[prop]])
             } else if (prop.toLocaleLowerCase() in newdom) {
                 Reflect.set(newdom, prop.toLocaleLowerCase(), props[prop])
-            }// else if (newdom.hasAttribute(prop)) {
+            } else if (prop in newdom)
                 newdom.setAttribute(prop, props[prop]);
-           // }
+            // }
         }
-        ret.init(newdom, { noWrapper: true});
+        ret.init(newdom, { noWrapper: true });
     } else if (atype.constructor !== undefined) {
         ret = new atype(props);
     } else if (typeof atype === "function") {
@@ -197,17 +232,10 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
 //class TC <Prop>extends React.Component<Prop,{}>{
 @$Class("jassijs.ui.Component")
 //@ts-ignore
-export class Component<T = {}> extends React.Component<ComponentCreateProperties, {}> implements ComponentConfig {
-    context: any;
+@$Property({ name: "new", type: "json", componentType: "jassijs.ui.ComponentProperties" })
+export class Component<T = {}> extends React.Component<ComponentProperties, {}>  {
     props: T;
-    state;
-    refs;
-    setState() {
 
-    }
-    forceUpdate() {
-
-    }
     private static _componentHook = [];
     _eventHandler;
     __dom: HTMLElement;
@@ -236,20 +264,15 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
      * @param {string} [properties.id] -  connect to existing id (not reqired)
      * 
      */
-    constructor(properties: ComponentCreateProperties | any = undefined) {//id connect to existing(not reqired)
+    constructor(properties: T | any = undefined) {//id connect to existing(not reqired)
         super(properties, undefined);
         this.props = properties;
-        if (properties === undefined || properties.id === undefined) {
-            var rend = this.render();
-            if (rend) {
-                var comp = createComponent(rend);
-                this.init((<any>comp).dom);
-            }
-        } else {
-            this._id = properties.id;
-            this.__dom = document.getElementById(properties.id);
-            this.dom._this = this;
+        var rend = this.render();
+        if (rend) {
+            var comp = createComponent(rend);
+            this.init((<any>comp).dom);
         }
+        this.config(this.props);
     }
 
 
@@ -261,31 +284,37 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
           this.init(this.lastinit, { replaceNode: this.dom });
           this.config(this.lastconfig);
       }*/
-    config(config: T): Component<T> {
-        var con = Object.assign({}, config);
+    config(config: T,forceRender=false): Component<T> {
+        var con:any = Object.assign({}, config);
+        delete con.noWrapper;
+        delete con.replaceNode;
         // this.lastconfig = config;
-        var notfound = {}
+        var notfound = <any>{}
         for (var key in con) {
             if (key in this) {
-                if (typeof this[key] === 'function') {
-                    this[key](config[key]);
+                var me = <any>this;
+                if (typeof me[key] === 'function') {
+                    me[key](config[key]);
                 } else {
-                    this[key] = config[key];
+                    me[key] = config[key];
                 }
             } else
                 notfound[key] = con;
         }
-        Object.assign(this.props===undefined?{}:this.props,config);
-        if (Object.keys(notfound).length > 0) {
+        Object.assign(this.props === undefined ? {} : this.props, config);
+        if (Object.keys(notfound).length > 0&&forceRender) {
             var rerender = this.render();
             if (rerender) {
-
                 this.init(createComponent(rerender).dom);
+                console.log("rerender");
             }
         }
         return this;
         //    return new c();
     }
+    /**
+     * called if the component is created
+     */
     static onComponentCreated(func) {
         this._componentHook.push(func);
     }
@@ -347,14 +376,19 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
                 domalt.classList.remove("jresizeable");
             }
         }
+        if (this.dom._this && this.dom._this !== this) {
+            if (this.dom._thisOther === undefined)
+                this.dom._thisOther = [];
+            this.dom._thisOther.push(this.dom._this);
+        }
         this.dom._this = this;
 
     }
-    @$Property({ default: "function(event){\n\t\n}" })
+    
     onfocus(handler) {
         return this.on("focus", handler);
     }
-    @$Property({ default: "function(event){\n\t\n}" })
+   
     onblur(handler) {
         return this.on("blur", handler);
     }
@@ -409,7 +443,7 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
      * @param {dom} dom - init the dom element
      * @paran {object} properties - properties to init
     */
-    init(dom: HTMLElement | string, properties: ComponentCreateProperties = undefined) {
+    init(dom: HTMLElement | string, properties: T = undefined) {
         // this.lastinit = dom;
         var oldwrapper = this.domWrapper;
         var olddom = this.dom;
@@ -417,11 +451,12 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
             dom = Component.createHTMLElement(dom);
         //is already attached
         if (this.domWrapper !== undefined) {
-            if (properties?.replaceNode?.parentNode) {
-                properties?.replaceNode.parentNode.replaceChild(dom, properties?.replaceNode);
+            var thisProperties:ComponentProperties=properties;
+            if (thisProperties?.replaceNode?.parentNode) {
+                thisProperties?.replaceNode.parentNode.replaceChild(dom, thisProperties?.replaceNode);
                 this.dom = dom;
 
-                this.dom.setAttribute("id", properties?.replaceNode.getAttribute("id"));
+                this.dom.setAttribute("id", thisProperties?.replaceNode.getAttribute("id"));
                 return;
             }
 
@@ -441,19 +476,19 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
         //   jassijs.componentSpy.unwatch(this);
         // }
         this.dom = dom;
-        this._id = olddom?olddom.id:("j" + registry.nextID());
+        this._id = olddom ? olddom.id : ("j" + registry.nextID());
         if (this.dom.setAttribute !== undefined)//Textnode
             this.dom.setAttribute("id", this._id);
         /** @member {Object.<string,function>} - all event handlers*/
         this._eventHandler = {};
         //add _this to the dom element
-        var lid =oldwrapper?oldwrapper.id:("j" + registry.nextID());
+        var lid = oldwrapper ? oldwrapper.id : ("j" + registry.nextID());
         var st = 'style="display: inline-block"';
         if (this instanceof classes.getClass("jassijs.ui.Container")) {
             st = "";
         }
-
-        if (properties !== undefined && properties.noWrapper === true) {
+        
+        if (properties !== undefined && (<any>properties).noWrapper === true) {
             this.domWrapper = this.dom;
             this.domWrapper._id = this._id;
             if (this.domWrapper.classList !== undefined)
@@ -482,7 +517,7 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
         //if (jassijs.componentSpy !== undefined) {
         //     jassijs.componentSpy.watch(this);
         //  }
-        if(!oldwrapper)
+        if (!oldwrapper)
             document.getElementById("jassitemp").appendChild(this.domWrapper);
 
     }
@@ -502,11 +537,11 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
         }
     }
 
-    @$Property({ description: "adds a label above the component" })
+    
     get label(): string {
         return this.domWrapper.querySelector(".jlabel")?.innerHTML;
     }
-    @$Property({ description: "tooltip are displayed on mouse over" })
+    
     get tooltip(): string {
         return this.dom.getAttribute("title");
     }
@@ -515,7 +550,7 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
 
     }
 
-    @$Property({})
+    
     get x(): number {
         return Number(this.domWrapper.style.left.replace("px", ""));
     }
@@ -527,7 +562,7 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
 
 
 
-    @$Property()
+   
     get y(): number {
         return Number(this.domWrapper.style.top.replace("px", ""));
     }
@@ -537,7 +572,7 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
         this.domWrapper.style.position = "absolute";
     }
 
-    @$Property()
+   
     get hidden(): boolean {
         return (this.dom.getAttribute("hidden") === "");
     }
@@ -565,7 +600,6 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
         }
         //  
     }
-    @$Property({ type: "string" })
     get width(): string {
         if (this.domWrapper.style.width !== undefined)
             return this.domWrapper.style.width;
@@ -587,7 +621,6 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
             this.domWrapper.style.height = "";
         }
     }
-    @$Property({ type: "string" })
     get height() {
         if (this.domWrapper.style.height !== undefined)
             return this.domWrapper.style.height;
@@ -595,8 +628,6 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
             return undefined;
         return this.dom.style.height.replace("px", "");
     }
-
-    @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
     set css(properties: CSSProperties) {
         var prop = CSSProperties.applyTo(properties, this);
         //if css-properties are already set and now a properties is deleted
@@ -617,7 +648,6 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
         this.dom.style.width = "calc(100% - 2px)";
         this.dom.style.height = "calc(100% - 2px)";
     }
-    @$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" })
     get styles(): any[] {
         return this._styles;
     }
@@ -640,7 +670,6 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
         });
     }
 
-    @$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" })
     get contextMenu() {
         return this._contextMenu;
     }
@@ -696,15 +725,29 @@ export class Component<T = {}> extends React.Component<ComponentCreateProperties
     }
     extensionCalled(action: ExtensionAction) {
     }
-
+ //React things - we don't need it
+    context: any;
+    state;
+    refs;
+    setState() {
+        throw new Error("not implemented");
+    }
+    forceUpdate() {
+        throw new Error("not implemented");
+    }
 }
-
-
+class HTMLComponentProperties extends ComponentProperties{
+    tag?: string;
+}
+// ret.tag = atype;
+//        var newdom = document.createElement(atype);
 @$Class("jassijs.ui.HTMLComponent")
-export class HTMLComponent extends Component {
-    tag: string;
+export class HTMLComponent<T extends HTMLComponentProperties={}> extends Component<T> {
     _components: Component[] = [];
     _designDummy: any;
+
+
+   
     /**
     * adds a component to the container
     * @param {jassijs.ui.Component} component - the component to add
@@ -795,16 +838,16 @@ export class HTMLComponent extends Component {
         }
         super.destroy();
     }
-
+   
 }
 @$Class("jassijs.ui.TextComponent")
 export class TextComponent extends Component {
     @$Property()
-     get text(){
+    get text() {
         return this.dom.textContent;
     };
-    set text(value: string){
-         var p=JSON.parse(`{"a":"`+value+'"}').a;
-        this.dom.textContent=p;
+    set text(value: string) {
+        var p = JSON.parse(`{"a":"` + value + '"}').a;
+        this.dom.textContent = p;
     };
 }

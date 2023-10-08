@@ -1,7 +1,7 @@
 import "jassijs/ext/jquerylib";
 import "jassijs/ext/fancytree";
 import { $Class } from "jassijs/remote/Registry";
-import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import registry from "jassijs/remote/Registry";
 
@@ -30,7 +30,7 @@ class TreeEditorProperties {
     @$Property({ type: "json", componentType: "jassijs.ui.TreeEditorPropertiesMulti" })
     multi?: TreeEditorPropertiesMulti;
 }
-export interface TreeConfig extends ComponentConfig {
+export interface TreeConfig extends ComponentProperties {
     options?: Fancytree.FancytreeOptions;
     /**
     * @member - get the property for the display of the item or an function to get the display from an item

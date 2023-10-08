@@ -7,10 +7,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, Registry_1, Component_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_1, Component_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Container = void 0;
+    exports.Container = exports.ContainerProperties = void 0;
+    let ContainerProperties = class ContainerProperties extends Component_1.ComponentProperties {
+    };
+    __decorate([
+        (0, Property_1.$Property)({ type: "jassijs.ui.Component" }),
+        __metadata("design:type", Object)
+    ], ContainerProperties.prototype, "children", void 0);
+    ContainerProperties = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.ContainerProperties")
+    ], ContainerProperties);
+    exports.ContainerProperties = ContainerProperties;
     let Container = class Container extends Component_1.Component {
         /**
          *
@@ -22,13 +32,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
             super(properties);
             this._components = [];
         }
-        config(config) {
-            if (config.children) {
-                this.removeAll(false);
-                for (var x = 0; x < config.children.length; x++) {
-                    this.add(config.children[x]);
+        config(config, forceRender = false) {
+            if (config === null || config === void 0 ? void 0 : config.children) {
+                if ((config === null || config === void 0 ? void 0 : config.children.length) > 0 && (config === null || config === void 0 ? void 0 : config.children[0]) instanceof Component_1.Component) {
+                    this.removeAll(false);
+                    for (var x = 0; x < config.children.length; x++) {
+                        this.add(config.children[x]);
+                    }
+                    delete config.children;
                 }
-                delete config.children;
             }
             super.config(config);
             return this;

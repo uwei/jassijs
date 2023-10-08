@@ -1,15 +1,15 @@
 var bugtinymce = undefined;
-import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
-import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 declare global {
     interface JQuery {
         doubletap: any;
     }
 }
 
-export interface HTMLPanelConfig extends DataComponentConfig {
+export interface HTMLPanelConfig extends DataComponentProperties {
 
     newlineafter?: boolean;
 

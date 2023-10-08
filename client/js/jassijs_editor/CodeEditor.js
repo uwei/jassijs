@@ -297,117 +297,138 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         addVariables(variables) {
             this.variables.addAll(variables);
         }
-        async fillVariablesAndSetupParser(url, root, component, cache, parser) {
+        async fillVariablesAndSetupParser(url, root, thecomponent, cache, parser, codePositions) {
             var _a, _b, _c, _d, _e, _f;
             var useThis = false;
-            if (cache[component._id] === undefined && component["__stack"] !== undefined && ((_a = component === null || component === void 0 ? void 0 : component.dom) === null || _a === void 0 ? void 0 : _a.classList) && !component.dom.classList.contains("designdummy")) {
-                var lines = (_b = component["__stack"]) === null || _b === void 0 ? void 0 : _b.split("\n");
-                for (var x = 0; x < lines.length; x++) {
-                    var sline = lines[x];
-                    if (sline.indexOf("$temp.js") > 0) {
-                        var spl = sline.split(":");
-                        var entr = {};
-                        if (cache[component._id] === undefined)
-                            cache[component._id] = [];
-                        cache[component._id].push({
-                            line: Number(spl[spl.length - 2]),
-                            column: Number(spl[spl.length - 1].replace(")", "")),
-                            component: component,
-                            pos: 0,
-                            name: undefined
-                        });
-                    }
-                }
-                if (component["_components"]) {
-                    for (var x = 0; x < component["_components"].length; x++) {
-                        this.fillVariablesAndSetupParser(url, root, component["_components"][x], cache, parser);
-                    }
-                }
-                if (component === root) {
-                    //fertig
-                    var hh = 0;
-                    var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
-                    var values = [];
-                    //@ts-ignore
-                    Object.values(cache).forEach((e) => {
-                        e.forEach(f => values.push(f));
-                    });
-                    var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".tsx", ".js").replace(".ts", ".js"), values);
-                    for (var x = 0; x < tmap.length; x++) {
-                        var val = values[x];
-                        val.column = tmap[x].column;
-                        val.line = tmap[x].line;
-                        val.pos = this._codePanel.positionToNumber({
-                            row: val.line,
-                            column: val.column
-                        });
-                    }
-                    //setupClasscope
-                    var foundscope;
-                    for (var xx = 0; xx < cache[root._id].length; xx++) {
-                        foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
-                        if (foundscope)
-                            break;
-                    }
-                    var scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }];
-                    if (foundscope)
-                        scope = [{ classname: (_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name, methodname: "layout" }, foundscope];
-                    if (this.file.toLowerCase().endsWith(".tsx")) {
-                        parser.parse(this._codePanel.value, undefined, values);
-                        for (var x = 0; x < values.length; x++) {
-                            this.variables.addVariable(values[x].name, values[x].component, false);
-                        }
-                        // this.variables.addVariable(sname, val.component, false);
-                    }
-                    else {
-                        parser.parse(this._codePanel.value, scope);
-                        //if layout is rendered and an other variable is assigned to this, then remove ths variable
-                        if (parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name] && parser.classes[(_f = root === null || root === void 0 ? void 0 : root.constructor) === null || _f === void 0 ? void 0 : _f.name].members["layout"]) {
-                            useThis = true;
-                            this.variables.addVariable("this", root);
-                        }
-                        for (var key in parser.data) {
-                            var com = parser.data[key];
-                            var _new_ = com["_new_"];
-                            if (_new_) {
-                                var pos = _new_[0].node.pos;
-                                var end = _new_[0].node.end;
-                                for (var x = 0; x < values.length; x++) {
-                                    var val = values[x];
-                                    if (val.pos >= pos && val.pos <= end) {
-                                        val.name = key;
-                                    }
-                                }
+            var connectedComponents = [thecomponent];
+            if (thecomponent.__dom._thisOther)
+                thecomponent.__dom._thisOther.forEach(e => connectedComponents.push(e));
+            for (var i = 0; i < connectedComponents.length; i++) {
+                var component = connectedComponents[i];
+                if (cache[component._id] === undefined && component["__stack"] !== undefined && ((_a = component === null || component === void 0 ? void 0 : component.dom) === null || _a === void 0 ? void 0 : _a.classList) && !component.dom.classList.contains("designdummy")) {
+                    var lines = (_b = component["__stack"]) === null || _b === void 0 ? void 0 : _b.split("\n");
+                    for (var x = 0; x < lines.length; x++) {
+                        var sline = lines[x];
+                        if (sline.indexOf("$temp.js") > 0) {
+                            var spl = sline.split(":");
+                            var entr = {};
+                            if (cache[component._id] === undefined)
+                                cache[component._id] = [];
+                            var data = {
+                                line: Number(spl[spl.length - 2]),
+                                column: Number(spl[spl.length - 1].replace(")", "")),
+                                component: component,
+                                pos: 0,
+                                name: undefined
+                            };
+                            if (codePositions[data.line + "," + data.column] === undefined) { //we collect first position in the scourecode file
+                                codePositions[data.line + "," + data.column] = data;
                             }
-                        }
-                        var ignoreVar = [];
-                        for (var x = 0; x < values.length; x++) {
-                            var val = values[x];
-                            var sname = val.name;
-                            var found = false;
-                            this.variables.value.forEach((it) => {
-                                if (it.name === sname)
-                                    found = true;
-                            });
-                            //sometimes does a constructor create other Components so we need the first one
-                            if (found)
-                                continue;
-                            if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                                if (ignoreVar.indexOf(sname) === -1) {
-                                    if (useThis && root === val.component)
-                                        ignoreVar.push(sname); //do nothing
-                                    else
-                                        this.variables.addVariable(sname, val.component, false);
-                                }
-                            }
+                            cache[component._id].push(data);
                         }
                     }
-                    this.variables.updateCache();
-                    this.variables.update();
-                    // parser.parse(,)
                 }
-                return parser;
             }
+            if (this.file.toLocaleLowerCase().endsWith(".tsx")) {
+                for (var x = 0; x < thecomponent.dom.children.length; x++) {
+                    var ch = thecomponent.dom.children[x];
+                    if (ch._this) {
+                        this.fillVariablesAndSetupParser(url, root, ch._this, cache, parser, codePositions);
+                    }
+                }
+            }
+            else {
+                if (thecomponent["_components"]) {
+                    for (var x = 0; x < thecomponent["_components"].length; x++) {
+                        this.fillVariablesAndSetupParser(url, root, thecomponent["_components"][x], cache, parser, codePositions);
+                    }
+                }
+            }
+            if (thecomponent === root) {
+                //fertig
+                var hh = 0;
+                var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
+                var values = [];
+                //@ts-ignore
+                Object.values(cache).forEach((e) => {
+                    e.forEach(f => values.push(f));
+                });
+                var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".tsx", ".js").replace(".ts", ".js"), values);
+                for (var x = 0; x < tmap.length; x++) {
+                    var val = values[x];
+                    val.column = tmap[x].column;
+                    val.line = tmap[x].line;
+                    val.pos = this._codePanel.positionToNumber({
+                        row: val.line,
+                        column: val.column
+                    });
+                }
+                //setupClasscope
+                var foundscope;
+                for (var xx = 0; xx < cache[root._id].length; xx++) {
+                    foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
+                    if (foundscope)
+                        break;
+                }
+                var scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }];
+                if (foundscope)
+                    scope = [{ classname: (_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name, methodname: "layout" }, foundscope];
+                if (this.file.toLowerCase().endsWith(".tsx")) {
+                    values = Object.values(codePositions);
+                    parser.parse(this._codePanel.value, undefined, values);
+                    for (var x = 0; x < values.length; x++) {
+                        this.variables.addVariable(values[x].name, values[x].component, false);
+                    }
+                    // this.variables.addVariable(sname, val.component, false);
+                }
+                else {
+                    parser.parse(this._codePanel.value, scope);
+                    //if layout is rendered and an other variable is assigned to this, then remove ths variable
+                    if (parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name] && parser.classes[(_f = root === null || root === void 0 ? void 0 : root.constructor) === null || _f === void 0 ? void 0 : _f.name].members["layout"]) {
+                        useThis = true;
+                        this.variables.addVariable("this", root);
+                    }
+                    for (var key in parser.data) {
+                        var com = parser.data[key];
+                        var _new_ = com["_new_"];
+                        if (_new_) {
+                            var pos = _new_[0].node.pos;
+                            var end = _new_[0].node.end;
+                            for (var x = 0; x < values.length; x++) {
+                                var val = values[x];
+                                if (val.pos >= pos && val.pos <= end) {
+                                    val.name = key;
+                                }
+                            }
+                        }
+                    }
+                    var ignoreVar = [];
+                    for (var x = 0; x < values.length; x++) {
+                        var val = values[x];
+                        var sname = val.name;
+                        var found = false;
+                        this.variables.value.forEach((it) => {
+                            if (it.name === sname)
+                                found = true;
+                        });
+                        //sometimes does a constructor create other Components so we need the first one
+                        if (found)
+                            continue;
+                        if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
+                            if (ignoreVar.indexOf(sname) === -1) {
+                                if (useThis && root === val.component)
+                                    ignoreVar.push(sname); //do nothing
+                                else
+                                    this.variables.addVariable(sname, val.component, false);
+                            }
+                        }
+                    }
+                }
+                this.variables.updateCache();
+                this.variables.update();
+                // parser.parse(,)
+            }
+            return parser;
         }
         /**
          * load the right editor for the returned value
@@ -435,8 +456,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
                 //@ts-ignore
                 _this._design.connectParser(parser);
+                var codePositions = {};
+                await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser, codePositions);
                 _this._design.designedComponent = ret;
-                await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
                 _this._design.editDialog(true);
                 //});
             }

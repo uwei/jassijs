@@ -1,6 +1,6 @@
 import "jassijs/ext/jquerylib";
 import { $Class } from "jassijs/remote/Registry";
-import {Component,  $UIComponent, ComponentCreateProperties, ComponentConfig } from "jassijs/ui/Component";
+import {Component,  $UIComponent, ComponentProperties, ComponentProperties } from "jassijs/ui/Component";
 import {DataComponent} from "jassijs/ui/DataComponent";
 //import Button from "jassijs/ui/Button";
 import "jquery.choosen";
@@ -9,7 +9,7 @@ import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";
 
 jassijs.includeCSSFile("chosen.css");
-export interface SelectConfig extends ComponentConfig{
+export interface SelectConfig extends ComponentProperties{
    /**
      * called if value has changed
      * @param {function} handler - the function which is executed
@@ -36,7 +36,7 @@ export interface SelectConfig extends ComponentConfig{
     value?;
  }
 @$Class("jassijs.ui.SelectCreateProperties")
-class SelectCreateProperties extends ComponentCreateProperties{
+class SelectCreateProperties extends ComponentProperties{
 	@$Property({ default: false })
 	multiple?:boolean;
 	@$Property({ default: false })

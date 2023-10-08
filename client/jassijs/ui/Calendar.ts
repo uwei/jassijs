@@ -1,11 +1,11 @@
 import "jassijs/ext/jquerylib";
 import { Textbox } from "jassijs/ui/Textbox";
-import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
-import { DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponentProperties } from "jassijs/ui/DataComponent";
 
-export interface CalendarConfig extends ComponentConfig,DataComponentConfig {
+export interface CalendarConfig extends ComponentProperties,DataComponentProperties {
 
     /**
     * @member  - the date

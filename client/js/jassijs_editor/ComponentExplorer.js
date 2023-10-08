@@ -51,6 +51,23 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          * @param {object} item
          */
         getComponentChilds(item) {
+            var _a;
+            if (this.codeEditor === undefined)
+                return this.getComponentChildsOld(item);
+            if (item === undefined)
+                return [];
+            var ret = [];
+            if ((_a = item.dom) === null || _a === void 0 ? void 0 : _a.childNodes) {
+                for (var x = 0; x < item.dom.childNodes.length; x++) {
+                    var nd = item.dom.childNodes[x];
+                    var varname = this.codeEditor.getVariableFromObject(nd._this);
+                    if (varname)
+                        ret.push(nd._this);
+                }
+            }
+            return ret;
+        }
+        getComponentChildsOld(item) {
             if (item === undefined)
                 return [];
             if (item === this.value && item._components) {

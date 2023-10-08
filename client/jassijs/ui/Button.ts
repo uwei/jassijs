@@ -1,35 +1,38 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 
-export interface ButtonConfig extends ComponentConfig{
+@$Class("jassijs.ui.ButtonProperties")
+export class ButtonProperties extends ComponentProperties{
       /**
     * register an event if the button is clicked
     * @param {function} handler - the function that is called on change
     */
+    @$Property({ default: "function(event){\n\t\n}" })
     onclick?(handler, removeOldHandler: boolean );
      /**
     * @member {string} - the icon of the button
     */
+    @$Property({type:"image"})
     icon?:string;
         /**
      * @member {string} - the caption of the button
      */
+    @$Property()
     text?:string;
 
 }
 
+
 @$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
 @$Class("jassijs.ui.Button")
-export class Button extends Component implements ButtonConfig {
-   
-    constructor(props={}) {
-        super(props);
-        //    super.init('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>');
-    
+@$Property({ name: "new", type: "json", componentType: "jassijs.ui.ButtonProperties" })
+export class Button<T extends ButtonProperties={}> extends Component<T> implements ButtonProperties {
+    constructor(properties:ButtonProperties){
+        super(properties);
     }
-    config(config:ButtonConfig):Button {
-        super.config(<ComponentConfig>config);
+    config(config: T,forceRender=false): Button<T> {
+        super.config(config);
         return this;
     }
     get dom(): HTMLButtonElement {
@@ -54,7 +57,7 @@ export class Button extends Component implements ButtonConfig {
                 )
         );
     }
-    @$Property({ default: "function(event){\n\t\n}" })
+    
     onclick(handler, removeOldHandler: boolean = true) {
        
         if(removeOldHandler){
@@ -81,7 +84,7 @@ export class Button extends Component implements ButtonConfig {
             (<HTMLInputElement> this.dom.querySelector(".buttonimg")).setAttribute("src",icon);
         }
     }
-    @$Property({type:"image"})
+    
     get icon(): string { //the Code
         var ret=(<HTMLInputElement> this.dom.querySelector(".buttonimg")).getAttribute("src");
         if(ret===""){
@@ -92,7 +95,7 @@ export class Button extends Component implements ButtonConfig {
     set text(value: string) { //the Code
         (<HTMLInputElement> this.dom.querySelector(".buttontext")).innerText=value===undefined?"":value;
     }
-    @$Property()
+    
     get text(): string {
         var ret=(<HTMLInputElement> this.dom.querySelector(".buttontext")).innerText;
         if(ret===undefined)

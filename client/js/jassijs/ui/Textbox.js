@@ -10,22 +10,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_1, Component_1, DataComponent_1, DefaultConverter_1, Registry_2, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Textbox = void 0;
+    exports.test = exports.Textbox = exports.TextboxProperties = void 0;
+    let TextboxProperties = class TextboxProperties extends DataComponent_1.DataComponentProperties {
+    };
+    __decorate([
+        (0, Property_1.$Property)({ type: "classselector", service: "$Converter" }),
+        __metadata("design:type", DefaultConverter_1.DefaultConverter)
+    ], TextboxProperties.prototype, "converter", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ type: "string" }),
+        __metadata("design:type", Object)
+    ], TextboxProperties.prototype, "value", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", String)
+    ], TextboxProperties.prototype, "placeholder", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Boolean)
+    ], TextboxProperties.prototype, "readOnly", void 0);
+    TextboxProperties = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.TextboxProperties")
+    ], TextboxProperties);
+    exports.TextboxProperties = TextboxProperties;
     let Textbox = class Textbox extends DataComponent_1.DataComponent {
-        constructor(color = undefined) {
-            super();
+        constructor(props = undefined) {
+            super(props);
             this._value = "";
             this._isFocused = false;
-            super.init('<input type="text" />');
             var _this = this;
-            this.dom.style.color = color;
             this.onblur((e) => _this.blurcalled(e));
             this.onfocus((e) => _this.focuscalled(e));
             // this.converter = undefined;
         }
-        config(config) {
-            super.config(config);
-            return this;
+        render() {
+            return React.createElement("input", { type: "text" });
         }
         get dom() {
             return super.dom;
@@ -185,55 +204,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.destroy();
         }
     };
-    __decorate([
-        (0, Property_1.$Property)({ type: "classselector", service: "$Converter" }),
-        __metadata("design:type", DefaultConverter_1.DefaultConverter),
-        __metadata("design:paramtypes", [DefaultConverter_1.DefaultConverter])
-    ], Textbox.prototype, "converter", null);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], Textbox.prototype, "readOnly", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "string" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Textbox.prototype, "value", null);
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], Textbox.prototype, "onclick", null);
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], Textbox.prototype, "onchange", null);
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], Textbox.prototype, "onkeydown", null);
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], Textbox.prototype, "oninput", null);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Textbox.prototype, "placeholder", null);
     Textbox = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
         (0, Registry_1.$Class)("jassijs.ui.Textbox"),
-        (0, Property_1.$Property)({ name: "new", type: "string" }),
-        __metadata("design:paramtypes", [Object])
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TextboxProperties" }),
+        __metadata("design:paramtypes", [TextboxProperties])
     ], Textbox);
     exports.Textbox = Textbox;
     function test() {

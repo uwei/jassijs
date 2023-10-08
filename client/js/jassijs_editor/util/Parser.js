@@ -398,9 +398,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                             counttrivial++;
                         }
                         else {
+                            var njsx = _this.jsxVariables[ch.pos - 1];
+                            if (njsx === undefined)
+                                njsx = _this.jsxVariables[ch.pos];
+                            if (njsx === undefined)
+                                njsx = _this.jsxVariables[ch.pos + 1];
+                            if (njsx) {
+                            }
                             var varname = this.getNextVariableNameForType("text", "text");
                             var stext = JSON.stringify(ch.text);
                             _this.add(varname, "_new_", stext, ch, false, false);
+                            _this.jsxVariables[varname] = ch;
                             _this.add(varname, "text", stext, ch, false, false);
                             //if ((<any>node.parent)?.jname !== undefined) {
                             _this.add(jsx.name, "add", varname, ch);
@@ -415,7 +423,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                         }
                     }
                     else {
-                        _this.visitNode(ch, {}); // consumeProperties)
+                        _this.visitNodeJSX(ch, {}); // consumeProperties)
                     }
                 }
             }
@@ -454,7 +462,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                             consumeProperties = true;
                     }
                 }
-                else
+                else if (this.jsxVariables === undefined)
                     consumeProperties = true;
             }
             if (node.kind === ts.SyntaxKind.JsxElement) {
@@ -465,6 +473,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 this.parseProperties(node);
             else
                 node.getChildren().forEach(c => _this.visitNode(c, consumeProperties));
+            //TODO remove this block
+            /*  if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
+                  this.add(node["name"].text, "", "", undefined);
+              }*/
+        }
+        visitNodeJSX(node, consumeProperties = undefined) {
+            var _this = this;
+            if (node.kind === ts.SyntaxKind.JsxElement) {
+                _this.parseJSX(_this, node);
+                return;
+            }
+            node.getChildren().forEach(c => _this.visitNodeJSX(c, consumeProperties));
             //TODO remove this block
             /*  if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
                   this.add(node["name"].text, "", "", undefined);
@@ -525,6 +545,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 if (autovars[tag] === undefined)
                     autovars[tag] = 1;
                 values[x].name = this.getNextVariableNameForType(tag); //tag + (autovars[tag]++);
+                this.data[values[x].name] = {}; //reserve variable
                 jsxvars[values[x].pos] = values[x];
             }
             this.jsxVariables = jsxvars;
@@ -537,14 +558,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         */
         parse(code, classScope = undefined, jsxVariables = undefined) {
             this.data = {};
-            if (jsxVariables)
-                this.initJSXVariables(jsxVariables);
             this.code = code;
             if (classScope !== undefined)
                 this.classScope = classScope;
             else
                 classScope = this.classScope;
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, jsxVariables ? ts.ScriptKind.TSX : undefined);
+            if (jsxVariables) {
+                this.initJSXVariables(jsxVariables);
+                this.visitNodeJSX(this.sourceFile, false);
+                return;
+            }
             if (this.classScope === undefined)
                 this.visitNode(this.sourceFile, true);
             else

@@ -11,7 +11,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     "use strict";
     var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TextComponent = exports.HTMLComponent = exports.Component = exports.createComponent = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
+    exports.TextComponent = exports.HTMLComponent = exports.Component = exports.createComponent = exports.React = exports.ComponentProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
@@ -27,9 +27,52 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         };
     }
     exports.$UIComponent = $UIComponent;
-    class ComponentCreateProperties {
-    }
-    exports.ComponentCreateProperties = ComponentCreateProperties;
+    let ComponentProperties = class ComponentProperties {
+    };
+    __decorate([
+        (0, Property_1.$Property)({ description: "adds a label above the component" }),
+        __metadata("design:type", String)
+    ], ComponentProperties.prototype, "label", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ description: "tooltip are displayed on mouse over" }),
+        __metadata("design:type", String)
+    ], ComponentProperties.prototype, "tooltip", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Number)
+    ], ComponentProperties.prototype, "x", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Number)
+    ], ComponentProperties.prototype, "y", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Boolean)
+    ], ComponentProperties.prototype, "hidden", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ type: "string" }),
+        __metadata("design:type", Object)
+    ], ComponentProperties.prototype, "width", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ type: "string" }),
+        __metadata("design:type", Object)
+    ], ComponentProperties.prototype, "height", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
+        __metadata("design:type", CSSProperties_1.CSSProperties)
+    ], ComponentProperties.prototype, "css", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
+        __metadata("design:type", Array)
+    ], ComponentProperties.prototype, "styles", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" }),
+        __metadata("design:type", Object)
+    ], ComponentProperties.prototype, "contextMenu", void 0);
+    ComponentProperties = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.ComponentProperties")
+    ], ComponentProperties);
+    exports.ComponentProperties = ComponentProperties;
     var React = {
         createElement(type, props, ...children) {
             if (props === undefined || props === null) //TODO is this right?
@@ -49,13 +92,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             return ret;
         }
     };
+    exports.React = React;
     //@ts-ignore
     React.Component = class {
         constructor(props) {
             this.props = props;
         }
     };
-    //@ts-ignore;
     window.React = React;
     function createComponent(node) {
         var _a, _b;
@@ -78,8 +121,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 }
                 else if (prop.toLocaleLowerCase() in newdom) {
                     Reflect.set(newdom, prop.toLocaleLowerCase(), props[prop]);
-                } // else if (newdom.hasAttribute(prop)) {
-                newdom.setAttribute(prop, props[prop]);
+                }
+                else if (prop in newdom)
+                    newdom.setAttribute(prop, props[prop]);
                 // }
             }
             ret.init(newdom, { noWrapper: true });
@@ -115,10 +159,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     exports.createComponent = createComponent;
     //class TC <Prop>extends React.Component<Prop,{}>{
     let Component = Component_1 = class Component extends React.Component {
-        setState() {
-        }
-        forceUpdate() {
-        }
         /*  get domWrapper():Element{
               return this._domWrapper;
           }
@@ -138,18 +178,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         constructor(properties = undefined) {
             super(properties, undefined);
             this.props = properties;
-            if (properties === undefined || properties.id === undefined) {
-                var rend = this.render();
-                if (rend) {
-                    var comp = createComponent(rend);
-                    this.init(comp.dom);
-                }
+            var rend = this.render();
+            if (rend) {
+                var comp = createComponent(rend);
+                this.init(comp.dom);
             }
-            else {
-                this._id = properties.id;
-                this.__dom = document.getElementById(properties.id);
-                this.dom._this = this;
-            }
+            this.config(this.props);
         }
         render() {
             return undefined;
@@ -159,32 +193,39 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
               this.init(this.lastinit, { replaceNode: this.dom });
               this.config(this.lastconfig);
           }*/
-        config(config) {
+        config(config, forceRender = false) {
             var con = Object.assign({}, config);
+            delete con.noWrapper;
+            delete con.replaceNode;
             // this.lastconfig = config;
             var notfound = {};
             for (var key in con) {
                 if (key in this) {
-                    if (typeof this[key] === 'function') {
-                        this[key](config[key]);
+                    var me = this;
+                    if (typeof me[key] === 'function') {
+                        me[key](config[key]);
                     }
                     else {
-                        this[key] = config[key];
+                        me[key] = config[key];
                     }
                 }
                 else
                     notfound[key] = con;
             }
             Object.assign(this.props === undefined ? {} : this.props, config);
-            if (Object.keys(notfound).length > 0) {
+            if (Object.keys(notfound).length > 0 && forceRender) {
                 var rerender = this.render();
                 if (rerender) {
                     this.init(createComponent(rerender).dom);
+                    console.log("rerender");
                 }
             }
             return this;
             //    return new c();
         }
+        /**
+         * called if the component is created
+         */
         static onComponentCreated(func) {
             this._componentHook.push(func);
         }
@@ -242,6 +283,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                     domalt.classList.remove("jinlinecomponent");
                     domalt.classList.remove("jresizeable");
                 }
+            }
+            if (this.dom._this && this.dom._this !== this) {
+                if (this.dom._thisOther === undefined)
+                    this.dom._thisOther = [];
+                this.dom._thisOther.push(this.dom._this);
             }
             this.dom._this = this;
         }
@@ -311,10 +357,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 dom = Component_1.createHTMLElement(dom);
             //is already attached
             if (this.domWrapper !== undefined) {
-                if ((_a = properties === null || properties === void 0 ? void 0 : properties.replaceNode) === null || _a === void 0 ? void 0 : _a.parentNode) {
-                    properties === null || properties === void 0 ? void 0 : properties.replaceNode.parentNode.replaceChild(dom, properties === null || properties === void 0 ? void 0 : properties.replaceNode);
+                var thisProperties = properties;
+                if ((_a = thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode) === null || _a === void 0 ? void 0 : _a.parentNode) {
+                    thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode.parentNode.replaceChild(dom, thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode);
                     this.dom = dom;
-                    this.dom.setAttribute("id", properties === null || properties === void 0 ? void 0 : properties.replaceNode.getAttribute("id"));
+                    this.dom.setAttribute("id", thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode.getAttribute("id"));
                     return;
                 }
                 this.domWrapper._this = undefined;
@@ -558,77 +605,26 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         extensionCalled(action) {
         }
+        setState() {
+            throw new Error("not implemented");
+        }
+        forceUpdate() {
+            throw new Error("not implemented");
+        }
     };
     Component._componentHook = [];
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], Component.prototype, "onfocus", null);
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], Component.prototype, "onblur", null);
-    __decorate([
-        (0, Property_1.$Property)({ description: "adds a label above the component" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Component.prototype, "label", null);
-    __decorate([
-        (0, Property_1.$Property)({ description: "tooltip are displayed on mouse over" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Component.prototype, "tooltip", null);
-    __decorate([
-        (0, Property_1.$Property)({}),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], Component.prototype, "x", null);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], Component.prototype, "y", null);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], Component.prototype, "hidden", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "string" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Component.prototype, "width", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "string" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Component.prototype, "height", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", CSSProperties_1.CSSProperties),
-        __metadata("design:paramtypes", [CSSProperties_1.CSSProperties])
-    ], Component.prototype, "css", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [Array])
-    ], Component.prototype, "styles", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Component.prototype, "contextMenu", null);
     Component = Component_1 = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.Component")
         //@ts-ignore
         ,
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.ComponentProperties" }),
         __metadata("design:paramtypes", [Object])
     ], Component);
     exports.Component = Component;
+    class HTMLComponentProperties extends ComponentProperties {
+    }
+    // ret.tag = atype;
+    //        var newdom = document.createElement(atype);
     let HTMLComponent = class HTMLComponent extends Component {
         constructor() {
             super(...arguments);

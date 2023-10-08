@@ -136,23 +136,21 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                img.y = component.y;*/
             component.dom.draggable = true;
             component.dom.ondragstart = ev => {
-                /*    helper = new cl();
-                    var img = new Image();
-                    img.src = component.src;
-                    img.height = "24";
-                    img.width = "24";
-                    img.x = component.x;
-                    img.y = component.y;
-                    helper._position = img;
-                    component._helper = helper;
-                    if (component.createFromParam !== undefined) {
-                        $.extend(helper, component.createFromParam);
-                    }*/
-                //  ev.dataTransfer.setDragImage(img.dom, 20, 20);
-                ev.dataTransfer.setData("text", JSON.stringify({
-                    createFromType: component["createFromType"],
-                    createFromParam: component["createFromParam"]
-                }));
+                helper = new cl();
+                        var img = new Image_1.Image();
+                        img.src = component.src;
+                        img.height = "24";
+                        img.width = "24";
+                        img.x = component.x;
+                        img.y = component.y;
+                        helper._position = img;
+                        component._helper = helper;
+                        if (component.createFromParam !== undefined) {
+                            $.extend(helper, component.createFromParam);
+                        }
+                ev.dataTransfer.setDragImage(img.dom, 20, 20);
+                $.extend(helper, component.createFromParam);
+                ev.dataTransfer.setData("text", "Hallo");
                 //document.getElementById("jassitemp").removeChild(helper.domWrapper);
                 //document.getElementById("jassitemp").removeChild(helper._position.domWrapper);
             };

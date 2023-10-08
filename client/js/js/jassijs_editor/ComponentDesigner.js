@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Registry_1, Panel_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_1, DragAndDropper_1, ComponentDescriptor_1, Classes_1, BoxPanel_1) {
     "use strict";
+    var ComponentDesigner_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = void 0;
     //import { Parser } from "./util/Parser";
@@ -21,7 +22,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.allChilds = [];
         }
     }
-    let ComponentDesigner = class ComponentDesigner extends Panel_1.Panel {
+    let ComponentDesigner = ComponentDesigner_1 = class ComponentDesigner extends Panel_1.Panel {
         constructor() {
             super();
             this._codeEditor = undefined;
@@ -769,8 +770,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
             }
         }
-        createPreDummy() {
-            var _this = this;
+        static createPreDummy() {
             var dummy;
             //  if (ComponentDesigner.beforeDummy === undefined) {
             dummy = document.createElement("span");
@@ -778,19 +778,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             dummy.draggable = true;
             dummy.classList.add("_dummy_");
             dummy.onclick = (ev) => console.log(ev);
-            dummy.ondrop = (ev) => {
-                ev.preventDefault();
-                var data = ev.dataTransfer.getData("text");
-                if (data.indexOf('"createFromType":') > -1) {
-                    var toCreate = JSON.parse(data);
-                    var cl = Classes_1.classes.getClass(toCreate.createFromType);
-                    var newComponent = new cl();
-                    var beforeComponent = ev.target.nd._this;
-                    var newParent = beforeComponent._parent;
-                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent); // beforeComponent);
-                    _this.updateDummies();
-                }
-            };
+            dummy.ondrop = (ev) => { ev.preventDefault(); var data = ev.dataTransfer.getData("text"); };
             dummy.ondragover = (ev) => ev.preventDefault();
             dummy.ondragstart = ev => {
                 ev.dataTransfer.setDragImage(event.target.nd, 20, 20);
@@ -811,52 +799,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
             return dummy;
         }
-        createPostDummy() {
-            var _this = this;
-            var dummy;
-            //  if (ComponentDesigner.beforeDummy === undefined) {
-            dummy = document.createElement("span");
-            dummy.contentEditable = "false";
-            dummy.draggable = true;
-            dummy.classList.add("_dummy_");
-            dummy.classList.add("ui-droppable");
-            //dummy.onclick = (ev) => console.log(ev);
-            dummy.ondrop = (ev) => {
-                ev.preventDefault();
-                var data = ev.dataTransfer.getData("text");
-                if (data.indexOf('"createFromType":') > -1) {
-                    var toCreate = JSON.parse(data);
-                    var cl = Classes_1.classes.getClass(toCreate.createFromType);
-                    var newComponent = new cl();
-                    var newParent = ev.target.nd._this;
-                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined); // beforeComponent);
-                    _this.updateDummies();
-                }
-            };
-            dummy.ondragover = (ev) => {
-                ev.preventDefault();
-                //  ev.dataTransfer.dropEffect = "move";
-            }; /*
-            dummy.ondragstart = ev => {
-                ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
-                ev.dataTransfer.setData("text", "Hallo");
-            }*/
-            dummy.style.zIndex = "10000";
-            dummy.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
-            dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
-            dummy.style.fontSize = "30px";
-            dummy.style.position = "absolute";
-            dummy.onmouseenter = (e) => {
-                e.target.nd._sicbgc_ = e.target.nd.style.backgroundColor;
-                e.target.nd.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
-            };
-            dummy.onmouseleave = (e) => e.target.nd.style.backgroundColor = e.target.nd._sicbgc_;
-            //   ComponentDesigner.beforeDummy = dummy;
-            // }
-            // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
-            return dummy;
-        }
         insertDummies(node, root, arr, rootRect) {
+            var _a;
             if (node._dummyholder === true)
                 return;
             if (root === undefined)
@@ -873,81 +817,52 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     }
                 }
             }
-            if (!varname) {
-                if (node.contentEditable !== "false")
-                    node.contentEditable = "false";
+            if (!varname)
                 return;
-            }
             var hasChildren = false;
             var desc = ComponentDescriptor_1.ComponentDescriptor.describe(comp.constructor);
-            var fnew = desc.findField("children");
+            var fnew = desc.findField("new");
             if (fnew) {
-                hasChildren = true;
+                var stype = fnew.componentType;
+                var cl = Classes_1.classes.getClass(stype);
+                desc = ComponentDescriptor_1.ComponentDescriptor.describe(cl, false);
+                debugger;
             }
             if (node.getClientRects === undefined)
                 return;
             var rect = node.getClientRects()[0];
             if (rect === undefined)
                 return;
-            rect = {
+            rect = { 
                 left: rect.left - rootRect.left + window.scrollX,
-                top: rect.top - rootRect.top + window.scrollY,
-                right: rect.right - rootRect.left + window.scrollX,
-                bottom: rect.bottom - rootRect.top + window.scrollY
+                top: rect.top - rootRect.top + window.scrollY
             };
-            if (node === null || node === void 0 ? void 0 : node.nd)
+            if ((_a = node) === null || _a === void 0 ? void 0 : _a.nd)
                 return;
-            var preDummy = node._preDummy_;
-            if (!node._preDummy_) {
-                preDummy = this.createPreDummy();
-                preDummy.nd = node;
-                preDummy.title = node.outerHTML;
-                node._preDummy_ = preDummy;
-                arr.push(preDummy);
+            if (!node._dummy_) {
+                var dummy = ComponentDesigner_1.createPreDummy();
+                dummy.nd = node;
+                dummy.title = node.outerHTML;
+                node._dummy_ = dummy;
+                arr.push(dummy);
             }
             var newTop = rect.top;
             var newLeft = rect.left;
             node.myTop = rect.top;
             node.myLeft = rect.left;
-            if (node.parentNode._preDummy_) {
-                const rp = {
+            if (node.parentNode._dummy_) {
+                var rp = {
                     top: node.parentNode.myTop,
                     left: node.parentNode.myLeft,
                 };
                 if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.left + 5) {
-                    newLeft = parseInt(node.parentNode._preDummy_.style.left.replace("px", "")) + 8;
+                    newLeft = parseInt(node.parentNode._dummy_.style.left.replace("px", "")) + 8;
                 }
             }
-            preDummy.style.top = newTop + "px";
-            preDummy.style.left = newLeft + "px";
-            if (hasChildren) {
-                var postDummy = node._postDummy_;
-                if (!node._postDummy_) {
-                    postDummy = this.createPostDummy();
-                    postDummy.nd = node;
-                    postDummy.title = node.outerHTML;
-                    node._postDummy_ = postDummy;
-                    arr.push(postDummy);
-                }
-                var newBottom = rect.bottom;
-                var newRight = rect.right;
-                node.myBottom = rect.bottom;
-                node.myRight = rect.right;
-                if (node.parentNode._postDummy_) {
-                    const rp = {
-                        bottom: node.parentNode.newBottom,
-                        right: node.parentNode.newRight,
-                    };
-                    if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
-                        newRight = parseInt(node.parentNode._postDummy_.style.left.replace("px", "")) - 8;
-                    }
-                }
-                postDummy.style.top = (newBottom - 8) + "px";
-                postDummy.style.left = (newRight - 8) + "px";
-            }
+            node._dummy_.style.top = newTop + "px";
+            node._dummy_.style.left = newLeft + "px";
             for (var x = 0; x < node.childNodes.length; x++) {
-                if (node._this !== node.childNodes[x]._this) //Wrapper
-                    this.insertDummies(node.childNodes[x], root, arr, rootRect);
+                this.insertDummies(node.childNodes[x], root, arr, rootRect);
             }
         }
         /**
@@ -1015,7 +930,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             super.destroy();
         }
     };
-    ComponentDesigner = __decorate([
+    ComponentDesigner = ComponentDesigner_1 = __decorate([
         (0, Registry_1.$Class)("jassijs_editor.ComponentDesigner"),
         __metadata("design:paramtypes", [])
     ], ComponentDesigner);

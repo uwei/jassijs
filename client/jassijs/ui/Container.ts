@@ -1,14 +1,17 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Component, ComponentConfig } from "jassijs/ui/Component";
+import { Component, ComponentProperties } from "jassijs/ui/Component";
+import { $Property } from "jassijs/ui/Property";
 
-export interface ContainerConfig extends ComponentConfig {
+@$Class("jassijs.ui.ContainerProperties")
+export class ContainerProperties extends ComponentProperties {
     /**
      * child components
      */
-    children?: Component[];
+    @$Property({type:"jassijs.ui.Component"})
+    children?;
 }
 @$Class("jassijs.ui.Container")
-export class Container extends Component implements Omit<ContainerConfig, "children">{
+export class Container<T extends ContainerProperties={}> extends Component<T> implements Omit<ContainerProperties, "children">{
     _components: Component[];
     _designDummy: any;
 
@@ -18,17 +21,19 @@ export class Container extends Component implements Omit<ContainerConfig, "child
      * @param {string} [properties.id] -  connect to existing id (not reqired)
      * 
      */
-    constructor(properties = undefined) {//id connect to existing(not reqired)
+    constructor(properties:T = undefined) {//id connect to existing(not reqired)
         super(properties);
         this._components = [];
     }
-    config(config: ContainerConfig): Container {
-        if (config.children) {
-            this.removeAll(false);
-            for (var x = 0; x < config.children.length; x++) {
-                this.add(config.children[x]);
+     config(config: T,forceRender=false): Container<T> {
+        if (config?.children) {
+            if (config?.children.length > 0 && config?.children[0] instanceof Component) {
+                this.removeAll(false);
+                for (var x = 0; x < config.children.length; x++) {
+                    this.add(config.children[x]);
+                }
+                delete config.children;
             }
-            delete config.children;
         }
         super.config(config);
         return this;

@@ -3,7 +3,7 @@ import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel, PanelConfig } from "jassijs/ui/Panel";
 import { Databinder } from "jassijs/ui/Databinder";
-import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { DBObject } from "jassijs/remote/DBObject";

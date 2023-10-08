@@ -1,11 +1,11 @@
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-import { $UIComponent, Component, ComponentConfig } from "jassijs/ui/Component";
+import { $UIComponent, Component, ComponentProperties } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 
 import { CSSProperties } from "jassijs/ui/CSSProperties";
 
-export interface StyleConfig extends ComponentConfig {
+export interface StyleConfig extends ComponentProperties {
   /**
     * sets CSS Properties
     */

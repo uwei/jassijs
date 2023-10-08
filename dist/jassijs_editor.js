@@ -1183,117 +1183,138 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
         addVariables(variables) {
             this.variables.addAll(variables);
         }
-        async fillVariablesAndSetupParser(url, root, component, cache, parser) {
+        async fillVariablesAndSetupParser(url, root, thecomponent, cache, parser, codePositions) {
             var _a, _b, _c, _d, _e, _f;
             var useThis = false;
-            if (cache[component._id] === undefined && component["__stack"] !== undefined && ((_a = component === null || component === void 0 ? void 0 : component.dom) === null || _a === void 0 ? void 0 : _a.classList) && !component.dom.classList.contains("designdummy")) {
-                var lines = (_b = component["__stack"]) === null || _b === void 0 ? void 0 : _b.split("\n");
-                for (var x = 0; x < lines.length; x++) {
-                    var sline = lines[x];
-                    if (sline.indexOf("$temp.js") > 0) {
-                        var spl = sline.split(":");
-                        var entr = {};
-                        if (cache[component._id] === undefined)
-                            cache[component._id] = [];
-                        cache[component._id].push({
-                            line: Number(spl[spl.length - 2]),
-                            column: Number(spl[spl.length - 1].replace(")", "")),
-                            component: component,
-                            pos: 0,
-                            name: undefined
-                        });
-                    }
-                }
-                if (component["_components"]) {
-                    for (var x = 0; x < component["_components"].length; x++) {
-                        this.fillVariablesAndSetupParser(url, root, component["_components"][x], cache, parser);
-                    }
-                }
-                if (component === root) {
-                    //fertig
-                    var hh = 0;
-                    var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
-                    var values = [];
-                    //@ts-ignore
-                    Object.values(cache).forEach((e) => {
-                        e.forEach(f => values.push(f));
-                    });
-                    var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".tsx", ".js").replace(".ts", ".js"), values);
-                    for (var x = 0; x < tmap.length; x++) {
-                        var val = values[x];
-                        val.column = tmap[x].column;
-                        val.line = tmap[x].line;
-                        val.pos = this._codePanel.positionToNumber({
-                            row: val.line,
-                            column: val.column
-                        });
-                    }
-                    //setupClasscope
-                    var foundscope;
-                    for (var xx = 0; xx < cache[root._id].length; xx++) {
-                        foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
-                        if (foundscope)
-                            break;
-                    }
-                    var scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }];
-                    if (foundscope)
-                        scope = [{ classname: (_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name, methodname: "layout" }, foundscope];
-                    if (this.file.toLowerCase().endsWith(".tsx")) {
-                        parser.parse(this._codePanel.value, undefined, values);
-                        for (var x = 0; x < values.length; x++) {
-                            this.variables.addVariable(values[x].name, values[x].component, false);
-                        }
-                        // this.variables.addVariable(sname, val.component, false);
-                    }
-                    else {
-                        parser.parse(this._codePanel.value, scope);
-                        //if layout is rendered and an other variable is assigned to this, then remove ths variable
-                        if (parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name] && parser.classes[(_f = root === null || root === void 0 ? void 0 : root.constructor) === null || _f === void 0 ? void 0 : _f.name].members["layout"]) {
-                            useThis = true;
-                            this.variables.addVariable("this", root);
-                        }
-                        for (var key in parser.data) {
-                            var com = parser.data[key];
-                            var _new_ = com["_new_"];
-                            if (_new_) {
-                                var pos = _new_[0].node.pos;
-                                var end = _new_[0].node.end;
-                                for (var x = 0; x < values.length; x++) {
-                                    var val = values[x];
-                                    if (val.pos >= pos && val.pos <= end) {
-                                        val.name = key;
-                                    }
-                                }
+            var connectedComponents = [thecomponent];
+            if (thecomponent.__dom._thisOther)
+                thecomponent.__dom._thisOther.forEach(e => connectedComponents.push(e));
+            for (var i = 0; i < connectedComponents.length; i++) {
+                var component = connectedComponents[i];
+                if (cache[component._id] === undefined && component["__stack"] !== undefined && ((_a = component === null || component === void 0 ? void 0 : component.dom) === null || _a === void 0 ? void 0 : _a.classList) && !component.dom.classList.contains("designdummy")) {
+                    var lines = (_b = component["__stack"]) === null || _b === void 0 ? void 0 : _b.split("\n");
+                    for (var x = 0; x < lines.length; x++) {
+                        var sline = lines[x];
+                        if (sline.indexOf("$temp.js") > 0) {
+                            var spl = sline.split(":");
+                            var entr = {};
+                            if (cache[component._id] === undefined)
+                                cache[component._id] = [];
+                            var data = {
+                                line: Number(spl[spl.length - 2]),
+                                column: Number(spl[spl.length - 1].replace(")", "")),
+                                component: component,
+                                pos: 0,
+                                name: undefined
+                            };
+                            if (codePositions[data.line + "," + data.column] === undefined) { //we collect first position in the scourecode file
+                                codePositions[data.line + "," + data.column] = data;
                             }
-                        }
-                        var ignoreVar = [];
-                        for (var x = 0; x < values.length; x++) {
-                            var val = values[x];
-                            var sname = val.name;
-                            var found = false;
-                            this.variables.value.forEach((it) => {
-                                if (it.name === sname)
-                                    found = true;
-                            });
-                            //sometimes does a constructor create other Components so we need the first one
-                            if (found)
-                                continue;
-                            if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                                if (ignoreVar.indexOf(sname) === -1) {
-                                    if (useThis && root === val.component)
-                                        ignoreVar.push(sname); //do nothing
-                                    else
-                                        this.variables.addVariable(sname, val.component, false);
-                                }
-                            }
+                            cache[component._id].push(data);
                         }
                     }
-                    this.variables.updateCache();
-                    this.variables.update();
-                    // parser.parse(,)
                 }
-                return parser;
             }
+            if (this.file.toLocaleLowerCase().endsWith(".tsx")) {
+                for (var x = 0; x < thecomponent.dom.children.length; x++) {
+                    var ch = thecomponent.dom.children[x];
+                    if (ch._this) {
+                        this.fillVariablesAndSetupParser(url, root, ch._this, cache, parser, codePositions);
+                    }
+                }
+            }
+            else {
+                if (thecomponent["_components"]) {
+                    for (var x = 0; x < thecomponent["_components"].length; x++) {
+                        this.fillVariablesAndSetupParser(url, root, thecomponent["_components"][x], cache, parser, codePositions);
+                    }
+                }
+            }
+            if (thecomponent === root) {
+                //fertig
+                var hh = 0;
+                var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
+                var values = [];
+                //@ts-ignore
+                Object.values(cache).forEach((e) => {
+                    e.forEach(f => values.push(f));
+                });
+                var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".tsx", ".js").replace(".ts", ".js"), values);
+                for (var x = 0; x < tmap.length; x++) {
+                    var val = values[x];
+                    val.column = tmap[x].column;
+                    val.line = tmap[x].line;
+                    val.pos = this._codePanel.positionToNumber({
+                        row: val.line,
+                        column: val.column
+                    });
+                }
+                //setupClasscope
+                var foundscope;
+                for (var xx = 0; xx < cache[root._id].length; xx++) {
+                    foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
+                    if (foundscope)
+                        break;
+                }
+                var scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }];
+                if (foundscope)
+                    scope = [{ classname: (_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name, methodname: "layout" }, foundscope];
+                if (this.file.toLowerCase().endsWith(".tsx")) {
+                    values = Object.values(codePositions);
+                    parser.parse(this._codePanel.value, undefined, values);
+                    for (var x = 0; x < values.length; x++) {
+                        this.variables.addVariable(values[x].name, values[x].component, false);
+                    }
+                    // this.variables.addVariable(sname, val.component, false);
+                }
+                else {
+                    parser.parse(this._codePanel.value, scope);
+                    //if layout is rendered and an other variable is assigned to this, then remove ths variable
+                    if (parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name] && parser.classes[(_f = root === null || root === void 0 ? void 0 : root.constructor) === null || _f === void 0 ? void 0 : _f.name].members["layout"]) {
+                        useThis = true;
+                        this.variables.addVariable("this", root);
+                    }
+                    for (var key in parser.data) {
+                        var com = parser.data[key];
+                        var _new_ = com["_new_"];
+                        if (_new_) {
+                            var pos = _new_[0].node.pos;
+                            var end = _new_[0].node.end;
+                            for (var x = 0; x < values.length; x++) {
+                                var val = values[x];
+                                if (val.pos >= pos && val.pos <= end) {
+                                    val.name = key;
+                                }
+                            }
+                        }
+                    }
+                    var ignoreVar = [];
+                    for (var x = 0; x < values.length; x++) {
+                        var val = values[x];
+                        var sname = val.name;
+                        var found = false;
+                        this.variables.value.forEach((it) => {
+                            if (it.name === sname)
+                                found = true;
+                        });
+                        //sometimes does a constructor create other Components so we need the first one
+                        if (found)
+                            continue;
+                        if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
+                            if (ignoreVar.indexOf(sname) === -1) {
+                                if (useThis && root === val.component)
+                                    ignoreVar.push(sname); //do nothing
+                                else
+                                    this.variables.addVariable(sname, val.component, false);
+                            }
+                        }
+                    }
+                }
+                this.variables.updateCache();
+                this.variables.update();
+                // parser.parse(,)
+            }
+            return parser;
         }
         /**
          * load the right editor for the returned value
@@ -1321,8 +1342,9 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 }
                 //@ts-ignore
                 _this._design.connectParser(parser);
+                var codePositions = {};
+                await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser, codePositions);
                 _this._design.designedComponent = ret;
-                await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
                 _this._design.editDialog(true);
                 //});
             }
@@ -1968,7 +1990,6 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
 });
 define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Registry_10, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, ComponentDescriptor_1, Classes_3, BoxPanel_1) {
     "use strict";
-    var ComponentDesigner_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = void 0;
     //import { Parser } from "./util/Parser";
@@ -1981,7 +2002,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.allChilds = [];
         }
     }
-    let ComponentDesigner = ComponentDesigner_1 = class ComponentDesigner extends Panel_4.Panel {
+    let ComponentDesigner = class ComponentDesigner extends Panel_4.Panel {
         constructor() {
             super();
             this._codeEditor = undefined;
@@ -2096,6 +2117,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             box.add(this.inlineEditorPanel);
             this.add(box);
             this._designPlaceholder.domWrapper.style.position = "relative";
+            this.dummyHolder = document.createElement("span");
+            this.__dom.append(this.dummyHolder);
             this.add(this._designPlaceholder);
         }
         /**
@@ -2727,7 +2750,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 }
             }
         }
-        static createDummy() {
+        createPreDummy() {
+            var _this = this;
             var dummy;
             //  if (ComponentDesigner.beforeDummy === undefined) {
             dummy = document.createElement("span");
@@ -2735,12 +2759,25 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             dummy.draggable = true;
             dummy.classList.add("_dummy_");
             dummy.onclick = (ev) => console.log(ev);
-            dummy.ondrop = (ev) => { ev.preventDefault(); var data = ev.dataTransfer.getData("text"); };
+            dummy.ondrop = (ev) => {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData("text");
+                if (data.indexOf('"createFromType":') > -1) {
+                    var toCreate = JSON.parse(data);
+                    var cl = Classes_3.classes.getClass(toCreate.createFromType);
+                    var newComponent = new cl();
+                    var beforeComponent = ev.target.nd._this;
+                    var newParent = beforeComponent._parent;
+                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent); // beforeComponent);
+                    _this.updateDummies();
+                }
+            };
             dummy.ondragover = (ev) => ev.preventDefault();
             dummy.ondragstart = ev => {
                 ev.dataTransfer.setDragImage(event.target.nd, 20, 20);
                 ev.dataTransfer.setData("text", "Hallo");
             };
+            dummy.style.zIndex = "10000";
             dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
             dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
             dummy.style.fontSize = "7px";
@@ -2755,45 +2792,144 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
             return dummy;
         }
-        static insertDummies(node, root, arr, rootRect) {
+        createPostDummy() {
+            var _this = this;
+            var dummy;
+            //  if (ComponentDesigner.beforeDummy === undefined) {
+            dummy = document.createElement("span");
+            dummy.contentEditable = "false";
+            dummy.draggable = true;
+            dummy.classList.add("_dummy_");
+            dummy.classList.add("ui-droppable");
+            //dummy.onclick = (ev) => console.log(ev);
+            dummy.ondrop = (ev) => {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData("text");
+                if (data.indexOf('"createFromType":') > -1) {
+                    var toCreate = JSON.parse(data);
+                    var cl = Classes_3.classes.getClass(toCreate.createFromType);
+                    var newComponent = new cl();
+                    var newParent = ev.target.nd._this;
+                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined); // beforeComponent);
+                    _this.updateDummies();
+                }
+            };
+            dummy.ondragover = (ev) => {
+                ev.preventDefault();
+                //  ev.dataTransfer.dropEffect = "move";
+            }; /*
+            dummy.ondragstart = ev => {
+                ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
+                ev.dataTransfer.setData("text", "Hallo");
+            }*/
+            dummy.style.zIndex = "10000";
+            dummy.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
+            dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+            dummy.style.fontSize = "30px";
+            dummy.style.position = "absolute";
+            dummy.onmouseenter = (e) => {
+                e.target.nd._sicbgc_ = e.target.nd.style.backgroundColor;
+                e.target.nd.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
+            };
+            dummy.onmouseleave = (e) => e.target.nd.style.backgroundColor = e.target.nd._sicbgc_;
+            //   ComponentDesigner.beforeDummy = dummy;
+            // }
+            // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
+            return dummy;
+        }
+        insertDummies(node, root, arr, rootRect) {
             var _a;
             if (node._dummyholder === true)
                 return;
             if (root === undefined)
                 root = node;
+            //only elements with varaiables can have dummies
+            var varname = this._codeEditor.getVariableFromObject(node._this);
+            var comp = node._this;
+            if (!varname && node._thisOther) {
+                for (var x = 0; x < node._thisOther.length; x++) {
+                    varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
+                    if (varname) {
+                        comp = node._thisOther[x];
+                        break;
+                    }
+                }
+            }
+            if (!varname) {
+                if (node.contentEditable !== "false")
+                    node.contentEditable = "false";
+                return;
+            }
+            var hasChildren = false;
+            var desc = ComponentDescriptor_1.ComponentDescriptor.describe(comp.constructor);
+            var fnew = desc.findField("children");
+            if (fnew) {
+                hasChildren = true;
+            }
             if (node.getClientRects === undefined)
                 return;
             var rect = node.getClientRects()[0];
+            if (rect === undefined)
+                return;
             rect = {
                 left: rect.left - rootRect.left + window.scrollX,
-                top: rect.top - rootRect.top + window.scrollY
+                top: rect.top - rootRect.top + window.scrollY,
+                right: rect.right - rootRect.left + window.scrollX,
+                bottom: rect.bottom - rootRect.top + window.scrollY
             };
             if ((_a = node) === null || _a === void 0 ? void 0 : _a.nd)
                 return;
-            if (!node._dummy_) {
-                var dummy = ComponentDesigner_1.createDummy();
-                dummy.nd = node;
-                dummy.title = node.outerHTML;
-                node._dummy_ = dummy;
-                arr.push(dummy);
+            var preDummy = node._preDummy_;
+            if (!node._preDummy_) {
+                preDummy = this.createPreDummy();
+                preDummy.nd = node;
+                preDummy.title = node.outerHTML;
+                node._preDummy_ = preDummy;
+                arr.push(preDummy);
             }
             var newTop = rect.top;
             var newLeft = rect.left;
             node.myTop = rect.top;
             node.myLeft = rect.left;
-            if (node.parentNode._dummy_) {
-                var rp = {
+            if (node.parentNode._preDummy_) {
+                const rp = {
                     top: node.parentNode.myTop,
                     left: node.parentNode.myLeft,
                 };
                 if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.left + 5) {
-                    newLeft = parseInt(node.parentNode._dummy_.style.left.replace("px", "")) + 8;
+                    newLeft = parseInt(node.parentNode._preDummy_.style.left.replace("px", "")) + 8;
                 }
             }
-            node._dummy_.style.top = newTop + "px";
-            node._dummy_.style.left = newLeft + "px";
+            preDummy.style.top = newTop + "px";
+            preDummy.style.left = newLeft + "px";
+            if (hasChildren) {
+                var postDummy = node._postDummy_;
+                if (!node._postDummy_) {
+                    postDummy = this.createPostDummy();
+                    postDummy.nd = node;
+                    postDummy.title = node.outerHTML;
+                    node._postDummy_ = postDummy;
+                    arr.push(postDummy);
+                }
+                var newBottom = rect.bottom;
+                var newRight = rect.right;
+                node.myBottom = rect.bottom;
+                node.myRight = rect.right;
+                if (node.parentNode._postDummy_) {
+                    const rp = {
+                        bottom: node.parentNode.newBottom,
+                        right: node.parentNode.newRight,
+                    };
+                    if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
+                        newRight = parseInt(node.parentNode._postDummy_.style.left.replace("px", "")) - 8;
+                    }
+                }
+                postDummy.style.top = (newBottom - 8) + "px";
+                postDummy.style.left = (newRight - 8) + "px";
+            }
             for (var x = 0; x < node.childNodes.length; x++) {
-                ComponentDesigner_1.insertDummies(node.childNodes[x], root, arr, rootRect);
+                if (node._this !== node.childNodes[x]._this) //Wrapper
+                    this.insertDummies(node.childNodes[x], root, arr, rootRect);
             }
         }
         /**
@@ -2827,14 +2963,20 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
         }
         updateDummies() {
             var arr = [];
-            var component = this._componentExplorer.value;
-            if (component.dom.dummyholder === undefined) {
-                component.dom.dummyholder = document.createElement("span");
-                component.dom.dummyholder._dummyholder = true;
-                component.dom.prepend(component.dom.dummyholder);
+            var component = this.designedComponent; //this._componentExplorer.value;
+            if (this._lastComponent !== component) { //delete dummies if the designedComponent has changed
+                //if((<any>this.dom).dummyholder)
+                //  (<any>this.dom).dummyholder.innerHTML="";
+                this.dummyHolder.innerHTML = ""; //delete all
+                this._lastComponent = component;
             }
-            ComponentDesigner_1.insertDummies(component.dom, undefined, arr, component.dom.getClientRects()[0]);
-            component.dom.dummyholder.append(...arr);
+            /* if ((<any>this.dom).dummyholder === undefined) {
+                 (<any>this.dom).dummyholder = document.createElement("span");
+                 (<any>this.dom).dummyholder._dummyholder = true;
+                 this.dom.prepend((<any>component.dom).dummyholder);
+             }*/
+            this.insertDummies(component.dom, this.dummyHolder, arr, this.dom.getClientRects()[0]);
+            this.dummyHolder.append(...arr);
         }
         get designedComponent() {
             return this._designPlaceholder._components[0];
@@ -2855,7 +2997,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             super.destroy();
         }
     };
-    ComponentDesigner = ComponentDesigner_1 = __decorate([
+    ComponentDesigner = __decorate([
         Registry_10.$Class("jassijs_editor.ComponentDesigner"),
         __metadata("design:paramtypes", [])
     ], ComponentDesigner);
@@ -2911,6 +3053,23 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
          * @param {object} item
          */
         getComponentChilds(item) {
+            var _a;
+            if (this.codeEditor === undefined)
+                return this.getComponentChildsOld(item);
+            if (item === undefined)
+                return [];
+            var ret = [];
+            if ((_a = item.dom) === null || _a === void 0 ? void 0 : _a.childNodes) {
+                for (var x = 0; x < item.dom.childNodes.length; x++) {
+                    var nd = item.dom.childNodes[x];
+                    var varname = this.codeEditor.getVariableFromObject(nd._this);
+                    if (varname)
+                        ret.push(nd._this);
+                }
+            }
+            return ret;
+        }
+        getComponentChildsOld(item) {
             if (item === undefined)
                 return [];
             if (item === this.value && item._components) {
@@ -3054,6 +3213,24 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
                     _this._makeDraggable(img);
                     _this.add(img);
                 }
+                for (var x = 0; x < jdata.length; x++) {
+                    var mdata = jdata[x];
+                    var data = mdata.params[0];
+                    if (data.fullPath === undefined || data.fullPath === "undefined")
+                        continue;
+                    var img = new Image_1.Image();
+                    var name = data.fullPath.split("/");
+                    var sname = name[name.length - 1];
+                    img.tooltip = sname;
+                    img.dom.style.color = "blue";
+                    img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
+                    //img.height = 24;
+                    //img.width = 24;
+                    img["createFromType"] = mdata.classname;
+                    img["createFromParam"] = data.initialize;
+                    _this._makeDraggable2(img);
+                    _this.add(img);
+                }
             });
             /*registry.loadAllFilesForService(this._service).then(function(){
                 registry.getData(_this._service).forEach(function(mdata){
@@ -3110,13 +3287,87 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
                 }
             });
         }
+        _makeDraggable2(component) {
+            var helper = undefined;
+            var cl = Classes_5.classes.getClass(component.createFromType);
+            if (cl === undefined) {
+                Classes_5.classes.loadClass(component.createFromType); //for later
+                cl = Panel_6.Panel;
+            }
+            /*   var img = new Image();
+               (<any>img).native=true;
+               img.src = component.src;
+               img.dom.style.color = "blue";
+               img.height = "24";
+               img.width = "24";
+               img.x = component.x;
+               img.y = component.y;*/
+            component.dom.draggable = true;
+            component.dom.ondragstart = ev => {
+                /*    helper = new cl();
+                    var img = new Image();
+                    img.src = component.src;
+                    img.height = "24";
+                    img.width = "24";
+                    img.x = component.x;
+                    img.y = component.y;
+                    helper._position = img;
+                    component._helper = helper;
+                    if (component.createFromParam !== undefined) {
+                        $.extend(helper, component.createFromParam);
+                    }*/
+                //  ev.dataTransfer.setDragImage(img.dom, 20, 20);
+                ev.dataTransfer.setData("text", JSON.stringify({
+                    createFromType: component["createFromType"],
+                    createFromParam: component["createFromParam"]
+                }));
+                //document.getElementById("jassitemp").removeChild(helper.domWrapper);
+                //document.getElementById("jassitemp").removeChild(helper._position.domWrapper);
+            };
+            //helper._position = img;
+            //component._helper = helper;
+            // if (component.createFromParam !== undefined) {
+            //   $.extend(helper, component.createFromParam);
+            //  }
+            /* $(component.dom).draggable({
+                 cancel: "false", revert: "invalid",
+     
+                 appendTo: "body",
+                 helper: function (event) {
+                     if (helper === undefined) {
+                         var cl = classes.getClass(component.createFromType);
+                         if (cl === undefined) {
+                             classes.loadClass(component.createFromType);//for later
+                             cl = Panel;
+                         }
+                         helper = new cl();
+                         var img = new Image();
+                         img.src = component.src;
+                         img.height = "24";
+                         img.width = "24";
+                         img.x = component.x;
+                         img.y = component.y;
+                         helper._position = img;
+                         component._helper = helper;
+                         if (component.createFromParam !== undefined) {
+                             $.extend(helper, component.createFromParam);
+                         }
+                         document.getElementById("jassitemp").removeChild(helper.domWrapper);
+                         document.getElementById("jassitemp").removeChild(helper._position.domWrapper);
+                     }
+                     return helper._position.dom;
+                 }
+             });*/
+        }
         destroy() {
             for (var x = 0; x < this._components.length; x++) {
                 var comp = this._components[x];
-                $(comp.dom).draggable({});
-                $(comp.dom).draggable("destroy");
-                if (comp["_helper"] !== undefined)
-                    comp["_helper"].destroy();
+                if (comp.native !== true) {
+                    $(comp.dom).draggable({});
+                    $(comp.dom).draggable("destroy");
+                    if (comp["_helper"] !== undefined)
+                        comp["_helper"].destroy();
+                }
             }
             super.destroy();
         }
@@ -4322,21 +4573,49 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
     }
     exports.test = test;
 });
-define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, ComponentDesigner_2, Registry_19, Component_5) {
+define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes"], function (require, exports, ComponentDesigner_1, Registry_19, Component_5, Classes_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HtmlDesigner = void 0;
-    let HtmlDesigner = class HtmlDesigner extends ComponentDesigner_2.ComponentDesigner {
+    let HtmlDesigner = class HtmlDesigner extends ComponentDesigner_1.ComponentDesigner {
         constructor() {
             super();
             var _this = this;
             this._designPlaceholder.dom.addEventListener("keydown", (ev => _this.keydown(ev)));
             this._designPlaceholder.dom.contentEditable = "true";
+            this._designPlaceholder.dom.addEventListener("drop", (ev) => _this.ondrop(ev));
         }
         getParentList(node, list) {
             list.push(node);
             if (node !== document)
                 this.getParentList(node.parentNode, list);
+        }
+        ondrop(ev) {
+            var _this = this;
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var range;
+            if (document.caretRangeFromPoint) {
+                // edge, chrome, android
+                range = document.caretRangeFromPoint(ev.clientX, ev.clientY);
+            }
+            else {
+                // firefox
+                var pos = [ev.rangeParent, ev.rangeOffset];
+                range = document.createRange();
+                range.setStart(...pos);
+                range.setEnd(...pos);
+            }
+            var selection = document.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            if (data.indexOf('"createFromType":') > -1) {
+                var toCreate = JSON.parse(data);
+                var cl = Classes_7.classes.getClass(toCreate.createFromType);
+                var newComponent = new cl();
+                _this.insertComponent(newComponent, selection);
+                _this.updateDummies();
+            }
         }
         /*set designedComponent(component) {
             alert(8);
@@ -4435,6 +4714,22 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
             node.textContent = text;
         }
+        insertComponent(component, sel = document.getSelection(), suggestedvarname = undefined) {
+            var anchorNode = sel.anchorNode;
+            var old = anchorNode.textContent;
+            var node = anchorNode;
+            var v1 = old.substring(0, sel.anchorOffset);
+            var v2 = old.substring(sel.focusOffset);
+            this.changeText(node, v2);
+            var comp = node._this;
+            var br = this.createComponent(Classes_7.classes.getClassName(component), component, undefined, undefined, comp._parent, comp, true, suggestedvarname);
+            var nd = document.createTextNode(v1);
+            var comp2 = new Component_5.TextComponent();
+            comp2.init(nd, { noWrapper: true });
+            var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, br, true, "text");
+            this.changeText(text2.dom, v1);
+            this.updateDummies();
+        }
         keydown(e) {
             var sel = document.getSelection();
             var position = sel.anchorNode.compareDocumentPosition(sel.focusNode);
@@ -4451,19 +4746,8 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             }
             if (e.keyCode === 13) {
                 e.preventDefault();
-                var old = anchorNode.textContent;
-                var node = anchorNode;
-                var v1 = old.substring(0, anchorOffset);
-                var v2 = old.substring(focusOffset);
-                this.changeText(node, v2);
                 var enter = Component_5.createComponent(React.createElement("br"));
-                var comp = node._this;
-                var br = this.createComponent("jassijs.ui.HTMLComponent", enter, undefined, undefined, comp._parent, comp, true, "br");
-                var nd = document.createTextNode(v1);
-                var comp2 = new Component_5.TextComponent();
-                comp2.init(nd, { noWrapper: true });
-                var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, br, true, "text");
-                this.changeText(text2.dom, v1);
+                this.insertComponent(enter, sel, "br");
                 //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
                 // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
                 return;
@@ -4914,7 +5198,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1696450228045.2976,
+                "date": 1696697256483.297,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -4932,15 +5216,15 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1696532790324.96,
+                "date": 1696790481218.0425,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1656022472000,
+                "date": 1696696982919.5652,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1656017274000,
+                "date": 1696779382120.8496,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
@@ -5115,6 +5399,10 @@ define("jassijs_editor/registry", ["require"], function (require) {
                     }
                 }
             },
+            "jassijs_editor/HtmlDesigner.ts": {
+                "date": 1696791469972.1626,
+                "jassijs_editor.HtmlDesigner": {}
+            },
             "jassijs_editor/modul.ts": {
                 "date": 1695399690345.8984
             },
@@ -5230,7 +5518,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1696534692234.4597,
+                "date": 1696695877822.2637,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -5261,10 +5549,6 @@ define("jassijs_editor/registry", ["require"], function (require) {
             "jassijs_editor/util/Typescript.ts": {
                 "date": 1695586918212.458,
                 "jassijs_editor.util.Typescript": {}
-            },
-            "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1696533188852.2512,
-                "jassijs_editor.HtmlDesigner": {}
             }
         }
     };
@@ -5404,7 +5688,7 @@ define("jassijs_editor/StartEditor", ["require", "exports", "jassijs_editor/File
     }
     start().then();
 });
-define("jassijs_editor/template/TemplateDBDialog", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/remote/DBObject", "jassijs/ui/OptionDialog", "jassijs/remote/Classes", "jassijs_editor/FileExplorer"], function (require, exports, Registry_22, Property_2, Actions_6, DBObject_1, OptionDialog_4, Classes_7, FileExplorer_3) {
+define("jassijs_editor/template/TemplateDBDialog", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/remote/DBObject", "jassijs/ui/OptionDialog", "jassijs/remote/Classes", "jassijs_editor/FileExplorer"], function (require, exports, Registry_22, Property_2, Actions_6, DBObject_1, OptionDialog_4, Classes_8, FileExplorer_3) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -5464,7 +5748,7 @@ export async function test(){
             var res = await OptionDialog_4.OptionDialog.askProperties("Create new DBDialog:", props, ["ok", "cancel"], undefined, false);
             if (res.button === "ok") {
                 var scode = code.replaceAll("{{dialogname}}", props.dialogname);
-                var fulldbclassname = Classes_7.classes.getClassName(props.dbobject);
+                var fulldbclassname = Classes_8.classes.getClassName(props.dbobject);
                 var shortdbclassname = fulldbclassname.split(".")[fulldbclassname.split(".").length - 1];
                 var dbfilename = (await Registry_22.default.getJSONData("$Class", fulldbclassname))[0].filename;
                 dbfilename = dbfilename.substring(0, dbfilename.length - 3);
@@ -6493,7 +6777,7 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
     ], DragAndDropper);
     exports.DragAndDropper = DragAndDropper;
 });
-define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs/remote/Test", "jassijs/remote/Classes"], function (require, exports, Registry_29, Typescript_5, Test_2, Classes_8) {
+define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs/remote/Test", "jassijs/remote/Classes"], function (require, exports, Registry_29, Typescript_5, Test_2, Classes_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.tests = exports.Parser = exports.ParsedClass = void 0;
@@ -6696,7 +6980,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
                 return arg.getText();
             }
-            throw new Classes_8.JassiError("Error type not found");
+            throw new Classes_9.JassiError("Error type not found");
         }
         parseDecorator(dec) {
             var ex = dec.expression;
@@ -6884,9 +7168,17 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                             counttrivial++;
                         }
                         else {
+                            var njsx = _this.jsxVariables[ch.pos - 1];
+                            if (njsx === undefined)
+                                njsx = _this.jsxVariables[ch.pos];
+                            if (njsx === undefined)
+                                njsx = _this.jsxVariables[ch.pos + 1];
+                            if (njsx) {
+                            }
                             var varname = this.getNextVariableNameForType("text", "text");
                             var stext = JSON.stringify(ch.text);
                             _this.add(varname, "_new_", stext, ch, false, false);
+                            _this.jsxVariables[varname] = ch;
                             _this.add(varname, "text", stext, ch, false, false);
                             //if ((<any>node.parent)?.jname !== undefined) {
                             _this.add(jsx.name, "add", varname, ch);
@@ -6901,7 +7193,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         }
                     }
                     else {
-                        _this.visitNode(ch, {}); // consumeProperties)
+                        _this.visitNodeJSX(ch, {}); // consumeProperties)
                     }
                 }
             }
@@ -6940,7 +7232,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                             consumeProperties = true;
                     }
                 }
-                else
+                else if (this.jsxVariables === undefined)
                     consumeProperties = true;
             }
             if (node.kind === ts.SyntaxKind.JsxElement) {
@@ -6951,6 +7243,18 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 this.parseProperties(node);
             else
                 node.getChildren().forEach(c => _this.visitNode(c, consumeProperties));
+            //TODO remove this block
+            /*  if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
+                  this.add(node["name"].text, "", "", undefined);
+              }*/
+        }
+        visitNodeJSX(node, consumeProperties = undefined) {
+            var _this = this;
+            if (node.kind === ts.SyntaxKind.JsxElement) {
+                _this.parseJSX(_this, node);
+                return;
+            }
+            node.getChildren().forEach(c => _this.visitNodeJSX(c, consumeProperties));
             //TODO remove this block
             /*  if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
                   this.add(node["name"].text, "", "", undefined);
@@ -7011,6 +7315,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (autovars[tag] === undefined)
                     autovars[tag] = 1;
                 values[x].name = this.getNextVariableNameForType(tag); //tag + (autovars[tag]++);
+                this.data[values[x].name] = {}; //reserve variable
                 jsxvars[values[x].pos] = values[x];
             }
             this.jsxVariables = jsxvars;
@@ -7023,14 +7328,17 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         */
         parse(code, classScope = undefined, jsxVariables = undefined) {
             this.data = {};
-            if (jsxVariables)
-                this.initJSXVariables(jsxVariables);
             this.code = code;
             if (classScope !== undefined)
                 this.classScope = classScope;
             else
                 classScope = this.classScope;
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, jsxVariables ? ts.ScriptKind.TSX : undefined);
+            if (jsxVariables) {
+                this.initJSXVariables(jsxVariables);
+                this.visitNodeJSX(this.sourceFile, false);
+                return;
+            }
             if (this.classScope === undefined)
                 this.visitNode(this.sourceFile, true);
             else
@@ -8772,7 +9080,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1696450228045.2976,
+                "date": 1696697256483.297,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -8790,15 +9098,15 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1696532790324.96,
+                "date": 1696790481218.0425,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1656022472000,
+                "date": 1696696982919.5652,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1656017274000,
+                "date": 1696779382120.8496,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
@@ -8973,6 +9281,10 @@ define("jassijs_editor/registry", ["require"], function (require) {
                     }
                 }
             },
+            "jassijs_editor/HtmlDesigner.ts": {
+                "date": 1696791469972.1626,
+                "jassijs_editor.HtmlDesigner": {}
+            },
             "jassijs_editor/modul.ts": {
                 "date": 1695399690345.8984
             },
@@ -9088,7 +9400,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1696534692234.4597,
+                "date": 1696695877822.2637,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -9119,10 +9431,6 @@ define("jassijs_editor/registry", ["require"], function (require) {
             "jassijs_editor/util/Typescript.ts": {
                 "date": 1695586918212.458,
                 "jassijs_editor.util.Typescript": {}
-            },
-            "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1696533188852.2512,
-                "jassijs_editor.HtmlDesigner": {}
             }
         }
     };

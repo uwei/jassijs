@@ -1,12 +1,9 @@
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { Button } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
-import { Checkbox } from "jassijs/ui/Checkbox";
-import { Component,ComponentCreateProperties,createComponent,HTMLComponent } from "jassijs/ui/Component";
+import { Button } from "jassijs/ui/Button";
+import { Component,ComponentProperties,createComponent,HTMLComponent,React } from "jassijs/ui/Component";
 import { Panel } from "jassijs/ui/Panel";
+import { Table } from "jassijs/ui/Table";
+/*
 function j() {
 }
 interface Prop {
@@ -64,20 +61,22 @@ function keydown(ev) {
 }
 interface Prop {
     text?: string;
-}
+}*/
 var x=1;
 /*
 class MyComp extends Component<Prop> {
-
     render() {
         var _this=this;
-        return <div>
+        var ret=<div>
             {this.props.text}
             <button onClick={() => {
                 _this.config({ text: "neu"+x++ });
             }}>Click
             </button>
+            Haello
+            <span>kkkk</span>
         </div>;
+        return ret;
     }
 }*/
 export function test() {
@@ -87,13 +86,29 @@ export function test() {
         dddd
     </Panel>;
    */
-    var ret=<div text="fsdf">
-        <div>
-            sdfsdfsdf
-        </div>sdfsd
-        
+    var ret=ret=<Panel height="15">
+        Hallo
+        <Button text="sdf"></Button>
 
-    </div>;
+    </Panel>;
+    /*<div>v
+      sdfsdf
+          <div style={{color:"blue"}}>
+              sdfsdfsdf
+          </div>sdfs
+          <br />
+          d
+          <br />
+  
+  
+  
+          ssss
+          <Table></Table>
+  
+      </div>;*/
+    // var ret= <Button text="Hallo" ></Button>
+    //
+    //<MyComp text="sdfsdfddsdf"></MyComp>;
     var comp=createComponent(ret);
     return comp;
 }

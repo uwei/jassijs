@@ -1,9 +1,9 @@
 import { $Class } from "jassijs/remote/Registry";
-import { ComponentConfig, $UIComponent } from "jassijs/ui/Component";
+import { ComponentProperties, $UIComponent } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
-import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 
-export interface CheckboxConfig extends DataComponentConfig {
+export interface CheckboxConfig extends DataComponentProperties {
     /**
   * register an event if the button is clicked
   * @param {function} handler - the function that is called on change
@@ -33,7 +33,7 @@ export class Checkbox extends DataComponent {
         this.checkbox = <HTMLInputElement>this.dom.firstChild;
     }
     config(config: CheckboxConfig): Checkbox {
-        super.config(<ComponentConfig>config);
+        super.config(<ComponentProperties>config);
         return this;
     }
     @$Property({ default: "function(event){\n\t\n}" })

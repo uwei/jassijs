@@ -32,6 +32,7 @@ define(["require", "exports", "jassijs/server/NativeAdapter", "jassijs/remote/Cl
                 moduleResolution: 2,
                 skipLibCheck: true,
                 rootDir: "./",
+                jsx: NativeAdapter_1.ts.JsxEmit.React,
                 emitDecoratorMetadata: true,
                 experimentalDecorators: true,
                 noResolve: true

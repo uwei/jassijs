@@ -10,13 +10,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_1, Component_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Button = void 0;
+    exports.test = exports.Button = exports.ButtonProperties = void 0;
+    let ButtonProperties = class ButtonProperties extends Component_1.ComponentProperties {
+    };
+    __decorate([
+        (0, Property_1.$Property)({ type: "image" }),
+        __metadata("design:type", String)
+    ], ButtonProperties.prototype, "icon", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", String)
+    ], ButtonProperties.prototype, "text", void 0);
+    ButtonProperties = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.ButtonProperties")
+    ], ButtonProperties);
+    exports.ButtonProperties = ButtonProperties;
     let Button = class Button extends Component_1.Component {
-        constructor(props = {}) {
-            super(props);
-            //    super.init('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>');
+        constructor(properties) {
+            super(properties);
         }
-        config(config) {
+        config(config, forceRender = false) {
             super.config(config);
             return this;
         }
@@ -97,26 +110,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.destroy();
         }
     };
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Boolean]),
-        __metadata("design:returntype", void 0)
-    ], Button.prototype, "onclick", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "image" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Button.prototype, "icon", null);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Button.prototype, "text", null);
     Button = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
         (0, Registry_1.$Class)("jassijs.ui.Button"),
-        __metadata("design:paramtypes", [Object])
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.ButtonProperties" }),
+        __metadata("design:paramtypes", [ButtonProperties])
     ], Button);
     exports.Button = Button;
     async function test() {

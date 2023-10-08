@@ -3,7 +3,7 @@ import "jquery.contextMenu";
 import { $Class } from "jassijs/remote/Registry";
 import { Menu } from "jassijs/ui/Menu";
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { $Property } from "jassijs/ui/Property";
@@ -16,7 +16,7 @@ declare global {
         contextMenu: any;
     }
 }
-export interface ContextMenuConfig extends ComponentConfig {
+export interface ContextMenuConfig extends ComponentProperties {
     /**
      * @member - includes Actions from @ActionProvider for the objects in value
      */

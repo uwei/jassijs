@@ -14,6 +14,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 define("jassijs/registry", ["require"], function (require) {
     return {
         default: {
+            "jassijs/index.d.ts": {
+                "date": 1681918736000
+            },
             "jassijs/remote/Classes.ts": {
                 "date": 1686759604000,
                 "jassijs.remote.JassiError": {},
@@ -22,6 +25,9 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/remote/ClientError.ts": {
                 "date": 1655556930000,
                 "jassijs.remote.ClientError": {}
+            },
+            "jassijs/remote/Config.ts": {
+                "date": 1686853238000
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
@@ -63,6 +69,9 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/remote/JassijsGlobal.ts": {
                 "date": 1655549782000
+            },
+            "jassijs/remote/Modules.ts": {
+                "date": 1682799476000
             },
             "jassijs/remote/ObjectTransaction.ts": {
                 "date": 1622985414000
@@ -361,39 +370,6 @@ define("jassijs/registry", ["require"], function (require) {
                     }
                 }
             },
-            "jassijs/remote/Settings.ts": {
-                "date": 1681315776000,
-                "jassijs.remote.Settings": {
-                    "@members": {
-                        "remove": {
-                            "ValidateFunctionParameter": []
-                        },
-                        "save": {
-                            "ValidateFunctionParameter": []
-                        },
-                        "saveAll": {
-                            "ValidateFunctionParameter": []
-                        }
-                    }
-                }
-            },
-            "jassijs/remote/Test.ts": {
-                "date": 1655556930000,
-                "jassijs.remote.Test": {}
-            },
-            "jassijs/remote/Transaction.ts": {
-                "date": 1655556866000,
-                "jassijs.remote.Transaction": {}
-            },
-            "jassijs/UserModel.ts": {
-                "date": 1622984046000
-            },
-            "jassijs/util/DatabaseSchema.ts": {
-                "date": 1611490792000
-            },
-            "jassijs/remote/Validator.ts": {
-                "date": 1681322648000
-            },
             "jassijs/remote/Server.ts": {
                 "date": 1695399507170.7808,
                 "jassijs.remote.Server": {
@@ -443,14 +419,38 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/remote/Serverservice.ts": {
                 "date": 1695999826188.6174
             },
-            "jassijs/index.d.ts": {
-                "date": 1681918736000
+            "jassijs/remote/Settings.ts": {
+                "date": 1681315776000,
+                "jassijs.remote.Settings": {
+                    "@members": {
+                        "remove": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "save": {
+                            "ValidateFunctionParameter": []
+                        },
+                        "saveAll": {
+                            "ValidateFunctionParameter": []
+                        }
+                    }
+                }
             },
-            "jassijs/remote/Config.ts": {
-                "date": 1686853238000
+            "jassijs/remote/Test.ts": {
+                "date": 1655556930000,
+                "jassijs.remote.Test": {}
             },
-            "jassijs/remote/Modules.ts": {
-                "date": 1682799476000
+            "jassijs/remote/Transaction.ts": {
+                "date": 1655556866000,
+                "jassijs.remote.Transaction": {}
+            },
+            "jassijs/remote/Validator.ts": {
+                "date": 1681322648000
+            },
+            "jassijs/UserModel.ts": {
+                "date": 1622984046000
+            },
+            "jassijs/util/DatabaseSchema.ts": {
+                "date": 1611490792000
             },
             "jassijs/server/Compile.ts": {
                 "date": 1684400488000
@@ -513,6 +513,9 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/server/RegistryIndexer.ts": {
                 "date": 1682799792000
             },
+            "jassijs/server/Reloader.ts": {
+                "date": 1684435442000
+            },
             "jassijs/server/Testuser.ts": {
                 "date": 1655556794000,
                 "Testuser": {
@@ -535,9 +538,6 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.server.TypeORMListener": {
                     "EventSubscriber": []
                 }
-            },
-            "jassijs/server/Reloader.ts": {
-                "date": 1684435442000
             }
         }
     };
@@ -4025,6 +4025,7 @@ define("jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAd
                 moduleResolution: 2,
                 skipLibCheck: true,
                 rootDir: "./",
+                jsx: NativeAdapter_1.ts.JsxEmit.React,
                 emitDecoratorMetadata: true,
                 experimentalDecorators: true,
                 noResolve: true

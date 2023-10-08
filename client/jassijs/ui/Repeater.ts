@@ -5,7 +5,7 @@ import {Databinder} from "jassijs/ui/Databinder";
 import {Component,  $UIComponent } from "jassijs/ui/Component";
 import {Property,  $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
-import { DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponentProperties } from "jassijs/ui/DataComponent";
 
 @$UIComponent({ editableChildComponents: ["databinder"]})
 @$Class("jassijs.ui.RepeaterDesignPanel")
@@ -32,7 +32,7 @@ export interface RepeaterConfig extends PanelConfig {
 }
 @$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple",editableChildComponents: ["this","design"]})
 @$Class("jassijs.ui.Repeater")
-export class Repeater extends Panel implements DataComponentConfig{
+export class Repeater extends Panel implements DataComponentProperties{
     _componentDesigner: any;//ComponentDesigner;
     _autocommit: boolean;
     _createRepeatingComponent;

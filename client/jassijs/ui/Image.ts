@@ -1,9 +1,9 @@
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
-import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 
-export interface ImageConfig extends DataComponentConfig {
+export interface ImageConfig extends DataComponentProperties {
 
        /**
     * register an event if the image is clicked

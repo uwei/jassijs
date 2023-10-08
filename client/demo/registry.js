@@ -13,6 +13,10 @@ define("demo/registry",["require"], function(require) {
 		"date": 1695239901541.8835,
 		"demo/Dialog2": {}
 	},
+	"demo/Dialog3.ts": {
+		"date": 1695762474246.062,
+		"demo/Dialog3": {}
+	},
 	"demo/EmptyDialog.ts": {
 		"date": 1655556796000,
 		"demo.EmptyDialog": {}
@@ -64,6 +68,9 @@ define("demo/registry",["require"], function(require) {
 			]
 		}
 	},
+	"demo/TestContent.ts": {
+		"date": 1695418663423.5051
+	},
 	"demo/Testcontextmenu.ts": {
 		"date": 1655843288000,
 		"demo.Testcontextmenu": {}
@@ -113,13 +120,6 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/_test1.ts": {
 		"date": 1670673960000
-	},
-	"demo/TestContent.ts": {
-		"date": 1695418663423.5051
-	},
-	"demo/Dialog3.ts": {
-		"date": 1695762474246.062,
-		"demo/Dialog3": {}
 	}
 }
  }

@@ -54,7 +54,8 @@ export class ComponentDesigner extends Panel {
     inlineEditorPanel: Panel;
     copyButton: Button;
     pasteButton: Button;
-
+    dummyHolder: HTMLSpanElement;
+    private _lastComponent;
     constructor() {
         super();
         this._codeEditor = undefined;
@@ -187,6 +188,8 @@ export class ComponentDesigner extends Panel {
         box.add(this.inlineEditorPanel);
         this.add(box);
         this._designPlaceholder.domWrapper.style.position = "relative";
+        this.dummyHolder = document.createElement("span");
+        this.__dom.append(this.dummyHolder);
         this.add(this._designPlaceholder);
 
     }
@@ -852,7 +855,8 @@ export class ComponentDesigner extends Panel {
         }
 
     }
-    static createDummy() {
+    createPreDummy() {
+        var _this=this;
         var dummy: HTMLSpanElement;
         //  if (ComponentDesigner.beforeDummy === undefined) {
         dummy = <HTMLSpanElement>document.createElement("span");
@@ -860,12 +864,26 @@ export class ComponentDesigner extends Panel {
         dummy.draggable = true;
         dummy.classList.add("_dummy_");
         dummy.onclick = (ev) => console.log(ev);
-        dummy.ondrop = (ev) => { ev.preventDefault(); var data = ev.dataTransfer.getData("text"); };
+        dummy.ondrop = (ev) => { 
+             ev.preventDefault(); 
+             
+             var data = ev.dataTransfer.getData("text");
+             if(data.indexOf('"createFromType":')>-1){
+                var toCreate:{ createFromType : string,createFromParam :string}=<any> JSON.parse(data);
+                var cl = classes.getClass(toCreate.createFromType);
+                var newComponent=new cl();
+                var beforeComponent:Component = (<any>ev.target).nd._this;
+                var newParent=beforeComponent._parent;
+                _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent,beforeComponent);// beforeComponent);
+                _this.updateDummies();
+             }
+        };
         dummy.ondragover = (ev) => ev.preventDefault();
         dummy.ondragstart = ev => {
             ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
             ev.dataTransfer.setData("text", "Hallo");
         }
+        dummy.style.zIndex = "10000";
         dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
         dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
         dummy.style.fontSize = "7px";
@@ -880,47 +898,148 @@ export class ComponentDesigner extends Panel {
         // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
         return dummy;
     }
-    static insertDummies(node: HTMLElement, root: HTMLElement, arr, rootRect: DOMRect) {
+     createPostDummy() {
+         var _this=this;
+        var dummy: HTMLSpanElement;
+        //  if (ComponentDesigner.beforeDummy === undefined) {
+        dummy = <HTMLSpanElement>document.createElement("span");
+        dummy.contentEditable = "false";
+        dummy.draggable = true;
+        dummy.classList.add("_dummy_");
+        dummy.classList.add("ui-droppable");
+        //dummy.onclick = (ev) => console.log(ev);
+        dummy.ondrop = (ev) => {
+             ev.preventDefault(); 
+             var data = ev.dataTransfer.getData("text");
+             if(data.indexOf('"createFromType":')>-1){
+                var toCreate:{ createFromType : string,createFromParam :string}=<any> JSON.parse(data);
+                var cl = classes.getClass(toCreate.createFromType);
+                var newComponent=new cl();
+                var newParent = (<any>ev.target).nd._this;
+                _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent,undefined);// beforeComponent);
+                _this.updateDummies();
+             }
+         };
+        dummy.ondragover = (ev) =>{
+            ev.preventDefault();
+          //  ev.dataTransfer.dropEffect = "move";
+        } /*
+        dummy.ondragstart = ev => {
+            ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
+            ev.dataTransfer.setData("text", "Hallo");
+        }*/
+        dummy.style.zIndex = "10000";
+        dummy.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
+        dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+        dummy.style.fontSize = "30px";
+        dummy.style.position = "absolute";
+        dummy.onmouseenter = (e) => {
+            (<any>e.target).nd._sicbgc_ = (<any>e.target).nd.style.backgroundColor;
+            (<any>e.target).nd.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
+        }
+        dummy.onmouseleave = (e) => (<any>e.target).nd.style.backgroundColor = (<any>e.target).nd._sicbgc_;
+        //   ComponentDesigner.beforeDummy = dummy;
+        // }
+        // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
+        return dummy;
+    }
+    private insertDummies(node: HTMLElement, root: HTMLElement, arr, rootRect: DOMRect) {
         if ((<any>node)._dummyholder === true)
             return;
-        if (root === undefined)
+        if (root === undefined) 
             root = node;
+        //only elements with varaiables can have dummies
+        var varname = this._codeEditor.getVariableFromObject(node._this);
+        var comp = node._this;
+        if (!varname && node._thisOther) {
+            for (var x = 0; x < node._thisOther.length; x++) {
+                varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
+                if (varname) {
+                    comp = node._thisOther[x];
+                    break;
+                }
+            }
+        }
+        if (!varname){
+            if(node.contentEditable!=="false")
+                node.contentEditable="false";
+            return;
+        }
+        var hasChildren = false;
+        var desc = ComponentDescriptor.describe(comp.constructor);
+        var fnew = desc.findField("children");
+        if (fnew) {
+            hasChildren=true;
+        }
         if (node.getClientRects === undefined)
             return;
 
         var rect = node.getClientRects()[0];
+        if (rect === undefined)
+            return;
         rect = <any>{
             left: rect.left - rootRect.left + window.scrollX,
-            top: rect.top - rootRect.top + window.scrollY
+            top: rect.top - rootRect.top + window.scrollY,
+            right: rect.right - rootRect.left + window.scrollX,
+            bottom: rect.bottom - rootRect.top + window.scrollY
         }
         if ((<any>node)?.nd)
             return;
-        if (!(<any>node)._dummy_) {
-            var dummy = ComponentDesigner.createDummy();
-            (<any>dummy).nd = node;
-            dummy.title = node.outerHTML;
-            (<any>node)._dummy_ = dummy;
-            arr.push(dummy);
+        var preDummy = (<any>node)._preDummy_;
+        if (!(<any>node)._preDummy_) {
+            preDummy = this.createPreDummy();
+            (<any>preDummy).nd = node;
+            preDummy.title = node.outerHTML;
+            (<any>node)._preDummy_ = preDummy;
+            arr.push(preDummy);
         }
         var newTop = rect.top;
         var newLeft = rect.left;
         (<any>node).myTop = rect.top;
         (<any>node).myLeft = rect.left;
 
-        if ((<any>node.parentNode)._dummy_) {
-            var rp = {
+        if ((<any>node.parentNode)._preDummy_) {
+            const rp = {
                 top: (<any>node.parentNode).myTop,
                 left: (<any>node.parentNode).myLeft,
             }
             if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.left + 5) {
-                newLeft = parseInt((<any>node.parentNode)._dummy_.style.left.replace("px", "")) + 8;
+                newLeft = parseInt((<any>node.parentNode)._preDummy_.style.left.replace("px", "")) + 8;
             }
         }
-        (<any>node)._dummy_.style.top = newTop + "px";
-        (<any>node)._dummy_.style.left = newLeft + "px";
-        for (var x = 0; x < node.childNodes.length; x++) {
-            ComponentDesigner.insertDummies(<any>node.childNodes[x], root, arr, rootRect);
+        preDummy.style.top = newTop + "px";
+        preDummy.style.left = newLeft + "px";
+        if (hasChildren) {
+            var postDummy = (<any>node)._postDummy_;
+            if (!(<any>node)._postDummy_) {
+                postDummy = this.createPostDummy();
+                (<any>postDummy).nd = node;
+                postDummy.title = node.outerHTML;
+                (<any>node)._postDummy_ = postDummy;
+                arr.push(postDummy);
+            }
+            var newBottom = rect.bottom;
+            var newRight = rect.right;
+            (<any>node).myBottom = rect.bottom;
+            (<any>node).myRight = rect.right;
+
+            if ((<any>node.parentNode)._postDummy_) {
+                const rp= {
+                    bottom: (<any>node.parentNode).newBottom,
+                    right: (<any>node.parentNode).newRight,
+                }
+                if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
+                    newRight = parseInt((<any>node.parentNode)._postDummy_.style.left.replace("px", "")) - 8;
+                }
+            }
+            postDummy.style.top = (newBottom-8) + "px";
+            postDummy.style.left = (newRight-8) + "px";
         }
+        for (var x = 0; x < node.childNodes.length; x++) {
+            if(node._this!==node.childNodes[x]._this)//Wrapper
+                this.insertDummies(<any>node.childNodes[x], root, arr, rootRect);
+        }
+
     }
     /**
      * @member {jassijs.ui.Component} - the designed component
@@ -958,14 +1077,20 @@ export class ComponentDesigner extends Panel {
     }
     updateDummies() {
         var arr = [];
-        var component=this._componentExplorer.value;
-        if ((<any>component.dom).dummyholder === undefined) {
-            (<any>component.dom).dummyholder = document.createElement("span");
-            (<any>component.dom).dummyholder._dummyholder = true;
-            component.dom.prepend((<any>component.dom).dummyholder);
+        var component = this.designedComponent;//this._componentExplorer.value;
+        if (this._lastComponent !== component) {//delete dummies if the designedComponent has changed
+            //if((<any>this.dom).dummyholder)
+            //  (<any>this.dom).dummyholder.innerHTML="";
+            this.dummyHolder.innerHTML = "";//delete all
+            this._lastComponent = component;
         }
-        ComponentDesigner.insertDummies(component.dom, undefined, arr, component.dom.getClientRects()[0]);
-        (<any>component.dom).dummyholder.append(...arr);
+        /* if ((<any>this.dom).dummyholder === undefined) {
+             (<any>this.dom).dummyholder = document.createElement("span");
+             (<any>this.dom).dummyholder._dummyholder = true;
+             this.dom.prepend((<any>component.dom).dummyholder);
+         }*/
+        this.insertDummies(component.dom, this.dummyHolder, arr, this.dom.getClientRects()[0]);
+        this.dummyHolder.append(...arr);
     }
     get designedComponent() {
         return this._designPlaceholder._components[0];

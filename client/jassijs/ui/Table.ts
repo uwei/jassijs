@@ -1,6 +1,6 @@
 import registry, { $Class } from "jassijs/remote/Registry";
 //import "jassijs/ext/tabulator";
-import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 import { $Property } from "jassijs/ui/Property";
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Textbox } from "jassijs/ui/Textbox";
@@ -51,7 +51,7 @@ class TableEditorProperties {
     @$Property({ default: false })
     movableColumns: boolean;
 }
-export interface TableConfig extends DataComponentConfig {
+export interface TableConfig extends DataComponentProperties {
     options?: TableOptions;
     /**
     * register an event if an item is selected

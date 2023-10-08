@@ -42,6 +42,7 @@ export class Compile {
       moduleResolution: 2,
       skipLibCheck: true,
       rootDir: "./",
+      jsx: ts.JsxEmit.React,
       emitDecoratorMetadata: true,
       experimentalDecorators: true,
       noResolve: true
