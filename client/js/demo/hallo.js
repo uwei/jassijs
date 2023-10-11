@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Component", "jassijs/ui/Panel"], function (require, exports, Button_1, Component_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Component", "jassijs/ui/Panel"], function (require, exports, Textbox_1, Button_1, Component_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -85,9 +85,15 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Component", "jass
             dddd
         </Panel>;
        */
-        var ret = ret = Component_1.React.createElement(Panel_1.Panel, { height: "15" },
-            "Hallo",
-            Component_1.React.createElement(Button_1.Button, { text: "sdf" }));
+        var ret = Component_1.React.createElement(Panel_1.Panel, null,
+            Component_1.React.createElement("br", null),
+            Component_1.React.createElement("br", null),
+            "kkkkkk",
+            Component_1.React.createElement("br", null),
+            Component_1.React.createElement(Textbox_1.Textbox, { value: "fff" }),
+            "lko",
+            Component_1.React.createElement(Button_1.Button, { text: "sdf" }),
+            "kkassajkkkkkklkosdf");
         /*<div>v
           sdfsdf
               <div style={{color:"blue"}}>

@@ -735,6 +735,8 @@ export class ComponentDesigner extends Panel {
         if (this._propertyEditor.codeEditor !== undefined) {
 
             var newName = _this._codeEditor.getVariableFromObject(newParent);
+            console.log("newName"+newName);
+            console.log(newParent);
             var before;
             if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") {//Designdummy atEnd
                 //if(beforeComponent.type==="beforeComponent")
@@ -1070,7 +1072,7 @@ export class ComponentDesigner extends Panel {
         while (this.inlineEditorPanel.dom.firstChild) {
             this.inlineEditorPanel.dom.firstChild.remove();
         }
-        this.updateDummies();
+        //this.updateDummies();
 
         //var parser=new jassijs.ui.PropertyEditor.Parser();
         //parser.parse(_this.value);
@@ -1091,6 +1093,9 @@ export class ComponentDesigner extends Panel {
          }*/
         this.insertDummies(component.dom, this.dummyHolder, arr, this.dom.getClientRects()[0]);
         this.dummyHolder.append(...arr);
+        component.dom.contentEditable="true";
+        this._designPlaceholder.domWrapper.contentEditable="false";
+        this._designPlaceholder.dom.contentEditable="false";
     }
     get designedComponent() {
         return this._designPlaceholder._components[0];

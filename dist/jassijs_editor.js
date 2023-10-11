@@ -2636,6 +2636,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             var varname = _this.createVariable(type, scope, varvalue, suggestedName);
             if (this._propertyEditor.codeEditor !== undefined) {
                 var newName = _this._codeEditor.getVariableFromObject(newParent);
+                console.log("newName" + newName);
+                console.log(newParent);
                 var before;
                 if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //Designdummy atEnd
                     //if(beforeComponent.type==="beforeComponent")
@@ -2957,7 +2959,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             while (this.inlineEditorPanel.dom.firstChild) {
                 this.inlineEditorPanel.dom.firstChild.remove();
             }
-            this.updateDummies();
+            //this.updateDummies();
             //var parser=new jassijs.ui.PropertyEditor.Parser();
             //parser.parse(_this.value);
         }
@@ -2977,6 +2979,9 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
              }*/
             this.insertDummies(component.dom, this.dummyHolder, arr, this.dom.getClientRects()[0]);
             this.dummyHolder.append(...arr);
+            component.dom.contentEditable = "true";
+            this._designPlaceholder.domWrapper.contentEditable = "false";
+            this._designPlaceholder.dom.contentEditable = "false";
         }
         get designedComponent() {
             return this._designPlaceholder._components[0];
@@ -3213,24 +3218,24 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
                     _this._makeDraggable(img);
                     _this.add(img);
                 }
-                for (var x = 0; x < jdata.length; x++) {
-                    var mdata = jdata[x];
-                    var data = mdata.params[0];
-                    if (data.fullPath === undefined || data.fullPath === "undefined")
-                        continue;
-                    var img = new Image_1.Image();
-                    var name = data.fullPath.split("/");
-                    var sname = name[name.length - 1];
-                    img.tooltip = sname;
-                    img.dom.style.color = "blue";
-                    img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
-                    //img.height = 24;
-                    //img.width = 24;
-                    img["createFromType"] = mdata.classname;
-                    img["createFromParam"] = data.initialize;
-                    _this._makeDraggable2(img);
-                    _this.add(img);
-                }
+                /*   for (var x = 0; x < jdata.length; x++) {
+                       var mdata = jdata[x];
+                       var data: UIComponentProperties = mdata.params[0];
+                       if (data.fullPath === undefined || data.fullPath === "undefined")
+                           continue;
+                       var img = new Image();
+                       var name = data.fullPath.split("/");
+                       var sname = name[name.length - 1];
+                       img.tooltip = sname;
+                       img.dom.style.color = "blue";
+                       img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
+                       //img.height = 24;
+                       //img.width = 24;
+                       img["createFromType"] = mdata.classname;
+                       img["createFromParam"] = data.initialize;
+                       _this._makeDraggable2(img);
+                       _this.add(img);
+                   }*/
             });
             /*registry.loadAllFilesForService(this._service).then(function(){
                 registry.getData(_this._service).forEach(function(mdata){
@@ -4708,11 +4713,16 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             range.setStart(from, frompos);
             selection.removeAllRanges();
             selection.addRange(range);
+            ;
         }
         changeText(node, text) {
             var varname = this._propertyEditor.getVariableFromObject(node._this);
             this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
-            node.textContent = text;
+            if (text === "&nbsp;")
+                node.innerHTML = text;
+            else
+                node.textContent = text;
+            return node;
         }
         insertComponent(component, sel = document.getSelection(), suggestedvarname = undefined) {
             var anchorNode = sel.anchorNode;
@@ -4723,6 +4733,8 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             this.changeText(node, v2);
             var comp = node._this;
             var br = this.createComponent(Classes_7.classes.getClassName(component), component, undefined, undefined, comp._parent, comp, true, suggestedvarname);
+            if (v1 === "")
+                v1 = "&nbsp;";
             var nd = document.createTextNode(v1);
             var comp2 = new Component_5.TextComponent();
             comp2.init(nd, { noWrapper: true });
@@ -4781,12 +4793,27 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 if (anchorNode !== focusNode) {
                     end = anchorNode.textContent.length;
                 }
-                var neu = anchorNode.textContent.substring(0, anchorOffset) + e.key + anchorNode.textContent.substring(end);
                 if (anchorNode === focusNode && anchorOffset === focusOffset) { //no selection
                 }
                 else {
                     this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
                 }
+                var neu = anchorNode.textContent.substring(0, anchorOffset) + e.key + anchorNode.textContent.substring(end);
+                if (anchorNode.nodeType !== anchorNode.TEXT_NODE) { //there is no Textnode here we create one
+                    var before = undefined;
+                    if (anchorNode.childNodes.length > 0) {
+                        before = anchorNode.childNodes[0]._this;
+                    }
+                    var comp2 = new Component_5.TextComponent();
+                    var newone = document.createTextNode(e.key);
+                    var par = anchorNode._this;
+                    comp2.init(newone, { noWrapper: true });
+                    var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
+                    anchorOffset = 0;
+                    anchorNode = newone;
+                    neu = e.key;
+                }
+                debugger;
                 this.changeText(anchorNode, neu);
                 e.preventDefault();
                 var range = document.createRange();
@@ -5216,7 +5243,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1696790481218.0425,
+                "date": 1697049074478.885,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -5224,7 +5251,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1696779382120.8496,
+                "date": 1697049042522.1914,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
@@ -5400,7 +5427,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1696791469972.1626,
+                "date": 1696964876125.1606,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -5518,7 +5545,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1696695877822.2637,
+                "date": 1696963409688.1948,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -7808,6 +7835,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (before) {
                     let found = undefined;
                     let ofound = -1;
+                    console.log("var " + before.variablename);
+                    console.log(this.data);
                     for (var o = 0; o < this.data[before.variablename][before.property].length; o++) {
                         if (this.data[before.variablename][before.property][o].value === before.value) {
                             found = this.data[before.variablename][before.property][o].node;
@@ -9098,7 +9127,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1696790481218.0425,
+                "date": 1697049074478.885,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -9106,7 +9135,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1696779382120.8496,
+                "date": 1697049042522.1914,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
@@ -9282,7 +9311,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1696791469972.1626,
+                "date": 1696964876125.1606,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -9400,7 +9429,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1696695877822.2637,
+                "date": 1696963409688.1948,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {

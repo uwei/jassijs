@@ -45,24 +45,24 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     _this._makeDraggable(img);
                     _this.add(img);
                 }
-                for (var x = 0; x < jdata.length; x++) {
-                    var mdata = jdata[x];
-                    var data = mdata.params[0];
-                    if (data.fullPath === undefined || data.fullPath === "undefined")
-                        continue;
-                    var img = new Image_1.Image();
-                    var name = data.fullPath.split("/");
-                    var sname = name[name.length - 1];
-                    img.tooltip = sname;
-                    img.dom.style.color = "blue";
-                    img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
-                    //img.height = 24;
-                    //img.width = 24;
-                    img["createFromType"] = mdata.classname;
-                    img["createFromParam"] = data.initialize;
-                    _this._makeDraggable2(img);
-                    _this.add(img);
-                }
+                /*   for (var x = 0; x < jdata.length; x++) {
+                       var mdata = jdata[x];
+                       var data: UIComponentProperties = mdata.params[0];
+                       if (data.fullPath === undefined || data.fullPath === "undefined")
+                           continue;
+                       var img = new Image();
+                       var name = data.fullPath.split("/");
+                       var sname = name[name.length - 1];
+                       img.tooltip = sname;
+                       img.dom.style.color = "blue";
+                       img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
+                       //img.height = 24;
+                       //img.width = 24;
+                       img["createFromType"] = mdata.classname;
+                       img["createFromParam"] = data.initialize;
+                       _this._makeDraggable2(img);
+                       _this.add(img);
+                   }*/
             });
             /*registry.loadAllFilesForService(this._service).then(function(){
                 registry.getData(_this._service).forEach(function(mdata){

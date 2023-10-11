@@ -1038,6 +1038,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 if (before) {
                     let found = undefined;
                     let ofound = -1;
+                    console.log("var " + before.variablename);
+                    console.log(this.data);
                     for (var o = 0; o < this.data[before.variablename][before.property].length; o++) {
                         if (this.data[before.variablename][before.property][o].value === before.value) {
                             found = this.data[before.variablename][before.property][o].node;

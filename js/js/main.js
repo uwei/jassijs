@@ -13,5 +13,6 @@ new Compile_1.Compile().transpileModul("northwind", true);
 new Compile_1.Compile().transpileModul("northwind", false);
 new Compile_1.Compile().transpileModul("tests", false);
 new Compile_1.Compile().transpileModul("tests", true);
+new Compile_1.Compile().transpileModul("demo", false);
 (0, JassiServer_1.default)();
 //# sourceMappingURL=main.js.map

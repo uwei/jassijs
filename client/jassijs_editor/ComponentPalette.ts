@@ -44,7 +44,7 @@ export class ComponentPalette extends Panel {
                 _this._makeDraggable(img);
                 _this.add(img);
             }
-            for (var x = 0; x < jdata.length; x++) {
+         /*   for (var x = 0; x < jdata.length; x++) {
                 var mdata = jdata[x];
                 var data: UIComponentProperties = mdata.params[0];
                 if (data.fullPath === undefined || data.fullPath === "undefined")
@@ -61,7 +61,7 @@ export class ComponentPalette extends Panel {
                 img["createFromParam"] = data.initialize;
                 _this._makeDraggable2(img);
                 _this.add(img);
-            }
+            }*/
         });
 
 

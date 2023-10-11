@@ -142,11 +142,16 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             range.setStart(from, frompos);
             selection.removeAllRanges();
             selection.addRange(range);
+            ;
         }
         changeText(node, text) {
             var varname = this._propertyEditor.getVariableFromObject(node._this);
             this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
-            node.textContent = text;
+            if (text === "&nbsp;")
+                node.innerHTML = text;
+            else
+                node.textContent = text;
+            return node;
         }
         insertComponent(component, sel = document.getSelection(), suggestedvarname = undefined) {
             var anchorNode = sel.anchorNode;
@@ -157,6 +162,8 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             this.changeText(node, v2);
             var comp = node._this;
             var br = this.createComponent(Classes_1.classes.getClassName(component), component, undefined, undefined, comp._parent, comp, true, suggestedvarname);
+            if (v1 === "")
+                v1 = "&nbsp;";
             var nd = document.createTextNode(v1);
             var comp2 = new Component_1.TextComponent();
             comp2.init(nd, { noWrapper: true });
@@ -215,12 +222,27 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 if (anchorNode !== focusNode) {
                     end = anchorNode.textContent.length;
                 }
-                var neu = anchorNode.textContent.substring(0, anchorOffset) + e.key + anchorNode.textContent.substring(end);
                 if (anchorNode === focusNode && anchorOffset === focusOffset) { //no selection
                 }
                 else {
                     this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
                 }
+                var neu = anchorNode.textContent.substring(0, anchorOffset) + e.key + anchorNode.textContent.substring(end);
+                if (anchorNode.nodeType !== anchorNode.TEXT_NODE) { //there is no Textnode here we create one
+                    var before = undefined;
+                    if (anchorNode.childNodes.length > 0) {
+                        before = anchorNode.childNodes[0]._this;
+                    }
+                    var comp2 = new Component_1.TextComponent();
+                    var newone = document.createTextNode(e.key);
+                    var par = anchorNode._this;
+                    comp2.init(newone, { noWrapper: true });
+                    var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
+                    anchorOffset = 0;
+                    anchorNode = newone;
+                    neu = e.key;
+                }
+                debugger;
                 this.changeText(anchorNode, neu);
                 e.preventDefault();
                 var range = document.createRange();

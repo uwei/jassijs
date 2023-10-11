@@ -1,3 +1,23 @@
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { HTMLComponent } from "jassijs/ui/HTMLComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { HTMLComponent } from "jassijs/ui/HTMLComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { HTMLComponent } from "jassijs/ui/HTMLComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { HTMLComponent } from "jassijs/ui/HTMLComponent";
+import { Textbox } from "jassijs/ui/Textbox";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Button } from "jassijs/ui/Button";
 import { Component,ComponentProperties,createComponent,HTMLComponent,React } from "jassijs/ui/Component";
@@ -86,9 +106,20 @@ export function test() {
         dddd
     </Panel>;
    */
-    var ret=ret=<Panel height="15">
-        Hallo
-        <Button text="sdf"></Button>
+    var ret=<Panel>
+
+
+        <br />
+        <br />
+
+        kkkkkk
+
+        <br />
+
+        <Textbox value="fff"></Textbox>
+
+        lko
+        <Button text="sdf"></Button>kkassajkkkkkklkosdf
 
     </Panel>;
     /*<div>v
