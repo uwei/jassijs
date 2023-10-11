@@ -246,7 +246,6 @@ export class HtmlDesigner extends ComponentDesigner {
                 anchorNode=newone;
                 neu=e.key;
             }
-            debugger;
             this.changeText(anchorNode, neu);
             e.preventDefault();
             var range = document.createRange();

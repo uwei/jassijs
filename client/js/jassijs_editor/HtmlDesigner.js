@@ -242,7 +242,6 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                     anchorNode = newone;
                     neu = e.key;
                 }
-                debugger;
                 this.changeText(anchorNode, neu);
                 e.preventDefault();
                 var range = document.createRange();

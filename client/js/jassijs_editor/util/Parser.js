@@ -370,18 +370,21 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         parseJSX(_this, node) {
             var _a, _b;
             var nd = node;
-            var jsx = _this.jsxVariables[nd.openingElement.pos - 1];
+            var element = nd;
+            if (nd.openingElement)
+                element = nd.openingElement;
+            var jsx = _this.jsxVariables[element.pos - 1];
             if (jsx === undefined)
-                jsx = _this.jsxVariables[nd.openingElement.pos];
+                jsx = _this.jsxVariables[element.pos];
             if (jsx === undefined)
-                jsx = _this.jsxVariables[nd.openingElement.pos + 1];
+                jsx = _this.jsxVariables[element.pos + 1];
             if (jsx) {
                 jsx.name = this.getNextVariableNameForType(jsx.name);
                 _this.jsxVariables[jsx.name] = jsx;
                 nd["jname"] = jsx.name;
                 _this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
-                for (var x = 0; x < nd.openingElement.attributes.properties.length; x++) {
-                    var prop = nd.openingElement.attributes.properties[x];
+                for (var x = 0; x < element.attributes.properties.length; x++) {
+                    var prop = element.attributes.properties[x];
                     var val = prop["initializer"].text;
                     _this.add(jsx.name, prop.name.text, val, prop);
                 }
@@ -391,43 +394,45 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 //node.getChildren().forEach(c => _this.visitNode(c, consumeProperties));
                 //mark textnodes
                 var counttrivial = 0;
-                for (var x = 0; x < nd.children.length; x++) {
-                    var ch = nd.children[x];
-                    if (ch.kind === ts.SyntaxKind.JsxText) {
-                        if (ch.containsOnlyTriviaWhiteSpaces) {
-                            counttrivial++;
+                if (nd.children) {
+                    for (var x = 0; x < nd.children.length; x++) {
+                        var ch = nd.children[x];
+                        if (ch.kind === ts.SyntaxKind.JsxText) {
+                            if (ch.containsOnlyTriviaWhiteSpaces) {
+                                counttrivial++;
+                            }
+                            else {
+                                var njsx = _this.jsxVariables[ch.pos - 1];
+                                if (njsx === undefined)
+                                    njsx = _this.jsxVariables[ch.pos];
+                                if (njsx === undefined)
+                                    njsx = _this.jsxVariables[ch.pos + 1];
+                                if (njsx) {
+                                }
+                                var varname = this.getNextVariableNameForType("text", "text");
+                                var stext = JSON.stringify(ch.text);
+                                _this.add(varname, "_new_", stext, ch, false, false);
+                                _this.jsxVariables[varname] = ch;
+                                _this.add(varname, "text", stext, ch, false, false);
+                                //if ((<any>node.parent)?.jname !== undefined) {
+                                _this.add(jsx.name, "add", varname, ch);
+                                // }
+                                var chvar = {
+                                    pos: ch.pos,
+                                    component: _this.jsxVariables[jsx.name].component._components[x - counttrivial],
+                                    name: varname
+                                };
+                                _this.jsxVariables[varname] = chvar;
+                                this.jsxVariables.__orginalarray__.push(chvar);
+                            }
                         }
                         else {
-                            var njsx = _this.jsxVariables[ch.pos - 1];
-                            if (njsx === undefined)
-                                njsx = _this.jsxVariables[ch.pos];
-                            if (njsx === undefined)
-                                njsx = _this.jsxVariables[ch.pos + 1];
-                            if (njsx) {
-                            }
-                            var varname = this.getNextVariableNameForType("text", "text");
-                            var stext = JSON.stringify(ch.text);
-                            _this.add(varname, "_new_", stext, ch, false, false);
-                            _this.jsxVariables[varname] = ch;
-                            _this.add(varname, "text", stext, ch, false, false);
-                            //if ((<any>node.parent)?.jname !== undefined) {
-                            _this.add(jsx.name, "add", varname, ch);
-                            // }
-                            var chvar = {
-                                pos: ch.pos,
-                                component: _this.jsxVariables[jsx.name].component._components[x - counttrivial],
-                                name: varname
-                            };
-                            _this.jsxVariables[varname] = chvar;
-                            this.jsxVariables.__orginalarray__.push(chvar);
+                            _this.visitNodeJSX(ch, {}); // consumeProperties)
                         }
-                    }
-                    else {
-                        _this.visitNodeJSX(ch, {}); // consumeProperties)
                     }
                 }
             }
-            console.log(nd.openingElement.getText(this.sourceFile));
+            //        console.log(nd.openingElement.getText(this.sourceFile));
         }
         visitNode(node, consumeProperties = undefined) {
             var _this = this;
@@ -480,7 +485,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         }
         visitNodeJSX(node, consumeProperties = undefined) {
             var _this = this;
-            if (node.kind === ts.SyntaxKind.JsxElement) {
+            if (node.kind === ts.SyntaxKind.JsxElement || node.kind === ts.SyntaxKind.JsxSelfClosingElement) {
                 _this.parseJSX(_this, node);
                 return;
             }

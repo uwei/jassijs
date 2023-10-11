@@ -94,7 +94,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 this.designDummies.push(component);
             else
                 this._components.splice(index, 0, component);
-            debugger;
             before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
         }
         /**

@@ -93,7 +93,7 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassij
             Component_1.React.createElement(Textbox_1.Textbox, { value: "fff" }),
             "lko",
             Component_1.React.createElement(Button_1.Button, { text: "sdf" }),
-            "kkassajkkkkkklkosdf");
+            "aadxkkassajkkkkkklkosdf");
         /*<div>v
           sdfsdf
               <div style={{color:"blue"}}>

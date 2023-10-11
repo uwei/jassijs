@@ -1,22 +1,3 @@
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { HTMLComponent } from "jassijs/ui/HTMLComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { HTMLComponent } from "jassijs/ui/HTMLComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { HTMLComponent } from "jassijs/ui/HTMLComponent";
-import { TextComponent } from "jassijs/ui/TextComponent";
-import { HTMLComponent } from "jassijs/ui/HTMLComponent";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Button } from "jassijs/ui/Button";
@@ -107,8 +88,6 @@ export function test() {
     </Panel>;
    */
     var ret=<Panel>
-
-
         <br />
         <br />
 
@@ -119,7 +98,7 @@ export function test() {
         <Textbox value="fff"></Textbox>
 
         lko
-        <Button text="sdf"></Button>kkassajkkkkkklkosdf
+        <Button text="sdf"></Button>aadxkkassajkkkkkklkosdf
 
     </Panel>;
     /*<div>v

@@ -2959,7 +2959,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             while (this.inlineEditorPanel.dom.firstChild) {
                 this.inlineEditorPanel.dom.firstChild.remove();
             }
-            //this.updateDummies();
+            this.updateDummies();
             //var parser=new jassijs.ui.PropertyEditor.Parser();
             //parser.parse(_this.value);
         }
@@ -3237,22 +3237,22 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
                        _this.add(img);
                    }*/
             });
-            /*registry.loadAllFilesForService(this._service).then(function(){
-                registry.getData(_this._service).forEach(function(mdata){
-                    var data:UIComponentProperties=mdata.params[0];
-                    var img=new Image();
-                    var name=data.fullPath.split("/");
-                    var sname=name[name.length-1];
-                    img.tooltip=sname;
-                    img.src=data.icon===undefined?"res/unknowncomponent.png":data.icon;
-                    img.height=24;
-                    img.width=24;
-                    img["createFromType"]=classes.getClassName(mdata.oclass);
-                    img["createFromParam"]=data.initialize;
+            Registry_13.default.loadAllFilesForService(this._service).then(function () {
+                Registry_13.default.getData(_this._service).forEach(function (mdata) {
+                    var data = mdata.params[0];
+                    var img = new Image_1.Image();
+                    var name = data.fullPath.split("/");
+                    var sname = name[name.length - 1];
+                    img.tooltip = sname;
+                    img.src = data.icon === undefined ? "res/unknowncomponent.png" : data.icon;
+                    img.height = 24;
+                    img.width = 24;
+                    img["createFromType"] = Classes_5.classes.getClassName(mdata.oclass);
+                    img["createFromParam"] = data.initialize;
                     _this._makeDraggable(img);
                     _this.add(img);
                 });
-           });*/
+            });
         }
         get service() {
             return this._service;
@@ -4813,7 +4813,6 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                     anchorNode = newone;
                     neu = e.key;
                 }
-                debugger;
                 this.changeText(anchorNode, neu);
                 e.preventDefault();
                 var range = document.createRange();
@@ -5243,7 +5242,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1697049074478.885,
+                "date": 1697051410384.2578,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -5251,7 +5250,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1697049042522.1914,
+                "date": 1697051376777.724,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
@@ -5427,7 +5426,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1696964876125.1606,
+                "date": 1697052572549.2588,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -5545,7 +5544,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1696963409688.1948,
+                "date": 1697052536534.7373,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -7167,18 +7166,21 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         parseJSX(_this, node) {
             var _a, _b;
             var nd = node;
-            var jsx = _this.jsxVariables[nd.openingElement.pos - 1];
+            var element = nd;
+            if (nd.openingElement)
+                element = nd.openingElement;
+            var jsx = _this.jsxVariables[element.pos - 1];
             if (jsx === undefined)
-                jsx = _this.jsxVariables[nd.openingElement.pos];
+                jsx = _this.jsxVariables[element.pos];
             if (jsx === undefined)
-                jsx = _this.jsxVariables[nd.openingElement.pos + 1];
+                jsx = _this.jsxVariables[element.pos + 1];
             if (jsx) {
                 jsx.name = this.getNextVariableNameForType(jsx.name);
                 _this.jsxVariables[jsx.name] = jsx;
                 nd["jname"] = jsx.name;
                 _this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
-                for (var x = 0; x < nd.openingElement.attributes.properties.length; x++) {
-                    var prop = nd.openingElement.attributes.properties[x];
+                for (var x = 0; x < element.attributes.properties.length; x++) {
+                    var prop = element.attributes.properties[x];
                     var val = prop["initializer"].text;
                     _this.add(jsx.name, prop.name.text, val, prop);
                 }
@@ -7188,43 +7190,45 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 //node.getChildren().forEach(c => _this.visitNode(c, consumeProperties));
                 //mark textnodes
                 var counttrivial = 0;
-                for (var x = 0; x < nd.children.length; x++) {
-                    var ch = nd.children[x];
-                    if (ch.kind === ts.SyntaxKind.JsxText) {
-                        if (ch.containsOnlyTriviaWhiteSpaces) {
-                            counttrivial++;
+                if (nd.children) {
+                    for (var x = 0; x < nd.children.length; x++) {
+                        var ch = nd.children[x];
+                        if (ch.kind === ts.SyntaxKind.JsxText) {
+                            if (ch.containsOnlyTriviaWhiteSpaces) {
+                                counttrivial++;
+                            }
+                            else {
+                                var njsx = _this.jsxVariables[ch.pos - 1];
+                                if (njsx === undefined)
+                                    njsx = _this.jsxVariables[ch.pos];
+                                if (njsx === undefined)
+                                    njsx = _this.jsxVariables[ch.pos + 1];
+                                if (njsx) {
+                                }
+                                var varname = this.getNextVariableNameForType("text", "text");
+                                var stext = JSON.stringify(ch.text);
+                                _this.add(varname, "_new_", stext, ch, false, false);
+                                _this.jsxVariables[varname] = ch;
+                                _this.add(varname, "text", stext, ch, false, false);
+                                //if ((<any>node.parent)?.jname !== undefined) {
+                                _this.add(jsx.name, "add", varname, ch);
+                                // }
+                                var chvar = {
+                                    pos: ch.pos,
+                                    component: _this.jsxVariables[jsx.name].component._components[x - counttrivial],
+                                    name: varname
+                                };
+                                _this.jsxVariables[varname] = chvar;
+                                this.jsxVariables.__orginalarray__.push(chvar);
+                            }
                         }
                         else {
-                            var njsx = _this.jsxVariables[ch.pos - 1];
-                            if (njsx === undefined)
-                                njsx = _this.jsxVariables[ch.pos];
-                            if (njsx === undefined)
-                                njsx = _this.jsxVariables[ch.pos + 1];
-                            if (njsx) {
-                            }
-                            var varname = this.getNextVariableNameForType("text", "text");
-                            var stext = JSON.stringify(ch.text);
-                            _this.add(varname, "_new_", stext, ch, false, false);
-                            _this.jsxVariables[varname] = ch;
-                            _this.add(varname, "text", stext, ch, false, false);
-                            //if ((<any>node.parent)?.jname !== undefined) {
-                            _this.add(jsx.name, "add", varname, ch);
-                            // }
-                            var chvar = {
-                                pos: ch.pos,
-                                component: _this.jsxVariables[jsx.name].component._components[x - counttrivial],
-                                name: varname
-                            };
-                            _this.jsxVariables[varname] = chvar;
-                            this.jsxVariables.__orginalarray__.push(chvar);
+                            _this.visitNodeJSX(ch, {}); // consumeProperties)
                         }
-                    }
-                    else {
-                        _this.visitNodeJSX(ch, {}); // consumeProperties)
                     }
                 }
             }
-            console.log(nd.openingElement.getText(this.sourceFile));
+            //        console.log(nd.openingElement.getText(this.sourceFile));
         }
         visitNode(node, consumeProperties = undefined) {
             var _this = this;
@@ -7277,7 +7281,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         }
         visitNodeJSX(node, consumeProperties = undefined) {
             var _this = this;
-            if (node.kind === ts.SyntaxKind.JsxElement) {
+            if (node.kind === ts.SyntaxKind.JsxElement || node.kind === ts.SyntaxKind.JsxSelfClosingElement) {
                 _this.parseJSX(_this, node);
                 return;
             }
@@ -9127,7 +9131,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1697049074478.885,
+                "date": 1697051410384.2578,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -9135,7 +9139,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1697049042522.1914,
+                "date": 1697051376777.724,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
@@ -9311,7 +9315,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1696964876125.1606,
+                "date": 1697052572549.2588,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -9429,7 +9433,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1696963409688.1948,
+                "date": 1697052536534.7373,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {

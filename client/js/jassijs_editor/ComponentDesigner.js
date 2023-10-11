@@ -977,7 +977,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             while (this.inlineEditorPanel.dom.firstChild) {
                 this.inlineEditorPanel.dom.firstChild.remove();
             }
-            //this.updateDummies();
+            this.updateDummies();
             //var parser=new jassijs.ui.PropertyEditor.Parser();
             //parser.parse(_this.value);
         }

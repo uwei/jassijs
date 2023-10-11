@@ -66,7 +66,7 @@ export class ComponentPalette extends Panel {
 
 
 
-        /*registry.loadAllFilesForService(this._service).then(function(){
+        registry.loadAllFilesForService(this._service).then(function(){
             registry.getData(_this._service).forEach(function(mdata){
                 var data:UIComponentProperties=mdata.params[0];
                 var img=new Image();
@@ -81,7 +81,7 @@ export class ComponentPalette extends Panel {
                 _this._makeDraggable(img);
                 _this.add(img);
             });
-       });*/
+       });
     }
     get service() {
         return this._service;

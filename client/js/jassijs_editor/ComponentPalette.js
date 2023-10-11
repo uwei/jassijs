@@ -64,22 +64,22 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                        _this.add(img);
                    }*/
             });
-            /*registry.loadAllFilesForService(this._service).then(function(){
-                registry.getData(_this._service).forEach(function(mdata){
-                    var data:UIComponentProperties=mdata.params[0];
-                    var img=new Image();
-                    var name=data.fullPath.split("/");
-                    var sname=name[name.length-1];
-                    img.tooltip=sname;
-                    img.src=data.icon===undefined?"res/unknowncomponent.png":data.icon;
-                    img.height=24;
-                    img.width=24;
-                    img["createFromType"]=classes.getClassName(mdata.oclass);
-                    img["createFromParam"]=data.initialize;
+            Registry_2.default.loadAllFilesForService(this._service).then(function () {
+                Registry_2.default.getData(_this._service).forEach(function (mdata) {
+                    var data = mdata.params[0];
+                    var img = new Image_1.Image();
+                    var name = data.fullPath.split("/");
+                    var sname = name[name.length - 1];
+                    img.tooltip = sname;
+                    img.src = data.icon === undefined ? "res/unknowncomponent.png" : data.icon;
+                    img.height = 24;
+                    img.width = 24;
+                    img["createFromType"] = Classes_1.classes.getClassName(mdata.oclass);
+                    img["createFromParam"] = data.initialize;
                     _this._makeDraggable(img);
                     _this.add(img);
                 });
-           });*/
+            });
         }
         get service() {
             return this._service;
