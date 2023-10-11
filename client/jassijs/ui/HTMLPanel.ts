@@ -133,7 +133,7 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
     public focusLost() {
         var editor = this.editor;
         var _this = this;
-        var text = _this.dom.firstElementChild.innerHTML;
+        var text = _this.dom?.firstElementChild?.innerHTML;
         if (text === '<br data-mce-bogus="1">')
             text = "";
         editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);

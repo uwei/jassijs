@@ -130,7 +130,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
                 DesignDummy_1.DesignDummy.destroyIfNeeded(this, "atEnd");
             }
             if (enable) { //dummy in containers at the end
-                if (this.isAbsolute === false) {
+                if (this.isAbsolute === false && this._components) {
                     for (var x = 0; x < this._components.length; x++) {
                         var comp = this._components[x];
                         if (comp instanceof Container_1.Container && !comp.dom.classList.contains("jdisableaddcomponents")) {

@@ -1910,7 +1910,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1656015000000,
+                "date": 1697050265465.2112,
                 "jassijs_report.InfoProperties": {
                     "@members": {}
                 },
@@ -4055,7 +4055,8 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             if (this.styleContainer._components.length > 0) {
                 r.styles = {};
                 for (var x = 0; x < this.styleContainer._components.length; x++) {
-                    r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
+                    if (!this.styleContainer._components[0].designDummyFor)
+                        r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
                 }
             }
             //var _this = this;
@@ -7116,7 +7117,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1656015000000,
+                "date": 1697050265465.2112,
                 "jassijs_report.InfoProperties": {
                     "@members": {}
                 },

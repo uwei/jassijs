@@ -131,7 +131,7 @@ export class Panel<T extends PanelProperties = {}> extends Container<T> implemen
         }
         if (enable) {//dummy in containers at the end
 
-            if (this.isAbsolute === false) {
+            if (this.isAbsolute === false&&this._components) {
                 for (var x = 0; x < this._components.length; x++) {
                     var comp = this._components[x];
                     if (comp instanceof Container && !comp.dom.classList.contains("jdisableaddcomponents")) {

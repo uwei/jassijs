@@ -952,7 +952,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1696687306205.7842,
+		"date": 1697050316322.105,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
@@ -1043,7 +1043,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1696710518340.8855,
+		"date": 1697050478710.7957,
 		"jassijs.ui.PanelProperties": {
 			"@members": {}
 		},

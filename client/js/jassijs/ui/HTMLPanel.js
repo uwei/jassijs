@@ -105,9 +105,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             }
         }
         focusLost() {
+            var _a, _b;
             var editor = this.editor;
             var _this = this;
-            var text = _this.dom.firstElementChild.innerHTML;
+            var text = (_b = (_a = _this.dom) === null || _a === void 0 ? void 0 : _a.firstElementChild) === null || _b === void 0 ? void 0 : _b.innerHTML;
             if (text === '<br data-mce-bogus="1">')
                 text = "";
             editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);

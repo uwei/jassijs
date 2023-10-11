@@ -114,7 +114,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ReportDesign.ts": {
-		"date": 1656015000000,
+		"date": 1697050265465.2112,
 		"jassijs_report.InfoProperties": {
 			"@members": {}
 		},

@@ -1,9 +1,6 @@
 reportdesign = {
-    content: [
-        "Hallo ${name}",
-        "${address.street}",
-        "${parameter.date}"
-    ]
+    styles: {},
+    content: ["Hallo ${name}", "${address.street}", "${parameter.date}"]
 };
 reportdesign.data = {
     name: "Klaus",
@@ -1830,7 +1827,7 @@ define("demoreports/registry", ["require"], function (require) {
     return {
         default: {
             "demoreports/01-Simpledata.ts": {
-                "date": 1656184586000
+                "date": 1697050393557.8125
             },
             "demoreports/10-Foreach.ts": {
                 "date": 1655407642000
@@ -1897,7 +1894,7 @@ define("demoreports/registry", ["require"], function (require) {
     return {
         default: {
             "demoreports/01-Simpledata.ts": {
-                "date": 1656184586000
+                "date": 1697050393557.8125
             },
             "demoreports/10-Foreach.ts": {
                 "date": 1655407642000

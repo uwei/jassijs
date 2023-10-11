@@ -1,9 +1,6 @@
 reportdesign = {
-    content: [
-        "Hallo ${name}",
-        "${address.street}",
-        "${parameter.date}"
-    ]
+    styles: {},
+    content: ["Hallo ${name}", "${address.street}", "${parameter.date}"]
 };
 reportdesign.data = {
     name: "Klaus",

@@ -2054,7 +2054,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1696687306205.7842,
+                "date": 1697050316322.105,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -2145,7 +2145,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1696710518340.8855,
+                "date": 1697050478710.7957,
                 "jassijs.ui.PanelProperties": {
                     "@members": {}
                 },
@@ -9985,9 +9985,10 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             }
         }
         focusLost() {
+            var _a, _b;
             var editor = this.editor;
             var _this = this;
-            var text = _this.dom.firstElementChild.innerHTML;
+            var text = (_b = (_a = _this.dom) === null || _a === void 0 ? void 0 : _a.firstElementChild) === null || _b === void 0 ? void 0 : _b.innerHTML;
             if (text === '<br data-mce-bogus="1">')
                 text = "";
             editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);
@@ -11059,7 +11060,7 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Registry", "ja
                 DesignDummy_3.DesignDummy.destroyIfNeeded(this, "atEnd");
             }
             if (enable) { //dummy in containers at the end
-                if (this.isAbsolute === false) {
+                if (this.isAbsolute === false && this._components) {
                     for (var x = 0; x < this._components.length; x++) {
                         var comp = this._components[x];
                         if (comp instanceof Container_4.Container && !comp.dom.classList.contains("jdisableaddcomponents")) {
@@ -18628,7 +18629,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1696687306205.7842,
+                "date": 1697050316322.105,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -18719,7 +18720,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1696710518340.8855,
+                "date": 1697050478710.7957,
                 "jassijs.ui.PanelProperties": {
                     "@members": {}
                 },
