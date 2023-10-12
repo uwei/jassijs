@@ -22,7 +22,7 @@ export class PanelProperties extends ContainerProperties {
 @$Class("jassijs.ui.Panel")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
 //@$Property({ name: "new/useSpan", type: "boolean", default: false })
-export class Panel<T extends PanelProperties = {}> extends Container<T> implements PanelProperties {
+export class Panel<T extends PanelProperties = {}> extends Container<PanelProperties> implements PanelProperties {
     _isAbsolute: boolean;
     private _activeComponentDesigner: any;
     /**
@@ -32,8 +32,8 @@ export class Panel<T extends PanelProperties = {}> extends Container<T> implemen
     * @param {boolean} [properties.useSpan] -  use span not div
     * 
     */
-    constructor(properties: T = undefined) {//id connect to existing(not reqired)
-        super(properties);
+    constructor(properties: PanelProperties = undefined) {//id connect to existing(not reqired)
+        super(properties); 
         this._designMode = false;
         this.isAbsolute = properties?.isAbsolute === true;
     }

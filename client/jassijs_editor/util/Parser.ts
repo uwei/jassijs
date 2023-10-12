@@ -411,7 +411,7 @@ export class Parser {
             _this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
             for (var x = 0; x < element.attributes.properties.length; x++) {
                 var prop = element.attributes.properties[x];
-                var val = prop["initializer"].text;
+                var val = prop["initializer"].getText();
                 _this.add(jsx.name, (<any>prop.name).text, val, prop);
             }
             if ((<any>node.parent)?.jname !== undefined) {
@@ -644,7 +644,11 @@ export class Parser {
             var pos = node.parent.parent["statements"].indexOf(node.parent);
             if (pos >= 0)
                 node.parent.parent["statements"].splice(pos, 1);
-        } else
+        } else if(node.parent["children"]){
+             var pos = node.parent["children"].indexOf(node);
+            if (pos >= 0)
+                node.parent["children"].splice(pos, 1);
+        }else
             throw Error(node.getFullText() + "could not be removed");
     }
     /** 

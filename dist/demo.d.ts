@@ -55,6 +55,21 @@ declare module "demo/Dialog3" {
     }
     export function test(): unknown;
 }
+declare module "demo/Dialog4" {
+    import { Button } from "jassijs/ui/Button";
+    import { Panel } from "jassijs/ui/Panel";
+    type Me = {
+        button?: Button;
+        panel?: Panel;
+        button2?: Button;
+    };
+    export class Dialog4 extends Panel {
+        me: Me;
+        constructor();
+        layout(me: Me): void;
+    }
+    export function test(): unknown;
+}
 declare module "demo/EmptyDialog" {
     import { HTMLPanel } from "jassijs/ui/HTMLPanel";
     import { Button } from "jassijs/ui/Button";

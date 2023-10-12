@@ -47,6 +47,8 @@ export class HtmlDesigner extends ComponentDesigner {
             var newComponent = new cl();
             _this.insertComponent(newComponent, selection);
             _this.updateDummies();
+        }else {
+            debugger;
         }
 
     }

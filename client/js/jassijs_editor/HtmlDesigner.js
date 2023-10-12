@@ -50,6 +50,9 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 _this.insertComponent(newComponent, selection);
                 _this.updateDummies();
             }
+            else {
+                debugger;
+            }
         }
         /*set designedComponent(component) {
             alert(8);

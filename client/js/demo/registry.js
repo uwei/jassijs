@@ -120,6 +120,10 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/_test1.ts": {
 		"date": 1670673960000
+	},
+	"demo/Dialog4.ts": {
+		"date": 1697130548234.411,
+		"demo/Dialog4": {}
 	}
 }
  }

@@ -166,7 +166,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
         //@$Property({ name: "new/useSpan", type: "boolean", default: false })
         ,
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:paramtypes", [PanelProperties])
     ], Panel);
     exports.Panel = Panel;
 });

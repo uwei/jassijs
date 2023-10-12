@@ -1804,7 +1804,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1696714284253.254,
+                "date": 1697130215042.4993,
                 "jassijs.ui.ContainerProperties": {
                     "@members": {}
                 },
@@ -2145,7 +2145,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1697050478710.7957,
+                "date": 1697130279944.2292,
                 "jassijs.ui.PanelProperties": {
                     "@members": {}
                 },
@@ -7690,7 +7690,7 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
     };
     Container = __decorate([
         Registry_45.$Class("jassijs.ui.Container"),
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:paramtypes", [ContainerProperties])
     ], Container);
     exports.Container = Container;
 });
@@ -11096,7 +11096,7 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Registry", "ja
         Property_25.$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
         //@$Property({ name: "new/useSpan", type: "boolean", default: false })
         ,
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:paramtypes", [PanelProperties])
     ], Panel);
     exports.Panel = Panel;
 });
@@ -18379,7 +18379,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1696714284253.254,
+                "date": 1697130215042.4993,
                 "jassijs.ui.ContainerProperties": {
                     "@members": {}
                 },
@@ -18720,7 +18720,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1697050478710.7957,
+                "date": 1697130279944.2292,
                 "jassijs.ui.PanelProperties": {
                     "@members": {}
                 },

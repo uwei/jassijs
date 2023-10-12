@@ -222,16 +222,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 return varname;
             };
         }
-        /**
-         * removes the selected component
-         */
-        async cutComponent() {
+        deleteComponents(text) {
             var _a;
-            var text = await this.copy();
-            if (await navigator.clipboard.readText() !== text) {
-                alert("could not copy to Clipboard.");
-                return;
-            }
             var clip = JSON.parse(text); //to Clipboard
             var all = [];
             for (var x = 0; x < clip.allChilds.length; x++) {
@@ -246,6 +238,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
             }
             this._propertyEditor.removeVariablesInCode(all);
+        }
+        /**
+         * removes the selected component
+         */
+        async cutComponent() {
+            var text = await this.copy();
+            if (await navigator.clipboard.readText() !== text) {
+                alert("could not copy to Clipboard.");
+                return;
+            }
+            this.deleteComponents(text);
             this._updateInvisibleComponents();
             this._componentExplorer.update();
         }
@@ -284,11 +287,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
             }
         }
-        async copy() {
-            var components = this._propertyEditor.value;
-            if (!Array.isArray(components)) {
-                components = [components];
-            }
+        componentsToString(components) {
             var clip = new ClipboardData();
             clip.varNamesToCopy = [];
             for (var x = 0; x < components.length; x++) {
@@ -298,6 +297,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 this.copyProperties(clip, component);
             }
             var text = JSON.stringify(clip);
+            return text;
+        }
+        async copy() {
+            var components = this._propertyEditor.value;
+            if (!Array.isArray(components)) {
+                components = [components];
+            }
+            var text = this.componentsToString(components);
             await navigator.clipboard.writeText(text);
             return text;
         }
@@ -338,24 +345,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             }
             return created;
         }
-        async paste() {
-            var text = await navigator.clipboard.readText();
-            var created;
-            var clip = JSON.parse(text);
+        async pasteComponents(text, parent, before = undefined) {
             var _this = this;
             var variablelistold = [];
             var variablelistnew = [];
+            var clip = JSON.parse(text);
+            console.log(parent);
+            console.log(before);
             //create Components
             for (var x = 0; x < clip.varNamesToCopy.length; x++) {
                 var varname = clip.varNamesToCopy[x];
-                var target = _this._propertyEditor.value;
-                if (target._components !== undefined)
-                    await _this.pasteComponent(clip, target, undefined, varname, variablelistold, variablelistnew);
-                else {
-                    // if(x===0)
-                    //    before=target;
-                    await _this.pasteComponent(clip, target._parent, target, varname, variablelistold, variablelistnew);
-                }
+                await _this.pasteComponent(clip, parent, before, varname, variablelistold, variablelistnew);
                 //set properties
             }
             //in the new Text the variables are renamed
@@ -416,7 +416,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     }
                 }
             }
-            _this._propertyEditor.value = created;
+        }
+        async paste() {
+            var text = await navigator.clipboard.readText();
+            //    var clip: ClipboardData = JSON.parse(text);
+            var _this = this;
+            var target = _this._propertyEditor.value;
+            if (target._components !== undefined)
+                await this.pasteComponents(text, target, undefined); // await _this.pasteComponent(clip, target, undefined, varname, variablelistold, variablelistnew);
+            else {
+                // if(x===0)
+                //    before=target;
+                await this.pasteComponents(text, target._parent, target); //await _this.pasteComponent(clip, target._parent, target, varname, variablelistold, variablelistnew);
+            }
+            //_this._propertyEditor.value = created;
             _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
             _this._propertyEditor.updateParser();
             _this._propertyEditor.callEvent("codeChanged", {});
@@ -782,33 +795,51 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             dummy.onclick = (ev) => console.log(ev);
             dummy.ondrop = (ev) => {
                 ev.preventDefault();
-                var data = ev.dataTransfer.getData("text");
-                if (data.indexOf('"createFromType":') > -1) {
-                    var toCreate = JSON.parse(data);
-                    var cl = Classes_1.classes.getClass(toCreate.createFromType);
-                    var newComponent = new cl();
-                    var beforeComponent = ev.target.nd._this;
-                    var newParent = beforeComponent._parent;
-                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent); // beforeComponent);
+                async function doit() {
+                    var data = ev.dataTransfer.getData("text");
+                    if (data.indexOf('"createFromType":') > -1) {
+                        var toCreate = JSON.parse(data);
+                        var cl = Classes_1.classes.getClass(toCreate.createFromType);
+                        var newComponent = new cl();
+                        var beforeComponent = ev.target.nd._this;
+                        var newParent = beforeComponent._parent;
+                        _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent); // beforeComponent);
+                    }
+                    else if (data.indexOf('"varNamesToCopy":') > -1) {
+                        var beforeComponent = ev.target.nd._this;
+                        var newParent = beforeComponent._parent;
+                        await _this.pasteComponents(data, newParent, beforeComponent);
+                        _this.deleteComponents(data);
+                    }
+                    else {
+                    }
                     _this.updateDummies();
+                    _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+                    _this._propertyEditor.callEvent("codeChanged", {});
+                    _this._componentExplorer.update();
+                    _this._updateInvisibleComponents();
                 }
+                ;
+                doit();
             };
-            dummy.ondragover = (ev) => ev.preventDefault();
+            dummy.ondragover = (ev) => {
+                ev.preventDefault();
+            };
             dummy.ondragstart = ev => {
                 ev.dataTransfer.setDragImage(event.target.nd, 20, 20);
-                ev.dataTransfer.setData("text", "Hallo");
+                ev.dataTransfer.setData("text", _this.componentsToString([event.target.nd._this]));
             };
             dummy.style.zIndex = "10000";
             dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
             dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
-            dummy.style.fontSize = "7px";
+            dummy.style.fontSize = "10px";
             dummy.style.position = "absolute";
-            dummy.onmouseenter = (e) => {
-                e.target.nd._sicbgc_ = e.target.nd.style.backgroundColor;
-                e.target.nd.style.backgroundColor = "rgba(245,234,39,0.2)";
+            dummy.ondragenter = dummy.onmouseenter = (e) => {
+                e.target.nd._this.dom._sicbgc_ = e.target.nd._this.dom.style.backgroundColor;
+                e.target.nd._this.dom.style.backgroundColor = "rgba(245,234,39)";
             };
-            dummy.onmouseleave = (e) => e.target.nd.style.backgroundColor = e.target.nd._sicbgc_;
-            //   ComponentDesigner.beforeDummy = dummy;
+            dummy.ondragleave = dummy.onmouseleave = (e) => e.target.nd._this.dom.style.backgroundColor = e.target.nd._this.dom._sicbgc_;
+            //  ComponentDesigner.beforeDummy = dummy;
             // }
             // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
             return dummy;
@@ -825,15 +856,30 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             //dummy.onclick = (ev) => console.log(ev);
             dummy.ondrop = (ev) => {
                 ev.preventDefault();
-                var data = ev.dataTransfer.getData("text");
-                if (data.indexOf('"createFromType":') > -1) {
-                    var toCreate = JSON.parse(data);
-                    var cl = Classes_1.classes.getClass(toCreate.createFromType);
-                    var newComponent = new cl();
-                    var newParent = ev.target.nd._this;
-                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined); // beforeComponent);
+                async function doit() {
+                    var data = ev.dataTransfer.getData("text");
+                    if (data.indexOf('"createFromType":') > -1) {
+                        var toCreate = JSON.parse(data);
+                        var cl = Classes_1.classes.getClass(toCreate.createFromType);
+                        var newComponent = new cl();
+                        let newParent = ev.target.nd._this;
+                        _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined); // beforeComponent);
+                    }
+                    else if (data.indexOf('"varNamesToCopy":') > -1) {
+                        let newParent = ev.target.nd._this;
+                        await _this.pasteComponents(data, newParent, undefined);
+                        _this.deleteComponents(data);
+                    }
+                    else {
+                    }
                     _this.updateDummies();
+                    _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+                    _this._propertyEditor.callEvent("codeChanged", {});
+                    _this._componentExplorer.update();
+                    _this._updateInvisibleComponents();
                 }
+                ;
+                doit();
             };
             dummy.ondragover = (ev) => {
                 ev.preventDefault();
@@ -846,13 +892,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             dummy.style.zIndex = "10000";
             dummy.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
             dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
-            dummy.style.fontSize = "30px";
+            dummy.style.fontSize = "10px";
             dummy.style.position = "absolute";
-            dummy.onmouseenter = (e) => {
+            dummy.ondragenter = dummy.onmouseenter = (e) => {
                 e.target.nd._sicbgc_ = e.target.nd.style.backgroundColor;
                 e.target.nd.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
             };
-            dummy.onmouseleave = (e) => e.target.nd.style.backgroundColor = e.target.nd._sicbgc_;
+            dummy.ondragleave = dummy.onmouseleave = (e) => e.target.nd.style.backgroundColor = e.target.nd._sicbgc_;
             //   ComponentDesigner.beforeDummy = dummy;
             // }
             // dummy = ComponentDesigner.beforeDummy.cloneNode(true);

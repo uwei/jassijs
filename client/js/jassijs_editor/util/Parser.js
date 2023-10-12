@@ -385,7 +385,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 _this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
                 for (var x = 0; x < element.attributes.properties.length; x++) {
                     var prop = element.attributes.properties[x];
-                    var val = prop["initializer"].text;
+                    var val = prop["initializer"].getText();
                     _this.add(jsx.name, prop.name.text, val, prop);
                 }
                 if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.jname) !== undefined) {
@@ -610,6 +610,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 var pos = node.parent.parent["statements"].indexOf(node.parent);
                 if (pos >= 0)
                     node.parent.parent["statements"].splice(pos, 1);
+            }
+            else if (node.parent["children"]) {
+                var pos = node.parent["children"].indexOf(node);
+                if (pos >= 0)
+                    node.parent["children"].splice(pos, 1);
             }
             else
                 throw Error(node.getFullText() + "could not be removed");

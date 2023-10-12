@@ -33,7 +33,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1697051410384.2578,
+		"date": 1697144095308.3767,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
@@ -41,7 +41,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ComponentExplorer": {}
 	},
 	"jassijs_editor/ComponentPalette.ts": {
-		"date": 1697051376777.724,
+		"date": 1697130093551.545,
 		"jassijs_editor.ComponentPalette": {}
 	},
 	"jassijs_editor/ComponentSpy.ts": {
@@ -217,7 +217,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/HtmlDesigner.ts": {
-		"date": 1697052572549.2588,
+		"date": 1697127841438.1167,
 		"jassijs_editor.HtmlDesigner": {}
 	},
 	"jassijs_editor/modul.ts": {
@@ -335,7 +335,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1697052536534.7373,
+		"date": 1697144037447.224,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {

@@ -86,14 +86,12 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassij
         </Panel>;
        */
         var ret = Component_1.React.createElement(Panel_1.Panel, null,
-            Component_1.React.createElement("br", null),
-            Component_1.React.createElement("br", null),
-            "kkkkkk",
-            Component_1.React.createElement("br", null),
-            Component_1.React.createElement(Textbox_1.Textbox, { value: "fff" }),
-            "lko",
-            Component_1.React.createElement(Button_1.Button, { text: "sdf" }),
-            "aadxkkassajkkkkkklkosdf");
+            Component_1.React.createElement(Textbox_1.Textbox, { value: "AA" }),
+            Component_1.React.createElement(Button_1.Button, null),
+            Component_1.React.createElement(Textbox_1.Textbox, { value: "fffrr3" }),
+            Component_1.React.createElement(Panel_1.Panel, { height: 150, width: 150 },
+                Component_1.React.createElement(Button_1.Button, null),
+                Component_1.React.createElement(Textbox_1.Textbox, { value: "fffrr3" })));
         /*<div>v
           sdfsdf
               <div style={{color:"blue"}}>

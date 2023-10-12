@@ -1,5 +1,36 @@
 import { Textbox } from "jassijs/ui/Textbox";
 import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Button } from "jassijs/ui/Button";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Button } from "jassijs/ui/Button";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { HTMLComponent } from "jassijs/ui/HTMLComponent";
+import { TextComponent } from "jassijs/ui/TextComponent";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
 import { Button } from "jassijs/ui/Button";
 import { Component,ComponentProperties,createComponent,HTMLComponent,React } from "jassijs/ui/Component";
 import { Panel } from "jassijs/ui/Panel";
@@ -88,18 +119,14 @@ export function test() {
     </Panel>;
    */
     var ret=<Panel>
-        <br />
-        <br />
+        <Textbox value="AA"></Textbox>
+        <Button></Button>
+        <Textbox value="fffrr3"></Textbox>
 
-        kkkkkk
-
-        <br />
-
-        <Textbox value="fff"></Textbox>
-
-        lko
-        <Button text="sdf"></Button>aadxkkassajkkkkkklkosdf
-
+        <Panel height={150} width={150}>
+            <Button></Button>
+            <Textbox value="fffrr3"></Textbox>
+        </Panel>
     </Panel>;
     /*<div>v
       sdfsdf

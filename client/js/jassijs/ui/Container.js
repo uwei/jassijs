@@ -144,7 +144,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     };
     Container = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.Container"),
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:paramtypes", [ContainerProperties])
     ], Container);
     exports.Container = Container;
 });

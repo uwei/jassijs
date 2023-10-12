@@ -278,16 +278,8 @@ export class ComponentDesigner extends Panel {
             return varname;
         };
     }
-    /**
-     * removes the selected component
-     */
-    async cutComponent() {
-        var text = await this.copy();
-        if (await navigator.clipboard.readText() !== text) {
-            alert("could not copy to Clipboard.")
-            return;
-        }
-        var clip: ClipboardData = JSON.parse(text);//to Clipboard
+    deleteComponents(text){
+ var clip: ClipboardData = JSON.parse(text);//to Clipboard
 
         var all = [];
         for (var x = 0; x < clip.allChilds.length; x++) {
@@ -302,6 +294,18 @@ export class ComponentDesigner extends Panel {
             }
         }
         this._propertyEditor.removeVariablesInCode(all);
+    }
+    /**
+     * removes the selected component
+     */
+    async cutComponent() {
+        var text = await this.copy();
+        if (await navigator.clipboard.readText() !== text) {
+            alert("could not copy to Clipboard.")
+            return;
+        }
+        this.deleteComponents(text);
+
         this._updateInvisibleComponents();
         this._componentExplorer.update();
 
@@ -340,13 +344,7 @@ export class ComponentDesigner extends Panel {
             }
         }
     }
-    async copy(): Promise<string> {
-
-        var components = this._propertyEditor.value;
-        if (!Array.isArray(components)) {
-            components = [components];
-        }
-
+    componentsToString(components: Component[]): string {
         var clip = new ClipboardData();
         clip.varNamesToCopy = [];
         for (var x = 0; x < components.length; x++) {
@@ -359,6 +357,16 @@ export class ComponentDesigner extends Panel {
 
 
         var text = JSON.stringify(clip);
+        return text;
+    }
+    async copy(): Promise<string> {
+
+        var components = this._propertyEditor.value;
+        if (!Array.isArray(components)) {
+            components = [components];
+        }
+
+        var text = this.componentsToString(components);
         await navigator.clipboard.writeText(text);
         return text;
     }
@@ -401,24 +409,19 @@ export class ComponentDesigner extends Panel {
         }
         return created;
     }
-    async paste() {
-        var text = await navigator.clipboard.readText();
-        var created
-        var clip: ClipboardData = JSON.parse(text);
+    async pasteComponents(text: string, parent: Container, before: Component = undefined) {
         var _this = this;
         var variablelistold = [];
         var variablelistnew = [];
+        var clip: ClipboardData = JSON.parse(text);
+        console.log(parent);
+        console.log(before);
         //create Components
         for (var x = 0; x < clip.varNamesToCopy.length; x++) {
             var varname = clip.varNamesToCopy[x];
-            var target: Container = _this._propertyEditor.value;
-            if (target._components !== undefined)
-                await _this.pasteComponent(clip, target, undefined, varname, variablelistold, variablelistnew);
-            else {
-                // if(x===0)
-                //    before=target;
-                await _this.pasteComponent(clip, target._parent, target, varname, variablelistold, variablelistnew);
-            }
+
+            await _this.pasteComponent(clip, parent, before, varname, variablelistold, variablelistnew);
+
             //set properties
         }
         //in the new Text the variables are renamed
@@ -482,7 +485,21 @@ export class ComponentDesigner extends Panel {
                 }
             }
         }
-        _this._propertyEditor.value = created;
+
+    }
+    async paste() {
+        var text = await navigator.clipboard.readText();
+        //    var clip: ClipboardData = JSON.parse(text);
+        var _this = this;
+        var target: Container = _this._propertyEditor.value;
+        if (target._components !== undefined)
+            await this.pasteComponents(text, target, undefined); // await _this.pasteComponent(clip, target, undefined, varname, variablelistold, variablelistnew);
+        else {
+            // if(x===0)
+            //    before=target;
+            await this.pasteComponents(text, target._parent, target);//await _this.pasteComponent(clip, target._parent, target, varname, variablelistold, variablelistnew);
+        }
+        //_this._propertyEditor.value = created;
         _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
         _this._propertyEditor.updateParser();
         _this._propertyEditor.callEvent("codeChanged", {});
@@ -735,7 +752,7 @@ export class ComponentDesigner extends Panel {
         if (this._propertyEditor.codeEditor !== undefined) {
 
             var newName = _this._codeEditor.getVariableFromObject(newParent);
-            console.log("newName"+newName);
+            console.log("newName" + newName);
             console.log(newParent);
             var before;
             if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") {//Designdummy atEnd
@@ -858,7 +875,7 @@ export class ComponentDesigner extends Panel {
 
     }
     createPreDummy() {
-        var _this=this;
+        var _this = this;
         var dummy: HTMLSpanElement;
         //  if (ComponentDesigner.beforeDummy === undefined) {
         dummy = <HTMLSpanElement>document.createElement("span");
@@ -866,42 +883,58 @@ export class ComponentDesigner extends Panel {
         dummy.draggable = true;
         dummy.classList.add("_dummy_");
         dummy.onclick = (ev) => console.log(ev);
-        dummy.ondrop = (ev) => { 
-             ev.preventDefault(); 
-             
-             var data = ev.dataTransfer.getData("text");
-             if(data.indexOf('"createFromType":')>-1){
-                var toCreate:{ createFromType : string,createFromParam :string}=<any> JSON.parse(data);
-                var cl = classes.getClass(toCreate.createFromType);
-                var newComponent=new cl();
-                var beforeComponent:Component = (<any>ev.target).nd._this;
-                var newParent=beforeComponent._parent;
-                _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent,beforeComponent);// beforeComponent);
+        dummy.ondrop = (ev) => {
+            ev.preventDefault();
+            async function doit() {
+                var data = ev.dataTransfer.getData("text");
+                if (data.indexOf('"createFromType":') > -1) {
+                    var toCreate: { createFromType: string, createFromParam: string } = <any>JSON.parse(data);
+                    var cl = classes.getClass(toCreate.createFromType);
+                    var newComponent = new cl();
+                    var beforeComponent: Component = (<any>ev.target).nd._this;
+                    var newParent = beforeComponent._parent;
+                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent);// beforeComponent);
+                } else if (data.indexOf('"varNamesToCopy":') > -1) {
+                    var beforeComponent: Component = (<any>ev.target).nd._this;
+                    var newParent = beforeComponent._parent;
+                    await _this.pasteComponents(data, newParent, beforeComponent);
+                    _this.deleteComponents(data);
+                } else {
+
+                }
                 _this.updateDummies();
-             }
+                _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+                _this._propertyEditor.callEvent("codeChanged", {});
+                _this._componentExplorer.update();
+                _this._updateInvisibleComponents();
+            };
+            doit();
         };
-        dummy.ondragover = (ev) => ev.preventDefault();
+        dummy.ondragover = (ev) => {
+            ev.preventDefault();
+        }
         dummy.ondragstart = ev => {
             ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
-            ev.dataTransfer.setData("text", "Hallo");
+            ev.dataTransfer.setData("text", _this.componentsToString([(<any>event.target).nd._this]));
         }
         dummy.style.zIndex = "10000";
         dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
         dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
-        dummy.style.fontSize = "7px";
+        dummy.style.fontSize = "10px";
         dummy.style.position = "absolute";
-        dummy.onmouseenter = (e) => {
-            (<any>e.target).nd._sicbgc_ = (<any>e.target).nd.style.backgroundColor;
-            (<any>e.target).nd.style.backgroundColor = "rgba(245,234,39,0.2)";
+        dummy.ondragenter = dummy.onmouseenter = (e) => {
+            (<any>e.target).nd._this.dom._sicbgc_ = (<any>e.target).nd._this.dom.style.backgroundColor;
+            (<any>e.target).nd._this.dom.style.backgroundColor = "rgba(245,234,39)";
+
         }
-        dummy.onmouseleave = (e) => (<any>e.target).nd.style.backgroundColor = (<any>e.target).nd._sicbgc_;
-        //   ComponentDesigner.beforeDummy = dummy;
+        dummy.ondragleave = dummy.onmouseleave = (e) => (<any>e.target).nd._this.dom.style.backgroundColor = (<any>e.target).nd._this.dom._sicbgc_;
+        //  ComponentDesigner.beforeDummy = dummy;
         // }
         // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
         return dummy;
     }
-     createPostDummy() {
-         var _this=this;
+    createPostDummy() {
+        var _this = this;
         var dummy: HTMLSpanElement;
         //  if (ComponentDesigner.beforeDummy === undefined) {
         dummy = <HTMLSpanElement>document.createElement("span");
@@ -911,20 +944,35 @@ export class ComponentDesigner extends Panel {
         dummy.classList.add("ui-droppable");
         //dummy.onclick = (ev) => console.log(ev);
         dummy.ondrop = (ev) => {
-             ev.preventDefault(); 
-             var data = ev.dataTransfer.getData("text");
-             if(data.indexOf('"createFromType":')>-1){
-                var toCreate:{ createFromType : string,createFromParam :string}=<any> JSON.parse(data);
-                var cl = classes.getClass(toCreate.createFromType);
-                var newComponent=new cl();
-                var newParent = (<any>ev.target).nd._this;
-                _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent,undefined);// beforeComponent);
-                _this.updateDummies();
-             }
-         };
-        dummy.ondragover = (ev) =>{
             ev.preventDefault();
-          //  ev.dataTransfer.dropEffect = "move";
+
+            async function doit() {
+                var data = ev.dataTransfer.getData("text");
+                if (data.indexOf('"createFromType":') > -1) {
+                    var toCreate: { createFromType: string, createFromParam: string } = <any>JSON.parse(data);
+                    var cl = classes.getClass(toCreate.createFromType);
+                    var newComponent = new cl();
+                    let newParent = (<any>ev.target).nd._this;
+                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined);// beforeComponent);
+                } else if (data.indexOf('"varNamesToCopy":') > -1) {
+                    let newParent: Container = (<any>ev.target).nd._this;
+                    await _this.pasteComponents(data, newParent, undefined);
+                    _this.deleteComponents(data);
+                } else {
+
+                }
+                _this.updateDummies();
+                _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+                _this._propertyEditor.callEvent("codeChanged", {});
+                _this._componentExplorer.update();
+                _this._updateInvisibleComponents();
+            };
+            doit();
+
+        };
+        dummy.ondragover = (ev) => {
+            ev.preventDefault();
+            //  ev.dataTransfer.dropEffect = "move";
         } /*
         dummy.ondragstart = ev => {
             ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
@@ -933,13 +981,13 @@ export class ComponentDesigner extends Panel {
         dummy.style.zIndex = "10000";
         dummy.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
         dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
-        dummy.style.fontSize = "30px";
+        dummy.style.fontSize = "10px";
         dummy.style.position = "absolute";
-        dummy.onmouseenter = (e) => {
+        dummy.ondragenter = dummy.onmouseenter = (e) => {
             (<any>e.target).nd._sicbgc_ = (<any>e.target).nd.style.backgroundColor;
             (<any>e.target).nd.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
         }
-        dummy.onmouseleave = (e) => (<any>e.target).nd.style.backgroundColor = (<any>e.target).nd._sicbgc_;
+        dummy.ondragleave = dummy.onmouseleave = (e) => (<any>e.target).nd.style.backgroundColor = (<any>e.target).nd._sicbgc_;
         //   ComponentDesigner.beforeDummy = dummy;
         // }
         // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
@@ -948,7 +996,7 @@ export class ComponentDesigner extends Panel {
     private insertDummies(node: HTMLElement, root: HTMLElement, arr, rootRect: DOMRect) {
         if ((<any>node)._dummyholder === true)
             return;
-        if (root === undefined) 
+        if (root === undefined)
             root = node;
         //only elements with varaiables can have dummies
         var varname = this._codeEditor.getVariableFromObject(node._this);
@@ -962,16 +1010,16 @@ export class ComponentDesigner extends Panel {
                 }
             }
         }
-        if (!varname){
-            if(node.contentEditable!=="false")
-                node.contentEditable="false";
+        if (!varname) {
+            if (node.contentEditable !== "false")
+                node.contentEditable = "false";
             return;
         }
         var hasChildren = false;
         var desc = ComponentDescriptor.describe(comp.constructor);
         var fnew = desc.findField("children");
         if (fnew) {
-            hasChildren=true;
+            hasChildren = true;
         }
         if (node.getClientRects === undefined)
             return;
@@ -1026,7 +1074,7 @@ export class ComponentDesigner extends Panel {
             (<any>node).myRight = rect.right;
 
             if ((<any>node.parentNode)._postDummy_) {
-                const rp= {
+                const rp = {
                     bottom: (<any>node.parentNode).newBottom,
                     right: (<any>node.parentNode).newRight,
                 }
@@ -1034,11 +1082,11 @@ export class ComponentDesigner extends Panel {
                     newRight = parseInt((<any>node.parentNode)._postDummy_.style.left.replace("px", "")) - 8;
                 }
             }
-            postDummy.style.top = (newBottom-8) + "px";
-            postDummy.style.left = (newRight-8) + "px";
+            postDummy.style.top = (newBottom - 8) + "px";
+            postDummy.style.left = (newRight - 8) + "px";
         }
         for (var x = 0; x < node.childNodes.length; x++) {
-            if(node._this!==node.childNodes[x]._this)//Wrapper
+            if (node._this !== node.childNodes[x]._this)//Wrapper
                 this.insertDummies(<any>node.childNodes[x], root, arr, rootRect);
         }
 
@@ -1093,9 +1141,9 @@ export class ComponentDesigner extends Panel {
          }*/
         this.insertDummies(component.dom, this.dummyHolder, arr, this.dom.getClientRects()[0]);
         this.dummyHolder.append(...arr);
-        component.dom.contentEditable="true";
-        this._designPlaceholder.domWrapper.contentEditable="false";
-        this._designPlaceholder.dom.contentEditable="false";
+        component.dom.contentEditable = "true";
+        this._designPlaceholder.domWrapper.contentEditable = "false";
+        this._designPlaceholder.dom.contentEditable = "false";
     }
     get designedComponent() {
         return this._designPlaceholder._components[0];

@@ -702,7 +702,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1696714284253.254,
+		"date": 1697130215042.4993,
 		"jassijs.ui.ContainerProperties": {
 			"@members": {}
 		},
@@ -1043,7 +1043,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1697050478710.7957,
+		"date": 1697130279944.2292,
 		"jassijs.ui.PanelProperties": {
 			"@members": {}
 		},

@@ -21,7 +21,7 @@ export class Container<T extends ContainerProperties={}> extends Component<T> im
      * @param {string} [properties.id] -  connect to existing id (not reqired)
      * 
      */
-    constructor(properties:T = undefined) {//id connect to existing(not reqired)
+    constructor(properties:ContainerProperties = undefined) {//id connect to existing(not reqired)
         super(properties);
         this._components = [];
     }
