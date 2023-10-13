@@ -91,7 +91,7 @@ export class DBManager {
       // ],
       // "subscribers": [
       //    "src/subscriber/**/*.ts"
-      // ]
+      // ] 
     };
 
 

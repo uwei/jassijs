@@ -66,7 +66,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 // ],
                 // "subscribers": [
                 //    "src/subscriber/**/*.ts"
-                // ]
+                // ] 
             };
             return opt;
         }

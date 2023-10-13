@@ -73,7 +73,7 @@ let DBManager = DBManager_1 = class DBManager {
             // ],
             // "subscribers": [
             //    "src/subscriber/**/*.ts"
-            // ]
+            // ] 
         };
         return opt;
     }

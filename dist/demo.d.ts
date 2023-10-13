@@ -91,6 +91,9 @@ declare module "demo/EmptyDialog" {
     }
     export function test(): unknown;
 }
+declare module "demo/hallo" {
+    export function test(): any;
+}
 declare module "demo/LargeReport" {
     export function test(): {
         reportdesign: {

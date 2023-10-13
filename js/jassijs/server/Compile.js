@@ -59,7 +59,7 @@ class Compile {
                     await this.dirFiles(fname, skip, ret);
                 }
                 else {
-                    if (fname.endsWith(".js") || fname.endsWith(".ts"))
+                    if (fname.endsWith(".js") || fname.endsWith(".ts") || fname.endsWith(".tsx"))
                         if (replaceClientFileName)
                             ret[fname.replace("./client/", "./")] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
                         else

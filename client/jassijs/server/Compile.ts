@@ -65,7 +65,7 @@ export class Compile {
 
           await this.dirFiles(fname, skip, ret);
         } else {
-          if (fname.endsWith(".js") || fname.endsWith(".ts"))
+          if (fname.endsWith(".js") || fname.endsWith(".ts")|| fname.endsWith(".tsx"))
             if(replaceClientFileName)
               ret[fname.replace("./client/","./")] = await myfs.readFile(fname, "utf-8");
             else
@@ -159,7 +159,7 @@ export class Compile {
     opts.outFile = "./dist/" + modul + (isServer ? "-server" : "") + ".js";
     opts.module = ts.ModuleKind.AMD;
     if (!isServer) {
-      opts.rootDir = "./client"
+      opts.rootDir = "./client";
     }
     var program = ts.createProgram(files, opts, host);
 
@@ -206,7 +206,7 @@ export class Compile {
     //  await myfs.copyFile(new Filesystem().path + "/" + fileName, fileName);
     await myfs.writeFile(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
     await myfs.writeFile(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
-
+  
   }
   /*
  test(response) {

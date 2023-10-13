@@ -453,13 +453,13 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1611490792000
             },
             "jassijs/server/Compile.ts": {
-                "date": 1696792044302.5027
+                "date": 1697213849686.3022
             },
             "jassijs/server/DatabaseSchema.ts": {
                 "date": 1682241710000
             },
             "jassijs/server/DBManager.ts": {
-                "date": 1697209070745.863,
+                "date": 1697213352571.0527,
                 "jassijs/server/DBManager": {
                     "$Serverservice": [
                         {
@@ -4043,7 +4043,7 @@ define("jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAd
                         await this.dirFiles(fname, skip, ret);
                     }
                     else {
-                        if (fname.endsWith(".js") || fname.endsWith(".ts"))
+                        if (fname.endsWith(".js") || fname.endsWith(".ts") || fname.endsWith(".tsx"))
                             if (replaceClientFileName)
                                 ret[fname.replace("./client/", "./")] = await NativeAdapter_1.myfs.readFile(fname, "utf-8");
                             else
@@ -4307,7 +4307,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                 // ],
                 // "subscribers": [
                 //    "src/subscriber/**/*.ts"
-                // ]
+                // ] 
             };
             return opt;
         }
