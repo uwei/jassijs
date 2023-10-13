@@ -45,6 +45,7 @@ class Jassi {
         var style = document.getElementById(id);
         //@ts-ignore
         if (!document.getElementById(id)) {
+            //@ts-ignore
             style = document.createRange().createContextualFragment('<style id=' + id + '></style>').children[0];
             //@ts-ignore
             document.head.appendChild(style);
@@ -108,6 +109,7 @@ class Jassi {
             }
         }
         else {
+            //@ts-ignore
             if (document.getElementById("-->" + url) != null) {
                 if (event)
                     event();

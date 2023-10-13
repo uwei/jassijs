@@ -1,6 +1,6 @@
 import "jassijs/ext/jquerylib";
 import { $Class } from "jassijs/remote/Registry";
-import {Component,  $UIComponent, ComponentProperties, ComponentProperties } from "jassijs/ui/Component";
+import {Component,  $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import {DataComponent} from "jassijs/ui/DataComponent";
 //import Button from "jassijs/ui/Button";
 import "jquery.choosen";
@@ -9,7 +9,9 @@ import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";
 
 jassijs.includeCSSFile("chosen.css");
-export interface SelectConfig extends ComponentProperties{
+
+@$Class("jassijs.ui.SelectProperties")
+export class SelectProperities extends ComponentProperties{
    /**
      * called if value has changed
      * @param {function} handler - the function which is executed
@@ -34,9 +36,6 @@ export interface SelectConfig extends ComponentProperties{
      * @member {object} sel - the selected object
      */
     value?;
- }
-@$Class("jassijs.ui.SelectCreateProperties")
-class SelectCreateProperties extends ComponentProperties{
 	@$Property({ default: false })
 	multiple?:boolean;
 	@$Property({ default: false })
@@ -48,18 +47,18 @@ class SelectCreateProperties extends ComponentProperties{
 
 @$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" })
 @$Class("jassijs.ui.Select")
-@$Property({ name: "new", type: "json",componentType:"jassijs.ui.SelectCreateProperties" })
-export class Select extends DataComponent {
+@$Property({ name: "new", type: "json",componentType:"jassijs.ui.SelectProperties" })
+export class Select<T extends SelectProperities={}> extends DataComponent<SelectProperities> {
     domSelect: HTMLElement;
     //dom:Element;
     _select:{value:number};
     options;
     _display;
     _items;
-    constructor(properties:SelectCreateProperties = undefined) {
-        super();
+    constructor(properties:SelectProperities = undefined) {
+        super(properties);
 
-        super.init('<select class="Select"><option value=""></option></select>');
+       // super.init('<select class="Select"><option value=""></option></select>');
         var _this=this;
         if (properties !== undefined && properties.multiple === true)
             document.getElementById(this._id)["multiple"]= true;
@@ -93,8 +92,16 @@ export class Select extends DataComponent {
 
         // this.layout();
     }
-
-    config(config:SelectConfig):Select {
+    render(){
+      //  super.init('<select class="Select"><option value=""></option></select>');
+        
+        return React.createElement("select",{
+            className:"Select"
+        },      React.createElement("option",{
+                    value:""
+        }));
+    }
+    config(config:SelectProperities) {
         super.config(config);
         return this;
     }

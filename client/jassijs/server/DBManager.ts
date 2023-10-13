@@ -1,4 +1,4 @@
-//synchronize-server-client
+//synchronize-server-client 
 //@ts-ignore  
 import { ConnectionOptions, createConnection, getConnection, SaveOptions, FindConditions, FindOneOptions, ObjectType, ObjectID, FindManyOptions, Connection, SelectQueryBuilder, Brackets, EntitySchema, getMetadataArgsStorage, Entity } from "typeorm";
 import { classes, JassiError } from "jassijs/remote/Classes";
@@ -10,7 +10,7 @@ import { User } from "jassijs/remote/security/User";
 import { Context } from "jassijs/remote/RemoteObject";
 import { $Class } from "jassijs/remote/Registry";
 import { $Serverservice } from "jassijs/remote/Serverservice";
-
+ 
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 

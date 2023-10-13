@@ -51,13 +51,13 @@ class TableEditorProperties {
     @$Property({ default: false })
     movableColumns: boolean;
 }
-export interface TableConfig extends DataComponentProperties {
+export class TableProperties extends DataComponentProperties {
     options?: TableOptions;
     /**
     * register an event if an item is selected
     * @param {function} handler - the function that is called on change
     */
-    onchange?(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void);
+    onchange?(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void){};
     showSearchbox?: boolean;
     /**
     * if the value is changed then the value of _component is also changed (_component.value)
@@ -73,7 +73,7 @@ export interface TableConfig extends DataComponentProperties {
 @$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" })
 @$Class("jassijs.ui.Table")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
-export class Table extends DataComponent implements TableConfig {
+export class Table<T extends TableProperties={}> extends DataComponent<TableProperties> implements TableProperties {
     table: Tabulator;
     _selectHandler;
     _select: {
@@ -90,16 +90,19 @@ export class Table extends DataComponent implements TableConfig {
     _databinderItems: Databinder;
     _lastOptions: TableOptions;
     private dataTreeChildFunction: string | ((obj: any) => any);
-    constructor(properties?: TableOptions) {
-        super();
-        super.init('<div class="Table"></div>');
+    constructor(properties?: TableProperties) {
+        super(properties);
+       // super.init('<div class="Table"></div>');
         var _this = this;
-        this.options = properties;
+        //this.options = properties;
         this._selectHandler = [];
     }
-    config(config: TableConfig): Table {
+    config(config: TableProperties): Table {
         super.config(config);
         return this;
+    }
+    render(): React.ReactNode {
+        return React.createElement("div",{ className:"Table" })
     }
     rerender() {
         this.table.destroy();
@@ -107,8 +110,8 @@ export class Table extends DataComponent implements TableConfig {
             this._databinderItems.remove(this);
             this._databinderItems = undefined;
         }
-        this.table = undefined;
-        super.rerender();
+        this.table = undefined; 
+       // super.rerender();
         this.options = this._lastOptions;
     }
     @$Property({ type: "json", componentType: "jassijs.ui.TableEditorProperties" })
@@ -521,7 +524,7 @@ export class Table extends DataComponent implements TableConfig {
         super.width = value;
     }
     @$Property({ type: "string" })
-    get width(): string {
+    get width() {
         return super.width;
     }
     /**
@@ -715,6 +718,7 @@ export async function test() {
         { id: 5, name: "Margret Marmajuke", age: 99, col: "yellow", dob: new Date() },
     ];
     var tab = new Table({
+        options:{
         height: 300,
         headerSort: true,
         items: tabledata,
@@ -724,6 +728,7 @@ export async function test() {
             { field: "name", title: "name", formatter: "buttonTick" },
             { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
         ]
+        }
     });
     tab.showSearchbox = true;
     tab.on("dblclick", () => {

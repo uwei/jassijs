@@ -65,7 +65,7 @@ export class DialogKunde extends Panel {
     layout(me: Me) {
        
         var test = new Kunde();
-        me.idvorname = new Textbox("red");
+        me.idvorname = new Textbox();
         me.idid = new Textbox();
         me.idnachname = new Textbox();
         me.objectchooser1 = new ObjectChooser();
@@ -104,7 +104,9 @@ export class DialogKunde extends Panel {
         me.idnachname.autocommit = true;
         this.add(me.idnachname);
         me.idtable = new Table({
-            movableColumns: false
+            options:{
+                movableColumns: false
+            }
         });
         me.idtable.table.on("cellDblClick", function (event: any, group: any) {
             alert(8);

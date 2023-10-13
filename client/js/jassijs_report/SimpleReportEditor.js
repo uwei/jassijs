@@ -232,7 +232,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater"
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], SimpleCodeEditor.prototype, "line", null);
-    class SimpleReportEditorProperties extends Panel_1.PanelCreateProperties {
+    class SimpleReportEditorProperties extends Panel_1.PanelProperties {
     }
     __decorate([
         (0, Property_1.$Property)(),

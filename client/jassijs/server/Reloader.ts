@@ -160,6 +160,7 @@ export class Reloader {
 
         }
         var myrequire;
+        //@ts-ignore
         if(require.defined("jassijs/server/Installserver")||useServerRequire){
             myrequire=<any>config.serverrequire;
         }else{

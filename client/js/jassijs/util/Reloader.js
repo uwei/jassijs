@@ -155,6 +155,7 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
                 //save all modules
             }
             var myrequire;
+            //@ts-ignore
             if (require.defined("jassijs/server/Installserver") || useServerRequire) {
                 myrequire = Config_1.config.serverrequire;
             }

@@ -68,15 +68,16 @@ export function syncRemoteFiles() {
         var paths = file.split("/");
         if (eventType === "change" && paths.length > 1 && (paths[1] === "remote" || paths[1] === "server")) {
             setTimeout(() => {
+                var f1 = path + "/" + file;
                 if (paths[1] === "server") {
-                    if (fs.existsSync(file) && !fs.statSync(file).isDirectory()) {
-                        var code = fs.readFileSync(file, 'utf-8');
+                    if (fs.existsSync(f1) && !fs.statSync(f1).isDirectory()) {
+                        var code = fs.readFileSync(f1, 'utf-8');
                         if (code.indexOf("//synchronize-server-client") !== 0)
                             return;
                     }
                 }
                 var f2 = "./" + file;
-                var f1 = path + "/" + file;
+                
                 copyFile(f1, f2);
             }, 200);
         }

@@ -3,7 +3,7 @@ define("northwind/registry",["require"], function(require) {
  return {
   default: {
 	"northwind/CategoriesView.ts": {
-		"date": 1695240623976.348,
+		"date": 1697199759329.1274,
 		"northwind.CategoriesView": {
 			"$DBObjectView": [
 				{
@@ -131,7 +131,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ProductList.ts": {
-		"date": 1657475060000,
+		"date": 1697197602604.6377,
 		"northwind/ProductList": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

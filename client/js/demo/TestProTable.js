@@ -11,11 +11,13 @@ define(["require", "exports", "jassijs/ui/Table"], function (require, exports, T
           });
          debugger;*/
         var tab = new Table_1.Table({
-            lazyLoad: {
-                classname: "tests.TestBigData",
-                loadFunc: "find",
-                pageSize: 10
-            },
+            options: {
+                lazyLoad: {
+                    classname: "tests.TestBigData",
+                    loadFunc: "find",
+                    pageSize: 10
+                }
+            }
         });
         tab.showSearchbox = true;
         tab.table.on("headerClick", function (e, c) {

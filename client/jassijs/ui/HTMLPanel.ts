@@ -8,22 +8,25 @@ declare global {
         doubletap: any;
     }
 }
-
-export interface HTMLPanelConfig extends DataComponentProperties {
-
+@$Class("jassijs.ui.HTMLPanelProperties")
+export class HTMLPanelProperties extends DataComponentProperties {
+    @$Property({ description: "line break after element", default: false })
     newlineafter?: boolean;
 
     /**
      * template string  component.value=new Person();component.template:"{{name}}"}
      */
+    @$Property({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' })
     template?: string;
+    @$Property()
+   
     value?: string;
 
 }
 
 @$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ })
 @$Class("jassijs.ui.HTMLPanel")
-export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
+export class HTMLPanel<T extends HTMLPanelProperties={}> extends DataComponent<HTMLPanelProperties> implements HTMLPanelProperties {
     static oldeditor;
     private _tcm;
     toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
@@ -41,7 +44,7 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
         'undo redo | bold italic underline | fontsizeselect', //fontselect
         'forecolor backcolor | numlist bullist outdent indent'
     ];*/
-    constructor(id = undefined) {
+    constructor(properties:HTMLPanelProperties={}) {
         super();
         super.init('<div class="HTMLPanel mce-content-body" tabindex="-1" ><div class="HTMLPanelContent"> </div></div>'); //tabindex for key-event
         //$(this.domWrapper).removeClass("jcontainer");
@@ -51,13 +54,12 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
         this.newlineafter = false;
         // $(this.__dom).css("min-width", "10px");
     }
-    config(config: HTMLPanelConfig): HTMLPanel {
+    config(config: HTMLPanelProperties): HTMLPanel {
         super.config(config);
         return this;
     }
 
 
-    @$Property({ description: "line break after element", default: false })
     get newlineafter(): boolean {
         return this.dom.style.display === "inline-block";
     }
@@ -73,8 +75,7 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
             }).join('') +
             '\'; }');
     }
-    @$Property({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' })
-    get template(): string {
+   get template(): string {
         return this._template;
     }
     set template(value: string) {
@@ -107,7 +108,6 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
         else
             el.innerHTML = scode;
     }
-    @$Property()
     get value(): string {
 
         return this._value;

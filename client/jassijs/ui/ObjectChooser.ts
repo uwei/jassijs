@@ -2,7 +2,7 @@ import "jassijs/ext/jquerylib";
 import { $Class } from "jassijs/remote/Registry";
 import { Table } from "jassijs/ui/Table";
 import { Panel } from "jassijs/ui/Panel";
-import { Button, ButtonConfig, ButtonProperties } from "jassijs/ui/Button";
+import { Button,  ButtonProperties } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { VariablePanel } from "jassijs/ui/VariablePanel";

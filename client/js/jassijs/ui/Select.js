@@ -10,29 +10,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_1, Component_1, DataComponent_1, Property_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Select = void 0;
+    exports.test = exports.Select = exports.SelectProperities = void 0;
     jassijs.includeCSSFile("chosen.css");
-    let SelectCreateProperties = class SelectCreateProperties extends Component_1.ComponentProperties {
+    let SelectProperities = class SelectProperities extends Component_1.ComponentProperties {
     };
     __decorate([
         (0, Property_1.$Property)({ default: false }),
         __metadata("design:type", Boolean)
-    ], SelectCreateProperties.prototype, "multiple", void 0);
+    ], SelectProperities.prototype, "multiple", void 0);
     __decorate([
         (0, Property_1.$Property)({ default: false }),
         __metadata("design:type", Boolean)
-    ], SelectCreateProperties.prototype, "allowDeselect", void 0);
+    ], SelectProperities.prototype, "allowDeselect", void 0);
     __decorate([
         (0, Property_1.$Property)({ default: "" }),
         __metadata("design:type", String)
-    ], SelectCreateProperties.prototype, "placeholder", void 0);
-    SelectCreateProperties = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.SelectCreateProperties")
-    ], SelectCreateProperties);
+    ], SelectProperities.prototype, "placeholder", void 0);
+    SelectProperities = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.SelectProperties")
+    ], SelectProperities);
+    exports.SelectProperities = SelectProperities;
     let Select = class Select extends DataComponent_1.DataComponent {
         constructor(properties = undefined) {
-            super();
-            super.init('<select class="Select"><option value=""></option></select>');
+            super(properties);
+            // super.init('<select class="Select"><option value=""></option></select>');
             var _this = this;
             if (properties !== undefined && properties.multiple === true)
                 document.getElementById(this._id)["multiple"] = true;
@@ -62,6 +63,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 //handler(e);
             });
             // this.layout();
+        }
+        render() {
+            //  super.init('<select class="Select"><option value=""></option></select>');
+            return React.createElement("select", {
+                className: "Select"
+            }, React.createElement("option", {
+                value: ""
+            }));
         }
         config(config) {
             super.config(config);
@@ -229,8 +238,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Select = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
         (0, Registry_1.$Class)("jassijs.ui.Select"),
-        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.SelectCreateProperties" }),
-        __metadata("design:paramtypes", [SelectCreateProperties])
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.SelectProperties" }),
+        __metadata("design:paramtypes", [SelectProperities])
     ], Select);
     exports.Select = Select;
     async function test() {

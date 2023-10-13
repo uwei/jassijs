@@ -17,6 +17,7 @@ export function $DBObject(options?: EntityOptions): Function {
         if (!options.name)
             options.name = classname.toLowerCase().replaceAll(".", "_");
         registry.register("$DBObject", pclass, options);
+        //@ts-ignore
         Entity(options)(pclass, ...params);//pass to orginal Entitiy
     }
 }
@@ -216,7 +217,7 @@ export class DBObject extends RemoteObject {
         if (!context?.isServer) {
             return await this.call(this.find, options, context);
         } else {
-            return (await serverservices.db).find(context, this, options);
+            return (await serverservices.db).find(context, this, <any>options);
         }
     }
     /**

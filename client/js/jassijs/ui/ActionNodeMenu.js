@@ -10,10 +10,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/ActionNode", "jassijs/ui/MenuItem"], function (require, exports, Menu_1, Registry_1, Panel_1, Actions_1, ActionNode_1, MenuItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ActionNodeMenu = void 0;
+    exports.test = exports.ActionNodeMenu = exports.ActionNodeMenuProperties = void 0;
+    class ActionNodeMenuProperties {
+    }
+    exports.ActionNodeMenuProperties = ActionNodeMenuProperties;
     let ActionNodeMenu = class ActionNodeMenu extends Panel_1.Panel {
-        constructor() {
-            super();
+        constructor(props = {}) {
+            super(props);
             this.me = {};
             this.layout(this.me);
         }
@@ -70,7 +73,7 @@ define(["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Registry", "jas
     };
     ActionNodeMenu = __decorate([
         (0, Registry_1.$Class)("jassijs/ui/ActionNodeMenu"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [ActionNodeMenuProperties])
     ], ActionNodeMenu);
     exports.ActionNodeMenu = ActionNodeMenu;
     async function test() {

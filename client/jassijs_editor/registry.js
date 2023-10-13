@@ -33,7 +33,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1697144095308.3767,
+		"date": 1697201944056.5862,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
@@ -41,7 +41,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ComponentExplorer": {}
 	},
 	"jassijs_editor/ComponentPalette.ts": {
-		"date": 1697130093551.545,
+		"date": 1697206203871.8457,
 		"jassijs_editor.ComponentPalette": {}
 	},
 	"jassijs_editor/ComponentSpy.ts": {
@@ -71,7 +71,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/DatabaseDesigner.ts": {
-		"date": 1684176866000,
+		"date": 1697201622965.974,
 		"jassijs_editor/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -217,7 +217,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/HtmlDesigner.ts": {
-		"date": 1697127841438.1167,
+		"date": 1697200831537.889,
 		"jassijs_editor.HtmlDesigner": {}
 	},
 	"jassijs_editor/modul.ts": {
@@ -246,7 +246,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/StartEditor.ts": {
-		"date": 1681571256000
+		"date": 1697200788486.8972
 	},
 	"jassijs_editor/template/TemplateDBDialog.ts": {
 		"date": 1681570392000,
@@ -335,7 +335,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1697144037447.224,
+		"date": 1697210878968.3445,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
@@ -364,7 +364,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1695586918212.458,
+		"date": 1697196860372.7793,
 		"jassijs_editor.util.Typescript": {}
 	}
 }

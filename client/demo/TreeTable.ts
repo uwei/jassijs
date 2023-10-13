@@ -41,9 +41,10 @@ export class TreeTable extends Panel {
         s.childs = [c];
 
         me.tab = new Table({
-            items: [c],
-            dataTreeChildFunction: "t"
-
+            options: {
+                items: [c],
+                dataTreeChildFunction: "t"
+            }
 
         });
 
@@ -87,24 +88,26 @@ export class TreeTable extends Panel {
             }
 
             me.tab = new Table({
-                dataTree: true,
-                dataTreeChildField: "__treechilds",
-                dataTreeRowExpanded: function (row) {
-                    let childs = row.getData()["childs"];
-                    for (let f = 0; f < childs.length; f++) {
-                        populateData(childs[f]);
+                options: {
+                    dataTree: true,
+                    dataTreeChildField: "__treechilds",
+                    dataTreeRowExpanded: function (row) {
+                        let childs = row.getData()["childs"];
+                        for (let f = 0; f < childs.length; f++) {
+                            populateData(childs[f]);
 
+                        }
+                        row.update(row.getData());
+                        /* var chs = row.getTreeChildren();
+                        for (let x = 0; x < chs.length; x++) {
+                            let r = chs[x];
+                            var dat = r.getData();
+                            let test=dat.__treechilds;
+                            r.update(dat);
+        
+                        }
+                        row.update(row.getData());*/
                     }
-                    row.update(row.getData());
-                    /* var chs = row.getTreeChildren();
-                    for (let x = 0; x < chs.length; x++) {
-                        let r = chs[x];
-                        var dat = r.getData();
-                        let test=dat.__treechilds;
-                        r.update(dat);
-    
-                    }
-                    row.update(row.getData());*/
                 }
                 /*dataTreeChildFunction1: function (ob) {
                     return ob.childs;
@@ -112,7 +115,7 @@ export class TreeTable extends Panel {
 
 
             });
-            var data =<any> [c];
+            var data = <any>[c];
 
             for (var x = 0; x < data.length; x++) {
                 populateData(data[x]);

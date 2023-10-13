@@ -1077,9 +1077,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
                 if (property === "text") {
                     var svalue = value;
-                    var old = this.data[variableName][property][0].node.text;
+                    var old = this.data[variableName][property][0].node.getText(); //text;
                     svalue = JSON.parse(`{"a":` + svalue + "}").a;
                     if (svalue.length === svalue.trim().length) {
+                        // @ts-ignore
                         svalue = old.substring(0, old.length - old.trimStart().length) + svalue + old.substring(old.length - (old.length - old.trimEnd().length));
                     }
                     //correct spaces linebrak are lost in html editing
@@ -1119,7 +1120,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                           node.parent["statements"].splice(pos, 0, newExpression);*/
                 }
                 else {
-                    var parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
+                    let parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
                     this.data[variableName][property] = [{ node: newExpression, isFunction, value }];
                     parent["properties"].push(newExpression);
                     newExpression.parent = parent["properties"];
@@ -1281,7 +1282,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         var code = Typescript_1.default.getCode("demo/hallo.tsx");
         var parser = new Parser();
         parser.parse(code, undefined, true);
-        debugger;
         // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
         // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";

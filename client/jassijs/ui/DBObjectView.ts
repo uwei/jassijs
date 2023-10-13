@@ -1,7 +1,7 @@
 import { Button } from "jassijs/ui/Button";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { $Class } from "jassijs/remote/Registry";
-import { Panel, PanelConfig } from "jassijs/ui/Panel";
+import { Panel, PanelProperties } from "jassijs/ui/Panel";
 import { Databinder } from "jassijs/ui/Databinder";
 import { $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
@@ -36,7 +36,7 @@ export function $DBObjectView(properties: DBObjectViewProperties): Function {
 }
 type Me = DBObjectViewMe;
 
-export interface DBObjectViewConfig extends PanelConfig {
+export interface DBObjectViewConfig extends PanelProperties {
     /**
        * register an event if the object is created
        * @param {function} handler - the function that is called
@@ -57,8 +57,9 @@ export interface DBObjectViewConfig extends PanelConfig {
     * @param {function} handler - the function that is called
     */
     ondeleted?(handler: (obj: DBObject) => void);
+    value:any;
 }
-@$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh", "me.databinder"] })
+//@$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh", "me.databinder"] })
 @$Class("jassijs/ui/DBObjectView")
 export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isAbsolute"> {
     me;

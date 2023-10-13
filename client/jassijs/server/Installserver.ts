@@ -15,13 +15,11 @@ navigator.serviceWorker.addEventListener("message", (evt) => {
     if (((_a = evt.data) === null || _a === void 0 ? void 0 : _a.type) === "REQUEST_REMOTEPROTCOL") {
 
         messageReceived(evt);
-
-
-    }
-});
-beforeServiceLoad(async (name, service) => {
-    if (name === "db") {
-        var man = (await import("jassijs/server/DBManagerExt"))
+   }   
+});    
+beforeServiceLoad(async (name, service) => {   
+    if (name === "db") {  
+        var man = (await import("jassijs/server/DBManagerExt"))  
         man.extendDBManager();
     }
 });

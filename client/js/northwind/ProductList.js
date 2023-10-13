@@ -26,7 +26,7 @@ define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jass
                 children: [
                     me.databinder.config({}),
                     me.repeater.config({
-                        isAbsolute: false,
+                        //isAbsolute: false,
                         bind: [me.databinder, "this"],
                         createRepeatingComponent: function (me) {
                             me.textbox = new Textbox_1.Textbox();

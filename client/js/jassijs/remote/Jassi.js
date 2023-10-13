@@ -46,6 +46,7 @@ define(["require", "exports"], function (require, exports) {
             var style = document.getElementById(id);
             //@ts-ignore
             if (!document.getElementById(id)) {
+                //@ts-ignore
                 style = document.createRange().createContextualFragment('<style id=' + id + '></style>').children[0];
                 //@ts-ignore
                 document.head.appendChild(style);
@@ -109,6 +110,7 @@ define(["require", "exports"], function (require, exports) {
                 }
             }
             else {
+                //@ts-ignore
                 if (document.getElementById("-->" + url) != null) {
                     if (event)
                         event();

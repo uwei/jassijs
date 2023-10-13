@@ -1,1 +1,0 @@
-{"version":3,"file":"tabulator.js","sourceRoot":"","sources":["../../northwind/tabulator.ts"],"names":[],"mappings":";;;;IAIA,IAAI,SAAS,GAAG,SAAS,CAAC;IAIjB,8BAAS;IAHlB,IAAI,IAAI,GAAG,eAAK,CAAC,OAAO,CAAC,KAAK,CAAC,cAAc,CAAC,CAAC;IAC/C,OAAO,CAAC,SAAS,CAAC,IAAI,CAAC,OAAO,CAAC,MAAM,EAAE,OAAO,CAAC,GAAC,MAAM,CAAC,CAAC"}

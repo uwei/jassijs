@@ -10,11 +10,11 @@ define("de/registry",["require"], function(require) {
 		"de/Dialog": {}
 	},
 	"de/Dialog2.ts": {
-		"date": 1695420885654.223,
+		"date": 1697206950609.826,
 		"de/Dialog2": {}
 	},
 	"de/DialogKunde.ts": {
-		"date": 1695319709913.6096,
+		"date": 1697206940949.708,
 		"de.DialogKunde": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -327,13 +327,10 @@ define("de/registry",["require"], function(require) {
 		"de/TestDialogBinder": {}
 	},
 	"de/TestEmployees.ts": {
-		"date": 1657973728000
+		"date": 1697199351525.1855
 	},
 	"de/TestExtension.ts": {
 		"date": 1656077196000
-	},
-	"de/TestProt.ts": {
-		"date": 1682190810000
 	},
 	"de/TH.ts": {
 		"date": 1682186442000

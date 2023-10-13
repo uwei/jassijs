@@ -50,7 +50,9 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
             var panel = new BoxPanel_1.BoxPanel();
             var panelButtons = new BoxPanel_1.BoxPanel();
             var table = new Table_1.Table({
-                columns: [{ field: "field", title: "field" }]
+                options: {
+                    columns: [{ field: "field", title: "field" }]
+                }
             });
             var up = new Button_1.Button();
             table.height = "100%";

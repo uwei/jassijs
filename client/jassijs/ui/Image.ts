@@ -3,35 +3,39 @@ import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 
-export interface ImageConfig extends DataComponentProperties {
+export class ImageProperties extends DataComponentProperties {
 
        /**
     * register an event if the image is clicked
     * @param {function} handler - the function that is called on change
     */
-    onclick?(handler);
+       @$Property({ default: "function(event){\n\t\n}" })
+    
+    onclick?(handler){};
   /**
     * @member {string} - link to image
     */
+  @$Property({ type: "image" })
     src?:string;
+    @$Property({ type: "string" })
+    declare value?: string;
 }
 
 @$UIComponent({ fullPath: "default/Image", icon: "mdi mdi-file-image" })//
 @$Class("jassijs.ui.Image")
-export class Image extends DataComponent implements ImageConfig{
+export class Image<T extends ImageProperties={}> extends DataComponent<ImageProperties> implements ImageProperties{
     /* get dom(){
          return this.dom;
      }*/
-    constructor() { 
-        super();
+    constructor(config:ImageProperties={}) { 
+        super(config);
         super.init('<div style="display: inline-block;white-space: nowrap;"><img  vspace="0" hspace="0"  border="0"  src="" alt=""></div>');
     }
-     config(config:ImageConfig ): Image {
+     config(config:ImageProperties ): Image {
         super.config(config);
         return this;
     }
-    @$Property({ default: "function(event){\n\t\n}" })
-    onclick(handler) {
+   onclick(handler) {
         this.on("click",handler);
 
     }
@@ -42,7 +46,7 @@ export class Image extends DataComponent implements ImageConfig{
     set value(value) { //the Code
         this.src = value;
     }
-    @$Property({ type: "string" })
+    
     get value() {
         return this.src
     }
@@ -61,7 +65,7 @@ export class Image extends DataComponent implements ImageConfig{
 
         return super.height;
     }
-    set height(value) {
+    set height(value: string | number) {
         if (value === undefined)
             (<HTMLElement>this.dom.children[0]).setAttribute("height", "");
         else
@@ -79,7 +83,7 @@ export class Image extends DataComponent implements ImageConfig{
             (<HTMLElement>this.dom.children[0]).style.visibility= "";
         }
     }
-    @$Property({ type: "image" })
+    
     get src(): string {
         var ret = (<HTMLElement>this.dom.children[0]).getAttribute("src");
         if (ret === "")

@@ -38,8 +38,10 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
             var c = new Person("Christoph", 4, [u, t]);
             s.childs = [c];
             me.tab = new Table_1.Table({
-                items: [c],
-                dataTreeChildFunction: "t"
+                options: {
+                    items: [c],
+                    dataTreeChildFunction: "t"
+                }
             });
             me.tab.height = "150";
             me.tab.width = "100%";
@@ -75,23 +77,25 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
                     }
                 }
                 me.tab = new Table_1.Table({
-                    dataTree: true,
-                    dataTreeChildField: "__treechilds",
-                    dataTreeRowExpanded: function (row) {
-                        let childs = row.getData()["childs"];
-                        for (let f = 0; f < childs.length; f++) {
-                            populateData(childs[f]);
+                    options: {
+                        dataTree: true,
+                        dataTreeChildField: "__treechilds",
+                        dataTreeRowExpanded: function (row) {
+                            let childs = row.getData()["childs"];
+                            for (let f = 0; f < childs.length; f++) {
+                                populateData(childs[f]);
+                            }
+                            row.update(row.getData());
+                            /* var chs = row.getTreeChildren();
+                            for (let x = 0; x < chs.length; x++) {
+                                let r = chs[x];
+                                var dat = r.getData();
+                                let test=dat.__treechilds;
+                                r.update(dat);
+            
+                            }
+                            row.update(row.getData());*/
                         }
-                        row.update(row.getData());
-                        /* var chs = row.getTreeChildren();
-                        for (let x = 0; x < chs.length; x++) {
-                            let r = chs[x];
-                            var dat = r.getData();
-                            let test=dat.__treechilds;
-                            r.update(dat);
-        
-                        }
-                        row.update(row.getData());*/
                     }
                     /*dataTreeChildFunction1: function (ob) {
                         return ob.childs;

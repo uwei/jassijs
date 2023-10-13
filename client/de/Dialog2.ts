@@ -7,7 +7,7 @@ type Me = {
     textbox?: Textbox;
     textbox2?: Textbox;
     textbox3?: Textbox;
-    button1: Button;
+    button1?: Button;
 };
 @$Class("de/Dialog2")
 export class Dialog2 extends Panel {

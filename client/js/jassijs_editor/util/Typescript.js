@@ -113,7 +113,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                     //include js in jassijs/ext
                     if (fname.startsWith("node_modules"))
                         continue;
-                    if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
+                    if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".tsx") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
                         if (fname.toLocaleLowerCase().endsWith(".js")) {
                             monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
                         }
@@ -143,7 +143,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                     //@ts-ignore
                     //	
                     var type = "typescript";
-                    if (key.toLocaleLowerCase().endsWith(".ts")) {
+                    if (key.toLocaleLowerCase().endsWith(".ts") || key.toLocaleLowerCase().endsWith(".tsx")) {
                         //
                         if (this.initInIdle) {
                             var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });

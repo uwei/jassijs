@@ -31,10 +31,11 @@ declare module "demo/Dialog2" {
     };
     export class Dialog2 extends Panel {
         me: Me;
+        data: any;
         constructor(data: any);
         layout(me: Me): void;
     }
-    export function test(): unknown;
+    export function test(): any;
 }
 declare module "demo/Dialog3" {
     import { Checkbox } from "jassijs/ui/Checkbox";

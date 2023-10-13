@@ -4,6 +4,7 @@ exports.localExec = exports.test = exports.messageReceived = void 0;
 const RemoteProtocol_1 = require("jassijs/remote/RemoteProtocol");
 const Server_1 = require("jassijs/remote/Server");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
+//@ts-ignore
 const Cookies_1 = require("jassijs/util/Cookies");
 const DoRemoteProtocol_1 = require("jassijs/server/DoRemoteProtocol");
 async function messageReceived(param) {
@@ -17,8 +18,9 @@ async function messageReceived(param) {
             user: 1
         }
     };
-    await DoRemoteProtocol_1.remoteProtocol(myRequest, {
+    await (0, DoRemoteProtocol_1.remoteProtocol)(myRequest, {
         send(msg) {
+            //@ts-ignore
             navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: config.id, data: msg });
         }
     });
@@ -106,6 +108,7 @@ async function localExec(prot, context = undefined) {
                 }
             }
         };
+        //@ts-ignore
         var Cookies = (await Promise.resolve().then(() => require("jassijs/util/Cookies"))).Cookies;
         if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
             var man = await Serverservice_1.serverservices.db;

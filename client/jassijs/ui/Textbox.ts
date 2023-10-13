@@ -23,25 +23,25 @@ export class TextboxProperties extends DataComponentProperties {
     * @param {function} handler - the function which is executed
     */
     @$Property({ default: "function(event){\n\t\n}" })
-    onclick?(handler);
+    onclick?(handler){};
     /**
      * called if value has changed
      * @param {function} handler - the function which is executed
      */
     @$Property({ default: "function(event){\n\t\n}" })
-    onchange?(handler);
+    onchange?(handler){};
     /**
      * called if a key is pressed down
      * @param {function} handler - the function which is executed
      */
     @$Property({ default: "function(event){\n\t\n}" })
-    onkeydown?(handler);
+    onkeydown?(handler){};
     /**
      * called if user has something typed
      * @param {function} handler - the function which is executed
      */
     @$Property({ default: "function(event){\n\t\n}" })
-    oninput?(handler);
+    oninput?(handler){};
     @$Property()
     placeholder?: string;
     /**
@@ -61,7 +61,7 @@ export class TextboxProperties extends DataComponentProperties {
 @$UIComponent({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" })
 @$Class("jassijs.ui.Textbox")
 @$Property({ name: "new",type: "json", componentType: "jassijs.ui.TextboxProperties"})
-export class Textbox<T extends TextboxProperties> extends DataComponent<T> implements TextboxProperties {
+export class Textbox<T extends TextboxProperties={}> extends DataComponent<TextboxProperties> implements TextboxProperties {
     /* get dom(){
          return this.dom;
      }*/

@@ -125,7 +125,9 @@ export class CSVImport extends Panel {
 		me.upload = new Upload();
 		var _this = this;
 		this.me.table = new Table({
-			autoColumns: false
+			options:{
+				autoColumns: false
+			}
 		});
 
 

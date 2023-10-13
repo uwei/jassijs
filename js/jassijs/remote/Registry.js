@@ -271,7 +271,7 @@ class Registry {
             else {
                 myrequire = Config_1.config.clientrequire;
             }
-            this.isServer = Config_1.config.isServer;
+            this.isServer = Config_1.config.isServer; //is this needed?
             for (let modul in modules) {
                 if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
                     myrequire.undef(modul + "/registry");

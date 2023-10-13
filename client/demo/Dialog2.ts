@@ -7,7 +7,7 @@ import { StringConverter } from "jassijs/ui/converters/StringConverter";
 import { Textbox } from "jassijs/ui/Textbox";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
-import { Kunde } from "de/remote/Kunde";
+
 type Me = {
     boxpanel?: Panel;
     button?: Button;
@@ -18,6 +18,7 @@ type Me = {
 @$Class("demo/Dialog2")
 export class Dialog2 extends Panel {
     me: Me;
+    data;
     constructor(data) {
         super();
         this.me = {};
@@ -29,7 +30,7 @@ export class Dialog2 extends Panel {
         me.button = new Button();
         me.button2 = new Button();
         me.textbox = new Textbox();
-        me.table = new Table({ data: this.data });
+        me.table = new Table({ options:{ data: this.data} });
         var _this = this;
         this.config({ children: [
                 me.boxpanel.config({
@@ -66,7 +67,7 @@ function kk() {
     return "kko";
 }
 export async function test() {
-    var data = await Kunde.find();
-    var ret = new Dialog2(data);
-    return ret;
+    //var data = await Kunde.find();
+    //var ret = new Dialog2(data);
+   // return ret;
 }

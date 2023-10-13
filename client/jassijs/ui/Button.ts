@@ -9,7 +9,7 @@ export class ButtonProperties extends ComponentProperties{
     * @param {function} handler - the function that is called on change
     */
     @$Property({ default: "function(event){\n\t\n}" })
-    onclick?(handler, removeOldHandler: boolean );
+    onclick?(handler, removeOldHandler: boolean ){};
      /**
     * @member {string} - the icon of the button
     */
@@ -28,7 +28,7 @@ export class ButtonProperties extends ComponentProperties{
 @$Class("jassijs.ui.Button")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.ButtonProperties" })
 export class Button<T extends ButtonProperties={}> extends Component<T> implements ButtonProperties {
-    constructor(properties:ButtonProperties){
+    constructor(properties:ButtonProperties={}){
         super(properties);
     }
     config(config: T,forceRender=false): Button<T> {

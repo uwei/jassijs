@@ -12,7 +12,7 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CategoriesView = void 0;
     let CategoriesView = class CategoriesView extends DBObjectView_1.DBObjectView {
-        constructor(config) {
+        constructor() {
             super();
             // this.me = {}; //this is called in objectdialog
             this.layout(this.me);
@@ -26,7 +26,7 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
             me.name = new Textbox_1.Textbox();
             me.description = new Textarea_1.Textarea();
             me.panel1 = new Panel_1.Panel();
-            me.table1 = new Table_1.Table({ data: this.value });
+            me.table1 = new Table_1.Table({ options: { data: this.value } });
             this.me.main.config({ children: [
                     me.boxpanel1.config({
                         children: [
@@ -68,7 +68,7 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
     CategoriesView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
         (0, Registry_1.$Class)("northwind.CategoriesView"),
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:paramtypes", [])
     ], CategoriesView);
     exports.CategoriesView = CategoriesView;
     async function test() {

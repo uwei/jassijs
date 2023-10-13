@@ -20,8 +20,8 @@ import { currentsettings } from "jassijs/base/CurrentSettings";
 
 async function start() {
     //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
-    var body = new Panel({ id: "body" });
-    body.max();
+  //  var body = new Panel({ id: "body" });
+    //body.max();
     var site=new Panel();
     
     windows._desktop.add(site);

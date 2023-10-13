@@ -37,7 +37,7 @@ export class Dialog3 extends Panel {
     }
     layout(me: Me) {
         this.dom.contentEditable = "true";
-        me.p1 = new BoxPanel();me.p1.horizontal=true;;me.p1.domWrapper.classList.add("testuw");
+        me.p1=new Panel();
         me.p1.domWrapper.style.borderWidth = "5px;";
         me.p1.domWrapper.style.borderStyle = "ridge";
         

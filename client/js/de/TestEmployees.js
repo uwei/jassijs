@@ -11,12 +11,14 @@ define(["require", "exports", "jassijs/ui/Table"], function (require, exports, T
           });
          debugger;*/
         var tab = new Table_1.Table({
-            lazyLoad: {
-                //classname: "tests.TestBigData",
-                classname: "northwind.Products",
-                loadFunc: "find",
-                pageSize: 500
-            },
+            options: {
+                lazyLoad: {
+                    //classname: "tests.TestBigData",
+                    classname: "northwind.Products",
+                    loadFunc: "find",
+                    pageSize: 500
+                }
+            }
         });
         tab.showSearchbox = true;
         /* tab.table.on("headerClick", function (e, c) {

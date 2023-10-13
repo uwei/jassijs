@@ -36,34 +36,34 @@ let User = class User extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    Validator_1.ValidateIsNumber({ optional: true }),
-    DatabaseSchema_1.PrimaryGeneratedColumn(),
+    (0, Validator_1.ValidateIsNumber)({ optional: true }),
+    (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
-    Validator_1.ValidateIsString(),
-    DatabaseSchema_1.Column(),
+    (0, Validator_1.ValidateIsString)(),
+    (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ select: false }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ select: false }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    Validator_1.ValidateIsArray({ optional: true, type: type => Group_1.Group }),
-    DatabaseSchema_1.JoinTable(),
-    DatabaseSchema_1.ManyToMany(type => Group_1.Group, ob => ob.users),
+    (0, Validator_1.ValidateIsArray)({ optional: true, type: type => Group_1.Group }),
+    (0, DatabaseSchema_1.JoinTable)(),
+    (0, DatabaseSchema_1.ManyToMany)(type => Group_1.Group, ob => ob.users),
     __metadata("design:type", Array)
 ], User.prototype, "groups", void 0);
 __decorate([
-    Validator_1.ValidateIsBoolean({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsBoolean)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isAdmin", void 0);
 User = __decorate([
-    DBObject_1.$DBObject({ name: "jassijs_user" }),
-    Registry_1.$Class("jassijs.security.User")
+    (0, DBObject_1.$DBObject)({ name: "jassijs_user" }),
+    (0, Registry_1.$Class)("jassijs.security.User")
 ], User);
 exports.User = User;
 async function test() {

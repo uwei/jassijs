@@ -23,35 +23,35 @@ var hh = Config_1.config;
 let Group = class Group extends DBObject_1.DBObject {
 };
 __decorate([
-    Validator_1.ValidateIsInt({ optional: true }),
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Group.prototype, "id", void 0);
 __decorate([
-    Validator_1.ValidateIsString(),
-    DatabaseSchema_1.Column(),
+    (0, Validator_1.ValidateIsString)(),
+    (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Group.prototype, "name", void 0);
 __decorate([
-    Validator_1.ValidateIsArray({ optional: true, type: type => ParentRight_1.ParentRight }),
-    DatabaseSchema_1.JoinTable(),
-    DatabaseSchema_1.ManyToMany(type => ParentRight_1.ParentRight, ob => ob.groups),
+    (0, Validator_1.ValidateIsArray)({ optional: true, type: type => ParentRight_1.ParentRight }),
+    (0, DatabaseSchema_1.JoinTable)(),
+    (0, DatabaseSchema_1.ManyToMany)(type => ParentRight_1.ParentRight, ob => ob.groups),
     __metadata("design:type", Array)
 ], Group.prototype, "parentRights", void 0);
 __decorate([
-    Validator_1.ValidateIsArray({ optional: true, type: type => Right_1.Right }),
-    DatabaseSchema_1.JoinTable(),
-    DatabaseSchema_1.ManyToMany(type => Right_1.Right, ob => ob.groups),
+    (0, Validator_1.ValidateIsArray)({ optional: true, type: type => Right_1.Right }),
+    (0, DatabaseSchema_1.JoinTable)(),
+    (0, DatabaseSchema_1.ManyToMany)(type => Right_1.Right, ob => ob.groups),
     __metadata("design:type", Array)
 ], Group.prototype, "rights", void 0);
 __decorate([
-    Validator_1.ValidateIsArray({ optional: true, type: type => User_1.User }),
-    DatabaseSchema_1.ManyToMany(type => User_1.User, ob => ob.groups),
+    (0, Validator_1.ValidateIsArray)({ optional: true, type: type => User_1.User }),
+    (0, DatabaseSchema_1.ManyToMany)(type => User_1.User, ob => ob.groups),
     __metadata("design:type", Array)
 ], Group.prototype, "users", void 0);
 Group = __decorate([
-    DBObject_1.$DBObject({ name: "jassijs_group" }),
-    Registry_1.$Class("jassijs.security.Group")
+    (0, DBObject_1.$DBObject)({ name: "jassijs_group" }),
+    (0, Registry_1.$Class)("jassijs.security.Group")
 ], Group);
 exports.Group = Group;
 //# sourceMappingURL=Group.js.map

@@ -3,6 +3,7 @@ import { Context } from "jassijs/remote/RemoteObject";
 import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
 import { Server } from "jassijs/remote/Server";
 import { serverservices } from "jassijs/remote/Serverservice";
+ //@ts-ignore
 import { Cookies } from "jassijs/util/Cookies";
 import { remoteProtocol } from "jassijs/server/DoRemoteProtocol";
 
@@ -21,6 +22,7 @@ export async function messageReceived(param) {
     };
     await remoteProtocol(myRequest,{
         send(msg){
+             //@ts-ignore
             navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: config.id, data: msg });
         }
     });
@@ -112,6 +114,7 @@ export async function localExec(prot: RemoteProtocol, context: Context = undefin
                 }
             }
         };
+        //@ts-ignore
         var Cookies = (await import("jassijs/util/Cookies")).Cookies;
         if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
             var man = await serverservices.db;

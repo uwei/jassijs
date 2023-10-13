@@ -3,7 +3,7 @@
 declare var Split;
 
 
-import { Panel, PanelConfig } from "jassijs/ui/Panel";
+import { Panel, PanelProperties} from "jassijs/ui/Panel";
 import { $Class } from "jassijs/remote/Registry";
 import { $UIComponent } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
@@ -12,22 +12,24 @@ import { classes } from "jassijs/remote/Classes";
 //import Split from "jassijs/ext/split";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 
-
-export interface BoxPanelConfig extends PanelConfig {
+@$Class("jassijs.ui.BoxPanelProperties")
+export class BoxPanelProperties extends PanelProperties {
     /**
      * @member {boolean} - if true then the components are composed horizontally
      **/
+    @$Property()
     horizontal?: boolean;
     /**
       * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
       */
+    @$Property({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" })
     spliter?: number[];
 }
 
 @$UIComponent({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] })
 @$Class("jassijs.ui.BoxPanel")
 @$Property({ name: "isAbsolute", hide: true, type: "boolean" })
-export class BoxPanel extends Panel implements BoxPanelConfig {
+export class BoxPanel<T extends BoxPanelProperties={}> extends Panel<BoxPanelProperties> implements BoxPanelProperties {
     _horizontal: boolean;
     private _spliter: number[];
     private _splitcomponent: any;
@@ -38,15 +40,16 @@ export class BoxPanel extends Panel implements BoxPanelConfig {
     * @param {boolean} [properties.useSpan] -  use span not div
     *
     */
-    constructor(properties = undefined) {
+    constructor(properties:BoxPanelProperties={}) {
         super(properties);
         this.domWrapper.classList.add('BoxPanel')
         this.domWrapper.classList.remove('Panel');
-        this.horizontal = false;
+
+        this.horizontal = !properties?.horizontal===false;
         this.dom.style.display="flex";
     }
 
-    config(config: BoxPanelConfig): BoxPanel {
+    config(config: BoxPanelProperties): BoxPanel {
         super.config(config);
         return this;
     }
@@ -59,7 +62,7 @@ export class BoxPanel extends Panel implements BoxPanelConfig {
         this.updateSpliter();
 
     }
-    @$Property()
+    
     get horizontal(): boolean {
         return this._horizontal;
     }
@@ -85,7 +88,6 @@ export class BoxPanel extends Panel implements BoxPanelConfig {
         this._spliter = size;
         this.updateSpliter();
     }
-    @$Property({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" })
     get spliter(): number[] {
         return this._spliter;
     }
@@ -120,7 +122,7 @@ export async function test() {
     var ret = new BoxPanel();
     var me: any = {};
     ret["me"] = me;
-    ret.horizontal = true;
+   // ret.horizontal = true;
     me.tb = new HTMLPanel();
     me.tb2 = new HTMLPanel();
     me.tb.value = "l&ouml;&auml;k&ouml;lk &ouml;lsfdk sd&auml;&ouml;flgkdf ";

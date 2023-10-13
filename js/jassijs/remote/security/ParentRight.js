@@ -19,48 +19,48 @@ const Validator_1 = require("jassijs/remote/Validator");
 let ParentRight = class ParentRight extends DBObject_1.DBObject {
 };
 __decorate([
-    Validator_1.ValidateIsInt({ optional: true }),
-    DatabaseSchema_1.PrimaryGeneratedColumn(),
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
+    (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], ParentRight.prototype, "id", void 0);
 __decorate([
-    Validator_1.ValidateIsString(),
-    DatabaseSchema_1.Column(),
+    (0, Validator_1.ValidateIsString)(),
+    (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], ParentRight.prototype, "name", void 0);
 __decorate([
-    Validator_1.ValidateIsString(),
-    DatabaseSchema_1.Column(),
+    (0, Validator_1.ValidateIsString)(),
+    (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], ParentRight.prototype, "classname", void 0);
 __decorate([
-    Validator_1.ValidateIsNumber({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsNumber)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", Number)
 ], ParentRight.prototype, "i1", void 0);
 __decorate([
-    Validator_1.ValidateIsNumber({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsNumber)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", Number)
 ], ParentRight.prototype, "i2", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], ParentRight.prototype, "s1", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], ParentRight.prototype, "s2", void 0);
 __decorate([
-    Validator_1.ValidateIsArray({ optional: true, type: type => Group_1.Group }),
-    DatabaseSchema_1.ManyToMany(type => Group_1.Group, ob => ob.parentRights),
+    (0, Validator_1.ValidateIsArray)({ optional: true, type: type => Group_1.Group }),
+    (0, DatabaseSchema_1.ManyToMany)(type => Group_1.Group, ob => ob.parentRights),
     __metadata("design:type", Array)
 ], ParentRight.prototype, "groups", void 0);
 ParentRight = __decorate([
-    DBObject_1.$DBObject({ name: "jassijs_parentright" }),
-    Registry_1.$Class("jassijs.security.ParentRight")
+    (0, DBObject_1.$DBObject)({ name: "jassijs_parentright" }),
+    (0, Registry_1.$Class)("jassijs.security.ParentRight")
 ], ParentRight);
 exports.ParentRight = ParentRight;
 //# sourceMappingURL=ParentRight.js.map

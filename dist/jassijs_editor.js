@@ -3287,6 +3287,8 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
                 Registry_13.default.getData(_this._service).forEach(function (mdata) {
                     var data = mdata.params[0];
                     var img = new Image_1.Image();
+                    if (data.fullPath === undefined)
+                        debugger;
                     var name = data.fullPath.split("/");
                     var sname = name[name.length - 1];
                     img.tooltip = sname;
@@ -3594,7 +3596,7 @@ define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/Box
             me.newclass = new Button_5.Button();
             me.boxpanel1 = new BoxPanel_3.BoxPanel();
             me.save = new Button_5.Button();
-            me.boxpanel2 = new BoxPanel_3.BoxPanel(false);
+            me.boxpanel2 = new BoxPanel_3.BoxPanel({ horizontal: false });
             me.newfield = new Button_5.Button();
             me.removefield = new Button_5.Button();
             me.boxpanel3 = new BoxPanel_3.BoxPanel();
@@ -3603,23 +3605,25 @@ define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/Box
             var xxx = 0;
             var params = { values: ["hall", "du"] };
             me.table = new Table_2.Table({
-                autoColumns: false,
-                columns: [
-                    //@ts-ignore
-                    { title: "name", field: "name", editor: "input", editable: true },
-                    //@ts-ignore
-                    { title: "type", field: "type", editor: "select", editorParams: this.allTypes },
-                    //@ts-ignore
-                    { title: "nullable", field: "nullable", editor: "tickCross", editorParams: { tristate: false } },
-                    {
+                options: {
+                    autoColumns: false,
+                    columns: [
                         //@ts-ignore
-                        title: "relationinfo", field: "relationinfo", editor: "select",
-                        editorParams: this.posibleRelations,
-                        cellEditing: function (cell) {
-                            _this.updatePossibleRelations(cell);
+                        { title: "name", field: "name", editor: "input", editable: true },
+                        //@ts-ignore
+                        { title: "type", field: "type", editor: "select", editorParams: this.allTypes },
+                        //@ts-ignore
+                        { title: "nullable", field: "nullable", editor: "tickCross", editorParams: { tristate: false } },
+                        {
+                            //@ts-ignore
+                            title: "relationinfo", field: "relationinfo", editor: "select",
+                            editorParams: this.posibleRelations,
+                            cellEditing: function (cell) {
+                                _this.updatePossibleRelations(cell);
+                            }
                         }
-                    }
-                ]
+                    ]
+                }
             });
             me.select = new Select_1.Select();
             me.databinder = new Databinder_1.Databinder();
@@ -4652,6 +4656,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             }
             else {
                 // firefox
+                //@ts-ignore
                 var pos = [ev.rangeParent, ev.rangeOffset];
                 range = document.createRange();
                 range.setStart(...pos);
@@ -5291,7 +5296,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1697144095308.3767,
+                "date": 1697201944056.5862,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -5299,7 +5304,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1697130093551.545,
+                "date": 1697206203871.8457,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
@@ -5329,7 +5334,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-                "date": 1684176866000,
+                "date": 1697201622965.974,
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -5475,7 +5480,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1697127841438.1167,
+                "date": 1697200831537.889,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -5504,7 +5509,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/StartEditor.ts": {
-                "date": 1681571256000
+                "date": 1697200788486.8972
             },
             "jassijs_editor/template/TemplateDBDialog.ts": {
                 "date": 1681570392000,
@@ -5593,7 +5598,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1697144037447.224,
+                "date": 1697200774201.297,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -5622,7 +5627,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1695586918212.458,
+                "date": 1697196860372.7793,
                 "jassijs_editor.util.Typescript": {}
             }
         }
@@ -5738,14 +5743,14 @@ define("jassijs_editor/SearchExplorer", ["require", "exports", "jassijs/remote/R
     }
     exports.test = test;
 });
-define("jassijs_editor/StartEditor", ["require", "exports", "jassijs_editor/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/base/Router", "jassijs_editor/SearchExplorer", "jassijs/ui/DBObjectExplorer", "jassijs/ui/ActionNodeMenu"], function (require, exports, FileExplorer_2, Windows_6, Panel_12, Button_7, Router_8, SearchExplorer_2, DBObjectExplorer_1, ActionNodeMenu_1) {
+define("jassijs_editor/StartEditor", ["require", "exports", "jassijs_editor/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Button", "jassijs/base/Router", "jassijs_editor/SearchExplorer", "jassijs/ui/DBObjectExplorer", "jassijs/ui/ActionNodeMenu"], function (require, exports, FileExplorer_2, Windows_6, Button_7, Router_8, SearchExplorer_2, DBObjectExplorer_1, ActionNodeMenu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     //var h=new RemoteObject().test();
     async function start() {
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
-        var body = new Panel_12.Panel({ id: "body" });
-        body.max();
+        //var body = new Panel({ id: "body" });
+        //body.max();
         Windows_6.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
         Windows_6.default.addLeft(new SearchExplorer_2.SearchExplorer(), "Search");
         Windows_6.default.addLeft(new FileExplorer_2.FileExplorer(), "Files");
@@ -7922,9 +7927,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
                 if (property === "text") {
                     var svalue = value;
-                    var old = this.data[variableName][property][0].node.text;
+                    var old = this.data[variableName][property][0].node.getText(); //text;
                     svalue = JSON.parse(`{"a":` + svalue + "}").a;
                     if (svalue.length === svalue.trim().length) {
+                        // @ts-ignore
                         svalue = old.substring(0, old.length - old.trimStart().length) + svalue + old.substring(old.length - (old.length - old.trimEnd().length));
                     }
                     //correct spaces linebrak are lost in html editing
@@ -7964,7 +7970,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                           node.parent["statements"].splice(pos, 0, newExpression);*/
                 }
                 else {
-                    var parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
+                    let parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
                     this.data[variableName][property] = [{ node: newExpression, isFunction, value }];
                     parent["properties"].push(newExpression);
                     newExpression.parent = parent["properties"];
@@ -8126,7 +8132,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         var code = Typescript_5.default.getCode("demo/hallo.tsx");
         var parser = new Parser();
         parser.parse(code, undefined, true);
-        debugger;
         // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
         // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
@@ -8828,7 +8833,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                     //include js in jassijs/ext
                     if (fname.startsWith("node_modules"))
                         continue;
-                    if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
+                    if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".tsx") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
                         if (fname.toLocaleLowerCase().endsWith(".js")) {
                             monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
                         }
@@ -8858,7 +8863,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                     //@ts-ignore
                     //	
                     var type = "typescript";
-                    if (key.toLocaleLowerCase().endsWith(".ts")) {
+                    if (key.toLocaleLowerCase().endsWith(".ts") || key.toLocaleLowerCase().endsWith(".tsx")) {
                         //
                         if (this.initInIdle) {
                             var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
@@ -9185,7 +9190,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1697144095308.3767,
+                "date": 1697201944056.5862,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -9193,7 +9198,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1697130093551.545,
+                "date": 1697206203871.8457,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
@@ -9223,7 +9228,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-                "date": 1684176866000,
+                "date": 1697201622965.974,
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -9369,7 +9374,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1697127841438.1167,
+                "date": 1697200831537.889,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -9398,7 +9403,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/StartEditor.ts": {
-                "date": 1681571256000
+                "date": 1697200788486.8972
             },
             "jassijs_editor/template/TemplateDBDialog.ts": {
                 "date": 1681570392000,
@@ -9487,7 +9492,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1697144037447.224,
+                "date": 1697200774201.297,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -9516,7 +9521,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1695586918212.458,
+                "date": 1697196860372.7793,
                 "jassijs_editor.util.Typescript": {}
             }
         }

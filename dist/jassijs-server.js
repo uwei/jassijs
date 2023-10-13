@@ -27,7 +27,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.ClientError": {}
             },
             "jassijs/remote/Config.ts": {
-                "date": 1686853238000
+                "date": 1697209179729.3484
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
@@ -48,7 +48,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.DBArray": {}
             },
             "jassijs/remote/DBObject.ts": {
-                "date": 1681317356000,
+                "date": 1697209147073.5745,
                 "jassijs.remote.DBObject": {}
             },
             "jassijs/remote/DBObjectQuery.ts": {
@@ -65,7 +65,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985410000
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1695580332624.7742
+                "date": 1697209123749.7214
             },
             "jassijs/remote/JassijsGlobal.ts": {
                 "date": 1655549782000
@@ -77,7 +77,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985414000
             },
             "jassijs/remote/Registry.ts": {
-                "date": 1686762490000
+                "date": 1697206758182.0095
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1655556866000,
@@ -459,7 +459,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1682241710000
             },
             "jassijs/server/DBManager.ts": {
-                "date": 1682710552000,
+                "date": 1697209070745.863,
                 "jassijs/server/DBManager": {
                     "$Serverservice": [
                         {
@@ -492,20 +492,11 @@ define("jassijs/registry", ["require"], function (require) {
                     ]
                 }
             },
-            "jassijs/server/FS.ts": {
-                "date": 1682930346000
-            },
             "jassijs/server/Indexer.ts": {
                 "date": 1684515212000
             },
-            "jassijs/server/Installserver.ts": {
-                "date": 1682880640000
-            },
-            "jassijs/server/LocalFS.ts": {
-                "date": 1683050190000
-            },
             "jassijs/server/LocalProtocol.ts": {
-                "date": 1682365336000
+                "date": 1697207752396.3682
             },
             "jassijs/server/NativeAdapter.ts": {
                 "date": 1684173750000
@@ -534,7 +525,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/TypeORMListener.ts": {
-                "date": 1682718174000,
+                "date": 1697207709231.553,
                 "jassijs.server.TypeORMListener": {
                     "EventSubscriber": []
                 }
@@ -953,6 +944,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
             if (!options.name)
                 options.name = classname.toLowerCase().replaceAll(".", "_");
             Registry_7.default.register("$DBObject", pclass, options);
+            //@ts-ignore
             DatabaseSchema_1.Entity(options)(pclass, ...params); //pass to orginal Entitiy
         };
     }
@@ -1385,6 +1377,7 @@ define("jassijs/remote/Jassi", ["require", "exports"], function (require, export
             var style = document.getElementById(id);
             //@ts-ignore
             if (!document.getElementById(id)) {
+                //@ts-ignore
                 style = document.createRange().createContextualFragment('<style id=' + id + '></style>').children[0];
                 //@ts-ignore
                 document.head.appendChild(style);
@@ -1448,6 +1441,7 @@ define("jassijs/remote/Jassi", ["require", "exports"], function (require, export
                 }
             }
             else {
+                //@ts-ignore
                 if (document.getElementById("-->" + url) != null) {
                     if (event)
                         event();
@@ -1803,7 +1797,7 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
                 else {
                     myrequire = Config_1.config.clientrequire;
                 }
-                this.isServer = Config_1.config.isServer;
+                this.isServer = Config_1.config.isServer; //is this needed?
                 for (let modul in modules) {
                     if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
                         myrequire.undef(modul + "/registry");
@@ -7092,6 +7086,7 @@ define("jassijs/server/Reloader", ["require", "exports", "jassijs/remote/Config"
                 //save all modules
             }
             var myrequire;
+            //@ts-ignore
             if (require.defined("jassijs/server/Installserver") || useServerRequire) {
                 myrequire = Config_12.config.serverrequire;
             }

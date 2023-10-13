@@ -15,6 +15,7 @@ interface Entry {
     value?: any;
     node?: ts.Node;
     isFunction: boolean;
+
 }
 class ParsedDecorator {
     node?: ts.Decorator;
@@ -570,7 +571,7 @@ export class Parser {
     }
     private createNode(code: string) {
         var ret = ts.createSourceFile('dummytemp.ts', code, ts.ScriptTarget.ES5, true, this.jsxVariables ? ts.ScriptKind.TSX : undefined);
-        var node = ret.statements[0].expression;
+        var node = (<any>ret.statements[0]).expression;
         this.removePos(node);
         return node;
         //return this.parseold(code,onlyfunction);
@@ -960,7 +961,7 @@ export class Parser {
         before: { variablename: string, property: string, value?} = undefined,
         variablescope: { variablename: string, methodname } = undefined) {
         if (this.jsxVariables)
-            return this.setPropertyInJSX(variableName, property, value, classscope, isFunction, replace, before, variablescope);
+            return this.setPropertyInJSX(variableName, property, <string>value, classscope, isFunction, replace, before, variablescope);
         if (this.data[variableName] === undefined)
             this.data[variableName] = {};
         if (classscope === undefined)
@@ -1043,7 +1044,7 @@ export class Parser {
             }
         }
     }
-    setPropertyInJSX(variableName: string, property: string, value: string | ts.Node,
+    setPropertyInJSX(variableName: string, property: string, value: string ,
         classscope: { classname: string, methodname: string }[],
         isFunction: boolean = false, replace: boolean = undefined,
         before: { variablename: string, property: string, value?} = undefined,
@@ -1073,9 +1074,9 @@ export class Parser {
         */
         if (property === "add") {
             var prop = this.data[value]["_new_"][0];
-            var classname = prop.className;
+            var classname =(<any> prop).className;
             if (classname === "HTMLComponent")
-                classname = prop.tag;
+                classname = (<any> prop).tag;
             var node;
             if (classname === "text") {
                 
@@ -1124,16 +1125,17 @@ export class Parser {
         if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
             if (property === "text") {
                 var svalue = <string>value;
-                var old =this.data[variableName][property][0].node.text;
+                var old =this.data[variableName][property][0].node.getText();//text;
                 svalue = JSON.parse(`{"a":` + svalue + "}").a;
                 if (svalue.length === svalue.trim().length) {
+                    // @ts-ignore
                     svalue = old.substring(0, old.length - old.trimStart().length) + svalue + old.substring(old.length - (old.length - old.trimEnd().length));
                 }
 
                 //correct spaces linebrak are lost in html editing
 
                 this.data[variableName][property][0].value = JSON.stringify(svalue);
-                this.data[variableName][property][0].node.text = svalue;
+                (<any>this.data[variableName][property][0].node).text = svalue;
             }
             return;
         }
@@ -1168,7 +1170,7 @@ export class Parser {
                       node.parent["statements"].splice(pos, 0, newExpression);*/
             } else {
 
-                var parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
+                let parent = (<any>this.data[variableName]["_new_"][0].node).openingElement.attributes;
                 this.data[variableName][property] = [{ node: newExpression, isFunction, value }];
                 parent["properties"].push(newExpression);
                 newExpression.parent = parent["properties"];
@@ -1259,7 +1261,7 @@ export class Parser {
 
         if (this.jsxVariables) {
             this.data[varname] = {
-                "_new_": [{ className: type, tag: suggestedName }]
+                "_new_": [<any>{ className: type, tag: suggestedName }]
             }
             // this.addTypeMe(varname, type);
             return varname;
@@ -1336,7 +1338,6 @@ export async function test() {
     var code = typescript.getCode("demo/hallo.tsx");
     var parser = new Parser();
     parser.parse(code, undefined, true);
-    debugger;
     // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
     // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
     // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";

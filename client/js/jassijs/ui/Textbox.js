@@ -12,6 +12,30 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textbox = exports.TextboxProperties = void 0;
     let TextboxProperties = class TextboxProperties extends DataComponent_1.DataComponentProperties {
+        /**
+        * called if value has changed
+        * @param {function} handler - the function which is executed
+        */
+        onclick(handler) { }
+        ;
+        /**
+         * called if value has changed
+         * @param {function} handler - the function which is executed
+         */
+        onchange(handler) { }
+        ;
+        /**
+         * called if a key is pressed down
+         * @param {function} handler - the function which is executed
+         */
+        onkeydown(handler) { }
+        ;
+        /**
+         * called if user has something typed
+         * @param {function} handler - the function which is executed
+         */
+        oninput(handler) { }
+        ;
     };
     __decorate([
         (0, Property_1.$Property)({ type: "classselector", service: "$Converter" }),
@@ -21,6 +45,30 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object)
     ], TextboxProperties.prototype, "value", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], TextboxProperties.prototype, "onclick", null);
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], TextboxProperties.prototype, "onchange", null);
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], TextboxProperties.prototype, "onkeydown", null);
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], TextboxProperties.prototype, "oninput", null);
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", String)

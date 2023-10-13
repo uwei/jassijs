@@ -8,7 +8,7 @@ export class Reloader {
     static cache = [];
     static reloadCodeFromServerIsRunning: boolean = false;
     static instance = new Reloader();
-    listener = [];
+    listener = []; 
     /**
      * reloads Code
      */
@@ -159,6 +159,7 @@ export class Reloader {
 
         }
         var myrequire;
+        //@ts-ignore
         if(require.defined("jassijs/server/Installserver")||useServerRequire){
             myrequire=<any>config.serverrequire;
         }else{

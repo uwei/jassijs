@@ -46,7 +46,7 @@ export class ProductList extends Panel {
             children: [
                 me.databinder.config({}),
                 me.repeater.config({
-                    isAbsolute: false,
+                    //isAbsolute: false,
                     bind: [me.databinder, "this"],
                     createRepeatingComponent: function (me: Me) {
                         me.textbox = new Textbox();
@@ -78,7 +78,7 @@ export class ProductList extends Panel {
                                         me.panel.config({})
                                     ],
                                     horizontal: true
-                                }),
+                                }), 
                                 me.boxpanel2.config({
                                     children: [
                                         me.htmlpanel2.config({ value: "Quantity Per Unit:", width: "150" }),

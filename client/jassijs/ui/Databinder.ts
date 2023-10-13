@@ -1,5 +1,5 @@
 
-import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
+import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { DataComponent } from "jassijs/ui/DataComponent";
@@ -8,11 +8,13 @@ import { classes } from "jassijs/remote/Classes";
 import { ValidationError } from "jassijs/remote/Validator";
 import { notify } from "jassijs/ui/Notify";
 
+class DatabinderProperties extends InvisibleComponentProperties{
 
+}
 
 @$UIComponent({ fullPath: "common/Databinder", icon: "mdi mdi-connection" })
 @$Class("jassijs.ui.Databinder")
-export class Databinder extends InvisibleComponent {
+export class Databinder<T extends DatabinderProperties={}> extends InvisibleComponent<DatabinderProperties> implements DatabinderProperties {
     components: Component[];
     private _properties: string[];
     private _getter: { (comp: Component): any; }[];
@@ -21,9 +23,9 @@ export class Databinder extends InvisibleComponent {
     private _autocommit: any[];
     userObject;
     rollbackObject;
-    constructor() {//id connect to existing(not reqired)
-        super();
-        super.init('<span class="InvisibleComponent"></span>');
+    constructor(props:DatabinderProperties={}) {//id connect to existing(not reqired)
+        super(props);
+       // super.init('<span class="InvisibleComponent"></span>');
         /** @member {[jassijs.ui.Component]} components - all binded components*/
         this.components = [];
         /** @member {[string]} properties - all binded properties*/
@@ -39,7 +41,11 @@ export class Databinder extends InvisibleComponent {
         /** @member [{object}] userObject - the object to bind*/
         this.userObject = undefined;
     }
-
+    render(){
+        return React.createElement("span",{
+            className:"InvisibleComponent"
+        })
+    }
 
     /**
     * binds the component to the property of the userObject

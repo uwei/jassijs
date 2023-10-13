@@ -13,7 +13,7 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CategoriesView = void 0;
     let CategoriesView = class CategoriesView extends DBObjectView_1.DBObjectView {
-        constructor(config) {
+        constructor() {
             super();
             // this.me = {}; //this is called in objectdialog
             this.layout(this.me);
@@ -27,7 +27,7 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
             me.name = new Textbox_1.Textbox();
             me.description = new Textarea_1.Textarea();
             me.panel1 = new Panel_1.Panel();
-            me.table1 = new Table_1.Table({ data: this.value });
+            me.table1 = new Table_1.Table({ options: { data: this.value } });
             this.me.main.config({ children: [
                     me.boxpanel1.config({
                         children: [
@@ -69,7 +69,7 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
     CategoriesView = __decorate([
         DBObjectView_1.$DBObjectView({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
         Registry_1.$Class("northwind.CategoriesView"),
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:paramtypes", [])
     ], CategoriesView);
     exports.CategoriesView = CategoriesView;
     async function test() {
@@ -976,7 +976,7 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
                 children: [
                     me.databinder.config({}),
                     me.repeater.config({
-                        isAbsolute: false,
+                        //isAbsolute: false,
                         bind: [me.databinder, "this"],
                         createRepeatingComponent: function (me) {
                             me.textbox = new Textbox_6.Textbox();
@@ -1221,7 +1221,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1695240623976.348,
+                "date": 1697199759329.1274,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -1349,7 +1349,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductList.ts": {
-                "date": 1657475060000,
+                "date": 1697197602604.6377,
                 "northwind/ProductList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -3241,7 +3241,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1695240623976.348,
+                "date": 1697199759329.1274,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -3369,7 +3369,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductList.ts": {
-                "date": 1657475060000,
+                "date": 1697197602604.6377,
                 "northwind/ProductList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"

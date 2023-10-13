@@ -68,6 +68,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 Registry_2.default.getData(_this._service).forEach(function (mdata) {
                     var data = mdata.params[0];
                     var img = new Image_1.Image();
+                    if (data.fullPath === undefined)
+                        debugger;
                     var name = data.fullPath.split("/");
                     var sname = name[name.length - 1];
                     img.tooltip = sname;

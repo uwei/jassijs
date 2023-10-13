@@ -75,7 +75,7 @@ define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Bo
     }
     exports.test = test;
 });
-define("demo/Dialog2", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "de/remote/Kunde"], function (require, exports, Button_2, Table_1, Textbox_1, Registry_2, Panel_2, Kunde_1) {
+define("demo/Dialog2", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Button_2, Table_1, Textbox_1, Registry_2, Panel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog2 = void 0;
@@ -91,7 +91,7 @@ define("demo/Dialog2", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/T
             me.button = new Button_2.Button();
             me.button2 = new Button_2.Button();
             me.textbox = new Textbox_1.Textbox();
-            me.table = new Table_1.Table({ data: this.data });
+            me.table = new Table_1.Table({ options: { data: this.data } });
             var _this = this;
             this.config({ children: [
                     me.boxpanel.config({
@@ -133,13 +133,13 @@ define("demo/Dialog2", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/T
         return "kko";
     }
     async function test() {
-        var data = await Kunde_1.Kunde.find();
-        var ret = new Dialog2(data);
-        return ret;
+        //var data = await Kunde.find();
+        //var ret = new Dialog2(data);
+        // return ret;
     }
     exports.test = test;
 });
-define("demo/Dialog3", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/BoxPanel"], function (require, exports, Registry_3, Panel_3, Component_1, BoxPanel_2) {
+define("demo/Dialog3", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component"], function (require, exports, Registry_3, Panel_3, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog3 = void 0;
@@ -166,10 +166,7 @@ define("demo/Dialog3", ["require", "exports", "jassijs/remote/Registry", "jassij
         }
         layout(me) {
             this.dom.contentEditable = "true";
-            me.p1 = new BoxPanel_2.BoxPanel();
-            me.p1.horizontal = true;
-            ;
-            me.p1.domWrapper.classList.add("testuw");
+            me.p1 = new Panel_3.Panel();
             me.p1.domWrapper.style.borderWidth = "5px;";
             me.p1.domWrapper.style.borderStyle = "ridge";
             me.p2 = new Panel_3.Panel();
@@ -373,7 +370,7 @@ define("demo/modul", ["require", "exports"], function (require, exports) {
         "require": {}
     };
 });
-define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Textarea", "jassijs/ui/Table", "jassijs/ui/Style", "jassijs/ui/Repeater", "jassijs/ui/Image", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/Checkbox", "jassijs/ui/BoxPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Panel"], function (require, exports, Tree_1, Textarea_1, Table_2, Style_1, Repeater_1, Image_1, HTMLPanel_2, Databinder_1, Checkbox_1, BoxPanel_3, Textbox_2, Button_5, Panel_6) {
+define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Textarea", "jassijs/ui/Table", "jassijs/ui/Style", "jassijs/ui/Repeater", "jassijs/ui/Image", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/Checkbox", "jassijs/ui/BoxPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Panel"], function (require, exports, Tree_1, Textarea_1, Table_2, Style_1, Repeater_1, Image_1, HTMLPanel_2, Databinder_1, Checkbox_1, BoxPanel_2, Textbox_2, Button_5, Panel_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -381,7 +378,7 @@ define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Text
         var ret = new Panel_6.Panel();
         var button = new Button_5.Button();
         var textbox = new Textbox_2.Textbox();
-        var boxpanel = new BoxPanel_3.BoxPanel();
+        var boxpanel = new BoxPanel_2.BoxPanel();
         var checkbox = new Checkbox_1.Checkbox();
         var databinder = new Databinder_1.Databinder();
         var htmlpanel = new HTMLPanel_2.HTMLPanel();
@@ -423,11 +420,11 @@ define("demo/registry", ["require"], function (require) {
                 "demo/Dialog": {}
             },
             "demo/Dialog2.ts": {
-                "date": 1695239901541.8835,
+                "date": 1697206912854.486,
                 "demo/Dialog2": {}
             },
             "demo/Dialog3.ts": {
-                "date": 1695762474246.062,
+                "date": 1697209636565.93,
                 "demo/Dialog3": {}
             },
             "demo/EmptyDialog.ts": {
@@ -465,7 +462,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo/StyleDialog": {}
             },
             "demo/TableContextmenu.ts": {
-                "date": 1681590828000
+                "date": 1697199411562.5796
             },
             "demo/TestComponent.ts": {
                 "date": 1655843270000,
@@ -511,7 +508,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo.Testmenu": {}
             },
             "demo/TestProTable.ts": {
-                "date": 1681563006000
+                "date": 1697201359946.1306
             },
             "demo/Testtable.ts": {
                 "date": 1681590322000
@@ -528,7 +525,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1634384688000
             },
             "demo/TreeTable.ts": {
-                "date": 1681590900000,
+                "date": 1697199554705.8606,
                 "demo.TreeTable": {}
             },
             "demo/_test1.ts": {
@@ -885,8 +882,10 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
             { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
         ];
         var tab = new Table_3.Table({
-            movableColumns: true,
-            items: tabledata
+            options: {
+                movableColumns: true,
+                items: tabledata
+            }
         });
         tab.width = 400;
         tab.table.on("rowDblClick", function () {
@@ -904,9 +903,11 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
         });
         contextmenu.menu.add(menu);
         contextmenu.getActions = async function (obs) {
-            return [{ name: "custom Action", call: function (data) {
+            return [{
+                    name: "custom Action", call: function (data) {
                         alert(data[0].name);
-                    } }];
+                    }
+                }];
         };
         tab.selectComponent = { value: "" };
         tab.showSearchbox = true;
@@ -1427,11 +1428,13 @@ define("demo/TestProTable", ["require", "exports", "jassijs/ui/Table"], function
           });
          debugger;*/
         var tab = new Table_4.Table({
-            lazyLoad: {
-                classname: "tests.TestBigData",
-                loadFunc: "find",
-                pageSize: 10
-            },
+            options: {
+                lazyLoad: {
+                    classname: "tests.TestBigData",
+                    loadFunc: "find",
+                    pageSize: 10
+                }
+            }
         });
         tab.showSearchbox = true;
         tab.table.on("headerClick", function (e, c) {
@@ -1653,8 +1656,10 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
             var c = new Person("Christoph", 4, [u, t]);
             s.childs = [c];
             me.tab = new Table_5.Table({
-                items: [c],
-                dataTreeChildFunction: "t"
+                options: {
+                    items: [c],
+                    dataTreeChildFunction: "t"
+                }
             });
             me.tab.height = "150";
             me.tab.width = "100%";
@@ -1690,23 +1695,25 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
                     }
                 }
                 me.tab = new Table_5.Table({
-                    dataTree: true,
-                    dataTreeChildField: "__treechilds",
-                    dataTreeRowExpanded: function (row) {
-                        let childs = row.getData()["childs"];
-                        for (let f = 0; f < childs.length; f++) {
-                            populateData(childs[f]);
+                    options: {
+                        dataTree: true,
+                        dataTreeChildField: "__treechilds",
+                        dataTreeRowExpanded: function (row) {
+                            let childs = row.getData()["childs"];
+                            for (let f = 0; f < childs.length; f++) {
+                                populateData(childs[f]);
+                            }
+                            row.update(row.getData());
+                            /* var chs = row.getTreeChildren();
+                            for (let x = 0; x < chs.length; x++) {
+                                let r = chs[x];
+                                var dat = r.getData();
+                                let test=dat.__treechilds;
+                                r.update(dat);
+            
+                            }
+                            row.update(row.getData());*/
                         }
-                        row.update(row.getData());
-                        /* var chs = row.getTreeChildren();
-                        for (let x = 0; x < chs.length; x++) {
-                            let r = chs[x];
-                            var dat = r.getData();
-                            let test=dat.__treechilds;
-                            r.update(dat);
-        
-                        }
-                        row.update(row.getData());*/
                     }
                     /*dataTreeChildFunction1: function (ob) {
                         return ob.childs;
@@ -1749,11 +1756,11 @@ define("demo/registry", ["require"], function (require) {
                 "demo/Dialog": {}
             },
             "demo/Dialog2.ts": {
-                "date": 1695239901541.8835,
+                "date": 1697206912854.486,
                 "demo/Dialog2": {}
             },
             "demo/Dialog3.ts": {
-                "date": 1695762474246.062,
+                "date": 1697209636565.93,
                 "demo/Dialog3": {}
             },
             "demo/EmptyDialog.ts": {
@@ -1791,7 +1798,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo/StyleDialog": {}
             },
             "demo/TableContextmenu.ts": {
-                "date": 1681590828000
+                "date": 1697199411562.5796
             },
             "demo/TestComponent.ts": {
                 "date": 1655843270000,
@@ -1837,7 +1844,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo.Testmenu": {}
             },
             "demo/TestProTable.ts": {
-                "date": 1681563006000
+                "date": 1697201359946.1306
             },
             "demo/Testtable.ts": {
                 "date": 1681590322000
@@ -1854,7 +1861,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1634384688000
             },
             "demo/TreeTable.ts": {
-                "date": 1681590900000,
+                "date": 1697199554705.8606,
                 "demo.TreeTable": {}
             },
             "demo/_test1.ts": {

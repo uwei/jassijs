@@ -1,6 +1,6 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Container, ContainerProperties } from "jassijs/ui/Container";
-import { Component, $UIComponent, ComponentProperties, ComponentProperties } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
 import { Image } from "jassijs/ui/Image";
 import { DesignDummy } from "jassijs/ui/DesignDummy";

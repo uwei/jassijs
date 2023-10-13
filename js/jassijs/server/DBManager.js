@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var DBManager_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBManager = void 0;
-//synchronize-server-client
+//synchronize-server-client 
 //@ts-ignore  
 const typeorm_1 = require("typeorm");
 const Classes_1 = require("jassijs/remote/Classes");
@@ -23,11 +23,6 @@ const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 var _instance = undefined;
 let DBManager = DBManager_1 = class DBManager {
-    constructor() {
-        this.waitForConnection = undefined;
-        Object.freeze(_instance);
-        this.waitForConnection = this.open();
-    }
     static async getConOpts() {
         var stype = "postgres";
         var shost = "localhost";
@@ -91,10 +86,10 @@ let DBManager = DBManager_1 = class DBManager {
     }
     async open() {
         var _initrunning = undefined;
-        var test = typeorm_1.getMetadataArgsStorage();
+        var test = (0, typeorm_1.getMetadataArgsStorage)();
         try {
             var opts = await DBManager_1.getConOpts();
-            _initrunning = typeorm_1.createConnection(opts);
+            _initrunning = (0, typeorm_1.createConnection)(opts);
             await _initrunning;
         }
         catch (err1) {
@@ -105,7 +100,7 @@ let DBManager = DBManager_1 = class DBManager {
                     rejectUnauthorized: false
                 };
                 //          opts["ssl"] = true; 
-                _initrunning = typeorm_1.createConnection(opts);
+                _initrunning = (0, typeorm_1.createConnection)(opts);
                 await _initrunning;
             }
             catch (err) {
@@ -125,7 +120,7 @@ let DBManager = DBManager_1 = class DBManager {
             }
         }
         try {
-            var con = typeorm_1.getConnection();
+            var con = (0, typeorm_1.getConnection)();
             for (var x = 0; x < 500; x++) { //sometimes on reconnect the connection is not ready
                 if (con.isConnected)
                     break;
@@ -157,7 +152,7 @@ let DBManager = DBManager_1 = class DBManager {
         return this;
     }
     async mySync() {
-        var con = typeorm_1.getConnection();
+        var con = (0, typeorm_1.getConnection)();
         //@ts-ignore
         var schem = await Promise.resolve().then(() => require("typeorm/schema-builder/RdbmsSchemaBuilder"));
         var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
@@ -184,29 +179,29 @@ let DBManager = DBManager_1 = class DBManager {
         //con.driver.
     }
     static async clearMetadata() {
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().checks);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().columns);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().discriminatorValues);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().embeddeds);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entityListeners);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entityRepositories);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entitySubscribers);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().exclusions);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().tables);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().generations);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().indices);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().inheritances);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().joinColumns);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().joinTables);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().namingStrategies);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relationCounts);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relationIds);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relations);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().tables);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().transactionEntityManagers);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().transactionRepositories);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().trees);
-        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().uniques);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().checks);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().columns);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().discriminatorValues);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().embeddeds);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().entityListeners);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().entityRepositories);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().entitySubscribers);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().exclusions);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().tables);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().generations);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().indices);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().inheritances);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().joinColumns);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().joinTables);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().namingStrategies);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().relationCounts);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().relationIds);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().relations);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().tables);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().transactionEntityManagers);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().transactionRepositories);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().trees);
+        DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().uniques);
     }
     async renewConnection() {
         if (this.waitForConnection !== undefined)
@@ -219,7 +214,7 @@ let DBManager = DBManager_1 = class DBManager {
         if (waitForCompleteOpen)
             await this.waitForConnection;
         try {
-            var con = await typeorm_1.getConnection();
+            var con = await (0, typeorm_1.getConnection)();
             await con.close();
         }
         catch (err) {
@@ -232,8 +227,13 @@ let DBManager = DBManager_1 = class DBManager {
             arr.pop();
         }
     }
+    constructor() {
+        this.waitForConnection = undefined;
+        Object.freeze(_instance);
+        this.waitForConnection = this.open();
+    }
     connection() {
-        return typeorm_1.getConnection();
+        return (0, typeorm_1.getConnection)();
     }
     async runSQL(context, sql, parameters = undefined) {
         var ret = (await this.waitForConnection).connection().query(sql, parameters);
@@ -291,7 +291,6 @@ let DBManager = DBManager_1 = class DBManager {
         return retob;
     }
     async save(context, entity, options) {
-        var _a;
         await this.waitForConnection;
         await this._checkParentRightsForSave(context, entity);
         if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
@@ -314,7 +313,7 @@ let DBManager = DBManager_1 = class DBManager {
         //delete entity.password;
         //delete ret["password"];
         //@ts-ignore
-        return (_a = ret) === null || _a === void 0 ? void 0 : _a.id;
+        return ret === null || ret === void 0 ? void 0 : ret.id;
     }
     async _checkParentRightsForSave(context, entity) {
         var _a;
@@ -448,7 +447,7 @@ let DBManager = DBManager_1 = class DBManager {
             return ret;
         for (let r = 0; r < relation.length; r++) {
             if (relation[r] === "*") {
-                var vdata = typeorm_1.getConnection().getMetadata(Classes_1.classes.getClass(classname));
+                var vdata = (0, typeorm_1.getConnection)().getMetadata(Classes_1.classes.getClass(classname));
                 for (var re = 0; re < vdata.relations.length; re++) {
                     var s = vdata.relations[re].propertyName;
                     if (ret.indexOf(s) === -1)
@@ -463,7 +462,7 @@ let DBManager = DBManager_1 = class DBManager {
     async createUser(context, username, password) {
         await this.waitForConnection;
         //var hh=getConnection().manager.findOne(User,{ email: username });
-        if (await typeorm_1.getConnection().manager.findOne(User_1.User, { email: username }) !== undefined) {
+        if (await (0, typeorm_1.getConnection)().manager.findOne(User_1.User, { email: username }) !== undefined) {
             throw new Error("User already exists");
         }
         const user = new User_1.User();
@@ -543,8 +542,8 @@ let DBManager = DBManager_1 = class DBManager {
     }
 };
 DBManager = DBManager_1 = __decorate([
-    Serverservice_1.$Serverservice({ name: "db", getInstance: async () => { return DBManager_1._get(); } }),
-    Registry_2.$Class("jassijs/server/DBManager"),
+    (0, Serverservice_1.$Serverservice)({ name: "db", getInstance: async () => { return DBManager_1._get(); } }),
+    (0, Registry_2.$Class)("jassijs/server/DBManager"),
     __metadata("design:paramtypes", [])
 ], DBManager);
 exports.DBManager = DBManager;

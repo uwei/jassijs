@@ -10,11 +10,11 @@ define("demo/registry",["require"], function(require) {
 		"demo/Dialog": {}
 	},
 	"demo/Dialog2.ts": {
-		"date": 1695239901541.8835,
+		"date": 1697210915283.1006,
 		"demo/Dialog2": {}
 	},
 	"demo/Dialog3.ts": {
-		"date": 1695762474246.062,
+		"date": 1697210905983.3728,
 		"demo/Dialog3": {}
 	},
 	"demo/EmptyDialog.ts": {
@@ -52,7 +52,7 @@ define("demo/registry",["require"], function(require) {
 		"demo/StyleDialog": {}
 	},
 	"demo/TableContextmenu.ts": {
-		"date": 1681590828000
+		"date": 1697199411562.5796
 	},
 	"demo/TestComponent.ts": {
 		"date": 1655843270000,
@@ -98,7 +98,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.Testmenu": {}
 	},
 	"demo/TestProTable.ts": {
-		"date": 1681563006000
+		"date": 1697201359946.1306
 	},
 	"demo/Testtable.ts": {
 		"date": 1681590322000
@@ -115,7 +115,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1634384688000
 	},
 	"demo/TreeTable.ts": {
-		"date": 1681590900000,
+		"date": 1697199554705.8606,
 		"demo.TreeTable": {}
 	},
 	"demo/_test1.ts": {

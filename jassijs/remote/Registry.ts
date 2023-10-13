@@ -55,6 +55,7 @@ class JSONDataEntry {
 */
 export class Registry {
     private _nextID: number;
+
     public jsondata: { [service: string]: { [classname: string]: JSONDataEntry } } = undefined;
     public data: { [service: string]: { [classname: string]: DataEntry } } = {};
     public dataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
@@ -301,7 +302,7 @@ export class Registry {
             }else{
                 myrequire=<any>config.clientrequire;
             }
-            this.isServer=config.isServer;
+            (<any>this).isServer=config.isServer;//is this needed?
             for (let modul in modules) {
                 if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
                     myrequire.undef(modul + "/registry");

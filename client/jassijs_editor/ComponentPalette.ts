@@ -70,6 +70,8 @@ export class ComponentPalette extends Panel {
             registry.getData(_this._service).forEach(function(mdata){
                 var data:UIComponentProperties=mdata.params[0];
                 var img=new Image();
+                if(data.fullPath===undefined)
+                    debugger;
                 var name=data.fullPath.split("/");
                 var sname=name[name.length-1];
                 img.tooltip=sname;

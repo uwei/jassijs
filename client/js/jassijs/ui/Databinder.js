@@ -11,10 +11,12 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Databinder = void 0;
+    class DatabinderProperties extends InvisibleComponent_1.InvisibleComponentProperties {
+    }
     let Databinder = class Databinder extends InvisibleComponent_1.InvisibleComponent {
-        constructor() {
-            super();
-            super.init('<span class="InvisibleComponent"></span>');
+        constructor(props = {}) {
+            super(props);
+            // super.init('<span class="InvisibleComponent"></span>');
             /** @member {[jassijs.ui.Component]} components - all binded components*/
             this.components = [];
             /** @member {[string]} properties - all binded properties*/
@@ -29,6 +31,11 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
             this._autocommit = [];
             /** @member [{object}] userObject - the object to bind*/
             this.userObject = undefined;
+        }
+        render() {
+            return React.createElement("span", {
+                className: "InvisibleComponent"
+            });
         }
         /**
         * binds the component to the property of the userObject
@@ -282,7 +289,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     Databinder = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Databinder", icon: "mdi mdi-connection" }),
         (0, Registry_1.$Class)("jassijs.ui.Databinder"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [DatabinderProperties])
     ], Databinder);
     exports.Databinder = Databinder;
     class PropertyAccessor {

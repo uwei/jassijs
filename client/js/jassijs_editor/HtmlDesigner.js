@@ -35,6 +35,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             }
             else {
                 // firefox
+                //@ts-ignore
                 var pos = [ev.rangeParent, ev.rangeOffset];
                 range = document.createRange();
                 range.setStart(...pos);

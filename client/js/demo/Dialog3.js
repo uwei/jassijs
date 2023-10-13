@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/BoxPanel"], function (require, exports, Registry_1, Panel_1, Component_1, BoxPanel_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component"], function (require, exports, Registry_1, Panel_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog3 = void 0;
@@ -34,10 +34,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         }
         layout(me) {
             this.dom.contentEditable = "true";
-            me.p1 = new BoxPanel_1.BoxPanel();
-            me.p1.horizontal = true;
-            ;
-            me.p1.domWrapper.classList.add("testuw");
+            me.p1 = new Panel_1.Panel();
             me.p1.domWrapper.style.borderWidth = "5px;";
             me.p1.domWrapper.style.borderStyle = "ridge";
             me.p2 = new Panel_1.Panel();

@@ -41,27 +41,27 @@ let MyRemoteObject = class MyRemoteObject extends RemoteObject_1.RemoteObject {
     }
 };
 __decorate([
-    __param(0, Validator_1.ValidateIsString()),
+    __param(0, (0, Validator_1.ValidateIsString)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MyRemoteObject.prototype, "tt", null);
 __decorate([
-    Validator_1.ValidateFunctionParameter(),
-    __param(0, Validator_1.ValidateIsString()),
+    (0, Validator_1.ValidateFunctionParameter)(),
+    __param(0, (0, Validator_1.ValidateIsString)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], MyRemoteObject.prototype, "sayHello", null);
 __decorate([
-    Validator_1.ValidateFunctionParameter(),
-    __param(0, Validator_1.ValidateIsString()),
+    (0, Validator_1.ValidateFunctionParameter)(),
+    __param(0, (0, Validator_1.ValidateIsString)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], MyRemoteObject, "sayHello2", null);
 MyRemoteObject = __decorate([
-    Registry_1.$Class("de.remote.MyRemoteObject")
+    (0, Registry_1.$Class)("de.remote.MyRemoteObject")
 ], MyRemoteObject);
 exports.MyRemoteObject = MyRemoteObject;
 async function test() {

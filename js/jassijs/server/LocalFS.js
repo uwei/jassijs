@@ -7,8 +7,6 @@ class Stats {
 class FileEntry {
 }
 class FS {
-    constructor() {
-    }
     static async getDB() {
         if (FS.db)
             return FS.db;
@@ -30,9 +28,13 @@ class FS {
         });
         return FS.db;
     }
+    constructor() {
+    }
+    //@ts-ignore
     static async _readdir(db, folder, withSubfolders = false, fullPath = false) {
         let transaction = db.transaction("handles", 'readonly');
         const store = transaction.objectStore("handles");
+        //@ts-ignore
         var ret = await store.openCursor(IDBKeyRange.bound(folder + "/", folder + "0", true, true)); //0 is the first char after /
         var all = [];
         if (!folder.endsWith("/"))
@@ -127,6 +129,7 @@ class FS {
         var db = await FS.getDB();
         return await FS._loadFileEntry(db, fileName);
     }
+    //@ts-ignore
     static async _loadFileEntry(db, fileName) {
         let transaction = db.transaction("handles", 'readonly');
         const store = transaction.objectStore("handles");
@@ -206,6 +209,7 @@ class FS {
             }
         }
     }
+    //@ts-ignore
     static async _removeEntry(db, entr) {
         let transaction = db.transaction("handles", 'readwrite');
         const store = transaction.objectStore("handles");
@@ -258,6 +262,7 @@ class FS {
 exports.FS = FS;
 async function downloadFile(file) {
     return await new Promise((resolve, reject) => {
+        //@ts-ignore
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open('GET', file.replace("./client", ""), true);
         xmlHttp.onreadystatechange = function () {

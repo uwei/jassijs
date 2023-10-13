@@ -246,7 +246,7 @@ export async function exists(filename: string): Promise<boolean> {
     return await new LocalFS()["exists"](filename);
 }
 async function verifyPermission(fileHandle, readWrite) {
-    const options = {};
+    const options:any = {};
     if (readWrite) {
         options.mode = 'readwrite';
     }
@@ -279,7 +279,7 @@ export async function deleteHandle() {
     
 }
 export async function createHandle() {
-    var handle = await window.showDirectoryPicker();
+    var handle = await (<any>window).showDirectoryPicker();
     if (handle === undefined)
         return;
     if (!await verifyPermission(handle, true))

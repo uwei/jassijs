@@ -33,7 +33,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
         }
         layout(me) {
             var test = new Kunde_1.Kunde();
-            me.idvorname = new Textbox_1.Textbox("red");
+            me.idvorname = new Textbox_1.Textbox();
             me.idid = new Textbox_1.Textbox();
             me.idnachname = new Textbox_1.Textbox();
             me.objectchooser1 = new ObjectChooser_1.ObjectChooser();
@@ -72,7 +72,9 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             me.idnachname.autocommit = true;
             this.add(me.idnachname);
             me.idtable = new Table_1.Table({
-                movableColumns: false
+                options: {
+                    movableColumns: false
+                }
             });
             me.idtable.table.on("cellDblClick", function (event, group) {
                 alert(8);

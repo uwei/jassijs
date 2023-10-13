@@ -31,6 +31,7 @@ export class HtmlDesigner extends ComponentDesigner {
             range = document.caretRangeFromPoint(ev.clientX, ev.clientY)
         } else {
             // firefox
+            //@ts-ignore
             var pos = [ev.rangeParent, ev.rangeOffset]
             range = document.createRange()
             range.setStart(...pos);
@@ -237,11 +238,11 @@ export class HtmlDesigner extends ComponentDesigner {
             if (anchorNode.nodeType !== anchorNode.TEXT_NODE) {//there is no Textnode here we create one
                 var before = undefined;
                 if (anchorNode.childNodes.length > 0) {
-                    before = anchorNode.childNodes[0]._this;
+                    before = (<any>anchorNode.childNodes[0])._this;
                 }
                 var comp2 = new TextComponent();
                  var newone = document.createTextNode(e.key);
-                 var par=anchorNode._this;
+                 var par=(<any>anchorNode)._this;
                  comp2.init(<any>newone, { noWrapper: true });
                 var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
                   anchorOffset=0;

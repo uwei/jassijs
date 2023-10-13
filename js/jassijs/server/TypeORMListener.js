@@ -10,11 +10,12 @@ exports.TypeORMListener = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
 //@ts-ignore
 const typeorm_1 = require("typeorm");
-const Reloader_1 = require("jassijs/util/Reloader");
 const Registry_2 = require("jassijs/remote/Registry");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 const NativeAdapter_1 = require("./NativeAdapter");
+const Reloader_1 = require("./Reloader");
 //listener for code changes
+//@ts-ignore //on client
 Reloader_1.Reloader.instance.addEventCodeReloaded(async function (files) {
     var dbobjects = await Registry_2.default.getJSONData("$DBObject");
     var reload = false;
@@ -124,8 +125,8 @@ let TypeORMListener = class TypeORMListener {
     }
 };
 TypeORMListener = __decorate([
-    typeorm_1.EventSubscriber(),
-    Registry_1.$Class("jassijs.server.TypeORMListener")
+    (0, typeorm_1.EventSubscriber)(),
+    (0, Registry_1.$Class)("jassijs.server.TypeORMListener")
 ], TypeORMListener);
 exports.TypeORMListener = TypeORMListener;
 //# sourceMappingURL=TypeORMListener.js.map

@@ -25,7 +25,7 @@ export class CategoriesView extends DBObjectView {
     declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
     declare value: Categories;
-    constructor(config) {
+    constructor() {
         super();
         // this.me = {}; //this is called in objectdialog
         this.layout(this.me);
@@ -40,7 +40,7 @@ export class CategoriesView extends DBObjectView {
         me.name = new Textbox();
         me.description = new Textarea();
         me.panel1 = new Panel();
-        me.table1 = new Table({data:this.value});
+        me.table1 = new Table({ options:{data:<any>this.value}});
         this.me.main.config({ children: [
                 me.boxpanel1.config({
                     children: [

@@ -99,6 +99,7 @@ export class Jassi {
         var style: HTMLElement = document.getElementById(id);
         //@ts-ignore
         if (!document.getElementById(id)) {
+            //@ts-ignore
             style =  <HTMLElement>document.createRange().createContextualFragment('<style id=' + id + '></style>').children[0];
             //@ts-ignore
             document.head.appendChild(style);
@@ -161,6 +162,7 @@ export class Jassi {
                 window.document.head.appendChild(js);
             }
         } else {
+            //@ts-ignore
             if(document.getElementById("-->" + url)!=null){
                 if(event)
                     event();

@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Component", "jassijs/ui/Panel"], function (require, exports, Textbox_1, Button_1, Component_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Component", "jassijs/ui/Panel", "jassijs/ui/Textbox"], function (require, exports, Button_1, Component_1, Panel_1, Textbox_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;

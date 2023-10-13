@@ -16,20 +16,20 @@ const Registry_1 = require("jassijs/remote/Registry");
 let Testuser = class Testuser {
 };
 __decorate([
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Testuser.prototype, "id", void 0);
 __decorate([
-    DatabaseSchema_1.Column(),
+    (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Testuser.prototype, "firstname", void 0);
 __decorate([
-    DatabaseSchema_1.Column(),
+    (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Testuser.prototype, "lastname", void 0);
 Testuser = __decorate([
-    DBObject_1.$DBObject(),
-    Registry_1.$Class("Testuser")
+    (0, DBObject_1.$DBObject)(),
+    (0, Registry_1.$Class)("Testuser")
 ], Testuser);
 exports.Testuser = Testuser;
 //# sourceMappingURL=Testuser.js.map

@@ -26,7 +26,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
             me.newclass = new Button_1.Button();
             me.boxpanel1 = new BoxPanel_1.BoxPanel();
             me.save = new Button_1.Button();
-            me.boxpanel2 = new BoxPanel_1.BoxPanel(false);
+            me.boxpanel2 = new BoxPanel_1.BoxPanel({ horizontal: false });
             me.newfield = new Button_1.Button();
             me.removefield = new Button_1.Button();
             me.boxpanel3 = new BoxPanel_1.BoxPanel();
@@ -35,23 +35,25 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
             var xxx = 0;
             var params = { values: ["hall", "du"] };
             me.table = new Table_1.Table({
-                autoColumns: false,
-                columns: [
-                    //@ts-ignore
-                    { title: "name", field: "name", editor: "input", editable: true },
-                    //@ts-ignore
-                    { title: "type", field: "type", editor: "select", editorParams: this.allTypes },
-                    //@ts-ignore
-                    { title: "nullable", field: "nullable", editor: "tickCross", editorParams: { tristate: false } },
-                    {
+                options: {
+                    autoColumns: false,
+                    columns: [
                         //@ts-ignore
-                        title: "relationinfo", field: "relationinfo", editor: "select",
-                        editorParams: this.posibleRelations,
-                        cellEditing: function (cell) {
-                            _this.updatePossibleRelations(cell);
+                        { title: "name", field: "name", editor: "input", editable: true },
+                        //@ts-ignore
+                        { title: "type", field: "type", editor: "select", editorParams: this.allTypes },
+                        //@ts-ignore
+                        { title: "nullable", field: "nullable", editor: "tickCross", editorParams: { tristate: false } },
+                        {
+                            //@ts-ignore
+                            title: "relationinfo", field: "relationinfo", editor: "select",
+                            editorParams: this.posibleRelations,
+                            cellEditing: function (cell) {
+                                _this.updatePossibleRelations(cell);
+                            }
                         }
-                    }
-                ]
+                    ]
+                }
             });
             me.select = new Select_1.Select();
             me.databinder = new Databinder_1.Databinder();

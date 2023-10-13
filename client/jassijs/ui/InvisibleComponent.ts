@@ -1,8 +1,12 @@
 
-import {Component} from "jassijs/ui/Component";
+import {Component, ComponentProperties} from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { $Property, Property } from "jassijs/ui/Property";
 
+
+export class InvisibleComponentProperties extends ComponentProperties{
+
+}
 /**
  * invivisible Component
  **/
@@ -19,10 +23,10 @@ import { $Property, Property } from "jassijs/ui/Property";
 @$Property({name:"hidden",hide:true})
 @$Property({name:"styles",hide:true})*/
 @$Property({hideBaseClassProperties:true})
-export class InvisibleComponent extends Component
+export class InvisibleComponent<T extends InvisibleComponentProperties={}> extends Component<InvisibleComponentProperties>
 {
 	$isInivisibleComponent:boolean;
-	constructor(properties=undefined){
+	constructor(properties:InvisibleComponentProperties=undefined){
     	super(properties);
 		this.$isInivisibleComponent=true;
     }

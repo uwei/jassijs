@@ -56,13 +56,13 @@ export class ComponentProperties {
     * @param {function} handler - the function which is executed
     */
     @$Property({ default: "function(event){\n\t\n}" })
-    onfocus?(handler);
+    onfocus?(handler){};
     /**
     * called if the component lost the focus
     * @param {function} handler - the function which is executed
     */
      @$Property({ default: "function(event){\n\t\n}" })
-    onblur?(handler);
+    onblur?(handler){};
     /**
      * @member {string} - the label over the component
      */
@@ -233,7 +233,7 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
 @$Class("jassijs.ui.Component")
 //@ts-ignore
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.ComponentProperties" })
-export class Component<T = {}> extends React.Component<ComponentProperties, {}>  {
+export class Component<T = {}> implements React.Component<ComponentProperties, {}>  {
     props: T;
 
     private static _componentHook = [];
@@ -265,7 +265,7 @@ export class Component<T = {}> extends React.Component<ComponentProperties, {}> 
      * 
      */
     constructor(properties: T | any = undefined) {//id connect to existing(not reqired)
-        super(properties, undefined);
+       // super(properties, undefined);
         this.props = properties;
         var rend = this.render();
         if (rend) {
@@ -600,7 +600,7 @@ export class Component<T = {}> extends React.Component<ComponentProperties, {}> 
         }
         //  
     }
-    get width(): string {
+    get width() {
         if (this.domWrapper.style.width !== undefined)
             return this.domWrapper.style.width;
         return this.dom.style.width.replace("px", "");

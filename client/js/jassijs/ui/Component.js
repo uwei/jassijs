@@ -28,7 +28,31 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     }
     exports.$UIComponent = $UIComponent;
     let ComponentProperties = class ComponentProperties {
+        /**
+        * called if the component get the focus
+        * @param {function} handler - the function which is executed
+        */
+        onfocus(handler) { }
+        ;
+        /**
+        * called if the component lost the focus
+        * @param {function} handler - the function which is executed
+        */
+        onblur(handler) { }
+        ;
     };
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], ComponentProperties.prototype, "onfocus", null);
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], ComponentProperties.prototype, "onblur", null);
     __decorate([
         (0, Property_1.$Property)({ description: "adds a label above the component" }),
         __metadata("design:type", String)
@@ -158,7 +182,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     }
     exports.createComponent = createComponent;
     //class TC <Prop>extends React.Component<Prop,{}>{
-    let Component = Component_1 = class Component extends React.Component {
+    let Component = Component_1 = class Component {
         /*  get domWrapper():Element{
               return this._domWrapper;
           }
@@ -176,7 +200,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
          *
          */
         constructor(properties = undefined) {
-            super(properties, undefined);
+            // super(properties, undefined);
             this.props = properties;
             var rend = this.render();
             if (rend) {

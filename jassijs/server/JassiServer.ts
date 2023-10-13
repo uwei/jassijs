@@ -20,11 +20,8 @@ const cookieParser = require("cookie-parser");
 const https = require("https");
 import "jassijs/server/PassportSetup";
 import { remoteProtocol } from "jassijs/server/DoRemoteProtocol";
-import { zip } from "jassijs/server/Zip";
 import { rawbody } from "jassijs/server/RawBody";
 import { ServerIndexer } from "./RegistryIndexer";
-import { DoServerreport } from "jassijs_report/DoServerreport";
-import { serverservices } from "../remote/Serverservice";
 import { updatePackage } from "./UpdatePackage";
 import { staticfiles, staticsecurefiles, syncRemoteFiles } from "./FileTools";
 

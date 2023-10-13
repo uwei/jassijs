@@ -36,18 +36,18 @@ let Setting = class Setting extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    Validator_1.ValidateIsInt({ optional: true }),
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, Validator_1.ValidateIsInt)({ optional: true }),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Setting.prototype, "id", void 0);
 __decorate([
-    Validator_1.ValidateIsString({ optional: true }),
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, Validator_1.ValidateIsString)({ optional: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Setting.prototype, "data", void 0);
 Setting = __decorate([
-    DBObject_1.$DBObject({ name: "jassijs_setting" }),
-    Registry_1.$Class("jassijs.security.Setting"),
+    (0, DBObject_1.$DBObject)({ name: "jassijs_setting" }),
+    (0, Registry_1.$Class)("jassijs.security.Setting"),
     __metadata("design:paramtypes", [])
 ], Setting);
 exports.Setting = Setting;

@@ -2,13 +2,15 @@ import { $Class } from "jassijs/remote/Registry";
 //@ts-ignore
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, RemoveEvent, UpdateEvent } from "typeorm";
 import Filesystem from "jassijs/server/Filesystem";
-import { Reloader } from "jassijs/util/Reloader";
+
 import registry from "jassijs/remote/Registry";
 import { serverservices } from "jassijs/remote/Serverservice";
 import { myfs } from "./NativeAdapter";
+import { Reloader } from "./Reloader";
 
-
+  
 //listener for code changes
+//@ts-ignore //on client
 Reloader.instance.addEventCodeReloaded(async function (files: string[]) {
     var dbobjects = await registry.getJSONData("$DBObject");
     var reload = false;

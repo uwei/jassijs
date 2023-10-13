@@ -1,25 +1,24 @@
 import { Table } from "jassijs/ui/Table";
 
 
-var x=0;
+var x = 0;
 export async function test() {
-   /*  var dat=await Orders.find({
-        //where:`UPPER("ShipName") LIKE '%AC%'`
-        where:`UPPER(CAST(ID AS TEXT)) LIKE :mftext`,
-        whereParams:{mftext:"%24%"}
-     });
-    debugger;*/
+    /*  var dat=await Orders.find({
+         //where:`UPPER("ShipName") LIKE '%AC%'`
+         where:`UPPER(CAST(ID AS TEXT)) LIKE :mftext`,
+         whereParams:{mftext:"%24%"}
+      });
+     debugger;*/
     var tab = new Table({
-        lazyLoad: {
-            classname: "tests.TestBigData",
-            loadFunc: "find",
-            pageSize: 10
-        },
-
-
-
+        options: {
+            lazyLoad: {
+                classname: "tests.TestBigData",
+                loadFunc: "find",
+                pageSize: 10
+            }
+        }
     });
-    tab.showSearchbox=true;
+    tab.showSearchbox = true;
     tab.table.on("headerClick", function (e, c) {
         setTimeout(() => {
             tab.table.replaceData("/data.php");

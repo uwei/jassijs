@@ -12,7 +12,19 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Button = exports.ButtonProperties = void 0;
     let ButtonProperties = class ButtonProperties extends Component_1.ComponentProperties {
+        /**
+      * register an event if the button is clicked
+      * @param {function} handler - the function that is called on change
+      */
+        onclick(handler, removeOldHandler) { }
+        ;
     };
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Boolean]),
+        __metadata("design:returntype", void 0)
+    ], ButtonProperties.prototype, "onclick", null);
     __decorate([
         (0, Property_1.$Property)({ type: "image" }),
         __metadata("design:type", String)
@@ -26,7 +38,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     ], ButtonProperties);
     exports.ButtonProperties = ButtonProperties;
     let Button = class Button extends Component_1.Component {
-        constructor(properties) {
+        constructor(properties = {}) {
             super(properties);
         }
         config(config, forceRender = false) {

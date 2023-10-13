@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "de/remote/Kunde"], function (require, exports, Button_1, Table_1, Textbox_1, Registry_1, Panel_1, Kunde_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Button_1, Table_1, Textbox_1, Registry_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog2 = void 0;
@@ -23,7 +23,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/
             me.button = new Button_1.Button();
             me.button2 = new Button_1.Button();
             me.textbox = new Textbox_1.Textbox();
-            me.table = new Table_1.Table({ data: this.data });
+            me.table = new Table_1.Table({ options: { data: this.data } });
             var _this = this;
             this.config({ children: [
                     me.boxpanel.config({
@@ -65,9 +65,9 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/
         return "kko";
     }
     async function test() {
-        var data = await Kunde_1.Kunde.find();
-        var ret = new Dialog2(data);
-        return ret;
+        //var data = await Kunde.find();
+        //var ret = new Dialog2(data);
+        // return ret;
     }
     exports.test = test;
 });

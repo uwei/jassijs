@@ -11,8 +11,10 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "
             { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
         ];
         var tab = new Table_1.Table({
-            movableColumns: true,
-            items: tabledata
+            options: {
+                movableColumns: true,
+                items: tabledata
+            }
         });
         tab.width = 400;
         tab.table.on("rowDblClick", function () {
@@ -30,9 +32,11 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "
         });
         contextmenu.menu.add(menu);
         contextmenu.getActions = async function (obs) {
-            return [{ name: "custom Action", call: function (data) {
+            return [{
+                    name: "custom Action", call: function (data) {
                         alert(data[0].name);
-                    } }];
+                    }
+                }];
         };
         tab.selectComponent = { value: "" };
         tab.showSearchbox = true;

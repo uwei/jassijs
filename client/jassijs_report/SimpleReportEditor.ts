@@ -3,13 +3,14 @@ import { Runlater } from "jassijs/util/Runlater";
 import { SimpleReportDesigner } from "jassijs_report/designer/SimpleReportDesigner";
 import { AcePanelSimple } from "jassijs_editor/AcePanelSimple";
 import { ReportDesign } from "jassijs_report/ReportDesign";
-import { Panel, PanelCreateProperties } from "jassijs/ui/Panel";
+import { Panel, PanelProperties } from "jassijs/ui/Panel";
 import { ReportDesigner } from "jassijs_report/designer/ReportDesigner";
 import windows from "jassijs/base/Windows";
 import { DockingContainer } from "jassijs/ui/DockingContainer";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
 import { $Property } from "jassijs/ui/Property";
+
 class SimpleCodeEditor extends Panel {
     _main: DockingContainer;
     _codeView: Panel;
@@ -236,7 +237,7 @@ class SimpleCodeEditor extends Panel {
         this._codePanel.undo();
     }
 }
-export class SimpleReportEditorProperties extends PanelCreateProperties {
+export class SimpleReportEditorProperties extends PanelProperties {
     @$Property()
     startUpWithPdfView?: boolean;
     view?:"default"|"vertical"|"horizontal"|"withoutcode";
