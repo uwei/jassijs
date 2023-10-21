@@ -10,8 +10,7 @@ import { classes } from "jassijs/remote/Classes";
 
 jassijs.includeCSSFile("chosen.css");
 
-@$Class("jassijs.ui.SelectProperties")
-export class SelectProperities extends ComponentProperties{
+export interface SelectProperities extends ComponentProperties{
    /**
      * called if value has changed
      * @param {function} handler - the function which is executed
@@ -36,11 +35,11 @@ export class SelectProperities extends ComponentProperties{
      * @member {object} sel - the selected object
      */
     value?;
-	@$Property({ default: false })
+	//@$Property({ default: false })
 	multiple?:boolean;
-	@$Property({ default: false })
+	//@$Property({ default: false })
 	allowDeselect?:boolean;
-	@$Property({default: "" })
+	//@$Property({default: "" })
 	placeholder?:string;
 }
 

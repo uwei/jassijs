@@ -4,7 +4,7 @@ import { $Class } from "jassijs/remote/Registry";
 import { $Property, Property } from "jassijs/ui/Property";
 
 
-export class InvisibleComponentProperties extends ComponentProperties{
+export interface InvisibleComponentProperties extends ComponentProperties{
 
 }
 /**

@@ -604,10 +604,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs/ui/ActionNodeMenu": {}
 	},
 	"jassijs/ui/BoxPanel.ts": {
-		"date": 1697209492004.0312,
-		"jassijs.ui.BoxPanelProperties": {
-			"@members": {}
-		},
+		"date": 1697484586822.1821,
 		"jassijs.ui.BoxPanel": {
 			"$UIComponent": [
 				{
@@ -624,14 +621,12 @@ define("jassijs/registry",["require"], function(require) {
 					"hide": true,
 					"type": "boolean"
 				}
-			]
+			],
+			"@members": {}
 		}
 	},
 	"jassijs/ui/Button.ts": {
-		"date": 1697197908032.563,
-		"jassijs.ui.ButtonProperties": {
-			"@members": {}
-		},
+		"date": 1697489115565.8855,
 		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
@@ -642,13 +637,7 @@ define("jassijs/registry",["require"], function(require) {
 					}
 				}
 			],
-			"$Property": [
-				{
-					"name": "new",
-					"type": "json",
-					"componentType": "jassijs.ui.ButtonProperties"
-				}
-			]
+			"@members": {}
 		}
 	},
 	"jassijs/ui/Calendar.ts": {
@@ -669,7 +658,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Checkbox.ts": {
-		"date": 1697206137333.4678,
+		"date": 1697484985748.2979,
 		"jassijs.ui.Checkbox": {
 			"$UIComponent": [
 				{
@@ -681,34 +670,28 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1697202219260.3325,
-		"jassijs.ui.ComponentProperties": {
+		"date": 1697906167972.4148,
+		"jassijs.ui.Component": {
 			"@members": {}
 		},
-		"jassijs.ui.Component": {
-			"$Property": [
-				{
-					"name": "new",
-					"type": "json",
-					"componentType": "jassijs.ui.ComponentProperties"
-				}
-			]
-		},
-		"jassijs.ui.HTMLComponent": {},
-		"jassijs.ui.TextComponent": {
+		"jassijs.ui.HTMLComponent": {
 			"@members": {}
 		}
 	},
 	"jassijs/ui/ComponentDescriptor.ts": {
-		"date": 1696717595128.208,
+		"date": 1697484610128.283,
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1697130215042.4993,
-		"jassijs.ui.ContainerProperties": {
-			"@members": {}
-		},
-		"jassijs.ui.Container": {}
+		"date": 1697901348314.4065,
+		"jassijs.ui.Container": {
+			"$Property": [
+				{
+					"name": "children",
+					"type": "jassijs.ui.Component"
+				}
+			]
+		}
 	},
 	"jassijs/ui/ContextMenu.ts": {
 		"date": 1696687306206.7812,
@@ -813,7 +796,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Databinder.ts": {
-		"date": 1697206499894.1558,
+		"date": 1697484759462.4792,
 		"jassijs.ui.Databinder": {
 			"$UIComponent": [
 				{
@@ -824,18 +807,9 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DataComponent.ts": {
-		"date": 1696782620600.11,
-		"jassijs.ui.DataComponentProperties": {
-			"@members": {}
-		},
+		"date": 1697816808896.5654,
 		"jassijs.ui.DataComponent": {
-			"$Property": [
-				{
-					"name": "new",
-					"type": "json",
-					"componentType": "jassijs.ui.DataComponentProperties"
-				}
-			]
+			"@members": {}
 		}
 	},
 	"jassijs/ui/DBObjectDialog.ts": {
@@ -941,32 +915,31 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1697197838886.287,
-		"jassijs.ui.HTMLPanelProperties": {
-			"@members": {}
-		},
+		"date": 1697484228054.6736,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/HTMLPanel",
 					"icon": "mdi mdi-cloud-tags"
 				}
-			]
+			],
+			"@members": {}
 		}
 	},
 	"jassijs/ui/Image.ts": {
-		"date": 1697201918061.901,
+		"date": 1697484437958.736,
 		"jassijs.ui.Image": {
 			"$UIComponent": [
 				{
 					"fullPath": "default/Image",
 					"icon": "mdi mdi-file-image"
 				}
-			]
+			],
+			"@members": {}
 		}
 	},
 	"jassijs/ui/InvisibleComponent.ts": {
-		"date": 1697206336414.1584,
+		"date": 1697484252085.1384,
 		"jassijs.ui.InvisibleComponent": {
 			"$Property": [
 				{
@@ -1033,10 +1006,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1697197475108.5203,
-		"jassijs.ui.PanelProperties": {
-			"@members": {}
-		},
+		"date": 1697484527486.2295,
 		"jassijs.ui.Panel": {
 			"$UIComponent": [
 				{
@@ -1052,6 +1022,11 @@ define("jassijs/registry",["require"], function(require) {
 					"name": "new",
 					"type": "json",
 					"componentType": "jassijs.ui.PanelProperties"
+				},
+				{
+					"name": "new/useSpan",
+					"type": "boolean",
+					"default": false
 				}
 			],
 			"@members": {}
@@ -1142,7 +1117,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DefaultEditor.ts": {
-		"date": 1655556796000,
+		"date": 1697402486773.8264,
 		"jassijs.ui.PropertyEditors.DefaultEditor": {
 			"$PropertyEditor": [
 				[
@@ -1266,7 +1241,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs/ui/PropertyEditors/TableColumnImport": {}
 	},
 	"jassijs/ui/Repeater.ts": {
-		"date": 1697210330487.7947,
+		"date": 1697484945129.4937,
 		"jassijs.ui.RepeaterDesignPanel": {},
 		"jassijs.ui.Repeater": {
 			"$UIComponent": [
@@ -1278,14 +1253,12 @@ define("jassijs/registry",["require"], function(require) {
 						"design"
 					]
 				}
-			]
+			],
+			"@members": {}
 		}
 	},
 	"jassijs/ui/Select.ts": {
-		"date": 1697201221366.545,
-		"jassijs.ui.SelectProperties": {
-			"@members": {}
-		},
+		"date": 1697485303644.25,
 		"jassijs.ui.Select": {
 			"$UIComponent": [
 				{
@@ -1335,7 +1308,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1697210711775.7844,
+		"date": 1697484708614.0403,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},
@@ -1374,10 +1347,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1697197569492.748,
-		"jassijs.ui.TextboxProperties": {
-			"@members": {}
-		},
+		"date": 1697483662800.33,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -1385,13 +1355,7 @@ define("jassijs/registry",["require"], function(require) {
 					"icon": "mdi mdi-form-textbox"
 				}
 			],
-			"$Property": [
-				{
-					"name": "new",
-					"type": "json",
-					"componentType": "jassijs.ui.TextboxProperties"
-				}
-			]
+			"@members": {}
 		}
 	},
 	"jassijs/ui/Tree.ts": {
@@ -1432,7 +1396,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/VariablePanel.ts": {
-		"date": 1697199259433.2144,
+		"date": 1697899903531.5457,
 		"jassijs.ui.VariablePanel": {}
 	},
 	"jassijs/util/Cookies.ts": {
@@ -1474,6 +1438,12 @@ define("jassijs/registry",["require"], function(require) {
 	"jassijs/util/Tools.ts": {
 		"date": 1657655420000,
 		"jassijs.util.Tools": {}
+	},
+	"jassijs/ui/TextComponent.ts": {
+		"date": 1697906036834.4336,
+		"jassijs.ui.TextComponent": {
+			"@members": {}
+		}
 	}
 }
  }

@@ -13,9 +13,9 @@ class RepeaterDesignPanel extends Panel {
     me;
     
 }
-@$UIComponent({ editableChildComponents: ["databinder"]})
-@$Class("jassijs.ui.Repeater")
-export class RepeaterProperties extends PanelProperties {
+//@$UIComponent({ editableChildComponents: ["databinder"]})
+//@$Class("jassijs.ui.Repeater")
+export interface RepeaterProperties extends PanelProperties {
 
      /**
      *  @member {array} value - the array which objects used to create the repeating components
@@ -26,11 +26,12 @@ export class RepeaterProperties extends PanelProperties {
      * @param {jassijs.ui.Databinder} databinder - the databinder to bind
      * @param {string} property - the property to bind
      */
-  @$Property({type:"databinder"})
+
    bind?:any[];
    createRepeatingComponent?(func);
 
 }
+
 @$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple",editableChildComponents: ["this","design"]})
 @$Class("jassijs.ui.Repeater")
 export class Repeater<T extends RepeaterProperties={}> extends Panel<RepeaterProperties> implements DataComponentProperties,RepeaterProperties{
@@ -188,7 +189,7 @@ export class Repeater<T extends RepeaterProperties={}> extends Panel<RepeaterPro
         //	super.setDesignMode(enable);
     }
     
-    
+    @$Property({type:"databinder"})
     set bind(databinder:any[]) {
         this._databinder = databinder[0];
         this._databinder.add(databinder[1], this, "_dummy");

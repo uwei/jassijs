@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Component", "jassijs/ui/Panel", "jassijs/ui/Textbox"], function (require, exports, Button_1, Component_1, Panel_1, Textbox_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel"], function (require, exports, Component_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -85,13 +85,95 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Component", "jass
             dddd
         </Panel>;
        */
-        var ret = Component_1.React.createElement(Panel_1.Panel, null,
-            Component_1.React.createElement(Textbox_1.Textbox, { value: "AA" }),
-            Component_1.React.createElement(Button_1.Button, null),
-            Component_1.React.createElement(Textbox_1.Textbox, { value: "fffrr3" }),
-            Component_1.React.createElement(Panel_1.Panel, { height: 150, width: 150 },
-                Component_1.React.createElement(Button_1.Button, null),
-                Component_1.React.createElement(Textbox_1.Textbox, { value: "fffrr3" })));
+        /*  def
+             <Button></Button>
+             <br />
+     
+             <Textbox value={"AA"}></Textbox>
+             <Textbox value="fffrr3"></Textbox>
+     
+             <Panel height={400} width={295}>
+                 <Button></Button>
+                 <Textbox value="fffrr3" width={90}></Textbox>
+             </Panel>*/
+        /*
+       var bt=new Button();
+       bt.onclick(()=>ret.tag="u");
+       bt.text="Hallo"
+       var ret= new HTMLComponent();
+       ret.add(bt);
+       ret.add(new TextComponent({text:"Hallo" }))
+       return ret;
+       */
+        var ret = React.createElement(Panel_1.Panel, { height: 100 },
+            "sddsf",
+            React.createElement("button", { style: { color: "red" } }, "dfgdfg"),
+            "dfg");
+        /*
+          var ret=<span text="sss" height={15}>
+          <button style={{ color: "blue" }}>Hallo2</button>
+          Halo
+              <u>unter
+                  <button>Hall1</button>
+      
+                  ter
+              </u>
+              test
+              <span>das
+                  <b>
+                      fett
+                  </b>ist e
+                  <u>unter
+      
+                      
+      
+      
+                      ter
+      
+                  </u>in
+      
+      
+                  <Panel>
+      
+                      <button>Hallo2
+                      </button>
+                  </Panel>
+                  Te
+      
+                  st
+                  <br />
+                  <b>fe
+      
+                      tts
+      
+                  </b>
+              </span>
+              <Button text="Hallo" domProperties={{ style: { color: "red" },onClick: () => alert(8) }}></Button>s
+              <Button text="Hallo"></Button>
+              a
+              <br />
+      
+      
+              <Button></Button>
+      
+      
+              df
+      
+      
+          </span>;*/
+        /*<Panel>xyzdas
+    
+    
+    
+            istein
+    
+            test
+            <Panel height={100}>Hallo
+            </Panel>
+            bcdefg
+    
+    
+            Hallo</Panel>;*/
         /*<div>v
           sdfsdf
               <div style={{color:"blue"}}>

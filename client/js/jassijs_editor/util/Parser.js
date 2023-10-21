@@ -154,6 +154,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
                 const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
                 this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
+                this.imports[name] = file;
             }
         }
         parseTypeMeNode(node) {
@@ -379,6 +380,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             if (jsx === undefined)
                 jsx = _this.jsxVariables[element.pos + 1];
             if (jsx) {
+                var tagname = element.tagName.getText();
                 jsx.name = this.getNextVariableNameForType(jsx.name);
                 _this.jsxVariables[jsx.name] = jsx;
                 nd["jname"] = jsx.name;
@@ -386,7 +388,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 for (var x = 0; x < element.attributes.properties.length; x++) {
                     var prop = element.attributes.properties[x];
                     var val = prop["initializer"].getText();
+                    if (val.startsWith("{") && val.endsWith("}"))
+                        val = val.substring(1, val.length - 1);
                     _this.add(jsx.name, prop.name.text, val, prop);
+                }
+                if (jsx.component.constructor.name === 'HTMLComponent') {
+                    _this.add(jsx.name, "tag", '"' + tagname + '"', undefined);
                 }
                 if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.jname) !== undefined) {
                     _this.add((_b = node.parent) === null || _b === void 0 ? void 0 : _b.jname, "add", jsx.name, node);
@@ -485,6 +492,21 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         }
         visitNodeJSX(node, consumeProperties = undefined) {
             var _this = this;
+            if (node.kind === ts.SyntaxKind.ImportDeclaration) {
+                var nd = node;
+                var file = nd.moduleSpecifier.text;
+                if (nd.importClause && nd.importClause.namedBindings) {
+                    var names = nd.importClause.namedBindings.elements;
+                    for (var e = 0; e < names.length; e++) {
+                        this.imports[names[e].name.escapedText] = file;
+                    }
+                }
+                return;
+            }
+            if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
+                this.parseTypeMeNode(node);
+                return;
+            }
             if (node.kind === ts.SyntaxKind.JsxElement || node.kind === ts.SyntaxKind.JsxSelfClosingElement) {
                 _this.parseJSX(_this, node);
                 return;
@@ -581,15 +603,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             //return this.parseold(code,onlyfunction);
         }
         removeNode(node) {
+            var _a, _b, _c;
             if (node.parent["statements"]) {
                 var pos = node.parent["statements"].indexOf(node);
                 if (pos >= 0)
                     node.parent["statements"].splice(pos, 1);
             }
-            else if (node.parent.parent["type"] !== undefined) {
+            else if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.parent) && ((_b = node.parent) === null || _b === void 0 ? void 0 : _b.parent["type"]) !== undefined) {
                 var pos = node.parent.parent["type"]["members"].indexOf(node);
                 if (pos >= 0)
-                    node.parent.parent["type"]["members"].splice(pos, 1);
+                    (_c = node.parent) === null || _c === void 0 ? void 0 : _c.parent["type"]["members"].splice(pos, 1);
             }
             else if (node.parent["members"] !== undefined) {
                 var pos = node.parent["members"].indexOf(node);
@@ -687,6 +710,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                     for (var x = 0; x < this.data[variablename][property].length; x++) {
                         if (this.data[variablename][property][x].value === onlyValue || this.data[variablename][property][x].value.startsWith(onlyValue + ".")) {
                             prop = this.data[variablename][property][x];
+                            this.data[variablename][property].splice(x, 1);
+                            break;
                         }
                     }
                 }
@@ -739,7 +764,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             }
             //remove nodes
             for (var x = 0; x < allprops.length; x++) {
-                this.removeNode(allprops[x].node);
+                if (allprops[x].node)
+                    this.removeNode(allprops[x].node);
             }
             for (var vv = 0; vv < varnames.length; vv++) {
                 var varname = varnames[vv];
@@ -772,6 +798,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                         }
                     }
                 }
+            }
+            for (var vv = 0; vv < varnames.length; vv++) {
+                delete this.data[varnames[vv]];
             }
         }
         getNodeFromScope(classscope, variablescope = undefined) {
@@ -1005,7 +1034,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         setPropertyInJSX(variableName, property, value, classscope, isFunction = false, replace = undefined, before = undefined, variablescope = undefined) {
             //if (this.data[variableName] === undefined)
             //    this.data[variableName] = {};
-            var newValue = typeof value === "string" ? ts.createIdentifier(value) : value;
+            var newValue;
+            if (typeof value === "string")
+                newValue = value.startsWith('"') ? ts.createIdentifier(value) : ts.createIdentifier("{" + value + "}");
+            else
+                newValue = value;
+            ;
             var newExpression = newExpression = ts.createJsxAttribute(ts.createIdentifier(property), newValue);
             ;
             if (property === "new") { //me.panel1=new Panel({});
@@ -1026,25 +1060,37 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 newExpression = ts.createExpressionStatement(ts.createAssignment(
                     ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
             */
-            if (property === "add") {
-                var prop = this.data[value]["_new_"][0];
-                var classname = prop.className;
-                if (classname === "HTMLComponent")
-                    classname = prop.tag;
-                var node;
-                if (classname === "text") {
-                    node = ts.createJsxText("", false);
-                    this.add(value, "text", "", node);
+            var jname;
+            if (property === "add") { //transfer a child to another
+                var parent = this.data[variableName]["_new_"][0].node;
+                if (typeof value === "string") {
+                    jname = value;
+                    var prop = this.data[value]["_new_"][0];
+                    var classname = prop.className;
+                    if (classname === "HTMLComponent")
+                        classname = prop.tag;
+                    var node;
+                    if (classname === "text") {
+                        node = ts.createJsxText("", false);
+                        this.add(value, "text", "", node);
+                    }
+                    else {
+                        node = this.createNode("<" + classname + "></" + classname + ">");
+                        if (classname === "br")
+                            node = this.createNode("<" + classname + "/>");
+                    }
+                    prop.node = node;
+                    prop.value = value;
                 }
                 else {
-                    node = this.createNode("<" + classname + "></" + classname + ">");
-                    if (classname === "br")
-                        node = this.createNode("<" + classname + "/>");
+                    jname = value.jname;
+                    //remove old
+                    var pos = value.parent["children"].indexOf(value);
+                    value.parent["children"].splice(pos, 0);
+                    prop = this.data[jname]["_new_"][0];
+                    node = value; //removeold
                 }
-                var parent = this.data[variableName]["_new_"][0].node;
                 node.parent = parent;
-                prop.node = node;
-                prop.value = value;
                 if (before) {
                     let found = undefined;
                     let ofound = -1;
@@ -1062,12 +1108,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                     parent["children"].splice(pos + 1, 0, ts.createJsxText("\n", true));
                     this.data[variableName]["add"].splice(ofound, 0, {
                         node: node,
-                        value: value,
+                        value: jname,
                         isFunction: false
                     });
                     //this.data[variableName]["add"][0].node;
                 }
                 else {
+                    if (parent["children"] === undefined)
+                        debugger;
                     parent["children"].push(node);
                     parent["children"].push(ts.createJsxText("\n", true));
                     this.add(variableName, "add", value, node);
@@ -1077,7 +1125,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
                 if (property === "text") {
                     var svalue = value;
-                    var old = this.data[variableName][property][0].node.getText(); //text;
+                    var old = this.data[variableName][property][0].node.text; //getText() throw error if created manuell
                     svalue = JSON.parse(`{"a":` + svalue + "}").a;
                     if (svalue.length === svalue.trim().length) {
                         // @ts-ignore
@@ -1089,8 +1137,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 }
                 return;
             }
-            if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
+            if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined && typeof value === "string") { //edit existing
                 let node = this.data[variableName][property][0].node;
+                if (node === undefined && property === "tag") {
+                    this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                    this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                    this.data[variableName][property][0].value = value;
+                    return;
+                }
                 var pos = node.parent["properties"].indexOf(node);
                 //node.initializer.text=newValue;
                 node.parent["properties"][pos] = newExpression;
@@ -1104,6 +1158,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             }
             else { //insert new
                 if (before) {
+                    throw "not implemented";
                     /*  if (before.value === undefined)
                           throw "not implemented";
                       let node = undefined;
@@ -1121,33 +1176,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                 }
                 else {
                     let parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
-                    this.data[variableName][property] = [{ node: newExpression, isFunction, value }];
-                    parent["properties"].push(newExpression);
-                    newExpression.parent = parent["properties"];
-                    /* for (let prop in this.data[variableName]) {
-                        if (prop === "_new_") {
-                            //should be in the same scope of declaration (important for repeater)
-                            statements = this.data[variableName][prop][0].node.parent["statements"];
-                            continue;
-                        }
-                        var testnode: ts.Node = this.data[variableName][prop][this.data[variableName][prop].length - 1].node;
-                        if (testnode.parent === scope["body"])
-                            lastprop = testnode;
+                    if (property === "tag" && typeof value === "string") { //HTMLComponent tag
+                        this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                        this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
                     }
-                    if (lastprop) {
-                        var pos = lastprop.parent["statements"].indexOf(lastprop);
-                        if (pos >= 0)
-                            lastprop.parent["statements"].splice(pos + 1, 0, newExpression);
-                    } else {
-                        var pos = statements.length;
-                        try {
-                            if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
-                                pos--;
-                        } catch {
-            
-                        }
-                        statements.splice(pos, 0, newExpression);
-                    }*/
+                    else {
+                        parent["properties"].push(newExpression);
+                        newExpression.parent = parent; //["properties"];
+                    }
+                    this.data[variableName][property] = [{ node: newExpression, isFunction, value }];
                 }
             }
         }

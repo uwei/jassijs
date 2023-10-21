@@ -56,14 +56,14 @@ export class ComponentDescriptor {
                     if (registry.getMemberData("$Property") === undefined)
                         return cache;
                     var props = registry.getMemberData("$Property")[sclass];
-                   if(props?.new){
+                   /*if(props?.new){
                        var clname=props.new[0][0].componentType;
                        if(classes.getClass(clname)){
                            type=classes.getClass(clname);
                            sclass = classes.getClassName(type);
                            props = registry.getMemberData("$Property")[sclass];
                        }
-                   }
+                   }*/
                     if (props !== undefined) {
                         var info = registry.getMemberData("design:type")[sclass];
 

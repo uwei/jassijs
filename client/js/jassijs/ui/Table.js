@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Classes_1, tabulator_tables_1, DateTimeConverter_1, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Table = exports.TableProperties = void 0;
+    exports.test = exports.Table = void 0;
     let TableEditorProperties = class TableEditorProperties {
     };
     __decorate([
@@ -36,15 +36,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
     TableEditorProperties = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
-    class TableProperties extends DataComponent_1.DataComponentProperties {
-        /**
-        * register an event if an item is selected
-        * @param {function} handler - the function that is called on change
-        */
-        onchange(handler) { }
-        ;
-    }
-    exports.TableProperties = TableProperties;
     let Table = class Table extends DataComponent_1.DataComponent {
         ;
         constructor(properties) {
@@ -575,7 +566,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         (0, Component_1.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
         (0, Registry_1.$Class)("jassijs.ui.Table"),
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
-        __metadata("design:paramtypes", [TableProperties])
+        __metadata("design:paramtypes", [Object])
     ], Table);
     exports.Table = Table;
     tabulator_tables_1.Tabulator.extendModule("format", "formatters", {

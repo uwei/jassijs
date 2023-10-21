@@ -11,8 +11,6 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Databinder = void 0;
-    class DatabinderProperties extends InvisibleComponent_1.InvisibleComponentProperties {
-    }
     let Databinder = class Databinder extends InvisibleComponent_1.InvisibleComponent {
         constructor(props = {}) {
             super(props);
@@ -289,7 +287,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     Databinder = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Databinder", icon: "mdi mdi-connection" }),
         (0, Registry_1.$Class)("jassijs.ui.Databinder"),
-        __metadata("design:paramtypes", [DatabinderProperties])
+        __metadata("design:paramtypes", [Object])
     ], Databinder);
     exports.Databinder = Databinder;
     class PropertyAccessor {

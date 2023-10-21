@@ -60,14 +60,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                         if (Registry_2.default.getMemberData("$Property") === undefined)
                             return cache;
                         var props = Registry_2.default.getMemberData("$Property")[sclass];
-                        if (props === null || props === void 0 ? void 0 : props.new) {
-                            var clname = props.new[0][0].componentType;
-                            if (Classes_1.classes.getClass(clname)) {
-                                type = Classes_1.classes.getClass(clname);
-                                sclass = Classes_1.classes.getClassName(type);
-                                props = Registry_2.default.getMemberData("$Property")[sclass];
+                        /*if(props?.new){
+                            var clname=props.new[0][0].componentType;
+                            if(classes.getClass(clname)){
+                                type=classes.getClass(clname);
+                                sclass = classes.getClassName(type);
+                                props = registry.getMemberData("$Property")[sclass];
                             }
-                        }
+                        }*/
                         if (props !== undefined) {
                             var info = Registry_2.default.getMemberData("design:type")[sclass];
                             for (var key in props) {

@@ -2,23 +2,21 @@ import { $Class } from "jassijs/remote/Registry";
 import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 
-@$Class("jassijs.ui.ButtonProperties")
-export class ButtonProperties extends ComponentProperties{
+
+export interface ButtonProperties extends ComponentProperties{
+    domProperties?:React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
       /**
     * register an event if the button is clicked
     * @param {function} handler - the function that is called on change
     */
-    @$Property({ default: "function(event){\n\t\n}" })
-    onclick?(handler, removeOldHandler: boolean ){};
+    onclick?(handler, removeOldHandler: boolean );
      /**
     * @member {string} - the icon of the button
     */
-    @$Property({type:"image"})
     icon?:string;
         /**
      * @member {string} - the caption of the button
      */
-    @$Property()
     text?:string;
 
 }
@@ -26,8 +24,7 @@ export class ButtonProperties extends ComponentProperties{
 
 @$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
 @$Class("jassijs.ui.Button")
-@$Property({ name: "new", type: "json", componentType: "jassijs.ui.ButtonProperties" })
-export class Button<T extends ButtonProperties={}> extends Component<T> implements ButtonProperties {
+export class Button<T extends ButtonProperties={}> extends Component<ButtonProperties> implements ButtonProperties {
     constructor(properties:ButtonProperties={}){
         super(properties);
     }
@@ -43,7 +40,7 @@ export class Button<T extends ButtonProperties={}> extends Component<T> implemen
         super.dom=value;
     }
     render(){
-        return React.createElement("button",{
+        return React.createElement("button",{...this.props.domProperties,
                                         className:"Button",
                                         contenteditable:false},
                 React.createElement("span",{
@@ -57,7 +54,7 @@ export class Button<T extends ButtonProperties={}> extends Component<T> implemen
                 )
         );
     }
-    
+    @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler, removeOldHandler: boolean = true) {
        
         if(removeOldHandler){
@@ -69,7 +66,7 @@ export class Button<T extends ButtonProperties={}> extends Component<T> implemen
         var img;
         if(icon===undefined)
             icon="";
-        if(this.dom===undefined)
+        if(this.dom===undefined||this.dom===null)
             debugger;
         var el1 = this.dom.querySelector(".buttonspan");
         el1.classList.forEach((cl)=> {el1.classList.remove(cl)});
@@ -85,6 +82,7 @@ export class Button<T extends ButtonProperties={}> extends Component<T> implemen
         }
     }
     
+    @$Property({type:"image"})
     get icon(): string { //the Code
         var ret=(<HTMLInputElement> this.dom.querySelector(".buttonimg")).getAttribute("src");
         if(ret===""){
@@ -95,7 +93,7 @@ export class Button<T extends ButtonProperties={}> extends Component<T> implemen
     set text(value: string) { //the Code
         (<HTMLInputElement> this.dom.querySelector(".buttontext")).innerText=value===undefined?"":value;
     }
-    
+    @$Property()
     get text(): string {
         var ret=(<HTMLInputElement> this.dom.querySelector(".buttontext")).innerText;
         if(ret===undefined)

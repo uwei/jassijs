@@ -11,26 +11,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     "use strict";
     var HTMLPanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.HTMLPanel = exports.HTMLPanelProperties = void 0;
+    exports.test = exports.HTMLPanel = void 0;
     var bugtinymce = undefined;
-    let HTMLPanelProperties = class HTMLPanelProperties extends DataComponent_1.DataComponentProperties {
-    };
-    __decorate([
-        (0, Property_1.$Property)({ description: "line break after element", default: false }),
-        __metadata("design:type", Boolean)
-    ], HTMLPanelProperties.prototype, "newlineafter", void 0);
-    __decorate([
-        (0, Property_1.$Property)({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' }),
-        __metadata("design:type", String)
-    ], HTMLPanelProperties.prototype, "template", void 0);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", String)
-    ], HTMLPanelProperties.prototype, "value", void 0);
-    HTMLPanelProperties = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.HTMLPanelProperties")
-    ], HTMLPanelProperties);
-    exports.HTMLPanelProperties = HTMLPanelProperties;
     let HTMLPanel = HTMLPanel_1 = class HTMLPanel extends DataComponent_1.DataComponent {
         /*[
             'undo redo | bold italic underline | fontsizeselect', //fontselect
@@ -243,10 +225,25 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             super.destroy();
         }
     };
+    __decorate([
+        (0, Property_1.$Property)({ description: "line break after element", default: false }),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Object])
+    ], HTMLPanel.prototype, "newlineafter", null);
+    __decorate([
+        (0, Property_1.$Property)({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], HTMLPanel.prototype, "template", null);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], HTMLPanel.prototype, "value", null);
     HTMLPanel = HTMLPanel_1 = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
         (0, Registry_1.$Class)("jassijs.ui.HTMLPanel"),
-        __metadata("design:paramtypes", [HTMLPanelProperties])
+        __metadata("design:paramtypes", [Object])
     ], HTMLPanel);
     exports.HTMLPanel = HTMLPanel;
     function test() {

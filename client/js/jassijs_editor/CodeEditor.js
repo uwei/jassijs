@@ -442,10 +442,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
                 //   var Parser = classes.getClass("jassijs_editor.base.Parser");
                 var ComponentDesigner;
-                if (this.file.toLowerCase().endsWith(".tsx"))
-                    ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.HtmlDesigner");
-                else
-                    ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
+                // if (this.file.toLowerCase().endsWith(".tsx"))
+                ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.HtmlDesigner");
+                // else
+                //   ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
                 var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
                 var parser = new Parser();
                 // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);

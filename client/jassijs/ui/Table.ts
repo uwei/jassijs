@@ -51,13 +51,13 @@ class TableEditorProperties {
     @$Property({ default: false })
     movableColumns: boolean;
 }
-export class TableProperties extends DataComponentProperties {
+export interface TableProperties extends DataComponentProperties {
     options?: TableOptions;
     /**
     * register an event if an item is selected
     * @param {function} handler - the function that is called on change
     */
-    onchange?(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void){};
+    onchange?(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void);
     showSearchbox?: boolean;
     /**
     * if the value is changed then the value of _component is also changed (_component.value)

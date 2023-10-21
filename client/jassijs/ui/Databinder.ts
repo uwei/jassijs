@@ -8,7 +8,7 @@ import { classes } from "jassijs/remote/Classes";
 import { ValidationError } from "jassijs/remote/Validator";
 import { notify } from "jassijs/ui/Notify";
 
-class DatabinderProperties extends InvisibleComponentProperties{
+interface DatabinderProperties extends InvisibleComponentProperties{
 
 }
 

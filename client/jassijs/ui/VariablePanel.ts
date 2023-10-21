@@ -111,7 +111,7 @@ export class VariablePanel extends Panel {
         }
         if (!found)
             values.push({ name: name, value: value });
-
+        this._cache[name]=value;
         if (refresh !== false)
             this.update();
 

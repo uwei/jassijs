@@ -5,14 +5,12 @@ import { Property, $Property } from "jassijs/ui/Property";
 import { Image } from "jassijs/ui/Image";
 import { DesignDummy } from "jassijs/ui/DesignDummy";
 
-@$Class("jassijs.ui.PanelProperties")
-export class PanelProperties extends ContainerProperties {
+export interface PanelProperties extends ContainerProperties {
     /**
       * @param {boolean} the elements are ordered absolute
       **/
-    @$Property()
+   
     isAbsolute?: boolean;
-    @$Property({ default: false })
     useSpan?: boolean;
 }
 
@@ -21,7 +19,7 @@ export class PanelProperties extends ContainerProperties {
 @$UIComponent({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] })
 @$Class("jassijs.ui.Panel")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
-//@$Property({ name: "new/useSpan", type: "boolean", default: false })
+@$Property({ name: "new/useSpan", type: "boolean", default: false })
 export class Panel<T extends PanelProperties = {}> extends Container<PanelProperties> implements PanelProperties {
     _isAbsolute: boolean;
     private _activeComponentDesigner: any;
@@ -41,7 +39,7 @@ export class Panel<T extends PanelProperties = {}> extends Container<PanelProper
         var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
         return React.createElement(tag, { className: "Panel" });
     }
-
+    @$Property()
     set isAbsolute(value: boolean) {
         this._isAbsolute = value;
         if (value)
@@ -54,7 +52,6 @@ export class Panel<T extends PanelProperties = {}> extends Container<PanelProper
             this._activeComponentDesigner.editDialog(true);
         }
     }
-    @$Property()
     get isAbsolute(): boolean {
         return this._isAbsolute;
     }

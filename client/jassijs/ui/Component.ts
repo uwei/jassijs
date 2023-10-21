@@ -9,14 +9,14 @@ import { CSSProperties } from "jassijs/ui/CSSProperties";
 
 //import { CSSProperties } from "jassijs/ui/Style";
 
-jassijs.includeCSSFile("jassijs.css"); 
+jassijs.includeCSSFile("jassijs.css");
 jassijs.includeCSSFile("materialdesignicons.min.css");
- 
+
 declare global {
     interface Element {
         _this: Component<any>;
         _id?: string;
-        _thisOther:Component<any>[];
+        _thisOther: Component<any>[];
     }
 
 }
@@ -49,86 +49,73 @@ export function $UIComponent(properties: UIComponentProperties): Function {
     }
 }
 
-@$Class("jassijs.ui.ComponentProperties")
-export class ComponentProperties {
+
+export interface ComponentProperties {
     /**
     * called if the component get the focus
     * @param {function} handler - the function which is executed
     */
-    @$Property({ default: "function(event){\n\t\n}" })
-    onfocus?(handler){};
+    onfocus?(handler);
     /**
     * called if the component lost the focus
     * @param {function} handler - the function which is executed
     */
-     @$Property({ default: "function(event){\n\t\n}" })
-    onblur?(handler){};
+    onblur?(handler);
     /**
      * @member {string} - the label over the component
      */
-    @$Property({ description: "adds a label above the component" })
     label?: string;
     /**
    * @member {string} - tooltip for the component
    */
-    @$Property({ description: "tooltip are displayed on mouse over" })
     tooltip?: string;
     /**
     * @member {number} - the left absolute position
     */
-    @$Property()
     x?: number;
     /**
      * @member {number|string} - the top absolute position
      */
-    @$Property()
     y?: number;
     /**
      * @member {boolean} - component is hidden
      */
-    @$Property()
     hidden?: boolean;
     /**
    * @member {string|number} - the width of the component 
    * e.g. 50 or "100%"
    */
-     @$Property({ type: "string" })
     width?: string | number;
     /**
      * @member {string|number} - the height of the component 
      * e.g. 50 or "100%"
      */
-     @$Property({ type: "string" })
     height?: string | number;
     /**
      * ccc-Properties
      */
- 
-    @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
     css?: CSSProperties;
-    @$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" })
     styles?: any[];
 
     /**
      * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
      **/
-    @$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" })
     contextMenu?;
     /*
     ** Component has no Wrapper around the dom-Element dom=domWrapper
     */
     noWrapper?: boolean;
     replaceNode?: any;
-  /*    //React things - we don't need it
-    context: any;
-    state;
-    refs;
-    setState() {
-        throw new Error("not implemented");
-    }
-    forceUpdate() {
-        throw new Error("not implemented");
-    }*/
+    /*    //React things - we don't need it
+      context: any;
+      state;
+      refs;
+      setState() {
+          throw new Error("not implemented");
+      }
+      forceUpdate() {
+          throw new Error("not implemented");
+      }*/
 }
 
 
@@ -163,13 +150,13 @@ React.Component = class {
 };
 export {React};
 declare global {
-interface Window {
-fetch:(url: string, options?: {}) => Promise<any>
-}
+    interface Window {
+        fetch: (url: string, options?: {}) => Promise<any>
+    }
 }
 declare global {
     interface Window {
-        React:any;
+        React: any;
     }
     interface React {
         createElement(atype: any, props, ...children);
@@ -182,25 +169,14 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
     var props = (<any>node).props;
     var ret;
     if (typeof atype === "string") {
+        if (props === undefined)
+            props = {};
+        props.tag = atype;
         ret = new HTMLComponent(props);
-        ret.tag = atype;
-        var newdom = document.createElement(atype);
-        for (var prop in props) {
+        //ret.tag = atype;
+        var newdom = ret.dom;//document.createElement(atype);
 
-            if (prop === "style") {
-                for (var key in props.style) {
-                    var val = props.style[key];
-                    newdom.style[key] = val;
-                }
-            } else if (prop in newdom) {
-                Reflect.set(newdom, prop, [props[prop]])
-            } else if (prop.toLocaleLowerCase() in newdom) {
-                Reflect.set(newdom, prop.toLocaleLowerCase(), props[prop])
-            } else if (prop in newdom)
-                newdom.setAttribute(prop, props[prop]);
-            // }
-        }
-        ret.init(newdom, { noWrapper: true });
+        //ret.init(newdom, { noWrapper: true });
     } else if (atype.constructor !== undefined) {
         ret = new atype(props);
     } else if (typeof atype === "function") {
@@ -215,10 +191,10 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
             var cchild;
             if (typeof child === "string") {
 
-                var nd = document.createTextNode(child);
+
                 cchild = new TextComponent();
                 cchild.tag = "";
-                cchild.init(nd, { noWrapper: true });
+                cchild.text = child;
                 //child.dom = nd;
             } else {
                 cchild = createComponent(child);
@@ -231,8 +207,7 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
 }
 //class TC <Prop>extends React.Component<Prop,{}>{
 @$Class("jassijs.ui.Component")
-//@ts-ignore
-@$Property({ name: "new", type: "json", componentType: "jassijs.ui.ComponentProperties" })
+@$Property({ name: "testuw", type: "string"})
 export class Component<T = {}> implements React.Component<ComponentProperties, {}>  {
     props: T;
 
@@ -265,7 +240,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
      * 
      */
     constructor(properties: T | any = undefined) {//id connect to existing(not reqired)
-       // super(properties, undefined);
+        // super(properties, undefined);
         this.props = properties;
         var rend = this.render();
         if (rend) {
@@ -284,8 +259,8 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
           this.init(this.lastinit, { replaceNode: this.dom });
           this.config(this.lastconfig);
       }*/
-    config(config: T,forceRender=false): Component<T> {
-        var con:any = Object.assign({}, config);
+    config(config: T, forceRender = false): Component<T> {
+        var con: any = Object.assign({}, config);
         delete con.noWrapper;
         delete con.replaceNode;
         // this.lastconfig = config;
@@ -302,7 +277,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
                 notfound[key] = con;
         }
         Object.assign(this.props === undefined ? {} : this.props, config);
-        if (Object.keys(notfound).length > 0&&forceRender) {
+        if (Object.keys(notfound).length > 0 && forceRender) {
             var rerender = this.render();
             if (rerender) {
                 this.init(createComponent(rerender).dom);
@@ -384,11 +359,12 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         this.dom._this = this;
 
     }
-    
+    @$Property({ default: "function(event){\n\t\n}" })
     onfocus(handler) {
         return this.on("focus", handler);
     }
-   
+
+    @$Property({ default: "function(event){\n\t\n}" })
     onblur(handler) {
         return this.on("blur", handler);
     }
@@ -451,7 +427,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
             dom = Component.createHTMLElement(dom);
         //is already attached
         if (this.domWrapper !== undefined) {
-            var thisProperties:ComponentProperties=properties;
+            var thisProperties: ComponentProperties = properties;
             if (thisProperties?.replaceNode?.parentNode) {
                 thisProperties?.replaceNode.parentNode.replaceChild(dom, thisProperties?.replaceNode);
                 this.dom = dom;
@@ -487,7 +463,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         if (this instanceof classes.getClass("jassijs.ui.Container")) {
             st = "";
         }
-        
+
         if (properties !== undefined && (<any>properties).noWrapper === true) {
             this.domWrapper = this.dom;
             this.domWrapper._id = this._id;
@@ -522,6 +498,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
 
     }
 
+    @$Property({ description: "adds a label above the component" })
     set label(value: string) { //the Code
         if (value === undefined) {
             var lab = this.domWrapper.querySelector(".jlabel"); //this.domWrapper.getElementsByClassName("jlabel");
@@ -537,11 +514,12 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         }
     }
 
-    
+
     get label(): string {
         return this.domWrapper.querySelector(".jlabel")?.innerHTML;
     }
-    
+
+    @$Property({ description: "tooltip are displayed on mouse over" })
     get tooltip(): string {
         return this.dom.getAttribute("title");
     }
@@ -550,7 +528,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
 
     }
 
-    
+    @$Property()
     get x(): number {
         return Number(this.domWrapper.style.left.replace("px", ""));
     }
@@ -560,9 +538,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         this.domWrapper.style.position = "absolute";
     }
 
-
-
-   
+    @$Property()
     get y(): number {
         return Number(this.domWrapper.style.top.replace("px", ""));
     }
@@ -572,7 +548,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         this.domWrapper.style.position = "absolute";
     }
 
-   
+    @$Property()
     get hidden(): boolean {
         return (this.dom.getAttribute("hidden") === "");
     }
@@ -582,7 +558,6 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         else
             this.dom.removeAttribute("hidden");
     }
-
 
     set width(value: string | number) { //the Code
         //  if($.isNumeric(value))
@@ -600,6 +575,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         }
         //  
     }
+    @$Property({ type: "number" })
     get width() {
         if (this.domWrapper.style.width !== undefined)
             return this.domWrapper.style.width;
@@ -621,6 +597,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
             this.domWrapper.style.height = "";
         }
     }
+    @$Property({ type: "number" })
     get height() {
         if (this.domWrapper.style.height !== undefined)
             return this.domWrapper.style.height;
@@ -628,6 +605,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
             return undefined;
         return this.dom.style.height.replace("px", "");
     }
+    @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
     set css(properties: CSSProperties) {
         var prop = CSSProperties.applyTo(properties, this);
         //if css-properties are already set and now a properties is deleted
@@ -648,6 +626,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         this.dom.style.width = "calc(100% - 2px)";
         this.dom.style.height = "calc(100% - 2px)";
     }
+    @$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" })
     get styles(): any[] {
         return this._styles;
     }
@@ -669,7 +648,8 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
                 this.dom.classList.add(st);
         });
     }
-
+    
+    @$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" })
     get contextMenu() {
         return this._contextMenu;
     }
@@ -725,7 +705,7 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
     }
     extensionCalled(action: ExtensionAction) {
     }
- //React things - we don't need it
+    //React things - we don't need it
     context: any;
     state;
     refs;
@@ -736,18 +716,71 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         throw new Error("not implemented");
     }
 }
-class HTMLComponentProperties extends ComponentProperties{
+interface HTMLComponentProperties extends ComponentProperties {//React.HTMLProps<Element>{
     tag?: string;
 }
+
+
 // ret.tag = atype;
 //        var newdom = document.createElement(atype);
 @$Class("jassijs.ui.HTMLComponent")
-export class HTMLComponent<T extends HTMLComponentProperties={}> extends Component<T> {
+export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Component<HTMLComponentProperties> implements HTMLComponentProperties{
     _components: Component[] = [];
     _designDummy: any;
 
 
-   
+    constructor(prop: HTMLComponentProperties = {}) {
+        super(prop);
+        
+        //this.init(document.createElement(tag), { noWrapper: true });
+    }
+
+    config(props: HTMLComponentProperties, forceRender: boolean = false) {
+        var tag=props?.tag===undefined?"span":props?.tag;
+        if (props?.tag !== this.tag.toLowerCase()) {
+            var childs = this.dom?.childNodes;
+            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
+            if (childs?.length > 0)
+                this.dom.append(...<any>childs);
+        }
+        super.config(props, forceRender);
+        for (var prop in props) {
+
+            if (prop === "style") {
+                for (var key in (<any>props).style) {
+                    var val = (<any>props).style[key];
+                    this.dom.style[key] = val;
+                }
+            } else if (prop in this.dom) {
+                Reflect.set(this.dom, prop, [props[prop]])
+            } else if (prop.toLocaleLowerCase() in this.dom) {
+                Reflect.set(this.dom, prop.toLocaleLowerCase(), props[prop])
+            } else if (prop in this.dom)
+                this.dom.setAttribute(prop, (<any>props)[prop]);
+            // }
+        }
+        return this;
+    }
+    set tag(value: string) {
+        var tag=value==undefined?"span":value;
+        if (tag!== this.tag.toLowerCase()) {
+            this.props.tag = value;
+            this.config(this.props);
+            /*
+            var childs = this.dom?.childNodes;
+            this.init(document.createElement(value), { replaceNode: this.dom, noWrapper: true });
+            if (childs?.length > 0)
+                this.dom.append(...<any>childs);
+            */
+        }
+    }
+    @$Property()
+    get tag(): string {
+        var ret=this.dom?.tagName;
+        if(ret===null||ret===undefined)
+            return "";
+        return ret;
+    }
     /**
     * adds a component to the container
     * @param {jassijs.ui.Component} component - the component to add
@@ -785,7 +818,6 @@ export class HTMLComponent<T extends HTMLComponentProperties={}> extends Compone
         if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
             component.domWrapper.parentNode.removeChild(component.domWrapper);
         }
-
         if (component["designDummyFor"])
             this.designDummies.push(component);
         else
@@ -794,10 +826,10 @@ export class HTMLComponent<T extends HTMLComponentProperties={}> extends Compone
         before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
     }
     /**
-   * remove the component
-   * @param {jassijs.ui.Component} component - the component to remove
-   * @param {boolean} destroy - if true the component would be destroyed
-   */
+    * remove the component
+    * @param {jassijs.ui.Component} component - the component to remove
+    * @param {boolean} destroy - if true the component would be destroyed
+    */
     remove(component, destroy = false) {
         if (destroy)
             component.destroy();
@@ -819,9 +851,9 @@ export class HTMLComponent<T extends HTMLComponentProperties={}> extends Compone
         }
     }
     /**
-   * remove all component
-   * @param {boolean} destroy - if true the component would be destroyed
-   */
+    * remove all component
+    * @param {boolean} destroy - if true the component would be destroyed
+    */
     removeAll(destroy = undefined) {
         while (this._components.length > 0) {
             this.remove(this._components[0], destroy);
@@ -838,16 +870,34 @@ export class HTMLComponent<T extends HTMLComponentProperties={}> extends Compone
         }
         super.destroy();
     }
-   
+
 }
+
+
+export interface TextComponentProperties extends ComponentProperties {
+    text?;
+}
+
 @$Class("jassijs.ui.TextComponent")
-export class TextComponent extends Component {
+export class TextComponent<T extends TextComponentProperties = {}> extends Component<TextComponentProperties> implements TextComponentProperties{
+    constructor(props: TextComponentProperties = {}) {
+        super(props);
+        
+    }
+    config(props: TextComponentProperties, forceRender: boolean = false) {
+        if(this.dom===undefined){
+            this.init(<any>document.createTextNode(props?.text), { noWrapper: true });
+        }
+        super.config(props, forceRender);
+        return this;
+    }
     @$Property()
     get text() {
-        return this.dom.textContent;
+        return this.dom?.textContent;
     };
     set text(value: string) {
-        var p = JSON.parse(`{"a":"` + value + '"}').a;
-        this.dom.textContent = p;
+
+       // var p = JSON.parse(value);//`{"a":"` + value + '"}').a;
+        this.dom.textContent = value;
     };
 }

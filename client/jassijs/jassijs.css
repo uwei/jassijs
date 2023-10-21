@@ -1,8 +1,8 @@
-.testuw::after { 
-  content: "O";
-  background-color: yellow;
-  color: red;
-  font-weight: bold;
+.dummyselected{
+  background-color: lightgoldenrodyellow;
+}
+.lm_content{
+  background-color:white;  
 }
 .jlabel{ 
   display:block;font-size: smaller;

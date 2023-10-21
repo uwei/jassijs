@@ -2,15 +2,15 @@ import { $Class } from "jassijs/remote/Registry";
 import { Component, ComponentProperties } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 
-@$Class("jassijs.ui.ContainerProperties")
-export class ContainerProperties extends ComponentProperties {
+
+export interface ContainerProperties extends ComponentProperties {
     /**
      * child components
      */
-    @$Property({type:"jassijs.ui.Component"})
     children?;
 }
 @$Class("jassijs.ui.Container")
+@$Property({name:"children",type:"jassijs.ui.Component"})
 export class Container<T extends ContainerProperties={}> extends Component<T> implements Omit<ContainerProperties, "children">{
     _components: Component[];
     _designDummy: any;
@@ -90,8 +90,8 @@ export class Container<T extends ContainerProperties={}> extends Component<T> im
             this.designDummies.push(component);
         else
             this._components.splice(index, 0, component);
-
-        before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+        this.dom.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+        //before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
     }
     /**
    * remove the component

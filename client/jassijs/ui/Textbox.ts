@@ -5,9 +5,7 @@ import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
 import registry from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 
-@$Class("jassijs.ui.TextboxProperties")
-export class TextboxProperties extends DataComponentProperties {
-     @$Property({ type: "classselector", service: "$Converter" })
+export interface TextboxProperties extends DataComponentProperties {
     converter?: DefaultConverter;
     /**
     * @member {boolean} disabled - enable or disable the element
@@ -16,33 +14,27 @@ export class TextboxProperties extends DataComponentProperties {
     /**
      * @member {string} value - value of the component
      */
-    @$Property({ type: "string" })
     value?;
     /**
     * called if value has changed
     * @param {function} handler - the function which is executed
     */
-    @$Property({ default: "function(event){\n\t\n}" })
-    onclick?(handler){};
+    onclick?(handler);
     /**
      * called if value has changed
      * @param {function} handler - the function which is executed
      */
-    @$Property({ default: "function(event){\n\t\n}" })
-    onchange?(handler){};
+    onchange?(handler);
     /**
      * called if a key is pressed down
      * @param {function} handler - the function which is executed
      */
-    @$Property({ default: "function(event){\n\t\n}" })
-    onkeydown?(handler){};
+    onkeydown?(handler);
     /**
      * called if user has something typed
      * @param {function} handler - the function which is executed
      */
-    @$Property({ default: "function(event){\n\t\n}" })
-    oninput?(handler){};
-    @$Property()
+    oninput?(handler);
     placeholder?: string;
     /**
     *  @member {string|function} completerDisplay - property or function used to gets the value to display
@@ -55,13 +47,11 @@ export class TextboxProperties extends DataComponentProperties {
     /**
      * @member {boolean} - the textfield is readonly
      */
-    @$Property()
     readOnly?: boolean;
 }
 @$UIComponent({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" })
 @$Class("jassijs.ui.Textbox")
-@$Property({ name: "new",type: "json", componentType: "jassijs.ui.TextboxProperties"})
-export class Textbox<T extends TextboxProperties={}> extends DataComponent<TextboxProperties> implements TextboxProperties {
+export class Textbox<T extends TextboxProperties = {}> extends DataComponent<TextboxProperties> implements TextboxProperties {
     /* get dom(){
          return this.dom;
      }*/
@@ -71,24 +61,26 @@ export class Textbox<T extends TextboxProperties={}> extends DataComponent<Textb
     _autocompleter;
     private _value: any = "";
     private _isFocused = false;
-    constructor(props:TextboxProperties = undefined) {
+    constructor(props: TextboxProperties = undefined) {
         super(props);
-        var _this=this;
+        var _this = this;
         this.onblur((e) => _this.blurcalled(e));
         this.onfocus((e) => _this.focuscalled(e));
         // this.converter = undefined;
     }
-   render(){
-        return React.createElement("input",{    type:"text"});
+    render() {
+        return React.createElement("input", { type: "text" });
     }
-    
-   
+
+
     get dom(): HTMLInputElement {
         return <any>super.dom;
     }
     set dom(value: HTMLInputElement) {
         super.dom = value;
     }
+
+
     set disabled(value) {
         this.dom.disabled = true;
     }
@@ -101,14 +93,14 @@ export class Textbox<T extends TextboxProperties={}> extends DataComponent<Textb
     get converter(): DefaultConverter {
         return this._converter;
     }
-   
+    @$Property({ type: "classselector", service: "$Converter" })
     set converter(value: DefaultConverter) {
         this._converter = value;
-        if(value)
-            this.converter.component=this;
-        this.value=this.value;
+        if (value)
+            this.converter.component = this;
+        this.value = this.value;
     }
-    
+
     get readOnly(): boolean {
         return this.dom.readOnly;
     }
@@ -138,28 +130,33 @@ export class Textbox<T extends TextboxProperties={}> extends DataComponent<Textb
         var v = value;
         if (this.converter)
             v = this.converter.objectToFormatedString(v);
-      
+
         this.dom.value = v === undefined ? "" : v;
     }
-    
+    @$Property({ type: "string" })
+
     get value() {
         if (this._isFocused)
             this.updateValue();
         return this._value;
     }
-    
+    @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler) {
         return this.on("click", handler);
     }
-    
+
+    @$Property({ default: "function(event){\n\t\n}" })
     onchange(handler) {
         return this.on("change", handler);
     }
-    
+
+
+    @$Property({ default: "function(event){\n\t\n}" })
     onkeydown(handler) {
         return this.on("keydown", handler);
     }
-    
+
+    @$Property({ default: "function(event){\n\t\n}" })
     oninput(handler) {
         return this.on("input", handler);
     }
@@ -170,7 +167,8 @@ export class Textbox<T extends TextboxProperties={}> extends DataComponent<Textb
 <option value="Firefox">
 </datalist>+>
      */
-    
+
+    @$Property()
     set placeholder(text: string) {
         this.dom.placeholder = text;
     }

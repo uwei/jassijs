@@ -10,16 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Registry_1, Component_1, Property_1, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Checkbox = exports.CheckboxProperties = void 0;
-    class CheckboxProperties extends DataComponent_1.DataComponentProperties {
-        /**
-      * register an event if the button is clicked
-      * @param {function} handler - the function that is called on change
-      */
-        onclick(handler) { }
-        ;
-    }
-    exports.CheckboxProperties = CheckboxProperties;
+    exports.test = exports.Checkbox = void 0;
     let Checkbox = class Checkbox extends DataComponent_1.DataComponent {
         /* get dom(){
              return this.dom;
@@ -84,7 +75,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Checkbox = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
         (0, Registry_1.$Class)("jassijs.ui.Checkbox"),
-        __metadata("design:paramtypes", [CheckboxProperties])
+        __metadata("design:paramtypes", [Object])
     ], Checkbox);
     exports.Checkbox = Checkbox;
     function test() {

@@ -107,6 +107,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             }
             if (!found)
                 values.push({ name: name, value: value });
+            this._cache[name] = value;
             if (refresh !== false)
                 this.update();
         }

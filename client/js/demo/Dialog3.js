@@ -33,14 +33,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.layout(this.me);
         }
         layout(me) {
+            /*
             this.dom.contentEditable = "true";
-            me.p1 = new Panel_1.Panel();
+            me.p1=new Panel();
             me.p1.domWrapper.style.borderWidth = "5px;";
             me.p1.domWrapper.style.borderStyle = "ridge";
-            me.p2 = new Panel_1.Panel();
+            
+            me.p2 = new Panel();
             me.p2.domWrapper.style.borderWidth = "5px;";
             me.p2.domWrapper.style.borderStyle = "ridge";
-            me.p3 = new Panel_1.Panel();
+            me.p3 = new Panel();
             me.p3.domWrapper.style.borderWidth = "5px;";
             me.p3.domWrapper.style.borderStyle = "ridge";
             me.p4 = new H({ nowrapper: true });
@@ -51,17 +53,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.add(me.p4);
             this.add(me.p5);
             this.height = 25;
-            setTimeout(() => {
-                const selection = window.getSelection();
+            setTimeout(()=>{
+                const selection = window.getSelection()
                 console.log(me.p2.dom.id);
-                const headerElement = document.querySelector('#' + me.p2.dom.id).childNodes[0];
-                selection.setBaseAndExtent(headerElement, 0, headerElement, 2);
-            }, 10000);
-            /*    me.p2 = new HTMLComponent({nowrapper:true});me.p2.dom=me.p2.domWrapper=Component.createHTMLElement(h);this.add(me.p2);
-                me.p3 = new HTMLComponent({nowrapper:true});me.p3.dom=me.p3.domWrapper=Component.createHTMLElement(h);this.add(me.p3);
-                me.p4 = new HTMLComponent({nowrapper:true});me.p4.dom=me.p4.domWrapper=Component.createHTMLElement(h);this.add(me.p4);
-                me.p5 = new HTMLComponent({nowrapper:true});me.p5.dom=me.p5.domWrapper=Component.createHTMLElement(h);this.add(me.p5);
-                me.p6 = new HTMLComponent({nowrapper:true});me.p6.dom=me.p6.domWrapper=Component.createHTMLElement(h);this.add(me.p6);*/
+                const headerElement = document.querySelector('#'+me.p2.dom.id).childNodes[0]
+                selection.setBaseAndExtent(headerElement,0,headerElement,2)
+            },10000);
+    */
         }
     };
     Dialog3 = __decorate([

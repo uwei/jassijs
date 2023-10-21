@@ -10,21 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DesignDummy"], function (require, exports, Registry_1, Container_1, Component_1, Property_1, DesignDummy_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Panel = exports.PanelProperties = void 0;
-    let PanelProperties = class PanelProperties extends Container_1.ContainerProperties {
-    };
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Boolean)
-    ], PanelProperties.prototype, "isAbsolute", void 0);
-    __decorate([
-        (0, Property_1.$Property)({ default: false }),
-        __metadata("design:type", Boolean)
-    ], PanelProperties.prototype, "useSpan", void 0);
-    PanelProperties = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.PanelProperties")
-    ], PanelProperties);
-    exports.PanelProperties = PanelProperties;
+    exports.Panel = void 0;
     let Panel = class Panel extends Container_1.Container {
         /**
         *
@@ -163,10 +149,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
     Panel = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
         (0, Registry_1.$Class)("jassijs.ui.Panel"),
-        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
-        //@$Property({ name: "new/useSpan", type: "boolean", default: false })
-        ,
-        __metadata("design:paramtypes", [PanelProperties])
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" }),
+        (0, Property_1.$Property)({ name: "new/useSpan", type: "boolean", default: false }),
+        __metadata("design:paramtypes", [Object])
     ], Panel);
     exports.Panel = Panel;
 });

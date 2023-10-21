@@ -237,8 +237,8 @@ class SimpleCodeEditor extends Panel {
         this._codePanel.undo();
     }
 }
-export class SimpleReportEditorProperties extends PanelProperties {
-    @$Property()
+export interface SimpleReportEditorProperties extends PanelProperties {
+   // @$Property()
     startUpWithPdfView?: boolean;
     view?:"default"|"vertical"|"horizontal"|"withoutcode";
     oncodechange?:any;

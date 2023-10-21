@@ -8,18 +8,14 @@ declare global {
         doubletap: any;
     }
 }
-@$Class("jassijs.ui.HTMLPanelProperties")
-export class HTMLPanelProperties extends DataComponentProperties {
-    @$Property({ description: "line break after element", default: false })
+
+export interface HTMLPanelProperties extends DataComponentProperties {
     newlineafter?: boolean;
 
     /**
      * template string  component.value=new Person();component.template:"{{name}}"}
      */
-    @$Property({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' })
     template?: string;
-    @$Property()
-   
     value?: string;
 
 }
@@ -63,6 +59,7 @@ export class HTMLPanel<T extends HTMLPanelProperties={}> extends DataComponent<H
     get newlineafter(): boolean {
         return this.dom.style.display === "inline-block";
     }
+    @$Property({ description: "line break after element", default: false })
     set newlineafter(value) {
         this.dom.style.display = value ? "" : "inline-block";
         this.domWrapper.style.display = value ? "" : "inline-block";
@@ -78,6 +75,7 @@ export class HTMLPanel<T extends HTMLPanelProperties={}> extends DataComponent<H
    get template(): string {
         return this._template;
     }
+    @$Property({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' })
     set template(value: string) {
         this._template = value;
         this.value = this.value; //reformat value
@@ -85,6 +83,7 @@ export class HTMLPanel<T extends HTMLPanelProperties={}> extends DataComponent<H
     /**
      * @member {string} code - htmlcode of the component
      **/
+    @$Property()
     set value(code: string) {
         var scode = code;
         this._value = code;

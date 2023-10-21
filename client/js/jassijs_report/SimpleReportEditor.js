@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Registry_1, Runlater_1, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_1, Panel_1, Windows_1, DockingContainer_1, VariablePanel_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.SimpleReportEditor = exports.SimpleReportEditorProperties = void 0;
+    exports.test = exports.SimpleReportEditor = void 0;
     class SimpleCodeEditor extends Panel_1.Panel {
         constructor(codePanel) {
             super();
@@ -232,13 +232,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater"
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], SimpleCodeEditor.prototype, "line", null);
-    class SimpleReportEditorProperties extends Panel_1.PanelProperties {
-    }
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Boolean)
-    ], SimpleReportEditorProperties.prototype, "startUpWithPdfView", void 0);
-    exports.SimpleReportEditorProperties = SimpleReportEditorProperties;
     let SimpleReportEditor = class SimpleReportEditor extends Panel_1.Panel {
         //value:string;
         constructor(properties) {
@@ -319,7 +312,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater"
     };
     SimpleReportEditor = __decorate([
         (0, Registry_1.$Class)("jassi_report.SimpleReportEditor"),
-        __metadata("design:paramtypes", [SimpleReportEditorProperties])
+        __metadata("design:paramtypes", [Object])
     ], SimpleReportEditor);
     exports.SimpleReportEditor = SimpleReportEditor;
     function test() {

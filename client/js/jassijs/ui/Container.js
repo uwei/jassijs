@@ -10,17 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_1, Component_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Container = exports.ContainerProperties = void 0;
-    let ContainerProperties = class ContainerProperties extends Component_1.ComponentProperties {
-    };
-    __decorate([
-        (0, Property_1.$Property)({ type: "jassijs.ui.Component" }),
-        __metadata("design:type", Object)
-    ], ContainerProperties.prototype, "children", void 0);
-    ContainerProperties = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.ContainerProperties")
-    ], ContainerProperties);
-    exports.ContainerProperties = ContainerProperties;
+    exports.Container = void 0;
     let Container = class Container extends Component_1.Component {
         /**
          *
@@ -94,7 +84,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 this.designDummies.push(component);
             else
                 this._components.splice(index, 0, component);
-            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+            this.dom.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+            //before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
         }
         /**
        * remove the component
@@ -144,7 +135,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     };
     Container = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.Container"),
-        __metadata("design:paramtypes", [ContainerProperties])
+        (0, Property_1.$Property)({ name: "children", type: "jassijs.ui.Component" }),
+        __metadata("design:paramtypes", [Object])
     ], Container);
     exports.Container = Container;
 });

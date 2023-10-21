@@ -22,7 +22,8 @@ export class Dialog4 extends Panel {
             children: [
                 me.button.config({ text: "button" }),
                 me.panel.config({
-                    width: "150",height: "150",children: [
+                    width: 200,
+                    height: 150,children: [
                         me.button2.config({ text: "button" })
                     ]
                 })

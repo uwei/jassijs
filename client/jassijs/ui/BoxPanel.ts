@@ -12,17 +12,14 @@ import { classes } from "jassijs/remote/Classes";
 //import Split from "jassijs/ext/split";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 
-@$Class("jassijs.ui.BoxPanelProperties")
-export class BoxPanelProperties extends PanelProperties {
+export interface BoxPanelProperties extends PanelProperties {
     /**
      * @member {boolean} - if true then the components are composed horizontally
      **/
-    @$Property()
     horizontal?: boolean;
     /**
       * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
       */
-    @$Property({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" })
     spliter?: number[];
 }
 
@@ -53,6 +50,7 @@ export class BoxPanel<T extends BoxPanelProperties={}> extends Panel<BoxPanelPro
         super.config(config);
         return this;
     }
+    @$Property()
     set horizontal(value: boolean) {
         this._horizontal = value;
         if (value)
@@ -84,6 +82,7 @@ export class BoxPanel<T extends BoxPanelProperties={}> extends Panel<BoxPanelPro
         super.addBefore(component, before);
         this.updateSpliter();
     }
+    @$Property({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" })
     set spliter(size: number[]) {
         this._spliter = size;
         this.updateSpliter();

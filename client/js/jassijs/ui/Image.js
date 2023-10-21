@@ -10,30 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/ui/DataComponent"], function (require, exports, Component_1, Property_1, Registry_1, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Image = exports.ImageProperties = void 0;
-    class ImageProperties extends DataComponent_1.DataComponentProperties {
-        /**
-     * register an event if the image is clicked
-     * @param {function} handler - the function that is called on change
-     */
-        onclick(handler) { }
-        ;
-    }
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], ImageProperties.prototype, "onclick", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "image" }),
-        __metadata("design:type", String)
-    ], ImageProperties.prototype, "src", void 0);
-    __decorate([
-        (0, Property_1.$Property)({ type: "string" }),
-        __metadata("design:type", String)
-    ], ImageProperties.prototype, "value", void 0);
-    exports.ImageProperties = ImageProperties;
+    exports.test = exports.Image = void 0;
     let Image = class Image extends DataComponent_1.DataComponent {
         /* get dom(){
              return this.dom;
@@ -99,11 +76,27 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             //            return $(this.dom).attr("src");
         }
     };
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], Image.prototype, "onclick", null);
+    __decorate([
+        (0, Property_1.$Property)({ type: "string" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Image.prototype, "value", null);
+    __decorate([
+        (0, Property_1.$Property)({ type: "image" }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], Image.prototype, "src", null);
     Image = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
         ,
         (0, Registry_1.$Class)("jassijs.ui.Image"),
-        __metadata("design:paramtypes", [ImageProperties])
+        __metadata("design:paramtypes", [Object])
     ], Image);
     exports.Image = Image;
     function test() {

@@ -10,21 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Component_1, Property_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DataComponent = exports.DataComponentProperties = void 0;
-    let DataComponentProperties = class DataComponentProperties extends Component_1.ComponentProperties {
-    };
-    __decorate([
-        (0, Property_1.$Property)({ type: "databinder" }),
-        __metadata("design:type", Array)
-    ], DataComponentProperties.prototype, "bind", void 0);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Boolean)
-    ], DataComponentProperties.prototype, "autocommit", void 0);
-    DataComponentProperties = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.DataComponentProperties")
-    ], DataComponentProperties);
-    exports.DataComponentProperties = DataComponentProperties;
+    exports.DataComponent = void 0;
     var tmpDatabinder = undefined;
     let DataComponent = class DataComponent extends Component_1.Component {
         /**
@@ -77,9 +63,18 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             super.destroy();
         }
     };
+    __decorate([
+        (0, Property_1.$Property)({ type: "databinder" }),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], DataComponent.prototype, "autocommit", null);
+    __decorate([
+        (0, Property_1.$Property)({ type: "databinder" }),
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
+    ], DataComponent.prototype, "bind", null);
     DataComponent = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.DataComponent"),
-        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.DataComponentProperties" }),
         __metadata("design:paramtypes", [Object])
     ], DataComponent);
     exports.DataComponent = DataComponent;

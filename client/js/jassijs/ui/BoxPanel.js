@@ -10,22 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Split, Panel_1, Registry_1, Component_1, Property_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.BoxPanel = exports.BoxPanelProperties = void 0;
+    exports.test = exports.BoxPanel = void 0;
     /// <amd-dependency path="splitlib" name="Split"/>
-    let BoxPanelProperties = class BoxPanelProperties extends Panel_1.PanelProperties {
-    };
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Boolean)
-    ], BoxPanelProperties.prototype, "horizontal", void 0);
-    __decorate([
-        (0, Property_1.$Property)({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" }),
-        __metadata("design:type", Array)
-    ], BoxPanelProperties.prototype, "spliter", void 0);
-    BoxPanelProperties = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.BoxPanelProperties")
-    ], BoxPanelProperties);
-    exports.BoxPanelProperties = BoxPanelProperties;
     let BoxPanel = class BoxPanel extends Panel_1.Panel {
         /**
         *
@@ -105,11 +91,21 @@ define(["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Re
             });
         }
     };
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], BoxPanel.prototype, "horizontal", null);
+    __decorate([
+        (0, Property_1.$Property)({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" }),
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
+    ], BoxPanel.prototype, "spliter", null);
     BoxPanel = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
         (0, Registry_1.$Class)("jassijs.ui.BoxPanel"),
         (0, Property_1.$Property)({ name: "isAbsolute", hide: true, type: "boolean" }),
-        __metadata("design:paramtypes", [BoxPanelProperties])
+        __metadata("design:paramtypes", [Object])
     ], BoxPanel);
     exports.BoxPanel = BoxPanel;
     async function test() {

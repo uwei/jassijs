@@ -10,33 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_1, Component_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Button = exports.ButtonProperties = void 0;
-    let ButtonProperties = class ButtonProperties extends Component_1.ComponentProperties {
-        /**
-      * register an event if the button is clicked
-      * @param {function} handler - the function that is called on change
-      */
-        onclick(handler, removeOldHandler) { }
-        ;
-    };
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Boolean]),
-        __metadata("design:returntype", void 0)
-    ], ButtonProperties.prototype, "onclick", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "image" }),
-        __metadata("design:type", String)
-    ], ButtonProperties.prototype, "icon", void 0);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", String)
-    ], ButtonProperties.prototype, "text", void 0);
-    ButtonProperties = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.ButtonProperties")
-    ], ButtonProperties);
-    exports.ButtonProperties = ButtonProperties;
+    exports.test = exports.Button = void 0;
     let Button = class Button extends Component_1.Component {
         constructor(properties = {}) {
             super(properties);
@@ -52,10 +26,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.dom = value;
         }
         render() {
-            return React.createElement("button", {
-                className: "Button",
-                contenteditable: false
-            }, React.createElement("span", {
+            return React.createElement("button", Object.assign(Object.assign({}, this.props.domProperties), { className: "Button", contenteditable: false }), React.createElement("span", {
                 className: "buttonspan"
             }, React.createElement("img", {
                 style: { display: "none" },
@@ -74,7 +45,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             var img;
             if (icon === undefined)
                 icon = "";
-            if (this.dom === undefined)
+            if (this.dom === undefined || this.dom === null)
                 debugger;
             var el1 = this.dom.querySelector(".buttonspan");
             el1.classList.forEach((cl) => { el1.classList.remove(cl); });
@@ -122,11 +93,26 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.destroy();
         }
     };
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Boolean]),
+        __metadata("design:returntype", void 0)
+    ], Button.prototype, "onclick", null);
+    __decorate([
+        (0, Property_1.$Property)({ type: "image" }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], Button.prototype, "icon", null);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], Button.prototype, "text", null);
     Button = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
         (0, Registry_1.$Class)("jassijs.ui.Button"),
-        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.ButtonProperties" }),
-        __metadata("design:paramtypes", [ButtonProperties])
+        __metadata("design:paramtypes", [Object])
     ], Button);
     exports.Button = Button;
     async function test() {

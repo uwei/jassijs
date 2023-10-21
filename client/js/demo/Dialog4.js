@@ -25,7 +25,8 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/remote/Registry", "j
                 children: [
                     me.button.config({ text: "button" }),
                     me.panel.config({
-                        width: "150", height: "150", children: [
+                        width: 200,
+                        height: 150, children: [
                             me.button2.config({ text: "button" })
                         ]
                     })

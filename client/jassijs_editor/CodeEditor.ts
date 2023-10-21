@@ -518,10 +518,10 @@ export class CodeEditor extends Panel {
             //   var Parser = classes.getClass("jassijs_editor.base.Parser");
 
             var ComponentDesigner;
-            if (this.file.toLowerCase().endsWith(".tsx"))
+           // if (this.file.toLowerCase().endsWith(".tsx"))
                 ComponentDesigner = await classes.loadClass("jassijs_editor.HtmlDesigner");
-            else
-                ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
+           // else
+             //   ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
 
             var Parser = await classes.loadClass("jassijs_editor.util.Parser");
             var parser = new Parser();

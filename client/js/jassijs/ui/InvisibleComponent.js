@@ -10,10 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Component_1, Registry_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.InvisibleComponent = exports.InvisibleComponentProperties = void 0;
-    class InvisibleComponentProperties extends Component_1.ComponentProperties {
-    }
-    exports.InvisibleComponentProperties = InvisibleComponentProperties;
+    exports.InvisibleComponent = void 0;
     /**
      * invivisible Component
      **/
@@ -38,7 +35,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         @$Property({name:"styles",hide:true})*/
         ,
         (0, Property_1.$Property)({ hideBaseClassProperties: true }),
-        __metadata("design:paramtypes", [InvisibleComponentProperties])
+        __metadata("design:paramtypes", [Object])
     ], InvisibleComponent);
     exports.InvisibleComponent = InvisibleComponent;
 });

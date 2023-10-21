@@ -10,26 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_1, Component_1, DataComponent_1, Property_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Select = exports.SelectProperities = void 0;
+    exports.test = exports.Select = void 0;
     jassijs.includeCSSFile("chosen.css");
-    let SelectProperities = class SelectProperities extends Component_1.ComponentProperties {
-    };
-    __decorate([
-        (0, Property_1.$Property)({ default: false }),
-        __metadata("design:type", Boolean)
-    ], SelectProperities.prototype, "multiple", void 0);
-    __decorate([
-        (0, Property_1.$Property)({ default: false }),
-        __metadata("design:type", Boolean)
-    ], SelectProperities.prototype, "allowDeselect", void 0);
-    __decorate([
-        (0, Property_1.$Property)({ default: "" }),
-        __metadata("design:type", String)
-    ], SelectProperities.prototype, "placeholder", void 0);
-    SelectProperities = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.SelectProperties")
-    ], SelectProperities);
-    exports.SelectProperities = SelectProperities;
     let Select = class Select extends DataComponent_1.DataComponent {
         constructor(properties = undefined) {
             super(properties);
@@ -239,7 +221,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         (0, Component_1.$UIComponent)({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
         (0, Registry_1.$Class)("jassijs.ui.Select"),
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.SelectProperties" }),
-        __metadata("design:paramtypes", [SelectProperities])
+        __metadata("design:paramtypes", [Object])
     ], Select);
     exports.Select = Select;
     async function test() {

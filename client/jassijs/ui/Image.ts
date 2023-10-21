@@ -3,22 +3,18 @@ import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 
-export class ImageProperties extends DataComponentProperties {
+export interface ImageProperties extends DataComponentProperties {
 
        /**
     * register an event if the image is clicked
     * @param {function} handler - the function that is called on change
     */
-       @$Property({ default: "function(event){\n\t\n}" })
-    
-    onclick?(handler){};
+    onclick?(handler);
   /**
     * @member {string} - link to image
     */
-  @$Property({ type: "image" })
     src?:string;
-    @$Property({ type: "string" })
-    declare value?: string;
+    value?: string;
 }
 
 @$UIComponent({ fullPath: "default/Image", icon: "mdi mdi-file-image" })//
@@ -35,7 +31,8 @@ export class Image<T extends ImageProperties={}> extends DataComponent<ImageProp
         super.config(config);
         return this;
     }
-   onclick(handler) {
+    @$Property({ default: "function(event){\n\t\n}" })
+    onclick(handler) {
         this.on("click",handler);
 
     }
@@ -43,6 +40,7 @@ export class Image<T extends ImageProperties={}> extends DataComponent<ImageProp
     /**
     * @member {string} value - value of the component 
     */
+    @$Property({ type: "string" })
     set value(value) { //the Code
         this.src = value;
     }
@@ -72,6 +70,7 @@ export class Image<T extends ImageProperties={}> extends DataComponent<ImageProp
             (<HTMLElement>this.dom.children[0]).setAttribute("height", "100%");
         super.height = value;
     }
+    @$Property({ type: "image" })
     set src(icon: string) {
         this.dom.classList.forEach((cl)=>{this.dom.classList.remove(cl)});
         (<HTMLElement>this.dom.children[0]).setAttribute("src", "")

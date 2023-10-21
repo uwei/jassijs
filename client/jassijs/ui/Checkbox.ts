@@ -3,12 +3,12 @@ import { ComponentProperties, $UIComponent } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 
-export class CheckboxProperties extends DataComponentProperties {
+export interface CheckboxProperties extends DataComponentProperties {
     /**
   * register an event if the button is clicked
   * @param {function} handler - the function that is called on change
   */
-    onclick?(handler){};
+    onclick?(handler);
     /**
      * @member - true or "true" if selected
      */
