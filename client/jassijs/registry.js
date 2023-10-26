@@ -670,11 +670,20 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1697906167972.4148,
+		"date": 1698091593269.8982,
 		"jassijs.ui.Component": {
+			"$Property": [
+				{
+					"name": "testuw",
+					"type": "string"
+				}
+			],
 			"@members": {}
 		},
 		"jassijs.ui.HTMLComponent": {
+			"@members": {}
+		},
+		"jassijs.ui.TextComponent": {
 			"@members": {}
 		}
 	},
@@ -1006,7 +1015,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1697484527486.2295,
+		"date": 1698138718755.303,
 		"jassijs.ui.Panel": {
 			"$UIComponent": [
 				{
@@ -1438,12 +1447,6 @@ define("jassijs/registry",["require"], function(require) {
 	"jassijs/util/Tools.ts": {
 		"date": 1657655420000,
 		"jassijs.util.Tools": {}
-	},
-	"jassijs/ui/TextComponent.ts": {
-		"date": 1697906036834.4336,
-		"jassijs.ui.TextComponent": {
-			"@members": {}
-		}
 	}
 }
  }

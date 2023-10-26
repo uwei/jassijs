@@ -82,27 +82,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
          * @param {boolean} enable - true if activate designMode
          */
         _setDesignMode(enable) {
+            return;
             this._designMode = enable;
             if (enable) { //dummy in containers at the end
                 if (this.isAbsolute === false) {
                     DesignDummy_1.DesignDummy.createIfNeeded(this, "atEnd", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
-                    /*            if (this._designDummy === undefined && this.isAbsolute === false) {
-                                    this._designDummy = new Image();
-                                    this._designDummy._parent=this;
-                                    console.log(this._designDummy._id);
-                                    $(this._designDummy.domWrapper).removeClass("jcomponent");
-                                    $(this._designDummy.domWrapper).addClass("jdesigndummy");
-                                    $(this._designDummy.domWrapper).css("width","16px");
-                                    this._designDummy["designDummyFor"] = "atEnd";
-                                    this._designDummy["src"] = "res/add-component.ico";
-                                    this._designDummy["_editorselectthis"]=(this["_editorselectthis"]?this["_editorselectthis"]:this);
-                                    //$(this.domWrapper).append(this._designDummy.domWrapper);
-                                    this.domWrapper.appendChild(this._designDummy.domWrapper);
-                                } else if (this._designDummy !== undefined && this.isAbsolute === true) {
-                                    this.remove(this._designDummy);
-                                    this._designDummy.destroy();
-                                    this._designDummy = undefined;
-                                }*/
                 }
                 else {
                     DesignDummy_1.DesignDummy.destroyIfNeeded(this, "atEnd");

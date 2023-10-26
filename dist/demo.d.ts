@@ -71,6 +71,16 @@ declare module "demo/Dialog4" {
     }
     export function test(): unknown;
 }
+declare module "demo/Dialog5" {
+    import { Panel } from "jassijs/ui/Panel";
+    type Me = {};
+    export class Dialog5 extends Panel {
+        me: Me;
+        constructor();
+        layout(me: Me): void;
+    }
+    export function test(): unknown;
+}
 declare module "demo/EmptyDialog" {
     import { HTMLPanel } from "jassijs/ui/HTMLPanel";
     import { Button } from "jassijs/ui/Button";
@@ -92,6 +102,9 @@ declare module "demo/EmptyDialog" {
     export function test(): unknown;
 }
 declare module "demo/hallo" {
+    export function test(): any;
+}
+declare module "demo/hallo2" {
     export function test(): any;
 }
 declare module "demo/LargeReport" {

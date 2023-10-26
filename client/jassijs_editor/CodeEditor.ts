@@ -369,7 +369,7 @@ export class CodeEditor extends Panel {
         for (var i = 0; i < connectedComponents.length; i++) {
             var component = connectedComponents[i];
 
-            if (cache[component._id] === undefined && component["__stack"] !== undefined && component?.dom?.classList && !component.dom.classList.contains("designdummy")) {
+            if (cache[component._id] === undefined && component["__stack"] !== undefined && (component?.dom?.classList===undefined || !component.dom.classList.contains("designdummy"))) {
                 var lines = component["__stack"]?.split("\n");
                 for (var x = 0; x < lines.length; x++) {
                     var sline: string = lines[x];

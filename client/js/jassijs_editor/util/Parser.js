@@ -604,6 +604,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         }
         removeNode(node) {
             var _a, _b, _c;
+            if (node.parent === undefined)
+                return;
             if (node.parent["statements"]) {
                 var pos = node.parent["statements"].indexOf(node);
                 if (pos >= 0)
@@ -1175,10 +1177,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                           node.parent["statements"].splice(pos, 0, newExpression);*/
                 }
                 else {
-                    let parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
+                    let parent = this.data[variableName]["_new_"][0].node.attributes;
+                    if (parent === undefined)
+                        parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
                     if (property === "tag" && typeof value === "string") { //HTMLComponent tag
-                        this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
-                        this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                        if (this.data[variableName]["_new_"][0].node.attributes) {
+                            this.data[variableName]["_new_"][0].node.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                        }
+                        else {
+                            this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                            this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                        }
                     }
                     else {
                         parent["properties"].push(newExpression);
@@ -1240,9 +1249,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             if (classscope === undefined)
                 classscope = this.classScope;
             let type = fulltype.split(".")[fulltype.split(".").length - 1];
-            type = type === "TextComponent" ? "text" : type;
             var varname = this.getNextVariableNameForType(type, suggestedName);
             if (this.jsxVariables) {
+                type = type === "TextComponent" ? "text" : type;
                 this.data[varname] = {
                     "_new_": [{ className: type, tag: suggestedName }]
                 };

@@ -431,7 +431,8 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
             if (thisProperties?.replaceNode?.parentNode) {
                 thisProperties?.replaceNode.parentNode.replaceChild(dom, thisProperties?.replaceNode);
                 this.dom = dom;
-
+                if(oldwrapper===olddom)
+                    this.domWrapper=dom;    
                 this.dom.setAttribute("id", thisProperties?.replaceNode.getAttribute("id"));
                 return;
             }

@@ -305,7 +305,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 thecomponent.__dom._thisOther.forEach(e => connectedComponents.push(e));
             for (var i = 0; i < connectedComponents.length; i++) {
                 var component = connectedComponents[i];
-                if (cache[component._id] === undefined && component["__stack"] !== undefined && ((_a = component === null || component === void 0 ? void 0 : component.dom) === null || _a === void 0 ? void 0 : _a.classList) && !component.dom.classList.contains("designdummy")) {
+                if (cache[component._id] === undefined && component["__stack"] !== undefined && (((_a = component === null || component === void 0 ? void 0 : component.dom) === null || _a === void 0 ? void 0 : _a.classList) === undefined || !component.dom.classList.contains("designdummy"))) {
                     var lines = (_b = component["__stack"]) === null || _b === void 0 ? void 0 : _b.split("\n");
                     for (var x = 0; x < lines.length; x++) {
                         var sline = lines[x];

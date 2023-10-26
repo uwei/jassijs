@@ -643,6 +643,8 @@ export class Parser {
         //return this.parseold(code,onlyfunction);
     }
     private removeNode(node: ts.Node) {
+        if(node.parent===undefined)
+            return;
         if (node.parent["statements"]) {
             var pos = node.parent["statements"].indexOf(node);
             if (pos >= 0)
@@ -1223,10 +1225,16 @@ export class Parser {
                       node.parent["statements"].splice(pos, 0, newExpression);*/
             } else {
 
-                let parent = (<any>this.data[variableName]["_new_"][0].node).openingElement.attributes;
+                let parent = (<any>this.data[variableName]["_new_"][0].node).attributes;
+                if(parent===undefined)
+                    parent=(<any>this.data[variableName]["_new_"][0].node).openingElement.attributes;
                 if(property==="tag"&&typeof value==="string"){//HTMLComponent tag
-                    (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName=ts.createIdentifier(value.substring(1,value.length-1));
-                    (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName=ts.createIdentifier(value.substring(1,value.length-1));
+                    if((<any>this.data[variableName]["_new_"][0].node).attributes){
+                         (<any>this.data[variableName]["_new_"][0].node).tagName=ts.createIdentifier(value.substring(1,value.length-1));
+                    }else{
+                        (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName=ts.createIdentifier(value.substring(1,value.length-1));
+                        (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName=ts.createIdentifier(value.substring(1,value.length-1));
+                    }
                  }else{
                     parent["properties"].push(newExpression);
                     newExpression.parent = parent;//["properties"];
@@ -1291,10 +1299,11 @@ export class Parser {
         if (classscope === undefined)
             classscope = this.classScope;
         let type = fulltype.split(".")[fulltype.split(".").length - 1];
-        type = type === "TextComponent" ? "text" : type;
+        
         var varname = this.getNextVariableNameForType(type, suggestedName);
 
         if (this.jsxVariables) {
+            type = type === "TextComponent" ? "text" : type;
             this.data[varname] = {
                 "_new_": [<any>{ className: type, tag: suggestedName }]
             }

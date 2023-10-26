@@ -1367,7 +1367,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1657475022000,
+                "date": 1697488583823.1606,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -3387,7 +3387,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1657475022000,
+                "date": 1697488583823.1606,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {

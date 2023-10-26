@@ -300,6 +300,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 if ((_a = thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode) === null || _a === void 0 ? void 0 : _a.parentNode) {
                     thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode.parentNode.replaceChild(dom, thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode);
                     this.dom = dom;
+                    if (oldwrapper === olddom)
+                        this.domWrapper = dom;
                     this.dom.setAttribute("id", thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode.getAttribute("id"));
                     return;
                 }

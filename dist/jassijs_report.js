@@ -2131,7 +2131,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1684501452000
             },
             "jassijs_report/SimpleReportEditor.ts": {
-                "date": 1697200051855.2717,
+                "date": 1697485042309.9119,
                 "jassi_report.SimpleReportEditor": {}
             },
             "jassijs_report/StartReporteditor.ts": {
@@ -5876,7 +5876,7 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registr
 define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Registry_26, Runlater_2, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_10, Panel_7, Windows_3, DockingContainer_1, VariablePanel_1, Property_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.SimpleReportEditor = exports.SimpleReportEditorProperties = void 0;
+    exports.test = exports.SimpleReportEditor = void 0;
     class SimpleCodeEditor extends Panel_7.Panel {
         constructor(codePanel) {
             super();
@@ -6098,13 +6098,6 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], SimpleCodeEditor.prototype, "line", null);
-    class SimpleReportEditorProperties extends Panel_7.PanelProperties {
-    }
-    __decorate([
-        Property_11.$Property(),
-        __metadata("design:type", Boolean)
-    ], SimpleReportEditorProperties.prototype, "startUpWithPdfView", void 0);
-    exports.SimpleReportEditorProperties = SimpleReportEditorProperties;
     let SimpleReportEditor = class SimpleReportEditor extends Panel_7.Panel {
         //value:string;
         constructor(properties) {
@@ -6185,7 +6178,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
     };
     SimpleReportEditor = __decorate([
         Registry_26.$Class("jassi_report.SimpleReportEditor"),
-        __metadata("design:paramtypes", [SimpleReportEditorProperties])
+        __metadata("design:paramtypes", [Object])
     ], SimpleReportEditor);
     exports.SimpleReportEditor = SimpleReportEditor;
     function test() {
@@ -6720,7 +6713,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.RUnknown": {}
             },
             "jassijs_report/SimpleReportEditor.ts": {
-                "date": 1697200051855.2717,
+                "date": 1697485042309.9119,
                 "jassi_report.SimpleReportEditor": {}
             },
             "jassijs_report/StartReporteditor.ts": {

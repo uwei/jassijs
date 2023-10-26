@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Registry";
+import registry, { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
@@ -283,7 +283,7 @@ export class ComponentDesigner extends Panel {
         };
     }
     deleteComponents(text){
- var clip: ClipboardData = JSON.parse(text);//to Clipboard
+     var clip: ClipboardData = JSON.parse(text);//to Clipboard
 
         var all = [];
         for (var x = 0; x < clip.allChilds.length; x++) {
@@ -297,6 +297,7 @@ export class ComponentDesigner extends Panel {
                 this._propertyEditor.removeVariableInDesign(varname);
             }
         }
+        console.log(all);
         this._propertyEditor.removeVariablesInCode(all);
     }
     /**
@@ -312,6 +313,7 @@ export class ComponentDesigner extends Panel {
 
         this._updateInvisibleComponents();
         this._componentExplorer.update();
+        this.updateDummies();
 
     }
     private copyProperties(clip: ClipboardData, component: Component) {
@@ -725,7 +727,12 @@ export class ComponentDesigner extends Panel {
         }*/
         var file = type.replaceAll(".", "/");
         var stype = file.split("/")[file.split("/").length - 1];
-        _this._propertyEditor.addImportIfNeeded(stype, file);
+        registry.getJSONData("$Class",type).then((data)=>{
+            var filename=data[0].filename;
+             _this._propertyEditor.addImportIfNeeded(stype, filename.substring(0,filename.lastIndexOf(".")));
+        })
+
+       
         var repeater = _this._hasRepeatingContainer(newParent);
         var scope = undefined;
 
@@ -1044,11 +1051,12 @@ export class ComponentDesigner extends Panel {
                     comp = node._thisOther[x];
                     break;
                 }
-            }
+            } 
         }
         if (!varname) {
             if (node.contentEditable !== "false")
                 node.contentEditable = "false";
+            
             return;
         }
         var hasChildren = false;
@@ -1056,6 +1064,9 @@ export class ComponentDesigner extends Panel {
         var fnew = desc.findField("children");
         if (fnew) {
             hasChildren = true;
+            if(!node.classList.contains("jeditablecontainer")){
+                node.classList.add("jeditablecontainer");
+            }
         }
         if (node.getClientRects === undefined)
             return;
@@ -1108,18 +1119,18 @@ export class ComponentDesigner extends Panel {
             var newRight = rect.right;
             (<any>node).myBottom = rect.bottom;
             (<any>node).myRight = rect.right;
-
-            if ((<any>node.parentNode)._postDummy_) {
+            var par=(<any>node)._this._parent;
+            if (par.dom._postDummy_) {
                 const rp = {
-                    bottom: (<any>node.parentNode).newBottom,
-                    right: (<any>node.parentNode).newRight,
+                    bottom:par.dom.myBottom,
+                    right: par.dom.myRight,
                 }
                 if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
-                    newRight = parseInt((<any>node.parentNode)._postDummy_.style.left.replace("px", "")) - 8;
+                    newRight = par.dom._postDummy_.style.left.replace("px", "") ;
                 }
             }
-            postDummy.style.top = (newBottom - 8) + "px";
-            postDummy.style.left = (newRight - 8) + "px";
+            postDummy.style.top = (newBottom - 14) + "px";
+            postDummy.style.left = (newRight - 14) + "px";
         }
         
         for (var x = 0; x < node.childNodes.length; x++) {
@@ -1181,7 +1192,13 @@ export class ComponentDesigner extends Panel {
         component.dom.contentEditable = "true";
         this._designPlaceholder.domWrapper.contentEditable = "false";
         this._designPlaceholder.dom.contentEditable = "false";
-    }
+        //delete removed dummies
+        for(var x=0;x<this.dummyHolder.childNodes.length;x++){
+            if((<any>this.dummyHolder.childNodes[x]).nd._this._parent===undefined){
+                this.dummyHolder.removeChild(this.dummyHolder.childNodes[x]);
+            }
+        }
+        }
     get designedComponent() {
         return this._designPlaceholder._components[0];
     }

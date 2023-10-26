@@ -71,10 +71,11 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             else {
                 // firefox
                 //@ts-ignore
-                var pos = [ev.rangeParent, ev.rangeOffset];
                 range = document.createRange();
-                range.setStart(...pos);
-                range.setEnd(...pos);
+                //@ts-ignore
+                range.setStart(ev.rangeParent, ev.rangeOffse);
+                //@ts-ignore
+                range.setEnd(ev.rangeParent, ev.rangeOffse);
             }
             selection.removeAllRanges();
             selection.addRange(range);
@@ -115,7 +116,13 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 if (anchorNode === anchorNodeToDel && anchorOffsetToDel < anchorOffset) {
                     anchorOffset -= nodes.childNodes[0].innerText.length; //removing the selection changes the insertposition
                 }
-                this.removeNode(anchorNodeToDel, anchorOffsetToDel, focusNodeToDel, focusOffsetToDel);
+                var newSel = getSelection();
+                range = document.createRange();
+                range.setStart(anchorNodeToDel, anchorOffsetToDel);
+                range.setEnd(focusNodeToDel, focusOffsetToDel);
+                newSel.addRange(range);
+                ;
+                this.removeNodes(newSel);
                 range = document.createRange();
                 var selection = getSelection();
                 range.setStart(anchorNode, anchorOffset);
@@ -128,7 +135,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                     _this.codeHasChanged();
                     _this.editDialog(true);
                 });
-                //this.removeNode(anchorNodeToDel,anchorOffsetToDel,focusNodeToDel,focusOffsetToDel);
+                //this.removeNodes(anchorNodeToDel,anchorOffsetToDel,focusNodeToDel,focusOffsetToDel);
                 // var fneu=anchorNode.textContent.substring(0,anchorOffset)+toInsert[0]+anchorNode.textContent.substring(anchorOffset);
                 //this.changeText(anchorNode, fneu);                    
             }
@@ -164,7 +171,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
         async copy() {
             var sel = document.getSelection();
             if (sel.focusNode === sel.anchorNode && sel.focusOffset === sel.anchorOffset)
-                return super.copy();
+                return await super.copy();
             document.execCommand("copy");
             return await navigator.clipboard.readText();
         }
@@ -173,73 +180,75 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             super.designedComponent=component;
             
         }*/
-        /* registerKeys() {
+        registerKeys() {
+            //in keydown(...)
+        }
+        /* private deleteNodeBetween(node1: Node, node2: Node) {
+             var list1 = [];
+             var list2 = [];
+             this.getParentList(node1, list1);
+             this.getParentList(node2, list2);
+             var pos = 0;
+             var test = list1[pos];
+             while (list2.indexOf(list1[pos]) === -1) {
+                 pos++;
+             }
+            
+             var par1 = list1[pos];
+             var par2 = list2[list2.indexOf(list1[pos]) ];
+             var components = [];
+             if(node1===node2){
+                 components.push(node1._this);
+             }else{
+                 var todel = par1.nextSibling;
      
-             var _this = this;
-             this._codeEditor._design.dom.tabindex = "1";
-             this._codeEditor._design.dom.addEventListener("keydown", function (evt) {
-                 if (evt.keyCode === 115 && evt.shiftKey) {//F4
-                     // var thiss=this._this._id;
-                     // var editor = ace.edit(this._this._id);
-                     _this.evalCode(true);
-                     evt.preventDefault();
-                     return false;
-                 } else if (evt.keyCode === 115) {//F4
-                     _this.evalCode(false);
-                     evt.preventDefault();
-                     return false;
+                 var components = [];
+                 while (todel !== par2) {
+                     var del = todel;
+                     todel = todel.nextSibling;
+                     components.push(del._this);
+                     // del.remove();
                  }
-                 if (evt.keyCode === 90 && evt.ctrlKey) {//Ctrl+Z
-                     _this.undo();
-                 }
-                 if (evt.keyCode === 116) {//F5
-                     evt.preventDefault();
-                     return false;
-                 }
-                 if (evt.keyCode === 46 || (evt.keyCode === 88 && evt.ctrlKey && evt.shiftKey)) {//Del or Ctrl X)
-                     evt.preventDefault();
-                     _this.cutComponent();
-                     return false;
-                 }
-                 if (evt.keyCode === 67 && evt.ctrlKey && evt.shiftKey) {//Ctrl+C
-                     evt.preventDefault();
-                     _this.copy();
-                     return false;
-                 }
-                 if (evt.keyCode === 86 && evt.ctrlKey && evt.shiftKey) {//Ctrl+V
-                     evt.preventDefault();
-                     _this.paste();
-                     return false;
-                 }
-                 if ((String.fromCharCode(evt.which).toLowerCase() === 's' && evt.ctrlKey)) {//Str+s
-                     _this.save();
-                     event.preventDefault();
-                     return false;
-                 }
-     
-             });
+             }
+             var s = this.componentsToString(components);
+             this.deleteComponents(s);
          }*/
-        deleteNodeBetween(node1, node2) {
-            var list1 = [];
-            var list2 = [];
-            this.getParentList(node1, list1);
-            this.getParentList(node2, list2);
-            var pos = 0;
-            var test = list1[pos];
-            while (list2.indexOf(list1[pos]) === -1) {
-                pos++;
-            }
-            var par1 = list1[pos - 1];
-            var par2 = list2[list2.indexOf(list1[pos]) - 1];
-            var todel = par1.nextSibling;
+        deleteNodeBetween(selection) {
+            var range = selection.getRangeAt(0);
+            var parent = range.commonAncestorContainer;
+            var contains = false;
             var components = [];
-            while (todel !== par2) {
-                var del = todel;
-                todel = todel.nextSibling;
-                components.push(del._this);
-                // del.remove();
+            for (var x = 0; x < parent.childNodes.length; x++) {
+                var node = parent.childNodes[x];
+                //@ts-ignore
+                if (node._this === selection.anchorNode._this || node._this === selection.focusNode._this || selection.containsNode(node)) {
+                    contains = true;
+                }
+                else {
+                    contains = false;
+                }
+                if (contains) {
+                    components.push(node._this);
+                }
             }
+            document.getSelection().modify("move", "left", "character");
+            var a = getSelection().anchorNode;
+            var apos = getSelection().anchorOffset;
+            setTimeout(() => {
+                var range = document.createRange();
+                var selection = getSelection();
+                console.log(range);
+                range.setStart(a, apos); //removed position
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }, 10);
+            //@ts-ignore
+            if (components.length > 0 && components[0].dom.nodeType === components[0].dom.TEXT_NODE)
+                components.splice(0, 1);
+            if (components.length > 0 && components[components.length - 1].dom.nodeType === components[components.length - 1].dom.TEXT_NODE)
+                components.splice(components.length - 1, 1);
             var s = this.componentsToString(components);
+            console.log(components);
             this.deleteComponents(s);
         }
         editDialog(enable) {
@@ -248,7 +257,11 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
         createDragAndDropper() {
             return undefined;
         }
-        removeNode(from, frompos, to, topos) {
+        removeNodes(selection) {
+            var from = selection.anchorNode;
+            var frompos = selection.anchorOffset;
+            var to = selection.focusNode;
+            var topos = selection.focusOffset;
             var position = from.compareDocumentPosition(to);
             // selection has wrong direction
             if (!position && frompos > topos || position === Node.DOCUMENT_POSITION_PRECEDING) {
@@ -259,21 +272,39 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 frompos = topos;
                 topos = k1;
             }
-            if (from === to) {
+            this.deleteNodeBetween(selection);
+            //@ts-ignore
+            if (from === to && to.nodeType === from.TEXT_NODE) {
                 var neu = to.textContent;
                 this.changeText(to, neu.substring(0, frompos) + "" + neu.substring(topos));
             }
             else {
-                this.deleteNodeBetween(from, to);
-                this.changeText(from, from.textContent.substring(0, frompos));
-                this.changeText(to, to.textContent.substring(topos));
+                if (from.nodeType === from.TEXT_NODE) {
+                    this.changeText(from, from.textContent.substring(0, frompos));
+                }
+                if (to.nodeType === from.TEXT_NODE) {
+                    this.changeText(to, to.textContent.substring(topos));
+                }
+                //this.changeText(from, from.textContent.substring(0, frompos));
+                //this.changeText(to, to.textContent.substring(topos));
             }
-            var range = document.createRange();
-            var selection = getSelection();
-            range.setStart(from, frompos);
-            selection.removeAllRanges();
-            selection.addRange(range);
-            ;
+            /*else {
+                var end = to.childNodes[topos];
+                if (end === undefined)
+                    end = to.childNodes[to.childNodes.length - 1];
+                this.deleteNodeBetween(from.childNodes[frompos], end);
+            }*/
+            /*} else {
+                if (from.nodeType === from.TEXT_NODE){
+                    this.deleteNodeBetween(from, to);
+                    this.changeText(from, from.textContent.substring(0, frompos));
+                    this.changeText(to, to.textContent.substring(topos));
+                }else{
+                     this.deleteNodeBetween(from.childNodes[frompos], to);
+                    
+                    this.changeText(to, to.textContent.substring(topos));
+                }
+            }*/
         }
         changeText(node, text) {
             var varname = this._propertyEditor.getVariableFromObject(node._this);
@@ -309,7 +340,24 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             //this.updateDummies();
             return comp;
         }
+        async cutComponent() {
+            var _this = this;
+            var sel = document.getSelection();
+            if (sel.focusNode === sel.anchorNode && sel.focusOffset === sel.anchorOffset)
+                return super.cutComponent();
+            document.execCommand("copy");
+            var data = await navigator.clipboard.read();
+            var tt = await data[0].getType("text/html");
+            var text = await tt.text();
+            var code = JSON.stringify(_this.htmlToClipboardData(text));
+            navigator.clipboard.writeText(code);
+            var e = new KeyboardEvent("keypress", {
+                code: "Delete"
+            });
+            _this.keydown(e);
+        }
         keydown(e) {
+            var _this = this;
             if (e.keyCode === 115 && e.shiftKey) { //F4
                 return false;
             }
@@ -322,8 +370,10 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 e.preventDefault();
                 return false;
             }
-            if (e.keyCode === 46 || (e.keyCode === 88 && e.ctrlKey && e.shiftKey)) { //Del or Ctrl X)
-                return false;
+            if ((e.keyCode === 88 && e.ctrlKey)) { //Del or Ctrl X)
+                e.preventDefault();
+                this.cutComponent();
+                return;
             }
             if (e.keyCode === 67 && e.ctrlKey) { //Ctrl+C
                 e.preventDefault();
@@ -372,7 +422,8 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 e.preventDefault();
                 var enter = (0, Component_1.createComponent)(React.createElement("br"));
                 var comp = this.splitText(sel);
-                this.createComponent(Classes_1.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
+                var center = this.createComponent(Classes_1.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
+                this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this._propertyEditor.getVariableFromObject(center));
                 //     this.insertComponent(enter, sel, "br");
                 //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
                 // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
@@ -382,11 +433,12 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 if (anchorNode === focusNode && anchorOffset === focusOffset) { //no selection
                     sel.modify("extend", "right", "character");
                     var newsel = document.getSelection();
-                    this.removeNode(anchorNode, anchorOffset, newsel.focusNode, newsel.focusOffset);
+                    this.removeNodes(newsel);
                 }
                 else {
-                    this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
+                    this.removeNodes(sel);
                 }
+                this.updateDummies();
                 return;
             }
             else if (e.code === "Backspace") {
@@ -394,11 +446,12 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 if (anchorNode === focusNode && anchorOffset === focusOffset) { //no selection
                     sel.modify("extend", "left", "character");
                     var newsel = document.getSelection();
-                    this.removeNode(newsel.focusNode, newsel.focusOffset, anchorNode, anchorOffset);
+                    this.removeNodes(newsel);
                 }
                 else {
-                    this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
+                    this.removeNodes(sel);
                 }
+                this.updateDummies();
                 return;
             }
             else if (e.key.length === 1) {
@@ -409,13 +462,13 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 if (anchorNode === focusNode && anchorOffset === focusOffset) { //no selection
                 }
                 else {
-                    this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
+                    this.removeNodes(sel);
                 }
                 var neu = anchorNode.textContent.substring(0, anchorOffset) + e.key + anchorNode.textContent.substring(end);
                 if (anchorNode.nodeType !== anchorNode.TEXT_NODE) { //there is no Textnode here we create one
                     var before = undefined;
-                    if (anchorNode.childNodes.length > 0) {
-                        before = anchorNode.childNodes[0]._this;
+                    if (anchorNode.childNodes.length > anchorOffset) {
+                        before = anchorNode.childNodes[anchorOffset]._this;
                     }
                     var comp2 = new Component_1.TextComponent();
                     var newone = document.createTextNode(e.key);

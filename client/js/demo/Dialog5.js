@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Button", "jassijs/ui/Checkbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Component_1, Button_1, Checkbox_1, Registry_1, Panel_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog5 = void 0;
@@ -18,17 +18,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Button", "jass
             this.layout(this.me);
         }
         layout(me) {
-            me.checkbox = new Checkbox_1.Checkbox();
-            me.checkbox2 = new Checkbox_1.Checkbox();
-            me.button = new Button_1.Button();
-            me.text1 = new Component_1.TextComponent();
-            this.config({
-                children: [
-                    me.button.config({}),
-                    me.text1.config({ text: "Halllo" }),
-                    me.checkbox2.config({})
-                ]
-            });
+            this.config({});
         }
     };
     Dialog5 = __decorate([

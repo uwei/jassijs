@@ -1191,7 +1191,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 thecomponent.__dom._thisOther.forEach(e => connectedComponents.push(e));
             for (var i = 0; i < connectedComponents.length; i++) {
                 var component = connectedComponents[i];
-                if (cache[component._id] === undefined && component["__stack"] !== undefined && ((_a = component === null || component === void 0 ? void 0 : component.dom) === null || _a === void 0 ? void 0 : _a.classList) && !component.dom.classList.contains("designdummy")) {
+                if (cache[component._id] === undefined && component["__stack"] !== undefined && (((_a = component === null || component === void 0 ? void 0 : component.dom) === null || _a === void 0 ? void 0 : _a.classList) === undefined || !component.dom.classList.contains("designdummy"))) {
                     var lines = (_b = component["__stack"]) === null || _b === void 0 ? void 0 : _b.split("\n");
                     for (var x = 0; x < lines.length; x++) {
                         var sline = lines[x];
@@ -1328,10 +1328,10 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
                 //   var Parser = classes.getClass("jassijs_editor.base.Parser");
                 var ComponentDesigner;
-                if (this.file.toLowerCase().endsWith(".tsx"))
-                    ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.HtmlDesigner");
-                else
-                    ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
+                // if (this.file.toLowerCase().endsWith(".tsx"))
+                ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.HtmlDesigner");
+                // else
+                //   ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
                 var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
                 var parser = new Parser();
                 // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
@@ -1991,7 +1991,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
 define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Registry_10, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, ComponentDescriptor_1, Classes_3, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ComponentDesigner = void 0;
+    exports.test = exports.ComponentDesigner = exports.ClipboardData = void 0;
     //import { Parser } from "./util/Parser";
     class ClipboardData {
         constructor() {
@@ -2002,9 +2002,14 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.allChilds = [];
         }
     }
+    exports.ClipboardData = ClipboardData;
     let ComponentDesigner = class ComponentDesigner extends Panel_4.Panel {
         constructor() {
             super();
+            this.lastSelectedDummy = {
+                component: undefined,
+                pre: false
+            };
             this._codeEditor = undefined;
             this._initDesign();
             this.editMode = true;
@@ -2218,6 +2223,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     this._propertyEditor.removeVariableInDesign(varname);
                 }
             }
+            console.log(all);
             this._propertyEditor.removeVariablesInCode(all);
         }
         /**
@@ -2232,6 +2238,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.deleteComponents(text);
             this._updateInvisibleComponents();
             this._componentExplorer.update();
+            this.updateDummies();
         }
         copyProperties(clip, component) {
             var _a;
@@ -2245,15 +2252,15 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             var editorfields = {};
             (_a = ComponentDescriptor_1.ComponentDescriptor.describe(component.constructor)) === null || _a === void 0 ? void 0 : _a.fields.forEach((f) => { editorfields[f.name] = f; });
             for (var key in parserdata) {
-                if (editorfields[key] || key === "_new_" || key === "add") {
-                    if (!clip.properties[varname][key]) {
-                        clip.properties[varname][key] = [];
-                    }
-                    for (var i = 0; i < parserdata[key].length; i++) {
-                        //only add fields in Propertydescriptor
-                        clip.properties[varname][key].push(parserdata[key][i].value);
-                    }
+                //if (editorfields[key] ||key === "_new_" || key === "add") {
+                if (!clip.properties[varname][key]) {
+                    clip.properties[varname][key] = [];
                 }
+                for (var i = 0; i < parserdata[key].length; i++) {
+                    //only add fields in Propertydescriptor
+                    clip.properties[varname][key].push(parserdata[key][i].value);
+                }
+                //}
             }
             if (component["_components"]) {
                 for (var x = 0; x < component["_components"].length; x++) {
@@ -2292,6 +2299,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
         async pasteComponent(clip, target, before, varname, variablelistold, variablelistnew) {
             var _this = this;
             var created;
+            console.log(clip);
             if (clip.properties[varname] !== undefined && clip.properties[varname]["_new_"] !== undefined) {
                 var vartype = clip.properties[varname]["_new_"][0];
                 if (variablelistold.indexOf(varname) > -1)
@@ -2301,7 +2309,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 var newcomp = { createFromType: clip.types[varname] };
                 await Classes_3.classes.loadClass(clip.types[varname]);
                 var svarname = varname.split(".")[varname.split(".").length - 1];
-                created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, before, false, svarname);
+                created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, before, false, svarname, false);
                 variablelistold.push(varname);
                 var newvarname = _this._codeEditor.getVariableFromObject(created);
                 variablelistnew.push(newvarname);
@@ -2331,8 +2339,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             var variablelistold = [];
             var variablelistnew = [];
             var clip = JSON.parse(text);
-            console.log(parent);
-            console.log(before);
             //create Components
             for (var x = 0; x < clip.varNamesToCopy.length; x++) {
                 var varname = clip.varNamesToCopy[x];
@@ -2397,13 +2403,19 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     }
                 }
             }
+            _this.variables.updateCache();
         }
         async paste() {
             var text = await navigator.clipboard.readText();
             //    var clip: ClipboardData = JSON.parse(text);
             var _this = this;
             var target = _this._propertyEditor.value;
-            if (target._components !== undefined)
+            var insertBefore = target._components === undefined;
+            if (this.lastSelectedDummy.component === target && this.lastSelectedDummy.pre)
+                insertBefore = true;
+            if (this.lastSelectedDummy.component === target && !this.lastSelectedDummy.pre)
+                insertBefore = false;
+            if (!insertBefore)
                 await this.pasteComponents(text, target, undefined); // await _this.pasteComponent(clip, target, undefined, varname, variablelistold, variablelistnew);
             else {
                 // if(x===0)
@@ -2411,13 +2423,14 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 await this.pasteComponents(text, target._parent, target); //await _this.pasteComponent(clip, target._parent, target, varname, variablelistold, variablelistnew);
             }
             //_this._propertyEditor.value = created;
-            _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+            // _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
             _this._propertyEditor.updateParser();
-            _this._propertyEditor.callEvent("codeChanged", {});
+            _this.codeHasChanged();
+            // _this._propertyEditor.callEvent("codeChanged", {});
             //include the new element
             _this.editDialog(true);
-            _this._componentExplorer.update();
-            _this._updateInvisibleComponents();
+            //  _this._componentExplorer.update();
+            //  _this._updateInvisibleComponents();
         }
         /**
         * execute the current code
@@ -2524,6 +2537,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                         _this._propertyEditor.value = comp;
                     _this._propertyEditor.setPropertyInCode(prop, value + "", true);
                     _this._propertyEditor.value = _this._propertyEditor.value;
+                    _this.updateDummies();
                 };
                 this._resizer.install(component, allcomponents);
                 allcomponents = this.variables.getEditableComponents(component, true);
@@ -2606,14 +2620,17 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
          * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
          * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
          **/
-        createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true, suggestedName = undefined) {
+        createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true, suggestedName = undefined, refresh = undefined) {
             var _this = this;
             /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor&&beforeComponent.type==="atEnd"){
                 beforeComponent=undefined;
             }*/
             var file = type.replaceAll(".", "/");
             var stype = file.split("/")[file.split("/").length - 1];
-            _this._propertyEditor.addImportIfNeeded(stype, file);
+            Registry_10.default.getJSONData("$Class", type).then((data) => {
+                var filename = data[0].filename;
+                _this._propertyEditor.addImportIfNeeded(stype, filename.substring(0, filename.lastIndexOf(".")));
+            });
             var repeater = _this._hasRepeatingContainer(newParent);
             var scope = undefined;
             if (repeater !== undefined) {
@@ -2646,11 +2663,9 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 varvalue = component;
             else
                 varvalue = new (Classes_3.classes.getClass(type));
-            var varname = _this.createVariable(type, scope, varvalue, suggestedName);
+            var varname = _this.createVariable(type, scope, varvalue, suggestedName, refresh);
             if (this._propertyEditor.codeEditor !== undefined) {
                 var newName = _this._codeEditor.getVariableFromObject(newParent);
-                console.log("newName" + newName);
-                console.log(newParent);
                 var before;
                 if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //Designdummy atEnd
                     //if(beforeComponent.type==="beforeComponent")
@@ -2674,7 +2689,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                      newParent.dom.append(newParent._designDummy.domWrapper)
                  }
              }*/
-            _this.variables.updateCache();
+            if (refresh)
+                _this.variables.updateCache();
             //set initial properties for the new component
             if (component.createFromParam !== undefined) {
                 for (var key in component.createFromParam) {
@@ -2711,7 +2727,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             }
             return varvalue;
         }
-        createVariable(type, scope, varvalue, suggestedName = undefined) {
+        createVariable(type, scope, varvalue, suggestedName = undefined, refresh = undefined) {
             if (this._propertyEditor.codeEditor === undefined)
                 return;
             var varname = this._propertyEditor.addVariableInCode(type, scope, suggestedName);
@@ -2722,7 +2738,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                  var th = this._codeEditor.getObjectFromVariable("this");
                  th[varname.substring(5)] = varvalue;
              } else*/
-            this.variables.addVariable(varname, varvalue);
+            this.variables.addVariable(varname, varvalue, refresh);
             return varname;
         }
         /**
@@ -2765,15 +2781,28 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 }
             }
         }
-        createPreDummy() {
+        codeHasChanged() {
+            var _this = this;
+            _this.updateDummies();
+            _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+            _this._propertyEditor.callEvent("codeChanged", {});
+            _this._componentExplorer.update();
+            _this._updateInvisibleComponents();
+        }
+        createPreDummy(node) {
             var _this = this;
             var dummy;
             //  if (ComponentDesigner.beforeDummy === undefined) {
             dummy = document.createElement("span");
-            dummy.contentEditable = "false";
+            dummy.contentEditable = node.tagName.toUpperCase() === "BR" ? "true" : "false";
             dummy.draggable = true;
             dummy.classList.add("_dummy_");
-            dummy.onclick = (ev) => console.log(ev);
+            dummy.onkeydown = (e) => {
+                if (this.keydown) {
+                    e.preventDefault();
+                    this.keydown(e);
+                }
+            };
             dummy.ondrop = (ev) => {
                 ev.preventDefault();
                 async function doit() {
@@ -2794,14 +2823,22 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     }
                     else {
                     }
-                    _this.updateDummies();
-                    _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
-                    _this._propertyEditor.callEvent("codeChanged", {});
-                    _this._componentExplorer.update();
-                    _this._updateInvisibleComponents();
+                    _this.codeHasChanged();
                 }
                 ;
                 doit();
+            };
+            dummy.onclick = (ev) => {
+                var _a;
+                _this._propertyEditor.value = ev.target.nd._this;
+                _this.lastSelectedDummy.component = ev.target.nd._this;
+                this.lastSelectedDummy.pre = true;
+                if (((_a = _this.lastSelectedDummy.component.tag) === null || _a === void 0 ? void 0 : _a.toUpperCase()) === "BR") {
+                    //dummy.contentEditable=true;
+                    //dummy.focus();//with this the keydown event will work
+                    console.log("focus");
+                }
+                getSelection().removeAllRanges(); //the next paste is before the component
             };
             dummy.ondragover = (ev) => {
                 ev.preventDefault();
@@ -2816,10 +2853,9 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             dummy.style.fontSize = "10px";
             dummy.style.position = "absolute";
             dummy.ondragenter = dummy.onmouseenter = (e) => {
-                e.target.nd._this.dom._sicbgc_ = e.target.nd._this.dom.style.backgroundColor;
-                e.target.nd._this.dom.style.backgroundColor = "rgba(245,234,39)";
+                e.target.nd._this.dom.classList.add("dummyselected");
             };
-            dummy.ondragleave = dummy.onmouseleave = (e) => e.target.nd._this.dom.style.backgroundColor = e.target.nd._this.dom._sicbgc_;
+            dummy.ondragleave = dummy.onmouseleave = (e) => e.target.nd._this.dom.classList.remove("dummyselected");
             //  ComponentDesigner.beforeDummy = dummy;
             // }
             // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
@@ -2834,6 +2870,12 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             dummy.draggable = true;
             dummy.classList.add("_dummy_");
             dummy.classList.add("ui-droppable");
+            dummy.onclick = (ev) => {
+                _this._propertyEditor.value = ev.target.nd._this;
+                getSelection().removeAllRanges(); //the next paste is before the component
+                _this.lastSelectedDummy.component = ev.target.nd._this;
+                this.lastSelectedDummy.pre = false;
+            };
             //dummy.onclick = (ev) => console.log(ev);
             dummy.ondrop = (ev) => {
                 ev.preventDefault();
@@ -2853,11 +2895,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     }
                     else {
                     }
-                    _this.updateDummies();
-                    _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
-                    _this._propertyEditor.callEvent("codeChanged", {});
-                    _this._componentExplorer.update();
-                    _this._updateInvisibleComponents();
+                    _this.codeHasChanged();
                 }
                 ;
                 doit();
@@ -2876,10 +2914,9 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             dummy.style.fontSize = "10px";
             dummy.style.position = "absolute";
             dummy.ondragenter = dummy.onmouseenter = (e) => {
-                e.target.nd._sicbgc_ = e.target.nd.style.backgroundColor;
-                e.target.nd.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
+                e.target.nd._this.dom.classList.add("dummyselected");
             };
-            dummy.ondragleave = dummy.onmouseleave = (e) => e.target.nd.style.backgroundColor = e.target.nd._sicbgc_;
+            dummy.ondragleave = dummy.onmouseleave = (e) => e.target.nd._this.dom.classList.remove("dummyselected");
             //   ComponentDesigner.beforeDummy = dummy;
             // }
             // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
@@ -2887,6 +2924,9 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
         }
         insertDummies(node, root, arr, rootRect) {
             var _a;
+            if (node._this === undefined)
+                return;
+            var node = node._this.dom; //eliminate Wrapper
             if (node._dummyholder === true)
                 return;
             if (root === undefined)
@@ -2913,6 +2953,9 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             var fnew = desc.findField("children");
             if (fnew) {
                 hasChildren = true;
+                if (!node.classList.contains("jeditablecontainer")) {
+                    node.classList.add("jeditablecontainer");
+                }
             }
             if (node.getClientRects === undefined)
                 return;
@@ -2929,7 +2972,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 return;
             var preDummy = node._preDummy_;
             if (!node._preDummy_) {
-                preDummy = this.createPreDummy();
+                preDummy = this.createPreDummy(node);
                 preDummy.nd = node;
                 preDummy.title = node.outerHTML;
                 node._preDummy_ = preDummy;
@@ -2963,21 +3006,22 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 var newRight = rect.right;
                 node.myBottom = rect.bottom;
                 node.myRight = rect.right;
-                if (node.parentNode._postDummy_) {
+                var par = node._this._parent;
+                if (par.dom._postDummy_) {
                     const rp = {
-                        bottom: node.parentNode.newBottom,
-                        right: node.parentNode.newRight,
+                        bottom: par.dom.myBottom,
+                        right: par.dom.myRight,
                     };
                     if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
-                        newRight = parseInt(node.parentNode._postDummy_.style.left.replace("px", "")) - 8;
+                        newRight = par.dom._postDummy_.style.left.replace("px", "");
                     }
                 }
-                postDummy.style.top = (newBottom - 8) + "px";
-                postDummy.style.left = (newRight - 8) + "px";
+                postDummy.style.top = (newBottom - 14) + "px";
+                postDummy.style.left = (newRight - 14) + "px";
             }
             for (var x = 0; x < node.childNodes.length; x++) {
-                if (node._this !== node.childNodes[x]._this) //Wrapper
-                    this.insertDummies(node.childNodes[x], root, arr, rootRect);
+                // if (node._this ===(<any> node.childNodes[x])._this)//Wrapper
+                this.insertDummies(node.childNodes[x], root, arr, rootRect);
             }
         }
         /**
@@ -3028,6 +3072,12 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             component.dom.contentEditable = "true";
             this._designPlaceholder.domWrapper.contentEditable = "false";
             this._designPlaceholder.dom.contentEditable = "false";
+            //delete removed dummies
+            for (var x = 0; x < this.dummyHolder.childNodes.length; x++) {
+                if (this.dummyHolder.childNodes[x].nd._this._parent === undefined) {
+                    this.dummyHolder.removeChild(this.dummyHolder.childNodes[x]);
+                }
+            }
         }
         get designedComponent() {
             return this._designPlaceholder._components[0];
@@ -4645,9 +4695,44 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             if (node !== document)
                 this.getParentList(node.parentNode, list);
         }
+        htmlToClipboardData(data) {
+            var nodes = Component_5.Component.createHTMLElement("<span>" + data + "</span>");
+            var toInsert = [];
+            var textvor;
+            var textnach;
+            var textpositions = {};
+            for (var x = 0; x < nodes.childNodes.length; x++) {
+                var nd = nodes.childNodes[x];
+                if (nd.classList.contains("jcomponent")) {
+                    toInsert.push(document.getElementById(nd.id)._this);
+                }
+                else {
+                    var text = nd.innerText;
+                    textpositions[x] = nd.innerText;
+                }
+            }
+            var clip = JSON.parse(this.componentsToString(toInsert));
+            var counter = 1000;
+            for (var p in textpositions) {
+                while (clip.allChilds.indexOf("text" + counter) !== -1) {
+                    counter++;
+                }
+                var varnamepre = "text" + counter;
+                clip.allChilds.push(varnamepre);
+                clip.varNamesToCopy.splice(parseInt(p), 0, varnamepre);
+                clip.properties[varnamepre] = { "text": ['"' + textpositions[parseInt(p)] + '"'], "_new_": ['"' + textpositions[parseInt(p)] + '"'] };
+                clip.types[varnamepre] = "jassijs.ui.TextComponent";
+            }
+            return clip;
+        }
         ondrop(ev) {
             var _this = this;
             ev.preventDefault();
+            var selection = document.getSelection();
+            let anchorNodeToDel = selection.anchorNode;
+            let anchorOffsetToDel = selection.anchorOffset;
+            let focusNodeToDel = selection.focusNode;
+            let focusOffsetToDel = selection.focusOffset;
             var data = ev.dataTransfer.getData("text");
             var range;
             if (document.caretRangeFromPoint) {
@@ -4657,24 +4742,109 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             else {
                 // firefox
                 //@ts-ignore
-                var pos = [ev.rangeParent, ev.rangeOffset];
                 range = document.createRange();
-                range.setStart(...pos);
-                range.setEnd(...pos);
+                //@ts-ignore
+                range.setStart(ev.rangeParent, ev.rangeOffse);
+                //@ts-ignore
+                range.setEnd(ev.rangeParent, ev.rangeOffse);
             }
-            var selection = document.getSelection();
             selection.removeAllRanges();
             selection.addRange(range);
+            let anchorNode = selection.anchorNode;
+            let anchorOffset = selection.anchorOffset;
+            let focusNode = selection.focusNode;
+            let focusOffset = selection.focusOffset;
+            var position = anchorNode.compareDocumentPosition(focusNode);
+            if (!position && anchorOffset > focusOffset || position === Node.DOCUMENT_POSITION_PRECEDING) {
+                var k = focusNode;
+                focusNode = focusNode;
+                focusNode = k;
+                var k1 = anchorOffset;
+                anchorOffset = focusOffset;
+                focusOffset = k1;
+            }
+            console.log("a" + anchorOffset);
             if (data.indexOf('"createFromType":') > -1) {
                 var toCreate = JSON.parse(data);
                 var cl = Classes_7.classes.getClass(toCreate.createFromType);
                 var newComponent = new cl();
-                _this.insertComponent(newComponent, selection);
-                _this.updateDummies();
+                var last = _this.splitText(selection);
+                var text2 = this.createComponent(Classes_7.classes.getClassName(newComponent), newComponent, undefined, undefined, last._parent, last, true);
+                //            _this.insertComponent(newComponent, selection);
+            }
+            else if (data.indexOf('"varNamesToCopy":') > -1) {
+                var clip = JSON.parse(data);
+                var svar = clip.varNamesToCopy[0];
+                var comp = _this._propertyEditor.getObjectFromVariable(svar);
+                var last = _this.splitText(selection);
+                this.moveComponent(comp, undefined, undefined, comp._parent, last._parent, last);
+                last.domWrapper.parentNode.insertBefore(comp.domWrapper, last.domWrapper);
             }
             else {
-                debugger;
+                data = ev.dataTransfer.getData("text/html");
+                var clip = this.htmlToClipboardData(data);
+                var nodes = Component_5.Component.createHTMLElement("<span>" + data + "</span>");
+                if (anchorNode === anchorNodeToDel && anchorOffsetToDel < anchorOffset) {
+                    anchorOffset -= nodes.childNodes[0].innerText.length; //removing the selection changes the insertposition
+                }
+                var newSel = getSelection();
+                range = document.createRange();
+                range.setStart(anchorNodeToDel, anchorOffsetToDel);
+                range.setEnd(focusNodeToDel, focusOffsetToDel);
+                newSel.addRange(range);
+                ;
+                this.removeNodes(newSel);
+                range = document.createRange();
+                var selection = getSelection();
+                range.setStart(anchorNode, anchorOffset);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                ;
+                var last = _this.splitText(selection);
+                this.pasteComponents(JSON.stringify(clip), last._parent, last).then(() => {
+                    _this._propertyEditor.updateParser();
+                    _this.codeHasChanged();
+                    _this.editDialog(true);
+                });
+                //this.removeNodes(anchorNodeToDel,anchorOffsetToDel,focusNodeToDel,focusOffsetToDel);
+                // var fneu=anchorNode.textContent.substring(0,anchorOffset)+toInsert[0]+anchorNode.textContent.substring(anchorOffset);
+                //this.changeText(anchorNode, fneu);                    
             }
+        }
+        async paste() {
+            var data = await navigator.clipboard.read();
+            var sel = document.getSelection();
+            var comp;
+            if (sel.anchorNode == null)
+                comp = this._propertyEditor.value;
+            else
+                comp = this.splitText(sel);
+            if (data[0].types.indexOf("text/html") !== -1) {
+                var data2 = await data[0].getType("text/html");
+                var text = await data2.text();
+                var clip = this.htmlToClipboardData(text);
+                if (this.lastSelectedDummy.component === comp && !this.lastSelectedDummy.pre)
+                    await this.pasteComponents(JSON.stringify(clip), comp); //insert in Container at the End
+                else
+                    await this.pasteComponents(JSON.stringify(clip), comp._parent, comp);
+            }
+            else {
+                this._propertyEditor.value = comp;
+                return await super.paste();
+            }
+            this._propertyEditor.updateParser();
+            this.codeHasChanged();
+            this.editDialog(true);
+            //  alert(8);
+            // debugger; 
+            //return await super.paste(); 
+        }
+        async copy() {
+            var sel = document.getSelection();
+            if (sel.focusNode === sel.anchorNode && sel.focusOffset === sel.anchorOffset)
+                return await super.copy();
+            document.execCommand("copy");
+            return await navigator.clipboard.readText();
         }
         /*set designedComponent(component) {
             alert(8);
@@ -4682,69 +4852,75 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             
         }*/
         registerKeys() {
-            return;
-            var _this = this;
-            this._codeEditor._design.dom.tabindex = "1";
-            this._codeEditor._design.dom.addEventListener("keydown", function (evt) {
-                if (evt.keyCode === 115 && evt.shiftKey) { //F4
-                    // var thiss=this._this._id;
-                    // var editor = ace.edit(this._this._id);
-                    _this.evalCode(true);
-                    evt.preventDefault();
-                    return false;
-                }
-                else if (evt.keyCode === 115) { //F4
-                    _this.evalCode(false);
-                    evt.preventDefault();
-                    return false;
-                }
-                if (evt.keyCode === 90 && evt.ctrlKey) { //Ctrl+Z
-                    _this.undo();
-                }
-                if (evt.keyCode === 116) { //F5
-                    evt.preventDefault();
-                    return false;
-                }
-                if (evt.keyCode === 46 || (evt.keyCode === 88 && evt.ctrlKey && evt.shiftKey)) { //Del or Ctrl X)
-                    _this.cutComponent();
-                    evt.preventDefault();
-                    return false;
-                }
-                if (evt.keyCode === 67 && evt.ctrlKey && evt.shiftKey) { //Ctrl+C
-                    _this.copy();
-                    evt.preventDefault();
-                    return false;
-                }
-                if (evt.keyCode === 86 && evt.ctrlKey && evt.shiftKey) { //Ctrl+V
-                    _this.paste();
-                    evt.preventDefault();
-                    return false;
-                }
-                if ((String.fromCharCode(evt.which).toLowerCase() === 's' && evt.ctrlKey) /* && (evt.which == 19)*/) { //Str+s
-                    _this.save();
-                    event.preventDefault();
-                    return false;
-                }
-            });
+            //in keydown(...)
         }
-        deleteNodeBetween(node1, node2) {
-            var list1 = [];
-            var list2 = [];
-            this.getParentList(node1, list1);
-            this.getParentList(node2, list2);
-            var pos = 0;
-            var test = list1[pos];
-            while (list2.indexOf(list1[pos]) === -1) {
-                pos++;
+        /* private deleteNodeBetween(node1: Node, node2: Node) {
+             var list1 = [];
+             var list2 = [];
+             this.getParentList(node1, list1);
+             this.getParentList(node2, list2);
+             var pos = 0;
+             var test = list1[pos];
+             while (list2.indexOf(list1[pos]) === -1) {
+                 pos++;
+             }
+            
+             var par1 = list1[pos];
+             var par2 = list2[list2.indexOf(list1[pos]) ];
+             var components = [];
+             if(node1===node2){
+                 components.push(node1._this);
+             }else{
+                 var todel = par1.nextSibling;
+     
+                 var components = [];
+                 while (todel !== par2) {
+                     var del = todel;
+                     todel = todel.nextSibling;
+                     components.push(del._this);
+                     // del.remove();
+                 }
+             }
+             var s = this.componentsToString(components);
+             this.deleteComponents(s);
+         }*/
+        deleteNodeBetween(selection) {
+            var range = selection.getRangeAt(0);
+            var parent = range.commonAncestorContainer;
+            var contains = false;
+            var components = [];
+            for (var x = 0; x < parent.childNodes.length; x++) {
+                var node = parent.childNodes[x];
+                //@ts-ignore
+                if (node._this === selection.anchorNode._this || node._this === selection.focusNode._this || selection.containsNode(node)) {
+                    contains = true;
+                }
+                else {
+                    contains = false;
+                }
+                if (contains) {
+                    components.push(node._this);
+                }
             }
-            var par1 = list1[pos - 1];
-            var par2 = list2[list2.indexOf(list1[pos]) - 1];
-            var todel = par1.nextSibling;
-            while (todel !== par2) {
-                var del = todel;
-                todel = todel.nextSibling;
-                del.remove();
-            }
+            document.getSelection().modify("move", "left", "character");
+            var a = getSelection().anchorNode;
+            var apos = getSelection().anchorOffset;
+            setTimeout(() => {
+                var range = document.createRange();
+                var selection = getSelection();
+                console.log(range);
+                range.setStart(a, apos); //removed position
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }, 10);
+            //@ts-ignore
+            if (components.length > 0 && components[0].dom.nodeType === components[0].dom.TEXT_NODE)
+                components.splice(0, 1);
+            if (components.length > 0 && components[components.length - 1].dom.nodeType === components[components.length - 1].dom.TEXT_NODE)
+                components.splice(components.length - 1, 1);
+            var s = this.componentsToString(components);
+            console.log(components);
+            this.deleteComponents(s);
         }
         editDialog(enable) {
             super.editDialog(enable);
@@ -4752,22 +4928,54 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
         createDragAndDropper() {
             return undefined;
         }
-        removeNode(from, frompos, to, topos) {
-            if (from === to) {
+        removeNodes(selection) {
+            var from = selection.anchorNode;
+            var frompos = selection.anchorOffset;
+            var to = selection.focusNode;
+            var topos = selection.focusOffset;
+            var position = from.compareDocumentPosition(to);
+            // selection has wrong direction
+            if (!position && frompos > topos || position === Node.DOCUMENT_POSITION_PRECEDING) {
+                var k = from;
+                from = to;
+                to = k;
+                var k1 = frompos;
+                frompos = topos;
+                topos = k1;
+            }
+            this.deleteNodeBetween(selection);
+            //@ts-ignore
+            if (from === to && to.nodeType === from.TEXT_NODE) {
                 var neu = to.textContent;
                 this.changeText(to, neu.substring(0, frompos) + "" + neu.substring(topos));
             }
             else {
-                this.deleteNodeBetween(from, to);
-                this.changeText(from, from.textContent.substring(0, frompos));
-                this.changeText(to, to.textContent.substring(topos));
+                if (from.nodeType === from.TEXT_NODE) {
+                    this.changeText(from, from.textContent.substring(0, frompos));
+                }
+                if (to.nodeType === from.TEXT_NODE) {
+                    this.changeText(to, to.textContent.substring(topos));
+                }
+                //this.changeText(from, from.textContent.substring(0, frompos));
+                //this.changeText(to, to.textContent.substring(topos));
             }
-            var range = document.createRange();
-            var selection = getSelection();
-            range.setStart(from, frompos);
-            selection.removeAllRanges();
-            selection.addRange(range);
-            ;
+            /*else {
+                var end = to.childNodes[topos];
+                if (end === undefined)
+                    end = to.childNodes[to.childNodes.length - 1];
+                this.deleteNodeBetween(from.childNodes[frompos], end);
+            }*/
+            /*} else {
+                if (from.nodeType === from.TEXT_NODE){
+                    this.deleteNodeBetween(from, to);
+                    this.changeText(from, from.textContent.substring(0, frompos));
+                    this.changeText(to, to.textContent.substring(topos));
+                }else{
+                     this.deleteNodeBetween(from.childNodes[frompos], to);
+                    
+                    this.changeText(to, to.textContent.substring(topos));
+                }
+            }*/
         }
         changeText(node, text) {
             var varname = this._propertyEditor.getVariableFromObject(node._this);
@@ -4778,26 +4986,97 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 node.textContent = text;
             return node;
         }
-        insertComponent(component, sel = document.getSelection(), suggestedvarname = undefined) {
-            var anchorNode = sel.anchorNode;
-            var old = anchorNode.textContent;
-            var node = anchorNode;
-            var v1 = old.substring(0, sel.anchorOffset);
-            var v2 = old.substring(sel.focusOffset);
+        splitText(sel = document.getSelection()) {
+            // selection has wrong direction
+            var offSet = sel.anchorOffset;
+            var node = sel.anchorNode;
+            if (sel.anchorNode.compareDocumentPosition(sel.focusNode) === Node.DOCUMENT_POSITION_PRECEDING) {
+                node = sel.focusNode;
+                offSet = sel.focusOffset;
+            }
+            var old = node.textContent;
+            var node = node;
+            var v1 = old.substring(0, offSet);
+            var v2 = old.substring(offSet);
             this.changeText(node, v2);
             var comp = node._this;
-            var br = this.createComponent(Classes_7.classes.getClassName(component), component, undefined, undefined, comp._parent, comp, true, suggestedvarname);
+            // var br = this.createComponent(classes.getClassName(component), component, undefined, undefined, comp._parent, comp, true, suggestedvarname);
             if (v1 === "")
-                v1 = "&nbsp;";
+                return comp; //v1 = "&nbsp;";
             var nd = document.createTextNode(v1);
             var comp2 = new Component_5.TextComponent();
             comp2.init(nd, { noWrapper: true });
-            var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, br, true, "text");
+            var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
             this.changeText(text2.dom, v1);
-            this.updateDummies();
+            //this.updateDummies();
+            return comp;
+        }
+        async cutComponent() {
+            var _this = this;
+            var sel = document.getSelection();
+            if (sel.focusNode === sel.anchorNode && sel.focusOffset === sel.anchorOffset)
+                return super.cutComponent();
+            document.execCommand("copy");
+            var data = await navigator.clipboard.read();
+            var tt = await data[0].getType("text/html");
+            var text = await tt.text();
+            var code = JSON.stringify(_this.htmlToClipboardData(text));
+            navigator.clipboard.writeText(code);
+            var e = new KeyboardEvent("keypress", {
+                code: "Delete"
+            });
+            _this.keydown(e);
         }
         keydown(e) {
+            var _this = this;
+            if (e.keyCode === 115 && e.shiftKey) { //F4
+                return false;
+            }
+            else if (e.keyCode === 115) { //F4
+                return false;
+            }
+            if (e.keyCode === 90 && e.ctrlKey) { //Ctrl+Z
+            }
+            if (e.keyCode === 116) { //F5
+                e.preventDefault();
+                return false;
+            }
+            if ((e.keyCode === 88 && e.ctrlKey)) { //Del or Ctrl X)
+                e.preventDefault();
+                this.cutComponent();
+                return;
+            }
+            if (e.keyCode === 67 && e.ctrlKey) { //Ctrl+C
+                e.preventDefault();
+                this.copy();
+                return false;
+            }
+            if (e.keyCode === 86 && e.ctrlKey) { //Ctrl+V
+                e.preventDefault();
+                this.paste();
+                return false;
+            }
+            if ((String.fromCharCode(e.which).toLowerCase() === 's' && e.ctrlKey) /* && (evt.which == 19)*/) { //Str+s
+                return false;
+            }
+            if (e.ctrlKey)
+                return;
             var sel = document.getSelection();
+            if (sel.anchorNode === null) {
+                var nd = document.createTextNode("");
+                var comp2 = new Component_5.TextComponent();
+                comp2.init(nd, { noWrapper: true });
+                if (this.lastSelectedDummy.pre)
+                    var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value._parent, this._propertyEditor.value, true, "text");
+                else
+                    var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value, undefined, true, "text");
+                var selection = getSelection();
+                var range = document.createRange();
+                range.setStart(comp2.dom, 0);
+                range.setEnd(comp2.dom, 0);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
             var position = sel.anchorNode.compareDocumentPosition(sel.focusNode);
             var anchorNode = sel.anchorNode;
             var anchorOffset = sel.anchorOffset;
@@ -4813,36 +5092,40 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             if (e.keyCode === 13) {
                 e.preventDefault();
                 var enter = Component_5.createComponent(React.createElement("br"));
-                this.insertComponent(enter, sel, "br");
+                var comp = this.splitText(sel);
+                var center = this.createComponent(Classes_7.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
+                this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this._propertyEditor.getVariableFromObject(center));
+                //     this.insertComponent(enter, sel, "br");
                 //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
                 // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
-                return;
             }
-            if (e.code === "Delete") {
+            else if (e.code === "Delete") {
                 e.preventDefault();
                 if (anchorNode === focusNode && anchorOffset === focusOffset) { //no selection
                     sel.modify("extend", "right", "character");
                     var newsel = document.getSelection();
-                    this.removeNode(anchorNode, anchorOffset, newsel.focusNode, newsel.focusOffset);
+                    this.removeNodes(newsel);
                 }
                 else {
-                    this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
+                    this.removeNodes(sel);
                 }
+                this.updateDummies();
                 return;
             }
-            if (e.code === "Backspace") {
+            else if (e.code === "Backspace") {
                 e.preventDefault();
                 if (anchorNode === focusNode && anchorOffset === focusOffset) { //no selection
                     sel.modify("extend", "left", "character");
                     var newsel = document.getSelection();
-                    this.removeNode(newsel.focusNode, newsel.focusOffset, anchorNode, anchorOffset);
+                    this.removeNodes(newsel);
                 }
                 else {
-                    this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
+                    this.removeNodes(sel);
                 }
+                this.updateDummies();
                 return;
             }
-            if (e.key.length === 1) {
+            else if (e.key.length === 1) {
                 var end = focusOffset;
                 if (anchorNode !== focusNode) {
                     end = anchorNode.textContent.length;
@@ -4850,13 +5133,13 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 if (anchorNode === focusNode && anchorOffset === focusOffset) { //no selection
                 }
                 else {
-                    this.removeNode(anchorNode, anchorOffset, focusNode, focusOffset);
+                    this.removeNodes(sel);
                 }
                 var neu = anchorNode.textContent.substring(0, anchorOffset) + e.key + anchorNode.textContent.substring(end);
                 if (anchorNode.nodeType !== anchorNode.TEXT_NODE) { //there is no Textnode here we create one
                     var before = undefined;
-                    if (anchorNode.childNodes.length > 0) {
-                        before = anchorNode.childNodes[0]._this;
+                    if (anchorNode.childNodes.length > anchorOffset) {
+                        before = anchorNode.childNodes[anchorOffset]._this;
                     }
                     var comp2 = new Component_5.TextComponent();
                     var newone = document.createTextNode(e.key);
@@ -5278,7 +5561,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1696697256483.297,
+                "date": 1698089473938.3076,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -5296,7 +5579,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1697201944056.5862,
+                "date": 1698337259791.4893,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -5480,7 +5763,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1697200831537.889,
+                "date": 1698347502290.6016,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -5598,11 +5881,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1697210878968.3445,
+                "date": 1698142821464.8,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1656018240000,
+                "date": 1697234630938.0537,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
@@ -7004,6 +7287,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
                 const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
                 this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
+                this.imports[name] = file;
             }
         }
         parseTypeMeNode(node) {
@@ -7229,6 +7513,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (jsx === undefined)
                 jsx = _this.jsxVariables[element.pos + 1];
             if (jsx) {
+                var tagname = element.tagName.getText();
                 jsx.name = this.getNextVariableNameForType(jsx.name);
                 _this.jsxVariables[jsx.name] = jsx;
                 nd["jname"] = jsx.name;
@@ -7236,7 +7521,12 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 for (var x = 0; x < element.attributes.properties.length; x++) {
                     var prop = element.attributes.properties[x];
                     var val = prop["initializer"].getText();
+                    if (val.startsWith("{") && val.endsWith("}"))
+                        val = val.substring(1, val.length - 1);
                     _this.add(jsx.name, prop.name.text, val, prop);
+                }
+                if (jsx.component.constructor.name === 'HTMLComponent') {
+                    _this.add(jsx.name, "tag", '"' + tagname + '"', undefined);
                 }
                 if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.jname) !== undefined) {
                     _this.add((_b = node.parent) === null || _b === void 0 ? void 0 : _b.jname, "add", jsx.name, node);
@@ -7335,6 +7625,21 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         }
         visitNodeJSX(node, consumeProperties = undefined) {
             var _this = this;
+            if (node.kind === ts.SyntaxKind.ImportDeclaration) {
+                var nd = node;
+                var file = nd.moduleSpecifier.text;
+                if (nd.importClause && nd.importClause.namedBindings) {
+                    var names = nd.importClause.namedBindings.elements;
+                    for (var e = 0; e < names.length; e++) {
+                        this.imports[names[e].name.escapedText] = file;
+                    }
+                }
+                return;
+            }
+            if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
+                this.parseTypeMeNode(node);
+                return;
+            }
             if (node.kind === ts.SyntaxKind.JsxElement || node.kind === ts.SyntaxKind.JsxSelfClosingElement) {
                 _this.parseJSX(_this, node);
                 return;
@@ -7431,15 +7736,18 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             //return this.parseold(code,onlyfunction);
         }
         removeNode(node) {
+            var _a, _b, _c;
+            if (node.parent === undefined)
+                return;
             if (node.parent["statements"]) {
                 var pos = node.parent["statements"].indexOf(node);
                 if (pos >= 0)
                     node.parent["statements"].splice(pos, 1);
             }
-            else if (node.parent.parent["type"] !== undefined) {
+            else if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.parent) && ((_b = node.parent) === null || _b === void 0 ? void 0 : _b.parent["type"]) !== undefined) {
                 var pos = node.parent.parent["type"]["members"].indexOf(node);
                 if (pos >= 0)
-                    node.parent.parent["type"]["members"].splice(pos, 1);
+                    (_c = node.parent) === null || _c === void 0 ? void 0 : _c.parent["type"]["members"].splice(pos, 1);
             }
             else if (node.parent["members"] !== undefined) {
                 var pos = node.parent["members"].indexOf(node);
@@ -7537,6 +7845,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     for (var x = 0; x < this.data[variablename][property].length; x++) {
                         if (this.data[variablename][property][x].value === onlyValue || this.data[variablename][property][x].value.startsWith(onlyValue + ".")) {
                             prop = this.data[variablename][property][x];
+                            this.data[variablename][property].splice(x, 1);
+                            break;
                         }
                     }
                 }
@@ -7589,7 +7899,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             }
             //remove nodes
             for (var x = 0; x < allprops.length; x++) {
-                this.removeNode(allprops[x].node);
+                if (allprops[x].node)
+                    this.removeNode(allprops[x].node);
             }
             for (var vv = 0; vv < varnames.length; vv++) {
                 var varname = varnames[vv];
@@ -7622,6 +7933,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         }
                     }
                 }
+            }
+            for (var vv = 0; vv < varnames.length; vv++) {
+                delete this.data[varnames[vv]];
             }
         }
         getNodeFromScope(classscope, variablescope = undefined) {
@@ -7855,7 +8169,12 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         setPropertyInJSX(variableName, property, value, classscope, isFunction = false, replace = undefined, before = undefined, variablescope = undefined) {
             //if (this.data[variableName] === undefined)
             //    this.data[variableName] = {};
-            var newValue = typeof value === "string" ? ts.createIdentifier(value) : value;
+            var newValue;
+            if (typeof value === "string")
+                newValue = value.startsWith('"') ? ts.createIdentifier(value) : ts.createIdentifier("{" + value + "}");
+            else
+                newValue = value;
+            ;
             var newExpression = newExpression = ts.createJsxAttribute(ts.createIdentifier(property), newValue);
             ;
             if (property === "new") { //me.panel1=new Panel({});
@@ -7876,25 +8195,37 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 newExpression = ts.createExpressionStatement(ts.createAssignment(
                     ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
             */
-            if (property === "add") {
-                var prop = this.data[value]["_new_"][0];
-                var classname = prop.className;
-                if (classname === "HTMLComponent")
-                    classname = prop.tag;
-                var node;
-                if (classname === "text") {
-                    node = ts.createJsxText("", false);
-                    this.add(value, "text", "", node);
+            var jname;
+            if (property === "add") { //transfer a child to another
+                var parent = this.data[variableName]["_new_"][0].node;
+                if (typeof value === "string") {
+                    jname = value;
+                    var prop = this.data[value]["_new_"][0];
+                    var classname = prop.className;
+                    if (classname === "HTMLComponent")
+                        classname = prop.tag;
+                    var node;
+                    if (classname === "text") {
+                        node = ts.createJsxText("", false);
+                        this.add(value, "text", "", node);
+                    }
+                    else {
+                        node = this.createNode("<" + classname + "></" + classname + ">");
+                        if (classname === "br")
+                            node = this.createNode("<" + classname + "/>");
+                    }
+                    prop.node = node;
+                    prop.value = value;
                 }
                 else {
-                    node = this.createNode("<" + classname + "></" + classname + ">");
-                    if (classname === "br")
-                        node = this.createNode("<" + classname + "/>");
+                    jname = value.jname;
+                    //remove old
+                    var pos = value.parent["children"].indexOf(value);
+                    value.parent["children"].splice(pos, 0);
+                    prop = this.data[jname]["_new_"][0];
+                    node = value; //removeold
                 }
-                var parent = this.data[variableName]["_new_"][0].node;
                 node.parent = parent;
-                prop.node = node;
-                prop.value = value;
                 if (before) {
                     let found = undefined;
                     let ofound = -1;
@@ -7912,12 +8243,14 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     parent["children"].splice(pos + 1, 0, ts.createJsxText("\n", true));
                     this.data[variableName]["add"].splice(ofound, 0, {
                         node: node,
-                        value: value,
+                        value: jname,
                         isFunction: false
                     });
                     //this.data[variableName]["add"][0].node;
                 }
                 else {
+                    if (parent["children"] === undefined)
+                        debugger;
                     parent["children"].push(node);
                     parent["children"].push(ts.createJsxText("\n", true));
                     this.add(variableName, "add", value, node);
@@ -7927,7 +8260,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
                 if (property === "text") {
                     var svalue = value;
-                    var old = this.data[variableName][property][0].node.getText(); //text;
+                    var old = this.data[variableName][property][0].node.text; //getText() throw error if created manuell
                     svalue = JSON.parse(`{"a":` + svalue + "}").a;
                     if (svalue.length === svalue.trim().length) {
                         // @ts-ignore
@@ -7939,8 +8272,14 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 }
                 return;
             }
-            if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
+            if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined && typeof value === "string") { //edit existing
                 let node = this.data[variableName][property][0].node;
+                if (node === undefined && property === "tag") {
+                    this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                    this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                    this.data[variableName][property][0].value = value;
+                    return;
+                }
                 var pos = node.parent["properties"].indexOf(node);
                 //node.initializer.text=newValue;
                 node.parent["properties"][pos] = newExpression;
@@ -7954,6 +8293,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             }
             else { //insert new
                 if (before) {
+                    throw "not implemented";
                     /*  if (before.value === undefined)
                           throw "not implemented";
                       let node = undefined;
@@ -7970,34 +8310,23 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                           node.parent["statements"].splice(pos, 0, newExpression);*/
                 }
                 else {
-                    let parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
-                    this.data[variableName][property] = [{ node: newExpression, isFunction, value }];
-                    parent["properties"].push(newExpression);
-                    newExpression.parent = parent["properties"];
-                    /* for (let prop in this.data[variableName]) {
-                        if (prop === "_new_") {
-                            //should be in the same scope of declaration (important for repeater)
-                            statements = this.data[variableName][prop][0].node.parent["statements"];
-                            continue;
+                    let parent = this.data[variableName]["_new_"][0].node.attributes;
+                    if (parent === undefined)
+                        parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
+                    if (property === "tag" && typeof value === "string") { //HTMLComponent tag
+                        if (this.data[variableName]["_new_"][0].node.attributes) {
+                            this.data[variableName]["_new_"][0].node.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
                         }
-                        var testnode: ts.Node = this.data[variableName][prop][this.data[variableName][prop].length - 1].node;
-                        if (testnode.parent === scope["body"])
-                            lastprop = testnode;
+                        else {
+                            this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                            this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                        }
                     }
-                    if (lastprop) {
-                        var pos = lastprop.parent["statements"].indexOf(lastprop);
-                        if (pos >= 0)
-                            lastprop.parent["statements"].splice(pos + 1, 0, newExpression);
-                    } else {
-                        var pos = statements.length;
-                        try {
-                            if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
-                                pos--;
-                        } catch {
-            
-                        }
-                        statements.splice(pos, 0, newExpression);
-                    }*/
+                    else {
+                        parent["properties"].push(newExpression);
+                        newExpression.parent = parent; //["properties"];
+                    }
+                    this.data[variableName][property] = [{ node: newExpression, isFunction, value }];
                 }
             }
         }
@@ -8053,9 +8382,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (classscope === undefined)
                 classscope = this.classScope;
             let type = fulltype.split(".")[fulltype.split(".").length - 1];
-            type = type === "TextComponent" ? "text" : type;
             var varname = this.getNextVariableNameForType(type, suggestedName);
             if (this.jsxVariables) {
+                type = type === "TextComponent" ? "text" : type;
                 this.data[varname] = {
                     "_new_": [{ className: type, tag: suggestedName }]
                 };
@@ -8259,8 +8588,10 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
                     this._changeCursor(e);
                     return;
                 }
-                if (this.lastSelected && this.lastSelected.length > 0 && this.lastSelected[0] !== element.id)
-                    return;
+                if (this.lastSelected && this.lastSelected.length > 0) {
+                    if (document.getElementById(this.lastSelected[0])._this !== element._this)
+                        return;
+                }
                 //top left positions of the div element
                 var topLeftX = $(element._this.dom).offset().left; //element.offsetLeft;
                 var topLeftY = $(element._this.dom).offset().top; //element.offsetTop;
@@ -9172,7 +9503,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1696697256483.297,
+                "date": 1698089473938.3076,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -9190,7 +9521,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1697201944056.5862,
+                "date": 1698337259791.4893,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -9374,7 +9705,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1697200831537.889,
+                "date": 1698347502290.6016,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -9492,11 +9823,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1697210878968.3445,
+                "date": 1698142821464.8,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1656018240000,
+                "date": 1697234630938.0537,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {

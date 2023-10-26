@@ -21,6 +21,10 @@ define("demo/registry",["require"], function(require) {
 		"date": 1697233194352.7358,
 		"demo/Dialog4": {}
 	},
+	"demo/Dialog5.ts": {
+		"date": 1698141600303.412,
+		"demo/Dialog5": {}
+	},
 	"demo/EmptyDialog.ts": {
 		"date": 1655556796000,
 		"demo.EmptyDialog": {}
@@ -124,10 +128,6 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/_test1.ts": {
 		"date": 1670673960000
-	},
-	"demo/Dialog5.ts": {
-		"date": 1697905729579.0618,
-		"demo/Dialog5": {}
 	}
 }
  }
