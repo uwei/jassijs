@@ -360,7 +360,7 @@ export class RTable extends RComponent {
                 }
                 if (v === null)
                     v = "initial";
-                css.background_color = v;
+                css.ContainerProperties = v;
                 cssid.push(v.replace("#", ""));
 
                 v = 1;

@@ -323,7 +323,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
                     }
                     if (v === null)
                         v = "initial";
-                    css.background_color = v;
+                    css.ContainerProperties = v;
                     cssid.push(v.replace("#", ""));
                     v = 1;
                     if ((_c = this.layout) === null || _c === void 0 ? void 0 : _c.hLineWidth) {

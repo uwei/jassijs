@@ -133,8 +133,8 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "j
                         items: "northwind.Suppliers"
                     }),
                     me.styleNumber.config({
-                        css: {
-                            text_align: "right"
+                        style: {
+                            textAlign: "right"
                         }
                     })
                 ] });

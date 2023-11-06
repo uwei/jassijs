@@ -94,7 +94,7 @@ export interface ComponentProperties {
     /**
      * ccc-Properties
      */
-    css?: CSSProperties;
+    style?: React.CSSProperties;
     styles?: any[];
 
     /**
@@ -181,7 +181,7 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
         ret = new atype(props);
     } else if (typeof atype === "function") {
         ret = atype(props);
-    }
+    } 
     if ((<any>node)?.props?.children !== undefined) {
         if (props === null || props === undefined)
             props = {};
@@ -607,8 +607,12 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         return this.dom.style.height.replace("px", "");
     }
     @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
-    set css(properties: CSSProperties) {
+    set style(properties: React.CSSProperties) {
         var prop = CSSProperties.applyTo(properties, this);
+        for (let key in prop) {
+
+                    this.dom.style[key] = prop[key];
+            }
         //if css-properties are already set and now a properties is deleted
         if (this["_lastCssChange"]) {
             for (let key in this["_lastCssChange"]) {
@@ -717,8 +721,9 @@ export class Component<T = {}> implements React.Component<ComponentProperties, {
         throw new Error("not implemented");
     }
 }
-interface HTMLComponentProperties extends ComponentProperties {//React.HTMLProps<Element>{
+interface HTMLComponentProperties extends ComponentProperties,Omit<React.HTMLProps<Element>,"contextMenu">{
     tag?: string;
+    children?;
 }
 
 
@@ -735,7 +740,7 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
         
         //this.init(document.createElement(tag), { noWrapper: true });
     }
-
+   
     config(props: HTMLComponentProperties, forceRender: boolean = false) {
         var tag=props?.tag===undefined?"span":props?.tag;
         if (props?.tag !== this.tag.toLowerCase()) {
@@ -759,6 +764,15 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
             } else if (prop in this.dom)
                 this.dom.setAttribute(prop, (<any>props)[prop]);
             // }
+        }
+        if (props?.children) {
+            if (props?.children.length > 0 && props?.children[0] instanceof Component) {
+                this.removeAll(false);
+                for (var x = 0; x < props.children.length; x++) {
+                    this.add(props.children[x]);
+                }
+                delete props.children;
+            }
         }
         return this;
     }
@@ -884,6 +898,27 @@ export class TextComponent<T extends TextComponentProperties = {}> extends Compo
     constructor(props: TextComponentProperties = {}) {
         super(props);
         
+    }
+    get label(){
+        return "";
+    }
+    get width(){
+        return 0;
+    }
+    get height(){
+        return 0;
+    }
+    get x(){
+        return 0;
+    }
+    get y(){
+        return 0;
+    }
+    get tooltip(){
+        return "";
+    }
+    get hidden(){
+        return false;
     }
     config(props: TextComponentProperties, forceRender: boolean = false) {
         if(this.dom===undefined){

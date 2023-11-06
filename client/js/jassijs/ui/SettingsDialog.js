@@ -94,9 +94,9 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jass
             this.update();
             me.htmlpanel1.value = "Settings for  ";
             me.htmlpanel1.width = "80";
-            me.htmlpanel1.css = {
-                font_size: "small",
-                font_weight: "bold"
+            me.htmlpanel1.style = {
+                fontSize: "small",
+                fontWeight: "bold"
             };
         }
     };

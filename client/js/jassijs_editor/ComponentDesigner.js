@@ -1038,8 +1038,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 postDummy.style.left = (newRight - 14) + "px";
             }
             for (var x = 0; x < node.childNodes.length; x++) {
-                // if (node._this ===(<any> node.childNodes[x])._this)//Wrapper
-                this.insertDummies(node.childNodes[x], root, arr, rootRect);
+                if (node._this !== node.childNodes[x]._this) //Wrapper
+                    this.insertDummies(node.childNodes[x], root, arr, rootRect);
             }
         }
         /**

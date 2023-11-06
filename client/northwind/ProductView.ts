@@ -153,8 +153,8 @@ export class ProductView extends DBObjectView {
                     items: "northwind.Suppliers"
                 }),
                 me.styleNumber.config({
-                    css: {
-                        text_align: "right"
+                    style: {
+                        textAlign: "right"
                     }
                 })
             ] });

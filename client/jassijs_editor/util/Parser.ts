@@ -123,7 +123,7 @@ export class Parser {
 
         if (value === undefined || value === null)
             return;
-        if (trim)
+        if (trim&&(typeof value==="string"))
             value = value.trim();
         property = property.trim();
         if (this.data[variable] === undefined) {
@@ -407,7 +407,7 @@ export class Parser {
         if (jsx === undefined)
             jsx = _this.jsxVariables[element.pos + 1];
         if (jsx) {
-            var tagname=element.tagName.getText();
+            var tagname = element.tagName.getText();
             jsx.name = this.getNextVariableNameForType(jsx.name);
             _this.jsxVariables[jsx.name] = jsx;
             nd["jname"] = jsx.name;
@@ -419,8 +419,8 @@ export class Parser {
                     val = val.substring(1, val.length - 1);
                 _this.add(jsx.name, (<any>prop.name).text, val, prop);
             }
-            if(jsx.component.constructor.name==='HTMLComponent'){
-                _this.add(jsx.name, "tag", '"'+tagname+'"', undefined);
+            if (jsx.component.constructor.name === 'HTMLComponent') {
+                _this.add(jsx.name, "tag", '"' + tagname + '"', undefined);
             }
             if ((<any>node.parent)?.jname !== undefined) {
                 _this.add((<any>node.parent)?.jname, "add", jsx.name, node);
@@ -446,7 +446,7 @@ export class Parser {
                             var stext = JSON.stringify(ch.text);
                             _this.add(varname, "_new_", stext, ch, false, false);
                             _this.jsxVariables[varname] = ch;
-                            _this.add(varname, "text",  stext, ch, false, false);
+                            _this.add(varname, "text", stext, ch, false, false);
                             //if ((<any>node.parent)?.jname !== undefined) {
                             _this.add(jsx.name, "add", varname, ch);
                             // }
@@ -643,7 +643,7 @@ export class Parser {
         //return this.parseold(code,onlyfunction);
     }
     private removeNode(node: ts.Node) {
-        if(node.parent===undefined)
+        if (node.parent === undefined)
             return;
         if (node.parent["statements"]) {
             var pos = node.parent["statements"].indexOf(node);
@@ -745,7 +745,7 @@ export class Parser {
                 for (var x = 0; x < this.data[variablename][property].length; x++) {
                     if (this.data[variablename][property][x].value === onlyValue || this.data[variablename][property][x].value.startsWith(onlyValue + ".")) {
                         prop = this.data[variablename][property][x];
-                        this.data[variablename][property].splice(x,1);
+                        this.data[variablename][property].splice(x, 1);
                         break;
                     }
                 }
@@ -799,7 +799,7 @@ export class Parser {
         }
         //remove nodes
         for (var x = 0; x < allprops.length; x++) {
-            if(allprops[x].node)
+            if (allprops[x].node)
                 this.removeNode(allprops[x].node);
         }
         for (var vv = 0; vv < varnames.length; vv++) {
@@ -1109,15 +1109,15 @@ export class Parser {
         var jname;
         if (property === "add") {//transfer a child to another
             var parent = this.data[variableName]["_new_"][0].node;
-            if (typeof value === "string"){
-                jname=value;
+            if (typeof value === "string") {
+                jname = value;
                 var prop = this.data[value]["_new_"][0];
                 var classname = (<any>prop).className;
                 if (classname === "HTMLComponent")
                     classname = (<any>prop).tag;
                 var node;
                 if (classname === "text") {
-    
+
                     node = ts.createJsxText(<string>"", false);
                     this.add(value, "text", <string>"", node);
                 } else {
@@ -1127,17 +1127,24 @@ export class Parser {
                 }
                 prop.node = node;
                 prop.value = value;
-            }else{
-                jname=(<any>value).jname;
+            } else {
+                var name;
+                for (var key in this.data) {
+                    if (this.data[key]["_new_"]) {
+                        if (this.data[key]["_new_"][0].node === value)
+                            name = key;
+                    }
+                }
+                //jname=(<any>value).jname;
                 //remove old
-                var pos=value.parent["children"].indexOf(value);
-                value.parent["children"].splice(pos,0);
-                prop = this.data[jname]["_new_"][0];
-                node=value;//removeold
-                
+                var pos = value.parent["children"].indexOf(value);
+                value.parent["children"].splice(pos, 0);
+                prop = this.data[name]["_new_"][0];
+                node = value;//removeold
+
             }
-           node.parent = parent;
-           
+            node.parent = parent;
+
             if (before) {
                 let found = undefined;
                 let ofound = -1;
@@ -1162,7 +1169,7 @@ export class Parser {
                 //this.data[variableName]["add"][0].node;
 
             } else {
-                if(parent["children"]===undefined)
+                if (parent["children"] === undefined)
                     debugger;
                 parent["children"].push(node);
                 parent["children"].push(ts.createJsxText("\n", true));
@@ -1187,12 +1194,13 @@ export class Parser {
             }
             return;
         }
-        if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined&&typeof value==="string") {//edit existing
+        if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined && typeof value === "string") {//edit existing
             let node = this.data[variableName][property][0].node;
-            if(node===undefined&&property==="tag"){
-                (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName=ts.createIdentifier(value.substring(1,value.length-1));
-                (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName=ts.createIdentifier(value.substring(1,value.length-1));
-                this.data[variableName][property][0].value=value;
+            if (node === undefined && property === "tag") {
+                (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                this.data[variableName][property][0].value = value;
+                node["jname"] = value.replaceAll('"', "");;
                 return;
             }
             var pos = node.parent["properties"].indexOf(node);
@@ -1226,16 +1234,17 @@ export class Parser {
             } else {
 
                 let parent = (<any>this.data[variableName]["_new_"][0].node).attributes;
-                if(parent===undefined)
-                    parent=(<any>this.data[variableName]["_new_"][0].node).openingElement.attributes;
-                if(property==="tag"&&typeof value==="string"){//HTMLComponent tag
-                    if((<any>this.data[variableName]["_new_"][0].node).attributes){
-                         (<any>this.data[variableName]["_new_"][0].node).tagName=ts.createIdentifier(value.substring(1,value.length-1));
-                    }else{
-                        (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName=ts.createIdentifier(value.substring(1,value.length-1));
-                        (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName=ts.createIdentifier(value.substring(1,value.length-1));
+                if (parent === undefined)
+                    parent = (<any>this.data[variableName]["_new_"][0].node).openingElement.attributes;
+                if (property === "tag" && typeof value === "string") {//HTMLComponent tag
+                    (<any>this.data[variableName]["_new_"][0].node)["jname"] = value.replaceAll('"', "");
+                    if ((<any>this.data[variableName]["_new_"][0].node).attributes) {
+                        (<any>this.data[variableName]["_new_"][0].node).tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                    } else {
+                        (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                        (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
                     }
-                 }else{
+                } else {
                     parent["properties"].push(newExpression);
                     newExpression.parent = parent;//["properties"];
                 }
@@ -1299,7 +1308,7 @@ export class Parser {
         if (classscope === undefined)
             classscope = this.classScope;
         let type = fulltype.split(".")[fulltype.split(".").length - 1];
-        
+
         var varname = this.getNextVariableNameForType(type, suggestedName);
 
         if (this.jsxVariables) {

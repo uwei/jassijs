@@ -1,13 +1,15 @@
 import { ClipboardData, ComponentDesigner } from "jassijs_editor/ComponentDesigner";
 import { $Class } from "jassijs/remote/Registry";
-import { Component, TextComponent, createComponent } from "jassijs/ui/Component";
+import { Component, TextComponent, createComponent, HTMLComponent } from "jassijs/ui/Component";
 import { Container } from "jassijs/ui/Container";
 import { classes } from "jassijs/remote/Classes";
+import { Button } from "jassijs/ui/Button";
+import { Tools } from "jassijs/util/Tools";
 
 
 @$Class("jassijs_editor.HtmlDesigner")
 export class HtmlDesigner extends ComponentDesigner {
-
+    boldButton: Button;
     constructor() {
         super();
         var _this = this;
@@ -96,7 +98,7 @@ export class HtmlDesigner extends ComponentDesigner {
             var toCreate: { createFromType: string, createFromParam: string } = <any>JSON.parse(data);
             var cl = classes.getClass(toCreate.createFromType);
             var newComponent = new cl();
-            var last = _this.splitText(selection);
+            var last = _this.splitText(selection)[1];
             var text2 = this.createComponent(classes.getClassName(newComponent), newComponent, undefined, undefined, last._parent, last, true);
 
             //            _this.insertComponent(newComponent, selection);
@@ -105,7 +107,7 @@ export class HtmlDesigner extends ComponentDesigner {
             var clip: ClipboardData = JSON.parse(data);
             var svar = clip.varNamesToCopy[0];
             var comp = _this._propertyEditor.getObjectFromVariable(svar);
-            var last = _this.splitText(selection);
+            var last = _this.splitText(selection)[1];
             this.moveComponent(comp, undefined, undefined, comp._parent, last._parent, last);
             last.domWrapper.parentNode.insertBefore(comp.domWrapper, last.domWrapper);
         } else {
@@ -126,7 +128,7 @@ export class HtmlDesigner extends ComponentDesigner {
             range.setStart(anchorNode, anchorOffset);
             selection.removeAllRanges();
             selection.addRange(range);;
-            var last = _this.splitText(selection);
+            var last = _this.splitText(selection)[1];
             this.pasteComponents(JSON.stringify(clip), last._parent, last).then(() => {
                 _this._propertyEditor.updateParser();
                 _this.codeHasChanged();
@@ -147,7 +149,7 @@ export class HtmlDesigner extends ComponentDesigner {
         if (sel.anchorNode == null)
             comp = this._propertyEditor.value;
         else
-            comp = this.splitText(sel);
+            comp = this.splitText(sel)[1];
         if (data[0].types.indexOf("text/html") !== -1) {
             var data2 = await data[0].getType("text/html");
             var text = await data2.text();
@@ -233,6 +235,7 @@ export class HtmlDesigner extends ComponentDesigner {
                 components.push((<any>node)._this);
             }
         }
+        //@ts-ignore
         document.getSelection().modify("move", "left", "character");
         var a = getSelection().anchorNode;
         var apos = getSelection().anchorOffset;
@@ -257,6 +260,158 @@ export class HtmlDesigner extends ComponentDesigner {
         console.log(components);
 
         this.deleteComponents(s);
+
+    }
+    protected wrapTextNodeIfNeeded(found: Node) {
+        var parent = found.parentNode;
+        if (parent.childNodes.length !== 1) {
+            //no wrap
+            var textComp = (<any>found)._this;
+            var newSpan = new HTMLComponent({ tag: "span" });
+            var span = this.createComponent(classes.getClassName(newSpan), newSpan, undefined, undefined, textComp._parent, textComp, false);
+            var varspan = this.codeEditor.getVariableFromObject(span);
+
+            this._propertyEditor.setPropertyInCode("tag", "\"span\"", true, varspan);
+            this.moveComponent(textComp, undefined, undefined, textComp._parent, span, undefined);
+            (<Container>span).add(textComp);
+            parent = span.__dom;
+        }
+        return parent;
+    }
+
+    bold() {
+        this.setStyle("bold");
+    }
+    setStyle(style: string, value = undefined): Component[] {
+
+        var sel = getSelection();
+        var anchorNode = sel.anchorNode;
+        var anchorOffset = sel.anchorOffset;
+        var focusNode = sel.focusNode;
+        var focusOffset = sel.focusOffset;
+        var position = anchorNode.compareDocumentPosition(focusNode);
+        if (!position && anchorOffset > focusOffset || position === Node.DOCUMENT_POSITION_PRECEDING) {
+            var k = focusNode;
+            focusNode = focusNode;
+            focusNode = k;
+            var k1 = anchorOffset;
+            anchorOffset = focusOffset;
+            focusOffset = k1;
+        }
+        var container = sel.getRangeAt(0).commonAncestorContainer;
+        if (container.nodeType === container.TEXT_NODE)
+            container = container.parentNode;
+        var allModified: Component[] = [];
+        for (var x = 0; x < container.childNodes.length; x++) {
+
+            var child = container.childNodes[x];
+            if ((<HTMLElement>child).tagName === "BR" || (<HTMLElement>child).tagName === "br")
+                continue;
+            var found = undefined;
+            if (sel.containsNode(child)) {
+                found = child;
+            }
+            if (child.contains(anchorNode) || child === anchorNode) {
+                if (anchorOffset !== 0) {
+                    var samenode = anchorNode === focusNode;
+
+                    if (child === anchorNode)
+                        x++;
+                    var texts = this.splitText(sel);
+                    anchorNode = texts[1].dom;
+                    if (allModified.indexOf(texts[0]) === -1)
+                        allModified.push(texts[0]);
+                    if (allModified.indexOf(texts[1]) === -1)
+                        allModified.push(texts[1]);
+                    if (anchorNode.nodeType !== anchorNode.TEXT_NODE) {//textnode is wrapped
+                        anchorNode = anchorNode.childNodes[0];
+                    }
+                    if (samenode) {
+                        focusNode = anchorNode;
+                        focusOffset -= anchorOffset;
+                    }
+                    anchorOffset = 0;
+                }
+                found = anchorNode;
+            }
+            if (child.contains(focusNode) || child === focusNode) {
+                if (focusOffset !== (<any>child).length) {
+
+                    //  var samenode = anchorNode === focusNode;
+                    range = document.createRange();
+
+                    range.setStart(focusNode, focusOffset);
+                    range.setEnd(focusNode, (<any>focusNode).length);
+
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                    if (child === focusNode)
+                        x++;
+                    var texts = this.splitText(sel);
+                    var pos = allModified.indexOf(texts[1]);
+                    debugger;
+                    if (pos !== -1)
+                        allModified.splice(pos, 0, texts[0]);
+                    else
+                        allModified.push(texts[0]);
+                    if (allModified.indexOf(texts[1]) === -1)
+                        allModified.push(texts[1]);
+
+                    var newNode: any = texts[0].dom;
+                    if (newNode.nodeType !== newNode.TEXT_NODE) {//textnode is wrapped
+                        newNode = newNode.childNodes[0];
+                    }
+                    if (focusNode === anchorNode) {
+                        focusNode = anchorNode = newNode;
+                    } else
+                        focusNode = newNode;
+                    //focusOffset=(<any>focusNode).length;
+                }
+                found = focusNode;
+            }
+
+            if (found) {
+                var parent = this.wrapTextNodeIfNeeded(found);
+
+                var compParent: Component = (<any>parent)._this;
+                if (allModified.indexOf(compParent) === -1)
+                    allModified.push(compParent)
+                this.applyStyle(compParent, style);
+            }
+        }
+        var range = document.createRange();
+        range.setStart(anchorNode, anchorOffset);
+        range.setEnd(focusNode, focusOffset);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        return allModified;
+    }
+
+    applyStyle(comp: Component, stylename: string, value: any = undefined) {
+        var varParent = this.codeEditor.getVariableFromObject(comp);
+        var style = this._propertyEditor.parser.getPropertyValue(varParent, "style");
+        var st: React.CSSProperties = Tools.jsonToObject(style === undefined ? "{}" : style);
+        if (st.fontWeight === "bold")
+            delete st.fontWeight;//="normal";
+        else
+            st.fontWeight = "bold";
+        if (this._propertyEditor.codeEditor)
+            this._propertyEditor.setPropertyInCode("style", JSON.stringify(st), true, varParent, undefined, undefined);
+        comp.style = st;
+
+    }
+    _initDesign() {
+        super._initDesign();
+        var _this = this;
+        this.boldButton = new Button();
+        this.boldButton.icon = "mdi mdi-format-bold mdi-18px";
+        this.boldButton.tooltip = "bold";
+        this.boldButton.onclick(function () {
+            _this.bold();
+
+        });
+
+        this._designToolbar.add(this.boldButton);
 
     }
     editDialog(enable) {
@@ -314,16 +469,18 @@ export class HtmlDesigner extends ComponentDesigner {
             }
         }*/
     }
-    private changeText(node: Node, text: string): Node {
-        var varname = this._propertyEditor.getVariableFromObject((<any>node)._this);
-        this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+    protected changeText(node: Node, text: string): Node {
+        var varname = this.codeEditor.getVariableFromObject((<any>node)._this);
+        if (this._propertyEditor.codeEditor)
+            this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
         if (text === "&nbsp;")
             (<HTMLHtmlElement>node).innerHTML = text
         else
             node.textContent = text;
+        this._propertyEditor.callEvent("propertyChanged", event);
         return node;
     }
-    private splitText(sel: Selection = document.getSelection()): Component {
+    private splitText(sel: Selection = document.getSelection()): Component[] {
         // selection has wrong direction
         var offSet = sel.anchorOffset;
         var node = sel.anchorNode;
@@ -340,16 +497,17 @@ export class HtmlDesigner extends ComponentDesigner {
         var comp: Component = (<any>node)._this;
         // var br = this.createComponent(classes.getClassName(component), component, undefined, undefined, comp._parent, comp, true, suggestedvarname);
         if (v1 === "")
-            return comp;//v1 = "&nbsp;";
+            return [comp, comp];//v1 = "&nbsp;";
+        var text2 = this.createTextComponent(v1, comp._parent, comp);
 
-        var nd = document.createTextNode(v1);
-        var comp2 = new TextComponent();
-        comp2.init(<any>nd, { noWrapper: true });
-        var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
-
+        /*        var nd = document.createTextNode(v1);
+                var comp2 = new TextComponent();
+                comp2.init(<any>nd, { noWrapper: true });
+                var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
+        */
         this.changeText(text2.dom, v1);
         //this.updateDummies();
-        return comp;
+        return [text2, comp];
     }
 
     async cutComponent() {
@@ -368,7 +526,20 @@ export class HtmlDesigner extends ComponentDesigner {
             code: "Delete"
         });
         _this.keydown(e);
-  }
+    }
+    createTextComponent(text, par, before): Component {
+        var comp2 = new TextComponent();
+        var newone = document.createTextNode(text);
+
+        comp2.init(<any>newone, { noWrapper: true });
+        return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");;
+    }
+    protected insertLineBreak(sel: Selection) {
+        var enter = createComponent(React.createElement("br"));
+        var comp = this.splitText(sel)[1];
+        var center = this.createComponent(classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
+        this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this.codeEditor.getVariableFromObject(center));
+    }
     private keydown(e: KeyboardEvent) {
         var _this = this;
         if (e.keyCode === 115 && e.shiftKey) {//F4
@@ -438,11 +609,7 @@ export class HtmlDesigner extends ComponentDesigner {
         }
         if (e.keyCode === 13) {
             e.preventDefault();
-            var enter = createComponent(React.createElement("br"));
-
-            var comp = this.splitText(sel);
-            var center = this.createComponent(classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
-            this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this._propertyEditor.getVariableFromObject(center));
+            this.insertLineBreak(sel);
             //     this.insertComponent(enter, sel, "br");
             //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
             // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
@@ -489,13 +656,10 @@ export class HtmlDesigner extends ComponentDesigner {
                 if (anchorNode.childNodes.length > anchorOffset) {
                     before = (<any>anchorNode.childNodes[anchorOffset])._this;
                 }
-                var comp2 = new TextComponent();
-                var newone = document.createTextNode(e.key);
-                var par = (<any>anchorNode)._this;
-                comp2.init(<any>newone, { noWrapper: true });
-                var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
+
+
                 anchorOffset = 0;
-                anchorNode = newone;
+                anchorNode = this.createTextComponent(e.key, (<any>anchorNode)._this, before).dom;
                 neu = e.key;
             }
             this.changeText(anchorNode, neu);

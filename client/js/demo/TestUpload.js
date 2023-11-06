@@ -30,8 +30,8 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jass
             });
             me.htmlpanel1.value = "";
             me.htmlpanel1.label = "Content:";
-            me.htmlpanel1.css = {
-                font_size: "x-small"
+            me.htmlpanel1.style = {
+                fontSize: "x-small"
             };
         }
     };

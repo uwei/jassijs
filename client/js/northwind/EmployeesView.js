@@ -152,9 +152,9 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                         x: 630,
                         y: 20,
                         src: "",
-                        css: {
-                            background_color: "black",
-                            border_style: "solid"
+                        style: {
+                            backgroundColor: "black",
+                            borderStyle: "solid"
                         },
                         width: 125,
                         bind: [me.databinder, "PhotoPath"]

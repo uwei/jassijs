@@ -1134,7 +1134,7 @@ export class ComponentDesigner extends Panel {
         }
         
         for (var x = 0; x < node.childNodes.length; x++) {
-           // if (node._this ===(<any> node.childNodes[x])._this)//Wrapper
+            if (node._this !==(<any> node.childNodes[x])._this)//Wrapper
                 this.insertDummies(<any>node.childNodes[x], root, arr, rootRect);
         }
 

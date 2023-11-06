@@ -133,16 +133,16 @@ export class DatabaseDesigner extends Panel {
         });
         me.newfield.width = "120";
         me.newfield.height = 25;
-        me.newfield.css = {
-            text_align: "left"
+        me.newfield.style = {
+            textAlign: "left"
         };
         me.boxpanel2.add(me.table);
         me.boxpanel2.add(me.boxpanel3);
         me.removefield.text = "Remove Field";
         me.removefield.icon = "mdi mdi-playlist-minus";
         me.removefield.width = "120";
-        me.removefield.css = {
-            text_align: "left"
+        me.removefield.style = {
+            textAlign: "left"
         };
         me.removefield.onclick(function (event) {
             var field = me.table.value;

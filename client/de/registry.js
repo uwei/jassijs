@@ -40,7 +40,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/KundeView.ts": {
-		"date": 1680709480000,
+		"date": 1698508046886.8955,
 		"de.KundeView": {
 			"$DBObjectView": [
 				{

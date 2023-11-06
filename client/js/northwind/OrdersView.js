@@ -97,9 +97,9 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                 me.detailsProduct.width = 530;
                 me.detailsProduct.bind = [me.repeater1.design.databinder, "Product"];
                 me.detailsProduct.template = "{{ProductName}}";
-                me.detailsProduct.css = {
+                me.detailsProduct.style = {
                     overflow: "hidden",
-                    margin_top: "5px"
+                    marginTop: "5px"
                 };
                 me.detailsProduct.styles = [me.style1];
                 me.objectchooser1.bind = [me.repeater1.design.databinder, "Product"];
@@ -143,8 +143,8 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
             me.id.bind = [me.databinder, "id"];
             me.id.label = "Order ID";
             me.id.width = 70;
-            me.id.css = {
-                text_align: "right"
+            me.id.style = {
+                textAlign: "right"
             };
             me.freight.x = 5;
             me.freight.y = 50;
@@ -152,8 +152,8 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
             me.freight.width = 70;
             me.freight.label = "Freight";
             me.freight.converter = new NumberConverter_1.NumberConverter({ format: "#.##0,00" });
-            me.freight.css = {
-                text_align: "right"
+            me.freight.style = {
+                textAlign: "right"
             };
             me.customername.x = 10;
             me.customername.y = 5;
@@ -228,7 +228,7 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
             me.htmlpanel1.styles = [];
             me.htmlpanel2.value = "Text<br>";
             me.htmlpanel2.width = 100;
-            me.style1.css = {};
+            me.style1.style = {};
         }
     };
     __decorate([

@@ -3,7 +3,12 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     var reportdesign = {
-        content: []
+        background: [""],
+        header: ["aaa  a"],
+        footer: ["sadfdf"],
+        content: [
+            { text: ["Hallo"] }
+        ]
     };
     function test() {
         return {

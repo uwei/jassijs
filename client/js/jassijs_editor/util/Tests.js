@@ -22,7 +22,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
         update() {
             if (this.failedtests === 0) {
             }
-            this.statustext.css = {
+            this.statustext.style = {
                 color: (this.failedtests === 0 ? "green" : "red")
             };
             this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
@@ -87,8 +87,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
                                     newerrorpanel.addError({
                                         error: err
                                     });
-                                    newerrorpanel.css = {
-                                        background_color: "red"
+                                    newerrorpanel.style = {
+                                        backgroundColor: "red"
                                     };
                                     container.add(newerrorpanel);
                                     container.failedtests++;

@@ -123,9 +123,9 @@ export class SettingsDialog extends Panel {
         this.update();
         me.htmlpanel1.value = "Settings for  ";
         me.htmlpanel1.width = "80";
-        me.htmlpanel1.css={
-            font_size: "small",
-            font_weight: "bold"
+        me.htmlpanel1.style={
+            fontSize: "small",
+            fontWeight: "bold"
         };
     }
 }

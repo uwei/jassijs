@@ -71,7 +71,7 @@ export class ComponentPalette extends Panel {
                 var data:UIComponentProperties=mdata.params[0];
                 var img=new Image();
                 if(data.fullPath===undefined)
-                    debugger;
+                    return;
                 var name=data.fullPath.split("/");
                 var sname=name[name.length-1];
                 img.tooltip=sname;

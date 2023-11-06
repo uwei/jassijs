@@ -456,8 +456,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 return undefined;
             return this.dom.style.height.replace("px", "");
         }
-        set css(properties) {
+        set style(properties) {
             var prop = CSSProperties_1.CSSProperties.applyTo(properties, this);
+            for (let key in prop) {
+                this.dom.style[key] = prop[key];
+            }
             //if css-properties are already set and now a properties is deleted
             if (this["_lastCssChange"]) {
                 for (let key in this["_lastCssChange"]) {
@@ -603,9 +606,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     ], Component.prototype, "height", null);
     __decorate([
         (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", CSSProperties_1.CSSProperties),
-        __metadata("design:paramtypes", [CSSProperties_1.CSSProperties])
-    ], Component.prototype, "css", null);
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Component.prototype, "style", null);
     __decorate([
         (0, Property_1.$Property)({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
         __metadata("design:type", Array),
@@ -656,6 +659,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 else if (prop in this.dom)
                     this.dom.setAttribute(prop, props[prop]);
                 // }
+            }
+            if (props === null || props === void 0 ? void 0 : props.children) {
+                if ((props === null || props === void 0 ? void 0 : props.children.length) > 0 && (props === null || props === void 0 ? void 0 : props.children[0]) instanceof Component) {
+                    this.removeAll(false);
+                    for (var x = 0; x < props.children.length; x++) {
+                        this.add(props.children[x]);
+                    }
+                    delete props.children;
+                }
             }
             return this;
         }
@@ -780,6 +792,27 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     let TextComponent = class TextComponent extends Component {
         constructor(props = {}) {
             super(props);
+        }
+        get label() {
+            return "";
+        }
+        get width() {
+            return 0;
+        }
+        get height() {
+            return 0;
+        }
+        get x() {
+            return 0;
+        }
+        get y() {
+            return 0;
+        }
+        get tooltip() {
+            return "";
+        }
+        get hidden() {
+            return false;
         }
         config(props, forceRender = false) {
             if (this.dom === undefined) {

@@ -42,7 +42,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
        */
         init(dom, properties = undefined) {
             super.init(dom, properties);
-            this.domWrapper.classList.add("jcontainer");
+            if (this.domWrapper.classList)
+                this.domWrapper.classList.add("jcontainer");
         }
         /**
          * adds a component to the container

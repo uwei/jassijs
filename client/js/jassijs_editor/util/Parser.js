@@ -97,7 +97,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
         add(variable, property, value, node, isFunction = false, trim = true) {
             if (value === undefined || value === null)
                 return;
-            if (trim)
+            if (trim && (typeof value === "string"))
                 value = value.trim();
             property = property.trim();
             if (this.data[variable] === undefined) {
@@ -1085,11 +1085,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                     prop.value = value;
                 }
                 else {
-                    jname = value.jname;
+                    var name;
+                    for (var key in this.data) {
+                        if (this.data[key]["_new_"]) {
+                            if (this.data[key]["_new_"][0].node === value)
+                                name = key;
+                        }
+                    }
+                    //jname=(<any>value).jname;
                     //remove old
                     var pos = value.parent["children"].indexOf(value);
                     value.parent["children"].splice(pos, 0);
-                    prop = this.data[jname]["_new_"][0];
+                    prop = this.data[name]["_new_"][0];
                     node = value; //removeold
                 }
                 node.parent = parent;
@@ -1145,6 +1152,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                     this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
                     this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
                     this.data[variableName][property][0].value = value;
+                    node["jname"] = value.replaceAll('"', "");
+                    ;
                     return;
                 }
                 var pos = node.parent["properties"].indexOf(node);
@@ -1181,6 +1190,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                     if (parent === undefined)
                         parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
                     if (property === "tag" && typeof value === "string") { //HTMLComponent tag
+                        this.data[variableName]["_new_"][0].node["jname"] = value.replaceAll('"', "");
                         if (this.data[variableName]["_new_"][0].node.attributes) {
                             this.data[variableName]["_new_"][0].node.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
                         }

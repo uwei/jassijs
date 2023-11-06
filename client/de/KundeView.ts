@@ -63,7 +63,7 @@ export class KundeView extends DBObjectView {
                     label: "Vorname",
                     width: 95,
                     bind: [me.databinder, "vorname"],
-                    css: {
+                    style: {
                         color: "#3dbbac",
                     }
                 }),

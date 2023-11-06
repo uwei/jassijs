@@ -3,7 +3,7 @@ define("jassijs_report/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_report/designer/ReportDesigner.ts": {
-		"date": 1684440712000,
+		"date": 1699287545054.5315,
 		"jassijs_report.designer.ReportDesigner": {}
 	},
 	"jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -27,7 +27,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.PDFReport": {}
 	},
 	"jassijs_report/PDFViewer.ts": {
-		"date": 1681513900000,
+		"date": 1698507857254.2302,
 		"jassijs_report.PDFViewer": {}
 	},
 	"jassijs_report/RColumns.ts": {
@@ -45,8 +45,8 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RComponent.ts": {
-		"date": 1655930740000,
-		"jassijs_report.ReportComponent": {
+		"date": 1699203219964.0005,
+		"jassijs_report.RComponent": {
 			"$Property": [
 				{
 					"hideBaseClassProperties": true
@@ -165,15 +165,8 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report/ReportViewer": {}
 	},
 	"jassijs_report/RGroupTablerow.ts": {
-		"date": 1656073104000,
+		"date": 1699111120748.0674,
 		"jassijs_report.RTablerow": {
-			"$ReportComponent": [
-				{
-					"editableChildComponents": [
-						"this"
-					]
-				}
-			],
 			"@members": {}
 		}
 	},
@@ -215,7 +208,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RStack.ts": {
-		"date": 1656015322000,
+		"date": 1699115329566.395,
 		"jassijs_report.RStack": {
 			"$ReportComponent": [
 				{
@@ -224,6 +217,12 @@ define("jassijs_report/registry",["require"], function(require) {
 					"editableChildComponents": [
 						"this"
 					]
+				}
+			],
+			"$Property": [
+				{
+					"name": "children",
+					"type": "jassijs_report.RComponent"
 				}
 			]
 		}
@@ -244,7 +243,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTable.ts": {
-		"date": 1681571020000,
+		"date": 1698507156069.9734,
 		"jassijs_report.RTable": {
 			"$ReportComponent": [
 				{
@@ -265,7 +264,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1633113320000
 	},
 	"jassijs_report/RTablerow.ts": {
-		"date": 1656019424000,
+		"date": 1699114918006.316,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{
@@ -277,7 +276,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RText.ts": {
-		"date": 1656335832000,
+		"date": 1699194592715.817,
 		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{
@@ -339,7 +338,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassi_report.SimpleReportEditor": {}
 	},
 	"jassijs_report/StartReporteditor.ts": {
-		"date": 1697200004009.1965
+		"date": 1698507857261.209
 	},
 	"jassijs_report/TemplateReport.ts": {
 		"date": 1681570100000,

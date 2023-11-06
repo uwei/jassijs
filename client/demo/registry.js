@@ -22,7 +22,7 @@ define("demo/registry",["require"], function(require) {
 		"demo/Dialog4": {}
 	},
 	"demo/Dialog5.ts": {
-		"date": 1698141600303.412,
+		"date": 1699110372945.5725,
 		"demo/Dialog5": {}
 	},
 	"demo/EmptyDialog.ts": {
@@ -42,7 +42,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1655757462000
 	},
 	"demo/Report1.ts": {
-		"date": 1656018452000
+		"date": 1699287691047.1409
 	},
 	"demo/ReportInvoice.ts": {
 		"date": 1681590034000,
@@ -116,7 +116,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.TestTree": {}
 	},
 	"demo/TestUpload.ts": {
-		"date": 1657656094000,
+		"date": 1698507857256.2214,
 		"demo/TestUpload": {}
 	},
 	"demo/TreeContextmenu.ts": {

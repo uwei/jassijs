@@ -6,7 +6,7 @@ import { $Property } from "jassijs/ui/Property";
 
 
 
-@$ReportComponent({ editableChildComponents: ["this"] })
+//@$ReportComponent({ editableChildComponents: ["this"] })
 @$Class("jassijs_report.RTablerow")
 //@$Property({name:"horizontal",hide:true})
 export class RGroupTablerow extends RTablerow {

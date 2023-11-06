@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Checkbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Component_1, Checkbox_1, Registry_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog5 = void 0;
@@ -18,7 +18,49 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], fu
             this.layout(this.me);
         }
         layout(me) {
-            this.config({});
+            me.div = new Component_1.HTMLComponent({ tag: "div" });
+            me.checkbox = new Checkbox_1.Checkbox();
+            me.text = new Component_1.TextComponent();
+            me.text2 = new Component_1.TextComponent();
+            me.br = new Component_1.HTMLComponent();
+            me.text3 = new Component_1.TextComponent();
+            me.htmlcomponent = new Component_1.HTMLComponent();
+            me.text4 = new Component_1.TextComponent();
+            me.htmlcomponent2 = new Component_1.HTMLComponent();
+            me.htmlcomponent3 = new Component_1.HTMLComponent();
+            me.text5 = new Component_1.TextComponent();
+            me.htmlcomponent4 = new Component_1.HTMLComponent();
+            this.config({
+                children: [
+                    this.me.div.config({}),
+                    me.text3.config({ text: "Ha" }),
+                    me.htmlcomponent.config({
+                        tag: "span",
+                        children: [
+                            me.text2.config({ text: "kd" })
+                        ]
+                    }),
+                    me.br.config({ tag: "br" }),
+                    me.htmlcomponent3.config({
+                        tag: "span", children: [
+                            me.text4.config({ text: "k" })
+                        ]
+                    }),
+                    me.htmlcomponent2.config({
+                        tag: "span", children: [
+                            me.htmlcomponent4.config({
+                                tag: "span", children: [
+                                    me.text5.config({ text: "i" })
+                                ],
+                                style: { "fontWeight": "bold" }
+                            }),
+                            me.text.config({
+                                text: ""
+                            })
+                        ]
+                    })
+                ]
+            });
         }
     };
     Dialog5 = __decorate([

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes"], function (require, exports, ComponentDesigner_1, Registry_1, Component_1, Classes_1) {
+define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Button", "jassijs/util/Tools"], function (require, exports, ComponentDesigner_1, Registry_1, Component_1, Classes_1, Button_1, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HtmlDesigner = void 0;
@@ -97,7 +97,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 var toCreate = JSON.parse(data);
                 var cl = Classes_1.classes.getClass(toCreate.createFromType);
                 var newComponent = new cl();
-                var last = _this.splitText(selection);
+                var last = _this.splitText(selection)[1];
                 var text2 = this.createComponent(Classes_1.classes.getClassName(newComponent), newComponent, undefined, undefined, last._parent, last, true);
                 //            _this.insertComponent(newComponent, selection);
             }
@@ -105,7 +105,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 var clip = JSON.parse(data);
                 var svar = clip.varNamesToCopy[0];
                 var comp = _this._propertyEditor.getObjectFromVariable(svar);
-                var last = _this.splitText(selection);
+                var last = _this.splitText(selection)[1];
                 this.moveComponent(comp, undefined, undefined, comp._parent, last._parent, last);
                 last.domWrapper.parentNode.insertBefore(comp.domWrapper, last.domWrapper);
             }
@@ -129,7 +129,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 selection.removeAllRanges();
                 selection.addRange(range);
                 ;
-                var last = _this.splitText(selection);
+                var last = _this.splitText(selection)[1];
                 this.pasteComponents(JSON.stringify(clip), last._parent, last).then(() => {
                     _this._propertyEditor.updateParser();
                     _this.codeHasChanged();
@@ -147,7 +147,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             if (sel.anchorNode == null)
                 comp = this._propertyEditor.value;
             else
-                comp = this.splitText(sel);
+                comp = this.splitText(sel)[1];
             if (data[0].types.indexOf("text/html") !== -1) {
                 var data2 = await data[0].getType("text/html");
                 var text = await data2.text();
@@ -231,6 +231,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                     components.push(node._this);
                 }
             }
+            //@ts-ignore
             document.getSelection().modify("move", "left", "character");
             var a = getSelection().anchorNode;
             var apos = getSelection().anchorOffset;
@@ -250,6 +251,143 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             var s = this.componentsToString(components);
             console.log(components);
             this.deleteComponents(s);
+        }
+        wrapTextNodeIfNeeded(found) {
+            var parent = found.parentNode;
+            if (parent.childNodes.length !== 1) {
+                //no wrap
+                var textComp = found._this;
+                var newSpan = new Component_1.HTMLComponent({ tag: "span" });
+                var span = this.createComponent(Classes_1.classes.getClassName(newSpan), newSpan, undefined, undefined, textComp._parent, textComp, false);
+                var varspan = this.codeEditor.getVariableFromObject(span);
+                this._propertyEditor.setPropertyInCode("tag", "\"span\"", true, varspan);
+                this.moveComponent(textComp, undefined, undefined, textComp._parent, span, undefined);
+                span.add(textComp);
+                parent = span.__dom;
+            }
+            return parent;
+        }
+        bold() {
+            this.setStyle("bold");
+        }
+        setStyle(style, value = undefined) {
+            var sel = getSelection();
+            var anchorNode = sel.anchorNode;
+            var anchorOffset = sel.anchorOffset;
+            var focusNode = sel.focusNode;
+            var focusOffset = sel.focusOffset;
+            var position = anchorNode.compareDocumentPosition(focusNode);
+            if (!position && anchorOffset > focusOffset || position === Node.DOCUMENT_POSITION_PRECEDING) {
+                var k = focusNode;
+                focusNode = focusNode;
+                focusNode = k;
+                var k1 = anchorOffset;
+                anchorOffset = focusOffset;
+                focusOffset = k1;
+            }
+            var container = sel.getRangeAt(0).commonAncestorContainer;
+            if (container.nodeType === container.TEXT_NODE)
+                container = container.parentNode;
+            var allModified = [];
+            for (var x = 0; x < container.childNodes.length; x++) {
+                var child = container.childNodes[x];
+                if (child.tagName === "BR" || child.tagName === "br")
+                    continue;
+                var found = undefined;
+                if (sel.containsNode(child)) {
+                    found = child;
+                }
+                if (child.contains(anchorNode) || child === anchorNode) {
+                    if (anchorOffset !== 0) {
+                        var samenode = anchorNode === focusNode;
+                        if (child === anchorNode)
+                            x++;
+                        var texts = this.splitText(sel);
+                        anchorNode = texts[1].dom;
+                        if (allModified.indexOf(texts[0]) === -1)
+                            allModified.push(texts[0]);
+                        if (allModified.indexOf(texts[1]) === -1)
+                            allModified.push(texts[1]);
+                        if (anchorNode.nodeType !== anchorNode.TEXT_NODE) { //textnode is wrapped
+                            anchorNode = anchorNode.childNodes[0];
+                        }
+                        if (samenode) {
+                            focusNode = anchorNode;
+                            focusOffset -= anchorOffset;
+                        }
+                        anchorOffset = 0;
+                    }
+                    found = anchorNode;
+                }
+                if (child.contains(focusNode) || child === focusNode) {
+                    if (focusOffset !== child.length) {
+                        //  var samenode = anchorNode === focusNode;
+                        range = document.createRange();
+                        range.setStart(focusNode, focusOffset);
+                        range.setEnd(focusNode, focusNode.length);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                        if (child === focusNode)
+                            x++;
+                        var texts = this.splitText(sel);
+                        var pos = allModified.indexOf(texts[1]);
+                        debugger;
+                        if (pos !== -1)
+                            allModified.splice(pos, 0, texts[0]);
+                        else
+                            allModified.push(texts[0]);
+                        if (allModified.indexOf(texts[1]) === -1)
+                            allModified.push(texts[1]);
+                        var newNode = texts[0].dom;
+                        if (newNode.nodeType !== newNode.TEXT_NODE) { //textnode is wrapped
+                            newNode = newNode.childNodes[0];
+                        }
+                        if (focusNode === anchorNode) {
+                            focusNode = anchorNode = newNode;
+                        }
+                        else
+                            focusNode = newNode;
+                        //focusOffset=(<any>focusNode).length;
+                    }
+                    found = focusNode;
+                }
+                if (found) {
+                    var parent = this.wrapTextNodeIfNeeded(found);
+                    var compParent = parent._this;
+                    if (allModified.indexOf(compParent) === -1)
+                        allModified.push(compParent);
+                    this.applyStyle(compParent, style);
+                }
+            }
+            var range = document.createRange();
+            range.setStart(anchorNode, anchorOffset);
+            range.setEnd(focusNode, focusOffset);
+            sel.removeAllRanges();
+            sel.addRange(range);
+            return allModified;
+        }
+        applyStyle(comp, stylename, value = undefined) {
+            var varParent = this.codeEditor.getVariableFromObject(comp);
+            var style = this._propertyEditor.parser.getPropertyValue(varParent, "style");
+            var st = Tools_1.Tools.jsonToObject(style === undefined ? "{}" : style);
+            if (st.fontWeight === "bold")
+                delete st.fontWeight; //="normal";
+            else
+                st.fontWeight = "bold";
+            if (this._propertyEditor.codeEditor)
+                this._propertyEditor.setPropertyInCode("style", JSON.stringify(st), true, varParent, undefined, undefined);
+            comp.style = st;
+        }
+        _initDesign() {
+            super._initDesign();
+            var _this = this;
+            this.boldButton = new Button_1.Button();
+            this.boldButton.icon = "mdi mdi-format-bold mdi-18px";
+            this.boldButton.tooltip = "bold";
+            this.boldButton.onclick(function () {
+                _this.bold();
+            });
+            this._designToolbar.add(this.boldButton);
         }
         editDialog(enable) {
             super.editDialog(enable);
@@ -307,12 +445,14 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             }*/
         }
         changeText(node, text) {
-            var varname = this._propertyEditor.getVariableFromObject(node._this);
-            this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+            var varname = this.codeEditor.getVariableFromObject(node._this);
+            if (this._propertyEditor.codeEditor)
+                this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
             if (text === "&nbsp;")
                 node.innerHTML = text;
             else
                 node.textContent = text;
+            this._propertyEditor.callEvent("propertyChanged", event);
             return node;
         }
         splitText(sel = document.getSelection()) {
@@ -331,14 +471,16 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             var comp = node._this;
             // var br = this.createComponent(classes.getClassName(component), component, undefined, undefined, comp._parent, comp, true, suggestedvarname);
             if (v1 === "")
-                return comp; //v1 = "&nbsp;";
-            var nd = document.createTextNode(v1);
-            var comp2 = new Component_1.TextComponent();
-            comp2.init(nd, { noWrapper: true });
-            var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
+                return [comp, comp]; //v1 = "&nbsp;";
+            var text2 = this.createTextComponent(v1, comp._parent, comp);
+            /*        var nd = document.createTextNode(v1);
+                    var comp2 = new TextComponent();
+                    comp2.init(<any>nd, { noWrapper: true });
+                    var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
+            */
             this.changeText(text2.dom, v1);
             //this.updateDummies();
-            return comp;
+            return [text2, comp];
         }
         async cutComponent() {
             var _this = this;
@@ -355,6 +497,19 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 code: "Delete"
             });
             _this.keydown(e);
+        }
+        createTextComponent(text, par, before) {
+            var comp2 = new Component_1.TextComponent();
+            var newone = document.createTextNode(text);
+            comp2.init(newone, { noWrapper: true });
+            return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
+            ;
+        }
+        insertLineBreak(sel) {
+            var enter = (0, Component_1.createComponent)(React.createElement("br"));
+            var comp = this.splitText(sel)[1];
+            var center = this.createComponent(Classes_1.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
+            this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this.codeEditor.getVariableFromObject(center));
         }
         keydown(e) {
             var _this = this;
@@ -420,10 +575,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             }
             if (e.keyCode === 13) {
                 e.preventDefault();
-                var enter = (0, Component_1.createComponent)(React.createElement("br"));
-                var comp = this.splitText(sel);
-                var center = this.createComponent(Classes_1.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
-                this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this._propertyEditor.getVariableFromObject(center));
+                this.insertLineBreak(sel);
                 //     this.insertComponent(enter, sel, "br");
                 //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
                 // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
@@ -470,13 +622,8 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                     if (anchorNode.childNodes.length > anchorOffset) {
                         before = anchorNode.childNodes[anchorOffset]._this;
                     }
-                    var comp2 = new Component_1.TextComponent();
-                    var newone = document.createTextNode(e.key);
-                    var par = anchorNode._this;
-                    comp2.init(newone, { noWrapper: true });
-                    var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
                     anchorOffset = 0;
-                    anchorNode = newone;
+                    anchorNode = this.createTextComponent(e.key, anchorNode._this, before).dom;
                     neu = e.key;
                 }
                 this.changeText(anchorNode, neu);

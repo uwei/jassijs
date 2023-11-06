@@ -7,10 +7,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools", "jassijs/ui/Component"], function (require, exports, Registry_1, RComponent_1, HTMLPanel_1, Property_1, ReportDesign_1, CSSProperties_1, Tools_1, Component_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools", "jassijs/ui/Component"], function (require, exports, Registry_1, RComponent_1, Property_1, ReportDesign_1, CSSProperties_1, Tools_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RText = void 0;
+    /*
+    Object.assign(TextComponent.prototype, {
+        toJSON() {
+             debugger;
+            return this.text;
+        }
+    });
+    */
     class InlineStyling {
     }
     //calc the default Formats
@@ -55,7 +63,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             this.reporttype = "text";
             this.toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
             this.customToolbarButtons = {};
-            super.init('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>'); //tabindex for key-event
+            this.text = document.createTextNode("");
+            this.dom.appendChild(this.text);
+            //@ts-ignore
+            this.text._this = this;
+            // super.init('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>');//tabindex for key-event
+            //        super.init('<div class="RText jdisableaddcomponents" tabindex="0" ></div>');//tabindex for key-event
             this.domWrapper.classList.remove("jcontainer");
             this.__dom.style["text-overflow"] = "ellipsis";
             this.__dom.style["overflow"] = "hidden";
@@ -65,28 +78,36 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             var el = this.dom.children[0];
             this._designMode = false;
             this.dom.style["display"] = "block";
-            this.extensionCalled = HTMLPanel_1.HTMLPanel.prototype.extensionCalled.bind(this);
-            this._setDesignMode = HTMLPanel_1.HTMLPanel.prototype._setDesignMode.bind(this);
-            this.initIfNeeded = HTMLPanel_1.HTMLPanel.prototype.initIfNeeded.bind(this);
-            this.focusLost = HTMLPanel_1.HTMLPanel.prototype.focusLost.bind(this);
+            //   this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
+            //  this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
+            //  this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
+            //  this.focusLost = HTMLPanel.prototype.focusLost.bind(this);
             //@ts-ignore
-            this._initTinymce = HTMLPanel_1.HTMLPanel.prototype._initTinymce.bind(this);
+            //this._initTinymce = HTMLPanel.prototype._initTinymce.bind(this);
+        }
+        render() {
+            return React.createElement(Component_1.HTMLComponent, {
+                tag: "div",
+                className: "RText jdisableaddcomponents",
+                tabIndex: 0
+            });
         }
         get value() {
-            var el = this.dom.children[0];
-            if (el === undefined)
-                return "";
-            var ret = el.innerHTML;
-            return ret;
+            /* var el = this.dom.children[0];
+             if (el === undefined)
+                 return "";
+             var ret = el.innerHTML;
+             */
+            return this.text.textContent;
         }
         set value(code) {
-            var el = this.dom.children[0];
-            if (el === undefined) {
-                el = document.createTextNode(code);
-                this.dom.appendChild(el);
-            }
-            else
-                el.innerHTML = code;
+            this.text.textContent = code;
+            /*  var el: any = this.dom.children[0];
+              if (el === undefined) {
+                  el = document.createTextNode(code);
+                  this.dom.appendChild(el);
+              } else
+                  el.innerHTML=code;*/
         }
         set format(value) {
             this._format = value;
@@ -96,12 +117,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
         }
         fromJSON(ob) {
             var ret = this;
-            if (ob.editTogether) {
-                delete ob.editTogether;
-                ret.convertToHTML(ob.text);
-            }
-            else
-                ret.value = ob.text.replaceAll("\n", "<br/>");
+            /*  if (ob.editTogether) {
+                  delete ob.editTogether;
+                  ret.convertToHTML(ob.text);
+              } else*/
+            ret.value = ob.text.replaceAll("\n", "<br/>");
             delete ob.text;
             if (ob.format) {
                 this.format = ob.format;

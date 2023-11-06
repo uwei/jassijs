@@ -25,11 +25,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
         }
     }
     exports.loadFontIfNedded = loadFontIfNedded;
+    var hj = {
+        backgroundColor: undefined,
+    };
     let CSSProperties = class CSSProperties {
         static applyTo(properties, component) {
             var prop = {};
             for (let key in properties) {
-                var newKey = key.replaceAll("_", "-");
+                var newKey = key; //.replaceAll("_","-");
                 prop[newKey] = properties[key];
                 if (newKey === "font-family") {
                     loadFontIfNedded(prop[newKey]);
@@ -42,23 +45,23 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
     __decorate([
         (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "background_color", void 0);
+    ], CSSProperties.prototype, "backgroundColor", void 0);
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "background_image", void 0);
+    ], CSSProperties.prototype, "backgroundImage", void 0);
     __decorate([
         (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "border_color", void 0);
+    ], CSSProperties.prototype, "borderColor", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "border_style", void 0);
+    ], CSSProperties.prototype, "borderStyle", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["thin", "medium", "thick", "2px", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "border_width", void 0);
+    ], CSSProperties.prototype, "borderWidth", void 0);
     __decorate([
         (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String)
@@ -78,43 +81,43 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
     __decorate([
         (0, Property_1.$Property)({ type: "font" }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "font_family", void 0);
+    ], CSSProperties.prototype, "fontFamily", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["12px", "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large", "larger", "smaller", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "font_size", void 0);
+    ], CSSProperties.prototype, "fontSize", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["normal", "small-caps", "small-caps slashed-zero", "common-ligatures tabular-nums", "no-common-ligatures proportional-nums", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "font_variant", void 0);
+    ], CSSProperties.prototype, "fontVariant", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["normal", "bold", "lighter", "bolder", "100", "900", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "font_weight", void 0);
+    ], CSSProperties.prototype, "fontWeight", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["normal", "1px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "letter_spacing", void 0);
+    ], CSSProperties.prototype, "letterSpacing", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["normal", "32px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "line_height", void 0);
+    ], CSSProperties.prototype, "lineHeight", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "margin_bottom", void 0);
+    ], CSSProperties.prototype, "marginBottom", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "margin_left", void 0);
+    ], CSSProperties.prototype, "marginLeft", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "margin_right", void 0);
+    ], CSSProperties.prototype, "marginRight", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "margin_top", void 0);
+    ], CSSProperties.prototype, "marginTop", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["visible", "hidden", "clip", "scroll", "auto", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
@@ -122,19 +125,19 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "padding_bottom", void 0);
+    ], CSSProperties.prototype, "paddingBottom", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "padding_left", void 0);
+    ], CSSProperties.prototype, "paddingLeft", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "padding_right", void 0);
+    ], CSSProperties.prototype, "paddingRight", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "padding_top", void 0);
+    ], CSSProperties.prototype, "paddingTop", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["static", "relative", "absolute", "sticky", "fixed", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
@@ -142,35 +145,35 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["start", "end", "left", "right", "center", "justify", "match-parent", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_align", void 0);
+    ], CSSProperties.prototype, "textAlign", void 0);
     __decorate([
         (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_decoration_color", void 0);
+    ], CSSProperties.prototype, "textDecorationColor", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["none", "underline", "overline", "line-through", "blink", "spelling-error", "grammar-error", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_decoration_line", void 0);
+    ], CSSProperties.prototype, "textDecorationLine", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["solid", "double", "dotted", "dashed", "wavy", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_decoration_style", void 0);
+    ], CSSProperties.prototype, "textDecorationStyle", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_decoration_thickness", void 0);
+    ], CSSProperties.prototype, "textDecorationThickness", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["none", "capitalize", "uppercase", "lowercase", "full-width", "full-size-kana", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_transform", void 0);
+    ], CSSProperties.prototype, "textTransform", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["baseline", "sub", "super", "text-top", "text-bottom", "middle", "top", "bottom", "3px", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "vertical_align", void 0);
+    ], CSSProperties.prototype, "verticalAlign", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["1", "2", "auto"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "z_index", void 0);
+    ], CSSProperties.prototype, "zIndex", void 0);
     CSSProperties = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.CSSProperties")
     ], CSSProperties);

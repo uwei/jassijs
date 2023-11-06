@@ -245,6 +245,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         get style() {
             return this._style;
         }
+        //@ts-ignore
         set style(value) {
             var old = this._style;
             this._style = value;
@@ -595,7 +596,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "decorationStyle", null);
     __decorate([
-        (0, Property_1.$Property)(),
+        (0, Property_1.$Property)()
+        //@ts-ignore
+        ,
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "style", null);
@@ -610,7 +613,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [Array])
     ], RComponent.prototype, "margin", null);
     RComponent = RComponent_1 = __decorate([
-        (0, Registry_2.$Class)("jassijs_report.ReportComponent"),
+        (0, Registry_2.$Class)("jassijs_report.RComponent"),
         (0, Property_1.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RComponent);

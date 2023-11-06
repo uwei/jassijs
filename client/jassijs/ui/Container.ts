@@ -45,7 +45,8 @@ export class Container<T extends ContainerProperties={}> extends Component<T> im
    */
     init(dom, properties = undefined) {
         super.init(dom, properties);
-        this.domWrapper.classList.add("jcontainer");
+        if(this.domWrapper.classList)
+            this.domWrapper.classList.add("jcontainer");
     }
 
     /**
