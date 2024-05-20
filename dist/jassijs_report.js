@@ -10,17 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_report/remote/ServerReport"], function (require, exports, Registry_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1, ServerReport_1) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_report/remote/ServerReport", "jassijs_editor/HtmlDesigner", "jassijs_report/RText", "jassijs_report/RTextGroup"], function (require, exports, Registry_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, Classes_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1, ServerReport_1, HtmlDesigner_1, RText_1, RTextGroup_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
-    let ReportDesigner = class ReportDesigner extends ComponentDesigner_1.ComponentDesigner {
+    let ReportDesigner = class ReportDesigner extends HtmlDesigner_1.HtmlDesigner {
         constructor() {
             super();
             this.propertyIsChanging = false;
             this.pdfviewer = new PDFViewer_1.PDFViewer();
             this._codeChanger = undefined;
             this.mainLayout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+            this._designPlaceholder.dom.style.whiteSpace = "pre";
         }
         set codeEditor(value) {
             var _this = this;
@@ -51,6 +52,24 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             this.registerKeys();
             this.editButton.tooltip = "pdf preview";
             this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
+        }
+        createTextComponent(text, par, before) {
+            var comp2 = new RText_1.RText();
+            comp2.value = text;
+            return this.createComponent("jassijs_report.RText", comp2, undefined, undefined, par, before);
+        }
+        wrapTextNodeIfNeeded(found) {
+            var parent = found.parentNode;
+            /* if (parent.childNodes.length !== 1) {
+                 //no wrap
+                 var textComp = (<any>found)._this;
+                 var newSpan = new RTextGroup();
+                 var span = this.createComponent(classes.getClassName(newSpan), newSpan, undefined, undefined, textComp._parent, textComp);
+                 this.moveComponent(textComp, undefined, undefined, textComp._parent, span, undefined);
+                 (<Container>span).add(textComp);
+                 parent = span.__dom;
+             }*/
+            return parent;
         }
         connectParser(parser) {
             this._propertyEditor.parser = parser;
@@ -290,6 +309,43 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                     return varname.substring(5);
                 return varname;
             };
+        }
+        insertLineBreak(sel) {
+            var offSet = sel.anchorOffset;
+            var node = sel.anchorNode;
+            if (sel.anchorNode.compareDocumentPosition(sel.focusNode) === Node.DOCUMENT_POSITION_PRECEDING) {
+                node = sel.focusNode;
+                offSet = sel.focusOffset;
+            }
+            var old = node.textContent;
+            var v1 = old.substring(0, offSet) + "\n" + old.substring(offSet);
+            this.changeText(node, v1);
+            this._propertyEditor.callEvent("propertyChanged", undefined);
+        }
+        setStyle(style, value = undefined) {
+            var ret = super.setStyle(style, value);
+            //Wrap to TextGRoup
+            if (ret.length > 0) {
+                var par = ret[0]._parent;
+                for (var x = 1; x < ret.length; x++) {
+                    if (ret[x]._parent !== par)
+                        par = undefined;
+                }
+                if ((par === null || par === void 0 ? void 0 : par.reporttype) !== "textgroup") {
+                    var tg = new RTextGroup_1.RTextGroup();
+                    tg = this.createComponent(Classes_1.classes.getClassName(tg), tg, undefined, undefined, par, ret[0]);
+                    ret.forEach((comp) => tg.add(comp));
+                    this._propertyEditor.callEvent("propertyChanged", undefined);
+                }
+            }
+            return ret;
+        }
+        applyStyle(comp, stylename, value = undefined) {
+            var rcomp = comp;
+            if (stylename === "bold") {
+                rcomp.bold = !rcomp.bold;
+            }
+            this._propertyEditor.callEvent("propertyChanged", undefined);
         }
     };
     ReportDesigner = __decorate([
@@ -727,7 +783,7 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
             this.layout(this.me);
         }
         layout(me) {
-            this.css = {
+            this.style = {
                 overflow: "auto"
             };
             me.toolbar = new BoxPanel_1.BoxPanel();
@@ -1177,6 +1233,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         get style() {
             return this._style;
         }
+        //@ts-ignore
         set style(value) {
             var old = this._style;
             this._style = value;
@@ -1542,7 +1599,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:paramtypes", [Array])
     ], RComponent.prototype, "margin", null);
     RComponent = RComponent_2 = __decorate([
-        Registry_7.$Class("jassijs_report.ReportComponent"),
+        Registry_7.$Class("jassijs_report.RComponent"),
         Property_1.$Property({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RComponent);
@@ -1799,7 +1856,7 @@ define("jassijs_report/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1684440712000,
+                "date": 1699287545054.5315,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -1823,7 +1880,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
-                "date": 1681513900000,
+                "date": 1698507857254.2302,
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
@@ -1841,8 +1898,8 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RComponent.ts": {
-                "date": 1655930740000,
-                "jassijs_report.ReportComponent": {
+                "date": 1699203219964.0005,
+                "jassijs_report.RComponent": {
                     "$Property": [
                         {
                             "hideBaseClassProperties": true
@@ -1961,15 +2018,8 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report/ReportViewer": {}
             },
             "jassijs_report/RGroupTablerow.ts": {
-                "date": 1656073104000,
+                "date": 1699111120748.0674,
                 "jassijs_report.RTablerow": {
-                    "$ReportComponent": [
-                        {
-                            "editableChildComponents": [
-                                "this"
-                            ]
-                        }
-                    ],
                     "@members": {}
                 }
             },
@@ -2011,7 +2061,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-                "date": 1656015322000,
+                "date": 1699115329566.395,
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -2020,6 +2070,12 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "editableChildComponents": [
                                 "this"
                             ]
+                        }
+                    ],
+                    "$Property": [
+                        {
+                            "name": "children",
+                            "type": "jassijs_report.RComponent"
                         }
                     ]
                 }
@@ -2040,7 +2096,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-                "date": 1681571020000,
+                "date": 1698507156069.9734,
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -2061,7 +2117,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1656019424000,
+                "date": 1699114918006.316,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -2073,7 +2129,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1656335832000,
+                "date": 1699194592715.817,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -2135,7 +2191,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassi_report.SimpleReportEditor": {}
             },
             "jassijs_report/StartReporteditor.ts": {
-                "date": 1697200004009.1965
+                "date": 1698507857261.209
             },
             "jassijs_report/TemplateReport.ts": {
                 "date": 1681570100000,
@@ -3001,7 +3057,7 @@ define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry"
     }
     exports.test = test;
 });
-define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable", "jassijs_report/RUList", "jassijs_report/ROList", "jassijs_report/RImage"], function (require, exports, BoxPanel_2, Registry_11, RStack_1, RText_1, RColumns_1, RUnknown_1, Panel_3, RComponent_4, RDatatable_1, Property_3, RStyle_1, RTextGroup_1, RTable_2, RUList_1, ROList_1, RImage_1) {
+define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable", "jassijs_report/RUList", "jassijs_report/ROList", "jassijs_report/RImage"], function (require, exports, BoxPanel_2, Registry_11, RStack_1, RText_2, RColumns_1, RUnknown_1, Panel_3, RComponent_4, RDatatable_1, Property_3, RStyle_1, RTextGroup_2, RTable_2, RUList_1, ROList_1, RImage_1) {
     "use strict";
     var ReportDesign_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3288,14 +3344,14 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
                 ret.create(ob);
             }
             else if (typeof ob === 'string' || ob instanceof String) {
-                ret = new RText_1.RText();
+                ret = new RText_2.RText();
                 ret.value = ob;
             }
             else if (ob.text !== undefined && (ob.editTogether || !Array.isArray(ob.text))) {
-                ret = new RText_1.RText().fromJSON(ob);
+                ret = new RText_2.RText().fromJSON(ob);
             }
             else if (ob.text !== undefined && Array.isArray(ob.text)) {
-                ret = new RTextGroup_1.RTextGroup().fromJSON(ob);
+                ret = new RTextGroup_2.RTextGroup().fromJSON(ob);
             }
             else if (ob.stack !== undefined || Array.isArray(ob)) {
                 ret = new RStack_1.RStack().fromJSON(ob);
@@ -3697,10 +3753,11 @@ define("jassijs_report/ReportViewer", ["require", "exports", "jassijs/ui/BoxPane
     }
     exports.test = test;
 });
-define("jassijs_report/RGroupTablerow", ["require", "exports", "jassijs_report/RTablerow", "jassijs_report/RComponent", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, RTablerow_2, RComponent_5, Registry_14, Property_4) {
+define("jassijs_report/RGroupTablerow", ["require", "exports", "jassijs_report/RTablerow", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, RTablerow_2, Registry_14, Property_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RGroupTablerow = void 0;
+    //@$ReportComponent({ editableChildComponents: ["this"] })
     let RGroupTablerow = 
     //@$Property({name:"horizontal",hide:true})
     class RGroupTablerow extends RTablerow_2.RTablerow {
@@ -3732,20 +3789,19 @@ define("jassijs_report/RGroupTablerow", ["require", "exports", "jassijs_report/R
         __metadata("design:paramtypes", [String])
     ], RGroupTablerow.prototype, "expression", null);
     RGroupTablerow = __decorate([
-        RComponent_5.$ReportComponent({ editableChildComponents: ["this"] }),
         Registry_14.$Class("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
     ], RGroupTablerow);
     exports.RGroupTablerow = RGroupTablerow;
 });
-define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs_report/RComponent"], function (require, exports, Registry_15, Property_5, RComponent_6) {
+define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs_report/RComponent"], function (require, exports, Registry_15, Property_5, RComponent_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RImage = void 0;
     //mdi-format-list-numbered
     let RImage = 
     //@$Property({name:"horizontal",hide:true})
-    class RImage extends RComponent_6.RComponent {
+    class RImage extends RComponent_5.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -3782,7 +3838,7 @@ define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry"
                 this.dom.setAttribute("src", "");
             else {
                 //later we have a parent
-                var report = RComponent_6.RComponent.findReport(this);
+                var report = RComponent_5.RComponent.findReport(this);
                 var _this = this;
                 if (report === undefined) {
                     if (_this["nextTry"] === undefined) { //deny recurse
@@ -3888,7 +3944,7 @@ define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:paramtypes", [Number])
     ], RImage.prototype, "opacity", null);
     RImage = __decorate([
-        RComponent_6.$ReportComponent({ fullPath: "report/Image", icon: "mdi mdi-image-frame" }),
+        RComponent_5.$ReportComponent({ fullPath: "report/Image", icon: "mdi mdi-image-frame" }),
         Registry_15.$Class("jassijs_report.RImage")
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -3896,7 +3952,7 @@ define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry"
     ], RImage);
     exports.RImage = RImage;
 });
-define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databinder", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Databinder_1, Upload_1, Textbox_1, Image_1, Button_2, Repeater_1, Registry_16, Panel_6, Editor_1, RComponent_7) {
+define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databinder", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Databinder_1, Upload_1, Textbox_1, Image_1, Button_2, Repeater_1, Registry_16, Panel_6, Editor_1, RComponent_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RImageChooser = exports.RImageEditor = void 0;
@@ -3966,7 +4022,7 @@ define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databin
             if (!this.dialog) {
                 this.dialog = new RImageChooser();
                 var image = this.ob;
-                var report = RComponent_7.RComponent.findReport(image);
+                var report = RComponent_6.RComponent.findReport(image);
                 if (report === null || report === void 0 ? void 0 : report.images)
                     this.dialog.items = report.images;
                 $(this.dialog.__dom).dialog({ height: "400", width: "400",
@@ -4074,14 +4130,14 @@ define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databin
     }
     exports.test = test;
 });
-define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_17, Component_3, Property_6, ReportDesign_4, RComponent_8) {
+define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_17, Component_3, Property_6, ReportDesign_4, RComponent_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ROList = void 0;
     //Limitations not implemented: separator,markerColor, counter is counting also the next elements
     let ROList = 
     //@$Property({name:"horizontal",hide:true})
-    class ROList extends RComponent_8.RComponent {
+    class ROList extends RComponent_7.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -4203,7 +4259,7 @@ define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:paramtypes", [Number])
     ], ROList.prototype, "start", null);
     ROList = __decorate([
-        RComponent_8.$ReportComponent({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] }),
+        RComponent_7.$ReportComponent({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] }),
         Registry_17.$Class("jassijs_report.ROList")
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -4211,14 +4267,12 @@ define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry"
     ], ROList);
     exports.ROList = ROList;
 });
-define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_18, ReportDesign_5, RComponent_9) {
+define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_18, Property_7, ReportDesign_5, RComponent_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RStack = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
-    let RStack = 
-    //@$Property({name:"horizontal",hide:true})
-    class RStack extends RComponent_9.RComponent {
+    let RStack = class RStack extends RComponent_8.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -4283,23 +4337,24 @@ define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Registry"
         }
     };
     RStack = __decorate([
-        RComponent_9.$ReportComponent({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        RComponent_8.$ReportComponent({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
         Registry_18.$Class("jassijs_report.RStack")
         //@$Property({name:"horizontal",hide:true})
         ,
+        Property_7.$Property({ name: "children", type: "jassijs_report.RComponent" }),
         __metadata("design:paramtypes", [Object])
     ], RStack);
     exports.RStack = RStack;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, RComponent_10, Registry_19, Property_7, Classes_5) {
+define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, RComponent_9, Registry_19, Property_8, Classes_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RStyle = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
     let RStyle = 
     //@$Property({name:"horizontal",hide:true})
-    class RStyle extends RComponent_10.RComponent {
+    class RStyle extends RComponent_9.RComponent {
         constructor(properties = undefined) {
             super(properties);
             this.$isInivisibleComponent = true; //invisible component in designer
@@ -4346,7 +4401,7 @@ define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponen
         update() {
             var style = document.getElementById(this.styleid);
             if (!document.getElementById(this.styleid)) {
-                style = RComponent_10.RComponent.createHTMLElement('<style id=' + this.styleid + '></style>');
+                style = RComponent_9.RComponent.createHTMLElement('<style id=' + this.styleid + '></style>');
                 document.head.appendChild(style);
             }
             var prop = {};
@@ -4374,12 +4429,12 @@ define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponen
         }
     };
     __decorate([
-        Property_7.$Property(),
+        Property_8.$Property(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RStyle.prototype, "name", null);
     RStyle = __decorate([
-        RComponent_10.$ReportComponent({ fullPath: "report/Style", icon: "mdi mdi-virus-outline", editableChildComponents: ["this"] }),
+        RComponent_9.$ReportComponent({ fullPath: "report/Style", icon: "mdi mdi-virus-outline", editableChildComponents: ["this"] }),
         Registry_19.$Class("jassijs_report.RStyle")
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -4392,14 +4447,14 @@ define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponen
     }
     exports.test = test;
 });
-define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText", "jassijs/util/Tools", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/util/Runlater", "jassijs_report/RTableLayouts"], function (require, exports, Registry_20, RText_2, Tools_3, RComponent_11, RTablerow_3, Property_8, ContextMenu_2, MenuItem_1, Button_3, Runlater_1, RTableLayouts_1) {
+define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText", "jassijs/util/Tools", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/util/Runlater", "jassijs_report/RTableLayouts"], function (require, exports, Registry_20, RText_3, Tools_3, RComponent_10, RTablerow_3, Property_9, ContextMenu_2, MenuItem_1, Button_3, Runlater_1, RTableLayouts_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RTable = void 0;
     var allLayouts = Object.keys(RTableLayouts_1.tableLayouts);
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
-    let RTable = class RTable extends RComponent_11.RComponent {
+    let RTable = class RTable extends RComponent_10.RComponent {
         /**
     *
     * @param {object} properties - properties to init
@@ -4438,7 +4493,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                                 var row = new RTablerow_3.RTablerow();
                                 row.parent = this;
                                 _this.add(row);
-                                var cell = new RText_2.RText();
+                                var cell = new RText_3.RText();
                                 row.add(cell);
                                 _this._componentDesigner.editDialog(true);
                                 _this.addEmptyCellsIfNeeded(_this._components[0]);
@@ -4482,7 +4537,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                         _this.heights.splice(info.row, 0, "auto");
                     newRow.parent = _this;
                     _this.addBefore(newRow, _this._components[info.row]);
-                    newRow.add(new RText_2.RText());
+                    newRow.add(new RText_3.RText());
                     //@ts-ignore
                     newRow._setDesignMode(true);
                     _this.fillTableRow(newRow, info.tableRow._components.length);
@@ -4506,7 +4561,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                         _this.add(newRow);
                     else
                         _this.addBefore(newRow, _this._components[info.row + 1]);
-                    newRow.add(new RText_2.RText());
+                    newRow.add(new RText_3.RText());
                     //@ts-ignore
                     newRow._setDesignMode(true);
                     _this.fillTableRow(newRow, info.tableRow._components.length);
@@ -4523,13 +4578,13 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             insertColumnBefore.text = "insert column before";
             insertColumnBefore.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
-                var newCell = new RText_2.RText();
+                var newCell = new RText_3.RText();
                 if (_this.widths && _this.widths.length > 0)
                     _this.widths.splice(info.column, 0, "auto");
                 _this.insertEmptyCells = false;
                 for (var x = 0; x < _this._components.length; x++) {
                     if (_this._components[x]._components.length > 1)
-                        _this._components[x].addBefore(new RText_2.RText(), _this._components[x]._components[info.column]);
+                        _this._components[x].addBefore(new RText_3.RText(), _this._components[x]._components[info.column]);
                 }
                 _this.insertEmptyCells = true;
                 _this._componentDesigner.editDialog(true);
@@ -4544,13 +4599,13 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             insertColumnAfter.text = "insert column after";
             insertColumnAfter.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
-                var newCell = new RText_2.RText();
+                var newCell = new RText_3.RText();
                 if (_this.widths && _this.widths.length > 0)
                     _this.widths.splice(info.column + 1, 0, "auto");
                 _this.insertEmptyCells = false;
                 for (var x = 0; x < _this._components.length; x++) {
                     if (_this._components[x]._components.length > 1)
-                        _this._components[x].addBefore(new RText_2.RText(), _this._components[x]._components[info.column + 1]);
+                        _this._components[x].addBefore(new RText_3.RText(), _this._components[x]._components[info.column + 1]);
                 }
                 _this.insertEmptyCells = true;
                 _this._componentDesigner.editDialog(true);
@@ -4708,7 +4763,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                     }
                     if (v === null)
                         v = "initial";
-                    css.background_color = v;
+                    css.ContainerProperties = v;
                     cssid.push(v.replace("#", ""));
                     v = 1;
                     if ((_c = this.layout) === null || _c === void 0 ? void 0 : _c.hLineWidth) {
@@ -4825,7 +4880,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             if (!row._designMode || count - row._components.length < 1)
                 return;
             for (var x = row._components.length; x < count; x++) {
-                var rr = new RText_2.RText();
+                var rr = new RText_3.RText();
                 row.addBefore(rr, row._components[row._components.length - 1]); //after addbutton
             }
         }
@@ -5089,16 +5144,16 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
         }
     };
     __decorate([
-        Property_8.$Property(),
+        Property_9.$Property(),
         __metadata("design:type", Number)
     ], RTable.prototype, "headerRows", void 0);
     __decorate([
-        Property_8.$Property({ chooseFrom: allLayouts, chooseFromStrict: true }),
+        Property_9.$Property({ chooseFrom: allLayouts, chooseFromStrict: true }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RTable.prototype, "layoutName", null);
     RTable = __decorate([
-        RComponent_11.$ReportComponent({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        RComponent_10.$ReportComponent({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
         Registry_20.$Class("jassijs_report.RTable"),
         __metadata("design:paramtypes", [Object])
     ], RTable);
@@ -5212,14 +5267,14 @@ define("jassijs_report/RTableLayouts", ["require", "exports"], function (require
     };
     exports.tableLayouts = tableLayouts;
 });
-define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/RComponent", "jassijs_report/RText"], function (require, exports, Registry_21, Component_4, ReportDesign_6, RComponent_12, RText_3) {
+define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/RComponent", "jassijs_report/RText"], function (require, exports, Registry_21, Component_4, ReportDesign_6, RComponent_11, RText_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTablerow = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
     let RTablerow = 
     //@$Property({name:"horizontal",hide:true})
-    class RTablerow extends RComponent_12.RComponent {
+    class RTablerow extends RComponent_11.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -5344,7 +5399,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
         fromJSON(columns) {
             var ret = this;
             if (columns["foreach"]) {
-                var dummy = new RText_3.RText();
+                var dummy = new RText_4.RText();
                 dummy.value = "foreach";
                 dummy.colSpan = 200;
                 this.add(dummy);
@@ -5371,7 +5426,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
         }
     };
     RTablerow = __decorate([
-        RComponent_12.$ReportComponent({ editableChildComponents: ["this"] }),
+        RComponent_11.$ReportComponent({ editableChildComponents: ["this"] }),
         Registry_21.$Class("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -5380,10 +5435,18 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
     exports.RTablerow = RTablerow;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools", "jassijs/ui/Component"], function (require, exports, Registry_22, RComponent_13, HTMLPanel_1, Property_9, ReportDesign_7, CSSProperties_1, Tools_4, Component_5) {
+define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools", "jassijs/ui/Component"], function (require, exports, Registry_22, RComponent_12, Property_10, ReportDesign_7, CSSProperties_1, Tools_4, Component_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RText = void 0;
+    /*
+    Object.assign(TextComponent.prototype, {
+        toJSON() {
+             debugger;
+            return this.text;
+        }
+    });
+    */
     class InlineStyling {
     }
     //calc the default Formats
@@ -5415,7 +5478,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
         ret.push("h:mm:ss A");
         return ret;
     })();
-    let RText = class RText extends RComponent_13.RComponent {
+    let RText = class RText extends RComponent_12.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -5428,7 +5491,12 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             this.reporttype = "text";
             this.toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
             this.customToolbarButtons = {};
-            super.init('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>'); //tabindex for key-event
+            this.text = document.createTextNode("");
+            this.dom.appendChild(this.text);
+            //@ts-ignore
+            this.text._this = this;
+            // super.init('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>');//tabindex for key-event
+            //        super.init('<div class="RText jdisableaddcomponents" tabindex="0" ></div>');//tabindex for key-event
             this.domWrapper.classList.remove("jcontainer");
             this.__dom.style["text-overflow"] = "ellipsis";
             this.__dom.style["overflow"] = "hidden";
@@ -5438,28 +5506,36 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             var el = this.dom.children[0];
             this._designMode = false;
             this.dom.style["display"] = "block";
-            this.extensionCalled = HTMLPanel_1.HTMLPanel.prototype.extensionCalled.bind(this);
-            this._setDesignMode = HTMLPanel_1.HTMLPanel.prototype._setDesignMode.bind(this);
-            this.initIfNeeded = HTMLPanel_1.HTMLPanel.prototype.initIfNeeded.bind(this);
-            this.focusLost = HTMLPanel_1.HTMLPanel.prototype.focusLost.bind(this);
+            //   this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
+            //  this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
+            //  this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
+            //  this.focusLost = HTMLPanel.prototype.focusLost.bind(this);
             //@ts-ignore
-            this._initTinymce = HTMLPanel_1.HTMLPanel.prototype._initTinymce.bind(this);
+            //this._initTinymce = HTMLPanel.prototype._initTinymce.bind(this);
+        }
+        render() {
+            return React.createElement(Component_5.HTMLComponent, {
+                tag: "div",
+                className: "RText jdisableaddcomponents",
+                tabIndex: 0
+            });
         }
         get value() {
-            var el = this.dom.children[0];
-            if (el === undefined)
-                return "";
-            var ret = el.innerHTML;
-            return ret;
+            /* var el = this.dom.children[0];
+             if (el === undefined)
+                 return "";
+             var ret = el.innerHTML;
+             */
+            return this.text.textContent;
         }
         set value(code) {
-            var el = this.dom.children[0];
-            if (el === undefined) {
-                el = document.createTextNode(code);
-                this.dom.appendChild(el);
-            }
-            else
-                el.innerHTML = code;
+            this.text.textContent = code;
+            /*  var el: any = this.dom.children[0];
+              if (el === undefined) {
+                  el = document.createTextNode(code);
+                  this.dom.appendChild(el);
+              } else
+                  el.innerHTML=code;*/
         }
         set format(value) {
             this._format = value;
@@ -5469,12 +5545,11 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
         }
         fromJSON(ob) {
             var ret = this;
-            if (ob.editTogether) {
-                delete ob.editTogether;
-                ret.convertToHTML(ob.text);
-            }
-            else
-                ret.value = ob.text.replaceAll("\n", "<br/>");
+            /*  if (ob.editTogether) {
+                  delete ob.editTogether;
+                  ret.convertToHTML(ob.text);
+              } else*/
+            ret.value = ob.text.replaceAll("\n", "<br/>");
             delete ob.text;
             if (ob.format) {
                 this.format = ob.format;
@@ -5635,7 +5710,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
         }
     };
     __decorate([
-        Property_9.$Property({
+        Property_10.$Property({
             chooseFrom: function (component) {
                 return ReportDesign_7.ReportDesign.getVariables(component);
             }
@@ -5644,16 +5719,16 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "value", null);
     __decorate([
-        Property_9.$Property({ type: "string", chooseFrom: allFormats }),
+        Property_10.$Property({ type: "string", chooseFrom: allFormats }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "format", null);
     RText = __decorate([
-        RComponent_13.$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
+        RComponent_12.$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
         Registry_22.$Class("jassijs_report.RText")
         //@$Property({hideBaseClassProperties:true})
         ,
-        Property_9.$Property({ name: "value", type: "string", description: "text" }),
+        Property_10.$Property({ name: "value", type: "string", description: "text" }),
         __metadata("design:paramtypes", [Object])
     ], RText);
     exports.RText = RText;
@@ -5665,14 +5740,14 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
     }
     exports.test = test;
 });
-define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportDesign", "jassijs_report/RComponent", "jassijs/remote/Classes"], function (require, exports, Registry_23, ReportDesign_8, RComponent_14, Classes_6) {
+define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportDesign", "jassijs_report/RComponent", "jassijs/remote/Classes"], function (require, exports, Registry_23, ReportDesign_8, RComponent_13, Classes_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTextGroup = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
     let RTextGroup = 
     //@$Property({name:"horizontal",hide:true})
-    class RTextGroup extends RComponent_14.RComponent {
+    class RTextGroup extends RComponent_13.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -5731,7 +5806,7 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
         }
     };
     RTextGroup = __decorate([
-        RComponent_14.$ReportComponent({ fullPath: "report/TextGroup", icon: "mdi mdi-text-box-multiple-outline", editableChildComponents: ["this"] }),
+        RComponent_13.$ReportComponent({ fullPath: "report/TextGroup", icon: "mdi mdi-text-box-multiple-outline", editableChildComponents: ["this"] }),
         Registry_23.$Class("jassijs_report.RTextGroup")
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -5740,14 +5815,14 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
     exports.RTextGroup = RTextGroup;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_24, Component_6, Property_10, ReportDesign_9, RComponent_15) {
+define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_24, Component_6, Property_11, ReportDesign_9, RComponent_14) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RUList = void 0;
     //mdi-format-list-numbered
     let RUList = 
     //@$Property({name:"horizontal",hide:true})
-    class RUList extends RComponent_15.RComponent {
+    class RUList extends RComponent_14.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -5823,12 +5898,12 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
         }
     };
     __decorate([
-        Property_10.$Property({ chooseFrom: ["square", "circle", "none"] }),
+        Property_11.$Property({ chooseFrom: ["square", "circle", "none"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RUList.prototype, "type", null);
     RUList = __decorate([
-        RComponent_15.$ReportComponent({ fullPath: "report/Unordered List", icon: "mdi mdi-format-list-bulleted", editableChildComponents: ["this"] }),
+        RComponent_14.$ReportComponent({ fullPath: "report/Unordered List", icon: "mdi mdi-format-list-bulleted", editableChildComponents: ["this"] }),
         Registry_24.$Class("jassijs_report.RUList")
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -5836,12 +5911,12 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
     ], RUList);
     exports.RUList = RUList;
 });
-define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent"], function (require, exports, Registry_25, RComponent_16) {
+define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent"], function (require, exports, Registry_25, RComponent_15) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RUnknown = void 0;
     //@$ReportComponent({fullPath:"report/Text",icon:"res/textbox.ico",initialize:{value:"text"}})
-    let RUnknown = class RUnknown extends RComponent_16.RComponent {
+    let RUnknown = class RUnknown extends RComponent_15.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -5873,7 +5948,7 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registr
     ], RUnknown);
     exports.RUnknown = RUnknown;
 });
-define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Registry_26, Runlater_2, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_10, Panel_7, Windows_3, DockingContainer_1, VariablePanel_1, Property_11) {
+define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Registry_26, Runlater_2, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_10, Panel_7, Windows_3, DockingContainer_1, VariablePanel_1, Property_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportEditor = void 0;
@@ -6089,12 +6164,12 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         }
     }
     __decorate([
-        Property_11.$Property({ isUrlTag: true, id: true }),
+        Property_12.$Property({ isUrlTag: true, id: true }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], SimpleCodeEditor.prototype, "file", null);
     __decorate([
-        Property_11.$Property({ isUrlTag: true }),
+        Property_12.$Property({ isUrlTag: true }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], SimpleCodeEditor.prototype, "line", null);
@@ -6235,8 +6310,8 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs_edito
         var site = new Panel_8.Panel();
         Windows_4.default._desktop.add(site);
         site.dom.innerHTML = '<h1>\n<a id="user-content-jassijs-reporteditor" class="anchor" href="#jassijs-reporteditor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Jassijs-Reporteditor</h1>\n<p>Jassijs Reporteditor is a visual tool for designing <a href="http://pdfmake.org/" rel="nofollow">pdfmake</a> reports. The reports can be rendered with pdfmake to pdf either directly in the browser or server-side with nodes.\nThe report designer can be executed directly via <a href="https://uwei.github.io/jassijs-reporteditor/web" rel="nofollow">https://uwei.github.io/jassijs-reporteditor/web</a>. The report designer can also be integrated into your own websites. An example of this is <a href="https://uwei.github.io/jassijs-reporteditor/simple" rel="nofollow">here</a>.</p>\n<h2>\n<a id="user-content-runtime" class="anchor" href="#runtime" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Runtime</h2>\n<p>The Jassijs report designer extends the syntax of pdfmake by filling data e.g. with the help of data tables. In order for the report to be filled at runtime, a conversion of the report design is necessary. Here is an <a href="https://uwei.github.io/jassijs-reporteditor/simple/usereport.html" rel="nofollow">example</a> or [with amd] (<a href="https://uwei.github.io/jassijs-reporteditor/simple/usereport-amd.html" rel="nofollow">https://uwei.github.io/jassijs-reporteditor/simple/usereport-amd.html</a>):</p>\n<div class="highlight highlight-text-html-basic"><pre><span class="pl-kos">&lt;</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">http://localhost/jassijs/dist/pdfmakejassi.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;/</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">docDefinition</span><span class="pl-c1">=</span><span class="pl-kos">{</span>\n\t\t\t<span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n\t\t\t\t<span class="pl-s">\'Hallo ${name}\'</span><span class="pl-kos">,</span>\n\t\t\t\t<span class="pl-s">\'${parameter.date}\'</span>\n\t\t\t<span class="pl-kos">]</span>\n\t\t<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-c">//fill data  </span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-c1">name</span>:<span class="pl-s">\'Max\'</span><span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">parameter</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-c1">date</span>:<span class="pl-s">\'2021-10-15\'</span><span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-s1">docDefinition</span><span class="pl-c1">=</span><span class="pl-s1">pdfmakejassi</span><span class="pl-kos">.</span><span class="pl-en">createReportDefinition</span><span class="pl-kos">(</span><span class="pl-s1">docDefinition</span><span class="pl-kos">,</span><span class="pl-s1">data</span><span class="pl-kos">,</span><span class="pl-s1">parameter</span><span class="pl-kos">)</span><span class="pl-kos">;</span>\n\n\t\t<span class="pl-s1">pdfMake</span><span class="pl-kos">.</span><span class="pl-en">createPdf</span><span class="pl-kos">(</span><span class="pl-s1">docDefinition</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">download</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>\n\t<span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;/</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span></pre></div>\n<h2>\n<a id="user-content-quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick Start:</h2>\n<p>The Jassijs Reportitor can be started directly in the <a href="https://uwei.github.io/jassijs-reporteditor/web" rel="nofollow">browser</a>. Please note that the reports stored there are not permanently stored and are lost when the browser cache is cleared.</p>\n<p>The existing reports are displayed on the right side. Double-click to open the report in Code view as javascript.\n<a href="https://camo.githubusercontent.com/9172b27b26433c0e87d06fd0419e757842ac89adb89e2bfb17be8de729d6431a/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72312e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/9172b27b26433c0e87d06fd0419e757842ac89adb89e2bfb17be8de729d6431a/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72312e6a7067" alt="jassijs-reporteditor1" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor1.jpg" style="max-width:100%;"></a></p>\n<p>With Run <a href="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" alt="jassijs-reporteditor2" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor2.jpg" style="max-width:100%;"></a> the report opens in the <strong>Design</strong> view.\n<a href="https://camo.githubusercontent.com/d014a6a69fa8a13596a3cf885687c93352c6f26c2e292889eb246b719aeb3c23/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72332e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/d014a6a69fa8a13596a3cf885687c93352c6f26c2e292889eb246b719aeb3c23/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72332e6a7067" alt="jassijs-reporteditor3" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor3.jpg" style="max-width:100%;"></a>\nThere, new report elements can be added from the <strong>Palette</strong> via drag and drop. The <strong>Properties</strong> of the selected report item can be changed in the property editor.</p>\n<p>With <a href="https://camo.githubusercontent.com/8a5bab1108211501516632442bbc08c3d50fc0eb4bf2643eaa39855eb1bb5478/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72342e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/8a5bab1108211501516632442bbc08c3d50fc0eb4bf2643eaa39855eb1bb5478/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72342e6a7067" alt="jassijs-reporteditor4" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor4.jpg" style="max-width:100%;"></a> the created pdf can be viewed.\n<a href="https://camo.githubusercontent.com/58e07784a867b283f4fb6f2770ef2d03b6367ac5fea0943030b0fdd50d7db066/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72352e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/58e07784a867b283f4fb6f2770ef2d03b6367ac5fea0943030b0fdd50d7db066/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72352e6a7067" alt="jassijs-reporteditor5" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor5.jpg" style="max-width:100%;"></a></p>\n<p>In the <strong>Code</strong> view, the report is displayed as Javascript code. With Run <a href="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" alt="jassijs-reporteditor2" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor2.jpg" style="max-width:100%;"></a> , changes in the code can be loaded back into the <strong>Design</strong> view.\nThere are many examples in the left side panel under Files that explain the report elements. Under pdfmake-Playground you will find examples of pdfmake. A detailed description of the syntax of pdfmake is described at <a href="http://pdfmake.org/" rel="nofollow">http://pdfmake.org/</a>.\nYou can create your own folders and reports (right-click context menu) under <strong>Files</strong>. But remember that the reports are only stored in the browser and are lost when the browser cache is cleared. You can also <strong>Download</strong> the <strong>modified</strong> reports (right-click on a folder in <strong>Files</strong>).</p>\n<h2>\n<a id="user-content-limitations" class="anchor" href="#limitations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Limitations</h2>\n<p>Not all properties of the report elements that are possible with pdfmake can be set with the visual disigner, but these properties are not lost when editing the report.</p>\n<h2>\n<a id="user-content-syntax-extensions" class="anchor" href="#syntax-extensions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Syntax extensions</h2>\n<p>The following extensions of the pdfmake syntax can be used with the help of link.</p>\n<h3>\n<a id="user-content-templating" class="anchor" href="#templating" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>templating:</h3>\n<p>With the help of javascript template strings, data can be filled into the report. The following example shows this.</p>\n<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-s1">reportdesign</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>\n\t<span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n        <span class="pl-s">\'Hallo ${name}\'</span><span class="pl-kos">,</span>\n        <span class="pl-s">\'${address.street}\'</span><span class="pl-kos">,</span>\n        <span class="pl-s">\'${parameter.date}\'</span>\n    <span class="pl-kos">]</span>\n<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\n<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">test</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>\n    <span class="pl-k">return</span> <span class="pl-kos">{</span> \n        reportdesign<span class="pl-kos">,</span>\n        <span class="pl-c1">data</span>:<span class="pl-kos">{</span>\n            <span class="pl-c1">name</span>:<span class="pl-s">\'Klaus\'</span><span class="pl-kos">,</span>\n            <span class="pl-c1">address</span>:<span class="pl-kos">{</span>\n                <span class="pl-c1">street</span>:<span class="pl-s">\'Mainstreet 8\'</span>\n            <span class="pl-kos">}</span>\n        <span class="pl-kos">}</span><span class="pl-kos">,</span>        \n        <span class="pl-c1">parameter</span>:<span class="pl-kos">{</span><span class="pl-c1">date</span>:<span class="pl-s">\'2021-10-10\'</span><span class="pl-kos">}</span>      <span class="pl-c">//parameter</span>\n    <span class="pl-kos">}</span><span class="pl-kos">;</span>\n<span class="pl-kos">}</span></pre></div>\n<p>The <strong>data</strong> of the report are specified in the data field or as a 2nd parameter when filling the report with <strong>pdfmakejassi.createReportDefinition</strong>.\nThis data could be filled line javascript Template-Strings like <strong>${name}</strong>.\nSimilar to data, parameters can also be filled in the report.</p>\n<h3>\n<a id="user-content-edittogether" class="anchor" href="#edittogether" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>edittogether</h3>\n<p>For texts with different formatting, individual text elements must be linked in pdfmake. Text elements that are to be edited together in a text box in the Designer are marked with edittogether. The text can be edited comfortably (thanks TinyMCE).\n<a href="https://camo.githubusercontent.com/a1741345d6b9db8cc6fa359d9ccebcb4940ba745ae8d42ec5c288553e1522dd0/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72362e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/a1741345d6b9db8cc6fa359d9ccebcb4940ba745ae8d42ec5c288553e1522dd0/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72362e6a7067" alt="jassijs-reporteditor6" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor6.jpg" style="max-width:100%;"></a></p>\n<h3>\n<a id="user-content-foreach" class="anchor" href="#foreach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>foreach</h3>\n<p>If the report data contain arrays, then this data can be filled into the report with foreach.\nHere is a simple <a href="https://uwei.github.io/jassijs-reporteditor/web/#do=jassijs_editor.CodeEditor&amp;file=demoreports/10-Foreach.ts" rel="nofollow">example</a>.</p>\n<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-s1">reportdesign</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>\n    <span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n        <span class="pl-kos">{</span>\n            <span class="pl-c1">foreach</span>: <span class="pl-s">\'line\'</span><span class="pl-kos">,</span>\n            <span class="pl-c1">text</span>: <span class="pl-s">\'${line.name}\'</span>\n        <span class="pl-kos">}</span><span class="pl-kos"></span>\n<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\n<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">test</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>\n    <span class="pl-k">return</span> <span class="pl-kos">{</span>\n        reportdesign<span class="pl-kos">,</span>\n        <span class="pl-c1">data</span>: <span class="pl-kos">[</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line1\'</span> <span class="pl-kos">}</span><span class="pl-kos">,</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line2\'</span> <span class="pl-kos">}</span><span class="pl-kos">,</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line3\'</span> <span class="pl-kos">}</span>\n        <span class="pl-kos">]</span>\n    <span class="pl-kos">}</span><span class="pl-kos">;</span>\n<span class="pl-kos">}</span></pre></div>\n<p>The element that is marked with foreach is repeated for each array element.\nThe array element can be accessed with ${line.name}.\nforeach $line is the short form for foreach $line in data.\nIf not the element itself but another report element is to be repeated,\ncan be used.</p>\n<h3>\n<a id="user-content-datatable" class="anchor" href="#datatable" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>datatable</h3>\n<p>Syntax {\n}\nBeispiel</p>\n<h3>\n<a id="user-content-format" class="anchor" href="#format" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>format</h3>\n<h2>\n<a id="user-content-aggregate-functions" class="anchor" href="#aggregate-functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>aggregate Functions</h2>\n';
-        site.css = {
-            background_color: "white",
+        site.style = {
+            backgroundColor: "white",
             overflow: "scroll"
         };
         site.height = "100%";
@@ -6305,7 +6380,7 @@ define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Act
     ], TemplateReport);
     exports.TemplateReport = TemplateReport;
 });
-define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_2, Property_12, Registry_28) {
+define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_2, Property_13, Registry_28) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ClientReport = void 0;
@@ -6334,7 +6409,7 @@ define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_repor
         }
     };
     __decorate([
-        Property_12.$Property(),
+        Property_13.$Property(),
         __metadata("design:type", String)
     ], ClientReport.prototype, "sort", void 0);
     ClientReport = __decorate([
@@ -6348,7 +6423,7 @@ define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_repor
     }
     exports.test = test;
 });
-define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_3, Property_13, Registry_29) {
+define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_3, Property_14, Registry_29) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ServerReport = void 0;
@@ -6367,7 +6442,7 @@ define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_repor
     let ServerReport = class ServerReport extends Report_3.Report {
     };
     __decorate([
-        Property_13.$Property({ chooseFromStrict: true, chooseFrom: ["name", "lastname"] }),
+        Property_14.$Property({ chooseFromStrict: true, chooseFrom: ["name", "lastname"] }),
         __metadata("design:type", String)
     ], ServerReport.prototype, "sort", void 0);
     ServerReport = __decorate([
@@ -6387,7 +6462,7 @@ define("jassijs_report/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1684440712000,
+                "date": 1699287545054.5315,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -6411,7 +6486,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
-                "date": 1681513900000,
+                "date": 1698507857254.2302,
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
@@ -6429,8 +6504,8 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RComponent.ts": {
-                "date": 1655930740000,
-                "jassijs_report.ReportComponent": {
+                "date": 1699203219964.0005,
+                "jassijs_report.RComponent": {
                     "$Property": [
                         {
                             "hideBaseClassProperties": true
@@ -6549,15 +6624,8 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report/ReportViewer": {}
             },
             "jassijs_report/RGroupTablerow.ts": {
-                "date": 1656073104000,
+                "date": 1699111120748.0674,
                 "jassijs_report.RTablerow": {
-                    "$ReportComponent": [
-                        {
-                            "editableChildComponents": [
-                                "this"
-                            ]
-                        }
-                    ],
                     "@members": {}
                 }
             },
@@ -6599,7 +6667,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-                "date": 1656015322000,
+                "date": 1699115329566.395,
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -6608,6 +6676,12 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "editableChildComponents": [
                                 "this"
                             ]
+                        }
+                    ],
+                    "$Property": [
+                        {
+                            "name": "children",
+                            "type": "jassijs_report.RComponent"
                         }
                     ]
                 }
@@ -6628,7 +6702,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-                "date": 1681571020000,
+                "date": 1698507156069.9734,
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -6649,7 +6723,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1656019424000,
+                "date": 1699114918006.316,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -6661,7 +6735,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1656335832000,
+                "date": 1699194592715.817,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -6717,7 +6791,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassi_report.SimpleReportEditor": {}
             },
             "jassijs_report/StartReporteditor.ts": {
-                "date": 1697200004009.1965
+                "date": 1698507857261.209
             },
             "jassijs_report/TemplateReport.ts": {
                 "date": 1681570100000,

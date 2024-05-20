@@ -3020,8 +3020,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 postDummy.style.left = (newRight - 14) + "px";
             }
             for (var x = 0; x < node.childNodes.length; x++) {
-                // if (node._this ===(<any> node.childNodes[x])._this)//Wrapper
-                this.insertDummies(node.childNodes[x], root, arr, rootRect);
+                if (node._this !== node.childNodes[x]._this) //Wrapper
+                    this.insertDummies(node.childNodes[x], root, arr, rootRect);
             }
         }
         /**
@@ -3338,7 +3338,7 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
                     var data = mdata.params[0];
                     var img = new Image_1.Image();
                     if (data.fullPath === undefined)
-                        debugger;
+                        return;
                     var name = data.fullPath.split("/");
                     var sname = name[name.length - 1];
                     img.tooltip = sname;
@@ -3518,7 +3518,7 @@ define("jassijs_editor/ComponentSpy", ["require", "exports", "jassijs/remote/Reg
         layout() {
             var me = this.me = {};
             me.IDText = new ErrorPanel_2.ErrorPanel(); //HTMLPanel();
-            this.css = { overflow: "scroll" };
+            this.style = { overflow: "scroll" };
             var _this = this;
             me.boxpanel1 = new BoxPanel_2.BoxPanel();
             me.IDUpdate = new Button_4.Button();
@@ -3728,16 +3728,16 @@ define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/Box
             });
             me.newfield.width = "120";
             me.newfield.height = 25;
-            me.newfield.css = {
-                text_align: "left"
+            me.newfield.style = {
+                textAlign: "left"
             };
             me.boxpanel2.add(me.table);
             me.boxpanel2.add(me.boxpanel3);
             me.removefield.text = "Remove Field";
             me.removefield.icon = "mdi mdi-playlist-minus";
             me.removefield.width = "120";
-            me.removefield.css = {
-                text_align: "left"
+            me.removefield.style = {
+                textAlign: "left"
             };
             me.removefield.onclick(function (event) {
                 var field = me.table.value;
@@ -4678,7 +4678,7 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
     }
     exports.test = test;
 });
-define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes"], function (require, exports, ComponentDesigner_1, Registry_19, Component_5, Classes_7) {
+define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Button", "jassijs/util/Tools"], function (require, exports, ComponentDesigner_1, Registry_19, Component_5, Classes_7, Button_7, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HtmlDesigner = void 0;
@@ -4768,7 +4768,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 var toCreate = JSON.parse(data);
                 var cl = Classes_7.classes.getClass(toCreate.createFromType);
                 var newComponent = new cl();
-                var last = _this.splitText(selection);
+                var last = _this.splitText(selection)[1];
                 var text2 = this.createComponent(Classes_7.classes.getClassName(newComponent), newComponent, undefined, undefined, last._parent, last, true);
                 //            _this.insertComponent(newComponent, selection);
             }
@@ -4776,7 +4776,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 var clip = JSON.parse(data);
                 var svar = clip.varNamesToCopy[0];
                 var comp = _this._propertyEditor.getObjectFromVariable(svar);
-                var last = _this.splitText(selection);
+                var last = _this.splitText(selection)[1];
                 this.moveComponent(comp, undefined, undefined, comp._parent, last._parent, last);
                 last.domWrapper.parentNode.insertBefore(comp.domWrapper, last.domWrapper);
             }
@@ -4800,7 +4800,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 selection.removeAllRanges();
                 selection.addRange(range);
                 ;
-                var last = _this.splitText(selection);
+                var last = _this.splitText(selection)[1];
                 this.pasteComponents(JSON.stringify(clip), last._parent, last).then(() => {
                     _this._propertyEditor.updateParser();
                     _this.codeHasChanged();
@@ -4818,7 +4818,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             if (sel.anchorNode == null)
                 comp = this._propertyEditor.value;
             else
-                comp = this.splitText(sel);
+                comp = this.splitText(sel)[1];
             if (data[0].types.indexOf("text/html") !== -1) {
                 var data2 = await data[0].getType("text/html");
                 var text = await data2.text();
@@ -4902,6 +4902,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                     components.push(node._this);
                 }
             }
+            //@ts-ignore
             document.getSelection().modify("move", "left", "character");
             var a = getSelection().anchorNode;
             var apos = getSelection().anchorOffset;
@@ -4921,6 +4922,143 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             var s = this.componentsToString(components);
             console.log(components);
             this.deleteComponents(s);
+        }
+        wrapTextNodeIfNeeded(found) {
+            var parent = found.parentNode;
+            if (parent.childNodes.length !== 1) {
+                //no wrap
+                var textComp = found._this;
+                var newSpan = new Component_5.HTMLComponent({ tag: "span" });
+                var span = this.createComponent(Classes_7.classes.getClassName(newSpan), newSpan, undefined, undefined, textComp._parent, textComp, false);
+                var varspan = this.codeEditor.getVariableFromObject(span);
+                this._propertyEditor.setPropertyInCode("tag", "\"span\"", true, varspan);
+                this.moveComponent(textComp, undefined, undefined, textComp._parent, span, undefined);
+                span.add(textComp);
+                parent = span.__dom;
+            }
+            return parent;
+        }
+        bold() {
+            this.setStyle("bold");
+        }
+        setStyle(style, value = undefined) {
+            var sel = getSelection();
+            var anchorNode = sel.anchorNode;
+            var anchorOffset = sel.anchorOffset;
+            var focusNode = sel.focusNode;
+            var focusOffset = sel.focusOffset;
+            var position = anchorNode.compareDocumentPosition(focusNode);
+            if (!position && anchorOffset > focusOffset || position === Node.DOCUMENT_POSITION_PRECEDING) {
+                var k = focusNode;
+                focusNode = focusNode;
+                focusNode = k;
+                var k1 = anchorOffset;
+                anchorOffset = focusOffset;
+                focusOffset = k1;
+            }
+            var container = sel.getRangeAt(0).commonAncestorContainer;
+            if (container.nodeType === container.TEXT_NODE)
+                container = container.parentNode;
+            var allModified = [];
+            for (var x = 0; x < container.childNodes.length; x++) {
+                var child = container.childNodes[x];
+                if (child.tagName === "BR" || child.tagName === "br")
+                    continue;
+                var found = undefined;
+                if (sel.containsNode(child)) {
+                    found = child;
+                }
+                if (child.contains(anchorNode) || child === anchorNode) {
+                    if (anchorOffset !== 0) {
+                        var samenode = anchorNode === focusNode;
+                        if (child === anchorNode)
+                            x++;
+                        var texts = this.splitText(sel);
+                        anchorNode = texts[1].dom;
+                        if (allModified.indexOf(texts[0]) === -1)
+                            allModified.push(texts[0]);
+                        if (allModified.indexOf(texts[1]) === -1)
+                            allModified.push(texts[1]);
+                        if (anchorNode.nodeType !== anchorNode.TEXT_NODE) { //textnode is wrapped
+                            anchorNode = anchorNode.childNodes[0];
+                        }
+                        if (samenode) {
+                            focusNode = anchorNode;
+                            focusOffset -= anchorOffset;
+                        }
+                        anchorOffset = 0;
+                    }
+                    found = anchorNode;
+                }
+                if (child.contains(focusNode) || child === focusNode) {
+                    if (focusOffset !== child.length) {
+                        //  var samenode = anchorNode === focusNode;
+                        range = document.createRange();
+                        range.setStart(focusNode, focusOffset);
+                        range.setEnd(focusNode, focusNode.length);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                        if (child === focusNode)
+                            x++;
+                        var texts = this.splitText(sel);
+                        var pos = allModified.indexOf(texts[1]);
+                        debugger;
+                        if (pos !== -1)
+                            allModified.splice(pos, 0, texts[0]);
+                        else
+                            allModified.push(texts[0]);
+                        if (allModified.indexOf(texts[1]) === -1)
+                            allModified.push(texts[1]);
+                        var newNode = texts[0].dom;
+                        if (newNode.nodeType !== newNode.TEXT_NODE) { //textnode is wrapped
+                            newNode = newNode.childNodes[0];
+                        }
+                        if (focusNode === anchorNode) {
+                            focusNode = anchorNode = newNode;
+                        }
+                        else
+                            focusNode = newNode;
+                        //focusOffset=(<any>focusNode).length;
+                    }
+                    found = focusNode;
+                }
+                if (found) {
+                    var parent = this.wrapTextNodeIfNeeded(found);
+                    var compParent = parent._this;
+                    if (allModified.indexOf(compParent) === -1)
+                        allModified.push(compParent);
+                    this.applyStyle(compParent, style);
+                }
+            }
+            var range = document.createRange();
+            range.setStart(anchorNode, anchorOffset);
+            range.setEnd(focusNode, focusOffset);
+            sel.removeAllRanges();
+            sel.addRange(range);
+            return allModified;
+        }
+        applyStyle(comp, stylename, value = undefined) {
+            var varParent = this.codeEditor.getVariableFromObject(comp);
+            var style = this._propertyEditor.parser.getPropertyValue(varParent, "style");
+            var st = Tools_1.Tools.jsonToObject(style === undefined ? "{}" : style);
+            if (st.fontWeight === "bold")
+                delete st.fontWeight; //="normal";
+            else
+                st.fontWeight = "bold";
+            if (this._propertyEditor.codeEditor)
+                this._propertyEditor.setPropertyInCode("style", JSON.stringify(st), true, varParent, undefined, undefined);
+            comp.style = st;
+        }
+        _initDesign() {
+            super._initDesign();
+            var _this = this;
+            this.boldButton = new Button_7.Button();
+            this.boldButton.icon = "mdi mdi-format-bold mdi-18px";
+            this.boldButton.tooltip = "bold";
+            this.boldButton.onclick(function () {
+                _this.bold();
+            });
+            this._designToolbar.add(this.boldButton);
         }
         editDialog(enable) {
             super.editDialog(enable);
@@ -4978,12 +5116,14 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             }*/
         }
         changeText(node, text) {
-            var varname = this._propertyEditor.getVariableFromObject(node._this);
-            this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+            var varname = this.codeEditor.getVariableFromObject(node._this);
+            if (this._propertyEditor.codeEditor)
+                this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
             if (text === "&nbsp;")
                 node.innerHTML = text;
             else
                 node.textContent = text;
+            this._propertyEditor.callEvent("propertyChanged", event);
             return node;
         }
         splitText(sel = document.getSelection()) {
@@ -5002,14 +5142,16 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             var comp = node._this;
             // var br = this.createComponent(classes.getClassName(component), component, undefined, undefined, comp._parent, comp, true, suggestedvarname);
             if (v1 === "")
-                return comp; //v1 = "&nbsp;";
-            var nd = document.createTextNode(v1);
-            var comp2 = new Component_5.TextComponent();
-            comp2.init(nd, { noWrapper: true });
-            var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
+                return [comp, comp]; //v1 = "&nbsp;";
+            var text2 = this.createTextComponent(v1, comp._parent, comp);
+            /*        var nd = document.createTextNode(v1);
+                    var comp2 = new TextComponent();
+                    comp2.init(<any>nd, { noWrapper: true });
+                    var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
+            */
             this.changeText(text2.dom, v1);
             //this.updateDummies();
-            return comp;
+            return [text2, comp];
         }
         async cutComponent() {
             var _this = this;
@@ -5026,6 +5168,19 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 code: "Delete"
             });
             _this.keydown(e);
+        }
+        createTextComponent(text, par, before) {
+            var comp2 = new Component_5.TextComponent();
+            var newone = document.createTextNode(text);
+            comp2.init(newone, { noWrapper: true });
+            return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
+            ;
+        }
+        insertLineBreak(sel) {
+            var enter = Component_5.createComponent(React.createElement("br"));
+            var comp = this.splitText(sel)[1];
+            var center = this.createComponent(Classes_7.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
+            this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this.codeEditor.getVariableFromObject(center));
         }
         keydown(e) {
             var _this = this;
@@ -5091,10 +5246,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             }
             if (e.keyCode === 13) {
                 e.preventDefault();
-                var enter = Component_5.createComponent(React.createElement("br"));
-                var comp = this.splitText(sel);
-                var center = this.createComponent(Classes_7.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
-                this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this._propertyEditor.getVariableFromObject(center));
+                this.insertLineBreak(sel);
                 //     this.insertComponent(enter, sel, "br");
                 //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
                 // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
@@ -5141,13 +5293,8 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                     if (anchorNode.childNodes.length > anchorOffset) {
                         before = anchorNode.childNodes[anchorOffset]._this;
                     }
-                    var comp2 = new Component_5.TextComponent();
-                    var newone = document.createTextNode(e.key);
-                    var par = anchorNode._this;
-                    comp2.init(newone, { noWrapper: true });
-                    var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
                     anchorOffset = 0;
-                    anchorNode = newone;
+                    anchorNode = this.createTextComponent(e.key, anchorNode._this, before).dom;
                     neu = e.key;
                 }
                 this.changeText(anchorNode, neu);
@@ -5579,7 +5726,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1698337259791.4893,
+                "date": 1699113283096.9436,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -5587,11 +5734,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1697206203871.8457,
+                "date": 1699116219018.671,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
-                "date": 1681570602000,
+                "date": 1698507857251.2354,
                 "jassijs_editor.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -5617,7 +5764,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-                "date": 1697201622965.974,
+                "date": 1698507857253.23,
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -5763,7 +5910,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1698347502290.6016,
+                "date": 1699287607642.389,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -5881,7 +6028,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1698142821464.8,
+                "date": 1698524672858.8315,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -5889,7 +6036,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
-                "date": 1684358014000,
+                "date": 1698507857241.7307,
                 "jassijs_editor.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -6026,7 +6173,7 @@ define("jassijs_editor/SearchExplorer", ["require", "exports", "jassijs/remote/R
     }
     exports.test = test;
 });
-define("jassijs_editor/StartEditor", ["require", "exports", "jassijs_editor/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Button", "jassijs/base/Router", "jassijs_editor/SearchExplorer", "jassijs/ui/DBObjectExplorer", "jassijs/ui/ActionNodeMenu"], function (require, exports, FileExplorer_2, Windows_6, Button_7, Router_8, SearchExplorer_2, DBObjectExplorer_1, ActionNodeMenu_1) {
+define("jassijs_editor/StartEditor", ["require", "exports", "jassijs_editor/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Button", "jassijs/base/Router", "jassijs_editor/SearchExplorer", "jassijs/ui/DBObjectExplorer", "jassijs/ui/ActionNodeMenu"], function (require, exports, FileExplorer_2, Windows_6, Button_8, Router_8, SearchExplorer_2, DBObjectExplorer_1, ActionNodeMenu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     //var h=new RemoteObject().test();
@@ -6037,7 +6184,7 @@ define("jassijs_editor/StartEditor", ["require", "exports", "jassijs_editor/File
         Windows_6.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
         Windows_6.default.addLeft(new SearchExplorer_2.SearchExplorer(), "Search");
         Windows_6.default.addLeft(new FileExplorer_2.FileExplorer(), "Files");
-        var bt = new Button_7.Button();
+        var bt = new Button_8.Button();
         Windows_6.default._desktop.add(bt);
         bt.icon = "mdi mdi-refresh";
         var am = new ActionNodeMenu_1.ActionNodeMenu();
@@ -6320,7 +6467,7 @@ export async function test(){
     ], TemplateRemoteObject);
     exports.TemplateRemoteObject = TemplateRemoteObject;
 });
-define("jassijs_editor/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs_editor/util/Parser", "jassijs_editor/template/TemplateDBObject", "jassijs/util/Tools", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/OptionDialog", "jquery.choosen"], function (require, exports, Registry_26, Registry_27, Typescript_4, Parser_1, TemplateDBObject_2, Tools_1, Server_4, Windows_7, OptionDialog_8) {
+define("jassijs_editor/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs_editor/util/Parser", "jassijs_editor/template/TemplateDBObject", "jassijs/util/Tools", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/OptionDialog", "jquery.choosen"], function (require, exports, Registry_26, Registry_27, Typescript_4, Parser_1, TemplateDBObject_2, Tools_2, Server_4, Windows_7, OptionDialog_8) {
     "use strict";
     var DatabaseSchema_2;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6557,7 +6704,7 @@ define("jassijs_editor/util/DatabaseSchema", ["require", "exports", "jassijs/rem
             }
             if (field.type === "int")
                 realtype = "number";
-            var s = realprops ? (_a = Tools_1.Tools.objectToJson(realprops, undefined, false)) === null || _a === void 0 ? void 0 : _a.replaceAll("\n", "") : undefined;
+            var s = realprops ? (_a = Tools_2.Tools.objectToJson(realprops, undefined, false)) === null || _a === void 0 ? void 0 : _a.replaceAll("\n", "") : undefined;
             var p = undefined;
             if (!field.relation || field.relation === "") {
                 if (s)
@@ -7230,7 +7377,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         add(variable, property, value, node, isFunction = false, trim = true) {
             if (value === undefined || value === null)
                 return;
-            if (trim)
+            if (trim && (typeof value === "string"))
                 value = value.trim();
             property = property.trim();
             if (this.data[variable] === undefined) {
@@ -8218,11 +8365,18 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     prop.value = value;
                 }
                 else {
-                    jname = value.jname;
+                    var name;
+                    for (var key in this.data) {
+                        if (this.data[key]["_new_"]) {
+                            if (this.data[key]["_new_"][0].node === value)
+                                name = key;
+                        }
+                    }
+                    //jname=(<any>value).jname;
                     //remove old
                     var pos = value.parent["children"].indexOf(value);
                     value.parent["children"].splice(pos, 0);
-                    prop = this.data[jname]["_new_"][0];
+                    prop = this.data[name]["_new_"][0];
                     node = value; //removeold
                 }
                 node.parent = parent;
@@ -8278,6 +8432,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
                     this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
                     this.data[variableName][property][0].value = value;
+                    node["jname"] = value.replaceAll('"', "");
+                    ;
                     return;
                 }
                 var pos = node.parent["properties"].indexOf(node);
@@ -8314,6 +8470,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     if (parent === undefined)
                         parent = this.data[variableName]["_new_"][0].node.openingElement.attributes;
                     if (property === "tag" && typeof value === "string") { //HTMLComponent tag
+                        this.data[variableName]["_new_"][0].node["jname"] = value.replaceAll('"', "");
                         if (this.data[variableName]["_new_"][0].node.attributes) {
                             this.data[variableName]["_new_"][0].node.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
                         }
@@ -8835,7 +8992,7 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
         update() {
             if (this.failedtests === 0) {
             }
-            this.statustext.css = {
+            this.statustext.style = {
                 color: (this.failedtests === 0 ? "green" : "red")
             };
             this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
@@ -8900,8 +9057,8 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
                                     newerrorpanel.addError({
                                         error: err
                                     });
-                                    newerrorpanel.css = {
-                                        background_color: "red"
+                                    newerrorpanel.style = {
+                                        backgroundColor: "red"
                                     };
                                     container.add(newerrorpanel);
                                     container.failedtests++;
@@ -9521,7 +9678,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1698337259791.4893,
+                "date": 1699113283096.9436,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -9529,11 +9686,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1697206203871.8457,
+                "date": 1699116219018.671,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
-                "date": 1681570602000,
+                "date": 1698507857251.2354,
                 "jassijs_editor.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -9559,7 +9716,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-                "date": 1697201622965.974,
+                "date": 1698507857253.23,
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -9705,7 +9862,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1698347502290.6016,
+                "date": 1699287607642.389,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -9823,7 +9980,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1698142821464.8,
+                "date": 1698524672858.8315,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -9831,7 +9988,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
-                "date": 1684358014000,
+                "date": 1698507857241.7307,
                 "jassijs_editor.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"

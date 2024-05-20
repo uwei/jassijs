@@ -72,8 +72,23 @@ declare module "demo/Dialog4" {
     export function test(): unknown;
 }
 declare module "demo/Dialog5" {
+    import { HTMLComponent, TextComponent } from "jassijs/ui/Component";
+    import { Checkbox } from "jassijs/ui/Checkbox";
     import { Panel } from "jassijs/ui/Panel";
-    type Me = {};
+    type Me = {
+        div?: HTMLComponent;
+        checkbox?: Checkbox;
+        text?: TextComponent;
+        text2?: TextComponent;
+        br?: HTMLComponent;
+        text3?: TextComponent;
+        htmlcomponent?: HTMLComponent;
+        text4?: TextComponent;
+        htmlcomponent2?: HTMLComponent;
+        htmlcomponent3?: HTMLComponent;
+        text5?: TextComponent;
+        htmlcomponent4?: HTMLComponent;
+    };
     export class Dialog5 extends Panel {
         me: Me;
         constructor();
@@ -131,6 +146,9 @@ declare module "demo/MyTest" {
 declare module "demo/Report1" {
     export function test(): {
         reportdesign: {
+            background: {};
+            header: {};
+            footer: {};
             content: {};
         };
     };

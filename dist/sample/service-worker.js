@@ -10,6 +10,10 @@ var filesdb;
 //deliver local folder
 var localfolderdb;
 
+var localRemoteProtocolList = {};
+var isLocalRemoteprotocolActivated = {};//{clientid}:true
+console.log("start serviceworker");
+var testdate=new Date();
 async function loadLocalFileEntry(handle, fileName) {
   if (fileName.startsWith("./"))
     fileName = fileName.substring(2);
@@ -121,7 +125,7 @@ function getMimeType(filename) {
   return type;
 }
 
-var localRemoteProtocolList = {};
+
 async function doLocalRemoteProtocol(evt) {
   var body = await evt.request.clone().json();
   var client = await self.clients.get(evt.clientId);
@@ -154,7 +158,7 @@ self.addEventListener('activate', event => {
 });
 
 //var todoAfterLoggedin = [];
-var isLocalRemoteprotocolActivated = {};//{clientid}:true
+
 self.addEventListener('message', function (evt) {
   if (evt.data && evt.data.type === "SAVE_FILE") {//this tempFiles could be delivered
     console.log(evt.data.filename);
@@ -170,6 +174,7 @@ self.addEventListener('message', function (evt) {
     localRemoteProtocolList[evt.data.id](evt.data);
     delete localRemoteProtocolList[evt.data.id];
   } else if (evt.data && evt.data.type === "ACTIVATE_REMOTEPROTCOL") {
+    console.log("activate Remoteprotocol "+evt.source.id)
     isLocalRemoteprotocolActivated[evt.source.id] = true;
   } else
     console.log('postMessage received', evt);

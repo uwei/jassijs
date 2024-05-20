@@ -1772,7 +1772,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1698091593269.8982,
+                "date": 1699192939210.3342,
                 "jassijs.ui.Component": {
                     "$Property": [
                         {
@@ -1794,7 +1794,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1697901348314.4065,
+                "date": 1699199726930.9116,
                 "jassijs.ui.Container": {
                     "$Property": [
                         {
@@ -1901,7 +1901,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/CSSProperties.ts": {
-                "date": 1656016872000,
+                "date": 1698507590656.5051,
                 "jassijs.ui.CSSProperties": {
                     "@members": {}
                 }
@@ -2008,7 +2008,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1697210595975.757,
+                "date": 1698507857245.2292,
                 "jassijs/ui/DBObjectView": {
                     "@members": {}
                 }
@@ -2388,7 +2388,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/SettingsDialog.ts": {
-                "date": 1681570600000,
+                "date": 1698507857246.2312,
                 "jassijs.ui.SettingsObject": {},
                 "jassijs.ui.SettingsDialog": {
                     "$ActionProvider": [
@@ -2407,7 +2407,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Style.ts": {
-                "date": 1696687306208.776,
+                "date": 1698508262720.2544,
                 "jassijs.ui.Style": {
                     "$UIComponent": [
                         {
@@ -6995,8 +6995,11 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                 return undefined;
             return this.dom.style.height.replace("px", "");
         }
-        set css(properties) {
+        set style(properties) {
             var prop = CSSProperties_1.CSSProperties.applyTo(properties, this);
+            for (let key in prop) {
+                this.dom.style[key] = prop[key];
+            }
             //if css-properties are already set and now a properties is deleted
             if (this["_lastCssChange"]) {
                 for (let key in this["_lastCssChange"]) {
@@ -7142,9 +7145,9 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     ], Component.prototype, "height", null);
     __decorate([
         Property_7.$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", typeof (_a = typeof CSSProperties_1.CSSProperties !== "undefined" && CSSProperties_1.CSSProperties) === "function" ? _a : Object),
-        __metadata("design:paramtypes", [typeof (_b = typeof CSSProperties_1.CSSProperties !== "undefined" && CSSProperties_1.CSSProperties) === "function" ? _b : Object])
-    ], Component.prototype, "css", null);
+        __metadata("design:type", typeof (_a = typeof React !== "undefined" && React.CSSProperties) === "function" ? _a : Object),
+        __metadata("design:paramtypes", [typeof (_b = typeof React !== "undefined" && React.CSSProperties) === "function" ? _b : Object])
+    ], Component.prototype, "style", null);
     __decorate([
         Property_7.$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
         __metadata("design:type", Array),
@@ -7195,6 +7198,15 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                 else if (prop in this.dom)
                     this.dom.setAttribute(prop, props[prop]);
                 // }
+            }
+            if (props === null || props === void 0 ? void 0 : props.children) {
+                if ((props === null || props === void 0 ? void 0 : props.children.length) > 0 && (props === null || props === void 0 ? void 0 : props.children[0]) instanceof Component) {
+                    this.removeAll(false);
+                    for (var x = 0; x < props.children.length; x++) {
+                        this.add(props.children[x]);
+                    }
+                    delete props.children;
+                }
             }
             return this;
         }
@@ -7319,6 +7331,27 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     let TextComponent = class TextComponent extends Component {
         constructor(props = {}) {
             super(props);
+        }
+        get label() {
+            return "";
+        }
+        get width() {
+            return 0;
+        }
+        get height() {
+            return 0;
+        }
+        get x() {
+            return 0;
+        }
+        get y() {
+            return 0;
+        }
+        get tooltip() {
+            return "";
+        }
+        get hidden() {
+            return false;
         }
         config(props, forceRender = false) {
             if (this.dom === undefined) {
@@ -7623,7 +7656,8 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
        */
         init(dom, properties = undefined) {
             super.init(dom, properties);
-            this.domWrapper.classList.add("jcontainer");
+            if (this.domWrapper.classList)
+                this.domWrapper.classList.add("jcontainer");
         }
         /**
          * adds a component to the container
@@ -8339,11 +8373,14 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Regist
         }
     }
     exports.loadFontIfNedded = loadFontIfNedded;
+    var hj = {
+        backgroundColor: undefined,
+    };
     let CSSProperties = class CSSProperties {
         static applyTo(properties, component) {
             var prop = {};
             for (let key in properties) {
-                var newKey = key.replaceAll("_", "-");
+                var newKey = key; //.replaceAll("_","-");
                 prop[newKey] = properties[key];
                 if (newKey === "font-family") {
                     loadFontIfNedded(prop[newKey]);
@@ -8356,23 +8393,23 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Regist
     __decorate([
         Property_15.$Property({ type: "color" }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "background_color", void 0);
+    ], CSSProperties.prototype, "backgroundColor", void 0);
     __decorate([
         Property_15.$Property(),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "background_image", void 0);
+    ], CSSProperties.prototype, "backgroundImage", void 0);
     __decorate([
         Property_15.$Property({ type: "color" }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "border_color", void 0);
+    ], CSSProperties.prototype, "borderColor", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "border_style", void 0);
+    ], CSSProperties.prototype, "borderStyle", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["thin", "medium", "thick", "2px", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "border_width", void 0);
+    ], CSSProperties.prototype, "borderWidth", void 0);
     __decorate([
         Property_15.$Property({ type: "color" }),
         __metadata("design:type", String)
@@ -8392,43 +8429,43 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Regist
     __decorate([
         Property_15.$Property({ type: "font" }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "font_family", void 0);
+    ], CSSProperties.prototype, "fontFamily", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["12px", "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large", "larger", "smaller", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "font_size", void 0);
+    ], CSSProperties.prototype, "fontSize", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["normal", "small-caps", "small-caps slashed-zero", "common-ligatures tabular-nums", "no-common-ligatures proportional-nums", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "font_variant", void 0);
+    ], CSSProperties.prototype, "fontVariant", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["normal", "bold", "lighter", "bolder", "100", "900", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "font_weight", void 0);
+    ], CSSProperties.prototype, "fontWeight", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["normal", "1px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "letter_spacing", void 0);
+    ], CSSProperties.prototype, "letterSpacing", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["normal", "32px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "line_height", void 0);
+    ], CSSProperties.prototype, "lineHeight", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "margin_bottom", void 0);
+    ], CSSProperties.prototype, "marginBottom", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "margin_left", void 0);
+    ], CSSProperties.prototype, "marginLeft", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "margin_right", void 0);
+    ], CSSProperties.prototype, "marginRight", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "margin_top", void 0);
+    ], CSSProperties.prototype, "marginTop", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["visible", "hidden", "clip", "scroll", "auto", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
@@ -8436,19 +8473,19 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Regist
     __decorate([
         Property_15.$Property({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "padding_bottom", void 0);
+    ], CSSProperties.prototype, "paddingBottom", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "padding_left", void 0);
+    ], CSSProperties.prototype, "paddingLeft", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "padding_right", void 0);
+    ], CSSProperties.prototype, "paddingRight", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "padding_top", void 0);
+    ], CSSProperties.prototype, "paddingTop", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["static", "relative", "absolute", "sticky", "fixed", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
@@ -8456,35 +8493,35 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Regist
     __decorate([
         Property_15.$Property({ chooseFrom: ["start", "end", "left", "right", "center", "justify", "match-parent", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_align", void 0);
+    ], CSSProperties.prototype, "textAlign", void 0);
     __decorate([
         Property_15.$Property({ type: "color" }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_decoration_color", void 0);
+    ], CSSProperties.prototype, "textDecorationColor", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["none", "underline", "overline", "line-through", "blink", "spelling-error", "grammar-error", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_decoration_line", void 0);
+    ], CSSProperties.prototype, "textDecorationLine", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["solid", "double", "dotted", "dashed", "wavy", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_decoration_style", void 0);
+    ], CSSProperties.prototype, "textDecorationStyle", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_decoration_thickness", void 0);
+    ], CSSProperties.prototype, "textDecorationThickness", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["none", "capitalize", "uppercase", "lowercase", "full-width", "full-size-kana", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "text_transform", void 0);
+    ], CSSProperties.prototype, "textTransform", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["baseline", "sub", "super", "text-top", "text-bottom", "middle", "top", "bottom", "3px", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "vertical_align", void 0);
+    ], CSSProperties.prototype, "verticalAlign", void 0);
     __decorate([
         Property_15.$Property({ chooseFrom: ["1", "2", "auto"] }),
         __metadata("design:type", String)
-    ], CSSProperties.prototype, "z_index", void 0);
+    ], CSSProperties.prototype, "zIndex", void 0);
     CSSProperties = __decorate([
         Registry_52.$Class("jassijs.ui.CSSProperties")
     ], CSSProperties);
@@ -9352,7 +9389,7 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
             this.add(me.main);
             me.main.width = "100%";
             me.main.height = "100%";
-            me.main.css = { position: "relative" };
+            me.main.style = { position: "relative" };
             me.toolbar.add(me.create);
             me.toolbar.add(me.save);
             me.toolbar.horizontal = true;
@@ -14245,9 +14282,9 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
             this.update();
             me.htmlpanel1.value = "Settings for  ";
             me.htmlpanel1.width = "80";
-            me.htmlpanel1.css = {
-                font_size: "small",
-                font_weight: "bold"
+            me.htmlpanel1.style = {
+                fontSize: "small",
+                fontWeight: "bold"
             };
         }
     };
@@ -14274,7 +14311,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
     }
     exports.test = test;
 });
-define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/CSSProperties"], function (require, exports, InvisibleComponent_3, Component_23, Registry_99, Property_31, CSSProperties_3) {
+define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, InvisibleComponent_3, Component_23, Registry_99, Property_31) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -14299,7 +14336,7 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
         /**
         * sets CSS Properties
         */
-        set css(properties) {
+        set style(properties) {
             //never!super.css(properties,removeOldProperties);
             var style = document.getElementById(this.styleid);
             if (!document.getElementById(this.styleid)) {
@@ -14325,9 +14362,9 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
     };
     __decorate([
         Property_31.$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", typeof (_a = typeof CSSProperties_3.CSSProperties !== "undefined" && CSSProperties_3.CSSProperties) === "function" ? _a : Object),
-        __metadata("design:paramtypes", [typeof (_b = typeof CSSProperties_3.CSSProperties !== "undefined" && CSSProperties_3.CSSProperties) === "function" ? _b : Object])
-    ], Style.prototype, "css", null);
+        __metadata("design:type", typeof (_a = typeof React !== "undefined" && React.CSSProperties) === "function" ? _a : Object),
+        __metadata("design:paramtypes", [typeof (_b = typeof React !== "undefined" && React.CSSProperties) === "function" ? _b : Object])
+    ], Style.prototype, "style", null);
     Style = __decorate([
         Component_23.$UIComponent({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
         Registry_99.$Class("jassijs.ui.Style")
@@ -14357,7 +14394,7 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
     exports.test = test;
     function test2() {
         var st = new Style();
-        st.css = {
+        st.style = {
             color: "red"
         };
         st.destroy();
@@ -18363,7 +18400,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1698091593269.8982,
+                "date": 1699192939210.3342,
                 "jassijs.ui.Component": {
                     "$Property": [
                         {
@@ -18385,7 +18422,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/Container.ts": {
-                "date": 1697901348314.4065,
+                "date": 1699199726930.9116,
                 "jassijs.ui.Container": {
                     "$Property": [
                         {
@@ -18492,7 +18529,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/CSSProperties.ts": {
-                "date": 1656016872000,
+                "date": 1698507590656.5051,
                 "jassijs.ui.CSSProperties": {
                     "@members": {}
                 }
@@ -18599,7 +18636,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1697210595975.757,
+                "date": 1698507857245.2292,
                 "jassijs/ui/DBObjectView": {
                     "@members": {}
                 }
@@ -18979,7 +19016,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/SettingsDialog.ts": {
-                "date": 1681570600000,
+                "date": 1698507857246.2312,
                 "jassijs.ui.SettingsObject": {},
                 "jassijs.ui.SettingsDialog": {
                     "$ActionProvider": [
@@ -18998,7 +19035,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Style.ts": {
-                "date": 1696687306208.776,
+                "date": 1698508262720.2544,
                 "jassijs.ui.Style": {
                     "$UIComponent": [
                         {

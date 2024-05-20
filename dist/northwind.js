@@ -563,9 +563,9 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/
                         x: 630,
                         y: 20,
                         src: "",
-                        css: {
-                            background_color: "black",
-                            border_style: "solid"
+                        style: {
+                            backgroundColor: "black",
+                            borderStyle: "solid"
                         },
                         width: 125,
                         bind: [me.databinder, "PhotoPath"]
@@ -806,9 +806,9 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
                 me.detailsProduct.width = 530;
                 me.detailsProduct.bind = [me.repeater1.design.databinder, "Product"];
                 me.detailsProduct.template = "{{ProductName}}";
-                me.detailsProduct.css = {
+                me.detailsProduct.style = {
                     overflow: "hidden",
-                    margin_top: "5px"
+                    marginTop: "5px"
                 };
                 me.detailsProduct.styles = [me.style1];
                 me.objectchooser1.bind = [me.repeater1.design.databinder, "Product"];
@@ -852,8 +852,8 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
             me.id.bind = [me.databinder, "id"];
             me.id.label = "Order ID";
             me.id.width = 70;
-            me.id.css = {
-                text_align: "right"
+            me.id.style = {
+                textAlign: "right"
             };
             me.freight.x = 5;
             me.freight.y = 50;
@@ -861,8 +861,8 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
             me.freight.width = 70;
             me.freight.label = "Freight";
             me.freight.converter = new NumberConverter_3.NumberConverter({ format: "#.##0,00" });
-            me.freight.css = {
-                text_align: "right"
+            me.freight.style = {
+                textAlign: "right"
             };
             me.customername.x = 10;
             me.customername.y = 5;
@@ -937,7 +937,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
             me.htmlpanel1.styles = [];
             me.htmlpanel2.value = "Text<br>";
             me.htmlpanel2.width = 100;
-            me.style1.css = {};
+            me.style1.style = {};
         }
     };
     __decorate([
@@ -1191,8 +1191,8 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
                         items: "northwind.Suppliers"
                     }),
                     me.styleNumber.config({
-                        css: {
-                            text_align: "right"
+                        style: {
+                            textAlign: "right"
                         }
                     })
                 ] });
@@ -1294,7 +1294,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1681317458000,
+                "date": 1698508046916.7515,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1336,7 +1336,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1657926698000,
+                "date": 1698507857261.209,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1367,7 +1367,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1697488583823.1606,
+                "date": 1698508046916.7515,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -3314,7 +3314,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1681317458000,
+                "date": 1698508046916.7515,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -3356,7 +3356,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1657926698000,
+                "date": 1698507857261.209,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -3387,7 +3387,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1697488583823.1606,
+                "date": 1698508046916.7515,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
