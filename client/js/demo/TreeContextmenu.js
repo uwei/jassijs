@@ -12,8 +12,10 @@ define(["require", "exports", "jassijs/ui/Tree", "jassijs/ui/ContextMenu", "jass
         var c = { name: "Christoph", id: 4, childs: [u, t] };
         var me = new Me();
         me.tree = new Tree_1.Tree({
-            checkbox: true,
-            selectMode: 2,
+            options: {
+                checkbox: true,
+                selectMode: 2,
+            }
         });
         me.panel = new Panel_1.Panel();
         me.button = new Button_1.Button();

@@ -73,7 +73,7 @@ export interface TableProperties extends DataComponentProperties {
 @$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" })
 @$Class("jassijs.ui.Table")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
-export class Table<T extends TableProperties={}> extends DataComponent<TableProperties> implements TableProperties {
+export class Table<T extends TableProperties = TableProperties> extends DataComponent<T> implements TableProperties {
     table: Tabulator;
     _selectHandler;
     _select: {
@@ -92,26 +92,37 @@ export class Table<T extends TableProperties={}> extends DataComponent<TableProp
     private dataTreeChildFunction: string | ((obj: any) => any);
     constructor(properties?: TableProperties) {
         super(properties);
-       // super.init('<div class="Table"></div>');
         var _this = this;
         //this.options = properties;
         this._selectHandler = [];
     }
-    config(config: TableProperties): Table {
+    config(config: T): Table {
+        
+        if (this.table===undefined){
+            if(config?.options === undefined) {
+                this.options = {};//this is not called if not options are set
+            }
+            if(config?.items){
+                this.options = {
+                    items:config.items
+                }
+                delete config.items;//or set async
+            }
+        }
         super.config(config);
         return this;
     }
     render(): React.ReactNode {
-        return React.createElement("div",{ className:"Table" })
+        return React.createElement("div", { className: "Table" })
     }
     rerender() {
         this.table.destroy();
-           if (this._databinderItems !== undefined) {
+        if (this._databinderItems !== undefined) {
             this._databinderItems.remove(this);
             this._databinderItems = undefined;
         }
-        this.table = undefined; 
-       // super.rerender();
+        this.table = undefined;
+        // super.rerender();
         this.options = this._lastOptions;
     }
     @$Property({ type: "json", componentType: "jassijs.ui.TableEditorProperties" })
@@ -717,19 +728,25 @@ export async function test() {
         { id: 4, name: "Brendon Philips", age: 12, col: "orange", dob: new Date() },
         { id: 5, name: "Margret Marmajuke", age: 99, col: "yellow", dob: new Date() },
     ];
+    /* var tab=new Table();
+     setTimeout(()=>{
+     tab.items=tabledata;
+ 
+     },100);*/
     var tab = new Table({
-        options:{
-        height: 300,
-        headerSort: true,
-        items: tabledata,
-        columns: [
-            { field: "id", title: "id" },
-            { field: "age", title: "age", formatter: "numberformat", formatterParams: { numberformat: "#.##0,00" }, editor: "numberformat" },
-            { field: "name", title: "name", formatter: "buttonTick" },
-            { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
-        ]
+        options: {
+            height: 300,
+            headerSort: true,
+            items: tabledata,
+            columns: [
+                { field: "id", title: "id" },
+                { field: "age", title: "age", formatter: "numberformat", formatterParams: { numberformat: "#.##0,00" }, editor: "numberformat" },
+                { field: "name", title: "name", formatter: "buttonTick" },
+                { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
+            ]
         }
     });
+   
     tab.showSearchbox = true;
     tab.on("dblclick", () => {
         //  alert(tab.value);

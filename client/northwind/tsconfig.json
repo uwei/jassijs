@@ -24,7 +24,7 @@
     ],
    
     "skipLibCheck": true,
-
+    "jsx": "react",
     "typeRoots": [".././node_modules/@types",".././node_modules2/typescriptservice"],
     "composite": true,
     "inlineSources": true,

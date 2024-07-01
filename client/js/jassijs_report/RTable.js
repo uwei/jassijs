@@ -29,7 +29,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             this.insertEmptyCells = true;
             this.widths = [];
             this.heights = [];
-            super.init("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>");
+            //super.init("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>");
             this.updater = new Runlater_1.Runlater(() => {
                 _this.updateLayout(false);
             }, 100);
@@ -40,6 +40,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             this.initContextMenu(properties === null || properties === void 0 ? void 0 : properties.isdatatable);
             var _this = this;
             this.initKeys();
+        }
+        render() {
+            return React.createElement("table", { style: { border_spacing: "0px", min_width: "50px", table_layout: "fixed" } });
+        }
+        componentDidMount() {
         }
         initKeys() {
             var _this = this;

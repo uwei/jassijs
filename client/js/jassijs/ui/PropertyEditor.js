@@ -20,22 +20,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             super();
             this.readPropertyValueFromDesign = false;
             this.codeChanges = {};
-            this.table = new Panel_1.Panel();
+            this.table = (0, Component_1.createComponent)(this.createTable());
             this.toolbar = new Panel_1.Panel();
             this.parser = parser;
-            this.table.init(`<table style="table-layout: fixed;font-size:11px">
-                            <thead>
-                                <tr>
-                                    <th class="propertyeditorheader">Name</th>
-                                    <th class="propertyeditorheader">Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="propertyeditorrow">
-                                    <td >a1</td><td>b1</td>
-                                </tr>
-                            </tbody>
-                            </table>`);
             this.add(this.toolbar);
             this.add(this.table);
             this.table.width = "98%";
@@ -54,6 +41,19 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.parentPropertyEditor;
             /** @member {[jassijs.ui.PropertyEditor]} - if multiselect - the propertyeditors of the other elements*/
             this._multiselectEditors;
+        }
+        createTable() {
+            return React.createElement("table", { style: { tableLayout: "fixed", fontSize: "11px" } },
+                React.createElement("thead", null,
+                    React.createElement("tr", null,
+                        React.createElement("th", { className: "propertyeditorheader" }, "Name"),
+                        React.createElement("th", { className: "propertyeditorheader" }, "Value"))),
+                React.createElement("tbody", null,
+                    React.createElement("tr", { className: "propertyeditorrow" },
+                        React.createElement("td", null, "a1"),
+                        React.createElement("td", null, "b1"))));
+        }
+        componentDidMount() {
         }
         /**
          * adds a new property

@@ -18,9 +18,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
          * @param {string} [properties.id] -  connect to existing id (not reqired)
          *
          */
-        constructor(properties = undefined) {
+        constructor(properties) {
+            var _a, _b;
             super(properties);
             this._components = [];
+            if ((_a = this.domWrapper) === null || _a === void 0 ? void 0 : _a.classList)
+                (_b = this.domWrapper) === null || _b === void 0 ? void 0 : _b.classList.add("jcontainer");
         }
         config(config, forceRender = false) {
             if (config === null || config === void 0 ? void 0 : config.children) {
@@ -40,11 +43,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         * @param {dom} dom - init the dom element
         * @paran {object} properties - properties to init
        */
-        init(dom, properties = undefined) {
-            super.init(dom, properties);
-            if (this.domWrapper.classList)
-                this.domWrapper.classList.add("jcontainer");
-        }
+        //  init(dom) {
+        //    super.init(dom);
+        // }
         /**
          * adds a component to the container
          * @param {jassijs.ui.Component} component - the component to add

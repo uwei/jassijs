@@ -1,21 +1,21 @@
 
 import {Container} from "jassijs/ui/Container";
-import {Panel, PanelConfig} from "jassijs/ui/Panel";
+import {Panel, PanelProperties} from "jassijs/ui/Panel";
 import {Databinder} from "jassijs/ui/Databinder";
 import {Component,  $UIComponent } from "jassijs/ui/Component";
 import {Property,  $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
-import { DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponentProperties } from "jassijs/ui/DataComponent";
 
-@$UIComponent({ editableChildComponents: ["databinder"]})
 @$Class("jassijs.ui.RepeaterDesignPanel")
 class RepeaterDesignPanel extends Panel {
     databinder: Databinder;
     me;
     
 }
-
-export interface RepeaterConfig extends PanelConfig {
+//@$UIComponent({ editableChildComponents: ["databinder"]})
+//@$Class("jassijs.ui.Repeater")
+export interface RepeaterProperties extends PanelProperties {
 
      /**
      *  @member {array} value - the array which objects used to create the repeating components
@@ -26,13 +26,15 @@ export interface RepeaterConfig extends PanelConfig {
      * @param {jassijs.ui.Databinder} databinder - the databinder to bind
      * @param {string} property - the property to bind
      */
+
    bind?:any[];
    createRepeatingComponent?(func);
 
 }
+
 @$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple",editableChildComponents: ["this","design"]})
 @$Class("jassijs.ui.Repeater")
-export class Repeater extends Panel implements DataComponentConfig{
+export class Repeater<T extends RepeaterProperties={}> extends Panel<RepeaterProperties> implements DataComponentProperties,RepeaterProperties{
     _componentDesigner: any;//ComponentDesigner;
     _autocommit: boolean;
     _createRepeatingComponent;
@@ -54,7 +56,7 @@ export class Repeater extends Panel implements DataComponentConfig{
     * @param {boolean} [properties.useSpan] -  use span not div
     * 
     */
-    constructor(properties = undefined) {//id connect to existing(not reqired)
+    constructor(properties:RepeaterProperties= {}) {//id connect to existing(not reqired)
 
         super();
         this._autocommit = false;
@@ -66,7 +68,7 @@ export class Repeater extends Panel implements DataComponentConfig{
         this.design.dom.classList.add("designerNoSelectable");
         this.design.dom.classList.add("designerNoResizable");
     }
-    config(config: RepeaterConfig): Repeater {
+    config(config: RepeaterProperties): Repeater {
         super.config(config);
         return this;
     }

@@ -15,8 +15,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
         /* get dom(){
              return this.dom;
          }*/
-        constructor() {
-            super();
+        constructor(config = {}) {
+            super(config);
             super.init('<div style="display: inline-block;white-space: nowrap;"><img  vspace="0" hspace="0"  border="0"  src="" alt=""></div>');
         }
         config(config) {
@@ -96,7 +96,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
         (0, Component_1.$UIComponent)({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
         ,
         (0, Registry_1.$Class)("jassijs.ui.Image"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], Image);
     exports.Image = Image;
     function test() {

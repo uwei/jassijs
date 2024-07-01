@@ -24,10 +24,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             super(properties);
             this._autocommit = false;
         }
-        config(config) {
-            super.config(config);
-            return this;
-        }
         get autocommit() {
             return this._autocommit;
         }
@@ -52,6 +48,13 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             if (this._databinder !== undefined)
                 this._databinder.add(property, this, "onchange");
         }
+        /*  rerender(){
+               if (this._databinder !== undefined) {
+                  this._databinder.remove(this);
+                  this._databinder = undefined;
+              }
+              super.rerender();
+          }*/
         destroy() {
             if (this._databinder !== undefined) {
                 this._databinder.remove(this);
@@ -61,7 +64,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
         }
     };
     __decorate([
-        (0, Property_1.$Property)(),
+        (0, Property_1.$Property)({ type: "databinder" }),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], DataComponent.prototype, "autocommit", null);

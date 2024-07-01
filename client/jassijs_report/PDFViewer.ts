@@ -9,7 +9,9 @@ import { PDFReport } from "jassijs_report/PDFReport";
 class Canavas extends Component {
     constructor() {
         super();
-        super.init('<canvas type="pdfviewer"></canvas>');
+    }
+    render(){
+        return React.createElement("canvas", { type: "pdfviewer"});
     }
 }
 type Me = {

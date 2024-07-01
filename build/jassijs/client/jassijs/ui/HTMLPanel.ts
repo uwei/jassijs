@@ -1,16 +1,15 @@
 var bugtinymce = undefined;
-import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
-import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 declare global {
     interface JQuery {
         doubletap: any;
     }
 }
 
-export interface HTMLPanelConfig extends DataComponentConfig {
-
+export interface HTMLPanelProperties extends DataComponentProperties {
     newlineafter?: boolean;
 
     /**
@@ -23,7 +22,7 @@ export interface HTMLPanelConfig extends DataComponentConfig {
 
 @$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ })
 @$Class("jassijs.ui.HTMLPanel")
-export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
+export class HTMLPanel<T extends HTMLPanelProperties={}> extends DataComponent<HTMLPanelProperties> implements HTMLPanelProperties {
     static oldeditor;
     private _tcm;
     toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
@@ -41,7 +40,7 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
         'undo redo | bold italic underline | fontsizeselect', //fontselect
         'forecolor backcolor | numlist bullist outdent indent'
     ];*/
-    constructor(id = undefined) {
+    constructor(properties:HTMLPanelProperties={}) {
         super();
         super.init('<div class="HTMLPanel mce-content-body" tabindex="-1" ><div class="HTMLPanelContent"> </div></div>'); //tabindex for key-event
         //$(this.domWrapper).removeClass("jcontainer");
@@ -51,16 +50,16 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
         this.newlineafter = false;
         // $(this.__dom).css("min-width", "10px");
     }
-    config(config: HTMLPanelConfig): HTMLPanel {
+    config(config: HTMLPanelProperties): HTMLPanel {
         super.config(config);
         return this;
     }
 
 
-    @$Property({ description: "line break after element", default: false })
     get newlineafter(): boolean {
         return this.dom.style.display === "inline-block";
     }
+    @$Property({ description: "line break after element", default: false })
     set newlineafter(value) {
         this.dom.style.display = value ? "" : "inline-block";
         this.domWrapper.style.display = value ? "" : "inline-block";
@@ -73,10 +72,10 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
             }).join('') +
             '\'; }');
     }
-    @$Property({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' })
-    get template(): string {
+   get template(): string {
         return this._template;
     }
+    @$Property({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' })
     set template(value: string) {
         this._template = value;
         this.value = this.value; //reformat value
@@ -84,6 +83,7 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
     /**
      * @member {string} code - htmlcode of the component
      **/
+    @$Property()
     set value(code: string) {
         var scode = code;
         this._value = code;
@@ -107,7 +107,6 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
         else
             el.innerHTML = scode;
     }
-    @$Property()
     get value(): string {
 
         return this._value;
@@ -133,7 +132,7 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
     public focusLost() {
         var editor = this.editor;
         var _this = this;
-        var text = _this.dom.firstElementChild.innerHTML;
+        var text = _this.dom?.firstElementChild?.innerHTML;
         if (text === '<br data-mce-bogus="1">')
             text = "";
         editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);

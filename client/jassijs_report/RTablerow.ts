@@ -26,15 +26,16 @@ export class RTablerow extends RComponent {
     * @param {boolean} [properties.useSpan] -  use span not div
     * 
     */
-    constructor(properties = undefined) {//id connect to existing(not reqired)
-        super(properties);
-        properties = undefined === properties ? {} : properties;
-        properties.noWrapper = true;
-        super.init("<tr></tr>", properties);
+    constructor(properties = {}) {//id connect to existing(not reqired)
+        super(Object.assign(properties,{noWrapper:true}));
+
         this.dom.classList.add("designerNoResizable");
     }
-
-
+    render(){
+        return <any>React.createElement("tr", { className: "RTablerow"});
+    }
+  
+    
     oncomponentAdded(callback) {
         this.addEvent("componentAdded", callback);
     }
@@ -58,7 +59,7 @@ export class RTablerow extends RComponent {
         if (component.domWrapper?.tagName === "TD")
             return;//allready wrapped
 
-        Component.replaceWrapper(component, document.createElement("td"));
+        Component.replaceWrapper(<any>component, document.createElement("td"));
         var border = component["border"];
         if (border !== undefined) {
             component.domWrapper.style["border-left-style"]= border[0] ? "solid" : "none";
@@ -74,12 +75,12 @@ export class RTablerow extends RComponent {
         component.domWrapper.style["word-break"]= "break-all";
         component.domWrapper.style["display"]= "";
         if (component.reporttype === "text") {
-            var rt = (<RText>component);
+            var rt = (<RText><any>component);
             rt.customToolbarButtons["Table"] = {
                 title: "<span class='mdi mdi-grid'><span>",
                 action: () => {
                     var test=rt;
-                    rt._parent.parent.contextMenu.target = (<RText>component).dom.children[0];
+                    rt._parent.parent.contextMenu.target = (<RText><any>component).dom.children[0];
                     rt._parent.parent.contextMenu.show();
                 }
             }

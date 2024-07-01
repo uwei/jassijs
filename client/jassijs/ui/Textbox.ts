@@ -6,6 +6,7 @@ import registry from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 
 export interface TextboxProperties extends DataComponentProperties {
+    domProperties?:React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
     converter?: DefaultConverter;
     /**
     * @member {boolean} disabled - enable or disable the element
@@ -51,7 +52,7 @@ export interface TextboxProperties extends DataComponentProperties {
 }
 @$UIComponent({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" })
 @$Class("jassijs.ui.Textbox")
-export class Textbox<T extends TextboxProperties = {}> extends DataComponent<TextboxProperties> implements TextboxProperties {
+export class Textbox<T extends TextboxProperties = TextboxProperties> extends DataComponent<T> implements TextboxProperties {
     /* get dom(){
          return this.dom;
      }*/
@@ -61,7 +62,7 @@ export class Textbox<T extends TextboxProperties = {}> extends DataComponent<Tex
     _autocompleter;
     private _value: any = "";
     private _isFocused = false;
-    constructor(props: TextboxProperties = undefined) {
+    constructor(props: TextboxProperties = {}) {
         super(props);
         var _this = this;
         this.onblur((e) => _this.blurcalled(e));
@@ -69,7 +70,7 @@ export class Textbox<T extends TextboxProperties = {}> extends DataComponent<Tex
         // this.converter = undefined;
     }
     render() {
-        return React.createElement("input", { type: "text" });
+        return React.createElement("input", { ...this.props.domProperties, type: "text" });
     }
 
 

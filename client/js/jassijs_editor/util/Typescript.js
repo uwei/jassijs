@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Server_1, Config_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "jassijs_editor/ext/monaco2", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Server_1, Config_1) {
     "use strict";
     var Typescript_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -115,7 +115,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                         continue;
                     if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".tsx") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
                         if (fname.toLocaleLowerCase().endsWith(".js")) {
-                            monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
+                            try {
+                                monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
+                            }
+                            catch (_a) {
+                                console.log("Error loading file " + fname);
+                            }
                         }
                         if (fdat === undefined) {
                             nodeFiles[fname] = new Server_1.Server().loadFile(fname);

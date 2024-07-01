@@ -30,18 +30,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         async createTable() {
             var Table = (await new Promise((resolve_1, reject_1) => { require(["jassijs/ui/Table"], resolve_1, reject_1); })).Table;
             this.table = new Table({
-                dataTreeChildFunction: function (obj) {
-                    var ret = [];
-                    if (typeof (obj.value) === "string")
+                options: {
+                    dataTreeChildFunction: function (obj) {
+                        var ret = [];
+                        if (typeof (obj.value) === "string")
+                            return ret;
+                        for (var v in obj.value) {
+                            var oval = obj.value[v];
+                            ret.push({
+                                name: v,
+                                value: oval
+                            });
+                        }
                         return ret;
-                    for (var v in obj.value) {
-                        var oval = obj.value[v];
-                        ret.push({
-                            name: v,
-                            value: oval
-                        });
                     }
-                    return ret;
                 }
             });
             this.table.width = "calc(100% - 2px)";
@@ -105,6 +107,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             }
             if (!found)
                 values.push({ name: name, value: value });
+            this._cache[name] = value;
             if (refresh !== false)
                 this.update();
         }

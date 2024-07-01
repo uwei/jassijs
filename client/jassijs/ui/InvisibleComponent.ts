@@ -23,10 +23,10 @@ export interface InvisibleComponentProperties extends ComponentProperties{
 @$Property({name:"hidden",hide:true})
 @$Property({name:"styles",hide:true})*/
 @$Property({hideBaseClassProperties:true})
-export class InvisibleComponent<T extends InvisibleComponentProperties={}> extends Component<InvisibleComponentProperties>
+export class InvisibleComponent<T extends InvisibleComponentProperties=InvisibleComponentProperties> extends Component<T>
 {
 	$isInivisibleComponent:boolean;
-	constructor(properties:InvisibleComponentProperties=undefined){
+	constructor(properties:InvisibleComponentProperties={}){
     	super(properties);
 		this.$isInivisibleComponent=true;
     }

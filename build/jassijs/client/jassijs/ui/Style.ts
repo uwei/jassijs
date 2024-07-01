@@ -1,15 +1,15 @@
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-import { $UIComponent, Component, ComponentConfig } from "jassijs/ui/Component";
+import { $UIComponent, Component, ComponentProperties } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 
 import { CSSProperties } from "jassijs/ui/CSSProperties";
 
-export interface StyleConfig extends ComponentConfig {
+export interface StyleConfig extends ComponentProperties {
   /**
     * sets CSS Properties
     */
-   css?:CSSProperties;
+   style?:React.CSSProperties;
 }
 
 @$UIComponent({ fullPath: "common/Style", icon: "mdi mdi-virus" })
@@ -37,7 +37,7 @@ export class Style extends InvisibleComponent implements StyleConfig{
     * sets CSS Properties
     */
     @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties"})
-    set css(properties: CSSProperties) {
+    set style(properties: React.CSSProperties) {
         //never!super.css(properties,removeOldProperties);
 
         var style: HTMLElement = document.getElementById(this.styleid);
@@ -64,7 +64,7 @@ export class Style extends InvisibleComponent implements StyleConfig{
 }
 
 export function test() {
-    var css: CSSProperties = {
+    var css: React.CSSProperties = {
         filter: "drop-shadow(16px 16px 20px blue)"
     };
     jassijs.includeCSS("mytest2id", {
@@ -80,7 +80,7 @@ export function test() {
 }
 export function test2() {
     var st = new Style();
-    st.css={
+    st.style={
         color: "red"
     };
     st.destroy();

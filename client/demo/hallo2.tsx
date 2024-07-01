@@ -30,7 +30,7 @@ export function test() {
    ret.add(new TextComponent({text:"Hallo" }))
    return ret;
    */
-    var ret=<Panel><span></span>
+    var ret=<Panel><span></span> 
         ha12hallo
         <span></span>
         o

@@ -1,4 +1,4 @@
-var RUNTIME = 'runtime58';
+var RUNTIME = 'runtime59';
 
 var nextid = 0;
 var tempFiles = {};
@@ -208,9 +208,14 @@ async function handleEvent(event) {
     }
     return res;
   }
-
+  if(event.request.url.endsWith("/tsWorker.js")){
+    
+    while(tempFiles[event.request.url]===undefined){
+      await new Promise((res)=>setTimeout(()=>res(),100));//wait until file is placed
+    }
+  }
   //let cache = await caches.open(RUNTIME)
-  var filename = event.request.url;
+  var filename = event.request.url;  
   if (tempFiles[filename]) {//we deliver tempFiles
     console.log("deliver " + filename + tempFiles[filename].substring(0, 50));
     return new Response(tempFiles[filename], {

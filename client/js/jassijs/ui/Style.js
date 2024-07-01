@@ -12,9 +12,13 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.Style = void 0;
     let Style = class Style extends InvisibleComponent_1.InvisibleComponent {
-        constructor() {
-            super();
-            super.init('<span class="InvisibleComponent"></span>');
+        constructor(props = {}) {
+            super(props);
+        }
+        render() {
+            return React.createElement("span", { className: "InvisibleComponent" });
+        }
+        componentDidMount() {
         }
         config(config) {
             super.config(config);
@@ -63,7 +67,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
          * the style is appended to the head
          **/
         ,
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], Style);
     exports.Style = Style;
     function test() {

@@ -1,15 +1,17 @@
 
-import { Component, ComponentConfig } from "jassijs/ui/Component";
+import { Component, ComponentProperties } from "jassijs/ui/Component";
 import { Databinder } from "jassijs/ui/Databinder";
 import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
 
-export interface DataComponentConfig extends ComponentConfig {
+
+export interface DataComponentProperties extends ComponentProperties {
     /**
         * binds a component to a databinder
         * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
         *         {string} property - the property to bind]
         */
+  
     bind?: any[];
     /**
    * @member {bool} autocommit -  if true the databinder will update the value on every change
@@ -21,7 +23,7 @@ export interface DataComponentConfig extends ComponentConfig {
 
 var tmpDatabinder = undefined;
 @$Class("jassijs.ui.DataComponent")
-export class DataComponent extends Component implements DataComponentConfig {
+export class DataComponent<T extends DataComponentProperties> extends Component<T> implements DataComponentProperties {
     _autocommit: boolean;
     _databinder: Databinder;
 
@@ -37,14 +39,13 @@ export class DataComponent extends Component implements DataComponentConfig {
         super(properties);
         this._autocommit = false;
     }
-    config(config: DataComponentConfig): DataComponent {
-        super.config(config);
-        return this;
-    }
-    @$Property()
+   
+   
+
     get autocommit(): boolean {
         return this._autocommit;
     }
+    @$Property({ type: "databinder" })
     set autocommit(value: boolean) {
         this._autocommit = value;
         //if (this._databinder !== undefined)
@@ -53,7 +54,7 @@ export class DataComponent extends Component implements DataComponentConfig {
     /**
      * @param [databinder:jassijs.ui.Databinder,"propertyToBind"]
      */
-    @$Property({ type: "databinder" })
+   @$Property({ type: "databinder" })
     set bind(databinder: any[]) {
         if(databinder===undefined){
             if(this._databinder!==undefined){
@@ -68,7 +69,13 @@ export class DataComponent extends Component implements DataComponentConfig {
             this._databinder.add(property, this, "onchange");
     }
 
-
+  /*  rerender(){
+         if (this._databinder !== undefined) {
+            this._databinder.remove(this);
+            this._databinder = undefined;
+        }
+        super.rerender();
+    }*/
     destroy() {
         if (this._databinder !== undefined) {
             this._databinder.remove(this);

@@ -499,9 +499,11 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             _this.keydown(e);
         }
         createTextComponent(text, par, before) {
-            var comp2 = new Component_1.TextComponent();
-            var newone = document.createTextNode(text);
-            comp2.init(newone, { noWrapper: true });
+            /*        var comp2 = new TextComponent();
+                    var newone = document.createTextNode(text);
+                    comp2.init(<any>newone, { noWrapper: true });*/
+            var comp2 = new Component_1.TextComponent({ noWrapper: true });
+            var newone = comp2.dom;
             return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
             ;
         }
@@ -547,9 +549,11 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 return;
             var sel = document.getSelection();
             if (sel.anchorNode === null) {
-                var nd = document.createTextNode("");
-                var comp2 = new Component_1.TextComponent();
-                comp2.init(nd, { noWrapper: true });
+                /*  var nd = document.createTextNode("");
+                  var comp2 = new TextComponent();
+                  comp2.init(<any>nd, { noWrapper: true });*/
+                var comp2 = new Component_1.TextComponent({ noWrapper: true });
+                var nd = comp2.dom;
                 if (this.lastSelectedDummy.pre)
                     var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value._parent, this._propertyEditor.value, true, "text");
                 else

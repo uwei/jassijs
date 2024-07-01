@@ -14,6 +14,29 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
     jassijs.includeCSSFile("contextMenu.css");
     //https://github.com/s-yadav/contextMenu.js/
     let ContextMenu = class ContextMenu extends InvisibleComponent_1.InvisibleComponent {
+        constructor(props = {}) {
+            super(props);
+        }
+        set menu(val) {
+            this._menu = val;
+        }
+        get menu() {
+            return this._menu;
+        }
+        add(menu) {
+            if (menu instanceof MenuItem_1.MenuItem)
+                this.menu.add(menu);
+        }
+        addBefore(menu, before) {
+            this.menu.addBefore(menu, before);
+        }
+        remove(item) {
+            this.remove(item);
+        }
+        /* set children(data){
+             if(data.length>0)
+                 this.menu=data[0];
+         }*/
         /**
          * @member - the objects for the includeClassActions @ActionProvider if  is enabled
          **/
@@ -23,9 +46,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
         get value() {
             return this._value;
         }
-        constructor() {
-            super();
-            super.init('<span class="InvisibleComponent"></span>');
+        render() {
+            return React.createElement("span", { className: "InvisibleComponent" });
+        }
+        componentDidMount() {
             var _this = this;
             this.menu = new Menu_1.Menu({ noUpdate: true });
             this.menu._mainMenu = this;
@@ -234,7 +258,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
     ContextMenu = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
         (0, Registry_1.$Class)("jassijs.ui.ContextMenu"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], ContextMenu);
     exports.ContextMenu = ContextMenu;
     async function test() {

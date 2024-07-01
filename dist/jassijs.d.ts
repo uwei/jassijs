@@ -1,3 +1,5 @@
+/// <reference types="react" />
+/// <reference types="react" />
 /// <reference types="tabulator-tables" />
 /// <reference types="jquery" />
 /// <reference types="jquery.fancytree" />
@@ -118,6 +120,554 @@ declare module "jassijs/remote/Classes" {
     export { classes };
     export function test(t: any): Promise<void>;
 }
+declare module "jassijs/remote/security/Rights" {
+    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+    export class RightProperties {
+        name: string;
+        description?: string;
+    }
+    export class ParentRightProperties {
+        name: string;
+        description?: {
+            text: string;
+            [parametername: string]: string;
+        };
+        sqlToCheck: string;
+    }
+    export function $Rights(rights: RightProperties[]): Function;
+    export function $ParentRights(rights: [ParentRightProperties]): Function;
+    export function $CheckParentRight(): Function;
+    export class Rights extends RemoteObject {
+        private _isAdmin;
+        isAdmin(context?: Context): Promise<boolean>;
+    }
+    var rights: Rights;
+    export default rights;
+}
+declare module "jassijs/util/Cookies" {
+    class C {
+        set(name: string, value: string, params?: any): void;
+        get(name: string): any;
+        remove(name: string, params?: any): void;
+        getJSON(): string;
+    }
+    var Cookies: C;
+    export { Cookies };
+}
+declare module "jassijs/ext/jquerylib" {
+    import "jquery";
+    import "jquery.ui";
+    import "jquery.ui.touch";
+}
+declare module "jassijs/ui/Property" {
+    export function $Property(property?: Property): Function;
+    export class Property {
+        [key: string]: any;
+        constructorClass?: any;
+        default?: any;
+        /** the name of the property*/
+        name?: string;
+        /** the type of the property*/
+        type?: string;
+        /** the user can choose this entries */
+        chooseFrom?: any[] | ((comp: any, propertyeditor?: any) => any[]);
+        /** @member - the user can select from chooseFrom but can not input own entries*/
+        chooseFromStrict?: boolean;
+        /** @member - the description for tooltip **/
+        decription?: string;
+        /** @member - hides the properties from the base class **/
+        hideBaseClassProperties?: boolean;
+        /** @member - is the property visible */
+        isVisible?: (component: any, propertyeditor?: any) => boolean;
+        /** @member - jassijs.base.Action -   the actions in the PropertyEditor  */
+        editoractions?: any[];
+        /**
+         * Property for PropertyEditor
+         * @class jassijs.ui.EditorProperty
+         */
+        constructor(name?: any, type?: any);
+        componentType?: any;
+        description?: string;
+        hide?: boolean;
+        /**
+         * this property could be set by browser url
+         */
+        isUrlTag?: boolean;
+    }
+}
+declare module "jassijs/ui/ComponentDescriptor" {
+    import { Property } from "jassijs/ui/Property";
+    import { Component } from "jassijs/ui/Component";
+    export class ComponentDescriptor {
+        static cache: any;
+        fields: Property[];
+        editableComponents: any;
+        /**
+        * describes a Component
+        * @class jassijs.ui.EditorProperty
+        */
+        constructor();
+        findField(name: string): Property;
+        /**
+         * describes a class
+         * @param {class}  type - the type of the class
+         * @param {boolean}  nocache - an uncached version
+         * @returns {jassijs.ui.ComponentDescriptor} - which describes the component
+         */
+        static describe(type: any, nocache?: boolean): ComponentDescriptor;
+        /**
+         * get the ids of all editable Components by the designer
+         * @param {jassijs.ui.Component} component - the component to inspect
+         * @param {boolean} idFromLabel - if true not the id but the id form label is returned
+         * @param {flag} - undocumented-used for recursation
+         **/
+        static getEditableComponents(component: Component, idFromLabel: any, includeFrozenContainer: any, flag: any): string;
+        /** calc editableComponents
+         * @param {object} ob - the object to resolve
+         * @returns {Object.<string,jassijs.ui.Component> - <name,component>
+         **/
+        resolveEditableComponents(ob: any, type?: any, ret?: any): any;
+        /**
+         * remove a field
+         * @param {string} field - the name of the field to remove
+         */
+        removeField(field: any): void;
+    }
+}
+declare module "jassijs/ui/CSSProperties" {
+    import { Component } from "jassijs/ui/Component";
+    /**
+     * loads googlefonts if needed
+     **/
+    export function loadFontIfNedded(font: string): void;
+    export class CSSProperties {
+        backgroundColor?: string;
+        backgroundImage?: string;
+        borderColor?: string;
+        borderStyle?: string | "none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset" | "inherit" | "initial" | "unset";
+        borderWidth?: string | "thin" | "medium" | "thick" | "2px" | "inherit" | "initial" | "unset";
+        color?: string;
+        cursor?: string | "auto" | "default" | "none" | "context-menu" | "help" | "pointer" | "progress" | "wait" | "cell" | "crosshair" | "text" | "vertical-text" | "alias" | "copy" | "move" | "no-drop" | "not-allowed" | "grab" | "grabbing" | "all-scroll" | "col-resize" | "row-resize" | "n-resize" | "e-resize" | "s-resize" | "w-resize" | "ne-resize" | "nw-resize" | "se-resize" | "sw-resize" | "ew-resize" | "ns-resize" | "nesw-resize" | "nwse-resize" | "zoom-in" | "zoom-out" | "inherit" | "initial" | "unset";
+        filter?: string | "blur(5px)" | "brightness(0.4)" | "contrast(200%)" | "drop-shadow(16px 16px 20px blue)" | "grayscale(50%)" | "hue-rotate(90deg)" | "invert(75%)" | "opacity(25%)" | "saturate(30%)" | "sepia(60%)" | "inherit" | "initial" | "unset";
+        float?: string | "left" | "right" | "none" | "inline-start" | "inline-end" | "inherit" | "initial" | "unset";
+        fontFamily?: string;
+        fontSize?: string | "12px" | "xx-small" | "x-small" | "small" | "medium" | "large" | "x-large" | "xx-large" | "xxx-large" | "larger" | "smaller" | "inherit" | "initial" | "unset";
+        fontVariant?: string | "normal" | "small-caps" | "small-caps slashed-zero" | "common-ligatures tabular-nums" | "no-common-ligatures proportional-nums" | "inherit" | "initial" | "unset";
+        fontWeight?: string | "normal" | "bold" | "lighter" | "bolder" | "100" | "900" | "inherit" | "initial" | "unset";
+        letterSpacing?: string | "normal" | "1px";
+        lineHeight?: string | "normal" | "32px";
+        marginBottom?: string | "3px";
+        marginLeft?: string | "3px";
+        marginRight?: string | "3px";
+        marginTop?: string | "3px";
+        overflow?: string | "visible" | "hidden" | "clip" | "scroll" | "auto" | "inherit" | "initial" | "unset";
+        paddingBottom?: string | "3px";
+        paddingLeft?: string | "3px";
+        paddingRight?: string | "3px";
+        paddingTop?: string | "3px";
+        position?: string | "static" | "relative" | "absolute" | "sticky" | "fixed" | "inherit" | "initial" | "unset";
+        textAlign?: string | "start" | "end" | "left" | "right" | "center" | "justify" | "match-parent" | "inherit" | "initial" | "unset";
+        textDecorationColor?: string;
+        textDecorationLine?: string | "none" | "underline" | "overline" | "line-through" | "blink" | "spelling-error" | "grammar-error" | "inherit" | "initial" | "unset";
+        textDecorationStyle?: string | "solid" | "double" | "dotted" | "dashed" | "wavy" | "inherit" | "initial" | "unset";
+        textDecorationThickness?: string | "3px";
+        textTransform?: string | "none" | "capitalize" | "uppercase" | "lowercase" | "full-width" | "full-size-kana" | "inherit" | "initial" | "unset";
+        verticalAlign?: string | "baseline" | "sub" | "super" | "text-top" | "text-bottom" | "middle" | "top" | "bottom" | "3px" | "inherit" | "initial" | "unset";
+        zIndex?: string | "1" | "2" | "auto";
+        [name: string]: string;
+        static applyTo(properties: React.CSSProperties, component: Component): React.CSSProperties;
+    }
+}
+declare module "jassijs/ui/State" {
+    class StateProp {
+        ob: any;
+        proppath: string[];
+    }
+    export function resolveState(ob: any, config: any): void;
+    export class State<T> {
+        private data;
+        self: any;
+        _comps_: StateProp[];
+        constructor(data?: any);
+        _observe_(control: any, property: any, atype: any): void;
+        get current(): T;
+        set current(data: T);
+    }
+    export function createState<T>(val?: T): State<T>;
+    export function test(): void;
+}
+declare module "jassijs/ui/Component" {
+    global {
+        interface Element {
+            _this: Component<any>;
+            _id?: string;
+            _thisOther: Component<any>[];
+        }
+    }
+    export class UIComponentProperties {
+        /**
+         * full path to classifiy the UIComponent e.g common/TopComponent
+         */
+        fullPath?: string;
+        icon?: string;
+        /**
+         * initproperties are automatically set on new created Components
+         * e.g. {text:"button"}
+         */
+        initialize?: {
+            [initproperties: string]: any;
+        };
+        /**
+         * allcomponents
+         */
+        editableChildComponents?: string[];
+    }
+    export function $UIComponent(properties: UIComponentProperties): Function;
+    export interface ComponentProperties {
+        /**
+        * called if the component get the focus
+        * @param {function} handler - the function which is executed
+        */
+        onfocus?(handler: any): any;
+        /**
+        * called if the component lost the focus
+        * @param {function} handler - the function which is executed
+        */
+        onblur?(handler: any): any;
+        /**
+         * @member {string} - the label over the component
+         */
+        label?: string;
+        /**
+       * @member {string} - tooltip for the component
+       */
+        tooltip?: string;
+        /**
+        * @member {number} - the left absolute position
+        */
+        x?: number;
+        /**
+         * @member {number|string} - the top absolute position
+         */
+        y?: number;
+        /**
+         * @member {boolean} - component is hidden
+         */
+        hidden?: boolean;
+        /**
+       * @member {string|number} - the width of the component
+       * e.g. 50 or "100%"
+       */
+        width?: string | number;
+        /**
+         * @member {string|number} - the height of the component
+         * e.g. 50 or "100%"
+         */
+        height?: string | number;
+        /**
+         * ccc-Properties
+         */
+        style?: React.CSSProperties;
+        styles?: any[];
+        /**
+         * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
+         **/
+        contextMenu?: any;
+        noWrapper?: boolean;
+        replaceNode?: any;
+        calculateState?: (any: any) => void;
+    }
+    var React: {
+        createElement(type: any, props: any, ...children: any[]): {
+            props: any;
+            type: any;
+        };
+    };
+    export { React };
+    global {
+        interface Window {
+            fetch: (url: string, options?: {}) => Promise<any>;
+        }
+    }
+    global {
+        interface Window {
+            React: any;
+        }
+        interface React {
+            createElement(atype: any, props: any, ...children: any[]): any;
+        }
+    }
+    export function createComponent(node: React.ReactNode): any;
+    export class Component<T extends ComponentProperties = {}> implements React.Component<T, {}> {
+        props: T;
+        private static _componentHook;
+        _eventHandler: any;
+        __dom: HTMLElement;
+        domWrapper: HTMLElement;
+        _id: string;
+        _contextMenu?: any;
+        _parent: any;
+        events: any;
+        _designMode: any;
+        _styles?: any[];
+        calculateState: (any: any) => any;
+        protected designDummies: Component<{}>[];
+        /**
+         * base class for each Component
+         * @class jassijs.ui.Component
+         * @param {object} properties - properties to init
+         * @param {string} [properties.id] -  connect to existing id (not reqired)
+         *
+         */
+        constructor(properties?: ComponentProperties);
+        private _rerenderMe;
+        componentDidMount(): void;
+        render(): React.ReactNode;
+        config(config: T): Component;
+        /**
+         * called if the component is created
+         */
+        static onComponentCreated(func: any): void;
+        static offComponentCreated(func: any): void;
+        /**
+         * adds an event
+         * @param {type} name - the name of the event
+         * @param {function} func - callfunction for the event
+         */
+        addEvent(name: any, func: any): void;
+        /**
+         * call the event
+         * @param {name} name - the name of the event
+         * @param {object} param 1- parameter for the event
+         * @param {object} param 2- parameter for the event
+         * @param {object} param 3- parameter for the event
+         * @param {object} param 4- parameter for the event
+         */
+        callEvent(name: any, param1: any, param2?: any, param3?: any, param4?: any): any[];
+        /**
+         * @member {dom} - the dom element
+         */
+        get dom(): HTMLElement;
+        set dom(value: HTMLElement);
+        /**
+       * inits the component
+       * @param {dom} dom - init the dom element
+       * @paran {object} properties - properties to init
+      */
+        private _initComponent;
+        onfocus(handler: any): EventListenerOrEventListenerObject;
+        onblur(handler: any): EventListenerOrEventListenerObject;
+        /**
+         * attach an eventhandler
+         * @returns the handler to off the event
+         */
+        on(eventname: string, handler: EventListenerOrEventListenerObject): EventListenerOrEventListenerObject;
+        off(eventname: string, handler?: EventListenerOrEventListenerObject): void;
+        private static cloneAttributes;
+        static replaceWrapper(old: Component<any>, newWrapper: HTMLElement): void;
+        /**
+         * create an Element from an htmlstring e.g. createDom("<input/>")
+         */
+        static createHTMLElement(html: string): HTMLElement;
+        replaceDom(dom: HTMLElement): void;
+        set label(value: string);
+        get label(): string;
+        get tooltip(): string;
+        set tooltip(value: string);
+        get x(): number;
+        set x(value: number);
+        get y(): number;
+        set y(value: number);
+        get hidden(): boolean;
+        set hidden(value: boolean);
+        set width(value: string | number);
+        get width(): string | number;
+        set height(value: string | number);
+        get height(): string | number;
+        set style(properties: React.CSSProperties);
+        /**
+         * maximize the component
+         */
+        maximize(): void;
+        get styles(): any[];
+        set styles(styles: any[]);
+        get contextMenu(): any;
+        set contextMenu(value: any);
+        destroy(): void;
+        extensionCalled(action: ExtensionAction): void;
+        context: any;
+        state: any;
+        refs: any;
+        setState(): void;
+        forceUpdate(): void;
+    }
+    interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
+        tag?: string;
+        children?: any;
+        renderFunc: any;
+        calculateState?: (prop: any) => void;
+    }
+    export class FunctionComponent<T extends FunctionComponentProperties> extends Component<FunctionComponentProperties> {
+        _components: Component[];
+        _designDummy: any;
+        constructor(properties: FunctionComponentProperties);
+        render(): any;
+        /**
+        * adds a component to the container
+        * @param {jassijs.ui.Component} component - the component to add
+        */
+        add(component: any): void;
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component: Component, before: Component): void;
+        /**
+        * remove the component
+        * @param {jassijs.ui.Component} component - the component to remove
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        remove(component: any, destroy?: boolean): void;
+        /**
+        * remove all component
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        removeAll(destroy?: any): void;
+        destroy(): void;
+    }
+    interface HTMLComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
+        tag?: string;
+        children?: any;
+    }
+    export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Component<HTMLComponentProperties> implements HTMLComponentProperties {
+        _components: Component[];
+        _designDummy: any;
+        constructor(prop?: HTMLComponentProperties);
+        render(): React.ReactNode;
+        config(props: HTMLComponentProperties): this;
+        set tag(value: string);
+        get tag(): string;
+        /**
+        * adds a component to the container
+        * @param {jassijs.ui.Component} component - the component to add
+        */
+        add(component: any): void;
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component: Component, before: Component): void;
+        /**
+        * remove the component
+        * @param {jassijs.ui.Component} component - the component to remove
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        remove(component: any, destroy?: boolean): void;
+        /**
+        * remove all component
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        removeAll(destroy?: any): void;
+        destroy(): void;
+    }
+    export interface TextComponentProperties extends ComponentProperties {
+        text?: any;
+    }
+    export class TextComponent<T extends TextComponentProperties = {}> extends Component<TextComponentProperties> implements TextComponentProperties {
+        constructor(props?: TextComponentProperties);
+        get label(): string;
+        get width(): number;
+        get height(): number;
+        get x(): number;
+        get y(): number;
+        get tooltip(): string;
+        get hidden(): boolean;
+        render(): React.ReactNode;
+        config(props: TextComponentProperties): this;
+        get text(): string;
+        set text(value: string);
+    }
+}
+declare module "jassijs/base/LoginDialog" {
+    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
+    import "jassijs/ext/jquerylib";
+    export function doAfterLogin(resolve: any, prot: RemoteProtocol): void;
+    export function login(): Promise<unknown>;
+    export function test(): void;
+}
+declare module "jassijs/remote/RemoteProtocol" {
+    export class RemoteProtocol {
+        static counter: number;
+        classname: string;
+        _this: any;
+        parameter: any[];
+        method: string;
+        /**
+         * converts object to jsonstring
+         * if class is registerd in classes then the class is used
+         * if id is used then recursive childs are possible
+         * @param obj
+         */
+        stringify(obj: any): string;
+        static simulateUser(user?: string, password?: string): Promise<void>;
+        exec(config: any, object: any): Promise<unknown>;
+        /**
+       * call the server
+       */
+        call(): Promise<any>;
+        /**
+         * converts jsonstring to an object
+         */
+        parse(text: string): Promise<any>;
+        test(): Promise<void>;
+    }
+}
+declare module "jassijs/remote/RemoteObject" {
+    export class Context {
+        isServer: boolean;
+        [key: string]: any;
+    }
+    export class RemoteObject {
+        static call(method: (...ars: any) => any, ...parameter: any[]): Promise<any>;
+        call(_this: any, method: (...ars: any) => any, ...parameter: any[]): Promise<any>;
+    }
+}
+declare module "jassijs/remote/FileNode" {
+    export class FileNode {
+        name: string;
+        fullpath?: string;
+        parent?: FileNode;
+        files?: FileNode[];
+        date?: any;
+        flag?: string;
+        constructor(fullpath?: string);
+        isDirectory?(): boolean;
+        resolveChilds?(all?: {
+            [path: string]: FileNode;
+        }): {
+            [path: string]: FileNode;
+        };
+    }
+}
+declare module "jassijs/remote/Serverservice" {
+    import "jassijs/remote/Classes";
+    export class ServerserviceProperties {
+        name: string;
+        getInstance: (() => Promise<any>);
+    }
+    var runningServerservices: {};
+    export function beforeServiceLoad(func: (name: string, props: ServerserviceProperties) => void): void;
+    global {
+        interface Serverservice {
+        }
+    }
+    var serverservices: Serverservice;
+    export function $Serverservice(properties: ServerserviceProperties): Function;
+    var doNotReloadModule: boolean;
+    export { serverservices, doNotReloadModule, runningServerservices };
+}
 declare module "jassijs/remote/Test" {
     export class Test {
         /**
@@ -137,31 +687,169 @@ declare module "jassijs/remote/Test" {
         expectErrorAsync(func: any): Promise<void>;
     }
 }
-declare module "jassijs/util/Reloader" {
-    export class Reloader {
-        static cache: any[];
-        static reloadCodeFromServerIsRunning: boolean;
-        static instance: Reloader;
-        listener: any[];
+declare module "jassijs/remote/Validator" {
+    import "reflect-metadata";
+    import { Test } from "jassijs/remote/Test";
+    export class ValidationOptions {
+        message?: string;
+    }
+    export function registerValidation(name: string, options: ValidationOptions, func: (target: any, propertyName: string, value: any, options: any) => string): (target: any, propertyKey: string, parameterIndex: number) => void;
+    export class ValidationError {
+        value: object;
+        target: object;
+        property: string;
+        message: string;
+        constructor(value: any, target: any, property: string, message: string);
+    }
+    class ValidateOptions {
         /**
-         * reloads Code
+         * e.g. {ValidateInt:{optional:false}} delegates optional:false to all ValidateInt rules
+         * e.g. {ALL:{optional:false}} delegates optional:false to all Validators rules}
          */
-        private constructor();
+        delegateOptions?: {
+            [ValidatorClassName: string]: any;
+        };
+    }
+    export function validate(obj: any, options?: ValidateOptions, raiseError?: boolean): ValidationError[];
+    export class ValidationIsArrayOptions extends ValidationOptions {
+        optional?: boolean;
+        type?: (type?: any) => any;
+        alternativeJsonProperties?: string[];
+    }
+    export function ValidateIsArray(options?: ValidationIsArrayOptions): Function;
+    export class ValidationIsBooleanOptions extends ValidationOptions {
+        optional?: boolean;
+        type?: any;
+    }
+    export function ValidateIsBoolean(options?: ValidationIsBooleanOptions): Function;
+    export class ValidationIsDateOptions extends ValidationOptions {
+        optional?: boolean;
+    }
+    export function ValidateIsDate(options?: ValidationIsDateOptions): Function;
+    export function ValidateFunctionParameter(): Function;
+    export class ValidationIsInOptions extends ValidationOptions {
+        optional?: boolean;
+        in: any[];
+    }
+    export function ValidateIsIn(options?: ValidationIsInOptions): Function;
+    export class ValidationIsInstanceOfOptions extends ValidationOptions {
+        optional?: boolean;
+        type: (type?: any) => any;
         /**
-         * check code changes out of the browser if localhost and load the changes in to the browser
+         * ["id"] means an object {id:9} is also a valid type
          */
-        static startReloadCodeFromServer(): void;
+        alternativeJsonProperties?: string[];
+    }
+    export function ValidateIsInstanceOf(options?: ValidationIsInstanceOfOptions): Function;
+    export class ValidationIsIntOptions extends ValidationOptions {
+        optional?: boolean;
+    }
+    export function ValidateIsInt(options?: ValidationIsIntOptions): Function;
+    export class ValidationMaxOptions extends ValidationOptions {
+        max: number;
+    }
+    export function ValidateMax(options: ValidationMaxOptions): Function;
+    export class ValidationMinOptions extends ValidationOptions {
+        min: number;
+    }
+    export function ValidateMin(options: ValidationMinOptions): Function;
+    export class ValidationIsNumberOptions extends ValidationOptions {
+        optional?: boolean;
+    }
+    export function ValidateIsNumber(options?: ValidationIsNumberOptions): Function;
+    export class ValidationIsStringOptions extends ValidationOptions {
+        optional?: boolean;
+    }
+    export function ValidateIsString(options?: ValidationIsIntOptions): Function;
+    export function test(test: Test): Promise<void>;
+}
+declare module "jassijs/ui/Notify" {
+    import "jquery";
+    import "jquery.notify";
+    export function notify(text: string | object, style: string | any, options?: any): void;
+    export function notifyAddStyle(style: any, options: any): void;
+}
+declare module "jassijs/remote/Server" {
+    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+    import { FileNode } from "jassijs/remote/FileNode";
+    export class Server extends RemoteObject {
+        private static isonline;
+        static filesInMap: {
+            [name: string]: {
+                modul: string;
+                id: number;
+            };
+        };
+        constructor();
+        private _convertFileNode;
+        private fillMapModules;
+        fillFilesInMapIfNeeded(): Promise<void>;
+        addFilesFromMap(root: FileNode): Promise<void>;
         /**
-         * listener for code reloaded
-         * @param {function} func - callfunction for the event
+        * gets alls ts/js-files from server
+        * @param {Promise<string>} [async] - returns a Promise for asynchros handling
+        * @returns {string[]} - list of files
+        */
+        dir(withDate?: boolean, context?: Context): Promise<FileNode>;
+        zip(directoryname: string, serverdir?: boolean, context?: Context): Promise<string | {
+            [id: string]: string;
+        }>;
+        /**
+         * gets the content of a file from server
+         * @param {string} fileNamew
+         * @returns {string} content of the file
          */
-        addEventCodeReloaded(func: any): void;
-        removeEventCodeReloaded(func: any): void;
-        private _findScript;
-        reloadJS(fileName: string): Promise<void>;
-        reloadJSAll(fileNames: string[], afterUnload?: () => {}): Promise<void>;
-        migrateModul(allModules: any, file: any, modul: any): void;
-        migrateClasses(file: any, oldmodul: any, modul: any): void;
+        loadFiles(fileNames: string[], context?: Context): Promise<{
+            [id: string]: string;
+        }>;
+        /**
+         * gets the content of a file from server
+         * @param {string} fileName
+         * @returns {string} content of the file
+         */
+        loadFile(fileName: string, context?: Context): Promise<string>;
+        /**
+        * put the content to a file
+        * @param [{string}] fileNames - the name of the file
+        * @param [{string}] contents
+        */
+        saveFiles(fileNames: string[], contents: string[], context?: Context): Promise<string>;
+        /**
+        * put the content to a file
+        * @param {string} fileName - the name of the file
+        * @param {string} content
+        */
+        saveFile(fileName: string, content: string, context?: Context): Promise<string>;
+        /**
+       * deletes a server modul
+       **/
+        testServersideFile(name: string, context?: Context): Promise<string>;
+        /**
+       * deletes a server modul
+       **/
+        removeServerModul(name: string, context?: Context): Promise<string>;
+        /**
+        * deletes a file or directory
+        **/
+        delete(name: string, context?: Context): Promise<string>;
+        /**
+         * renames a file or directory
+         **/
+        rename(oldname: string, newname: string, context?: Context): Promise<string>;
+        /**
+        * is the nodes server running
+        **/
+        static isOnline(context?: Context): Promise<boolean>;
+        /**
+         * creates a file
+         **/
+        createFile(filename: string, content: string, context?: Context): Promise<string>;
+        /**
+        * creates a file
+        **/
+        createFolder(foldername: string, context?: Context): Promise<string>;
+        createModule(modulename: string, context?: Context): Promise<string>;
+        static mytest(context?: Context): Promise<any>;
     }
 }
 declare module "jassijs/server/FS" {
@@ -229,6 +917,33 @@ declare module "jassijs/server/LocalFS" {
     export function createHandle(): Promise<void>;
     export function test(tt: Test): Promise<void>;
 }
+declare module "jassijs/server/Reloader" {
+    export class Reloader {
+        static cache: any[];
+        static reloadCodeFromServerIsRunning: boolean;
+        static instance: Reloader;
+        listener: any[];
+        /**
+         * reloads Code
+         */
+        private constructor();
+        /**
+         * check code changes out of the browser if localhost and load the changes in to the browser
+         */
+        static startReloadCodeFromServer(): void;
+        /**
+         * listener for code reloaded
+         * @param {function} func - callfunction for the event
+         */
+        addEventCodeReloaded(func: any): void;
+        removeEventCodeReloaded(func: any): void;
+        private _findScript;
+        reloadJS(fileName: string): Promise<void>;
+        reloadJSAll(fileNames: string[], afterUnload?: () => {}, useServerRequire?: boolean): Promise<void>;
+        migrateModul(allModules: any, file: any, modul: any): void;
+        migrateClasses(file: any, oldmodul: any, modul: any): void;
+    }
+}
 /// <amd-dependency name="JSZip" path="jszip" />
 declare module "jassijs/server/ext/jszip" {
     var JSZip: any;
@@ -250,6 +965,7 @@ declare module "jassijs/server/NativeAdapter" {
 }
 declare module "jassijs/remote/Config" {
     export class Config {
+        name: string;
         isLocalFolderMapped: boolean;
         isServer: boolean;
         modules: {
@@ -264,46 +980,12 @@ declare module "jassijs/remote/Config" {
         clientrequire: any;
         serverrequire: any;
         constructor();
-        init(configtext: string): void;
+        init(configtext: string, name?: any): void;
         reload(): Promise<void>;
         saveJSON(): Promise<void>;
     }
     var config: Config;
     export { config };
-}
-declare module "jassijs/remote/FileNode" {
-    export class FileNode {
-        name: string;
-        fullpath?: string;
-        parent?: FileNode;
-        files?: FileNode[];
-        date?: any;
-        flag?: string;
-        constructor(fullpath?: string);
-        isDirectory?(): boolean;
-        resolveChilds?(all?: {
-            [path: string]: FileNode;
-        }): {
-            [path: string]: FileNode;
-        };
-    }
-}
-declare module "jassijs/remote/Serverservice" {
-    import "jassijs/remote/Classes";
-    export class ServerserviceProperties {
-        name: string;
-        getInstance: (() => Promise<any>);
-    }
-    var runningServerservices: {};
-    export function beforeServiceLoad(func: (name: string, props: ServerserviceProperties) => void): void;
-    global {
-        interface Serverservice {
-        }
-    }
-    var serverservices: Serverservice;
-    export function $Serverservice(properties: ServerserviceProperties): Function;
-    var doNotReloadModule: boolean;
-    export { serverservices, doNotReloadModule, runningServerservices };
 }
 declare module "jassijs/server/Indexer" {
     export abstract class Indexer {
@@ -340,7 +1022,7 @@ declare module "jassijs/server/Compile" {
         constructor();
         serverConfig(): ts.CompilerOptions;
         getDirectoryname(ppath: any): any;
-        dirFiles(dirname: string, skip: string[], ret: any): Promise<void>;
+        dirFiles(dirname: string, skip: string[], ret: any, replaceClientFileName?: boolean): Promise<void>;
         readRegistry(file: string, isServer: boolean): Promise<any>;
         createRegistry(modul: string, isServer: boolean, exclude: string, includeClientRegistry: string, files: any): Promise<void>;
         readModuleCode(modul: any, isServer: any): Promise<{
@@ -578,379 +1260,6 @@ declare module "jassijs/base/ActionNode" {
     export class ActionNode {
     }
     export function test(): Promise<void>;
-}
-declare module "jassijs/remote/security/Rights" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    export class RightProperties {
-        name: string;
-        description?: string;
-    }
-    export class ParentRightProperties {
-        name: string;
-        description?: {
-            text: string;
-            [parametername: string]: string;
-        };
-        sqlToCheck: string;
-    }
-    export function $Rights(rights: RightProperties[]): Function;
-    export function $ParentRights(rights: [ParentRightProperties]): Function;
-    export function $CheckParentRight(): Function;
-    export class Rights extends RemoteObject {
-        private _isAdmin;
-        isAdmin(context?: Context): Promise<boolean>;
-    }
-    var rights: Rights;
-    export default rights;
-}
-declare module "jassijs/util/Cookies" {
-    class C {
-        set(name: string, value: string, params?: any): void;
-        get(name: string): any;
-        remove(name: string, params?: any): void;
-        getJSON(): string;
-    }
-    var Cookies: C;
-    export { Cookies };
-}
-declare module "jassijs/ext/jquerylib" {
-    import "jquery";
-    import "jquery.ui";
-    import "jquery.ui.touch";
-}
-declare module "jassijs/ui/Property" {
-    export function $Property(property?: Property): Function;
-    export class Property {
-        [key: string]: any;
-        constructorClass?: any;
-        default?: any;
-        /** the name of the property*/
-        name?: string;
-        /** the type of the property*/
-        type?: string;
-        /** the user can choose this entries */
-        chooseFrom?: any[] | ((comp: any, propertyeditor?: any) => any[]);
-        /** @member - the user can select from chooseFrom but can not input own entries*/
-        chooseFromStrict?: boolean;
-        /** @member - the description for tooltip **/
-        decription?: string;
-        /** @member - hides the properties from the base class **/
-        hideBaseClassProperties?: boolean;
-        /** @member - is the property visible */
-        isVisible?: (component: any, propertyeditor?: any) => boolean;
-        /** @member - jassijs.base.Action -   the actions in the PropertyEditor  */
-        editoractions?: any[];
-        /**
-         * Property for PropertyEditor
-         * @class jassijs.ui.EditorProperty
-         */
-        constructor(name?: any, type?: any);
-        componentType?: any;
-        description?: string;
-        hide?: boolean;
-        /**
-         * this property could be set by browser url
-         */
-        isUrlTag?: boolean;
-    }
-}
-declare module "jassijs/ui/ComponentDescriptor" {
-    import { Property } from "jassijs/ui/Property";
-    import { Component } from "jassijs/ui/Component";
-    export class ComponentDescriptor {
-        static cache: any;
-        fields: Property[];
-        editableComponents: any;
-        /**
-        * describes a Component
-        * @class jassijs.ui.EditorProperty
-        */
-        constructor();
-        /**
-         * describes a class
-         * @param {class}  type - the type of the class
-         * @param {boolean}  nocache - an uncached version
-         * @returns {jassijs.ui.ComponentDescriptor} - which describes the component
-         */
-        static describe(type: any, nocache?: boolean): ComponentDescriptor;
-        /**
-         * get the ids of all editable Components by the designer
-         * @param {jassijs.ui.Component} component - the component to inspect
-         * @param {boolean} idFromLabel - if true not the id but the id form label is returned
-         * @param {flag} - undocumented-used for recursation
-         **/
-        static getEditableComponents(component: Component, idFromLabel: any, includeFrozenContainer: any, flag: any): string;
-        /** calc editableComponents
-         * @param {object} ob - the object to resolve
-         * @returns {Object.<string,jassijs.ui.Component> - <name,component>
-         **/
-        resolveEditableComponents(ob: any, type?: any, ret?: any): any;
-        /**
-         * remove a field
-         * @param {string} field - the name of the field to remove
-         */
-        removeField(field: any): void;
-    }
-}
-declare module "jassijs/ui/CSSProperties" {
-    import { Component } from "jassijs/ui/Component";
-    /**
-     * loads googlefonts if needed
-     **/
-    export function loadFontIfNedded(font: string): void;
-    export class CSSProperties {
-        background_color?: string;
-        background_image?: string;
-        border_color?: string;
-        border_style?: string | "none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset" | "inherit" | "initial" | "unset";
-        border_width?: string | "thin" | "medium" | "thick" | "2px" | "inherit" | "initial" | "unset";
-        color?: string;
-        cursor?: string | "auto" | "default" | "none" | "context-menu" | "help" | "pointer" | "progress" | "wait" | "cell" | "crosshair" | "text" | "vertical-text" | "alias" | "copy" | "move" | "no-drop" | "not-allowed" | "grab" | "grabbing" | "all-scroll" | "col-resize" | "row-resize" | "n-resize" | "e-resize" | "s-resize" | "w-resize" | "ne-resize" | "nw-resize" | "se-resize" | "sw-resize" | "ew-resize" | "ns-resize" | "nesw-resize" | "nwse-resize" | "zoom-in" | "zoom-out" | "inherit" | "initial" | "unset";
-        filter?: string | "blur(5px)" | "brightness(0.4)" | "contrast(200%)" | "drop-shadow(16px 16px 20px blue)" | "grayscale(50%)" | "hue-rotate(90deg)" | "invert(75%)" | "opacity(25%)" | "saturate(30%)" | "sepia(60%)" | "inherit" | "initial" | "unset";
-        float?: string | "left" | "right" | "none" | "inline-start" | "inline-end" | "inherit" | "initial" | "unset";
-        font_family?: string;
-        font_size?: string | "12px" | "xx-small" | "x-small" | "small" | "medium" | "large" | "x-large" | "xx-large" | "xxx-large" | "larger" | "smaller" | "inherit" | "initial" | "unset";
-        font_variant?: string | "normal" | "small-caps" | "small-caps slashed-zero" | "common-ligatures tabular-nums" | "no-common-ligatures proportional-nums" | "inherit" | "initial" | "unset";
-        font_weight?: string | "normal" | "bold" | "lighter" | "bolder" | "100" | "900" | "inherit" | "initial" | "unset";
-        letter_spacing?: string | "normal" | "1px";
-        line_height?: string | "normal" | "32px";
-        margin_bottom?: string | "3px";
-        margin_left?: string | "3px";
-        margin_right?: string | "3px";
-        margin_top?: string | "3px";
-        overflow?: string | "visible" | "hidden" | "clip" | "scroll" | "auto" | "inherit" | "initial" | "unset";
-        padding_bottom?: string | "3px";
-        padding_left?: string | "3px";
-        padding_right?: string | "3px";
-        padding_top?: string | "3px";
-        position?: string | "static" | "relative" | "absolute" | "sticky" | "fixed" | "inherit" | "initial" | "unset";
-        text_align?: string | "start" | "end" | "left" | "right" | "center" | "justify" | "match-parent" | "inherit" | "initial" | "unset";
-        text_decoration_color?: string;
-        text_decoration_line?: string | "none" | "underline" | "overline" | "line-through" | "blink" | "spelling-error" | "grammar-error" | "inherit" | "initial" | "unset";
-        text_decoration_style?: string | "solid" | "double" | "dotted" | "dashed" | "wavy" | "inherit" | "initial" | "unset";
-        text_decoration_thickness?: string | "3px";
-        text_transform?: string | "none" | "capitalize" | "uppercase" | "lowercase" | "full-width" | "full-size-kana" | "inherit" | "initial" | "unset";
-        vertical_align?: string | "baseline" | "sub" | "super" | "text-top" | "text-bottom" | "middle" | "top" | "bottom" | "3px" | "inherit" | "initial" | "unset";
-        z_index?: string | "1" | "2" | "auto";
-        [name: string]: string;
-        static applyTo(properties: CSSProperties, component: Component): CSSProperties;
-    }
-}
-declare module "jassijs/ui/Component" {
-    import { CSSProperties } from "jassijs/ui/CSSProperties";
-    global {
-        interface Element {
-            _this: Component;
-            _id?: string;
-        }
-    }
-    export class UIComponentProperties {
-        /**
-         * full path to classifiy the UIComponent e.g common/TopComponent
-         */
-        fullPath?: string;
-        icon?: string;
-        /**
-         * initproperties are automatically set on new created Components
-         * e.g. {text:"button"}
-         */
-        initialize?: {
-            [initproperties: string]: any;
-        };
-        /**
-         * allcomponents
-         */
-        editableChildComponents?: string[];
-    }
-    export function $UIComponent(properties: UIComponentProperties): Function;
-    export class ComponentCreateProperties {
-        id?: string;
-        noWrapper?: boolean;
-    }
-    export interface ComponentConfig {
-        /**
-        * called if the component get the focus
-        * @param {function} handler - the function which is executed
-        */
-        onfocus?(handler: any): any;
-        /**
-        * called if the component lost the focus
-        * @param {function} handler - the function which is executed
-        */
-        onblur?(handler: any): any;
-        /**
-         * @member {string} - the label over the component
-         */
-        label?: string;
-        /**
-       * @member {string} - tooltip for the component
-       */
-        tooltip?: string;
-        /**
-        * @member {number} - the left absolute position
-        */
-        x?: number;
-        /**
-         * @member {number|string} - the top absolute position
-         */
-        y?: number;
-        /**
-         * @member {boolean} - component is hidden
-         */
-        hidden?: boolean;
-        /**
-       * @member {string|number} - the width of the component
-       * e.g. 50 or "100%"
-       */
-        width?: string | number;
-        /**
-         * @member {string|number} - the height of the component
-         * e.g. 50 or "100%"
-         */
-        height?: string | number;
-        /**
-         * ccc-Properties
-         */
-        css?: CSSProperties;
-        styles?: any[];
-        /**
-         * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
-         **/
-        contextMenu?: any;
-    }
-    export class Component implements ComponentConfig {
-        private static _componentHook;
-        _eventHandler: any;
-        __dom: HTMLElement;
-        domWrapper: HTMLElement;
-        _id: string;
-        _contextMenu?: any;
-        _parent: any;
-        events: any;
-        _designMode: any;
-        _styles?: any[];
-        protected designDummies: Component[];
-        /**
-         * base class for each Component
-         * @class jassijs.ui.Component
-         * @param {object} properties - properties to init
-         * @param {string} [properties.id] -  connect to existing id (not reqired)
-         *
-         */
-        constructor(properties?: ComponentCreateProperties);
-        config(config: ComponentConfig): Component;
-        static onComponentCreated(func: any): void;
-        static offComponentCreated(func: any): void;
-        /**
-         * adds an event
-         * @param {type} name - the name of the event
-         * @param {function} func - callfunction for the event
-         */
-        addEvent(name: any, func: any): void;
-        /**
-         * call the event
-         * @param {name} name - the name of the event
-         * @param {object} param 1- parameter for the event
-         * @param {object} param 2- parameter for the event
-         * @param {object} param 3- parameter for the event
-         * @param {object} param 4- parameter for the event
-         */
-        callEvent(name: any, param1: any, param2?: any, param3?: any, param4?: any): any[];
-        /**
-         * @member {dom} - the dom element
-         */
-        get dom(): HTMLElement;
-        set dom(value: HTMLElement);
-        onfocus(handler: any): EventListenerOrEventListenerObject;
-        onblur(handler: any): EventListenerOrEventListenerObject;
-        /**
-         * attach an eventhandler
-         * @returns the handler to off the event
-         */
-        on(eventname: string, handler: EventListenerOrEventListenerObject): EventListenerOrEventListenerObject;
-        off(eventname: string, handler?: EventListenerOrEventListenerObject): void;
-        private static cloneAttributes;
-        static replaceWrapper(old: Component, newWrapper: HTMLElement): void;
-        /**
-         * create an Element from an htmlstring e.g. createDom("<input/>")
-         */
-        static createHTMLElement(html: string): HTMLElement;
-        /**
-         * inits the component
-         * @param {dom} dom - init the dom element
-         * @paran {object} properties - properties to init
-        */
-        init(dom: HTMLElement | string, properties?: ComponentCreateProperties): void;
-        set label(value: string);
-        get label(): string;
-        get tooltip(): string;
-        set tooltip(value: string);
-        get x(): number;
-        set x(value: number);
-        get y(): number;
-        set y(value: number);
-        get hidden(): boolean;
-        set hidden(value: boolean);
-        set width(value: string | number);
-        get width(): string;
-        set height(value: string | number);
-        get height(): string | number;
-        set css(properties: CSSProperties);
-        /**
-         * maximize the component
-         */
-        maximize(): void;
-        get styles(): any[];
-        set styles(styles: any[]);
-        get contextMenu(): any;
-        set contextMenu(value: any);
-        destroy(): void;
-        extensionCalled(action: ExtensionAction): void;
-    }
-}
-declare module "jassijs/base/LoginDialog" {
-    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
-    import "jassijs/ext/jquerylib";
-    export function doAfterLogin(resolve: any, prot: RemoteProtocol): void;
-    export function login(): Promise<unknown>;
-    export function test(): void;
-}
-declare module "jassijs/remote/RemoteProtocol" {
-    export class RemoteProtocol {
-        static counter: number;
-        classname: string;
-        _this: any;
-        parameter: any[];
-        method: string;
-        /**
-         * converts object to jsonstring
-         * if class is registerd in classes then the class is used
-         * if id is used then recursive childs are possible
-         * @param obj
-         */
-        stringify(obj: any): string;
-        static simulateUser(user?: string, password?: string): Promise<void>;
-        exec(config: any, object: any): Promise<unknown>;
-        /**
-       * call the server
-       */
-        call(): Promise<any>;
-        /**
-         * converts jsonstring to an object
-         */
-        parse(text: string): Promise<any>;
-        test(): Promise<void>;
-    }
-}
-declare module "jassijs/remote/RemoteObject" {
-    export class Context {
-        isServer: boolean;
-        [key: string]: any;
-    }
-    export class RemoteObject {
-        static call(method: (...ars: any) => any, ...parameter: any[]): Promise<any>;
-        call(_this: any, method: (...ars: any) => any, ...parameter: any[]): Promise<any>;
-    }
 }
 declare module "jassijs/remote/Database" {
     export class TypeDef {
@@ -1520,82 +1829,6 @@ declare module "jassijs/remote/Transaction" {
         add(obj: any, method: (...args: any[]) => any, ...params: any[]): void;
     }
 }
-declare module "jassijs/remote/Validator" {
-    import "reflect-metadata";
-    import { Test } from "jassijs/remote/Test";
-    export class ValidationOptions {
-        message?: string;
-    }
-    export function registerValidation(name: string, options: ValidationOptions, func: (target: any, propertyName: string, value: any, options: any) => string): (target: any, propertyKey: string, parameterIndex: number) => void;
-    export class ValidationError {
-        value: object;
-        target: object;
-        property: string;
-        message: string;
-        constructor(value: any, target: any, property: string, message: string);
-    }
-    class ValidateOptions {
-        /**
-         * e.g. {ValidateInt:{optional:false}} delegates optional:false to all ValidateInt rules
-         * e.g. {ALL:{optional:false}} delegates optional:false to all Validators rules}
-         */
-        delegateOptions?: {
-            [ValidatorClassName: string]: any;
-        };
-    }
-    export function validate(obj: any, options?: ValidateOptions, raiseError?: boolean): ValidationError[];
-    export class ValidationIsArrayOptions extends ValidationOptions {
-        optional?: boolean;
-        type?: (type?: any) => any;
-        alternativeJsonProperties?: string[];
-    }
-    export function ValidateIsArray(options?: ValidationIsArrayOptions): Function;
-    export class ValidationIsBooleanOptions extends ValidationOptions {
-        optional?: boolean;
-        type?: any;
-    }
-    export function ValidateIsBoolean(options?: ValidationIsBooleanOptions): Function;
-    export class ValidationIsDateOptions extends ValidationOptions {
-        optional?: boolean;
-    }
-    export function ValidateIsDate(options?: ValidationIsDateOptions): Function;
-    export function ValidateFunctionParameter(): Function;
-    export class ValidationIsInOptions extends ValidationOptions {
-        optional?: boolean;
-        in: any[];
-    }
-    export function ValidateIsIn(options?: ValidationIsInOptions): Function;
-    export class ValidationIsInstanceOfOptions extends ValidationOptions {
-        optional?: boolean;
-        type: (type?: any) => any;
-        /**
-         * ["id"] means an object {id:9} is also a valid type
-         */
-        alternativeJsonProperties?: string[];
-    }
-    export function ValidateIsInstanceOf(options?: ValidationIsInstanceOfOptions): Function;
-    export class ValidationIsIntOptions extends ValidationOptions {
-        optional?: boolean;
-    }
-    export function ValidateIsInt(options?: ValidationIsIntOptions): Function;
-    export class ValidationMaxOptions extends ValidationOptions {
-        max: number;
-    }
-    export function ValidateMax(options: ValidationMaxOptions): Function;
-    export class ValidationMinOptions extends ValidationOptions {
-        min: number;
-    }
-    export function ValidateMin(options: ValidationMinOptions): Function;
-    export class ValidationIsNumberOptions extends ValidationOptions {
-        optional?: boolean;
-    }
-    export function ValidateIsNumber(options?: ValidationIsNumberOptions): Function;
-    export class ValidationIsStringOptions extends ValidationOptions {
-        optional?: boolean;
-    }
-    export function ValidateIsString(options?: ValidationIsIntOptions): Function;
-    export function test(test: Test): Promise<void>;
-}
 declare module "jassijs/remote/DBObject" {
     import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
     import { EntityOptions } from "jassijs/util/DatabaseSchema";
@@ -1700,95 +1933,6 @@ declare module "jassijs/remote/security/Setting" {
     }
     export function test(): Promise<void>;
 }
-declare module "jassijs/ui/Notify" {
-    import "jquery";
-    import "jquery.notify";
-    export function notify(text: string | object, style: string | any, options?: any): void;
-    export function notifyAddStyle(style: any, options: any): void;
-}
-declare module "jassijs/remote/Server" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    import { FileNode } from "jassijs/remote/FileNode";
-    export class Server extends RemoteObject {
-        private static isonline;
-        static lastTestServersideFileResult: any;
-        static filesInMap: {
-            [name: string]: {
-                modul: string;
-                id: number;
-            };
-        };
-        constructor();
-        private _convertFileNode;
-        fillFilesInMapIfNeeded(): Promise<void>;
-        addFilesFromMap(root: FileNode): Promise<void>;
-        /**
-        * gets alls ts/js-files from server
-        * @param {Promise<string>} [async] - returns a Promise for asynchros handling
-        * @returns {string[]} - list of files
-        */
-        dir(withDate?: boolean, context?: Context): Promise<FileNode>;
-        zip(directoryname: string, serverdir?: boolean, context?: Context): Promise<string | {
-            [id: string]: string;
-        }>;
-        /**
-         * gets the content of a file from server
-         * @param {string} fileNamew
-         * @returns {string} content of the file
-         */
-        loadFiles(fileNames: string[], context?: Context): Promise<{
-            [id: string]: string;
-        }>;
-        /**
-         * gets the content of a file from server
-         * @param {string} fileName
-         * @returns {string} content of the file
-         */
-        loadFile(fileName: string, context?: Context): Promise<string>;
-        /**
-        * put the content to a file
-        * @param [{string}] fileNames - the name of the file
-        * @param [{string}] contents
-        */
-        saveFiles(fileNames: string[], contents: string[], context?: Context): Promise<string>;
-        /**
-        * put the content to a file
-        * @param {string} fileName - the name of the file
-        * @param {string} content
-        */
-        saveFile(fileName: string, content: string, context?: Context): Promise<string>;
-        /**
-       * deletes a server modul
-       **/
-        testServersideFile(name: string, context?: Context): Promise<string>;
-        /**
-       * deletes a server modul
-       **/
-        removeServerModul(name: string, context?: Context): Promise<string>;
-        /**
-        * deletes a file or directory
-        **/
-        delete(name: string, context?: Context): Promise<string>;
-        /**
-         * renames a file or directory
-         **/
-        rename(oldname: string, newname: string, context?: Context): Promise<string>;
-        /**
-        * is the nodes server running
-        **/
-        static isOnline(context?: Context): Promise<boolean>;
-        /**
-         * creates a file
-         **/
-        createFile(filename: string, content: string, context?: Context): Promise<string>;
-        /**
-        * creates a file
-        **/
-        createFolder(foldername: string, context?: Context): Promise<string>;
-        createModule(modulname: string, context?: Context): Promise<string>;
-        static mytest(context?: Context): Promise<any>;
-    }
-}
 declare module "jassijs/remote/Settings" {
     import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
     import { Setting } from "jassijs/remote/security/Setting";
@@ -1891,14 +2035,14 @@ declare module "jassijs/base/Extensions" {
     export default extensions;
 }
 declare module "jassijs/ui/Container" {
-    import { Component, ComponentConfig } from "jassijs/ui/Component";
-    export interface ContainerConfig extends ComponentConfig {
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    export interface ContainerProperties extends ComponentProperties {
         /**
          * child components
          */
-        children?: Component[];
+        children?: any;
     }
-    export class Container extends Component implements Omit<ContainerConfig, "children"> {
+    export class Container<T extends ContainerProperties = ComponentProperties> extends Component<T> implements Omit<ContainerProperties, "children"> {
         _components: Component[];
         _designDummy: any;
         /**
@@ -1907,14 +2051,13 @@ declare module "jassijs/ui/Container" {
          * @param {string} [properties.id] -  connect to existing id (not reqired)
          *
          */
-        constructor(properties?: any);
-        config(config: ContainerConfig): Container;
+        constructor(properties: ContainerProperties);
+        config(config: T, forceRender?: boolean): Container;
         /**
         * inits the component
         * @param {dom} dom - init the dom element
         * @paran {object} properties - properties to init
        */
-        init(dom: any, properties?: any): void;
         /**
          * adds a component to the container
          * @param {jassijs.ui.Component} component - the component to add
@@ -1941,19 +2084,23 @@ declare module "jassijs/ui/Container" {
     }
 }
 declare module "jassijs/ui/InvisibleComponent" {
-    import { Component } from "jassijs/ui/Component";
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    export interface InvisibleComponentProperties extends ComponentProperties {
+    }
     /**
      * invivisible Component
      **/
-    export class InvisibleComponent extends Component {
+    export class InvisibleComponent<T extends InvisibleComponentProperties = InvisibleComponentProperties> extends Component<T> {
         $isInivisibleComponent: boolean;
-        constructor(properties?: any);
+        constructor(properties?: InvisibleComponentProperties);
     }
 }
 declare module "jassijs/ui/Databinder" {
-    import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
+    import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
     import { Component } from "jassijs/ui/Component";
-    export class Databinder extends InvisibleComponent {
+    interface DatabinderProperties extends InvisibleComponentProperties {
+    }
+    export class Databinder<T extends DatabinderProperties = {}> extends InvisibleComponent<DatabinderProperties> implements DatabinderProperties {
         components: Component[];
         private _properties;
         private _getter;
@@ -1962,7 +2109,10 @@ declare module "jassijs/ui/Databinder" {
         private _autocommit;
         userObject: any;
         rollbackObject: any;
-        constructor();
+        constructor(props?: DatabinderProperties);
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+        }, HTMLElement>;
         /**
         * binds the component to the property of the userObject
         * @param {string} property - the name of the property to bind
@@ -2010,9 +2160,9 @@ declare module "jassijs/ui/Databinder" {
     }
 }
 declare module "jassijs/ui/DataComponent" {
-    import { Component, ComponentConfig } from "jassijs/ui/Component";
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
     import { Databinder } from "jassijs/ui/Databinder";
-    export interface DataComponentConfig extends ComponentConfig {
+    export interface DataComponentProperties extends ComponentProperties {
         /**
             * binds a component to a databinder
             * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
@@ -2026,7 +2176,7 @@ declare module "jassijs/ui/DataComponent" {
         autocommit?: boolean;
         value?: any;
     }
-    export class DataComponent extends Component implements DataComponentConfig {
+    export class DataComponent<T extends DataComponentProperties = DataComponentProperties> extends Component<T> implements DataComponentProperties {
         _autocommit: boolean;
         _databinder: Databinder;
         /**
@@ -2036,8 +2186,7 @@ declare module "jassijs/ui/DataComponent" {
          * @param {string} [properties.id] -  connect to existing id (not reqired)
          *
          */
-        constructor(properties?: any);
-        config(config: DataComponentConfig): DataComponent;
+        constructor(properties?: DataComponentProperties);
         get autocommit(): boolean;
         set autocommit(value: boolean);
         /**
@@ -2048,8 +2197,9 @@ declare module "jassijs/ui/DataComponent" {
     }
 }
 declare module "jassijs/ui/Image" {
-    import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
-    export interface ImageConfig extends DataComponentConfig {
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    export interface ImageProperties extends DataComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLImageElement>, HTMLImageElement>;
         /**
      * register an event if the image is clicked
      * @param {function} handler - the function that is called on change
@@ -2059,24 +2209,26 @@ declare module "jassijs/ui/Image" {
           * @member {string} - link to image
           */
         src?: string;
+        value?: string;
     }
-    export class Image extends DataComponent implements ImageConfig {
-        constructor();
-        config(config: ImageConfig): Image;
+    export class Image<T extends ImageProperties = ImageProperties> extends DataComponent<T> implements ImageProperties {
+        constructor(config?: ImageProperties);
+        render(): React.JSX.Element;
+        config(config: T): Image;
         onclick(handler: any): void;
         /**
         * @member {string} value - value of the component
         */
         set value(value: string);
         get value(): string;
-        get width(): string;
-        set width(value: string);
+        get width(): string | number;
+        set width(value: string | number);
         get height(): string | number;
         set height(value: string | number);
         set src(icon: string);
         get src(): string;
     }
-    export function test(): Image;
+    export function test(): Image<ImageProperties>;
 }
 declare module "jassijs/ui/DesignDummy" {
     import { Component } from "jassijs/ui/Component";
@@ -2091,18 +2243,17 @@ declare module "jassijs/ui/DesignDummy" {
     }
 }
 declare module "jassijs/ui/Panel" {
-    import { Container, ContainerConfig } from "jassijs/ui/Container";
-    import { Component, ComponentCreateProperties } from "jassijs/ui/Component";
-    export class PanelCreateProperties extends ComponentCreateProperties {
-        useSpan?: boolean;
-    }
-    export interface PanelConfig extends ContainerConfig {
+    import { Container, ContainerProperties } from "jassijs/ui/Container";
+    import { Component } from "jassijs/ui/Component";
+    export interface PanelProperties extends ContainerProperties {
         /**
           * @param {boolean} the elements are ordered absolute
           **/
         isAbsolute?: boolean;
+        useSpan?: boolean;
+        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
     }
-    export class Panel extends Container implements PanelConfig {
+    export class Panel<T extends PanelProperties = PanelProperties> extends Container<T> implements PanelProperties {
         _isAbsolute: boolean;
         private _activeComponentDesigner;
         /**
@@ -2112,8 +2263,279 @@ declare module "jassijs/ui/Panel" {
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties?: PanelCreateProperties);
-        config(config: PanelConfig): Panel;
+        constructor(properties?: PanelProperties);
+        render(): React.DOMElement<{
+            className: string;
+            ref?: React.LegacyRef<HTMLDivElement>;
+            key?: React.Key;
+            defaultChecked?: boolean;
+            defaultValue?: string | number | readonly string[];
+            suppressContentEditableWarning?: boolean;
+            suppressHydrationWarning?: boolean;
+            accessKey?: string;
+            autoFocus?: boolean;
+            contentEditable?: "inherit" | (boolean | "true" | "false");
+            contextMenu?: string;
+            dir?: string;
+            draggable?: boolean | "true" | "false";
+            hidden?: boolean;
+            id?: string;
+            lang?: string;
+            nonce?: string;
+            placeholder?: string;
+            slot?: string;
+            spellCheck?: boolean | "true" | "false";
+            style?: React.CSSProperties;
+            tabIndex?: number;
+            title?: string;
+            translate?: "yes" | "no";
+            radioGroup?: string;
+            role?: React.AriaRole;
+            about?: string;
+            content?: string;
+            datatype?: string;
+            inlist?: any;
+            prefix?: string;
+            property?: string;
+            rel?: string;
+            resource?: string;
+            rev?: string;
+            typeof?: string;
+            vocab?: string;
+            autoCapitalize?: string;
+            autoCorrect?: string;
+            autoSave?: string;
+            color?: string;
+            itemProp?: string;
+            itemScope?: boolean;
+            itemType?: string;
+            itemID?: string;
+            itemRef?: string;
+            results?: number;
+            security?: string;
+            unselectable?: "on" | "off";
+            inputMode?: "text" | "none" | "url" | "decimal" | "numeric" | "email" | "search" | "tel";
+            is?: string;
+            'aria-activedescendant'?: string;
+            'aria-atomic'?: boolean | "true" | "false";
+            'aria-autocomplete'?: "none" | "list" | "inline" | "both";
+            'aria-braillelabel'?: string;
+            'aria-brailleroledescription'?: string;
+            'aria-busy'?: boolean | "true" | "false";
+            'aria-checked'?: boolean | "true" | "false" | "mixed";
+            'aria-colcount'?: number;
+            'aria-colindex'?: number;
+            'aria-colindextext'?: string;
+            'aria-colspan'?: number;
+            'aria-controls'?: string;
+            'aria-current'?: boolean | "page" | "step" | "time" | "date" | "true" | "false" | "location";
+            'aria-describedby'?: string;
+            'aria-description'?: string;
+            'aria-details'?: string;
+            'aria-disabled'?: boolean | "true" | "false";
+            'aria-dropeffect'?: "none" | "copy" | "move" | "link" | "execute" | "popup";
+            'aria-errormessage'?: string;
+            'aria-expanded'?: boolean | "true" | "false";
+            'aria-flowto'?: string;
+            'aria-grabbed'?: boolean | "true" | "false";
+            'aria-haspopup'?: boolean | "menu" | "grid" | "dialog" | "true" | "false" | "listbox" | "tree";
+            'aria-hidden'?: boolean | "true" | "false";
+            'aria-invalid'?: boolean | "true" | "false" | "grammar" | "spelling";
+            'aria-keyshortcuts'?: string;
+            'aria-label'?: string;
+            'aria-labelledby'?: string;
+            'aria-level'?: number;
+            'aria-live'?: "off" | "assertive" | "polite";
+            'aria-modal'?: boolean | "true" | "false";
+            'aria-multiline'?: boolean | "true" | "false";
+            'aria-multiselectable'?: boolean | "true" | "false";
+            'aria-orientation'?: "horizontal" | "vertical";
+            'aria-owns'?: string;
+            'aria-placeholder'?: string;
+            'aria-posinset'?: number;
+            'aria-pressed'?: boolean | "true" | "false" | "mixed";
+            'aria-readonly'?: boolean | "true" | "false";
+            'aria-relevant'?: "text" | "all" | "additions" | "additions removals" | "additions text" | "removals" | "removals additions" | "removals text" | "text additions" | "text removals";
+            'aria-required'?: boolean | "true" | "false";
+            'aria-roledescription'?: string;
+            'aria-rowcount'?: number;
+            'aria-rowindex'?: number;
+            'aria-rowindextext'?: string;
+            'aria-rowspan'?: number;
+            'aria-selected'?: boolean | "true" | "false";
+            'aria-setsize'?: number;
+            'aria-sort'?: "none" | "ascending" | "descending" | "other";
+            'aria-valuemax'?: number;
+            'aria-valuemin'?: number;
+            'aria-valuenow'?: number;
+            'aria-valuetext'?: string;
+            children?: React.ReactNode;
+            dangerouslySetInnerHTML?: {
+                __html: string | TrustedHTML;
+            };
+            onCopy?: React.ClipboardEventHandler<HTMLDivElement>;
+            onCopyCapture?: React.ClipboardEventHandler<HTMLDivElement>;
+            onCut?: React.ClipboardEventHandler<HTMLDivElement>;
+            onCutCapture?: React.ClipboardEventHandler<HTMLDivElement>;
+            onPaste?: React.ClipboardEventHandler<HTMLDivElement>;
+            onPasteCapture?: React.ClipboardEventHandler<HTMLDivElement>;
+            onCompositionEnd?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionEndCapture?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionStart?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionStartCapture?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionUpdate?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionUpdateCapture?: React.CompositionEventHandler<HTMLDivElement>;
+            onFocus?: React.FocusEventHandler<HTMLDivElement>;
+            onFocusCapture?: React.FocusEventHandler<HTMLDivElement>;
+            onBlur?: React.FocusEventHandler<HTMLDivElement>;
+            onBlurCapture?: React.FocusEventHandler<HTMLDivElement>;
+            onChange?: React.FormEventHandler<HTMLDivElement>;
+            onChangeCapture?: React.FormEventHandler<HTMLDivElement>;
+            onBeforeInput?: React.FormEventHandler<HTMLDivElement>;
+            onBeforeInputCapture?: React.FormEventHandler<HTMLDivElement>;
+            onInput?: React.FormEventHandler<HTMLDivElement>;
+            onInputCapture?: React.FormEventHandler<HTMLDivElement>;
+            onReset?: React.FormEventHandler<HTMLDivElement>;
+            onResetCapture?: React.FormEventHandler<HTMLDivElement>;
+            onSubmit?: React.FormEventHandler<HTMLDivElement>;
+            onSubmitCapture?: React.FormEventHandler<HTMLDivElement>;
+            onInvalid?: React.FormEventHandler<HTMLDivElement>;
+            onInvalidCapture?: React.FormEventHandler<HTMLDivElement>;
+            onLoad?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onError?: React.ReactEventHandler<HTMLDivElement>;
+            onErrorCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyPress?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyPressCapture?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyUp?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyUpCapture?: React.KeyboardEventHandler<HTMLDivElement>;
+            onAbort?: React.ReactEventHandler<HTMLDivElement>;
+            onAbortCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onCanPlay?: React.ReactEventHandler<HTMLDivElement>;
+            onCanPlayCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onCanPlayThrough?: React.ReactEventHandler<HTMLDivElement>;
+            onCanPlayThroughCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onDurationChange?: React.ReactEventHandler<HTMLDivElement>;
+            onDurationChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onEmptied?: React.ReactEventHandler<HTMLDivElement>;
+            onEmptiedCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onEncrypted?: React.ReactEventHandler<HTMLDivElement>;
+            onEncryptedCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onEnded?: React.ReactEventHandler<HTMLDivElement>;
+            onEndedCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadedData?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadedDataCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadedMetadata?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadedMetadataCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadStart?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadStartCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onPause?: React.ReactEventHandler<HTMLDivElement>;
+            onPauseCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onPlay?: React.ReactEventHandler<HTMLDivElement>;
+            onPlayCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onPlaying?: React.ReactEventHandler<HTMLDivElement>;
+            onPlayingCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onProgress?: React.ReactEventHandler<HTMLDivElement>;
+            onProgressCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onRateChange?: React.ReactEventHandler<HTMLDivElement>;
+            onRateChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onResize?: React.ReactEventHandler<HTMLDivElement>;
+            onResizeCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onSeeked?: React.ReactEventHandler<HTMLDivElement>;
+            onSeekedCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onSeeking?: React.ReactEventHandler<HTMLDivElement>;
+            onSeekingCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onStalled?: React.ReactEventHandler<HTMLDivElement>;
+            onStalledCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onSuspend?: React.ReactEventHandler<HTMLDivElement>;
+            onSuspendCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onTimeUpdate?: React.ReactEventHandler<HTMLDivElement>;
+            onTimeUpdateCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onVolumeChange?: React.ReactEventHandler<HTMLDivElement>;
+            onVolumeChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onWaiting?: React.ReactEventHandler<HTMLDivElement>;
+            onWaitingCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onAuxClick?: React.MouseEventHandler<HTMLDivElement>;
+            onAuxClickCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onClick?: React.MouseEventHandler<HTMLDivElement>;
+            onClickCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onContextMenu?: React.MouseEventHandler<HTMLDivElement>;
+            onContextMenuCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
+            onDoubleClickCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onDrag?: React.DragEventHandler<HTMLDivElement>;
+            onDragCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragEnd?: React.DragEventHandler<HTMLDivElement>;
+            onDragEndCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragEnter?: React.DragEventHandler<HTMLDivElement>;
+            onDragEnterCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragExit?: React.DragEventHandler<HTMLDivElement>;
+            onDragExitCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragLeave?: React.DragEventHandler<HTMLDivElement>;
+            onDragLeaveCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragOver?: React.DragEventHandler<HTMLDivElement>;
+            onDragOverCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragStart?: React.DragEventHandler<HTMLDivElement>;
+            onDragStartCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDrop?: React.DragEventHandler<HTMLDivElement>;
+            onDropCapture?: React.DragEventHandler<HTMLDivElement>;
+            onMouseDown?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseDownCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseMoveCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseOut?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseOutCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseOver?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseOverCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseUp?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseUpCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onSelect?: React.ReactEventHandler<HTMLDivElement>;
+            onSelectCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onTouchCancel?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchCancelCapture?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchEnd?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchEndCapture?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchMove?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchMoveCapture?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchStart?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchStartCapture?: React.TouchEventHandler<HTMLDivElement>;
+            onPointerDown?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerDownCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerMove?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerMoveCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerUp?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerUpCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerCancel?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerCancelCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerEnter?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerEnterCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerLeave?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerLeaveCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerOver?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerOverCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerOut?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerOutCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onGotPointerCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onGotPointerCaptureCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onLostPointerCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onLostPointerCaptureCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onScroll?: React.UIEventHandler<HTMLDivElement>;
+            onScrollCapture?: React.UIEventHandler<HTMLDivElement>;
+            onWheel?: React.WheelEventHandler<HTMLDivElement>;
+            onWheelCapture?: React.WheelEventHandler<HTMLDivElement>;
+            onAnimationStart?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationStartCapture?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationEndCapture?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationIteration?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationIterationCapture?: React.AnimationEventHandler<HTMLDivElement>;
+            onTransitionEnd?: React.TransitionEventHandler<HTMLDivElement>;
+            onTransitionEndCapture?: React.TransitionEventHandler<HTMLDivElement>;
+        }, HTMLDivElement>;
         set isAbsolute(value: boolean);
         get isAbsolute(): boolean;
         max(): void;
@@ -2138,8 +2560,9 @@ declare module "jassijs/ui/Panel" {
     }
 }
 declare module "jassijs/ui/Button" {
-    import { Component, ComponentConfig } from "jassijs/ui/Component";
-    export interface ButtonConfig extends ComponentConfig {
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    export interface ButtonProperties extends ComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
         /**
       * register an event if the button is clicked
       * @param {function} handler - the function that is called on change
@@ -2154,11 +2577,294 @@ declare module "jassijs/ui/Button" {
      */
         text?: string;
     }
-    export class Button extends Component implements ButtonConfig {
-        constructor();
-        config(config: ButtonConfig): Button;
+    export class Button<T extends ButtonProperties = ComponentProperties> extends Component<T> implements ButtonProperties {
+        constructor(properties?: ButtonProperties);
+        config(config: T, forceRender?: boolean): Button;
         get dom(): HTMLButtonElement;
         set dom(value: HTMLButtonElement);
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+            contenteditable: boolean;
+            ref?: React.LegacyRef<HTMLButtonElement>;
+            key?: React.Key;
+            disabled?: boolean;
+            form?: string;
+            formAction?: string;
+            formEncType?: string;
+            formMethod?: string;
+            formNoValidate?: boolean;
+            formTarget?: string;
+            name?: string;
+            type?: "button" | "reset" | "submit";
+            value?: string | number | readonly string[];
+            defaultChecked?: boolean;
+            defaultValue?: string | number | readonly string[];
+            suppressContentEditableWarning?: boolean;
+            suppressHydrationWarning?: boolean;
+            accessKey?: string;
+            autoFocus?: boolean;
+            contentEditable?: "inherit" | (boolean | "true" | "false");
+            contextMenu?: string;
+            dir?: string;
+            draggable?: boolean | "true" | "false";
+            hidden?: boolean;
+            id?: string;
+            lang?: string;
+            nonce?: string;
+            placeholder?: string;
+            slot?: string;
+            spellCheck?: boolean | "true" | "false";
+            style?: React.CSSProperties;
+            tabIndex?: number;
+            title?: string;
+            translate?: "yes" | "no";
+            radioGroup?: string;
+            role?: React.AriaRole;
+            about?: string;
+            content?: string;
+            datatype?: string;
+            inlist?: any;
+            prefix?: string;
+            property?: string;
+            rel?: string;
+            resource?: string;
+            rev?: string;
+            typeof?: string;
+            vocab?: string;
+            autoCapitalize?: string;
+            autoCorrect?: string;
+            autoSave?: string;
+            color?: string;
+            itemProp?: string;
+            itemScope?: boolean;
+            itemType?: string;
+            itemID?: string;
+            itemRef?: string;
+            results?: number;
+            security?: string;
+            unselectable?: "on" | "off";
+            inputMode?: "text" | "none" | "url" | "decimal" | "numeric" | "email" | "search" | "tel";
+            is?: string;
+            'aria-activedescendant'?: string;
+            'aria-atomic'?: boolean | "true" | "false";
+            'aria-autocomplete'?: "none" | "list" | "inline" | "both";
+            'aria-braillelabel'?: string;
+            'aria-brailleroledescription'?: string;
+            'aria-busy'?: boolean | "true" | "false";
+            'aria-checked'?: boolean | "true" | "false" | "mixed";
+            'aria-colcount'?: number;
+            'aria-colindex'?: number;
+            'aria-colindextext'?: string;
+            'aria-colspan'?: number;
+            'aria-controls'?: string;
+            'aria-current'?: boolean | "page" | "step" | "time" | "date" | "true" | "false" | "location";
+            'aria-describedby'?: string;
+            'aria-description'?: string;
+            'aria-details'?: string;
+            'aria-disabled'?: boolean | "true" | "false";
+            'aria-dropeffect'?: "none" | "copy" | "move" | "link" | "execute" | "popup";
+            'aria-errormessage'?: string;
+            'aria-expanded'?: boolean | "true" | "false";
+            'aria-flowto'?: string;
+            'aria-grabbed'?: boolean | "true" | "false";
+            'aria-haspopup'?: boolean | "menu" | "grid" | "dialog" | "true" | "false" | "listbox" | "tree";
+            'aria-hidden'?: boolean | "true" | "false";
+            'aria-invalid'?: boolean | "true" | "false" | "grammar" | "spelling";
+            'aria-keyshortcuts'?: string;
+            'aria-label'?: string;
+            'aria-labelledby'?: string;
+            'aria-level'?: number;
+            'aria-live'?: "off" | "assertive" | "polite";
+            'aria-modal'?: boolean | "true" | "false";
+            'aria-multiline'?: boolean | "true" | "false";
+            'aria-multiselectable'?: boolean | "true" | "false";
+            'aria-orientation'?: "horizontal" | "vertical";
+            'aria-owns'?: string;
+            'aria-placeholder'?: string;
+            'aria-posinset'?: number;
+            'aria-pressed'?: boolean | "true" | "false" | "mixed";
+            'aria-readonly'?: boolean | "true" | "false";
+            'aria-relevant'?: "text" | "all" | "additions" | "additions removals" | "additions text" | "removals" | "removals additions" | "removals text" | "text additions" | "text removals";
+            'aria-required'?: boolean | "true" | "false";
+            'aria-roledescription'?: string;
+            'aria-rowcount'?: number;
+            'aria-rowindex'?: number;
+            'aria-rowindextext'?: string;
+            'aria-rowspan'?: number;
+            'aria-selected'?: boolean | "true" | "false";
+            'aria-setsize'?: number;
+            'aria-sort'?: "none" | "ascending" | "descending" | "other";
+            'aria-valuemax'?: number;
+            'aria-valuemin'?: number;
+            'aria-valuenow'?: number;
+            'aria-valuetext'?: string;
+            children?: React.ReactNode;
+            dangerouslySetInnerHTML?: {
+                __html: string | TrustedHTML;
+            };
+            onCopy?: React.ClipboardEventHandler<HTMLButtonElement>;
+            onCopyCapture?: React.ClipboardEventHandler<HTMLButtonElement>;
+            onCut?: React.ClipboardEventHandler<HTMLButtonElement>;
+            onCutCapture?: React.ClipboardEventHandler<HTMLButtonElement>;
+            onPaste?: React.ClipboardEventHandler<HTMLButtonElement>;
+            onPasteCapture?: React.ClipboardEventHandler<HTMLButtonElement>;
+            onCompositionEnd?: React.CompositionEventHandler<HTMLButtonElement>;
+            onCompositionEndCapture?: React.CompositionEventHandler<HTMLButtonElement>;
+            onCompositionStart?: React.CompositionEventHandler<HTMLButtonElement>;
+            onCompositionStartCapture?: React.CompositionEventHandler<HTMLButtonElement>;
+            onCompositionUpdate?: React.CompositionEventHandler<HTMLButtonElement>;
+            onCompositionUpdateCapture?: React.CompositionEventHandler<HTMLButtonElement>;
+            onFocus?: React.FocusEventHandler<HTMLButtonElement>;
+            onFocusCapture?: React.FocusEventHandler<HTMLButtonElement>;
+            onBlur?: React.FocusEventHandler<HTMLButtonElement>;
+            onBlurCapture?: React.FocusEventHandler<HTMLButtonElement>;
+            onChange?: React.FormEventHandler<HTMLButtonElement>;
+            onChangeCapture?: React.FormEventHandler<HTMLButtonElement>;
+            onBeforeInput?: React.FormEventHandler<HTMLButtonElement>;
+            onBeforeInputCapture?: React.FormEventHandler<HTMLButtonElement>;
+            onInput?: React.FormEventHandler<HTMLButtonElement>;
+            onInputCapture?: React.FormEventHandler<HTMLButtonElement>;
+            onReset?: React.FormEventHandler<HTMLButtonElement>;
+            onResetCapture?: React.FormEventHandler<HTMLButtonElement>;
+            onSubmit?: React.FormEventHandler<HTMLButtonElement>;
+            onSubmitCapture?: React.FormEventHandler<HTMLButtonElement>;
+            onInvalid?: React.FormEventHandler<HTMLButtonElement>;
+            onInvalidCapture?: React.FormEventHandler<HTMLButtonElement>;
+            onLoad?: React.ReactEventHandler<HTMLButtonElement>;
+            onLoadCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onError?: React.ReactEventHandler<HTMLButtonElement>;
+            onErrorCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement>;
+            onKeyDownCapture?: React.KeyboardEventHandler<HTMLButtonElement>;
+            onKeyPress?: React.KeyboardEventHandler<HTMLButtonElement>;
+            onKeyPressCapture?: React.KeyboardEventHandler<HTMLButtonElement>;
+            onKeyUp?: React.KeyboardEventHandler<HTMLButtonElement>;
+            onKeyUpCapture?: React.KeyboardEventHandler<HTMLButtonElement>;
+            onAbort?: React.ReactEventHandler<HTMLButtonElement>;
+            onAbortCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onCanPlay?: React.ReactEventHandler<HTMLButtonElement>;
+            onCanPlayCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onCanPlayThrough?: React.ReactEventHandler<HTMLButtonElement>;
+            onCanPlayThroughCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onDurationChange?: React.ReactEventHandler<HTMLButtonElement>;
+            onDurationChangeCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onEmptied?: React.ReactEventHandler<HTMLButtonElement>;
+            onEmptiedCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onEncrypted?: React.ReactEventHandler<HTMLButtonElement>;
+            onEncryptedCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onEnded?: React.ReactEventHandler<HTMLButtonElement>;
+            onEndedCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onLoadedData?: React.ReactEventHandler<HTMLButtonElement>;
+            onLoadedDataCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onLoadedMetadata?: React.ReactEventHandler<HTMLButtonElement>;
+            onLoadedMetadataCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onLoadStart?: React.ReactEventHandler<HTMLButtonElement>;
+            onLoadStartCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onPause?: React.ReactEventHandler<HTMLButtonElement>;
+            onPauseCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onPlay?: React.ReactEventHandler<HTMLButtonElement>;
+            onPlayCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onPlaying?: React.ReactEventHandler<HTMLButtonElement>;
+            onPlayingCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onProgress?: React.ReactEventHandler<HTMLButtonElement>;
+            onProgressCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onRateChange?: React.ReactEventHandler<HTMLButtonElement>;
+            onRateChangeCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onResize?: React.ReactEventHandler<HTMLButtonElement>;
+            onResizeCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onSeeked?: React.ReactEventHandler<HTMLButtonElement>;
+            onSeekedCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onSeeking?: React.ReactEventHandler<HTMLButtonElement>;
+            onSeekingCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onStalled?: React.ReactEventHandler<HTMLButtonElement>;
+            onStalledCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onSuspend?: React.ReactEventHandler<HTMLButtonElement>;
+            onSuspendCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onTimeUpdate?: React.ReactEventHandler<HTMLButtonElement>;
+            onTimeUpdateCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onVolumeChange?: React.ReactEventHandler<HTMLButtonElement>;
+            onVolumeChangeCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onWaiting?: React.ReactEventHandler<HTMLButtonElement>;
+            onWaitingCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onAuxClick?: React.MouseEventHandler<HTMLButtonElement>;
+            onAuxClickCapture?: React.MouseEventHandler<HTMLButtonElement>;
+            onClick?: React.MouseEventHandler<HTMLButtonElement>;
+            onClickCapture?: React.MouseEventHandler<HTMLButtonElement>;
+            onContextMenu?: React.MouseEventHandler<HTMLButtonElement>;
+            onContextMenuCapture?: React.MouseEventHandler<HTMLButtonElement>;
+            onDoubleClick?: React.MouseEventHandler<HTMLButtonElement>;
+            onDoubleClickCapture?: React.MouseEventHandler<HTMLButtonElement>;
+            onDrag?: React.DragEventHandler<HTMLButtonElement>;
+            onDragCapture?: React.DragEventHandler<HTMLButtonElement>;
+            onDragEnd?: React.DragEventHandler<HTMLButtonElement>;
+            onDragEndCapture?: React.DragEventHandler<HTMLButtonElement>;
+            onDragEnter?: React.DragEventHandler<HTMLButtonElement>;
+            onDragEnterCapture?: React.DragEventHandler<HTMLButtonElement>;
+            onDragExit?: React.DragEventHandler<HTMLButtonElement>;
+            onDragExitCapture?: React.DragEventHandler<HTMLButtonElement>;
+            onDragLeave?: React.DragEventHandler<HTMLButtonElement>;
+            onDragLeaveCapture?: React.DragEventHandler<HTMLButtonElement>;
+            onDragOver?: React.DragEventHandler<HTMLButtonElement>;
+            onDragOverCapture?: React.DragEventHandler<HTMLButtonElement>;
+            onDragStart?: React.DragEventHandler<HTMLButtonElement>;
+            onDragStartCapture?: React.DragEventHandler<HTMLButtonElement>;
+            onDrop?: React.DragEventHandler<HTMLButtonElement>;
+            onDropCapture?: React.DragEventHandler<HTMLButtonElement>;
+            onMouseDown?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseDownCapture?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseLeave?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseMove?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseMoveCapture?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseOut?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseOutCapture?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseOver?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseOverCapture?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseUp?: React.MouseEventHandler<HTMLButtonElement>;
+            onMouseUpCapture?: React.MouseEventHandler<HTMLButtonElement>;
+            onSelect?: React.ReactEventHandler<HTMLButtonElement>;
+            onSelectCapture?: React.ReactEventHandler<HTMLButtonElement>;
+            onTouchCancel?: React.TouchEventHandler<HTMLButtonElement>;
+            onTouchCancelCapture?: React.TouchEventHandler<HTMLButtonElement>;
+            onTouchEnd?: React.TouchEventHandler<HTMLButtonElement>;
+            onTouchEndCapture?: React.TouchEventHandler<HTMLButtonElement>;
+            onTouchMove?: React.TouchEventHandler<HTMLButtonElement>;
+            onTouchMoveCapture?: React.TouchEventHandler<HTMLButtonElement>;
+            onTouchStart?: React.TouchEventHandler<HTMLButtonElement>;
+            onTouchStartCapture?: React.TouchEventHandler<HTMLButtonElement>;
+            onPointerDown?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerDownCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerMove?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerMoveCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerUp?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerUpCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerCancel?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerCancelCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerEnter?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerEnterCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerLeave?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerLeaveCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerOver?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerOverCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerOut?: React.PointerEventHandler<HTMLButtonElement>;
+            onPointerOutCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onGotPointerCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onGotPointerCaptureCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onLostPointerCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onLostPointerCaptureCapture?: React.PointerEventHandler<HTMLButtonElement>;
+            onScroll?: React.UIEventHandler<HTMLButtonElement>;
+            onScrollCapture?: React.UIEventHandler<HTMLButtonElement>;
+            onWheel?: React.WheelEventHandler<HTMLButtonElement>;
+            onWheelCapture?: React.WheelEventHandler<HTMLButtonElement>;
+            onAnimationStart?: React.AnimationEventHandler<HTMLButtonElement>;
+            onAnimationStartCapture?: React.AnimationEventHandler<HTMLButtonElement>;
+            onAnimationEnd?: React.AnimationEventHandler<HTMLButtonElement>;
+            onAnimationEndCapture?: React.AnimationEventHandler<HTMLButtonElement>;
+            onAnimationIteration?: React.AnimationEventHandler<HTMLButtonElement>;
+            onAnimationIterationCapture?: React.AnimationEventHandler<HTMLButtonElement>;
+            onTransitionEnd?: React.TransitionEventHandler<HTMLButtonElement>;
+            onTransitionEndCapture?: React.TransitionEventHandler<HTMLButtonElement>;
+        }, HTMLButtonElement>;
         onclick(handler: any, removeOldHandler?: boolean): EventListenerOrEventListenerObject;
         set icon(icon: string);
         get icon(): string;
@@ -2167,7 +2873,7 @@ declare module "jassijs/ui/Button" {
         toggle(setDown?: any): boolean;
         destroy(): void;
     }
-    export function test(): Promise<import("jassijs/ui/Panel").Panel>;
+    export function test(): Promise<import("jassijs/ui/Panel").Panel<import("jassijs/ui/Panel").PanelProperties>>;
 }
 declare module "jassijs/util/Tools" {
     export class Tools {
@@ -2285,9 +2991,10 @@ declare module "jassijs/ui/converters/DefaultConverter" {
     }
 }
 declare module "jassijs/ui/Textbox" {
-    import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
     import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
-    export interface TextboxConfig extends DataComponentConfig {
+    export interface TextboxProperties extends DataComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
         converter?: DefaultConverter;
         /**
         * @member {boolean} disabled - enable or disable the element
@@ -2331,14 +3038,14 @@ declare module "jassijs/ui/Textbox" {
          */
         readOnly?: boolean;
     }
-    export class Textbox extends DataComponent implements TextboxConfig {
+    export class Textbox<T extends TextboxProperties = TextboxProperties> extends DataComponent<T> implements TextboxProperties {
         _converter: DefaultConverter;
         _autocompleterDisplay: any;
         _autocompleter: any;
         private _value;
         private _isFocused;
-        constructor(color?: any);
-        config(config: TextboxConfig): Textbox;
+        constructor(props?: TextboxProperties);
+        render(): React.DetailedReactHTMLElement<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
         get dom(): HTMLInputElement;
         set dom(value: HTMLInputElement);
         set disabled(value: boolean);
@@ -2369,7 +3076,7 @@ declare module "jassijs/ui/Textbox" {
         focus(): void;
         destroy(): void;
     }
-    export function test(): Textbox;
+    export function test(): Textbox<TextboxProperties>;
 }
 declare module "jassijs/ui/PropertyEditors/NameEditor" {
     import { Editor } from "jassijs/ui/PropertyEditors/Editor";
@@ -2521,7 +3228,7 @@ declare module "jassijs/ui/PropertyEditor" {
     }
     export class PropertyEditor extends Panel {
         readPropertyValueFromDesign: boolean;
-        table: Panel;
+        table: Component;
         codeEditor: any;
         parser: ParserInterface;
         variablename: string;
@@ -2539,6 +3246,8 @@ declare module "jassijs/ui/PropertyEditor" {
         * edit object properties
         */
         constructor(codeEditor?: any, parser?: any);
+        createTable(): React.JSX.Element;
+        componentDidMount(): void;
         /**
          * adds a new property
          * @param {string} name  - the name of the property
@@ -2776,6 +3485,10 @@ declare module "jassijs/ui/DockingContainer" {
     * @class jassijs.ui.DockingContainer
     */
         constructor(id?: any);
+        componentDidMount(): void;
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+        }, HTMLElement>;
         static clearMemoryleak(container: any): void;
         /**
          * add a component to the container
@@ -3184,13 +3897,13 @@ declare module "jassijs/ui/converters/NumberConverter" {
     }
 }
 declare module "jassijs/ui/HTMLPanel" {
-    import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
     global {
         interface JQuery {
             doubletap: any;
         }
     }
-    export interface HTMLPanelConfig extends DataComponentConfig {
+    export interface HTMLPanelProperties extends DataComponentProperties {
         newlineafter?: boolean;
         /**
          * template string  component.value=new Person();component.template:"{{name}}"}
@@ -3198,7 +3911,7 @@ declare module "jassijs/ui/HTMLPanel" {
         template?: string;
         value?: string;
     }
-    export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
+    export class HTMLPanel<T extends HTMLPanelProperties = HTMLPanelProperties> extends DataComponent<T> implements HTMLPanelProperties {
         static oldeditor: any;
         private _tcm;
         toolbar: string[];
@@ -3212,8 +3925,9 @@ declare module "jassijs/ui/HTMLPanel" {
                 action: any;
             };
         };
-        constructor(id?: any);
-        config(config: HTMLPanelConfig): HTMLPanel;
+        constructor(properties?: HTMLPanelProperties);
+        render(): React.JSX.Element;
+        config(config: T): HTMLPanel;
         get newlineafter(): boolean;
         set newlineafter(value: boolean);
         compileTemplate(template: any): Function;
@@ -3236,12 +3950,12 @@ declare module "jassijs/ui/HTMLPanel" {
         _setDesignMode(enable: any, editor: any): void;
         destroy(): void;
     }
-    export function test(): HTMLPanel;
+    export function test(): HTMLPanel<HTMLPanelProperties>;
 }
 /// <amd-dependency name="Split" path="splitlib" />
 declare module "jassijs/ui/BoxPanel" {
-    import { Panel, PanelConfig } from "jassijs/ui/Panel";
-    export interface BoxPanelConfig extends PanelConfig {
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
+    export interface BoxPanelProperties extends PanelProperties {
         /**
          * @member {boolean} - if true then the components are composed horizontally
          **/
@@ -3251,7 +3965,7 @@ declare module "jassijs/ui/BoxPanel" {
           */
         spliter?: number[];
     }
-    export class BoxPanel extends Panel implements BoxPanelConfig {
+    export class BoxPanel<T extends BoxPanelProperties = BoxPanelProperties> extends Panel<T> implements BoxPanelProperties {
         _horizontal: boolean;
         private _spliter;
         private _splitcomponent;
@@ -3262,8 +3976,8 @@ declare module "jassijs/ui/BoxPanel" {
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties?: any);
-        config(config: BoxPanelConfig): BoxPanel;
+        constructor(properties?: BoxPanelProperties);
+        config(config: T): BoxPanel;
         set horizontal(value: boolean);
         get horizontal(): boolean;
         /**
@@ -3281,12 +3995,12 @@ declare module "jassijs/ui/BoxPanel" {
         get spliter(): number[];
         updateSpliter(): void;
     }
-    export function test(): Promise<BoxPanel>;
+    export function test(): Promise<BoxPanel<BoxPanelProperties>>;
 }
 declare module "jassijs/ui/DBObjectView" {
     import { Button } from "jassijs/ui/Button";
     import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { Panel, PanelConfig } from "jassijs/ui/Panel";
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
     import { Databinder } from "jassijs/ui/Databinder";
     import { DBObject } from "jassijs/remote/DBObject";
     export type DBObjectViewMe = {
@@ -3309,7 +4023,7 @@ declare module "jassijs/ui/DBObjectView" {
     }
     export function $DBObjectView(properties: DBObjectViewProperties): Function;
     type Me = DBObjectViewMe;
-    export interface DBObjectViewConfig extends PanelConfig {
+    export interface DBObjectViewConfig extends PanelProperties {
         /**
            * register an event if the object is created
            * @param {function} handler - the function that is called
@@ -3330,6 +4044,7 @@ declare module "jassijs/ui/DBObjectView" {
         * @param {function} handler - the function that is called
         */
         ondeleted?(handler: (obj: DBObject) => void): any;
+        value: any;
     }
     export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isAbsolute"> {
         me: any;
@@ -3364,24 +4079,22 @@ declare module "jassijs/ui/DBObjectView" {
 }
 declare module "jassijs/ui/Calendar" {
     import "jassijs/ext/jquerylib";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { ComponentConfig } from "jassijs/ui/Component";
-    import { DataComponentConfig } from "jassijs/ui/DataComponent";
-    export interface CalendarConfig extends ComponentConfig, DataComponentConfig {
+    import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
+    export interface CalendarProperties extends TextboxProperties {
         /**
         * @member  - the date
         */
         value?: any;
     }
-    export class Calendar extends Textbox implements CalendarConfig {
+    export class Calendar<T extends CalendarProperties = TextboxProperties> extends Textbox<T> implements CalendarProperties {
         constructor(properties?: any);
-        config(config: CalendarConfig): Calendar;
+        config(config: T): Calendar;
         get value(): any;
         set value(val: any);
         static parseDate(date: string, format?: any, settings?: any): Date;
         static formatDate(date: Date, format?: any, settings?: any): string;
     }
-    export function test(): Calendar;
+    export function test(): Calendar<TextboxProperties>;
 }
 declare module "jassijs/ui/converters/DateTimeConverter" {
     import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
@@ -3422,8 +4135,7 @@ declare module "jassijs/ui/converters/DateTimeConverter" {
     export function test(): void;
 }
 declare module "jassijs/ui/Table" {
-    import "tabulator-tables";
-    import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
     import { Textbox } from "jassijs/ui/Textbox";
     import { Databinder } from "jassijs/ui/Databinder";
     import { Tabulator } from "tabulator-tables";
@@ -3453,7 +4165,7 @@ declare module "jassijs/ui/Table" {
     };
     export type MyEditor = Tabulator.Editor | "datetimeformat" | "numberformat" | any;
     export type MyFormatter = Tabulator.Formatter | "datetimeformat" | "numberformat" | any;
-    export interface TableConfig extends DataComponentConfig {
+    export interface TableProperties extends DataComponentProperties {
         options?: TableOptions;
         /**
         * register an event if an item is selected
@@ -3472,7 +4184,7 @@ declare module "jassijs/ui/Table" {
         columns?: Tabulator.ColumnDefinition[];
         bindItems?: any[];
     }
-    export class Table extends DataComponent implements TableConfig {
+    export class Table<T extends TableProperties = TableProperties> extends DataComponent<T> implements TableProperties {
         table: Tabulator;
         _selectHandler: any;
         _select: {
@@ -3488,8 +4200,10 @@ declare module "jassijs/ui/Table" {
         _databinderItems: Databinder;
         _lastOptions: TableOptions;
         private dataTreeChildFunction;
-        constructor(properties?: TableOptions);
-        config(config: TableConfig): Table;
+        constructor(properties?: TableProperties);
+        config(config: T): Table;
+        render(): React.ReactNode;
+        rerender(): void;
         set options(properties: TableOptions);
         get options(): TableOptions;
         /**
@@ -3532,7 +4246,7 @@ declare module "jassijs/ui/Table" {
         set height(value: string | number);
         get height(): string | number;
         set width(value: string | number);
-        get width(): string;
+        get width(): string | number;
         /**
          * Searches records in the grid
          * @param {string} field - name of the search field
@@ -3545,7 +4259,7 @@ declare module "jassijs/ui/Table" {
         get columns(): Tabulator.ColumnDefinition[];
         set bindItems(databinder: any[]);
     }
-    export function test(): Promise<Table>;
+    export function test(): Promise<Table<TableProperties>>;
 }
 declare module "jassijs/ui/DBObjectDialog" {
     import { Table } from "jassijs/ui/Table";
@@ -3597,10 +4311,11 @@ declare module "jassijs/security/GroupView" {
 }
 declare module "jassijs/ui/Select" {
     import "jassijs/ext/jquerylib";
-    import { ComponentCreateProperties, ComponentConfig } from "jassijs/ui/Component";
+    import { ComponentProperties } from "jassijs/ui/Component";
     import { DataComponent } from "jassijs/ui/DataComponent";
     import "jquery.choosen";
-    export interface SelectConfig extends ComponentConfig {
+    export interface SelectProperities extends ComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
         /**
           * called if value has changed
           * @param {function} handler - the function which is executed
@@ -3624,13 +4339,11 @@ declare module "jassijs/ui/Select" {
         * @member {object} sel - the selected object
         */
         value?: any;
-    }
-    class SelectCreateProperties extends ComponentCreateProperties {
         multiple?: boolean;
         allowDeselect?: boolean;
         placeholder?: string;
     }
-    export class Select extends DataComponent {
+    export class Select<T extends SelectProperities = SelectProperities> extends DataComponent<T> {
         domSelect: HTMLElement;
         _select: {
             value: number;
@@ -3638,8 +4351,290 @@ declare module "jassijs/ui/Select" {
         options: any;
         _display: any;
         _items: any;
-        constructor(properties?: SelectCreateProperties);
-        config(config: SelectConfig): Select;
+        constructor(properties?: SelectProperities);
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+            ref?: React.LegacyRef<HTMLSelectElement>;
+            key?: React.Key;
+            disabled?: boolean;
+            form?: string;
+            formAction?: string;
+            formEncType?: string;
+            formMethod?: string;
+            formNoValidate?: boolean;
+            formTarget?: string;
+            name?: string;
+            type?: "button" | "reset" | "submit";
+            value?: string | number | readonly string[];
+            defaultChecked?: boolean;
+            defaultValue?: string | number | readonly string[];
+            suppressContentEditableWarning?: boolean;
+            suppressHydrationWarning?: boolean;
+            accessKey?: string;
+            autoFocus?: boolean;
+            contentEditable?: "inherit" | (boolean | "true" | "false");
+            contextMenu?: string;
+            dir?: string;
+            draggable?: boolean | "true" | "false";
+            hidden?: boolean;
+            id?: string;
+            lang?: string;
+            nonce?: string;
+            placeholder?: string;
+            slot?: string;
+            spellCheck?: boolean | "true" | "false";
+            style?: React.CSSProperties;
+            tabIndex?: number;
+            title?: string;
+            translate?: "yes" | "no";
+            radioGroup?: string;
+            role?: React.AriaRole;
+            about?: string;
+            content?: string;
+            datatype?: string;
+            inlist?: any;
+            prefix?: string;
+            property?: string;
+            rel?: string;
+            resource?: string;
+            rev?: string;
+            typeof?: string;
+            vocab?: string;
+            autoCapitalize?: string;
+            autoCorrect?: string;
+            autoSave?: string;
+            color?: string;
+            itemProp?: string;
+            itemScope?: boolean;
+            itemType?: string;
+            itemID?: string;
+            itemRef?: string;
+            results?: number;
+            security?: string;
+            unselectable?: "on" | "off";
+            inputMode?: "text" | "none" | "url" | "decimal" | "numeric" | "email" | "search" | "tel";
+            is?: string;
+            'aria-activedescendant'?: string;
+            'aria-atomic'?: boolean | "true" | "false";
+            'aria-autocomplete'?: "none" | "list" | "inline" | "both";
+            'aria-braillelabel'?: string;
+            'aria-brailleroledescription'?: string;
+            'aria-busy'?: boolean | "true" | "false";
+            'aria-checked'?: boolean | "true" | "false" | "mixed";
+            'aria-colcount'?: number;
+            'aria-colindex'?: number;
+            'aria-colindextext'?: string;
+            'aria-colspan'?: number;
+            'aria-controls'?: string;
+            'aria-current'?: boolean | "page" | "step" | "time" | "date" | "true" | "false" | "location";
+            'aria-describedby'?: string;
+            'aria-description'?: string;
+            'aria-details'?: string;
+            'aria-disabled'?: boolean | "true" | "false";
+            'aria-dropeffect'?: "none" | "copy" | "move" | "link" | "execute" | "popup";
+            'aria-errormessage'?: string;
+            'aria-expanded'?: boolean | "true" | "false";
+            'aria-flowto'?: string;
+            'aria-grabbed'?: boolean | "true" | "false";
+            'aria-haspopup'?: boolean | "menu" | "grid" | "dialog" | "true" | "false" | "listbox" | "tree";
+            'aria-hidden'?: boolean | "true" | "false";
+            'aria-invalid'?: boolean | "true" | "false" | "grammar" | "spelling";
+            'aria-keyshortcuts'?: string;
+            'aria-label'?: string;
+            'aria-labelledby'?: string;
+            'aria-level'?: number;
+            'aria-live'?: "off" | "assertive" | "polite";
+            'aria-modal'?: boolean | "true" | "false";
+            'aria-multiline'?: boolean | "true" | "false";
+            'aria-multiselectable'?: boolean | "true" | "false";
+            'aria-orientation'?: "horizontal" | "vertical";
+            'aria-owns'?: string;
+            'aria-placeholder'?: string;
+            'aria-posinset'?: number;
+            'aria-pressed'?: boolean | "true" | "false" | "mixed";
+            'aria-readonly'?: boolean | "true" | "false";
+            'aria-relevant'?: "text" | "all" | "additions" | "additions removals" | "additions text" | "removals" | "removals additions" | "removals text" | "text additions" | "text removals";
+            'aria-required'?: boolean | "true" | "false";
+            'aria-roledescription'?: string;
+            'aria-rowcount'?: number;
+            'aria-rowindex'?: number;
+            'aria-rowindextext'?: string;
+            'aria-rowspan'?: number;
+            'aria-selected'?: boolean | "true" | "false";
+            'aria-setsize'?: number;
+            'aria-sort'?: "none" | "ascending" | "descending" | "other";
+            'aria-valuemax'?: number;
+            'aria-valuemin'?: number;
+            'aria-valuenow'?: number;
+            'aria-valuetext'?: string;
+            children?: React.ReactNode;
+            dangerouslySetInnerHTML?: {
+                __html: string | TrustedHTML;
+            };
+            onCopy?: React.ClipboardEventHandler<HTMLSelectElement>;
+            onCopyCapture?: React.ClipboardEventHandler<HTMLSelectElement>;
+            onCut?: React.ClipboardEventHandler<HTMLSelectElement>;
+            onCutCapture?: React.ClipboardEventHandler<HTMLSelectElement>;
+            onPaste?: React.ClipboardEventHandler<HTMLSelectElement>;
+            onPasteCapture?: React.ClipboardEventHandler<HTMLSelectElement>;
+            onCompositionEnd?: React.CompositionEventHandler<HTMLSelectElement>;
+            onCompositionEndCapture?: React.CompositionEventHandler<HTMLSelectElement>;
+            onCompositionStart?: React.CompositionEventHandler<HTMLSelectElement>;
+            onCompositionStartCapture?: React.CompositionEventHandler<HTMLSelectElement>;
+            onCompositionUpdate?: React.CompositionEventHandler<HTMLSelectElement>;
+            onCompositionUpdateCapture?: React.CompositionEventHandler<HTMLSelectElement>;
+            onFocus?: React.FocusEventHandler<HTMLSelectElement>;
+            onFocusCapture?: React.FocusEventHandler<HTMLSelectElement>;
+            onBlur?: React.FocusEventHandler<HTMLSelectElement>;
+            onBlurCapture?: React.FocusEventHandler<HTMLSelectElement>;
+            onChange?: React.FormEventHandler<HTMLSelectElement>;
+            onChangeCapture?: React.FormEventHandler<HTMLSelectElement>;
+            onBeforeInput?: React.FormEventHandler<HTMLSelectElement>;
+            onBeforeInputCapture?: React.FormEventHandler<HTMLSelectElement>;
+            onInput?: React.FormEventHandler<HTMLSelectElement>;
+            onInputCapture?: React.FormEventHandler<HTMLSelectElement>;
+            onReset?: React.FormEventHandler<HTMLSelectElement>;
+            onResetCapture?: React.FormEventHandler<HTMLSelectElement>;
+            onSubmit?: React.FormEventHandler<HTMLSelectElement>;
+            onSubmitCapture?: React.FormEventHandler<HTMLSelectElement>;
+            onInvalid?: React.FormEventHandler<HTMLSelectElement>;
+            onInvalidCapture?: React.FormEventHandler<HTMLSelectElement>;
+            onLoad?: React.ReactEventHandler<HTMLSelectElement>;
+            onLoadCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onError?: React.ReactEventHandler<HTMLSelectElement>;
+            onErrorCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onKeyDown?: React.KeyboardEventHandler<HTMLSelectElement>;
+            onKeyDownCapture?: React.KeyboardEventHandler<HTMLSelectElement>;
+            onKeyPress?: React.KeyboardEventHandler<HTMLSelectElement>;
+            onKeyPressCapture?: React.KeyboardEventHandler<HTMLSelectElement>;
+            onKeyUp?: React.KeyboardEventHandler<HTMLSelectElement>;
+            onKeyUpCapture?: React.KeyboardEventHandler<HTMLSelectElement>;
+            onAbort?: React.ReactEventHandler<HTMLSelectElement>;
+            onAbortCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onCanPlay?: React.ReactEventHandler<HTMLSelectElement>;
+            onCanPlayCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onCanPlayThrough?: React.ReactEventHandler<HTMLSelectElement>;
+            onCanPlayThroughCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onDurationChange?: React.ReactEventHandler<HTMLSelectElement>;
+            onDurationChangeCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onEmptied?: React.ReactEventHandler<HTMLSelectElement>;
+            onEmptiedCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onEncrypted?: React.ReactEventHandler<HTMLSelectElement>;
+            onEncryptedCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onEnded?: React.ReactEventHandler<HTMLSelectElement>;
+            onEndedCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onLoadedData?: React.ReactEventHandler<HTMLSelectElement>;
+            onLoadedDataCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onLoadedMetadata?: React.ReactEventHandler<HTMLSelectElement>;
+            onLoadedMetadataCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onLoadStart?: React.ReactEventHandler<HTMLSelectElement>;
+            onLoadStartCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onPause?: React.ReactEventHandler<HTMLSelectElement>;
+            onPauseCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onPlay?: React.ReactEventHandler<HTMLSelectElement>;
+            onPlayCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onPlaying?: React.ReactEventHandler<HTMLSelectElement>;
+            onPlayingCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onProgress?: React.ReactEventHandler<HTMLSelectElement>;
+            onProgressCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onRateChange?: React.ReactEventHandler<HTMLSelectElement>;
+            onRateChangeCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onResize?: React.ReactEventHandler<HTMLSelectElement>;
+            onResizeCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onSeeked?: React.ReactEventHandler<HTMLSelectElement>;
+            onSeekedCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onSeeking?: React.ReactEventHandler<HTMLSelectElement>;
+            onSeekingCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onStalled?: React.ReactEventHandler<HTMLSelectElement>;
+            onStalledCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onSuspend?: React.ReactEventHandler<HTMLSelectElement>;
+            onSuspendCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onTimeUpdate?: React.ReactEventHandler<HTMLSelectElement>;
+            onTimeUpdateCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onVolumeChange?: React.ReactEventHandler<HTMLSelectElement>;
+            onVolumeChangeCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onWaiting?: React.ReactEventHandler<HTMLSelectElement>;
+            onWaitingCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onAuxClick?: React.MouseEventHandler<HTMLSelectElement>;
+            onAuxClickCapture?: React.MouseEventHandler<HTMLSelectElement>;
+            onClick?: React.MouseEventHandler<HTMLSelectElement>;
+            onClickCapture?: React.MouseEventHandler<HTMLSelectElement>;
+            onContextMenu?: React.MouseEventHandler<HTMLSelectElement>;
+            onContextMenuCapture?: React.MouseEventHandler<HTMLSelectElement>;
+            onDoubleClick?: React.MouseEventHandler<HTMLSelectElement>;
+            onDoubleClickCapture?: React.MouseEventHandler<HTMLSelectElement>;
+            onDrag?: React.DragEventHandler<HTMLSelectElement>;
+            onDragCapture?: React.DragEventHandler<HTMLSelectElement>;
+            onDragEnd?: React.DragEventHandler<HTMLSelectElement>;
+            onDragEndCapture?: React.DragEventHandler<HTMLSelectElement>;
+            onDragEnter?: React.DragEventHandler<HTMLSelectElement>;
+            onDragEnterCapture?: React.DragEventHandler<HTMLSelectElement>;
+            onDragExit?: React.DragEventHandler<HTMLSelectElement>;
+            onDragExitCapture?: React.DragEventHandler<HTMLSelectElement>;
+            onDragLeave?: React.DragEventHandler<HTMLSelectElement>;
+            onDragLeaveCapture?: React.DragEventHandler<HTMLSelectElement>;
+            onDragOver?: React.DragEventHandler<HTMLSelectElement>;
+            onDragOverCapture?: React.DragEventHandler<HTMLSelectElement>;
+            onDragStart?: React.DragEventHandler<HTMLSelectElement>;
+            onDragStartCapture?: React.DragEventHandler<HTMLSelectElement>;
+            onDrop?: React.DragEventHandler<HTMLSelectElement>;
+            onDropCapture?: React.DragEventHandler<HTMLSelectElement>;
+            onMouseDown?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseDownCapture?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseEnter?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseLeave?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseMove?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseMoveCapture?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseOut?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseOutCapture?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseOver?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseOverCapture?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseUp?: React.MouseEventHandler<HTMLSelectElement>;
+            onMouseUpCapture?: React.MouseEventHandler<HTMLSelectElement>;
+            onSelect?: React.ReactEventHandler<HTMLSelectElement>;
+            onSelectCapture?: React.ReactEventHandler<HTMLSelectElement>;
+            onTouchCancel?: React.TouchEventHandler<HTMLSelectElement>;
+            onTouchCancelCapture?: React.TouchEventHandler<HTMLSelectElement>;
+            onTouchEnd?: React.TouchEventHandler<HTMLSelectElement>;
+            onTouchEndCapture?: React.TouchEventHandler<HTMLSelectElement>;
+            onTouchMove?: React.TouchEventHandler<HTMLSelectElement>;
+            onTouchMoveCapture?: React.TouchEventHandler<HTMLSelectElement>;
+            onTouchStart?: React.TouchEventHandler<HTMLSelectElement>;
+            onTouchStartCapture?: React.TouchEventHandler<HTMLSelectElement>;
+            onPointerDown?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerDownCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerMove?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerMoveCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerUp?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerUpCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerCancel?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerCancelCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerEnter?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerEnterCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerLeave?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerLeaveCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerOver?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerOverCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerOut?: React.PointerEventHandler<HTMLSelectElement>;
+            onPointerOutCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onGotPointerCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onGotPointerCaptureCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onLostPointerCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onLostPointerCaptureCapture?: React.PointerEventHandler<HTMLSelectElement>;
+            onScroll?: React.UIEventHandler<HTMLSelectElement>;
+            onScrollCapture?: React.UIEventHandler<HTMLSelectElement>;
+            onWheel?: React.WheelEventHandler<HTMLSelectElement>;
+            onWheelCapture?: React.WheelEventHandler<HTMLSelectElement>;
+            onAnimationStart?: React.AnimationEventHandler<HTMLSelectElement>;
+            onAnimationStartCapture?: React.AnimationEventHandler<HTMLSelectElement>;
+            onAnimationEnd?: React.AnimationEventHandler<HTMLSelectElement>;
+            onAnimationEndCapture?: React.AnimationEventHandler<HTMLSelectElement>;
+            onAnimationIteration?: React.AnimationEventHandler<HTMLSelectElement>;
+            onAnimationIterationCapture?: React.AnimationEventHandler<HTMLSelectElement>;
+            onTransitionEnd?: React.TransitionEventHandler<HTMLSelectElement>;
+            onTransitionEndCapture?: React.TransitionEventHandler<HTMLSelectElement>;
+        }, HTMLSelectElement>;
+        config(config: T): this;
         refresh(): void;
         onchange(handler: any): void;
         set selectComponent(_component: {
@@ -3673,8 +4668,9 @@ declare module "jassijs/ui/Select" {
     export function test(): Promise<any>;
 }
 declare module "jassijs/ui/Checkbox" {
-    import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
-    export interface CheckboxConfig extends DataComponentConfig {
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    export interface CheckboxProperties extends DataComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
         /**
       * register an event if the button is clicked
       * @param {function} handler - the function that is called on change
@@ -3689,17 +4685,19 @@ declare module "jassijs/ui/Checkbox" {
         */
         text?: string;
     }
-    export class Checkbox extends DataComponent {
-        checkbox: HTMLInputElement;
-        constructor();
-        config(config: CheckboxConfig): Checkbox;
+    export class Checkbox<T extends CheckboxProperties = CheckboxProperties> extends DataComponent<T> implements CheckboxProperties {
+        private checkbox;
+        constructor(properties?: CheckboxProperties);
+        componentDidMount(): void;
+        render(): React.DetailedReactHTMLElement<{}, HTMLElement>;
+        config(config: T): Checkbox;
         onclick(handler: any): void;
         set value(value: string | boolean);
         get value(): string | boolean;
         set text(value: string);
         get text(): string;
     }
-    export function test(): Checkbox;
+    export function test(): Checkbox<CheckboxProperties>;
 }
 declare module "jassijs/security/UserView" {
     import { Select } from "jassijs/ui/Select";
@@ -3895,26 +4893,28 @@ declare module "jassijs/server/ext/EmpyDeclaration" {
 }
 declare module "jassijs/ui/MenuItem" {
     import "jassijs/ext/jquerylib";
-    import { Menu } from "jassijs/ui/Menu";
-    import { Container, ContainerConfig } from "jassijs/ui/Container";
-    export interface MenuItemConfig extends ContainerConfig {
+    import { Menu, MenuProperties } from "jassijs/ui/Menu";
+    import { Container, ContainerProperties } from "jassijs/ui/Container";
+    export interface MenuItemProperties extends ContainerProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLLIElement>, HTMLLIElement>;
         onclick?(handler: any): any;
         /**
          * @member {string} - the icon of the button
          */
-        icon: string;
+        icon?: string;
         /**
         * @member {string} - the caption of the button
         */
         text?: string;
     }
-    export class MenuItem extends Container implements ContainerConfig {
+    export class MenuItem<T extends MenuItemProperties = MenuItemProperties> extends Container<T> implements MenuItemProperties {
         _text: string;
         items: Menu;
         _icon: string;
         _mainMenu: Menu;
-        constructor();
-        config(config: MenuItemConfig): MenuItem;
+        constructor(props?: MenuItemProperties);
+        render(): React.JSX.Element;
+        config(config: T): MenuItem;
         onclick(handler: any): void;
         set icon(icon: string);
         get icon(): string;
@@ -3925,22 +4925,28 @@ declare module "jassijs/ui/MenuItem" {
         _menueChanged(): void;
         extensionCalled(action: ExtensionAction): void;
     }
-    export function test(): Promise<Menu>;
+    export function test(): Promise<Menu<MenuProperties>>;
 }
 declare module "jassijs/ui/Menu" {
     import "jassijs/ext/jquerylib";
-    import { Container, ContainerConfig } from "jassijs/ui/Container";
-    export interface MenuConfig extends ContainerConfig {
-        onclick(handler: any): any;
+    import { Container, ContainerProperties } from "jassijs/ui/Container";
+    export interface MenuProperties extends ContainerProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLUListElement>, HTMLUListElement>;
+        noUpdate?: boolean;
+        onclick?(handler: any): any;
     }
-    export class Menu extends Container implements MenuConfig {
+    export class Menu<T extends MenuProperties = MenuProperties> extends Container<T> implements MenuProperties {
         _isRoot: boolean;
         _text: string;
         _icon: string;
         _noUpdate: boolean;
         _mainMenu: any;
         constructor(options?: any);
-        config(config: MenuConfig): Menu;
+        componentDidMount(): void;
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+        }, HTMLElement>;
+        config(config: T): Menu;
         _sample(): void;
         _menueChanged(): void;
         getMainMenu(): any;
@@ -3964,36 +4970,39 @@ declare module "jassijs/ui/Menu" {
         protected _setDesignMode(enable: any): void;
         destroy(): void;
     }
-    export function test(): Menu;
+    export function test(): Menu<MenuProperties>;
 }
 declare module "jassijs/ui/ActionNodeMenu" {
     import { Menu } from "jassijs/ui/Menu";
-    import { Panel, PanelConfig } from "jassijs/ui/Panel";
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
     type Me = {
         menu?: Menu;
     };
-    export class ActionNodeMenu extends Panel {
+    export class ActionNodeMenuProperties {
+    }
+    export class ActionNodeMenu<T extends ActionNodeMenuProperties = {}> extends Panel<ActionNodeMenuProperties> {
         me: Me;
-        constructor();
-        config(config: PanelConfig): ActionNodeMenu;
+        constructor(props?: ActionNodeMenuProperties);
+        config(config: PanelProperties): ActionNodeMenu;
         layout(me: Me): void;
         fillActions(): Promise<void>;
     }
-    export function test(): Promise<ActionNodeMenu>;
+    export function test(): Promise<ActionNodeMenu<{}>>;
 }
 declare module "jassijs/ui/ContextMenu" {
     import "jassijs/ext/jquerylib";
     import "jquery.contextMenu";
     import { Menu } from "jassijs/ui/Menu";
-    import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-    import { Component, ComponentConfig } from "jassijs/ui/Component";
+    import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
+    import { Component } from "jassijs/ui/Component";
     import { Action } from "jassijs/base/Actions";
+    import { MenuItem } from "jassijs/ui/MenuItem";
     global {
         interface JQuery {
             contextMenu: any;
         }
     }
-    export interface ContextMenuConfig extends ComponentConfig {
+    export interface ContextMenuProperties extends InvisibleComponentProperties {
         /**
          * @member - includes Actions from @ActionProvider for the objects in value
          */
@@ -4004,21 +5013,31 @@ declare module "jassijs/ui/ContextMenu" {
         * @returns {boolean} - false if the contextmenu should not been shown
         */
         onbeforeshow?(handler: any): any;
+        children?: any;
     }
-    export class ContextMenu extends InvisibleComponent implements ContextMenuConfig {
-        menu: Menu;
+    export class ContextMenu<T extends ContextMenuProperties = ContextMenuProperties> extends InvisibleComponent<T> implements ContextMenuProperties {
+        _menu: Menu;
         contextComponents: any;
         _components: Component[];
         target: any;
         includeClassActions: boolean;
         private _value;
+        constructor(props?: ContextMenuProperties);
+        set menu(val: Menu<import("jassijs/ui/Menu").MenuProperties>);
+        get menu(): Menu<import("jassijs/ui/Menu").MenuProperties>;
+        add(menu: MenuItem): void;
+        addBefore(menu: MenuItem, before: any): void;
+        remove(item: any): void;
         /**
          * @member - the objects for the includeClassActions @ActionProvider if  is enabled
          **/
         set value(value: any[]);
         get value(): any[];
-        constructor();
-        config(config: ContextMenuConfig): ContextMenu;
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+        }, HTMLElement>;
+        componentDidMount(): void;
+        config(config: T): ContextMenu;
         /**
          * could be override to provide Context-actions
          * exsample:
@@ -4056,26 +5075,29 @@ declare module "jassijs/ui/ContextMenu" {
 }
 declare module "jassijs/ui/Style" {
     import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-    import { ComponentConfig } from "jassijs/ui/Component";
-    import { CSSProperties } from "jassijs/ui/CSSProperties";
-    export interface StyleConfig extends ComponentConfig {
+    import { ComponentProperties } from "jassijs/ui/Component";
+    export interface StyleConfig extends ComponentProperties {
         /**
           * sets CSS Properties
           */
-        css?: CSSProperties;
+        style?: React.CSSProperties;
     }
     /**
      * on ore mors Style can be assigned to component
      * the style is appended to the head
      **/
-    export class Style extends InvisibleComponent implements StyleConfig {
-        constructor();
+    export class Style extends InvisibleComponent<StyleConfig> implements StyleConfig {
+        constructor(props?: StyleConfig);
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+        }, HTMLElement>;
+        componentDidMount(): void;
         config(config: StyleConfig): Style;
         get styleid(): string;
         /**
         * sets CSS Properties
         */
-        set css(properties: CSSProperties);
+        set style(properties: React.CSSProperties);
         destroy(): void;
     }
     export function test(): void;
@@ -4084,9 +5106,10 @@ declare module "jassijs/ui/Style" {
 declare module "jassijs/ui/Tree" {
     import "jassijs/ext/jquerylib";
     import "jassijs/ext/fancytree";
-    import { Component, ComponentConfig } from "jassijs/ui/Component";
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
     import { CSSProperties } from "jassijs/ui/CSSProperties";
-    export interface TreeConfig extends ComponentConfig {
+    export interface TreeProperties extends ComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLDivElement>, HTMLDivElement>;
         options?: Fancytree.FancytreeOptions;
         /**
         * @member - get the property for the display of the item or an function to get the display from an item
@@ -4141,7 +5164,7 @@ declare module "jassijs/ui/Tree" {
          **/
         contextMenu?: any;
     }
-    export class Tree extends Component implements TreeConfig {
+    export class Tree<T extends TreeProperties = TreeProperties> extends Component<TreeProperties> implements TreeProperties {
         _propDisplay: string | {
             (item: any): string;
         };
@@ -4164,8 +5187,291 @@ declare module "jassijs/ui/Tree" {
         private _allKeysReaded;
         private _allNodesReaded;
         _lastOptions: Fancytree.FancytreeOptions;
-        constructor(options?: Fancytree.FancytreeOptions);
-        config(config: TreeConfig): Tree;
+        constructor(props?: TreeProperties);
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+            ref?: React.LegacyRef<HTMLDivElement>;
+            key?: React.Key;
+            disabled?: boolean;
+            form?: string;
+            formAction?: string;
+            formEncType?: string;
+            formMethod?: string;
+            formNoValidate?: boolean;
+            formTarget?: string;
+            name?: string;
+            type?: "button" | "reset" | "submit";
+            value?: string | number | readonly string[];
+            defaultChecked?: boolean;
+            defaultValue?: string | number | readonly string[];
+            suppressContentEditableWarning?: boolean;
+            suppressHydrationWarning?: boolean;
+            accessKey?: string;
+            autoFocus?: boolean;
+            contentEditable?: "inherit" | (boolean | "true" | "false");
+            contextMenu?: string;
+            dir?: string;
+            draggable?: boolean | "true" | "false";
+            hidden?: boolean;
+            id?: string;
+            lang?: string;
+            nonce?: string;
+            placeholder?: string;
+            slot?: string;
+            spellCheck?: boolean | "true" | "false";
+            style?: React.CSSProperties;
+            tabIndex?: number;
+            title?: string;
+            translate?: "yes" | "no";
+            radioGroup?: string;
+            role?: React.AriaRole;
+            about?: string;
+            content?: string;
+            datatype?: string;
+            inlist?: any;
+            prefix?: string;
+            property?: string;
+            rel?: string;
+            resource?: string;
+            rev?: string;
+            typeof?: string;
+            vocab?: string;
+            autoCapitalize?: string;
+            autoCorrect?: string;
+            autoSave?: string;
+            color?: string;
+            itemProp?: string;
+            itemScope?: boolean;
+            itemType?: string;
+            itemID?: string;
+            itemRef?: string;
+            results?: number;
+            security?: string;
+            unselectable?: "on" | "off";
+            inputMode?: "text" | "none" | "url" | "decimal" | "numeric" | "email" | "search" | "tel";
+            is?: string;
+            'aria-activedescendant'?: string;
+            'aria-atomic'?: boolean | "true" | "false";
+            'aria-autocomplete'?: "none" | "list" | "inline" | "both";
+            'aria-braillelabel'?: string;
+            'aria-brailleroledescription'?: string;
+            'aria-busy'?: boolean | "true" | "false";
+            'aria-checked'?: boolean | "true" | "false" | "mixed";
+            'aria-colcount'?: number;
+            'aria-colindex'?: number;
+            'aria-colindextext'?: string;
+            'aria-colspan'?: number;
+            'aria-controls'?: string;
+            'aria-current'?: boolean | "page" | "step" | "time" | "date" | "true" | "false" | "location";
+            'aria-describedby'?: string;
+            'aria-description'?: string;
+            'aria-details'?: string;
+            'aria-disabled'?: boolean | "true" | "false";
+            'aria-dropeffect'?: "none" | "copy" | "move" | "link" | "execute" | "popup";
+            'aria-errormessage'?: string;
+            'aria-expanded'?: boolean | "true" | "false";
+            'aria-flowto'?: string;
+            'aria-grabbed'?: boolean | "true" | "false";
+            'aria-haspopup'?: boolean | "menu" | "grid" | "dialog" | "true" | "false" | "listbox" | "tree";
+            'aria-hidden'?: boolean | "true" | "false";
+            'aria-invalid'?: boolean | "true" | "false" | "grammar" | "spelling";
+            'aria-keyshortcuts'?: string;
+            'aria-label'?: string;
+            'aria-labelledby'?: string;
+            'aria-level'?: number;
+            'aria-live'?: "off" | "assertive" | "polite";
+            'aria-modal'?: boolean | "true" | "false";
+            'aria-multiline'?: boolean | "true" | "false";
+            'aria-multiselectable'?: boolean | "true" | "false";
+            'aria-orientation'?: "horizontal" | "vertical";
+            'aria-owns'?: string;
+            'aria-placeholder'?: string;
+            'aria-posinset'?: number;
+            'aria-pressed'?: boolean | "true" | "false" | "mixed";
+            'aria-readonly'?: boolean | "true" | "false";
+            'aria-relevant'?: "text" | "all" | "additions" | "additions removals" | "additions text" | "removals" | "removals additions" | "removals text" | "text additions" | "text removals";
+            'aria-required'?: boolean | "true" | "false";
+            'aria-roledescription'?: string;
+            'aria-rowcount'?: number;
+            'aria-rowindex'?: number;
+            'aria-rowindextext'?: string;
+            'aria-rowspan'?: number;
+            'aria-selected'?: boolean | "true" | "false";
+            'aria-setsize'?: number;
+            'aria-sort'?: "none" | "ascending" | "descending" | "other";
+            'aria-valuemax'?: number;
+            'aria-valuemin'?: number;
+            'aria-valuenow'?: number;
+            'aria-valuetext'?: string;
+            children?: React.ReactNode;
+            dangerouslySetInnerHTML?: {
+                __html: string | TrustedHTML;
+            };
+            onCopy?: React.ClipboardEventHandler<HTMLDivElement>;
+            onCopyCapture?: React.ClipboardEventHandler<HTMLDivElement>;
+            onCut?: React.ClipboardEventHandler<HTMLDivElement>;
+            onCutCapture?: React.ClipboardEventHandler<HTMLDivElement>;
+            onPaste?: React.ClipboardEventHandler<HTMLDivElement>;
+            onPasteCapture?: React.ClipboardEventHandler<HTMLDivElement>;
+            onCompositionEnd?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionEndCapture?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionStart?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionStartCapture?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionUpdate?: React.CompositionEventHandler<HTMLDivElement>;
+            onCompositionUpdateCapture?: React.CompositionEventHandler<HTMLDivElement>;
+            onFocus?: React.FocusEventHandler<HTMLDivElement>;
+            onFocusCapture?: React.FocusEventHandler<HTMLDivElement>;
+            onBlur?: React.FocusEventHandler<HTMLDivElement>;
+            onBlurCapture?: React.FocusEventHandler<HTMLDivElement>;
+            onChange?: React.FormEventHandler<HTMLDivElement>;
+            onChangeCapture?: React.FormEventHandler<HTMLDivElement>;
+            onBeforeInput?: React.FormEventHandler<HTMLDivElement>;
+            onBeforeInputCapture?: React.FormEventHandler<HTMLDivElement>;
+            onInput?: React.FormEventHandler<HTMLDivElement>;
+            onInputCapture?: React.FormEventHandler<HTMLDivElement>;
+            onReset?: React.FormEventHandler<HTMLDivElement>;
+            onResetCapture?: React.FormEventHandler<HTMLDivElement>;
+            onSubmit?: React.FormEventHandler<HTMLDivElement>;
+            onSubmitCapture?: React.FormEventHandler<HTMLDivElement>;
+            onInvalid?: React.FormEventHandler<HTMLDivElement>;
+            onInvalidCapture?: React.FormEventHandler<HTMLDivElement>;
+            onLoad?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onError?: React.ReactEventHandler<HTMLDivElement>;
+            onErrorCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyPress?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyPressCapture?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyUp?: React.KeyboardEventHandler<HTMLDivElement>;
+            onKeyUpCapture?: React.KeyboardEventHandler<HTMLDivElement>;
+            onAbort?: React.ReactEventHandler<HTMLDivElement>;
+            onAbortCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onCanPlay?: React.ReactEventHandler<HTMLDivElement>;
+            onCanPlayCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onCanPlayThrough?: React.ReactEventHandler<HTMLDivElement>;
+            onCanPlayThroughCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onDurationChange?: React.ReactEventHandler<HTMLDivElement>;
+            onDurationChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onEmptied?: React.ReactEventHandler<HTMLDivElement>;
+            onEmptiedCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onEncrypted?: React.ReactEventHandler<HTMLDivElement>;
+            onEncryptedCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onEnded?: React.ReactEventHandler<HTMLDivElement>;
+            onEndedCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadedData?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadedDataCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadedMetadata?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadedMetadataCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadStart?: React.ReactEventHandler<HTMLDivElement>;
+            onLoadStartCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onPause?: React.ReactEventHandler<HTMLDivElement>;
+            onPauseCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onPlay?: React.ReactEventHandler<HTMLDivElement>;
+            onPlayCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onPlaying?: React.ReactEventHandler<HTMLDivElement>;
+            onPlayingCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onProgress?: React.ReactEventHandler<HTMLDivElement>;
+            onProgressCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onRateChange?: React.ReactEventHandler<HTMLDivElement>;
+            onRateChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onResize?: React.ReactEventHandler<HTMLDivElement>;
+            onResizeCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onSeeked?: React.ReactEventHandler<HTMLDivElement>;
+            onSeekedCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onSeeking?: React.ReactEventHandler<HTMLDivElement>;
+            onSeekingCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onStalled?: React.ReactEventHandler<HTMLDivElement>;
+            onStalledCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onSuspend?: React.ReactEventHandler<HTMLDivElement>;
+            onSuspendCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onTimeUpdate?: React.ReactEventHandler<HTMLDivElement>;
+            onTimeUpdateCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onVolumeChange?: React.ReactEventHandler<HTMLDivElement>;
+            onVolumeChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onWaiting?: React.ReactEventHandler<HTMLDivElement>;
+            onWaitingCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onAuxClick?: React.MouseEventHandler<HTMLDivElement>;
+            onAuxClickCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onClick?: React.MouseEventHandler<HTMLDivElement>;
+            onClickCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onContextMenu?: React.MouseEventHandler<HTMLDivElement>;
+            onContextMenuCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
+            onDoubleClickCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onDrag?: React.DragEventHandler<HTMLDivElement>;
+            onDragCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragEnd?: React.DragEventHandler<HTMLDivElement>;
+            onDragEndCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragEnter?: React.DragEventHandler<HTMLDivElement>;
+            onDragEnterCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragExit?: React.DragEventHandler<HTMLDivElement>;
+            onDragExitCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragLeave?: React.DragEventHandler<HTMLDivElement>;
+            onDragLeaveCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragOver?: React.DragEventHandler<HTMLDivElement>;
+            onDragOverCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDragStart?: React.DragEventHandler<HTMLDivElement>;
+            onDragStartCapture?: React.DragEventHandler<HTMLDivElement>;
+            onDrop?: React.DragEventHandler<HTMLDivElement>;
+            onDropCapture?: React.DragEventHandler<HTMLDivElement>;
+            onMouseDown?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseDownCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseMoveCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseOut?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseOutCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseOver?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseOverCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseUp?: React.MouseEventHandler<HTMLDivElement>;
+            onMouseUpCapture?: React.MouseEventHandler<HTMLDivElement>;
+            onSelect?: React.ReactEventHandler<HTMLDivElement>;
+            onSelectCapture?: React.ReactEventHandler<HTMLDivElement>;
+            onTouchCancel?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchCancelCapture?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchEnd?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchEndCapture?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchMove?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchMoveCapture?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchStart?: React.TouchEventHandler<HTMLDivElement>;
+            onTouchStartCapture?: React.TouchEventHandler<HTMLDivElement>;
+            onPointerDown?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerDownCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerMove?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerMoveCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerUp?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerUpCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerCancel?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerCancelCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerEnter?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerEnterCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerLeave?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerLeaveCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerOver?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerOverCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerOut?: React.PointerEventHandler<HTMLDivElement>;
+            onPointerOutCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onGotPointerCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onGotPointerCaptureCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onLostPointerCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onLostPointerCaptureCapture?: React.PointerEventHandler<HTMLDivElement>;
+            onScroll?: React.UIEventHandler<HTMLDivElement>;
+            onScrollCapture?: React.UIEventHandler<HTMLDivElement>;
+            onWheel?: React.WheelEventHandler<HTMLDivElement>;
+            onWheelCapture?: React.WheelEventHandler<HTMLDivElement>;
+            onAnimationStart?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationStartCapture?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationEndCapture?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationIteration?: React.AnimationEventHandler<HTMLDivElement>;
+            onAnimationIterationCapture?: React.AnimationEventHandler<HTMLDivElement>;
+            onTransitionEnd?: React.TransitionEventHandler<HTMLDivElement>;
+            onTransitionEndCapture?: React.TransitionEventHandler<HTMLDivElement>;
+        }, HTMLDivElement>;
+        componentDidMount(): void;
+        config(config: T): Tree;
         set options(options: Fancytree.FancytreeOptions);
         get options(): Fancytree.FancytreeOptions;
         /**
@@ -4258,7 +5564,7 @@ declare module "jassijs/ui/Tree" {
         get contextMenu(): any;
         destroy(): void;
     }
-    export function test(): Promise<Tree>;
+    export function test(): Promise<Tree<TreeProperties>>;
 }
 declare module "jassijs/ui/DBObjectExplorer" {
     import { ContextMenu } from "jassijs/ui/ContextMenu";
@@ -4325,7 +5631,7 @@ declare module "jassijs/ui/VariablePanel" {
          * @id {number} - the id
          * @returns  {jassijs.ui.VariablePanel}
         **/
-        static get(id: any): Component | {
+        static get(id: any): Component<any> | {
             __db: boolean;
             add: () => void;
             update: () => void;
@@ -4397,10 +5703,10 @@ declare module "jassijs/ui/ObjectChooser" {
     import "jassijs/ext/jquerylib";
     import { Table } from "jassijs/ui/Table";
     import { Panel } from "jassijs/ui/Panel";
-    import { Button, ButtonConfig } from "jassijs/ui/Button";
+    import { Button, ButtonProperties } from "jassijs/ui/Button";
     import { Textbox } from "jassijs/ui/Textbox";
     import { Databinder } from "jassijs/ui/Databinder";
-    import { DataComponentConfig } from "jassijs/ui/DataComponent";
+    import { DataComponentProperties } from "jassijs/ui/DataComponent";
     class Me {
         IDTable?: Table;
         IDPanel?: Panel;
@@ -4408,7 +5714,7 @@ declare module "jassijs/ui/ObjectChooser" {
         IDSearch?: Textbox;
         IDOK?: Button;
     }
-    export interface ObjectChooserConfig extends ButtonConfig {
+    export interface ObjectChooserProperties extends ButtonProperties {
         dialogHeight?: number;
         dialogWidth?: number;
         /**
@@ -4436,7 +5742,7 @@ declare module "jassijs/ui/ObjectChooser" {
            */
         bind?: any[];
     }
-    export class ObjectChooser extends Button implements ObjectChooserConfig, DataComponentConfig {
+    export class ObjectChooser<T extends ObjectChooserProperties = ObjectChooserProperties> extends Button<T> implements ObjectChooserProperties, DataComponentProperties {
         dialogHeight: number;
         dialogWidth: number;
         _items: any;
@@ -4445,7 +5751,7 @@ declare module "jassijs/ui/ObjectChooser" {
         _autocommit: boolean;
         _databinder: Databinder;
         constructor();
-        config(config: ObjectChooserConfig): ObjectChooser;
+        config(config: T): ObjectChooser;
         get title(): string;
         layout(): void;
         ok(): void;
@@ -4466,7 +5772,7 @@ declare module "jassijs/ui/ObjectChooser" {
         set bind(databinder: any[]);
         destroy(): void;
     }
-    export function test(): Promise<ObjectChooser>;
+    export function test(): Promise<ObjectChooser<ObjectChooserProperties>>;
     export function test2(): Promise<void>;
 }
 declare module "jassijs/ui/OptionDialog" {
@@ -4526,15 +5832,15 @@ declare module "jassijs/ui/OptionDialog" {
     export function test2(): Promise<void>;
 }
 declare module "jassijs/ui/Repeater" {
-    import { Panel, PanelConfig } from "jassijs/ui/Panel";
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
     import { Databinder } from "jassijs/ui/Databinder";
     import { Component } from "jassijs/ui/Component";
-    import { DataComponentConfig } from "jassijs/ui/DataComponent";
+    import { DataComponentProperties } from "jassijs/ui/DataComponent";
     class RepeaterDesignPanel extends Panel {
         databinder: Databinder;
         me: any;
     }
-    export interface RepeaterConfig extends PanelConfig {
+    export interface RepeaterProperties extends PanelProperties {
         /**
         *  @member {array} value - the array which objects used to create the repeating components
         */
@@ -4547,7 +5853,7 @@ declare module "jassijs/ui/Repeater" {
         bind?: any[];
         createRepeatingComponent?(func: any): any;
     }
-    export class Repeater extends Panel implements DataComponentConfig {
+    export class Repeater<T extends RepeaterProperties = RepeaterProperties> extends Panel<T> implements DataComponentProperties, RepeaterProperties {
         _componentDesigner: any;
         _autocommit: boolean;
         _createRepeatingComponent: any;
@@ -4568,8 +5874,8 @@ declare module "jassijs/ui/Repeater" {
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties?: any);
-        config(config: RepeaterConfig): Repeater;
+        constructor(properties?: RepeaterProperties);
+        config(config: T): Repeater;
         createRepeatingComponent(func: any): void;
         _copyMeFromParent(me: any, parent: any, override?: boolean): void;
         update(): void;
@@ -4632,15 +5938,26 @@ declare module "jassijs/ui/SettingsDialog" {
     export function test(): Promise<SettingsDialog>;
 }
 declare module "jassijs/ui/Textarea" {
-    import { Textbox } from "jassijs/ui/Textbox";
-    export class Textarea extends Textbox {
-        constructor();
+    import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
+    export class Textarea<T extends TextboxProperties = TextboxProperties> extends Textbox<T> {
+        constructor(props?: TextboxProperties);
+        render(): any;
+        componentDidMount(): void;
     }
 }
 declare module "jassijs/ui/Upload" {
-    import { Component } from "jassijs/ui/Component";
-    export class Upload extends Component {
-        constructor();
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    export interface UploadProperties extends ComponentProperties {
+        readAs?: "Text" | "DataUrl" | "ArrayBuffer" | "BinaryString";
+        accept?: string;
+        multiple?: boolean;
+        onuploaded?: (any: any, FileList: any, JQueryEventObject: any) => any;
+    }
+    export class Upload<T extends UploadProperties = UploadProperties> extends Component<T> implements UploadProperties {
+        constructor(props?: UploadProperties);
+        render(): React.DetailedReactHTMLElement<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+        config(config: T): Upload;
+        componentDidMount(): void;
         get dom(): HTMLInputElement;
         set dom(value: HTMLInputElement);
         readAs: "Text" | "DataUrl" | "ArrayBuffer" | "BinaryString";
@@ -4662,7 +5979,7 @@ declare module "jassijs/ui/Upload" {
             [file: string]: string;
         }, files: FileList, evt: JQueryEventObject) => any): void;
     }
-    export function test(): Upload;
+    export function test(): Upload<UploadProperties>;
 }
 declare module "jassijs/ui/PropertyEditors/BooleanEditor" {
     import { Editor } from "jassijs/ui/PropertyEditors/Editor";
@@ -4827,7 +6144,28 @@ declare module "jassijs/ui/PropertyEditors/ColorEditor" {
         _onchange(param: any): void;
     }
     export function test3(): PropertyEditor;
-    export function test2(): BoxPanel;
+    export function test2(): BoxPanel<import("jassijs/ui/BoxPanel").BoxPanelProperties>;
+}
+declare module "jassijs/ui/PropertyEditors/ComponentEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    export class BooleanEditor extends Editor {
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onclick(param: any): void;
+    }
 }
 declare module "jassijs/ui/PropertyEditors/ComponentSelectorEditor" {
     import { Editor } from "jassijs/ui/PropertyEditors/Editor";
@@ -5024,7 +6362,7 @@ declare module "jassijs/ui/PropertyEditors/ImageEditor" {
         static show(): Promise<void>;
         showDialog(onlytest?: any): Promise<void>;
     }
-    export function test2(): Panel;
+    export function test2(): Panel<import("jassijs/ui/Panel").PanelProperties>;
 }
 declare module "jassijs/ui/PropertyEditors/JsonArrayEditor" {
     import { Editor } from "jassijs/ui/PropertyEditors/Editor";
@@ -5107,6 +6445,33 @@ declare module "jassijs/util/CSVImport" {
         private _doimport;
     }
     export function test(): Promise<void>;
+}
+declare module "jassijs/util/Reloader" {
+    export class Reloader {
+        static cache: any[];
+        static reloadCodeFromServerIsRunning: boolean;
+        static instance: Reloader;
+        listener: any[];
+        /**
+         * reloads Code
+         */
+        private constructor();
+        /**
+         * check code changes out of the browser if localhost and load the changes in to the browser
+         */
+        static startReloadCodeFromServer(): void;
+        /**
+         * listener for code reloaded
+         * @param {function} func - callfunction for the event
+         */
+        addEventCodeReloaded(func: any): void;
+        removeEventCodeReloaded(func: any): void;
+        private _findScript;
+        reloadJS(fileName: string): Promise<void>;
+        reloadJSAll(fileNames: string[], afterUnload?: () => {}, useServerRequire?: boolean): Promise<void>;
+        migrateModul(allModules: any, file: any, modul: any): void;
+        migrateClasses(file: any, oldmodul: any, modul: any): void;
+    }
 }
 declare module "jassijs/util/Runlater" {
     export class Runlater {

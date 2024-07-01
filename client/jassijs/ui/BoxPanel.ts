@@ -11,8 +11,10 @@ import { classes } from "jassijs/remote/Classes";
 //@ts-ignore
 //import Split from "jassijs/ext/split";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+import { Container, ContainerProperties } from "./Container";
 
 export interface BoxPanelProperties extends PanelProperties {
+
     /**
      * @member {boolean} - if true then the components are composed horizontally
      **/
@@ -26,7 +28,7 @@ export interface BoxPanelProperties extends PanelProperties {
 @$UIComponent({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] })
 @$Class("jassijs.ui.BoxPanel")
 @$Property({ name: "isAbsolute", hide: true, type: "boolean" })
-export class BoxPanel<T extends BoxPanelProperties={}> extends Panel<BoxPanelProperties> implements BoxPanelProperties {
+export class BoxPanel<T extends BoxPanelProperties=BoxPanelProperties> extends Panel<T> implements BoxPanelProperties {
     _horizontal: boolean;
     private _spliter: number[];
     private _splitcomponent: any;
@@ -46,7 +48,7 @@ export class BoxPanel<T extends BoxPanelProperties={}> extends Panel<BoxPanelPro
         this.dom.style.display="flex";
     }
 
-    config(config: BoxPanelProperties): BoxPanel {
+    config(config: T): BoxPanel {
         super.config(config);
         return this;
     }

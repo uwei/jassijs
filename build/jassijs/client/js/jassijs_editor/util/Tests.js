@@ -22,7 +22,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
         update() {
             if (this.failedtests === 0) {
             }
-            this.statustext.css = {
+            this.statustext.style = {
                 color: (this.failedtests === 0 ? "green" : "red")
             };
             this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
@@ -87,8 +87,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
                                     newerrorpanel.addError({
                                         error: err
                                     });
-                                    newerrorpanel.css = {
-                                        background_color: "red"
+                                    newerrorpanel.style = {
+                                        backgroundColor: "red"
                                     };
                                     container.add(newerrorpanel);
                                     container.failedtests++;
@@ -118,7 +118,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
         __metadata("design:returntype", Promise)
     ], TestAction, "testNode", null);
     TestAction = TestAction_1 = __decorate([
-        (0, Actions_1.$ActionProvider)("jassijs_editor.remote.FileNode"),
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
         (0, Registry_1.$Class)("jassijs_editor.ui.TestAction")
     ], TestAction);
     exports.TestAction = TestAction;

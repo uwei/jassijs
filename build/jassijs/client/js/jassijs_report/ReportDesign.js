@@ -449,7 +449,8 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
             if (this.styleContainer._components.length > 0) {
                 r.styles = {};
                 for (var x = 0; x < this.styleContainer._components.length; x++) {
-                    r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
+                    if (!this.styleContainer._components[0].designDummyFor)
+                        r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
                 }
             }
             //var _this = this;

@@ -20,7 +20,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
          * @param {string} [properties.id] -  connect to existing id (not reqired)
          *
          */
-        constructor(properties = undefined) {
+        constructor(properties = {}) {
             super(properties);
             this._autocommit = false;
         }

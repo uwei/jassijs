@@ -767,7 +767,9 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
     class Canavas extends Component_1.Component {
         constructor() {
             super();
-            super.init('<canvas type="pdfviewer"></canvas>');
+        }
+        render() {
+            return React.createElement("canvas", { type: "pdfviewer" });
         }
     }
     let PDFViewer = class PDFViewer extends Panel_1.Panel {
@@ -1880,7 +1882,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
-                "date": 1698507857254.2302,
+                "date": 1719589039108.462,
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
@@ -2024,7 +2026,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImage.ts": {
-                "date": 1656184928000,
+                "date": 1719588998709.0293,
                 "jassijs_report.RImage": {
                     "$ReportComponent": [
                         {
@@ -2046,7 +2048,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ROList.ts": {
-                "date": 1656019462000,
+                "date": 1719588965636.7617,
                 "jassijs_report.ROList": {
                     "$ReportComponent": [
                         {
@@ -2096,7 +2098,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-                "date": 1698507156069.9734,
+                "date": 1719588905687.799,
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -2117,7 +2119,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1699114918006.316,
+                "date": 1719757536098.1802,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -2129,7 +2131,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1699194592715.817,
+                "date": 1719757546458.8499,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -2162,7 +2164,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUList.ts": {
-                "date": 1656016418000,
+                "date": 1719588330055.1697,
                 "jassijs_report.RUList": {
                     "$ReportComponent": [
                         {
@@ -2177,7 +2179,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUnknown.ts": {
-                "date": 1656016430000,
+                "date": 1719588242339.4045,
                 "jassijs_report.RUnknown": {}
             },
             "jassijs_report/server/DoServerreport.ts": {
@@ -3813,9 +3815,11 @@ define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry"
             super(properties);
             this.reporttype = "image";
             this._image = "";
-            this.init('<img class="RImage"></img>');
             this.domWrapper.classList.remove("jcontainer");
             delete this._components;
+        }
+        render() {
+            return React.createElement("img", { className: "RImage" });
         }
         /**
          * adds a component to the container before an other component
@@ -4148,7 +4152,9 @@ define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry"
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "ol";
-            this.init("<ol></ol>");
+        }
+        render() {
+            return React.createElement("ol", { className: "ROList" });
         }
         set type(value) {
             this._type = value;
@@ -4469,7 +4475,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             this.insertEmptyCells = true;
             this.widths = [];
             this.heights = [];
-            super.init("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>");
+            //super.init("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>");
             this.updater = new Runlater_1.Runlater(() => {
                 _this.updateLayout(false);
             }, 100);
@@ -4480,6 +4486,11 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             this.initContextMenu(properties === null || properties === void 0 ? void 0 : properties.isdatatable);
             var _this = this;
             this.initKeys();
+        }
+        render() {
+            return React.createElement("table", { style: { border_spacing: "0px", min_width: "50px", table_layout: "fixed" } });
+        }
+        componentDidMount() {
         }
         initKeys() {
             var _this = this;
@@ -5282,13 +5293,13 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties = undefined) {
-            super(properties);
+        constructor(properties = {}) {
+            super(Object.assign(properties, { noWrapper: true }));
             this.reporttype = "tablerow";
-            properties = undefined === properties ? {} : properties;
-            properties.noWrapper = true;
-            super.init("<tr></tr>", properties);
             this.dom.classList.add("designerNoResizable");
+        }
+        render() {
+            return React.createElement("tr", { className: "RTablerow" });
         }
         oncomponentAdded(callback) {
             this.addEvent("componentAdded", callback);
@@ -5833,7 +5844,9 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "ul";
-            this.init("<ul></ul>");
+        }
+        render() {
+            return React.createElement("ul", { className: "RUList" });
         }
         /**
          * adds a component to the container before an other component
@@ -5927,8 +5940,12 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registr
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "unkown";
-            super.init('<span class="InvisibleComponent"></span>');
+        }
+        componentDidMount() {
             this.horizonzal = false;
+        }
+        render() {
+            return React.createElement("span", { className: "InvisibleComponent" /*, style= "Menu" */ });
         }
         fromJSON(ob) {
             var ret = this;
@@ -6486,7 +6503,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
-                "date": 1698507857254.2302,
+                "date": 1719589039108.462,
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
@@ -6630,7 +6647,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImage.ts": {
-                "date": 1656184928000,
+                "date": 1719588998709.0293,
                 "jassijs_report.RImage": {
                     "$ReportComponent": [
                         {
@@ -6652,7 +6669,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ROList.ts": {
-                "date": 1656019462000,
+                "date": 1719588965636.7617,
                 "jassijs_report.ROList": {
                     "$ReportComponent": [
                         {
@@ -6702,7 +6719,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-                "date": 1698507156069.9734,
+                "date": 1719588905687.799,
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -6723,7 +6740,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1699114918006.316,
+                "date": 1719757536098.1802,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -6735,7 +6752,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1699194592715.817,
+                "date": 1719757546458.8499,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -6768,7 +6785,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUList.ts": {
-                "date": 1656016418000,
+                "date": 1719588330055.1697,
                 "jassijs_report.RUList": {
                     "$ReportComponent": [
                         {
@@ -6783,7 +6800,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUnknown.ts": {
-                "date": 1656016430000,
+                "date": 1719588242339.4045,
                 "jassijs_report.RUnknown": {}
             },
             "jassijs_report/SimpleReportEditor.ts": {

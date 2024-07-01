@@ -1,22 +1,26 @@
 import { Menu } from "jassijs/ui/Menu";
 import { $Class } from "jassijs/remote/Registry";
-import { Panel, PanelConfig } from "jassijs/ui/Panel";
+import { Panel, PanelProperties } from "jassijs/ui/Panel";
 import { Action, Actions } from "jassijs/base/Actions";
 import { ActionNode} from "jassijs/base/ActionNode";
 import { MenuItem } from "jassijs/ui/MenuItem";
 type Me = {
     menu?: Menu;
 };
+export class ActionNodeMenuProperties{
+
+}
+
 @$Class("jassijs/ui/ActionNodeMenu")
-export class ActionNodeMenu extends Panel {
+export class ActionNodeMenu<T extends ActionNodeMenuProperties={}> extends Panel<ActionNodeMenuProperties> {
     me: Me;
-    constructor() {
-        super();
+    constructor(props:ActionNodeMenuProperties={}) {
+        super(props);
         this.me = {};
         this.layout(this.me);
     }
-	config(config:PanelConfig):ActionNodeMenu {
-        super.config(<PanelConfig>config);
+	config(config:PanelProperties):ActionNodeMenu {
+        super.config(<PanelProperties>config);
         return this;
     }
     layout(me: Me) {

@@ -83,6 +83,9 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/
             if (this.property.type === "number") {
                 oval = Number(oval);
             }
+            if (this.property.type === "string") {
+                oval = JSON.parse('"' + oval + '"');
+            }
             if (this.property.type === "number[]") {
                 if (oval === "")
                     oval = undefined;

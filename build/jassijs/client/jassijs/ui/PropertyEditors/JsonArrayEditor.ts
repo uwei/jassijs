@@ -50,7 +50,9 @@ export class JsonArrayEditor extends Editor {
         var panel = new BoxPanel();
         var panelButtons = new BoxPanel();
         var table = new Table({
-            columns: [{ field: "field", title: "field" }]
+            options:{
+                columns: [{ field: "field", title: "field" }]
+            }
         });
         var up = new Button();
         table.height = "100%";

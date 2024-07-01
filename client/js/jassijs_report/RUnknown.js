@@ -23,8 +23,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "unkown";
-            super.init('<span class="InvisibleComponent"></span>');
+        }
+        componentDidMount() {
             this.horizonzal = false;
+        }
+        render() {
+            return React.createElement("span", { className: "InvisibleComponent" /*, style= "Menu" */ });
         }
         fromJSON(ob) {
             var ret = this;

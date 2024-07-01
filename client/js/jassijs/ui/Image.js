@@ -17,7 +17,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
          }*/
         constructor(config = {}) {
             super(config);
-            super.init('<div style="display: inline-block;white-space: nowrap;"><img  vspace="0" hspace="0"  border="0"  src="" alt=""></div>');
+        }
+        render() {
+            return React.createElement("div", { style: { display: "inline-block", whiteSpace: "nowrap" } },
+                React.createElement("img", Object.assign({}, this.props.domProperties, { src: "", alt: "" })));
         }
         config(config) {
             super.config(config);
@@ -42,7 +45,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             if (value === undefined)
                 this.dom.children[0].setAttribute("width", "");
             else
-                this.dom.children[0].setAttribute("width", "100%");
+                (this.dom.children[0]).setAttribute("width", "100%");
             super.width = value;
         }
         get height() {
@@ -50,20 +53,20 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
         }
         set height(value) {
             if (value === undefined)
-                this.dom.children[0].setAttribute("height", "");
+                (this.dom.children[0]).setAttribute("height", "");
             else
-                this.dom.children[0].setAttribute("height", "100%");
+                (this.dom.children[0]).setAttribute("height", "100%");
             super.height = value;
         }
         set src(icon) {
             this.dom.classList.forEach((cl) => { this.dom.classList.remove(cl); });
-            this.dom.children[0].setAttribute("src", "");
+            (this.dom.children[0]).setAttribute("src", "");
             if (icon === null || icon === void 0 ? void 0 : icon.startsWith("mdi ")) {
                 icon.split(" ").forEach((cl) => this.dom.classList.add(cl));
                 this.dom.children[0].style.visibility = "hidden";
             }
             else {
-                this.dom.children[0].setAttribute("src", icon);
+                (this.dom.children[0]).setAttribute("src", icon);
                 this.dom.children[0].style.visibility = "";
             }
         }

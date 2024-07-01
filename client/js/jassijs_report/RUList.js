@@ -23,7 +23,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "ul";
-            this.init("<ul></ul>");
+        }
+        render() {
+            return React.createElement("ul", { className: "RUList" });
         }
         /**
          * adds a component to the container before an other component

@@ -30,7 +30,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
             this.layout(this.me);
         }
         layout(me) {
-            this.css = {
+            this.style = {
                 overflow: "auto"
             };
             me.toolbar = new BoxPanel_1.BoxPanel();

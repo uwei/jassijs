@@ -28,6 +28,7 @@ function $DBObject(options) {
         if (!options.name)
             options.name = classname.toLowerCase().replaceAll(".", "_");
         Registry_2.default.register("$DBObject", pclass, options);
+        //@ts-ignore
         (0, DatabaseSchema_1.Entity)(options)(pclass, ...params); //pass to orginal Entitiy
     };
 }

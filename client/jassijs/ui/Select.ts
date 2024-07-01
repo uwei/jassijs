@@ -11,6 +11,7 @@ import { classes } from "jassijs/remote/Classes";
 jassijs.includeCSSFile("chosen.css");
 
 export interface SelectProperities extends ComponentProperties{
+    domProperties?:React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
    /**
      * called if value has changed
      * @param {function} handler - the function which is executed
@@ -47,7 +48,7 @@ export interface SelectProperities extends ComponentProperties{
 @$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" })
 @$Class("jassijs.ui.Select")
 @$Property({ name: "new", type: "json",componentType:"jassijs.ui.SelectProperties" })
-export class Select<T extends SelectProperities={}> extends DataComponent<SelectProperities> {
+export class Select<T extends SelectProperities=SelectProperities> extends DataComponent<T> {
     domSelect: HTMLElement;
     //dom:Element;
     _select:{value:number};
@@ -95,12 +96,13 @@ export class Select<T extends SelectProperities={}> extends DataComponent<Select
       //  super.init('<select class="Select"><option value=""></option></select>');
         
         return React.createElement("select",{
+            ...this.props.domProperties,
             className:"Select"
         },      React.createElement("option",{
                     value:""
         }));
     }
-    config(config:SelectProperities) {
+    config(config:T) {
         super.config(config);
         return this;
     }

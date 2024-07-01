@@ -2,7 +2,7 @@ import "jassijs/ext/jquerylib";
 import { $Class } from "jassijs/remote/Registry";
 import { Table } from "jassijs/ui/Table";
 import { Panel } from "jassijs/ui/Panel";
-import { Button, ButtonConfig } from "jassijs/ui/Button";
+import { Button,  ButtonProperties } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
@@ -11,7 +11,7 @@ import { Property, $Property } from "jassijs/ui/Property";
 import { $UIComponent } from "jassijs/ui/Component";
 import { DBObject } from "jassijs/remote/DBObject";
 import { classes } from "jassijs/remote/Classes";
-import { DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponentProperties } from "jassijs/ui/DataComponent";
 /*
 https://blog.openshift.com/using-filezilla-and-sftp-on-windows-with-openshift/
 */
@@ -22,7 +22,7 @@ class Me {
     IDSearch?: Textbox;
     IDOK?: Button;
 }
-export interface ObjectChooserConfig extends ButtonConfig {
+export interface ObjectChooserConfig extends ButtonProperties {
     dialogHeight?: number;
     dialogWidth?: number;
     /**
@@ -52,7 +52,7 @@ export interface ObjectChooserConfig extends ButtonConfig {
 }
 @$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" })
 @$Class("jassijs.ui.ObjectChooser")
-export class ObjectChooser extends Button implements ObjectChooserConfig, DataComponentConfig {
+export class ObjectChooser extends Button implements ObjectChooserConfig, DataComponentProperties {
     @$Property({ default: 450 })
     dialogHeight: number;
     @$Property({ default: 300 })

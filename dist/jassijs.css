@@ -1,8 +1,25 @@
-.testuw::after { 
-  content: "O";
-  background-color: yellow;
-  color: red;
-  font-weight: bold;
+br2.jdesignmode { 
+  content: "";
+}
+br2.jdesignmode::after{
+  content: "\A.";
+   white-space: pre;
+
+}
+
+.dummyselected{
+  background-color: lightgoldenrodyellow;
+}
+.brafter::after {
+            content: "\A";
+            white-space: pre;
+        }
+.jeditablecontainer{
+  min-width: 20px;
+  min-height: 20px;
+}
+.lm_content{
+  background-color:white;  
 }
 .jlabel{ 
   display:block;font-size: smaller;

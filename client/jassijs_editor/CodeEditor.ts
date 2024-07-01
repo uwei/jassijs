@@ -75,7 +75,7 @@ export class CodeEditor extends Panel {
                 this._codePanel = new AcePanel();
 
             } else {
-                this._codePanel = new MonacoPanel();
+                this._codePanel = <any>new MonacoPanel();
                 // this._codePanel = new AcePanel(); 
 
             }
@@ -443,6 +443,7 @@ export class CodeEditor extends Panel {
             if (foundscope)
                 scope = [{ classname: root?.constructor?.name, methodname: "layout" }, foundscope];
             if (this.file.toLowerCase().endsWith(".tsx")) {
+                //@ts-ignore
                 values = Object.values(codePositions);
                 parser.parse(this._codePanel.value, undefined, values);
                 for (var x = 0; x < values.length; x++) {

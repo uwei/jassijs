@@ -18,8 +18,13 @@ export class RUnknown extends RComponent{
     */
     constructor(properties=undefined) {//id connect to existing(not reqired)
         super(properties);
-        super.init('<span class="InvisibleComponent"></span>');
+      
+    }
+    componentDidMount(): void {
         this.horizonzal = false;
+    }
+    render(){
+        return React.createElement("span", { className: "InvisibleComponent"/*, style= "Menu" */});
     }
    fromJSON(ob:any){
         var ret=this;

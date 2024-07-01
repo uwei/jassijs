@@ -27,7 +27,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.ClientError": {}
             },
             "jassijs/remote/Config.ts": {
-                "date": 1697209179729.3484
+                "date": 1719331708682.118
             },
             "jassijs/remote/Database.ts": {
                 "date": 1655556796000,
@@ -482,7 +482,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657714030000
             },
             "jassijs/server/Filesystem.ts": {
-                "date": 1684401442000,
+                "date": 1719332352671.4578,
                 "jassijs.server.Filesystem": {
                     "$Serverservice": [
                         {
@@ -679,14 +679,17 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
     exports.config = exports.Config = void 0;
     class Config {
         constructor() {
+            this.name = './client/jassijs.json';
             if (!window.document) {
                 this.isServer = true;
                 //@ts-ignore
                 var fs = require("fs");
-                this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
+                this.init(fs.readFileSync(this.name, 'utf-8'));
             }
         }
-        init(configtext) {
+        init(configtext, name = undefined) {
+            if (name !== undefined)
+                this.name = name;
             this.jsonData = JSON.parse(configtext);
             this.modules = this.jsonData.modules;
             this.server = {
@@ -698,7 +701,7 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
                 this.isServer = true;
                 //@ts-ignore
                 var fs = require("fs");
-                this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
+                this.init(fs.readFileSync(this.name, 'utf-8'));
             }
             else {
                 var Server = (await new Promise((resolve_4, reject_4) => { require(["jassijs/remote/Server"], resolve_4, reject_4); })).Server;
@@ -708,7 +711,7 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
         }
         async saveJSON() {
             var myfs = (await new Promise((resolve_5, reject_5) => { require(["jassijs/server/NativeAdapter"], resolve_5, reject_5); })).myfs;
-            var fname = './client/jassijs.json';
+            var fname = this.name;
             await myfs.writeFile(fname, JSON.stringify(this.jsonData, undefined, "\t"));
             this.init(await myfs.readFile(fname));
         }
@@ -5509,7 +5512,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
                 //if (!await exists(newpath + "/remote"))
                 //    await myfs.mkdir(newpath + "/remote", { recursive: true });
                 if (!await NativeAdapter_3.exists(newpath + "/modul.ts")) {
-                    await this.saveFiles([modulename + "/modul.js", "js/" + modulename + "/modul.js"], [
+                    await this.saveFiles([modulename + "/modul.ts", "js/" + modulename + "/modul.js"], [
                         "export default {}",
                         'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'
                     ]);
@@ -6290,16 +6293,35 @@ define("jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Se
             man.extendDBManager();
         }
     });
-    var autostart = async function () {
-        var files = await new FS_1.FS().readdir("./client");
+    var checkdir = async function (dir) {
+        var fs = new FS_1.FS();
+        var files = await fs.readdir(dir);
         for (var x = 0; x < files.length; x++) {
-            var fname = files[x];
-            fname = fname.replace("./client/", "");
-            if (!fname.startsWith("./client/js/")) {
-                var name = fname.substring(0, fname.length - 3);
-                Config_8.config.serverrequire.undef(name);
+            var fullname = dir + "/" + files[x];
+            if ((await fs.stat(fullname)).isDirectory()) {
+                await checkdir(fullname);
+            }
+            else {
+                if (fullname.startsWith("./client/")) {
+                    fullname = fullname.replace("./client/", "");
+                    if (!fullname.startsWith("js/")) {
+                        var name = fullname.substring(0, fullname.length - 3);
+                        Config_8.config.clientrequire.undef(name);
+                        Config_8.config.serverrequire.undef(name);
+                    }
+                }
+                else {
+                    if (!fullname.startsWith("js/")) {
+                        var name = fullname.substring(0, fullname.length - 3);
+                        Config_8.config.serverrequire.undef(name);
+                        Config_8.config.clientrequire.undef(name);
+                    }
+                }
             }
         }
+    };
+    var autostart = async function () {
+        await checkdir(".");
     };
     exports.autostart = autostart;
     Config_8.config.serverrequire.undef("jassijs/util/DatabaseSchema");

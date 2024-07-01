@@ -11,7 +11,7 @@ export interface ContainerProperties extends ComponentProperties {
 }
 @$Class("jassijs.ui.Container")
 @$Property({name:"children",type:"jassijs.ui.Component"})
-export class Container<T extends ContainerProperties={}> extends Component<T> implements Omit<ContainerProperties, "children">{
+export class Container<T extends ContainerProperties=ComponentProperties> extends Component<T> implements Omit<ContainerProperties, "children">{
     _components: Component[];
     _designDummy: any;
 
@@ -21,11 +21,13 @@ export class Container<T extends ContainerProperties={}> extends Component<T> im
      * @param {string} [properties.id] -  connect to existing id (not reqired)
      * 
      */
-    constructor(properties:ContainerProperties = undefined) {//id connect to existing(not reqired)
+    constructor(properties:ContainerProperties) {//id connect to existing(not reqired)
         super(properties);
         this._components = [];
+        if(this.domWrapper?.classList)
+            this.domWrapper?.classList.add("jcontainer");
     }
-     config(config: T,forceRender=false): Container<T> {
+     config(config: T,forceRender=false): Container {
         if (config?.children) {
             if (config?.children.length > 0 && config?.children[0] instanceof Component) {
                 this.removeAll(false);
@@ -43,11 +45,10 @@ export class Container<T extends ContainerProperties={}> extends Component<T> im
     * @param {dom} dom - init the dom element
     * @paran {object} properties - properties to init
    */
-    init(dom, properties = undefined) {
-        super.init(dom, properties);
-        if(this.domWrapper.classList)
-            this.domWrapper.classList.add("jcontainer");
-    }
+  //  init(dom) {
+    //    super.init(dom);
+        
+   // }
 
     /**
      * adds a component to the container

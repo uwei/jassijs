@@ -20,9 +20,12 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
     let AcePanel = AcePanel_1 = class AcePanel extends CodePanel_1.CodePanel {
         constructor() {
             super();
+        }
+        render() {
+            return React.createElement("div", { className: "CodePanel", style: { height: "500px", width: "500px" } });
+        }
+        componentDidMount() {
             var _this = this;
-            var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
-            super.init(test);
             this.domWrapper.style.display = "";
             this._editor = ace.edit(this._id);
             this.file = "";
@@ -45,7 +48,6 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
             var include = /[a-z.]/i;
             this._addEvents();
             this._addCommands();
-            //editor.$blockScrolling = Infinity;
         }
         _addEvents() {
             var _this = this;
@@ -539,9 +541,12 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassi
     let AcePanelSimple = class AcePanelSimple extends CodePanel_2.CodePanel {
         constructor() {
             super();
-            var _this = this;
-            var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
-            super.init(test);
+            //editor.$blockScrolling = Infinity;
+        }
+        render() {
+            return React.createElement("div", { className: "CodePanel", style: { height: "500px", width: "500px" } });
+        }
+        componentDidMount() {
             this.domWrapper.style.display = "";
             this._editor = ace.edit(this._id);
             this.file = "";
@@ -558,7 +563,6 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassi
             this._editor.$blockScrolling = Infinity;
             this._editor.jassi = this;
             this._addEvents();
-            //editor.$blockScrolling = Infinity;
         }
         _addEvents() {
             var _this = this;
@@ -1260,6 +1264,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 if (foundscope)
                     scope = [{ classname: (_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name, methodname: "layout" }, foundscope];
                 if (this.file.toLowerCase().endsWith(".tsx")) {
+                    //@ts-ignore
                     values = Object.values(codePositions);
                     parser.parse(this._codePanel.value, undefined, values);
                     for (var x = 0; x < values.length; x++) {
@@ -1762,12 +1767,16 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
     let CodeEditorInvisibleComponents = class CodeEditorInvisibleComponents extends Panel_2.Panel {
         constructor(codeeditor) {
             super();
-            super.init('<span class="Panel" style="border:1px solid #ccc;"/>');
             /**
            * @member {jassijs_editor.CodeEditor} - the parent CodeEditor
            * */
             this.codeeditor = codeeditor;
             this.layout();
+        }
+        render() {
+            return React.createElement("span", { className: "Panel", style: { border: "1px solid #ccc" } });
+        }
+        componentDidMount() {
         }
         layout() {
             this.update();
@@ -3551,7 +3560,12 @@ define("jassijs_editor/ComponentSpy", ["require", "exports", "jassijs/remote/Reg
             for (var k in jassijs.componentSpy.ids) {
                 data.push(jassijs.componentSpy.ids[k]);
             }
-            this.me.IDTable.items = data;
+            try {
+                this.me.IDTable.items = data;
+            }
+            catch (_a) {
+                setTimeout(() => this.me.IDTable.items = data, 100);
+            }
         }
         clear() {
             jassijs.componentSpy.ids = {};
@@ -4237,43 +4251,56 @@ define("jassijs_editor/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "
     };
     jassijs.ErrorPanel = ErrorPanel;
 });
-define("jassijs_editor/ext/monaco", ["require", "exports", "vs/editor/editor.main", "vs/language/typescript/tsWorker", "jassijs_editor/modul"], function (require, exports, _monaco, tsWorker, modul_1) {
+define("jassijs_editor/ext/monaco", ["require", "exports", "vs/editor/editor.main", "vs/language/typescript/tsWorker"], function (require, exports, _monaco, tsWorker) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /// <amd-dependency path="vs/editor/editor.main" name="_monaco"/>
     /// <amd-dependency path="vs/language/typescript/tsWorker" name="tsWorker"/>
+});
+define("jassijs_editor/ext/monaco2", ["require", "exports", "jassijs_editor/modul"], function (require, exports, modul_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     //hack to make autocompletion for autoimports from other modules
     //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
     let monacopath = modul_1.default.require.paths.vs.replace("/vs", "");
-    var platform_1 = require("vs/base/common/platform");
-    platform_1.globals.MonacoEnvironment = {};
-    function myfunc() {
-        if (require.getConfig().baseUrl === "") {
-            setTimeout(() => { myfunc(); }, 10);
-        }
-        else {
-            require(['vs/language/typescript/tsWorker'], function (tsWorker) {
-                tsWorker.TypeScriptWorker.prototype.getCompletionsAtPosition = async function (fileName, position, properties) {
-                    return await this._languageService.getCompletionsAtPosition(fileName, position, properties);
-                };
-            });
-        }
-        //   }
+    const channel = new MessageChannel();
+    async function downloadFile(file) {
+        return await new Promise((resolve, reject) => {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open('GET', file.replace("./client", ""), true);
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4) {
+                    if (xmlHttp.status === 200)
+                        resolve(xmlHttp.responseText);
+                    else
+                        resolve(undefined);
+                }
+                ;
+            };
+            xmlHttp.onerror = (err) => {
+                resolve(undefined);
+            };
+            xmlHttp.send(null);
+        });
     }
-    platform_1.globals.MonacoEnvironment.getWorker = function (workerId, label) {
-        const myPath = 'vs/base/worker/defaultWorkerFactory.js';
-        //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs/base/worker/workerMain.js"
-        let scriptPath = monacopath + "/vs/base/worker/workerMain.js"; // require.toUrl('./' + workerId);
-        //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/"
-        const workerBaseUrl = require.toUrl(myPath).slice(0, -myPath.length); // explicitly using require.toUrl(), see https://github.com/microsoft/vscode/issues/107440#issuecomment-698982321
-        let js = `/*${label}*/self.MonacoEnvironment={baseUrl: '${workerBaseUrl}'};const ttPolicy = self.trustedTypes?.createPolicy('defaultWorkerFactory', { createScriptURL: value => value });importScripts(ttPolicy?.createScriptURL('${scriptPath}') ?? '${scriptPath}');/*${label}*/;`;
-        if (label === "typescript")
-            js += myfunc.toString() + ";myfunc();";
-        const blob = new Blob([js], { type: 'application/javascript' });
-        var workerUrl = URL.createObjectURL(blob);
-        //var workerUrl=URL.createObjectURL(blob);
-        return new Worker(workerUrl, { name: label });
-    };
+    ;
+    async function test() {
+        var s = await downloadFile(monacopath + "/vs/language/typescript/tsWorker.js?1");
+        /*async getCompletionsAtPosition(fileName, position) {
+            if (fileNameIsLib(fileName)) {
+              return void 0;
+            }
+            return this._languageService.getCompletionsAtPosition(fileName, position, void 0);
+          }*/
+        s = s.replace("async getCompletionsAtPosition(fileName, position)", "async getCompletionsAtPosition(fileName, position,settings)");
+        s = s.replace("this._languageService.getCompletionsAtPosition(fileName, position, void 0);", "this._languageService.getCompletionsAtPosition(fileName, position, settings);");
+        navigator.serviceWorker.controller.postMessage({
+            type: 'SAVE_FILE',
+            filename: "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/dev/vs/language/typescript/tsWorker.js",
+            code: s
+        }, [channel.port2]);
+    }
+    test();
 });
 define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows", "jassijs/remote/Config"], function (require, exports, Registry_18, Tree_2, Panel_10, Textbox_1, Server_3, Router_5, Actions_4, OptionDialog_3, ContextMenu_2, Windows_4, Config_2) {
     "use strict";
@@ -5170,9 +5197,11 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             _this.keydown(e);
         }
         createTextComponent(text, par, before) {
-            var comp2 = new Component_5.TextComponent();
-            var newone = document.createTextNode(text);
-            comp2.init(newone, { noWrapper: true });
+            /*        var comp2 = new TextComponent();
+                    var newone = document.createTextNode(text);
+                    comp2.init(<any>newone, { noWrapper: true });*/
+            var comp2 = new Component_5.TextComponent({ noWrapper: true });
+            var newone = comp2.dom;
             return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
             ;
         }
@@ -5218,9 +5247,11 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 return;
             var sel = document.getSelection();
             if (sel.anchorNode === null) {
-                var nd = document.createTextNode("");
-                var comp2 = new Component_5.TextComponent();
-                comp2.init(nd, { noWrapper: true });
+                /*  var nd = document.createTextNode("");
+                  var comp2 = new TextComponent();
+                  comp2.init(<any>nd, { noWrapper: true });*/
+                var comp2 = new Component_5.TextComponent({ noWrapper: true });
+                var nd = comp2.dom;
                 if (this.lastSelectedDummy.pre)
                     var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value._parent, this._propertyEditor.value, true, "text");
                 else
@@ -5337,15 +5368,15 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
             "node_modules/@types/react/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/index.d.ts",
             "node_modules/@types/react/jsx-runtime.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/jsx-runtime.d.ts",
             "node_modules/@types/react/jsx-dev-runtime.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/jsx-dev-runtime.d.ts",
-            "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/monaco.d.ts",
-            "node_modules/typescript/typescriptServices.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-3.7/lib/typescriptServices.d.ts"
+            "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/monaco.d.ts",
+            "node_modules/typescript/typescriptServices.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-5.4/lib/typescript.d.ts"
         },
         "require": {
             paths: {
                 'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
                 'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools',
                 monacoLib: "jassijs_editor/ext/monacoLib",
-                vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/dev/vs"
+                vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/dev/vs"
             },
             shim: {
                 'ace/ext/language_tools': ['ace/ace'],
@@ -5446,27 +5477,15 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
     let MonacoPanel = class MonacoPanel extends CodePanel_5.CodePanel {
         constructor() {
             super();
+            //this._editor.setModel(monaco.editor.getModels() [1]);
+        }
+        render() {
+            return React.createElement("div", { className: "MonacoPanel", style: { borderSpacing: "0px", minWidth: "50px", tableLayout: "fixed" } });
+        }
+        componentDidMount() {
             var _this = this;
-            var test = '<div class="MonacoPanel" style="height: 100px; width: 100px"></div>';
-            super.init(test);
             this.domWrapper.style.overflow = "hidden";
             this.domWrapper.style.display = "";
-            /* _this._editor.on("guttermousedown", function(e) {
-     
-                 var row = e.getDocumentPosition().row;
-                 var breakpoints = e.editor.session.getBreakpoints(row, 0);
-                 var type = "debugpoint";
-                 if (e.domEvent.ctrlKey)
-                     type = "checkpoint";
-                 var column = _this._editor.session.getLine(row).length;
-                 if (typeof breakpoints[row] === typeof undefined) {
-                     e.editor.session.setBreakpoint(row);
-                     _this.callEvent("breakpointChanged", row, column, true, type);
-                 } else {
-                     e.editor.session.clearBreakpoint(row, false, undefined);
-                     _this.callEvent("breakpointChanged", row, column, false, type);
-                 }
-             });*/
             let theme = CurrentSettings_2.currentsettings.gets(Settings_2.Settings.keys.Development_MoanacoEditorTheme);
             this._editor = monaco.editor.create(this.dom, {
                 //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
@@ -5482,7 +5501,6 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
             this._editor.onMouseDown(function (e) {
                 _this._mouseDown(e);
             });
-            //this._editor.setModel(monaco.editor.getModels() [1]);
         }
         getBreakpointDecoration(line) {
             var decs = this._editor.getLineDecorations(line);
@@ -5696,11 +5714,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1684357702000,
+                "date": 1719757292376.6711,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1657651672000,
+                "date": 1719757301492.3672,
                 "jassijs.ui.AcePanelSimple": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
@@ -5708,7 +5726,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1698089473938.3076,
+                "date": 1719757394281.4602,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -5718,7 +5736,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1681558934000,
+                "date": 1719757407652.6265,
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
@@ -5738,7 +5756,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
-                "date": 1698507857251.2354,
+                "date": 1719755727631.165,
                 "jassijs_editor.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -5804,7 +5822,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/ext/monaco.ts": {
-                "date": 1681572586000
+                "date": 1719861907601.9385
             },
             "jassijs_editor/FileExplorer.ts": {
                 "date": 1683575950000,
@@ -5910,14 +5928,14 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1699287607642.389,
+                "date": 1719609659408.3953,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
-                "date": 1695399690345.8984
+                "date": 1719846808609.5916
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1684357486000,
+                "date": 1719865346020.8171,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/SearchExplorer.ts": {
@@ -6057,8 +6075,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1697196860372.7793,
+                "date": 1719865551737.1772,
                 "jassijs_editor.util.Typescript": {}
+            },
+            "jassijs_editor/ext/monaco2.ts": {
+                "date": 1719864992662.5933
             }
         }
     };
@@ -9215,7 +9236,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
     ], TSSourceMap);
     exports.TSSourceMap = TSSourceMap;
 });
-define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "jassijs_editor/ext/monaco"], function (require, exports, Registry_33, Server_6, Config_4) {
+define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "jassijs_editor/ext/monaco2", "jassijs_editor/ext/monaco"], function (require, exports, Registry_33, Server_6, Config_4) {
     "use strict";
     var Typescript_6;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -9323,7 +9344,12 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                         continue;
                     if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".tsx") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
                         if (fname.toLocaleLowerCase().endsWith(".js")) {
-                            monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
+                            try {
+                                monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
+                            }
+                            catch (_a) {
+                                console.log("Error loading file " + fname);
+                            }
                         }
                         if (fdat === undefined) {
                             nodeFiles[fname] = new Server_6.Server().loadFile(fname);
@@ -9648,11 +9674,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1684357702000,
+                "date": 1719757292376.6711,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1657651672000,
+                "date": 1719757301492.3672,
                 "jassijs.ui.AcePanelSimple": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
@@ -9660,7 +9686,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1698089473938.3076,
+                "date": 1719757394281.4602,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -9670,7 +9696,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1681558934000,
+                "date": 1719757407652.6265,
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
@@ -9690,7 +9716,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/ComponentSpy.ts": {
-                "date": 1698507857251.2354,
+                "date": 1719755727631.165,
                 "jassijs_editor.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -9756,7 +9782,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/ext/monaco.ts": {
-                "date": 1681572586000
+                "date": 1719861907601.9385
             },
             "jassijs_editor/FileExplorer.ts": {
                 "date": 1683575950000,
@@ -9862,14 +9888,14 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1699287607642.389,
+                "date": 1719609659408.3953,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
-                "date": 1695399690345.8984
+                "date": 1719846808609.5916
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1684357486000,
+                "date": 1719865346020.8171,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/SearchExplorer.ts": {
@@ -10009,8 +10035,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1697196860372.7793,
+                "date": 1719865551737.1772,
                 "jassijs_editor.util.Typescript": {}
+            },
+            "jassijs_editor/ext/monaco2.ts": {
+                "date": 1719864992662.5933
             }
         }
     };

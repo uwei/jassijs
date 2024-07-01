@@ -25,9 +25,11 @@ export class RImage extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        this.init('<img class="RImage"></img>');
         this.domWrapper.classList.remove("jcontainer");
          delete this._components;
+    }
+    render(){
+        return React.createElement("img", { className: "RImage"});
     }
     /**
      * adds a component to the container before an other component

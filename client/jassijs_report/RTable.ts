@@ -56,8 +56,8 @@ export class RTable extends RComponent {
 */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        super.init("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>");
-        this.updater = new Runlater(() => {
+        //super.init("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>");
+         this.updater = new Runlater(() => {
             _this.updateLayout(false);
         }, 100);
         let tr = new RTablerow();
@@ -68,6 +68,12 @@ export class RTable extends RComponent {
         var _this = this;
         this.initKeys();
 
+    }
+    render(){
+        return React.createElement("table", { style: {border_spacing:"0px", min_width:"50px",table_layout: "fixed"}});
+    }
+    componentDidMount(): void {
+       
     }
     private initKeys() {
         var _this = this;

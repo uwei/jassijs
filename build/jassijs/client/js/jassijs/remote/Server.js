@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes", "./Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_1, RemoteObject_1, FileNode_1, Classes_1, Serverservice_1, Validator_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes", "./Serverservice", "jassijs/remote/Validator", "./Config"], function (require, exports, Registry_1, RemoteObject_1, FileNode_1, Classes_1, Serverservice_1, Validator_1, Config_1) {
     "use strict";
     var Server_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -32,42 +32,53 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             }
             return ret;
         }
-        async fillFilesInMapIfNeeded() {
-            var _a, _b, _c, _d, _e, _f;
-            if (Server_1.filesInMap)
+        async fillMapModules(ret, serverModules) {
+            var _a, _b, _c, _d, _e, _f, _g;
+            var modules = Config_1.config.modules;
+            if (serverModules === true)
+                modules = (_a = Config_1.config.server) === null || _a === void 0 ? void 0 : _a.modules;
+            if (modules === undefined)
                 return;
-            var ret = {};
-            for (var mod in jassijs.modules) {
-                if ((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
-                    if (((_d = (_c = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
+            for (var mod in modules) {
+                if ((_c = (_b = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _b === void 0 ? void 0 : _b.Server) === null || _c === void 0 ? void 0 : _c.filterModulInFilemap) {
+                    if (((_e = (_d = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _d === void 0 ? void 0 : _d.Server) === null || _e === void 0 ? void 0 : _e.filterModulInFilemap.indexOf(mod)) === -1)
                         continue;
                 }
-                if (jassijs.modules[mod].endsWith(".js") || jassijs.modules[mod].indexOf(".js?") > -1) {
-                    let mapname = jassijs.modules[mod].split("?")[0] + ".map";
-                    if (jassijs.modules[mod].indexOf(".js?") > -1)
-                        mapname = mapname + "?" + jassijs.modules[mod].split("?")[1];
+                if (modules[mod].endsWith(".js") || modules[mod].indexOf(".js?") > -1) {
+                    let mapname = modules[mod].split("?")[0] + ".map";
+                    if (modules[mod].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + modules[mod].split("?")[1];
                     var code = await $.ajax({ url: mapname, dataType: "text" });
                     var data = JSON.parse(code);
                     var files = data.sources;
                     for (let x = 0; x < files.length; x++) {
                         let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                        if (((_f = (_e = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _e === void 0 ? void 0 : _e.Server) === null || _f === void 0 ? void 0 : _f.filterSytemfilesInFilemap) === true) {
+                        if (((_g = (_f = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _f === void 0 ? void 0 : _f.Server) === null || _g === void 0 ? void 0 : _g.filterSytemfilesInFilemap) === true) {
                             if (fname.endsWith("/modul.js") || fname.endsWith("/registry.js"))
                                 continue;
                         }
                         if (fname.endsWith)
-                            ret[fname] = {
+                            ret[(serverModules ? "$serverside/" : "") + fname] = {
                                 id: x,
                                 modul: mod
                             };
                     }
                 }
             }
+        }
+        async fillFilesInMapIfNeeded() {
+            if (Server_1.filesInMap)
+                return;
+            var ret = {};
+            await this.fillMapModules(ret, false);
+            await this.fillMapModules(ret, true);
             Server_1.filesInMap = ret;
         }
         async addFilesFromMap(root) {
             await this.fillFilesInMapIfNeeded();
             for (var fname in Server_1.filesInMap) {
+                if (fname.startsWith("$serverside"))
+                    continue;
                 let path = fname.split("/");
                 var parent = root;
                 for (let p = 0; p < path.length; p++) {
@@ -116,7 +127,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return r;
             }
             else {
-                var rett = (await Serverservice_1.serverservices.filesystem).dir("", withDate);
+                var rett = await (await Serverservice_1.serverservices.filesystem).dir("", withDate);
                 return rett;
                 // return ["jassijs/base/ChromeDebugger.ts"];
             }
@@ -153,17 +164,31 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             var fromServerdirectory = fileName.startsWith("$serverside/");
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 await this.fillFilesInMapIfNeeded();
-                if (!fromServerdirectory && Server_1.filesInMap[fileName]) {
-                    //perhabs the files ar in localserver?
-                    var Filesystem = Classes_1.classes.getClass("jassijs_localserver.Filesystem");
-                    if (Filesystem && (await new Filesystem().loadFileEntry(fileName) !== undefined)) {
+                if (Server_1.filesInMap[fileName]) {
+                    var foundOnLocalserver = false;
+                    if (Config_1.config.serverrequire) {
+                        var r = await new Promise((resolve) => {
+                            Config_1.config.serverrequire(["jassijs/server/NativeAdapter"], (adapter) => {
+                                resolve(adapter);
+                            });
+                        });
+                        var fname = "./client/" + fileName;
+                        if (fromServerdirectory)
+                            fname = fileName.replace("$serverside/", "./");
+                        if (r.exists && await r.exists(fname)) {
+                            foundOnLocalserver = true;
+                        }
+                    }
+                    if (foundOnLocalserver) {
                         //use ajax
                     }
                     else {
                         var found = Server_1.filesInMap[fileName];
-                        let mapname = jassijs.modules[found.modul].split("?")[0] + ".map";
-                        if (jassijs.modules[found.modul].indexOf(".js?") > -1)
-                            mapname = mapname + "?" + jassijs.modules[found.modul].split("?")[1];
+                        let mapname = Config_1.config.modules[found.modul].split("?")[0] + ".map";
+                        if (fromServerdirectory)
+                            mapname = Config_1.config.server.modules[found.modul].split("?")[0] + ".map";
+                        if (Config_1.config.modules[found.modul].indexOf(".js?") > -1)
+                            mapname = mapname + "?" + Config_1.config.modules[found.modul].split("?")[1];
                         var code = await this.loadFile(mapname, context);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;
@@ -197,7 +222,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                     var _this = this;
                     var fileName = fileNames[f];
                     var content = contents[f];
-                    if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
+                    if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".tsx") || fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                         //var tss = await import("jassijs_editor/util/Typescript");
                         var tss = await Classes_1.classes.loadClass("jassijs_editor.util.Typescript");
                         var rets = await tss.instance.transpile(fileName, content);
@@ -270,9 +295,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 }
                 //@ts-ignore
                 var test = (await new Promise((resolve_3, reject_3) => { require([name.replaceAll("$serverside/", "")], resolve_3, reject_3); })).test;
+                var ret;
                 if (test)
-                    Server_1.lastTestServersideFileResult = await test();
-                return Server_1.lastTestServersideFileResult;
+                    ret = await test();
+                return ret;
             }
         }
         /**
@@ -330,6 +356,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         static async isOnline(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 //no serviceworker no serverside implementation
+                //@ts-ignore
                 if (navigator.serviceWorker.controller === null)
                     return false;
                 try {
@@ -379,9 +406,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return (await Serverservice_1.serverservices.filesystem).createFolder(foldername);
             }
         }
-        async createModule(modulname, context = undefined) {
+        async createModule(modulename, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createModule, modulname, context);
+                var ret = await this.call(this, this.createModule, modulename, context);
+                if (!Config_1.config.modules[modulename]) {
+                    //config.jsonData.modules[modulename] = modulename;
+                    await Config_1.config.reload();
+                }
                 //@ts-ignore
                 //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
                 return ret;
@@ -389,7 +420,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             else {
                 if (!context.request.user.isAdmin)
                     throw new Classes_1.JassiError("only admins can createFolder");
-                return (await Serverservice_1.serverservices.filesystem).createModule(modulname);
+                return (await Serverservice_1.serverservices.filesystem).createModule(modulename);
             }
         }
         static async mytest(context = undefined) {
@@ -401,7 +432,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         }
     };
     Server.isonline = undefined;
-    Server.lastTestServersideFileResult = undefined;
     //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
     __decorate([

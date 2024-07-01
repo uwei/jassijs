@@ -10,15 +10,15 @@ export default {
         "node_modules/@types/react/index.d.ts":"https://cdn.jsdelivr.net/npm/@types/react@18.2.22/index.d.ts",
         "node_modules/@types/react/jsx-runtime.d.ts":"https://cdn.jsdelivr.net/npm/@types/react@18.2.22/jsx-runtime.d.ts",
         "node_modules/@types/react/jsx-dev-runtime.d.ts":"https://cdn.jsdelivr.net/npm/@types/react@18.2.22/jsx-dev-runtime.d.ts",
-        "node_modules/monaco.d.ts":"https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/monaco.d.ts",
-        "node_modules/typescript/typescriptServices.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-3.7/lib/typescriptServices.d.ts"
+        "node_modules/monaco.d.ts":"https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/monaco.d.ts",
+        "node_modules/typescript/typescriptServices.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-5.4/lib/typescript.d.ts"
     },
     "require":{ 
         paths: {
             'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
             'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools',
             monacoLib:"jassijs_editor/ext/monacoLib",
-            vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/dev/vs"
+            vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/dev/vs"
         },
         shim: {
             'ace/ext/language_tools': ['ace/ace'],

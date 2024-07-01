@@ -1,11 +1,11 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Component, $UIComponent } from "jassijs/ui/Component";
-import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
 import registry from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 
-export interface TextboxConfig extends DataComponentConfig {
+export interface TextboxProperties extends DataComponentProperties {
     converter?: DefaultConverter;
     /**
     * @member {boolean} disabled - enable or disable the element
@@ -51,8 +51,7 @@ export interface TextboxConfig extends DataComponentConfig {
 }
 @$UIComponent({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" })
 @$Class("jassijs.ui.Textbox")
-@$Property({ name: "new", type: "string" })
-export class Textbox extends DataComponent implements TextboxConfig {
+export class Textbox<T extends TextboxProperties = {}> extends DataComponent<TextboxProperties> implements TextboxProperties {
     /* get dom(){
          return this.dom;
      }*/
@@ -62,26 +61,26 @@ export class Textbox extends DataComponent implements TextboxConfig {
     _autocompleter;
     private _value: any = "";
     private _isFocused = false;
-    constructor(color = undefined) {
-        super();
-        super.init('<input type="text" />');
+    constructor(props: TextboxProperties = undefined) {
+        super(props);
         var _this = this;
-        this.dom.style.color = color;
         this.onblur((e) => _this.blurcalled(e));
         this.onfocus((e) => _this.focuscalled(e));
         // this.converter = undefined;
     }
-
-    config(config: TextboxConfig): Textbox {
-        super.config(config);
-        return this;
+    render() {
+        return React.createElement("input", { type: "text" });
     }
+
+
     get dom(): HTMLInputElement {
         return <any>super.dom;
     }
     set dom(value: HTMLInputElement) {
         super.dom = value;
     }
+
+
     set disabled(value) {
         this.dom.disabled = true;
     }
@@ -97,11 +96,11 @@ export class Textbox extends DataComponent implements TextboxConfig {
     @$Property({ type: "classselector", service: "$Converter" })
     set converter(value: DefaultConverter) {
         this._converter = value;
-        if(value)
-            this.converter.component=this;
-        this.value=this.value;
+        if (value)
+            this.converter.component = this;
+        this.value = this.value;
     }
-    @$Property()
+
     get readOnly(): boolean {
         return this.dom.readOnly;
     }
@@ -131,9 +130,11 @@ export class Textbox extends DataComponent implements TextboxConfig {
         var v = value;
         if (this.converter)
             v = this.converter.objectToFormatedString(v);
+
         this.dom.value = v === undefined ? "" : v;
     }
     @$Property({ type: "string" })
+
     get value() {
         if (this._isFocused)
             this.updateValue();
@@ -143,14 +144,18 @@ export class Textbox extends DataComponent implements TextboxConfig {
     onclick(handler) {
         return this.on("click", handler);
     }
+
     @$Property({ default: "function(event){\n\t\n}" })
     onchange(handler) {
         return this.on("change", handler);
     }
+
+
     @$Property({ default: "function(event){\n\t\n}" })
     onkeydown(handler) {
         return this.on("keydown", handler);
     }
+
     @$Property({ default: "function(event){\n\t\n}" })
     oninput(handler) {
         return this.on("input", handler);
@@ -162,6 +167,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
 <option value="Firefox">
 </datalist>+>
      */
+
     @$Property()
     set placeholder(text: string) {
         this.dom.placeholder = text;

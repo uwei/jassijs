@@ -22,7 +22,7 @@ class Me {
     IDSearch?: Textbox;
     IDOK?: Button;
 }
-export interface ObjectChooserConfig extends ButtonProperties {
+export interface ObjectChooserProperties extends ButtonProperties {
     dialogHeight?: number;
     dialogWidth?: number;
     /**
@@ -52,7 +52,7 @@ export interface ObjectChooserConfig extends ButtonProperties {
 }
 @$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" })
 @$Class("jassijs.ui.ObjectChooser")
-export class ObjectChooser extends Button implements ObjectChooserConfig, DataComponentProperties {
+export class ObjectChooser<T extends ObjectChooserProperties=ObjectChooserProperties> extends Button<T> implements ObjectChooserProperties, DataComponentProperties {
     @$Property({ default: 450 })
     dialogHeight: number;
     @$Property({ default: 300 })
@@ -74,7 +74,7 @@ export class ObjectChooser extends Button implements ObjectChooserConfig, DataCo
         this.dialogWidth = 450;
         this.layout();
     }
-    config(config: ObjectChooserConfig): ObjectChooser {
+    config(config: T): ObjectChooser {
         super.config(config);
         return this;
     }

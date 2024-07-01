@@ -3,11 +3,11 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1684357702000,
+		"date": 1719757292376.6711,
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/AcePanelSimple.ts": {
-		"date": 1657651672000,
+		"date": 1719757301492.3672,
 		"jassijs.ui.AcePanelSimple": {}
 	},
 	"jassijs_editor/ChromeDebugger.ts": {
@@ -15,7 +15,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1698089473938.3076,
+		"date": 1719757394281.4602,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {}
@@ -25,7 +25,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/CodeEditorInvisibleComponents.ts": {
-		"date": 1681558934000,
+		"date": 1719757407652.6265,
 		"jassijs_editor.CodeEditorInvisibleComponents": {}
 	},
 	"jassijs_editor/CodePanel.ts": {
@@ -45,7 +45,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ComponentPalette": {}
 	},
 	"jassijs_editor/ComponentSpy.ts": {
-		"date": 1698507857251.2354,
+		"date": 1719755727631.165,
 		"jassijs_editor.ui.ComponentSpy": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -111,7 +111,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/ext/monaco.ts": {
-		"date": 1681572586000
+		"date": 1719861907601.9385
 	},
 	"jassijs_editor/FileExplorer.ts": {
 		"date": 1683575950000,
@@ -217,14 +217,14 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/HtmlDesigner.ts": {
-		"date": 1699287607642.389,
+		"date": 1719609659408.3953,
 		"jassijs_editor.HtmlDesigner": {}
 	},
 	"jassijs_editor/modul.ts": {
-		"date": 1695399690345.8984
+		"date": 1719846808609.5916
 	},
 	"jassijs_editor/MonacoPanel.ts": {
-		"date": 1684357486000,
+		"date": 1719865346020.8171,
 		"jassijs_editor.MonacoPanel": {}
 	},
 	"jassijs_editor/SearchExplorer.ts": {
@@ -364,8 +364,11 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1697196860372.7793,
+		"date": 1719865551737.1772,
 		"jassijs_editor.util.Typescript": {}
+	},
+	"jassijs_editor/ext/monaco2.ts": {
+		"date": 1719864992662.5933
 	}
 }
  }

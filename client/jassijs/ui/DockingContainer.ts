@@ -22,7 +22,9 @@ export class DockingContainer extends Container {
     */
     constructor(id=undefined) {//id connect to existing(not reqired)
         super(id);
-        super.init('<div class="DockingContainer"/>');
+      
+    }
+    componentDidMount(): void {
         this.maximize();
         var _this = this;
         this._registeredcomponents = {};
@@ -38,6 +40,9 @@ export class DockingContainer extends Container {
             }
         }, { rootMargin: `0px 0px 0px 0px` });
         this._intersectionObserver.observe(_this.dom);
+    }
+    render(){
+        return React.createElement("div", { className: "DockingContainer"/*, style= "Menu" */});
     }
      public static clearMemoryleak(container){
      

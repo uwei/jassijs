@@ -17,9 +17,14 @@ export class AcePanelSimple extends CodePanel{
     private _isInited: boolean;
     constructor() {
         super();
-        var _this = this;
-        var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
-        super.init(test);
+      
+       
+        //editor.$blockScrolling = Infinity;
+    }
+    render(){
+        return <any>React.createElement("div", { className:"CodePanel",style:{height:"500px",width:"500px"}});
+    }
+    componentDidMount(): void {
         this.domWrapper.style.display="";
         this._editor = ace.edit(this._id);
         this.file = "";
@@ -37,7 +42,6 @@ export class AcePanelSimple extends CodePanel{
         this._editor.$blockScrolling = Infinity;
         this._editor.jassi = this;
         this._addEvents();
-        //editor.$blockScrolling = Infinity;
     }
     private _addEvents() {
         var _this = this;

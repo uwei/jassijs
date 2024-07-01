@@ -1,5 +1,5 @@
 import "jassijs/ext/jquerylib";
-import { Container, ContainerConfig } from "jassijs/ui/Container";
+import { Container, ContainerProperties } from "jassijs/ui/Container";
 import { Button } from "jassijs/ui/Button";
 import { Property, $Property } from "jassijs/ui/Property";
 import { MenuItem } from "jassijs/ui/MenuItem";
@@ -13,7 +13,7 @@ import { DesignDummy } from "jassijs/ui/DesignDummy";
 }*/
 
 
-export interface MenuConfig extends ContainerConfig {
+export interface MenuConfig extends ContainerProperties {
 
     onclick(handler);
 }

@@ -26,6 +26,20 @@ define(["require", "exports"], function (require, exports) {
             "tabulator-tables.ts": "https://cdn.jsdelivr.net/npm/@types/tabulator-tables@5.1.4/index.d.ts"
         },
         "require": {
+            "shim": {
+                //'tabulator-tables': ['tabulatorext'],
+                'goldenlayout': ["jquery"],
+                "jquery.choosen": ["jquery"],
+                "jquery.contextMenu": ["jquery.ui"],
+                'jquery.fancytree': ["jquery", "jquery.ui"],
+                'jquery.fancytree.dnd': ["jquery", "jquery.ui"],
+                'jquery.ui': ["jquery"],
+                'jquery.notify': ["jquery"],
+                'jquery.ui.touch': ["jquery", "jquery.ui"],
+                //            'jquery.doubletap': ["jquery"],
+                //  'jassijs/jassi': ['jquery', 'jquery.ui', /*'jquery.ui.touch'*/],
+                "spectrum": ["jquery"]
+            },
             "paths": {
                 'intersection-observer': '//cdn.jsdelivr.net/npm/intersection-observer@0.7.0/intersection-observer.js',
                 'goldenlayout': '//cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout',
@@ -56,22 +70,26 @@ define(["require", "exports"], function (require, exports) {
                 //"tabulatorext":'jassijs/ext/tabulator',
                 // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
                 "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect"
-            },
-            "shim": {
-                //'tabulator-tables': ['tabulatorext'],
-                'goldenlayout': ["jquery"],
-                "jquery.choosen": ["jquery"],
-                "jquery.contextMenu": ["jquery.ui"],
-                'jquery.fancytree': ["jquery", "jquery.ui"],
-                'jquery.fancytree.dnd': ["jquery", "jquery.ui"],
-                'jquery.ui': ["jquery"],
-                'jquery.notify': ["jquery"],
-                'jquery.ui.touch': ["jquery", "jquery.ui"],
-                //            'jquery.doubletap': ["jquery"],
-                //  'jassijs/jassi': ['jquery', 'jquery.ui', /*'jquery.ui.touch'*/],
-                "spectrum": ["jquery"]
             }
+        },
+        server: {
+            "require": {
+                "shim": {},
+                "paths": {
+                    'js-cookie': '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
+                    "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect",
+                    //localserver
+                    "jszip": "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip",
+                    "js-sql-parser": "https://cdn.jsdelivr.net/npm/js-sql-parser@1.4.1/dist/parser/sqlParser.min",
+                    "typeorm": "jassijs/server/ext/typeorm",
+                    "typeormbrowser": "https://uwei.github.io/jassijs/dist/typeorm/typeormbrowser",
+                    "window.SQL": "https://sql.js.org/dist/sql-wasm",
+                    //"jassijs/util/DatabaseSchema": "jassijs/server/DatabaseSchema"
+                }
+            },
+            "loadbeforestart": ["js-sql-parser", "typeormbrowser", "jassijs/server/Installserver"],
         }
+        //localserver
     };
     window["tinyMCEPreInit"] = {
         suffix: '.min',

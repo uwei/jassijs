@@ -1,8 +1,10 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 
-export interface ButtonConfig extends ComponentConfig{
+
+export interface ButtonProperties extends ComponentProperties{
+    domProperties?:React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
       /**
     * register an event if the button is clicked
     * @param {function} handler - the function that is called on change
@@ -19,16 +21,15 @@ export interface ButtonConfig extends ComponentConfig{
 
 }
 
+
 @$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
 @$Class("jassijs.ui.Button")
-export class Button extends Component implements ButtonConfig {
-   
-    constructor() {
-        super();
-        super.init('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>');
+export class Button<T extends ButtonProperties={}> extends Component<ButtonProperties> implements ButtonProperties {
+    constructor(properties:ButtonProperties={}){
+        super(properties);
     }
-    config(config:ButtonConfig):Button {
-        super.config(<ComponentConfig>config);
+    config(config: T,forceRender=false): Button<T> {
+        super.config(config);
         return this;
     }
     get dom(): HTMLButtonElement {
@@ -37,6 +38,21 @@ export class Button extends Component implements ButtonConfig {
 
     set dom(value: HTMLButtonElement) {
         super.dom=value;
+    }
+    render(){
+        return React.createElement("button",{...this.props.domProperties,
+                                        className:"Button",
+                                        contenteditable:false},
+                React.createElement("span",{
+                                className:"buttonspan"
+                                },React.createElement("img",{
+                                    style:{display: "none"},
+                                    className:"buttonimg"}),
+                                  React.createElement("span",{
+                                    className:"buttontext"
+                                  })
+                )
+        );
     }
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler, removeOldHandler: boolean = true) {
@@ -50,7 +66,7 @@ export class Button extends Component implements ButtonConfig {
         var img;
         if(icon===undefined)
             icon="";
-        if(this.dom===undefined)
+        if(this.dom===undefined||this.dom===null)
             debugger;
         var el1 = this.dom.querySelector(".buttonspan");
         el1.classList.forEach((cl)=> {el1.classList.remove(cl)});
@@ -65,6 +81,7 @@ export class Button extends Component implements ButtonConfig {
             (<HTMLInputElement> this.dom.querySelector(".buttonimg")).setAttribute("src",icon);
         }
     }
+    
     @$Property({type:"image"})
     get icon(): string { //the Code
         var ret=(<HTMLInputElement> this.dom.querySelector(".buttonimg")).getAttribute("src");

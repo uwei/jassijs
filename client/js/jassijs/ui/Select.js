@@ -48,9 +48,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         }
         render() {
             //  super.init('<select class="Select"><option value=""></option></select>');
-            return React.createElement("select", {
-                className: "Select"
-            }, React.createElement("option", {
+            return React.createElement("select", Object.assign(Object.assign({}, this.props.domProperties), { className: "Select" }), React.createElement("option", {
                 value: ""
             }));
         }

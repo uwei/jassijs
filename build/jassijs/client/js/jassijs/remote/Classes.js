@@ -43,16 +43,17 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
          * @param classname - the class to load
          */
         async loadClass(classname) {
+            var config = (await new Promise((resolve_1, reject_1) => { require(["./Config"], resolve_1, reject_1); })).config;
             var cl = await Registry_1.default.getJSONData("$Class", classname);
             if (cl === undefined) {
                 try {
                     //@ts-ignore
                     if (require.main) { //nodes load project class from module
-                        //@ts-ignore
+                        //@ts-ignore 
                         await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                     }
                     else {
-                        await new Promise((resolve_1, reject_1) => { require([classname.replaceAll(".", "/")], resolve_1, reject_1); });
+                        await new Promise((resolve_2, reject_2) => { require([classname.replaceAll(".", "/")], resolve_2, reject_2); });
                     }
                 }
                 catch (err) {
@@ -67,8 +68,8 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
                 //@ts-ignore
                 if (window.document === undefined) {
                     var pack = file.split("/");
-                    if (pack.length < 2 || pack[1] !== "remote") {
-                        throw new JassiError("failed loadClass " + classname + " on server only remote classes coud be loaded");
+                    if (pack.length < 2 || pack[1] === "server") {
+                        // throw new JassiError("Server classes could not be loaded: " + classname );
                     }
                 }
                 //@ts-ignore
@@ -77,7 +78,7 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
                     var imp = await Promise.resolve().then(() => require.main.require(file.replace(".ts", "")));
                 }
                 else {
-                    var imp = await new Promise((resolve_2, reject_2) => { require([file.replace(".ts", "")], resolve_2, reject_2); });
+                    var imp = await new Promise((resolve_3, reject_3) => { require([file.replace(".ts", "")], resolve_3, reject_3); });
                 }
             }
             return this.getClass(classname);

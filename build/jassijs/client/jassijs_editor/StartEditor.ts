@@ -18,8 +18,8 @@ import { ActionNodeMenu } from "jassijs/ui/ActionNodeMenu";
 
 async function start() {
   //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
-    var body = new Panel({ id: "body" });
-    body.max();
+    //var body = new Panel({ id: "body" });
+    //body.max();
     windows.addLeft(new DBObjectExplorer(), "DBObjects");
     windows.addLeft(new SearchExplorer(), "Search");
     windows.addLeft(new FileExplorer(), "Files");

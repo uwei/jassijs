@@ -98,7 +98,9 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
             me.upload = new Upload_1.Upload();
             var _this = this;
             this.me.table = new Table_1.Table({
-                autoColumns: false
+                options: {
+                    autoColumns: false
+                }
             });
             me.select = new Select_1.Select();
             me.table.width = 500;

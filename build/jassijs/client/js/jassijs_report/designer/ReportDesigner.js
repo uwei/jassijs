@@ -7,17 +7,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_report/remote/ServerReport"], function (require, exports, Registry_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1, ServerReport_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_report/remote/ServerReport", "jassijs_editor/HtmlDesigner", "jassijs_report/RText", "jassijs_report/RTextGroup"], function (require, exports, Registry_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, Classes_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1, ServerReport_1, HtmlDesigner_1, RText_1, RTextGroup_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
-    let ReportDesigner = class ReportDesigner extends ComponentDesigner_1.ComponentDesigner {
+    let ReportDesigner = class ReportDesigner extends HtmlDesigner_1.HtmlDesigner {
         constructor() {
             super();
             this.propertyIsChanging = false;
             this.pdfviewer = new PDFViewer_1.PDFViewer();
             this._codeChanger = undefined;
             this.mainLayout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+            this._designPlaceholder.dom.style.whiteSpace = "pre";
         }
         set codeEditor(value) {
             var _this = this;
@@ -49,6 +50,24 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
             this.editButton.tooltip = "pdf preview";
             this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
         }
+        createTextComponent(text, par, before) {
+            var comp2 = new RText_1.RText();
+            comp2.value = text;
+            return this.createComponent("jassijs_report.RText", comp2, undefined, undefined, par, before);
+        }
+        wrapTextNodeIfNeeded(found) {
+            var parent = found.parentNode;
+            /* if (parent.childNodes.length !== 1) {
+                 //no wrap
+                 var textComp = (<any>found)._this;
+                 var newSpan = new RTextGroup();
+                 var span = this.createComponent(classes.getClassName(newSpan), newSpan, undefined, undefined, textComp._parent, textComp);
+                 this.moveComponent(textComp, undefined, undefined, textComp._parent, span, undefined);
+                 (<Container>span).add(textComp);
+                 parent = span.__dom;
+             }*/
+            return parent;
+        }
         connectParser(parser) {
             this._propertyEditor.parser = parser;
             var Parser = Classes_1.classes.getClass("jassijs_editor.util.Parser");
@@ -65,7 +84,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
                     this._codeEditor.evalServerside().then((data) => {
                         if (!data)
                             return;
-                        ServerReport_1.ServerReport.getBase64LastTestResult().then((base64) => {
+                        ServerReport_1.ServerReport.getBase64FromFile(this.codeEditor._file).then((base64) => {
                             this.pdfviewer.report = rep;
                             _this.pdfviewer.value = base64;
                         });
@@ -287,6 +306,43 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
                     return varname.substring(5);
                 return varname;
             };
+        }
+        insertLineBreak(sel) {
+            var offSet = sel.anchorOffset;
+            var node = sel.anchorNode;
+            if (sel.anchorNode.compareDocumentPosition(sel.focusNode) === Node.DOCUMENT_POSITION_PRECEDING) {
+                node = sel.focusNode;
+                offSet = sel.focusOffset;
+            }
+            var old = node.textContent;
+            var v1 = old.substring(0, offSet) + "\n" + old.substring(offSet);
+            this.changeText(node, v1);
+            this._propertyEditor.callEvent("propertyChanged", undefined);
+        }
+        setStyle(style, value = undefined) {
+            var ret = super.setStyle(style, value);
+            //Wrap to TextGRoup
+            if (ret.length > 0) {
+                var par = ret[0]._parent;
+                for (var x = 1; x < ret.length; x++) {
+                    if (ret[x]._parent !== par)
+                        par = undefined;
+                }
+                if ((par === null || par === void 0 ? void 0 : par.reporttype) !== "textgroup") {
+                    var tg = new RTextGroup_1.RTextGroup();
+                    tg = this.createComponent(Classes_1.classes.getClassName(tg), tg, undefined, undefined, par, ret[0]);
+                    ret.forEach((comp) => tg.add(comp));
+                    this._propertyEditor.callEvent("propertyChanged", undefined);
+                }
+            }
+            return ret;
+        }
+        applyStyle(comp, stylename, value = undefined) {
+            var rcomp = comp;
+            if (stylename === "bold") {
+                rcomp.bold = !rcomp.bold;
+            }
+            this._propertyEditor.callEvent("propertyChanged", undefined);
         }
     };
     ReportDesigner = __decorate([

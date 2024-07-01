@@ -374,6 +374,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 if (foundscope)
                     scope = [{ classname: (_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name, methodname: "layout" }, foundscope];
                 if (this.file.toLowerCase().endsWith(".tsx")) {
+                    //@ts-ignore
                     values = Object.values(codePositions);
                     parser.parse(this._codePanel.value, undefined, values);
                     for (var x = 0; x < values.length; x++) {

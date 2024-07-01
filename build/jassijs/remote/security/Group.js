@@ -17,6 +17,8 @@ const ParentRight_1 = require("jassijs/remote/security/ParentRight");
 const User_1 = require("jassijs/remote/security/User");
 const Right_1 = require("jassijs/remote/security/Right");
 const Validator_1 = require("jassijs/remote/Validator");
+const Config_1 = require("../Config");
+var hh = Config_1.config;
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 let Group = class Group extends DBObject_1.DBObject {
 };

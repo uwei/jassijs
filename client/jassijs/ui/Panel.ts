@@ -12,6 +12,7 @@ export interface PanelProperties extends ContainerProperties {
    
     isAbsolute?: boolean;
     useSpan?: boolean;
+    domProperties?:React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 }
 
 
@@ -20,7 +21,7 @@ export interface PanelProperties extends ContainerProperties {
 @$Class("jassijs.ui.Panel")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
 @$Property({ name: "new/useSpan", type: "boolean", default: false })
-export class Panel<T extends PanelProperties = {}> extends Container<PanelProperties> implements PanelProperties {
+export class Panel<T extends PanelProperties=PanelProperties > extends Container<T> implements PanelProperties {
     _isAbsolute: boolean;
     private _activeComponentDesigner: any;
     /**
@@ -30,14 +31,14 @@ export class Panel<T extends PanelProperties = {}> extends Container<PanelProper
     * @param {boolean} [properties.useSpan] -  use span not div
     * 
     */
-    constructor(properties: PanelProperties = undefined) {//id connect to existing(not reqired)
+    constructor(properties: PanelProperties = <any>{}) {//id connect to existing(not reqired)
         super(properties); 
         this._designMode = false;
         this.isAbsolute = properties?.isAbsolute === true;
     }
     render() {
         var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
-        return React.createElement(tag, { className: "Panel" });
+        return React.createElement(tag, { ...this.props.domProperties,className: "Panel" });
     }
     @$Property()
     set isAbsolute(value: boolean) {
@@ -133,6 +134,7 @@ export class Panel<T extends PanelProperties = {}> extends Container<PanelProper
 
     }
     destroy() {
+        
         super.destroy();
         if (this._designDummy)
             this._designDummy.destroy();

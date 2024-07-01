@@ -15,12 +15,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
     let CodeEditorInvisibleComponents = class CodeEditorInvisibleComponents extends Panel_1.Panel {
         constructor(codeeditor) {
             super();
-            super.init('<span class="Panel" style="border:1px solid #ccc;"/>');
             /**
            * @member {jassijs_editor.CodeEditor} - the parent CodeEditor
            * */
             this.codeeditor = codeeditor;
             this.layout();
+        }
+        render() {
+            return React.createElement("span", { className: "Panel", style: { border: "1px solid #ccc" } });
+        }
+        componentDidMount() {
         }
         layout() {
             this.update();

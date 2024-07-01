@@ -108,7 +108,7 @@ export class RText extends RComponent {
         //this._initTinymce = HTMLPanel.prototype._initTinymce.bind(this);
     }
     render(){
-        return React.createElement(HTMLComponent,{
+        return <any>React.createElement(HTMLComponent,{
             tag:"div",
             className:"RText jdisableaddcomponents", 
             tabIndex:0

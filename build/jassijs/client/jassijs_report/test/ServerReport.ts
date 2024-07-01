@@ -14,7 +14,7 @@ import { $Class } from "jassijs/remote/Registry";
         }
     ]
 };*/ 
-@$Report({name:"test/Sample Serverreport",serverReportPath:"jassijs_report/TestServerreport"})
+@$Report({name:"test/Sample Serverreport",serverReportPath:"jassijs_report/server/TestServerreport"})
 @$Class("jassijs_report.test.ServerReport")
 export class ServerReport extends Report {
      @$Property({chooseFromStrict:true,chooseFrom:["name","lastname"]})

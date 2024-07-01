@@ -3,7 +3,7 @@ import "jquery.contextMenu";
 import { $Class } from "jassijs/remote/Registry";
 import { Menu } from "jassijs/ui/Menu";
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { $Property } from "jassijs/ui/Property";
@@ -16,7 +16,7 @@ declare global {
         contextMenu: any;
     }
 }
-export interface ContextMenuConfig extends ComponentConfig {
+export interface ContextMenuConfig extends ComponentProperties {
     /**
      * @member - includes Actions from @ActionProvider for the objects in value
      */
@@ -127,7 +127,8 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
                     var men = new MenuItem();
                     men["_classaction"] = true;
                     men.text = path[i];
-                    men.icon = action.icon;
+                    if (action.icon !== undefined)
+                        men.icon = action.icon;
                     men.onclick(() => action.call(_this.value));
                     parent.add(men);
                 } else {
@@ -162,8 +163,6 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
         this.addEvent("beforeshow", handler);
     }
     async _callContextmenu(evt) {
-        if (evt.preventDefault !== undefined)
-            evt.preventDefault();
         this.target = evt.target;
         var cancel = this.callEvent("beforeshow", evt);
         if (cancel !== undefined) {
@@ -187,7 +186,11 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
         this.contextComponents.push(component);
         var _this = this;
         $(component.dom).contextmenu(function (evt) {
-            _this._callContextmenu(evt);
+            if (evt.preventDefault !== undefined)
+                evt.preventDefault();
+            setTimeout(() => {//timout because Table._oncontext should be called first
+                _this._callContextmenu(evt);
+            }, 10);
         });
     }
     /**

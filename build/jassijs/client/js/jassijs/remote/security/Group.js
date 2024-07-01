@@ -7,10 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right", "jassijs/remote/Validator"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, ParentRight_1, User_1, Right_1, Validator_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right", "jassijs/remote/Validator", "../Config"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, ParentRight_1, User_1, Right_1, Validator_1, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Group = void 0;
+    var hh = Config_1.config;
     //import "jassijs/ext/enableExtension.js?de.Kunde";
     let Group = class Group extends DBObject_1.DBObject {
     };

@@ -1,18 +1,29 @@
-
 /// <amd-dependency path="vs/editor/editor.main" name="_monaco"/>
 /// <amd-dependency path="vs/language/typescript/tsWorker" name="tsWorker"/>
 declare var _monaco;
 declare var tsWorker;
 declare var require;
 
-import modul from "jassijs_editor/modul";
+//var defaultWorkerFactory= require("vs/base/browser/defaultWorkerFactory");
+
+//  /tsWorker.js
+/*
+    async getCompletionsAtPosition(fileName, position) {
+      if (fileNameIsLib(fileName)) {
+        return void 0;
+      }
+      return this._languageService.getCompletionsAtPosition(fileName, position, void 0);
+    }*/
+
 //hack to make autocompletion for autoimports from other modules
 //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
-let monacopath = modul.require.paths.vs.replace("/vs", "");
-
-var platform_1 = require("vs/base/common/platform");
-platform_1.globals.MonacoEnvironment = {};
-
+/*let monacopath = modul.require.paths.vs.replace("/vs", "");
+var defaultWorkerFactory= require("vs/base/browser/defaultWorkerFactory");
+var orgfunc=defaultWorkerFactory.DefaultWorkerFactory.prototype.create;
+defaultWorkerFactory.DefaultWorkerFactory.prototype.create=function(p1,p2,p3){
+    debugger;
+    return orgfunc(p1,p2,p3);
+}
 function myfunc() {
     if (require.getConfig().baseUrl === "") {
         setTimeout(() => { myfunc(); }, 10);
@@ -26,21 +37,17 @@ function myfunc() {
     }
     //   }
 
-}
-platform_1.globals.MonacoEnvironment.getWorker = function (workerId, label) {
-    const myPath = 'vs/base/worker/defaultWorkerFactory.js';
-    //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs/base/worker/workerMain.js"
-    let scriptPath = monacopath + "/vs/base/worker/workerMain.js";// require.toUrl('./' + workerId);
-    //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/"
-    const workerBaseUrl = require.toUrl(myPath).slice(0, -myPath.length); // explicitly using require.toUrl(), see https://github.com/microsoft/vscode/issues/107440#issuecomment-698982321
-    let js = `/*${label}*/self.MonacoEnvironment={baseUrl: '${workerBaseUrl}'};const ttPolicy = self.trustedTypes?.createPolicy('defaultWorkerFactory', { createScriptURL: value => value });importScripts(ttPolicy?.createScriptURL('${scriptPath}') ?? '${scriptPath}');/*${label}*/;`;
-    if (label === "typescript")
-        js += myfunc.toString() + ";myfunc();";
-    const blob = new Blob([js], { type: 'application/javascript' });
-    var workerUrl = URL.createObjectURL(blob);
-
-    //var workerUrl=URL.createObjectURL(blob);
-    return new Worker(workerUrl, { name: label });
-}
-
+}*/
+/*defaultWorkerFactory.getWorkerBootstrapUrl=function(scriptPath,label){
+    debugger;
+    var labelneu="";
+    if(label==="typescript"){
+        labelneu="typescript"+myfunc.toString() + ";myfunc();"+label
+    }
+    orgfunc(scriptPath,labelneu);
+}*/
+//var platform_1 = require("vs/base/common/platform");
+//platform_1.globals.MonacoEnvironment = {};
 export { };
+
+

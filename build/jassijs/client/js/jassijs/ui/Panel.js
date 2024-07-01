@@ -10,17 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DesignDummy"], function (require, exports, Registry_1, Container_1, Component_1, Property_1, DesignDummy_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Panel = exports.PanelCreateProperties = void 0;
-    let PanelCreateProperties = class PanelCreateProperties extends Component_1.ComponentCreateProperties {
-    };
-    __decorate([
-        (0, Property_1.$Property)({ default: false }),
-        __metadata("design:type", Boolean)
-    ], PanelCreateProperties.prototype, "useSpan", void 0);
-    PanelCreateProperties = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.PanelCreateProperties")
-    ], PanelCreateProperties);
-    exports.PanelCreateProperties = PanelCreateProperties;
+    exports.Panel = void 0;
     let Panel = class Panel extends Container_1.Container {
         /**
         *
@@ -30,31 +20,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         *
         */
         constructor(properties = undefined) {
-            var addStyle = "";
-            var tag = properties !== undefined && properties.useSpan === true ? "span" : "div";
-            if (properties != undefined && properties.id === "body") {
-                super();
-                this.dom = document.body;
-                this.domWrapper = this.dom;
-                /** @member {numer}  - the id of the element */
-                this._id = "body";
-                this.dom.id = "body";
-                //super.init($('<div class="Panel" style="border:1px solid #ccc;"/>')[0]);
-                //            $(document.body).append(this.domWrapper); 
-            }
-            else {
-                super(properties);
-                if (properties === undefined || properties.id === undefined) {
-                    //super.init($('<div class="Panel"/>')[0]);
-                    super.init('<' + tag + ' class="Panel" />');
-                }
-            }
+            super(properties);
             this._designMode = false;
-            this.isAbsolute = false;
+            this.isAbsolute = (properties === null || properties === void 0 ? void 0 : properties.isAbsolute) === true;
         }
-        config(config) {
-            super.config(config);
-            return this;
+        render() {
+            var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
+            return React.createElement(tag, { className: "Panel" });
         }
         set isAbsolute(value) {
             this._isAbsolute = value;
@@ -110,27 +82,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
          * @param {boolean} enable - true if activate designMode
          */
         _setDesignMode(enable) {
+            return;
             this._designMode = enable;
             if (enable) { //dummy in containers at the end
                 if (this.isAbsolute === false) {
                     DesignDummy_1.DesignDummy.createIfNeeded(this, "atEnd", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
-                    /*            if (this._designDummy === undefined && this.isAbsolute === false) {
-                                    this._designDummy = new Image();
-                                    this._designDummy._parent=this;
-                                    console.log(this._designDummy._id);
-                                    $(this._designDummy.domWrapper).removeClass("jcomponent");
-                                    $(this._designDummy.domWrapper).addClass("jdesigndummy");
-                                    $(this._designDummy.domWrapper).css("width","16px");
-                                    this._designDummy["designDummyFor"] = "atEnd";
-                                    this._designDummy["src"] = "res/add-component.ico";
-                                    this._designDummy["_editorselectthis"]=(this["_editorselectthis"]?this["_editorselectthis"]:this);
-                                    //$(this.domWrapper).append(this._designDummy.domWrapper);
-                                    this.domWrapper.appendChild(this._designDummy.domWrapper);
-                                } else if (this._designDummy !== undefined && this.isAbsolute === true) {
-                                    this.remove(this._designDummy);
-                                    this._designDummy.destroy();
-                                    this._designDummy = undefined;
-                                }*/
                 }
                 else {
                     DesignDummy_1.DesignDummy.destroyIfNeeded(this, "atEnd");
@@ -144,7 +100,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
                 DesignDummy_1.DesignDummy.destroyIfNeeded(this, "atEnd");
             }
             if (enable) { //dummy in containers at the end
-                if (this.isAbsolute === false) {
+                if (this.isAbsolute === false && this._components) {
                     for (var x = 0; x < this._components.length; x++) {
                         var comp = this._components[x];
                         if (comp instanceof Container_1.Container && !comp.dom.classList.contains("jdisableaddcomponents")) {
@@ -154,9 +110,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
                 }
             }
             else {
-                for (var x = 0; x < this._components.length; x++) {
-                    var comp = this._components[x];
-                    DesignDummy_1.DesignDummy.destroyIfNeeded(comp, "beforeComponent");
+                if (this._components) {
+                    for (var x = 0; x < this._components.length; x++) {
+                        var comp = this._components[x];
+                        DesignDummy_1.DesignDummy.destroyIfNeeded(comp, "beforeComponent");
+                    }
                 }
             }
         }
@@ -175,10 +133,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
     Panel = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
         (0, Registry_1.$Class)("jassijs.ui.Panel"),
-        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelCreateProperties" })
-        //@$Property({ name: "new/useSpan", type: "boolean", default: false })
-        ,
-        __metadata("design:paramtypes", [PanelCreateProperties])
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" }),
+        (0, Property_1.$Property)({ name: "new/useSpan", type: "boolean", default: false }),
+        __metadata("design:paramtypes", [Object])
     ], Panel);
     exports.Panel = Panel;
 });

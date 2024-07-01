@@ -8,7 +8,6 @@ require("jassijs/remote/Registry");
 //import "reflect-metadata";
 //important: registry must be loaded after "reflect-metadata" and before the typeorm (because delegation of Reflect.metadata)
 const express = require("express");
-const Filesystem_1 = require("jassijs/server/Filesystem");
 const PassportLoginRegister_1 = require("jassijs/server/PassportLoginRegister");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
@@ -18,6 +17,7 @@ const DoRemoteProtocol_1 = require("jassijs/server/DoRemoteProtocol");
 const RawBody_1 = require("jassijs/server/RawBody");
 const RegistryIndexer_1 = require("./RegistryIndexer");
 const UpdatePackage_1 = require("./UpdatePackage");
+const FileTools_1 = require("./FileTools");
 class JassiConnectionProperties {
 }
 /**
@@ -35,13 +35,13 @@ function JassiServer(properties = {}, expressApp = undefined) {
         new RegistryIndexer_1.ServerIndexer().updateRegistry();
     if (properties.syncRemoteFiles !== false) {
         try {
-            (0, Filesystem_1.syncRemoteFiles)();
+            (0, FileTools_1.syncRemoteFiles)();
         }
         catch (_a) {
             console.log("could not sync remotefiles");
         }
     }
-    app.use(Filesystem_1.staticfiles);
+    app.use(FileTools_1.staticfiles);
     app.use(RawBody_1.rawbody);
     app.set('etag', 'strong');
     // app.use(installGetRequest);
@@ -49,7 +49,7 @@ function JassiServer(properties = {}, expressApp = undefined) {
     app.use(cookieParser());
     app.use("/user", PassportLoginRegister_1.loginRegister);
     app.use(PassportLoginRegister_1.manageToken);
-    app.use(Filesystem_1.staticsecurefiles, passport.authenticate("jwt", { session: false }));
+    app.use(FileTools_1.staticsecurefiles, passport.authenticate("jwt", { session: false }));
     app.post('/remoteprotocol', passport.authenticate("jwt", { session: false }), DoRemoteProtocol_1.remoteProtocol);
     /* if (properties.allowDownloadAsZip!==false)
          app.get('/zip', passport.authenticate("jwt", { session: false }), zip);*/

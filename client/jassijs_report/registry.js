@@ -27,7 +27,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.PDFReport": {}
 	},
 	"jassijs_report/PDFViewer.ts": {
-		"date": 1698507857254.2302,
+		"date": 1719589039108.462,
 		"jassijs_report.PDFViewer": {}
 	},
 	"jassijs_report/RColumns.ts": {
@@ -171,7 +171,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RImage.ts": {
-		"date": 1656184928000,
+		"date": 1719588998709.0293,
 		"jassijs_report.RImage": {
 			"$ReportComponent": [
 				{
@@ -193,7 +193,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ROList.ts": {
-		"date": 1656019462000,
+		"date": 1719588965636.7617,
 		"jassijs_report.ROList": {
 			"$ReportComponent": [
 				{
@@ -243,7 +243,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTable.ts": {
-		"date": 1698507156069.9734,
+		"date": 1719588905687.799,
 		"jassijs_report.RTable": {
 			"$ReportComponent": [
 				{
@@ -264,7 +264,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1633113320000
 	},
 	"jassijs_report/RTablerow.ts": {
-		"date": 1699114918006.316,
+		"date": 1719757536098.1802,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{
@@ -276,7 +276,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RText.ts": {
-		"date": 1699194592715.817,
+		"date": 1719757546458.8499,
 		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{
@@ -309,7 +309,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RUList.ts": {
-		"date": 1656016418000,
+		"date": 1719588330055.1697,
 		"jassijs_report.RUList": {
 			"$ReportComponent": [
 				{
@@ -324,7 +324,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RUnknown.ts": {
-		"date": 1656016430000,
+		"date": 1719588242339.4045,
 		"jassijs_report.RUnknown": {}
 	},
 	"jassijs_report/server/DoServerreport.ts": {

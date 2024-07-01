@@ -1,4 +1,6 @@
 /// <reference path="jassijs_editor.d.ts" />
+/// <reference types="react" />
+/// <reference types="react" />
 /// <amd-dependency name="pdfMakelib" path="pdfMakelib" />
 /// <amd-dependency name="vfs_fonts" path="vfs_fonts" />
 declare module "jassijs_report/ext/pdfmake" {
@@ -19,6 +21,9 @@ declare module "jassijs_report/PDFViewer" {
     import { PDFReport } from "jassijs_report/PDFReport";
     class Canavas extends Component {
         constructor();
+        render(): React.ReactElement<{
+            type: string;
+        }, string | React.JSXElementConstructor<any>>;
     }
     type Me = {
         toolbar?: BoxPanel;
@@ -225,6 +230,7 @@ declare module "jassijs_report/RStack" {
 declare module "jassijs_report/RText" {
     import { RComponent } from "jassijs_report/RComponent";
     export class RText extends RComponent {
+        text: Text;
         reporttype: string;
         initIfNeeded: any;
         focusLost: any;
@@ -244,6 +250,7 @@ declare module "jassijs_report/RText" {
         *
         */
         constructor(properties?: any);
+        render(): any;
         get value(): string;
         set value(code: string);
         set format(value: string);
@@ -271,8 +278,20 @@ declare module "jassijs_report/RUnknown" {
         *
         */
         constructor(properties?: any);
+        componentDidMount(): void;
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+        }, HTMLElement>;
         fromJSON(ob: any): this;
         toJSON(): any;
+    }
+}
+declare module "jassijs_report/server/DoServerreport" {
+    export class DoServerreport {
+        getDesign(path: string, parameter: any): Promise<any>;
+        download(url: any, dest: any): Promise<void>;
+        getBase64(file: string, parameter: any): Promise<any>;
+        getBase64FromData(data: any): Promise<any>;
     }
 }
 declare module "jassijs_report/remote/ServerReport" {
@@ -281,16 +300,45 @@ declare module "jassijs_report/remote/ServerReport" {
         static cacheLastParameter: {};
         static getDesign(path: string, parameter: any, context?: Context): Promise<any>;
         static getBase64(path: string, parameter: any, context?: Context): Promise<any>;
-        static getBase64LastTestResult(context?: Context): Promise<any>;
+        static getBase64FromFile(file: string, context?: Context): Promise<any>;
     }
     export function test(): Promise<any>;
 }
+declare module "jassijs_report/RTextGroup" {
+    import { RComponent } from "jassijs_report/RComponent";
+    export class RTextGroup extends RComponent {
+        reporttype: string;
+        /**
+        *
+        * @param {object} properties - properties to init
+        * @param {string} [properties.id] -  connect to existing id (not reqired)
+        * @param {boolean} [properties.useSpan] -  use span not div
+        *
+        */
+        constructor(properties?: {
+            useSpan: boolean;
+        });
+        /**
+          * adds a component to the container before an other component
+          * @param {jassijs.ui.Component} component - the component to add
+          * @param {jassijs.ui.Component} before - the component before then component to add
+          */
+        addBefore(component: any, before: any): any;
+        /**
+      * adds a component to the container
+      * @param {jassijs.ui.Component} component - the component to add
+      */
+        add(component: any): any;
+        toJSON(): any;
+        fromJSON(ob: any): RTextGroup;
+    }
+}
 declare module "jassijs_report/designer/ReportDesigner" {
-    import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
     import { Component } from "jassijs/ui/Component";
     import { PDFViewer } from "jassijs_report/PDFViewer";
     import { ReportDesign } from "jassijs_report/ReportDesign";
-    export class ReportDesigner extends ComponentDesigner {
+    import { HtmlDesigner } from "jassijs_editor/HtmlDesigner";
+    export class ReportDesigner extends HtmlDesigner {
         propertyIsChanging: boolean;
         pdfviewer: PDFViewer;
         allComponents: {
@@ -304,10 +352,12 @@ declare module "jassijs_report/designer/ReportDesigner" {
         mainLayout: string;
         constructor();
         set codeEditor(value: any);
+        createTextComponent(text: any, par: any, before: any): Component;
+        protected wrapTextNodeIfNeeded(found: Node): ParentNode;
         connectParser(parser: any): void;
         editDialog(enable: any): void;
         propertyChanged(): void;
-        createComponent(type: any, component: any, top: any, left: any, newParent: any, beforeComponent: any): Component;
+        createComponent(type: any, component: any, top: any, left: any, newParent: any, beforeComponent: any): Component<{}>;
         createVariable(type: any, scope: any, component: Component): string;
         paste(): Promise<void>;
         copy(): Promise<string>;
@@ -325,6 +375,9 @@ declare module "jassijs_report/designer/ReportDesigner" {
         _installView(): void;
         destroy(): void;
         _initComponentExplorer(): void;
+        protected insertLineBreak(sel: Selection): void;
+        setStyle(style: string, value?: any): Component[];
+        applyStyle(comp: Component, stylename: string, value?: any): void;
     }
     export function test2(): Promise<PDFViewer>;
     export function test(): Promise<import("jassijs_editor/CodeEditor").CodeEditor>;
@@ -423,6 +476,14 @@ declare module "jassijs_report/RTable" {
     *
     */
         constructor(properties?: any);
+        render(): React.ReactElement<{
+            style: {
+                border_spacing: string;
+                min_width: string;
+                table_layout: string;
+            };
+        }, string | React.JSXElementConstructor<any>>;
+        componentDidMount(): void;
         private initKeys;
         private getInfoFromEvent;
         initContextMenu(isDatatable: any): Promise<void>;
@@ -480,7 +541,8 @@ declare module "jassijs_report/RTablerow" {
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties?: any);
+        constructor(properties?: {});
+        render(): any;
         oncomponentAdded(callback: any): void;
         get _editorselectthis(): any;
         setChildWidth(component: Component, value: any): void;
@@ -534,35 +596,6 @@ declare module "jassijs_report/RDatatable" {
     }
     export function test(): Promise<void>;
 }
-declare module "jassijs_report/RTextGroup" {
-    import { RComponent } from "jassijs_report/RComponent";
-    export class RTextGroup extends RComponent {
-        reporttype: string;
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties?: {
-            useSpan: boolean;
-        });
-        /**
-          * adds a component to the container before an other component
-          * @param {jassijs.ui.Component} component - the component to add
-          * @param {jassijs.ui.Component} before - the component before then component to add
-          */
-        addBefore(component: any, before: any): any;
-        /**
-      * adds a component to the container
-      * @param {jassijs.ui.Component} component - the component to add
-      */
-        add(component: any): any;
-        toJSON(): any;
-        fromJSON(ob: any): RTextGroup;
-    }
-}
 declare module "jassijs_report/RUList" {
     import { RComponent } from "jassijs_report/RComponent";
     export class RUList extends RComponent {
@@ -576,6 +609,9 @@ declare module "jassijs_report/RUList" {
         *
         */
         constructor(properties?: any);
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+        }, HTMLElement>;
         /**
          * adds a component to the container before an other component
          * @param {jassijs.ui.Component} component - the component to add
@@ -608,6 +644,9 @@ declare module "jassijs_report/ROList" {
         *
         */
         constructor(properties?: any);
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+        }, HTMLElement>;
         set type(value: string);
         get type(): string;
         set reversed(value: boolean);
@@ -644,6 +683,9 @@ declare module "jassijs_report/RImage" {
         *
         */
         constructor(properties?: any);
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+        }, HTMLElement>;
         /**
          * adds a component to the container before an other component
          * @param {jassijs.ui.Component} component - the component to add
@@ -918,7 +960,7 @@ declare module "jassijs_report/designer/SimpleReportDesigner" {
 declare module "jassijs_report/SimpleReportEditor" {
     import { AcePanelSimple } from "jassijs_editor/AcePanelSimple";
     import { ReportDesign } from "jassijs_report/ReportDesign";
-    import { Panel, PanelCreateProperties } from "jassijs/ui/Panel";
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
     import { ReportDesigner } from "jassijs_report/designer/ReportDesigner";
     import { DockingContainer } from "jassijs/ui/DockingContainer";
     import { CodePanel } from "jassijs_editor/CodePanel";
@@ -1039,7 +1081,7 @@ declare module "jassijs_report/SimpleReportEditor" {
         */
         undo(): void;
     }
-    export class SimpleReportEditorProperties extends PanelCreateProperties {
+    export interface SimpleReportEditorProperties extends PanelProperties {
         startUpWithPdfView?: boolean;
         view?: "default" | "vertical" | "horizontal" | "withoutcode";
         oncodechange?: any;
@@ -1526,86 +1568,53 @@ declare module "jassijs_report/pdfMake-interface" {
     }
     export {};
 }
-declare module "jassijs_report/remote/RComponent" {
-    import { UIComponentProperties } from "jassijs/ui/Component";
-    import { Panel } from "jassijs/ui/Panel";
-    import { ReportDesign } from "jassijs_report/ReportDesign";
-    export class ReportComponentProperties extends UIComponentProperties {
-    }
-    export function $ReportComponent(properties: ReportComponentProperties): Function;
-    export class RComponent extends Panel {
-        private _colSpan;
-        private _rowSpan;
-        foreach: string;
-        private _width;
-        private _height;
-        private _bold;
-        private _decoration;
-        private _decorationStyle;
-        private _decorationColor;
-        private _color;
-        private _fontSize;
-        private _lineHeight;
-        private _italics;
-        private _alignment;
-        private _background;
-        private _font;
-        private _style;
-        private _fillColor;
-        private _border;
-        private _counter;
-        private _listType;
-        private _margin;
-        reporttype: string;
-        otherProperties: any;
-        constructor(properties?: any);
-        onstylechanged(func: any): void;
-        set counter(value: number);
-        get counter(): number;
-        set listType(value: string);
-        get listType(): string;
-        get fillColor(): string;
-        set fillColor(value: string);
-        get colSpan(): number;
-        set colSpan(value: number);
-        get rowSpan(): number;
-        set rowSpan(value: number);
-        get border(): boolean[];
-        set border(value: boolean[]);
-        get width(): any;
-        set width(value: any);
-        get height(): any;
-        set height(value: any);
-        get bold(): boolean;
-        set bold(value: boolean);
-        get italics(): boolean;
-        set italics(value: boolean);
-        get font(): string;
-        set font(value: string);
-        get fontSize(): number;
-        set fontSize(value: number);
-        get background(): string;
-        set background(value: string);
-        get color(): string;
-        set color(value: string);
-        get alignment(): string;
-        set alignment(value: string);
-        get decoration(): string;
-        set decoration(value: string);
-        get decorationColor(): string;
-        set decorationColor(value: string);
-        get decorationStyle(): string;
-        set decorationStyle(value: string);
-        static findReport(parent: any): ReportDesign;
-        get style(): string;
-        set style(value: string);
-        get lineHeight(): number;
-        set lineHeight(value: number);
-        get margin(): number[];
-        set margin(value: number[]);
-        fromJSON(ob: any): RComponent;
-        toJSON(): any;
-    }
+declare module "jassijs_report/server/TestServerreport" {
+    export function fill(parameter: any): Promise<{
+        reportdesign: {
+            content: {
+                datatable: {
+                    widths: (string | number)[];
+                    header: (string | {
+                        bold: boolean;
+                        italics: boolean;
+                        font: string;
+                        text: string;
+                    })[];
+                    footer: string[];
+                    dataforeach: string;
+                    body: string[];
+                };
+            }[];
+        };
+        data: {
+            name: string;
+            lastname: string;
+            fullname(): string;
+        }[];
+    }>;
+    export function test(): Promise<{
+        reportdesign: {
+            content: {
+                datatable: {
+                    widths: (string | number)[];
+                    header: (string | {
+                        bold: boolean;
+                        italics: boolean;
+                        font: string;
+                        text: string;
+                    })[];
+                    footer: string[];
+                    dataforeach: string;
+                    body: string[];
+                };
+            }[];
+        };
+        data: {
+            name: string;
+            lastname: string;
+            fullname(): string;
+        }[];
+    }>;
 }
 declare module "jassijs_report/test/ClientReport" {
     import { Report } from "jassijs_report/Report";

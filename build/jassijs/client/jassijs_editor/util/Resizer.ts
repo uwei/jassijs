@@ -140,8 +140,10 @@ export class Resizer {
                 this._changeCursor(e);
                 return;
             }
-            if(this.lastSelected&&this.lastSelected.length>0&&this.lastSelected[0]!==element.id)
-                return;
+            if(this.lastSelected&&this.lastSelected.length>0){
+                if(document.getElementById(this.lastSelected[0])._this!==element._this)
+                    return;
+            }
             //top left positions of the div element
             var topLeftX = $(element._this.dom).offset().left;//element.offsetLeft;
             var topLeftY = $(element._this.dom).offset().top;//element.offsetTop;

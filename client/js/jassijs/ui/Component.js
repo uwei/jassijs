@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties"], function (require, exports, Registry_1, Property_1, Registry_2, Classes_1, CSSProperties_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties", "jassijs/ui/State"], function (require, exports, Registry_1, Property_1, Registry_2, Classes_1, CSSProperties_1, State_1) {
     "use strict";
     var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TextComponent = exports.HTMLComponent = exports.Component = exports.createComponent = exports.React = exports.$UIComponent = exports.UIComponentProperties = void 0;
+    exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.createComponent = exports.React = exports.$UIComponent = exports.UIComponentProperties = void 0;
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
@@ -64,22 +64,29 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 props = {};
             props.tag = atype;
             ret = new HTMLComponent(props);
-            //ret.tag = atype;
-            var newdom = ret.dom; //document.createElement(atype);
-            //ret.init(newdom, { noWrapper: true });
         }
         else if (atype.constructor !== undefined) {
-            ret = new atype(props);
-        }
-        else if (typeof atype === "function") {
-            ret = atype(props);
+            if (atype.prototype._rerenderMe === undefined) { //Functioncompoment
+                var p = props || {};
+                p.renderFunc = atype;
+                ret = new FunctionComponent(p);
+            }
+            else
+                ret = new atype(props);
         }
         if (((_a = node === null || node === void 0 ? void 0 : node.props) === null || _a === void 0 ? void 0 : _a.children) !== undefined) {
             if (props === null || props === undefined)
                 props = {};
             props.children = (_b = node === null || node === void 0 ? void 0 : node.props) === null || _b === void 0 ? void 0 : _b.children;
             for (var x = 0; x < props.children.length; x++) {
+                //delegate renderFunc
                 var child = props.children[x];
+                /*if(child?.props?.calculateState){
+                    props.calculateState=child?.props?.renderFunc;
+                    delete child?.props?.calculateState;
+                    
+    
+                }*/
                 var cchild;
                 if (typeof child === "string") {
                     cchild = new TextComponent();
@@ -87,11 +94,21 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                     cchild.text = child;
                     //child.dom = nd;
                 }
+                else if (child === null || child === void 0 ? void 0 : child._observe_) {
+                    cchild = new TextComponent();
+                    cchild.tag = "";
+                    child === null || child === void 0 ? void 0 : child._observe_(cchild, "text", "property");
+                    cchild.text = child.current;
+                }
                 else {
                     cchild = createComponent(child);
                 }
                 ret.add(cchild);
             }
+        }
+        if (props === null || props === void 0 ? void 0 : props.ref) {
+            props.ref.current = ret;
+            props === null || props === void 0 ? true : delete props.ref;
         }
         return ret;
     }
@@ -114,15 +131,34 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
          * @param {string} [properties.id] -  connect to existing id (not reqired)
          *
          */
-        constructor(properties = undefined) {
+        constructor(properties = {}) {
             // super(properties, undefined);
+            // if(properties===undefined)
+            // properties={};
             this.props = properties;
+            this._rerenderMe(true);
+            this.config(this.props);
+        }
+        _rerenderMe(firstTime = false) {
+            var _a;
             var rend = this.render();
             if (rend) {
-                var comp = createComponent(rend);
-                this.init(comp.dom);
+                if (rend instanceof Node) {
+                    this._initComponent(rend);
+                }
+                else {
+                    if ((_a = rend === null || rend === void 0 ? void 0 : rend.props) === null || _a === void 0 ? void 0 : _a.calculateState) {
+                        this.calculateState = rend.props.calculateState;
+                        delete rend.props.calculateState;
+                    }
+                    var comp = createComponent(rend);
+                    this._initComponent(comp.dom);
+                }
             }
-            this.config(this.props);
+            if (firstTime)
+                this.componentDidMount();
+        }
+        componentDidMount() {
         }
         render() {
             return undefined;
@@ -132,32 +168,48 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
               this.init(this.lastinit, { replaceNode: this.dom });
               this.config(this.lastconfig);
           }*/
-        config(config, forceRender = false) {
+        config(config) {
+            var _a;
             var con = Object.assign({}, config);
             delete con.noWrapper;
             delete con.replaceNode;
             // this.lastconfig = config;
             var notfound = {};
+            (0, State_1.resolveState)(this, config);
             for (var key in con) {
                 if (key in this) {
                     var me = this;
+                    var val = con[key];
+                    if (val === null || val === void 0 ? void 0 : val._observe_) {
+                        val === null || val === void 0 ? void 0 : val._observe_(this, key, "property");
+                        con[key] = val.current;
+                        config[key] = con[key];
+                    }
                     if (typeof me[key] === 'function') {
                         me[key](config[key]);
                     }
                     else {
-                        me[key] = config[key];
+                        if (((_a = me[key]) === null || _a === void 0 ? void 0 : _a._observe_) !== undefined) {
+                            me[key].current = config[key];
+                        }
+                        else
+                            me[key] = config[key];
                     }
                 }
                 else
                     notfound[key] = con;
             }
             Object.assign(this.props === undefined ? {} : this.props, config);
-            if (Object.keys(notfound).length > 0 && forceRender) {
-                var rerender = this.render();
-                if (rerender) {
-                    this.init(createComponent(rerender).dom);
-                    console.log("rerender");
+            if (Object.keys(notfound).length > 0) {
+                if (this.calculateState) {
+                    this.calculateState(config);
+                    return this;
                 }
+                /* var rerender = this.render();
+                 if (rerender) {
+                     this.init(createComponent(rerender).dom);
+                     
+                 }*/
             }
             return this;
             //    return new c();
@@ -230,6 +282,76 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             }
             this.dom._this = this;
         }
+        /**
+       * inits the component
+       * @param {dom} dom - init the dom element
+       * @paran {object} properties - properties to init
+      */
+        _initComponent(dom) {
+            // this.lastinit = dom;
+            var oldwrapper = this.domWrapper;
+            var olddom = this.dom;
+            //is already attached
+            if (this.domWrapper !== undefined) {
+                var thisProperties = this.props;
+                this.domWrapper._this = undefined;
+            }
+            if (this.dom !== undefined) {
+                this.__dom._this = undefined;
+            }
+            //notify Hook
+            for (var x = 0; x < Component_1._componentHook.length; x++) {
+                Component_1._componentHook[x]("precreate", this);
+            }
+            //allready watched?
+            // if (jassijs.componentSpy !== undefined) {
+            //   jassijs.componentSpy.unwatch(this);
+            // }
+            this.dom = dom;
+            this._id = olddom ? olddom.id : ("j" + Registry_2.default.nextID());
+            if (this.dom.setAttribute !== undefined) //Textnode
+                this.dom.setAttribute("id", this._id);
+            /** @member {Object.<string,function>} - all event handlers*/
+            this._eventHandler = {};
+            //add _this to the dom element
+            var lid = oldwrapper ? oldwrapper.id : ("j" + Registry_2.default.nextID());
+            var st = 'style="display: inline-block"';
+            if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
+                st = "";
+            }
+            if (this.props !== undefined && this.props.noWrapper === true) {
+                this.domWrapper = this.dom;
+                this.domWrapper._id = this._id;
+                if (this.domWrapper.classList !== undefined)
+                    this.domWrapper.classList.add("jcomponent");
+            }
+            else {
+                /** @member {dom} - the dom element for label*/
+                let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
+                this.domWrapper = Component_1.createHTMLElement(strdom);
+                this.domWrapper._this = this;
+                this.domWrapper._id = lid;
+                this.domWrapper.appendChild(dom);
+            }
+            if ((oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.parentNode) !== undefined) {
+                oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper); //removeChild(this.domWrapper);
+            }
+            //append temporary so new elements must not added immediately
+            if (document.getElementById("jassitemp") === null) {
+                var temp = Component_1.createHTMLElement('<template id="jassitemp"></template>');
+                document.body.appendChild(temp);
+            }
+            //notify Hook
+            for (var x = 0; x < Component_1._componentHook.length; x++) {
+                Component_1._componentHook[x]("create", this);
+            }
+            //for profilling save code pos
+            //if (jassijs.componentSpy !== undefined) {
+            //     jassijs.componentSpy.watch(this);
+            //  }
+            if (!oldwrapper)
+                document.getElementById("jassitemp").appendChild(this.domWrapper);
+        }
         onfocus(handler) {
             return this.on("focus", handler);
         }
@@ -282,86 +404,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             else
                 return document.createRange().createContextualFragment(html).children[0];
         }
-        /**
-         * inits the component
-         * @param {dom} dom - init the dom element
-         * @paran {object} properties - properties to init
-        */
-        init(dom, properties = undefined) {
-            var _a;
-            // this.lastinit = dom;
+        replaceDom(dom) {
             var oldwrapper = this.domWrapper;
             var olddom = this.dom;
-            if (typeof dom === "string")
-                dom = Component_1.createHTMLElement(dom);
-            //is already attached
-            if (this.domWrapper !== undefined) {
-                var thisProperties = properties;
-                if ((_a = thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode) === null || _a === void 0 ? void 0 : _a.parentNode) {
-                    thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode.parentNode.replaceChild(dom, thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode);
-                    this.dom = dom;
-                    if (oldwrapper === olddom)
-                        this.domWrapper = dom;
-                    this.dom.setAttribute("id", thisProperties === null || thisProperties === void 0 ? void 0 : thisProperties.replaceNode.getAttribute("id"));
-                    return;
-                }
-                this.domWrapper._this = undefined;
+            if (olddom === null || olddom === void 0 ? void 0 : olddom.parentNode) {
+                olddom.parentNode.replaceChild(olddom, dom);
             }
-            if (this.dom !== undefined) {
-                this.__dom._this = undefined;
-            }
-            //notify Hook
-            for (var x = 0; x < Component_1._componentHook.length; x++) {
-                Component_1._componentHook[x]("precreate", this);
-            }
-            //allready watched?
-            // if (jassijs.componentSpy !== undefined) {
-            //   jassijs.componentSpy.unwatch(this);
-            // }
             this.dom = dom;
-            this._id = olddom ? olddom.id : ("j" + Registry_2.default.nextID());
-            if (this.dom.setAttribute !== undefined) //Textnode
-                this.dom.setAttribute("id", this._id);
-            /** @member {Object.<string,function>} - all event handlers*/
-            this._eventHandler = {};
-            //add _this to the dom element
-            var lid = oldwrapper ? oldwrapper.id : ("j" + Registry_2.default.nextID());
-            var st = 'style="display: inline-block"';
-            if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
-                st = "";
-            }
-            if (properties !== undefined && properties.noWrapper === true) {
-                this.domWrapper = this.dom;
-                this.domWrapper._id = this._id;
-                if (this.domWrapper.classList !== undefined)
-                    this.domWrapper.classList.add("jcomponent");
-            }
-            else {
-                /** @member {dom} - the dom element for label*/
-                let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
-                this.domWrapper = Component_1.createHTMLElement(strdom);
-                this.domWrapper._this = this;
-                this.domWrapper._id = lid;
-                this.domWrapper.appendChild(dom);
-            }
-            if ((oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.parentNode) !== undefined) {
-                oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper); //removeChild(this.domWrapper);
-            }
-            //append temporary so new elements must not added immediately
-            if (document.getElementById("jassitemp") === null) {
-                var temp = Component_1.createHTMLElement('<template id="jassitemp"></template>');
-                document.body.appendChild(temp);
-            }
-            //notify Hook
-            for (var x = 0; x < Component_1._componentHook.length; x++) {
-                Component_1._componentHook[x]("create", this);
-            }
-            //for profilling save code pos
-            //if (jassijs.componentSpy !== undefined) {
-            //     jassijs.componentSpy.watch(this);
-            //  }
-            if (!oldwrapper)
-                document.getElementById("jassitemp").appendChild(this.domWrapper);
+            if (oldwrapper === olddom)
+                this.domWrapper = dom;
+            this.dom.setAttribute("id", olddom.getAttribute("id"));
         }
         set label(value) {
             if (value === undefined) {
@@ -506,6 +558,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (this._contextMenu !== undefined)
                 this._contextMenu.unregisterComponent(this);
             if (value !== undefined) {
+                if (value.current)
+                    value = value.current;
                 var ContextMenu = Classes_1.classes.getClass("jassijs.ui.ContextMenu");
                 if (value instanceof ContextMenu === false) {
                     throw new Error("value is not of type jassijs.ui.ContextMenu");
@@ -625,39 +679,175 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         __metadata("design:paramtypes", [Object])
     ], Component);
     exports.Component = Component;
+    class FunctionComponent extends Component {
+        constructor(properties) {
+            super(properties);
+            this._components = [];
+        }
+        render() {
+            var Rend = this.props.renderFunc;
+            var ret = new Rend(this.props);
+            if (ret.props.calculateState) {
+                //@ts-ignore
+                this.calculateState = ret.props.calculateState;
+                //this.calculateState(this.props);
+            }
+            return ret;
+        }
+        /**
+        * adds a component to the container
+        * @param {jassijs.ui.Component} component - the component to add
+        */
+        add(component) {
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper._parent = this;
+            if (this["designDummyFor"])
+                this.designDummies.push(component);
+            else
+                this._components.push(component);
+            this.dom.appendChild(component.domWrapper);
+        }
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component, before) {
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper["_parent"] = this;
+            var index = this._components.indexOf(before);
+            if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
+                component.domWrapper.parentNode.removeChild(component.domWrapper);
+            }
+            if (component["designDummyFor"])
+                this.designDummies.push(component);
+            else
+                this._components.splice(index, 0, component);
+            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+        }
+        /**
+        * remove the component
+        * @param {jassijs.ui.Component} component - the component to remove
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        remove(component, destroy = false) {
+            var _a;
+            if (destroy)
+                component.destroy();
+            component._parent = undefined;
+            if (component.domWrapper !== undefined)
+                component.domWrapper._parent = undefined;
+            if (this._components) {
+                var pos = this._components.indexOf(component);
+                if (pos >= 0)
+                    this._components.splice(pos, 1);
+            }
+            let posd = (_a = this.designDummies) === null || _a === void 0 ? void 0 : _a.indexOf(component);
+            if (posd >= 0)
+                this.designDummies.splice(posd, 1);
+            try {
+                this.dom.removeChild(component.domWrapper);
+            }
+            catch (ex) {
+            }
+        }
+        /**
+        * remove all component
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        removeAll(destroy = undefined) {
+            while (this._components.length > 0) {
+                this.remove(this._components[0], destroy);
+            }
+        }
+        destroy() {
+            if (this._components !== undefined) {
+                var tmp = [].concat(this._components);
+                for (var k = 0; k < tmp.length; k++) {
+                    tmp[k].destroy();
+                }
+                this._components = [];
+            }
+            super.destroy();
+        }
+    }
+    exports.FunctionComponent = FunctionComponent;
     // ret.tag = atype;
     //        var newdom = document.createElement(atype);
     let HTMLComponent = class HTMLComponent extends Component {
         constructor(prop = {}) {
-            super(prop);
+            super(Object.assign(prop, { noWrapper: true }));
             this._components = [];
             //this.init(document.createElement(tag), { noWrapper: true });
         }
-        config(props, forceRender = false) {
+        render() {
+            var _a, _b, _c, _d;
+            var ret;
+            var tag = ((_a = this.props) === null || _a === void 0 ? void 0 : _a.tag) === undefined ? "span" : (_b = this.props) === null || _b === void 0 ? void 0 : _b.tag;
+            if (((_c = this.props) === null || _c === void 0 ? void 0 : _c.tag) !== this.tag.toLowerCase()) {
+                var childs = (_d = this.dom) === null || _d === void 0 ? void 0 : _d.childNodes;
+                ret = document.createElement(tag);
+                //this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
+                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
+                    ret.append(...childs);
+            }
+            return ret;
+        }
+        config(props) {
             var _a;
             var tag = (props === null || props === void 0 ? void 0 : props.tag) === undefined ? "span" : props === null || props === void 0 ? void 0 : props.tag;
-            if ((props === null || props === void 0 ? void 0 : props.tag) !== this.tag.toLowerCase()) {
+            if ((props === null || props === void 0 ? void 0 : props.tag) !== undefined && (props === null || props === void 0 ? void 0 : props.tag) !== this.tag.toLowerCase()) {
                 var childs = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.childNodes;
-                this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
+                this.replaceDom(document.createElement(tag));
+                //            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
                 if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
                     this.dom.append(...childs);
             }
-            super.config(props, forceRender);
+            super.config(props);
             for (var prop in props) {
+                var val = props[prop];
                 if (prop === "style") {
                     for (var key in props.style) {
-                        var val = props.style[key];
+                        val = props.style[key];
+                        /*   if (val?._observe_) {
+                               val?._observe_(this, key, "style");
+                               val = val.current;
+                           }*/
                         this.dom.style[key] = val;
                     }
                 }
                 else if (prop in this.dom) {
-                    Reflect.set(this.dom, prop, [props[prop]]);
+                    /*  if (val?._observe_) {
+                          val?._observe_(this, prop, "dom");
+                          val = val.current;
+                      }*/
+                    Reflect.set(this.dom, prop, val);
+                    //Reflect.set(this.dom, prop, [val])
                 }
                 else if (prop.toLocaleLowerCase() in this.dom) {
-                    Reflect.set(this.dom, prop.toLocaleLowerCase(), props[prop]);
+                    /* if (val?._observe_) {
+                         val?._observe_(this, prop.toLocaleLowerCase(), "dom");
+                         val = val.current;
+                     }
+                     if (val?._observe_) {
+                         val?._observe_(this, prop.toLocaleLowerCase(), "dom");
+                         val = val.current;
+                     }*/
+                    Reflect.set(this.dom, prop.toLocaleLowerCase(), val);
                 }
-                else if (prop in this.dom)
-                    this.dom.setAttribute(prop, props[prop]);
+                else if (prop in this.dom) {
+                    if (val === null || val === void 0 ? void 0 : val._observe_) {
+                        val === null || val === void 0 ? void 0 : val._observe_(this, prop, "attribute");
+                        val = val.current;
+                    }
+                    this.dom.setAttribute(prop, val);
+                }
                 // }
             }
             if (props === null || props === void 0 ? void 0 : props.children) {
@@ -791,7 +981,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     exports.HTMLComponent = HTMLComponent;
     let TextComponent = class TextComponent extends Component {
         constructor(props = {}) {
-            super(props);
+            super(Object.assign(props, { noWrapper: true }));
         }
         get label() {
             return "";
@@ -814,11 +1004,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         get hidden() {
             return false;
         }
-        config(props, forceRender = false) {
-            if (this.dom === undefined) {
-                this.init(document.createTextNode(props === null || props === void 0 ? void 0 : props.text), { noWrapper: true });
-            }
-            super.config(props, forceRender);
+        render() {
+            var _a;
+            return document.createTextNode((_a = this.props) === null || _a === void 0 ? void 0 : _a.text);
+        }
+        config(props) {
+            //  if (this.dom === undefined) {
+            //      this.init(<any>document.createTextNode(props?.text));
+            //  }
+            super.config(props);
             return this;
         }
         get text() {

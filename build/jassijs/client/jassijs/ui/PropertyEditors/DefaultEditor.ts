@@ -74,13 +74,16 @@ class DefaultEditor extends Editor
     _onchange(param) {
         var val = this.component.value;
         if (this.property.type === "string")
-            val = "\"" + val + "\"";
+            val ="\"" + val + "\"";
         if (this.property.type === "number[]"||this.property.type === "boolean[]")
             val = (val === "" ? "undefined" : "[" + val + "]");
         this.propertyEditor.setPropertyInCode(this.property.name, val);
         var oval = this.component.value;
         if (this.property.type === "number") {
             oval = Number(oval);
+        }
+        if (this.property.type === "string") {
+            oval = JSON.parse('"'+oval+'"');
         }
         if (this.property.type === "number[]") {
             if (oval === "")

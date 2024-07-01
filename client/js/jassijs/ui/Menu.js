@@ -13,10 +13,10 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
     exports.test = exports.Menu = void 0;
     let Menu = class Menu extends Container_1.Container {
         constructor(options = undefined) {
-            super();
+            var _a;
+            super(options);
             this._isRoot = true;
-            super.init('<ul ' + ` style="Menu"></ul>`);
-            if (options !== undefined && options.noUpdate === true) {
+            if (((_a = this.props) === null || _a === void 0 ? void 0 : _a.noUpdate) === true) {
                 this._noUpdate = true;
             }
             else
@@ -24,26 +24,31 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
             this._text = "";
             this._icon = "";
         }
+        componentDidMount() {
+        }
+        render() {
+            return React.createElement("ul", { className: "InvisibleComponent" /*, style= "Menu" */ });
+        }
         config(config) {
             super.config(config);
             return this;
         }
         _sample() {
-            super.init('<ul ' + ` class="Menu">
-<li>  <div><img  src="res/car.ico" />Save</div></li>
-<li title="create button" onclick="doCreate()"><div><img  src="res/car.ico" />Create</div>
-    <ul class="Menu" style="visibility:hidden">
-    <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
-    </ul>
-</li>
-<li title="update button2"> <div> <img src="res/tree.ico" />Update2</div>
-    <ul style="Menu">
-      <li> <div><img   src="res/car.ico" />Hoho</div></li>
-     <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
-      </ul>
-</li>
-<li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
-</ul>`);
+            /*
+        <li>  <div><img  src="res/car.ico" />Save</div></li>
+        <li title="create button" onclick="doCreate()"><div><img  src="res/car.ico" />Create</div>
+            <ul class="Menu" style="visibility:hidden">
+            <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
+            </ul>
+        </li>
+        <li title="update button2"> <div> <img src="res/tree.ico" />Update2</div>
+            <ul style="Menu">
+              <li> <div><img   src="res/car.ico" />Hoho</div></li>
+             <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
+              </ul>
+        </li>
+        <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
+        </ul>`);*/
         }
         _menueChanged() {
             if (this._isRoot && this._noUpdate !== true) {

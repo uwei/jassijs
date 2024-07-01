@@ -3,7 +3,8 @@ define(["require", "exports", "jassijs_editor/FileExplorer", "jassijs/base/Windo
     Object.defineProperty(exports, "__esModule", { value: true });
     async function test() {
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
-        var body = new Panel_1.Panel({ id: "body" });
+        var body = new Panel_1.Panel(); //{ id: "body" });
+        document.body.appendChild(body.dom);
         body.max();
         Windows_1.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
         Windows_1.default.addLeft(new SearchExplorer_1.SearchExplorer(), "Search");

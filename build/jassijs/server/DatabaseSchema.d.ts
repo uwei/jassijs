@@ -1,0 +1,12 @@
+import { EntityOptions } from "typeorm";
+export declare function Entity(...param: any[]): Function;
+export declare function PrimaryGeneratedColumn(...param: any[]): Function;
+export declare function JoinColumn(...param: any[]): Function;
+export declare function JoinTable(...param: any[]): Function;
+export declare function Column(...param: any[]): Function;
+export declare function PrimaryColumn(...param: any[]): Function;
+export declare function OneToOne(...param: any[]): Function;
+export declare function OneToMany(...param: any[]): Function;
+export declare function ManyToOne(...param: any[]): Function;
+export declare function ManyToMany(...param: any[]): Function;
+export { EntityOptions };

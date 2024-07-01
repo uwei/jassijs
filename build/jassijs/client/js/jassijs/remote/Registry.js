@@ -1,4 +1,4 @@
-define(["require", "exports", "reflect-metadata"], function (require, exports) {
+define(["require", "exports", "jassijs/remote/Config", "reflect-metadata"], function (require, exports, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.migrateModul = exports.Registry = exports.$register = exports.$Class = void 0;
@@ -50,6 +50,7 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
             this.jsondataMembers = {};
             this._eventHandler = {};
             this._nextID = 10;
+            this.isLoading = this.reload();
         }
         getData(service, classname = undefined) {
             var olddata = this.data[service];
@@ -228,10 +229,10 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
             var modultext = "";
             //@ts-ignore
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
-                //@ts-ignore
+                //@ts-ignore 
                 var fs = await new Promise((resolve_1, reject_1) => { require(['fs'], resolve_1, reject_1); });
-                modultext = fs.readFileSync("./jassijs.json", 'utf-8');
-                var modules = JSON.parse(modultext).modules;
+                var Filesystem = await new Promise((resolve_2, reject_2) => { require(["jassijs/server/Filesystem"], resolve_2, reject_2); });
+                var modules = Config_1.config.server.modules;
                 for (let modul in modules) {
                     try {
                         try {
@@ -256,23 +257,34 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
                 }
             }
             else { //on client
+                // var config=(await import("./Config")).config;
+                //   this.isServer=config.isServer;
                 var all = {};
-                var mod = JSON.parse(await (this.loadText("jassijs.json")));
-                for (let modul in mod.modules) {
-                    if (!mod.modules[modul].endsWith(".js") && mod.modules[modul].indexOf(".js?") === -1)
-                        //@ts-ignore
-                        requirejs.undef(modul + "/registry");
+                var modules = Config_1.config.modules;
+                var myrequire;
+                if (Config_1.config.isServer) {
+                    //if(require.defined("jassijs/server/Installserver")){
+                    myrequire = Config_1.config.serverrequire;
+                    modules = Config_1.config.server.modules;
+                }
+                else {
+                    myrequire = Config_1.config.clientrequire;
+                }
+                this.isServer = Config_1.config.isServer; //is this needed?
+                for (let modul in modules) {
+                    if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
+                        myrequire.undef(modul + "/registry");
                     {
                         var m = modul;
                         all[modul] = new Promise((resolve, reject) => {
                             //@ts-ignore
-                            require([m + "/registry"], function (ret) {
+                            myrequire([m + "/registry"], function (ret) {
                                 resolve(ret.default);
                             });
                         });
                     }
                 }
-                for (let modul in mod.modules) {
+                for (let modul in modules) {
                     var data = await all[modul];
                     _this.initJSONData(data);
                 }
@@ -348,13 +360,13 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
          * @param service - the service for which we want informations
          */
         async getJSONData(service, classname = undefined) {
-            if (this.isLoading)
-                await this.isLoading;
-            if (this.jsondata === undefined) {
-                this.isLoading = this.reload();
-                await this.isLoading;
-            }
-            this.isLoading = undefined;
+            // if (this.isLoading)
+            await this.isLoading;
+            /* if (this.jsondata === undefined) {
+                 this.isLoading = this.reload();
+                 await this.isLoading;
+             }
+             this.isLoading = undefined;*/
             var ret = [];
             var odata = this.jsondata[service];
             if (odata === undefined)

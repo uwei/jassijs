@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.$Serverservice = exports.beforeServiceLoad = exports.ServerserviceProperties = void 0;
 require("jassijs/remote/Classes");
+const Classes_1 = require("jassijs/remote/Classes");
 const Registry_1 = require("jassijs/remote/Registry");
 class ServerserviceProperties {
 }
@@ -17,10 +18,10 @@ exports.beforeServiceLoad = beforeServiceLoad;
 var serverservices = new Proxy(runningServerservices, {
     get(target, prop, receiver) {
         return new Promise(async (resolve, reject) => {
-            var _a;
             var khsdf = runningServerservices;
             if (target[prop]) {
                 resolve(target[prop]);
+                return;
             }
             else {
                 var all = await Registry_1.default.getJSONData("$Serverservice");
@@ -41,7 +42,7 @@ var serverservices = new Proxy(runningServerservices, {
                             await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                         }
                         else {
-                            await (_a = classname.replaceAll(".", "/"), Promise.resolve().then(() => require(_a)));
+                            await Classes_1.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
                         }
                         var props = Registry_1.default.getData("$Serverservice", classname)[0].params[0];
                         for (var x = 0; x < beforeServiceLoadHandler.length; x++) {

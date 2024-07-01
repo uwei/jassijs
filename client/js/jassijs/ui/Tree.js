@@ -43,11 +43,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         (0, Registry_1.$Class)("jassijs.ui.TreeEditorProperties")
     ], TreeEditorProperties);
     let Tree = class Tree extends Component_1.Component {
-        constructor(options) {
-            super();
-            super.init('<div class="Tree"></div>');
+        constructor(props = {}) {
+            super(props);
             this._itemToKey = new Map();
-            this.options = options;
+            if ((props === null || props === void 0 ? void 0 : props.options) === undefined)
+                this.options = props === null || props === void 0 ? void 0 : props.options;
+        }
+        render() {
+            var _this = this;
+            return React.createElement("div", Object.assign(Object.assign({}, this.props.domProperties), { className: "Tree" }));
+        }
+        componentDidMount() {
         }
         config(config) {
             super.config(config);

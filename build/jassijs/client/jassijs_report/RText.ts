@@ -5,10 +5,16 @@ import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { loadFontIfNedded } from "jassijs/ui/CSSProperties";
 import { Tools } from "jassijs/util/Tools";
-import { Component } from "jassijs/ui/Component";
+import { Component, HTMLComponent, TextComponent } from "jassijs/ui/Component";
 
-
-
+/*
+Object.assign(TextComponent.prototype, {
+    toJSON() {
+         debugger;
+        return this.text;
+    }
+});
+*/
 class InlineStyling {
     bold: boolean;
     italics: boolean;
@@ -53,11 +59,12 @@ let allFormats = (() => {
 
 
 @$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" })
-@$Class("jassijs_report.RText")
+@$Class("jassijs_report.RText") 
 //@$Property({hideBaseClassProperties:true})
 @$Property({ name: "value", type: "string", description: "text" })
 
 export class RText extends RComponent {
+    text:Text;
     reporttype: string = "text";
     initIfNeeded;
     focusLost;
@@ -78,7 +85,12 @@ export class RText extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        super.init('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>');//tabindex for key-event
+        this.text=document.createTextNode("");
+        this.dom.appendChild(this.text);
+        //@ts-ignore
+        this.text._this=this;
+       // super.init('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>');//tabindex for key-event
+//        super.init('<div class="RText jdisableaddcomponents" tabindex="0" ></div>');//tabindex for key-event
         this.domWrapper.classList.remove("jcontainer");
         this.__dom.style["text-overflow"]= "ellipsis";
         this.__dom.style["overflow"]= "hidden";
@@ -88,33 +100,41 @@ export class RText extends RComponent {
         var el = this.dom.children[0];
         this._designMode = false;
         this.dom.style["display"]= "block";
-        this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
-        this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
-        this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
-        this.focusLost = HTMLPanel.prototype.focusLost.bind(this);
+     //   this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
+      //  this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
+      //  this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
+      //  this.focusLost = HTMLPanel.prototype.focusLost.bind(this);
         //@ts-ignore
-        this._initTinymce = HTMLPanel.prototype._initTinymce.bind(this);
+        //this._initTinymce = HTMLPanel.prototype._initTinymce.bind(this);
     }
-
+    render(){
+        return React.createElement(HTMLComponent,{
+            tag:"div",
+            className:"RText jdisableaddcomponents", 
+            tabIndex:0
+        });
+    }
     @$Property({
         chooseFrom: function (component) {
             return ReportDesign.getVariables(component);
         }
     })
     get value(): string {
-        var el = this.dom.children[0];
+       /* var el = this.dom.children[0];
         if (el === undefined)
             return "";
         var ret = el.innerHTML;
-        return ret;
+        */
+        return this.text.textContent;
     }
     set value(code: string) {
-        var el: any = this.dom.children[0];
+        this.text.textContent=code;
+      /*  var el: any = this.dom.children[0];
         if (el === undefined) {
             el = document.createTextNode(code);
             this.dom.appendChild(el);
         } else
-            el.innerHTML=code;
+            el.innerHTML=code;*/
     }
     @$Property({ type: "string", chooseFrom: allFormats })
     set format(value: string) {
@@ -127,10 +147,10 @@ export class RText extends RComponent {
    
     fromJSON(ob: any): RText {
         var ret = this;
-        if (ob.editTogether) {
+      /*  if (ob.editTogether) {
             delete ob.editTogether;
             ret.convertToHTML(ob.text);
-        } else
+        } else*/
             ret.value = <string>ob.text.replaceAll("\n", "<br/>");
         delete ob.text;
         if (ob.format) {

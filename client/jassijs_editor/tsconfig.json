@@ -17,7 +17,7 @@
       "dom",
       "es5"
     ],
-   
+    "jsx": "react",
     "skipLibCheck": true,
     "typeRoots": [".././node_modules/@types",".././node_modules2/typescriptservice"],
     "composite": true,

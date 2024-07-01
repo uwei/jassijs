@@ -11,7 +11,7 @@ import { Panel } from "jassijs/ui/Panel";
 @$ReportComponent({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] })
 @$Class("jassijs_report.RStack")
 //@$Property({name:"horizontal",hide:true})
-
+@$Property({name:"children",type:"jassijs_report.RComponent"})
 export class RStack extends RComponent {
     reporttype: string = "stack";
     /**

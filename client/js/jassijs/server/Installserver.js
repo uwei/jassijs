@@ -20,16 +20,35 @@ define(["require", "exports", "jassijs/remote/Serverservice", "./LocalProtocol",
             man.extendDBManager();
         }
     });
-    var autostart = async function () {
-        var files = await new FS_1.FS().readdir("./client");
+    var checkdir = async function (dir) {
+        var fs = new FS_1.FS();
+        var files = await fs.readdir(dir);
         for (var x = 0; x < files.length; x++) {
-            var fname = files[x];
-            fname = fname.replace("./client/", "");
-            if (!fname.startsWith("./client/js/")) {
-                var name = fname.substring(0, fname.length - 3);
-                Config_1.config.serverrequire.undef(name);
+            var fullname = dir + "/" + files[x];
+            if ((await fs.stat(fullname)).isDirectory()) {
+                await checkdir(fullname);
+            }
+            else {
+                if (fullname.startsWith("./client/")) {
+                    fullname = fullname.replace("./client/", "");
+                    if (!fullname.startsWith("js/")) {
+                        var name = fullname.substring(0, fullname.length - 3);
+                        Config_1.config.clientrequire.undef(name);
+                        Config_1.config.serverrequire.undef(name);
+                    }
+                }
+                else {
+                    if (!fullname.startsWith("js/")) {
+                        var name = fullname.substring(0, fullname.length - 3);
+                        Config_1.config.serverrequire.undef(name);
+                        Config_1.config.clientrequire.undef(name);
+                    }
+                }
             }
         }
+    };
+    var autostart = async function () {
+        await checkdir(".");
     };
     exports.autostart = autostart;
     Config_1.config.serverrequire.undef("jassijs/util/DatabaseSchema");

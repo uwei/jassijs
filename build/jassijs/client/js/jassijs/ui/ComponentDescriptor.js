@@ -23,6 +23,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             /** @member {[jassijs.ui.Property]}  - all property fields which acts are editable*/
             this.editableComponents = [];
         }
+        findField(name) {
+            for (var x = 0; x < this.fields.length; x++) {
+                if (this.fields[x].name === name) {
+                    return this.fields[x];
+                }
+            }
+            return undefined;
+        }
         /**
          * describes a class
          * @param {class}  type - the type of the class
@@ -52,6 +60,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                         if (Registry_2.default.getMemberData("$Property") === undefined)
                             return cache;
                         var props = Registry_2.default.getMemberData("$Property")[sclass];
+                        /*if(props?.new){
+                            var clname=props.new[0][0].componentType;
+                            if(classes.getClass(clname)){
+                                type=classes.getClass(clname);
+                                sclass = classes.getClassName(type);
+                                props = registry.getMemberData("$Property")[sclass];
+                            }
+                        }*/
                         if (props !== undefined) {
                             var info = Registry_2.default.getMemberData("design:type")[sclass];
                             for (var key in props) {

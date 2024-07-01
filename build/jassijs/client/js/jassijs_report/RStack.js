@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_1, ReportDesign_1, RComponent_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_1, Property_1, ReportDesign_1, RComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RStack = void 0;
@@ -81,6 +81,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
         (0, Registry_1.$Class)("jassijs_report.RStack")
         //@$Property({name:"horizontal",hide:true})
         ,
+        (0, Property_1.$Property)({ name: "children", type: "jassijs_report.RComponent" }),
         __metadata("design:paramtypes", [Object])
     ], RStack);
     exports.RStack = RStack;

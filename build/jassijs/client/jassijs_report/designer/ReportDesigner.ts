@@ -16,10 +16,13 @@ import { Tools } from "jassijs/util/Tools";
 import { RComponent } from "jassijs_report/RComponent";
 import { RStack } from "jassijs_report/RStack";
 import { ServerReport } from "jassijs_report/remote/ServerReport";
+import { HtmlDesigner } from "jassijs_editor/HtmlDesigner";
+import { RText } from "jassijs_report/RText";
+import { RTextGroup } from "jassijs_report/RTextGroup";
 
 
 @$Class("jassijs_report.designer.ReportDesigner")
-export class ReportDesigner extends ComponentDesigner {
+export class ReportDesigner extends HtmlDesigner {
 
     propertyIsChanging = false;
     pdfviewer: PDFViewer = new PDFViewer();
@@ -30,7 +33,7 @@ export class ReportDesigner extends ComponentDesigner {
     mainLayout: string = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
     constructor() {
         super();
-
+        this._designPlaceholder.dom.style.whiteSpace = "pre";
 
     }
     set codeEditor(value) {
@@ -61,11 +64,28 @@ export class ReportDesigner extends ComponentDesigner {
         this.dom.style.overflow = "scroll";
         this.dom.style.width = "";
         this.registerKeys();
-            this.editButton.tooltip = "pdf preview";
-            this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
+        this.editButton.tooltip = "pdf preview";
+        this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
 
     }
-
+    createTextComponent(text, par, before): Component {
+        var comp2 = new RText();
+        comp2.value = text;
+        return this.createComponent("jassijs_report.RText", comp2, undefined, undefined, par, before);
+    }
+    protected wrapTextNodeIfNeeded(found: Node) {
+        var parent = found.parentNode;
+        /* if (parent.childNodes.length !== 1) {
+             //no wrap
+             var textComp = (<any>found)._this;
+             var newSpan = new RTextGroup();
+             var span = this.createComponent(classes.getClassName(newSpan), newSpan, undefined, undefined, textComp._parent, textComp);
+             this.moveComponent(textComp, undefined, undefined, textComp._parent, span, undefined);
+             (<Container>span).add(textComp);
+             parent = span.__dom;
+         }*/
+        return parent;
+    }
     connectParser(parser) {
         this._propertyEditor.parser = parser;
         var Parser = classes.getClass("jassijs_editor.util.Parser");
@@ -81,7 +101,7 @@ export class ReportDesigner extends ComponentDesigner {
                 this._codeEditor.evalServerside().then((data) => {
                     if (!data)
                         return;
-                    ServerReport.getBase64LastTestResult().then((base64) => {
+                    ServerReport.getBase64FromFile(this.codeEditor._file).then((base64) => {
                         this.pdfviewer.report = rep;
                         _this.pdfviewer.value = base64
                     });
@@ -323,6 +343,45 @@ export class ReportDesigner extends ComponentDesigner {
                 return varname.substring(5);
             return varname;
         };
+    }
+    protected insertLineBreak(sel: Selection) {
+        var offSet = sel.anchorOffset;
+        var node = sel.anchorNode;
+        if (sel.anchorNode.compareDocumentPosition(sel.focusNode) === Node.DOCUMENT_POSITION_PRECEDING) {
+            node = sel.focusNode;
+            offSet = sel.focusOffset;
+        }
+        var old = node.textContent;
+        var v1 = old.substring(0, offSet) + "\n" + old.substring(offSet);
+        this.changeText(node, v1);
+        this._propertyEditor.callEvent("propertyChanged", undefined);
+    }
+    setStyle(style: string, value = undefined): Component[] {
+        var ret = super.setStyle(style, value);
+        //Wrap to TextGRoup
+        if (ret.length > 0) {
+            var par: RComponent = ret[0]._parent;
+            for (var x = 1; x < ret.length; x++) {
+                if (ret[x]._parent !== par)
+                    par = undefined;
+            }
+            if (par?.reporttype !== "textgroup") {
+                var tg = new RTextGroup();
+                tg = <any>this.createComponent(classes.getClassName(tg), tg, undefined, undefined, par, ret[0]);
+                ret.forEach((comp) => tg.add(comp));
+                this._propertyEditor.callEvent("propertyChanged", undefined);
+            }
+        }
+
+        return ret;
+    }
+    applyStyle(comp: Component, stylename: string, value: any = undefined) {
+        var rcomp: RComponent = <any>comp;
+        if (stylename === "bold") {
+            rcomp.bold = !rcomp.bold
+
+        }
+        this._propertyEditor.callEvent("propertyChanged", undefined);
     }
 }
 

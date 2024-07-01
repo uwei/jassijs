@@ -15,10 +15,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         /* get dom(){
              return this.dom;
          }*/
-        constructor() {
-            super();
-            super.init('<div><input type="checkbox"><span class="checkboxtext" style="width:100%"></span></div>');
+        constructor(properties = {}) {
+            super(properties);
+            //super.init('<div><input type="checkbox"><span class="checkboxtext" style="width:100%"></span></div>');
             this.checkbox = this.dom.firstChild;
+        }
+        render() {
+            return React.createElement("div", {}, React.createElement("input", {
+                type: "checkbox",
+            }, React.createElement("span", {
+                className: "checkboxtext",
+                style: {
+                    width: "100%"
+                }
+            })));
         }
         config(config) {
             super.config(config);
@@ -65,7 +75,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Checkbox = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
         (0, Registry_1.$Class)("jassijs.ui.Checkbox"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], Checkbox);
     exports.Checkbox = Checkbox;
     function test() {

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter", "tabulator-tables"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Classes_1, tabulator_tables_1, DateTimeConverter_1, Numberformatter_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Classes_1, tabulator_tables_1, DateTimeConverter_1, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -39,18 +39,31 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
     let Table = class Table extends DataComponent_1.DataComponent {
         ;
         constructor(properties) {
-            super();
+            super(properties);
             this._lastLazySort = undefined;
             this._lastLazySearch = undefined;
             this._lazyDataHasChanged = undefined;
-            super.init('<div class="Table"></div>');
+            // super.init('<div class="Table"></div>');
             var _this = this;
-            this.options = properties;
+            //this.options = properties;
             this._selectHandler = [];
         }
         config(config) {
             super.config(config);
             return this;
+        }
+        render() {
+            return React.createElement("div", { className: "Table" });
+        }
+        rerender() {
+            this.table.destroy();
+            if (this._databinderItems !== undefined) {
+                this._databinderItems.remove(this);
+                this._databinderItems = undefined;
+            }
+            this.table = undefined;
+            // super.rerender();
+            this.options = this._lastOptions;
         }
         set options(properties) {
             var _this = this;
@@ -688,15 +701,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             { id: 5, name: "Margret Marmajuke", age: 99, col: "yellow", dob: new Date() },
         ];
         var tab = new Table({
-            height: 300,
-            headerSort: true,
-            items: tabledata,
-            columns: [
-                { field: "id", title: "id" },
-                { field: "age", title: "age", formatter: "numberformat", formatterParams: { numberformat: "#.##0,00" }, editor: "numberformat" },
-                { field: "name", title: "name", formatter: "buttonTick" },
-                { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
-            ]
+            options: {
+                height: 300,
+                headerSort: true,
+                items: tabledata,
+                columns: [
+                    { field: "id", title: "id" },
+                    { field: "age", title: "age", formatter: "numberformat", formatterParams: { numberformat: "#.##0,00" }, editor: "numberformat" },
+                    { field: "name", title: "name", formatter: "buttonTick" },
+                    { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
+                ]
+            }
         });
         tab.showSearchbox = true;
         tab.on("dblclick", () => {

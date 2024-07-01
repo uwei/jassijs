@@ -20,11 +20,11 @@ define(["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Re
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties = undefined) {
+        constructor(properties = {}) {
             super(properties);
             this.domWrapper.classList.add('BoxPanel');
             this.domWrapper.classList.remove('Panel');
-            this.horizontal = false;
+            this.horizontal = !(properties === null || properties === void 0 ? void 0 : properties.horizontal) === false;
             this.dom.style.display = "flex";
         }
         config(config) {
@@ -113,7 +113,7 @@ define(["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Re
         var ret = new BoxPanel();
         var me = {};
         ret["me"] = me;
-        ret.horizontal = true;
+        // ret.horizontal = true;
         me.tb = new HTMLPanel();
         me.tb2 = new HTMLPanel();
         me.tb.value = "l&ouml;&auml;k&ouml;lk &ouml;lsfdk sd&auml;&ouml;flgkdf ";

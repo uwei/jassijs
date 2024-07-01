@@ -26,7 +26,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
             me.newclass = new Button_1.Button();
             me.boxpanel1 = new BoxPanel_1.BoxPanel();
             me.save = new Button_1.Button();
-            me.boxpanel2 = new BoxPanel_1.BoxPanel(false);
+            me.boxpanel2 = new BoxPanel_1.BoxPanel({ horizontal: false });
             me.newfield = new Button_1.Button();
             me.removefield = new Button_1.Button();
             me.boxpanel3 = new BoxPanel_1.BoxPanel();
@@ -35,23 +35,25 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
             var xxx = 0;
             var params = { values: ["hall", "du"] };
             me.table = new Table_1.Table({
-                autoColumns: false,
-                columns: [
-                    //@ts-ignore
-                    { title: "name", field: "name", editor: "input", editable: true },
-                    //@ts-ignore
-                    { title: "type", field: "type", editor: "select", editorParams: this.allTypes },
-                    //@ts-ignore
-                    { title: "nullable", field: "nullable", editor: "tick", editorParams: { tristate: false } },
-                    {
+                options: {
+                    autoColumns: false,
+                    columns: [
                         //@ts-ignore
-                        title: "relationinfo", field: "relationinfo", editor: "select",
-                        editorParams: this.posibleRelations,
-                        cellEditing: function (cell) {
-                            _this.updatePossibleRelations(cell);
+                        { title: "name", field: "name", editor: "input", editable: true },
+                        //@ts-ignore
+                        { title: "type", field: "type", editor: "select", editorParams: this.allTypes },
+                        //@ts-ignore
+                        { title: "nullable", field: "nullable", editor: "tickCross", editorParams: { tristate: false } },
+                        {
+                            //@ts-ignore
+                            title: "relationinfo", field: "relationinfo", editor: "select",
+                            editorParams: this.posibleRelations,
+                            cellEditing: function (cell) {
+                                _this.updatePossibleRelations(cell);
+                            }
                         }
-                    }
-                ]
+                    ]
+                }
             });
             me.select = new Select_1.Select();
             me.databinder = new Databinder_1.Databinder();
@@ -106,16 +108,16 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
             });
             me.newfield.width = "120";
             me.newfield.height = 25;
-            me.newfield.css = {
-                text_align: "left"
+            me.newfield.style = {
+                textAlign: "left"
             };
             me.boxpanel2.add(me.table);
             me.boxpanel2.add(me.boxpanel3);
             me.removefield.text = "Remove Field";
             me.removefield.icon = "mdi mdi-playlist-minus";
             me.removefield.width = "120";
-            me.removefield.css = {
-                text_align: "left"
+            me.removefield.style = {
+                textAlign: "left"
             };
             me.removefield.onclick(function (event) {
                 var field = me.table.value;

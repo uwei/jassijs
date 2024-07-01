@@ -3,17 +3,16 @@
 declare var Split;
 
 
-import { Panel, PanelConfig } from "jassijs/ui/Panel";
+import { Panel, PanelProperties} from "jassijs/ui/Panel";
 import { $Class } from "jassijs/remote/Registry";
-import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { $UIComponent } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";
 //@ts-ignore
 //import Split from "jassijs/ext/split";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 
-
-export interface BoxPanelConfig extends PanelConfig {
+export interface BoxPanelProperties extends PanelProperties {
     /**
      * @member {boolean} - if true then the components are composed horizontally
      **/
@@ -27,7 +26,7 @@ export interface BoxPanelConfig extends PanelConfig {
 @$UIComponent({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] })
 @$Class("jassijs.ui.BoxPanel")
 @$Property({ name: "isAbsolute", hide: true, type: "boolean" })
-export class BoxPanel extends Panel implements BoxPanelConfig {
+export class BoxPanel<T extends BoxPanelProperties={}> extends Panel<BoxPanelProperties> implements BoxPanelProperties {
     _horizontal: boolean;
     private _spliter: number[];
     private _splitcomponent: any;
@@ -38,18 +37,20 @@ export class BoxPanel extends Panel implements BoxPanelConfig {
     * @param {boolean} [properties.useSpan] -  use span not div
     *
     */
-    constructor(properties = undefined) {
+    constructor(properties:BoxPanelProperties={}) {
         super(properties);
         this.domWrapper.classList.add('BoxPanel')
         this.domWrapper.classList.remove('Panel');
-        this.horizontal = false;
+
+        this.horizontal = !properties?.horizontal===false;
         this.dom.style.display="flex";
     }
 
-    config(config: BoxPanelConfig): BoxPanel {
+    config(config: BoxPanelProperties): BoxPanel {
         super.config(config);
         return this;
     }
+    @$Property()
     set horizontal(value: boolean) {
         this._horizontal = value;
         if (value)
@@ -59,7 +60,7 @@ export class BoxPanel extends Panel implements BoxPanelConfig {
         this.updateSpliter();
 
     }
-    @$Property()
+    
     get horizontal(): boolean {
         return this._horizontal;
     }
@@ -81,11 +82,11 @@ export class BoxPanel extends Panel implements BoxPanelConfig {
         super.addBefore(component, before);
         this.updateSpliter();
     }
+    @$Property({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" })
     set spliter(size: number[]) {
         this._spliter = size;
         this.updateSpliter();
     }
-    @$Property({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" })
     get spliter(): number[] {
         return this._spliter;
     }
@@ -120,7 +121,7 @@ export async function test() {
     var ret = new BoxPanel();
     var me: any = {};
     ret["me"] = me;
-    ret.horizontal = true;
+   // ret.horizontal = true;
     me.tb = new HTMLPanel();
     me.tb2 = new HTMLPanel();
     me.tb.value = "l&ouml;&auml;k&ouml;lk &ouml;lsfdk sd&auml;&ouml;flgkdf ";

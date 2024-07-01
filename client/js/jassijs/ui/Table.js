@@ -43,12 +43,22 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             this._lastLazySort = undefined;
             this._lastLazySearch = undefined;
             this._lazyDataHasChanged = undefined;
-            // super.init('<div class="Table"></div>');
             var _this = this;
             //this.options = properties;
             this._selectHandler = [];
         }
         config(config) {
+            if (this.table === undefined) {
+                if ((config === null || config === void 0 ? void 0 : config.options) === undefined) {
+                    this.options = {}; //this is not called if not options are set
+                }
+                if (config === null || config === void 0 ? void 0 : config.items) {
+                    this.options = {
+                        items: config.items
+                    };
+                    delete config.items; //or set async
+                }
+            }
             super.config(config);
             return this;
         }
@@ -700,6 +710,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             { id: 4, name: "Brendon Philips", age: 12, col: "orange", dob: new Date() },
             { id: 5, name: "Margret Marmajuke", age: 99, col: "yellow", dob: new Date() },
         ];
+        /* var tab=new Table();
+         setTimeout(()=>{
+         tab.items=tabledata;
+     
+         },100);*/
         var tab = new Table({
             options: {
                 height: 300,

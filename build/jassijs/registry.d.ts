@@ -1,5 +1,8 @@
 export const __esModule: boolean;
 declare const _default: {
+    "jassijs/index.d.ts": {
+        date: number;
+    };
     "jassijs/remote/Classes.ts": {
         date: number;
         "jassijs.remote.JassiError": {};
@@ -8,6 +11,9 @@ declare const _default: {
     "jassijs/remote/ClientError.ts": {
         date: number;
         "jassijs.remote.ClientError": {};
+    };
+    "jassijs/remote/Config.ts": {
+        date: number;
     };
     "jassijs/remote/Database.ts": {
         date: number;
@@ -48,6 +54,9 @@ declare const _default: {
         date: number;
     };
     "jassijs/remote/JassijsGlobal.ts": {
+        date: number;
+    };
+    "jassijs/remote/Modules.ts": {
         date: number;
     };
     "jassijs/remote/ObjectTransaction.ts": {
@@ -269,84 +278,6 @@ declare const _default: {
             };
         };
     };
-    "jassijs/remote/Settings.ts": {
-        date: number;
-        "jassijs.remote.Settings": {
-            "@members": {
-                remove: {
-                    ValidateFunctionParameter: any[];
-                };
-                save: {
-                    ValidateFunctionParameter: any[];
-                };
-                saveAll: {
-                    ValidateFunctionParameter: any[];
-                };
-            };
-        };
-    };
-    "jassijs/remote/Test.ts": {
-        date: number;
-        "jassijs.remote.Test": {};
-    };
-    "jassijs/remote/Transaction.ts": {
-        date: number;
-        "jassijs.remote.Transaction": {};
-    };
-    "jassijs/server/Compile.ts": {
-        date: number;
-    };
-    "jassijs/server/DBManager.ts": {
-        date: number;
-        "jassijs/server/DBManager": {
-            $Serverservice: {
-                name: string;
-                getInstance: string;
-            }[];
-        };
-    };
-    "jassijs/server/DoRemoteProtocol.ts": {
-        date: number;
-    };
-    "jassijs/server/Filesystem.ts": {
-        date: number;
-        "jassijs.server.Filesystem": {
-            $Serverservice: {
-                name: string;
-                getInstance: string;
-            }[];
-        };
-    };
-    "jassijs/server/Indexer.ts": {
-        date: number;
-    };
-    "jassijs/server/JassiServer.ts": {
-        date: number;
-    };
-    "jassijs/server/PassportLoginRegister.ts": {
-        date: number;
-    };
-    "jassijs/server/PassportSetup.ts": {
-        date: number;
-    };
-    "jassijs/server/RawBody.ts": {
-        date: number;
-    };
-    "jassijs/server/RegistryIndexer.ts": {
-        date: number;
-    };
-    "jassijs/server/Zip.ts": {
-        date: number;
-    };
-    "jassijs/UserModel.ts": {
-        date: number;
-    };
-    "jassijs/util/DatabaseSchema.ts": {
-        date: number;
-    };
-    "jassijs/remote/Validator.ts": {
-        date: number;
-    };
     "jassijs/remote/Server.ts": {
         date: number;
         "jassijs.remote.Server": {
@@ -396,10 +327,138 @@ declare const _default: {
     "jassijs/remote/Serverservice.ts": {
         date: number;
     };
-    "jassijs/index.d.ts": {
+    "jassijs/remote/Settings.ts": {
+        date: number;
+        "jassijs.remote.Settings": {
+            "@members": {
+                remove: {
+                    ValidateFunctionParameter: any[];
+                };
+                save: {
+                    ValidateFunctionParameter: any[];
+                };
+                saveAll: {
+                    ValidateFunctionParameter: any[];
+                };
+            };
+        };
+    };
+    "jassijs/remote/Test.ts": {
+        date: number;
+        "jassijs.remote.Test": {};
+    };
+    "jassijs/remote/Transaction.ts": {
+        date: number;
+        "jassijs.remote.Transaction": {};
+    };
+    "jassijs/remote/Validator.ts": {
         date: number;
     };
+    "jassijs/server/Compile.ts": {
+        date: number;
+    };
+    "jassijs/server/Cookies.ts": {
+        date: number;
+    };
+    "jassijs/server/CreatePackage.ts": {
+        date: number;
+    };
+    "jassijs/server/DatabaseSchema.ts": {
+        date: number;
+    };
+    "jassijs/server/DBManager.ts": {
+        date: number;
+        "jassijs/server/DBManager": {
+            $Serverservice: {
+                name: string;
+                getInstance: string;
+            }[];
+        };
+    };
+    "jassijs/server/DBManagerExt.ts": {
+        date: number;
+    };
+    "jassijs/server/DoRemoteProtocol.ts": {
+        date: number;
+    };
+    "jassijs/server/ext/EmpyDeclaration.ts": {
+        date: number;
+    };
+    "jassijs/server/ext/jszip.ts": {
+        date: number;
+    };
+    "jassijs/server/Filesystem.ts": {
+        date: number;
+        "jassijs.server.Filesystem": {
+            $Serverservice: {
+                name: string;
+                getInstance: string;
+            }[];
+        };
+    };
+    "jassijs/server/FileTools.ts": {
+        date: number;
+    };
+    "jassijs/server/Indexer.ts": {
+        date: number;
+    };
+    "jassijs/server/JassiServer.ts": {
+        date: number;
+    };
+    "jassijs/server/LocalProtocol.ts": {
+        date: number;
+    };
+    "jassijs/server/NativeAdapter.ts": {
+        date: number;
+    };
+    "jassijs/server/PassportLoginRegister.ts": {
+        date: number;
+    };
+    "jassijs/server/PassportSetup.ts": {
+        date: number;
+    };
+    "jassijs/server/RawBody.ts": {
+        date: number;
+    };
+    "jassijs/server/RegistryIndexer.ts": {
+        date: number;
+    };
+    "jassijs/server/Reloader.ts": {
+        date: number;
+    };
+    "jassijs/server/Testuser.ts": {
+        date: number;
+        Testuser: {
+            $DBObject: any[];
+            "@members": {
+                id: {
+                    PrimaryColumn: any[];
+                };
+                firstname: {
+                    Column: any[];
+                };
+                lastname: {
+                    Column: any[];
+                };
+            };
+        };
+    };
+    "jassijs/server/TypeORMListener.ts": {
+        date: number;
+        "jassijs.server.TypeORMListener": {
+            EventSubscriber: any[];
+        };
+    };
     "jassijs/server/UpdatePackage.ts": {
+        date: number;
+    };
+    "jassijs/server/Zip.ts": {
+        date: number;
+    };
+    "jassijs/UserModel.ts": {
+        date: number;
+    };
+    "jassijs/util/DatabaseSchema.ts": {
         date: number;
     };
 };

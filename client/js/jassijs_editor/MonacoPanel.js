@@ -100,27 +100,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
     let MonacoPanel = class MonacoPanel extends CodePanel_1.CodePanel {
         constructor() {
             super();
+            //this._editor.setModel(monaco.editor.getModels() [1]);
+        }
+        render() {
+            return React.createElement("div", { className: "MonacoPanel", style: { borderSpacing: "0px", minWidth: "50px", tableLayout: "fixed" } });
+        }
+        componentDidMount() {
             var _this = this;
-            var test = '<div class="MonacoPanel" style="height: 100px; width: 100px"></div>';
-            super.init(test);
             this.domWrapper.style.overflow = "hidden";
             this.domWrapper.style.display = "";
-            /* _this._editor.on("guttermousedown", function(e) {
-     
-                 var row = e.getDocumentPosition().row;
-                 var breakpoints = e.editor.session.getBreakpoints(row, 0);
-                 var type = "debugpoint";
-                 if (e.domEvent.ctrlKey)
-                     type = "checkpoint";
-                 var column = _this._editor.session.getLine(row).length;
-                 if (typeof breakpoints[row] === typeof undefined) {
-                     e.editor.session.setBreakpoint(row);
-                     _this.callEvent("breakpointChanged", row, column, true, type);
-                 } else {
-                     e.editor.session.clearBreakpoint(row, false, undefined);
-                     _this.callEvent("breakpointChanged", row, column, false, type);
-                 }
-             });*/
             let theme = CurrentSettings_1.currentsettings.gets(Settings_1.Settings.keys.Development_MoanacoEditorTheme);
             this._editor = monaco.editor.create(this.dom, {
                 //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
@@ -136,7 +124,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
             this._editor.onMouseDown(function (e) {
                 _this._mouseDown(e);
             });
-            //this._editor.setModel(monaco.editor.getModels() [1]);
         }
         getBreakpointDecoration(line) {
             var decs = this._editor.getLineDecorations(line);

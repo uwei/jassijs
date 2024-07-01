@@ -23,7 +23,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "ol";
-            this.init("<ol></ol>");
+        }
+        render() {
+            return React.createElement("ol", { className: "ROList" });
         }
         set type(value) {
             this._type = value;

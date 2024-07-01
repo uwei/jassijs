@@ -1,4 +1,4 @@
-import ts = require("typescript");
+import { ts } from 'jassijs/server/NativeAdapter';
 export declare abstract class Indexer {
     abstract fileExists(name: any): any;
     abstract readFile(name: any): any;

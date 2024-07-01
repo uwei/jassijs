@@ -98,7 +98,11 @@ export class ComponentSpy extends Panel {
         for (var k in jassijs.componentSpy.ids) {
             data.push(jassijs.componentSpy.ids[k]);
         }
-        this.me.IDTable.items = data;
+        try{
+             this.me.IDTable.items = data;
+        }catch{
+            setTimeout(()=>this.me.IDTable.items = data,100);
+        }
     }
     clear() {
         jassijs.componentSpy.ids = {};

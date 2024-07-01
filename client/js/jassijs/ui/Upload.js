@@ -15,13 +15,23 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         /* get dom(){
              return this.dom;
          }*/
-        constructor() {
-            super();
-            super.init('<input type="file" id="dateien" name="files[]" />');
+        constructor(props = {}) {
+            super(props);
+        }
+        render() {
             var _this = this;
-            this.on("change", function (evt) {
-                _this.readUpload(evt);
+            return React.createElement("input", {
+                className: "Upload", type: "file", name: "files[]",
+                onChange: (evt) => {
+                    _this.readUpload(evt);
+                }
             });
+        }
+        config(config) {
+            super.config(config);
+            return this;
+        }
+        componentDidMount() {
         }
         get dom() {
             return super.dom;
@@ -109,7 +119,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Upload = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
         (0, Registry_1.$Class)("jassijs.ui.Upload"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], Upload);
     exports.Upload = Upload;
     /*

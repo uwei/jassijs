@@ -30,7 +30,8 @@ class TreeEditorProperties {
     @$Property({ type: "json", componentType: "jassijs.ui.TreeEditorPropertiesMulti" })
     multi?: TreeEditorPropertiesMulti;
 }
-export interface TreeConfig extends ComponentProperties {
+export interface TreeProperties extends ComponentProperties {
+    domProperties?:React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLDivElement>, HTMLDivElement>;
     options?: Fancytree.FancytreeOptions;
     /**
     * @member - get the property for the display of the item or an function to get the display from an item
@@ -86,7 +87,7 @@ export interface TreeConfig extends ComponentProperties {
 @$Property({ name: "new/multi", type: "json" })
 @$Property({ name: "new/multi/mode", type: "string", default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" })
 */
-export class Tree extends Component implements TreeConfig {
+export class Tree<T extends TreeProperties=TreeProperties > extends Component<TreeProperties> implements TreeProperties {
     _propDisplay: string | { (item: any): string };
     _propIcon: string | { (item: any): string };
     _propChilds: string | { (item: any): any[] };
@@ -99,13 +100,21 @@ export class Tree extends Component implements TreeConfig {
     private _allKeysReaded: boolean;
     private _allNodesReaded: boolean;
     _lastOptions: Fancytree.FancytreeOptions;
-    constructor(options?: Fancytree.FancytreeOptions) {
-        super();
-        super.init('<div class="Tree"></div>');
+    constructor(props: TreeProperties={}) {
+        super(props);
         this._itemToKey = new Map();
-        this.options = options;
+        if(props?.options===undefined)
+            this.options = props?.options;
+        
     }
-    config(config: TreeConfig): Tree {
+    render() {
+        var _this = this;
+        return React.createElement("div", { ...this.props.domProperties, className: "Tree"       });
+    }
+    componentDidMount(): void {
+       
+    }
+    config(config: T): Tree {
         super.config(config);
         return this;
     }
@@ -728,6 +737,7 @@ export async function test() {
     var c = { name: "Christoph", id: 4, childs: [u, t] };
     s.childs = [c];
     tree.config({
+
         options: {
            // checkbox: true
         },

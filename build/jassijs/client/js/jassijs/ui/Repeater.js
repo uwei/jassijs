@@ -14,7 +14,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
     let RepeaterDesignPanel = class RepeaterDesignPanel extends Panel_1.Panel {
     };
     RepeaterDesignPanel = __decorate([
-        (0, Component_1.$UIComponent)({ editableChildComponents: ["databinder"] }),
         (0, Registry_1.$Class)("jassijs.ui.RepeaterDesignPanel")
     ], RepeaterDesignPanel);
     let Repeater = class Repeater extends Panel_1.Panel {
@@ -25,7 +24,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties = undefined) {
+        constructor(properties = {}) {
             super();
             this._autocommit = false;
             this.design = new RepeaterDesignPanel();

@@ -1,5 +1,5 @@
 {
-  "compilerOptions": { 
+  "compilerOptions": {
     "baseUrl": "./../",
     "allowJs": true,
     //"checkJs":false,
@@ -8,24 +8,30 @@
     "jsx": "react",
     "moduleResolution": "node",
     "lib": [
-      "es2016", 
+      "es2016",
       "dom",
       "es5"
     ],
-   
     "skipLibCheck": true,
-
-    "typeRoots": [".././node_modules/@types",".././node_modules2/typescriptservice"],
+    "typeRoots": [
+      ".././node_modules/@types",
+      ".././node_modules2/typescriptservice"
+    ],
     "composite": true,
     "inlineSources": true,
     "outFile": "../../dist/jassijs.js",
     "rootDir": "./../",
     "declaration": true,
-     "sourceMap": true,
+    "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
-   "include":["./",".././node_modules2", "../jassijs_localserver/modul.ts"],
-  "exclude":["./jassijs/server"]
-  
+  "include": [
+    "./",
+    ".././node_modules2",
+    "../jassijs_localserver/modul.ts"
+  ],
+  "exclude": [
+    "./jassijs/server"
+  ]
 }

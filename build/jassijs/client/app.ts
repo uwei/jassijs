@@ -9,7 +9,8 @@ import { ActionNodeMenu } from "jassijs/ui/ActionNodeMenu";
 
 async function test() {
   //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
-    var body = new Panel({ id: "body" });
+    var body = new Panel();//{ id: "body" });
+    document.body.appendChild(body.dom);
     body.max();
     windows.addLeft(new DBObjectExplorer(), "DBObjects");
     windows.addLeft(new SearchExplorer(), "Search");

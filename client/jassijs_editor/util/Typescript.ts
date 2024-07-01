@@ -1,10 +1,12 @@
-
+import "jassijs_editor/ext/monaco2";
+import "jassijs_editor/ext/monaco";
 import { $Class } from "jassijs/remote/Registry";
 import { Server } from "jassijs/remote/Server";
 import { FileNode } from "jassijs/remote/FileNode";
-import "jassijs_editor/ext/monaco";
+
 import { Editor } from "jassijs/ui/PropertyEditors/Editor";
 import { config } from "jassijs/remote/Config";
+
 
 @$Class("jassijs_editor.util.Typescript")
 export class Typescript {
@@ -147,7 +149,11 @@ export class Typescript {
                     continue;
                 if (fname.toLowerCase().endsWith(".ts") ||fname.toLowerCase().endsWith(".tsx") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
                     if (fname.toLocaleLowerCase().endsWith(".js")) {
+                        try{
                         monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
+                        }catch{
+                            console.log("Error loading file "+fname);
+                        }
                     }
                     if (fdat === undefined) {
                         nodeFiles[fname] = new Server().loadFile(fname);

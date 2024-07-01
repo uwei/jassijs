@@ -19,9 +19,12 @@ define(["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_edi
     let AcePanelSimple = class AcePanelSimple extends CodePanel_1.CodePanel {
         constructor() {
             super();
-            var _this = this;
-            var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
-            super.init(test);
+            //editor.$blockScrolling = Infinity;
+        }
+        render() {
+            return React.createElement("div", { className: "CodePanel", style: { height: "500px", width: "500px" } });
+        }
+        componentDidMount() {
             this.domWrapper.style.display = "";
             this._editor = ace.edit(this._id);
             this.file = "";
@@ -38,7 +41,6 @@ define(["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_edi
             this._editor.$blockScrolling = Infinity;
             this._editor.jassi = this;
             this._addEvents();
-            //editor.$blockScrolling = Infinity;
         }
         _addEvents() {
             var _this = this;

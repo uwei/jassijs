@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/CSSProperties"], function (require, exports, InvisibleComponent_1, Component_1, Registry_1, Property_1, CSSProperties_1) {
+define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, InvisibleComponent_1, Component_1, Registry_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.Style = void 0;
@@ -26,7 +26,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
         /**
         * sets CSS Properties
         */
-        set css(properties) {
+        set style(properties) {
             //never!super.css(properties,removeOldProperties);
             var style = document.getElementById(this.styleid);
             if (!document.getElementById(this.styleid)) {
@@ -52,9 +52,9 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     };
     __decorate([
         (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", CSSProperties_1.CSSProperties),
-        __metadata("design:paramtypes", [CSSProperties_1.CSSProperties])
-    ], Style.prototype, "css", null);
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Style.prototype, "style", null);
     Style = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
         (0, Registry_1.$Class)("jassijs.ui.Style")
@@ -84,7 +84,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     exports.test = test;
     function test2() {
         var st = new Style();
-        st.css = {
+        st.style = {
             color: "red"
         };
         st.destroy();

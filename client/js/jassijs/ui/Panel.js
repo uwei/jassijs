@@ -19,14 +19,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties = undefined) {
+        constructor(properties = {}) {
             super(properties);
             this._designMode = false;
             this.isAbsolute = (properties === null || properties === void 0 ? void 0 : properties.isAbsolute) === true;
         }
         render() {
             var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
-            return React.createElement(tag, { className: "Panel" });
+            return React.createElement(tag, Object.assign(Object.assign({}, this.props.domProperties), { className: "Panel" }));
         }
         set isAbsolute(value) {
             this._isAbsolute = value;

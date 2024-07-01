@@ -23,13 +23,15 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             this.toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
             this.inited = false;
             this.customToolbarButtons = {};
-            super.init('<div class="HTMLPanel mce-content-body" tabindex="-1" ><div class="HTMLPanelContent"> </div></div>'); //tabindex for key-event
             //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
-            var el = this.dom.children[0];
             this._designMode = false;
             this.newlineafter = false;
             // $(this.__dom).css("min-width", "10px");
+        }
+        render() {
+            return React.createElement("div", { className: "HTMLPanel mce-content-body", tabIndex: -1 },
+                React.createElement("div", { className: "HTMLPanelContent" }, " "));
         }
         config(config) {
             super.config(config);

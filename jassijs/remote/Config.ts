@@ -2,6 +2,7 @@
 
 
 export class Config{
+    name='./client/jassijs.json';
     isLocalFolderMapped:boolean;
     isServer:boolean;
     modules:{[modul:string]:string};
@@ -16,10 +17,12 @@ export class Config{
             this.isServer=true;
             //@ts-ignore
             var fs=require("fs"); 
-            this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
+            this.init(fs.readFileSync(this.name, 'utf-8'));
          }
     }
-    init(configtext:string){
+    init(configtext:string,name=undefined){
+        if(name!==undefined)
+            this.name=name;
         this.jsonData= JSON.parse(configtext);
         this.modules=this.jsonData.modules;
         this.server=<any>{
@@ -31,7 +34,7 @@ export class Config{
             this.isServer=true;
              //@ts-ignore
             var fs=require("fs");
-            this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
+            this.init(fs.readFileSync(this.name, 'utf-8'));
         }else{
            var Server= (await import("jassijs/remote/Server")).Server;
            var text=await new Server().loadFile("jassijs.json");
@@ -40,7 +43,7 @@ export class Config{
     }
     async saveJSON(){
         var myfs= (await import("jassijs/server/NativeAdapter")).myfs;
-        var fname='./client/jassijs.json';
+        var fname=this.name;
         
         await myfs.writeFile(fname,JSON.stringify(this.jsonData, undefined, "\t"));
         this.init(<any>await myfs.readFile(fname));

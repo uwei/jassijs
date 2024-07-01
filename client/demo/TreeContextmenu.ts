@@ -17,9 +17,10 @@ export async function test() {
     var c = { name: "Christoph", id: 4, childs: [u, t] };
 	var me:Me=new Me();
 	me.tree=new Tree({
-	      checkbox: true,
+        options:{
+          checkbox: true,
 	      selectMode: 2,
-	      
+        }
 	});
 	me.panel=new Panel();
 	me.button=new Button();

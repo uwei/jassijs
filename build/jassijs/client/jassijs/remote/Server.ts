@@ -5,7 +5,7 @@ import { FileNode } from "jassijs/remote/FileNode";
 import { classes, JassiError } from "./Classes";
 import { serverservices } from "./Serverservice";
 import { ValidateFunctionParameter, ValidateIsArray, ValidateIsBoolean, ValidateIsString } from "jassijs/remote/Validator";
-
+import { config } from "./Config";
 
 
 
@@ -13,7 +13,7 @@ import { ValidateFunctionParameter, ValidateIsArray, ValidateIsBoolean, Validate
 @$Class("jassijs.remote.Server")
 export class Server extends RemoteObject {
     private static isonline: Promise<boolean> = undefined;
-    static lastTestServersideFileResult = undefined;
+   
     //files found in js.map of modules in the jassijs.json
     public static filesInMap: { [name: string]: { modul: string, id: number } } = undefined;
     constructor() {
@@ -33,19 +33,21 @@ export class Server extends RemoteObject {
         }
         return ret;
     }
-    async fillFilesInMapIfNeeded() {
-        if (Server.filesInMap)
+    private async fillMapModules( ret,serverModules) {
+        var modules=config.modules;
+        if(serverModules===true)
+            modules=config.server?.modules;
+        if(modules===undefined)
             return;
-        var ret = {};
-        for (var mod in jassijs.modules) {
+        for (var mod in modules) {
             if (jassijs?.options?.Server?.filterModulInFilemap) {
                 if (jassijs?.options?.Server?.filterModulInFilemap.indexOf(mod) === -1)
                     continue;
             }
-            if (jassijs.modules[mod].endsWith(".js") || jassijs.modules[mod].indexOf(".js?") > -1) {
-                let mapname = jassijs.modules[mod].split("?")[0] + ".map";
-                if (jassijs.modules[mod].indexOf(".js?") > -1)
-                    mapname = mapname + "?" + jassijs.modules[mod].split("?")[1];
+            if (modules[mod].endsWith(".js") || modules[mod].indexOf(".js?") > -1) {
+                let mapname = modules[mod].split("?")[0] + ".map";
+                if (modules[mod].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + modules[mod].split("?")[1];
                 var code = await $.ajax({ url: mapname, dataType: "text" })
                 var data = JSON.parse(code);
                 var files = data.sources;
@@ -56,19 +58,29 @@ export class Server extends RemoteObject {
                             continue;
                     }
                     if (fname.endsWith)
-                        ret[fname] = {
+                        ret[(serverModules?"$serverside/":"")+ fname] = {
                             id: x,
                             modul: mod
                         };
                 }
             }
         }
+
+    }
+    async fillFilesInMapIfNeeded() {
+        if (Server.filesInMap)
+            return;
+        var ret = {};
+        await this.fillMapModules(ret,false);
+        await this.fillMapModules(ret,true);
         Server.filesInMap = ret;
 
     }
     async addFilesFromMap(root: FileNode) {
         await this.fillFilesInMapIfNeeded();
         for (var fname in Server.filesInMap) {
+            if(fname.startsWith("$serverside"))
+                continue;
             let path = fname.split("/");
             var parent = root;
             for (let p = 0; p < path.length; p++) {
@@ -108,6 +120,7 @@ export class Server extends RemoteObject {
     */
     @ValidateFunctionParameter()
     async dir(@ValidateIsBoolean({ optional: true }) withDate: boolean = false, context: Context = undefined): Promise<FileNode> {
+
         if (!context?.isServer) {
             var ret: FileNode;
             if ((await Server.isOnline(context)) === true)
@@ -119,7 +132,7 @@ export class Server extends RemoteObject {
             let r = this._convertFileNode(ret);
             return r;
         } else {
-            var rett = (await serverservices.filesystem).dir("", withDate);
+            var rett = await (await serverservices.filesystem).dir("", withDate);
             return rett;
             // return ["jassijs/base/ChromeDebugger.ts"];
         }
@@ -139,7 +152,7 @@ export class Server extends RemoteObject {
      * @returns {string} content of the file
      */
     @ValidateFunctionParameter()
-    async loadFiles(@ValidateIsArray({ type: tp=>String }) fileNames: string[], context: Context = undefined): Promise<{ [id: string]: string }> {
+    async loadFiles(@ValidateIsArray({ type: tp => String }) fileNames: string[], context: Context = undefined): Promise<{ [id: string]: string }> {
         if (!context?.isServer) {
             return <{ [id: string]: string }>await this.call(this, this.loadFiles, fileNames, context);
         } else {
@@ -157,16 +170,30 @@ export class Server extends RemoteObject {
         var fromServerdirectory = fileName.startsWith("$serverside/");
         if (!context?.isServer) {
             await this.fillFilesInMapIfNeeded();
-            if (!fromServerdirectory && Server.filesInMap[fileName]) {
-                //perhabs the files ar in localserver?
-                var Filesystem = classes.getClass("jassijs_localserver.Filesystem");
-                if (Filesystem && (await new Filesystem().loadFileEntry(fileName) !== undefined)) {
+            if (Server.filesInMap[fileName]) {
+                var foundOnLocalserver=false;
+                if(config.serverrequire){
+                    var r=<any>await new Promise((resolve)=>{
+                        config.serverrequire(["jassijs/server/NativeAdapter"],(adapter)=>{
+                            resolve(adapter);
+                        });
+                    });
+                    var fname="./client/"+fileName;
+                    if(fromServerdirectory)
+                        fname=fileName.replace("$serverside/","./");
+                    if(r.exists&&await r.exists(fname)){
+                        foundOnLocalserver=true;
+                    }
+                }
+                if(foundOnLocalserver){
                     //use ajax
-                } else {
+                } else { 
                     var found = Server.filesInMap[fileName];
-                    let mapname = jassijs.modules[found.modul].split("?")[0] + ".map";
-                    if (jassijs.modules[found.modul].indexOf(".js?") > -1)
-                        mapname = mapname + "?" + jassijs.modules[found.modul].split("?")[1];
+                    let mapname = config.modules[found.modul].split("?")[0] + ".map";
+                    if(fromServerdirectory)
+                        mapname = config.server.modules[found.modul].split("?")[0] + ".map";
+                    if (config.modules[found.modul].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + config.modules[found.modul].split("?")[1];
                     var code = await this.loadFile(mapname, context);
                     var data = JSON.parse(code).sourcesContent[found.id];
                     return data;
@@ -193,7 +220,7 @@ export class Server extends RemoteObject {
     * @param [{string}] contents
     */
     @ValidateFunctionParameter()
-    async saveFiles(@ValidateIsArray({ type: type=>String }) fileNames: string[], @ValidateIsArray({ type:  type=>String}) contents: string[], context: Context = undefined): Promise<string> {
+    async saveFiles(@ValidateIsArray({ type: type => String }) fileNames: string[], @ValidateIsArray({ type: type => String }) contents: string[], context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
             var allfileNames: string[] = [];
             var allcontents: string[] = [];
@@ -203,15 +230,15 @@ export class Server extends RemoteObject {
 
                 var fileName = fileNames[f];
                 var content = contents[f];
-                if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
+                if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".tsx") ||fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
 
-                   //var tss = await import("jassijs_editor/util/Typescript");
-                   var tss=<any> await classes.loadClass("jassijs_editor.util.Typescript");
-                   var rets = await tss.instance.transpile(fileName, content);
-                   
-                   allfileNames = allfileNames.concat(rets.fileNames);
+                    //var tss = await import("jassijs_editor/util/Typescript");
+                    var tss = <any>await classes.loadClass("jassijs_editor.util.Typescript");
+                    var rets = await tss.instance.transpile(fileName, content);
+
+                    allfileNames = allfileNames.concat(rets.fileNames);
                     allcontents = allcontents.concat(rets.contents);
-                    alltsfiles.push(fileName); 
+                    alltsfiles.push(fileName);
                 } else {
                     allfileNames.push(fileName);
                     allcontents.push(content);
@@ -277,9 +304,10 @@ export class Server extends RemoteObject {
             }
             //@ts-ignore
             var test = (await import(name.replaceAll("$serverside/", ""))).test;
+            var ret;
             if (test)
-                Server.lastTestServersideFileResult = await test();
-            return Server.lastTestServersideFileResult;
+                ret = await test();
+            return ret;
 
         }
     }
@@ -303,7 +331,7 @@ export class Server extends RemoteObject {
     * deletes a file or directory
     **/
     @ValidateFunctionParameter()
-    async delete(@ValidateIsString()  name: string, context: Context = undefined): Promise<string> {
+    async delete(@ValidateIsString() name: string, context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
             var ret = await this.call(this, this.delete, name, context);
             //@ts-ignore
@@ -318,7 +346,7 @@ export class Server extends RemoteObject {
     /**
      * renames a file or directory
      **/
-     @ValidateFunctionParameter()
+    @ValidateFunctionParameter()
     async rename(@ValidateIsString() oldname: string, @ValidateIsString() newname: string, context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
             var ret = await this.call(this, this.rename, oldname, newname, context);
@@ -337,6 +365,7 @@ export class Server extends RemoteObject {
     public static async isOnline(context: Context = undefined): Promise<boolean> {
         if (!context?.isServer) {
             //no serviceworker no serverside implementation
+            //@ts-ignore
             if (navigator.serviceWorker.controller === null)
                 return false;
             try {
@@ -355,7 +384,7 @@ export class Server extends RemoteObject {
     /**
      * creates a file 
      **/
-     @ValidateFunctionParameter()
+    @ValidateFunctionParameter()
     async createFile(@ValidateIsString() filename: string, content: string, context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
             var ret = await this.call(this, this.createFile, filename, content, context);
@@ -386,16 +415,20 @@ export class Server extends RemoteObject {
         }
     }
     @ValidateFunctionParameter()
-    async createModule(@ValidateIsString() modulname: string, context: Context = undefined): Promise<string> {
+    async createModule(@ValidateIsString() modulename: string, context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
-            var ret = await this.call(this, this.createModule, modulname, context);
+            var ret = await this.call(this, this.createModule, modulename, context);
+            if (!config.modules[modulename]){
+                //config.jsonData.modules[modulename] = modulename;
+                await config.reload();
+            }
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
         } else {
             if (!context.request.user.isAdmin)
                 throw new JassiError("only admins can createFolder");
-            return (await serverservices.filesystem).createModule(modulname);
+            return (await serverservices.filesystem).createModule(modulename);
         }
     }
     static async mytest(context: Context = undefined) {

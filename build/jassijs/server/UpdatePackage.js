@@ -15,9 +15,9 @@ function updatePackage() {
     if (!fs.existsSync(client_path + "/js")) {
         fs.mkdirSync(client_path + "/js");
     }
-    if (!fs.existsSync("./jassijs.json")) {
-        fs.copyFileSync(module_path.replace("/client", "") + "/jassijs.json", "./jassijs.json");
-    }
+    // if(!fs.existsSync("./jassijs.json")){
+    //     fs.copyFileSync(module_path.replace("/client","")+"/jassijs.json", "./jassijs.json");
+    //  }
     if (!fs.existsSync("./tsconfig.json")) {
         fs.copyFileSync(module_path.replace("/client", "") + "/tsconfig.json", "./tsconfig.json");
     }

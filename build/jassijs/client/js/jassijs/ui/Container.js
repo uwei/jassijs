@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, Registry_1, Component_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_1, Component_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Container = void 0;
@@ -22,13 +22,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
             super(properties);
             this._components = [];
         }
-        config(config) {
-            if (config.children) {
-                this.removeAll(false);
-                for (var x = 0; x < config.children.length; x++) {
-                    this.add(config.children[x]);
+        config(config, forceRender = false) {
+            if (config === null || config === void 0 ? void 0 : config.children) {
+                if ((config === null || config === void 0 ? void 0 : config.children.length) > 0 && (config === null || config === void 0 ? void 0 : config.children[0]) instanceof Component_1.Component) {
+                    this.removeAll(false);
+                    for (var x = 0; x < config.children.length; x++) {
+                        this.add(config.children[x]);
+                    }
+                    delete config.children;
                 }
-                delete config.children;
             }
             super.config(config);
             return this;
@@ -40,7 +42,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
        */
         init(dom, properties = undefined) {
             super.init(dom, properties);
-            this.domWrapper.classList.add("jcontainer");
+            if (this.domWrapper.classList)
+                this.domWrapper.classList.add("jcontainer");
         }
         /**
          * adds a component to the container
@@ -82,7 +85,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
                 this.designDummies.push(component);
             else
                 this._components.splice(index, 0, component);
-            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+            this.dom.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+            //before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
         }
         /**
        * remove the component
@@ -96,9 +100,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
             component._parent = undefined;
             if (component.domWrapper !== undefined)
                 component.domWrapper._parent = undefined;
-            var pos = this._components.indexOf(component);
-            if (pos >= 0)
-                this._components.splice(pos, 1);
+            if (this._components) {
+                var pos = this._components.indexOf(component);
+                if (pos >= 0)
+                    this._components.splice(pos, 1);
+            }
             let posd = (_a = this.designDummies) === null || _a === void 0 ? void 0 : _a.indexOf(component);
             if (posd >= 0)
                 this.designDummies.splice(posd, 1);
@@ -130,6 +136,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
     };
     Container = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.Container"),
+        (0, Property_1.$Property)({ name: "children", type: "jassijs.ui.Component" }),
         __metadata("design:paramtypes", [Object])
     ], Container);
     exports.Container = Container;

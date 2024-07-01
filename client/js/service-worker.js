@@ -1,4 +1,4 @@
-var RUNTIME = 'runtime58';
+var RUNTIME = 'runtime59';
 var nextid = 0;
 var tempFiles = {};
 // A list of local resources we always want to be cached.
@@ -188,6 +188,11 @@ async function handleEvent(event) {
             console.log("wait for login");
         }
         return res;
+    }
+    if (event.request.url.endsWith("/tsWorker.js")) {
+        while (tempFiles[event.request.url] === undefined) {
+            await new Promise((res) => setTimeout(() => res(), 100)); //wait until file is placed
+        }
     }
     //let cache = await caches.open(RUNTIME)
     var filename = event.request.url;

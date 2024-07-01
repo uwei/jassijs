@@ -117,10 +117,55 @@ declare module "demo/EmptyDialog" {
     export function test(): unknown;
 }
 declare module "demo/hallo" {
+    interface MyCompProp {
+        mycolor?: string;
+        mytext?: string;
+    }
+    export function MyComp(props: MyCompProp): any;
     export function test(): any;
 }
 declare module "demo/hallo2" {
     export function test(): any;
+}
+declare module "demo/hallo3" {
+    import { Component } from "jassijs/ui/Component";
+    import { State } from "jassijs/ui/State";
+    interface Prop {
+        mytext?: string;
+        mycolor?: State | any;
+    }
+    class MyComp extends Component<Prop> {
+        mycolor: State<string>;
+        mytext: State<string>;
+        makeGreen(): void;
+        constructor(p: Prop);
+        render(): any;
+    }
+    export function test(): MyComp;
+}
+declare module "demo/hallo4" {
+    import { Component } from "jassijs/ui/Component";
+    interface Prop {
+        mytext?: string;
+        mycolor?: string;
+    }
+    class MyComp extends Component<Prop> {
+        constructor(p: Prop);
+        render(): any;
+    }
+    export function test(): MyComp;
+}
+declare module "demo/hallo5" {
+    import { Component } from "jassijs/ui/Component";
+    interface Prop {
+        mytext?: string;
+        mycolor?: string;
+    }
+    class MyComp extends Component<Prop> {
+        constructor(p: Prop);
+        render(): any;
+    }
+    export function test(): MyComp;
 }
 declare module "demo/LargeReport" {
     export function test(): {
@@ -236,6 +281,9 @@ declare module "demo/Testdatatable3" {
 }
 declare module "demo/TestImage" {
     export function test(): unknown;
+}
+declare module "demo/TestJSX" {
+    export function test(): any;
 }
 declare module "demo/TestList" {
     export function test(): unknown;

@@ -12,16 +12,21 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Textarea = void 0;
     let Textarea = class Textarea extends Textbox_1.Textbox {
-        constructor() {
-            super();
-            super.init('<textarea  />');
+        constructor(props = {}) {
+            super(props);
+        }
+        render() {
+            var _this = this;
+            return React.createElement("textarea", { className: "Textarea" });
+        }
+        componentDidMount() {
         }
     };
     Textarea = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
         (0, Registry_1.$Class)("jassijs.ui.Textarea"),
         (0, Property_1.$Property)({ name: "new", type: "string" }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], Textarea);
     exports.Textarea = Textarea;
 });

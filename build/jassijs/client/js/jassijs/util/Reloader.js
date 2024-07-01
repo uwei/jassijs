@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Notify"], function (require, exports, Registry_1, Registry_2, Notify_1) {
+define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry", "jassijs/remote/Registry"], function (require, exports, Config_1, Registry_1, Registry_2) {
     "use strict";
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -38,7 +38,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                     for (var x = 0; x < len; x++) {
                         var file = h.files[x];
                         new Reloader_1().reloadJS(file);
-                        (0, Notify_1.notify)(file + " reloaded", "info", { position: "bottom right" });
+                        // notify(file + " reloaded", "info", { position: "bottom right" });
                     }
                     window.setTimeout(f, 100000);
                 });
@@ -71,13 +71,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
         async reloadJS(fileName) {
             await this.reloadJSAll([fileName]);
         }
-        async reloadJSAll(fileNames) {
+        async reloadJSAll(fileNames, afterUnload = undefined, useServerRequire = false) {
             //classname->file
             var files = {};
             let allModules = {};
             var allfiles = [];
             for (let ff = 0; ff < fileNames.length; ff++) {
                 var fileName = fileNames[ff];
+                fileName = fileName.replace("$serverside/", "");
                 var fileNameBlank = fileName;
                 if (fileName.toLocaleLowerCase().endsWith("css")) {
                     /*var node=document.getElementById("-->"+fileName);
@@ -87,7 +88,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                     jassijs.myRequire(fileName);
                     continue;
                 }
-                if (fileName.toLocaleLowerCase().endsWith("json")) {
+                if (fileName.toLocaleLowerCase().endsWith("json") || fileName.toLocaleLowerCase().endsWith("html")) {
                     continue;
                 }
                 if (fileNameBlank.endsWith(".js"))
@@ -153,9 +154,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                 }
                 //save all modules
             }
+            var myrequire;
+            //@ts-ignore
+            if (require.defined("jassijs/server/Installserver") || useServerRequire) {
+                myrequire = Config_1.config.serverrequire;
+            }
+            else {
+                myrequire = Config_1.config.clientrequire;
+            }
             await new Promise((resolve, reject) => {
                 //@ts-ignore
-                require(allfiles, function (...ret) {
+                myrequire(allfiles, function (...ret) {
                     for (var rx = 0; rx < ret.length; rx++) {
                         allModules[allfiles[rx]] = ret[rx];
                     }
@@ -165,39 +174,19 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                 });
             });
             for (let x = 0; x < allfiles.length; x++) {
-                requirejs.undef(allfiles[x]);
+                myrequire.undef(allfiles[x]);
             }
-            //undefined all files
-            /*  for (var key in files) {
-                  requirejs.undef(files[key]);
-              }*/
-            // requirejs.undef(fileNameBlank);
-            /*  var hasloaded = {};
-              var doclass = async function (fam) {
-                  for (var key in fam) {
-                      var name = fam[key].name;
-                      var file = files[key];
-                      //console.log("reload "+key+"->"+file);
-                      var next = fam[key];
-                      var key = key;
-                      await new Promise((resolve, reject) => {
-                          require([file], function (ret) {
-                              _this.migrateModul(allModules, file, ret);
-                              resolve(undefined);
-                          });
-                      });
-                      await doclass(next);
-                  }
-              }
-              doclass(family);*/
+            if (afterUnload !== undefined)
+                await afterUnload();
             var _this = this;
             // console.log("reload " + JSON.stringify(fileNameBlank));
             await new Promise((resolve, reject) => {
                 //@ts-ignore
-                require(allfiles, function (...ret) {
+                myrequire(allfiles, function (...ret) {
                     async function run() {
                         for (let f = 0; f < allfiles.length; f++) {
-                            _this.migrateModul(allModules, allfiles[f], ret[f]);
+                            if (ret && !ret[x].doNotReloadModule)
+                                _this.migrateModul(allModules, allfiles[f], ret[f]);
                         }
                         for (let i = 0; i < _this.listener.length; i++) {
                             await _this.listener[i](allfiles);
@@ -218,6 +207,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
             if (modul === undefined)
                 return;
             var old = allModules[file];
+            if (old === modul) {
+                console.log("migrate Modul " + file + " not work");
+                return;
+            }
             this.migrateClasses(file, old, modul);
             //now migrate loaded modules
             modul.__oldModul = old;

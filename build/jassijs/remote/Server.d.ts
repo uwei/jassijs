@@ -2,7 +2,6 @@ import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { FileNode } from "jassijs/remote/FileNode";
 export declare class Server extends RemoteObject {
     private static isonline;
-    static lastTestServersideFileResult: any;
     static filesInMap: {
         [name: string]: {
             modul: string;
@@ -11,6 +10,7 @@ export declare class Server extends RemoteObject {
     };
     constructor();
     private _convertFileNode;
+    private fillMapModules;
     fillFilesInMapIfNeeded(): Promise<void>;
     addFilesFromMap(root: FileNode): Promise<void>;
     /**
@@ -76,6 +76,6 @@ export declare class Server extends RemoteObject {
     * creates a file
     **/
     createFolder(foldername: string, context?: Context): Promise<string>;
-    createModule(modulname: string, context?: Context): Promise<string>;
+    createModule(modulename: string, context?: Context): Promise<string>;
     static mytest(context?: Context): Promise<any>;
 }

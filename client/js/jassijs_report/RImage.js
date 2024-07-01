@@ -24,9 +24,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             super(properties);
             this.reporttype = "image";
             this._image = "";
-            this.init('<img class="RImage"></img>');
             this.domWrapper.classList.remove("jcontainer");
             delete this._components;
+        }
+        render() {
+            return React.createElement("img", { className: "RImage" });
         }
         /**
          * adds a component to the container before an other component

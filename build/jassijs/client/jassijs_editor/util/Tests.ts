@@ -23,13 +23,13 @@ class MyContainer extends BoxPanel {
         if (this.failedtests === 0) {
 
         }
-        this.statustext.css={
+        this.statustext.style={
             color: (this.failedtests === 0 ? "green" : "red")
         };
         this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed."
     }
 }
-@$ActionProvider("jassijs_editor.remote.FileNode")
+@$ActionProvider("jassijs.remote.FileNode")
 @$Class("jassijs_editor.ui.TestAction")
 export class TestAction {
     @$Action({
@@ -94,8 +94,8 @@ export class TestAction {
                                 newerrorpanel.addError({
                                     error: err
                                 });
-                                newerrorpanel.css={
-                                    background_color: "red"
+                                newerrorpanel.style={
+                                    backgroundColor: "red"
                                 };
                                 container.add(newerrorpanel);
                                 container.failedtests++;

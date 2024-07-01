@@ -34,7 +34,7 @@ export interface RepeaterProperties extends PanelProperties {
 
 @$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple",editableChildComponents: ["this","design"]})
 @$Class("jassijs.ui.Repeater")
-export class Repeater<T extends RepeaterProperties={}> extends Panel<RepeaterProperties> implements DataComponentProperties,RepeaterProperties{
+export class Repeater<T extends RepeaterProperties=RepeaterProperties> extends Panel<T> implements DataComponentProperties,RepeaterProperties{
     _componentDesigner: any;//ComponentDesigner;
     _autocommit: boolean;
     _createRepeatingComponent;
@@ -68,7 +68,7 @@ export class Repeater<T extends RepeaterProperties={}> extends Panel<RepeaterPro
         this.design.dom.classList.add("designerNoSelectable");
         this.design.dom.classList.add("designerNoResizable");
     }
-    config(config: RepeaterProperties): Repeater {
+    config(config: T): Repeater {
         super.config(config);
         return this;
     }

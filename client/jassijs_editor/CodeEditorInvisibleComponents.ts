@@ -16,13 +16,19 @@ export class CodeEditorInvisibleComponents extends Panel {
     codeeditor;
     constructor(codeeditor) {
         super();
-        super.init('<span class="Panel" style="border:1px solid #ccc;"/>');
+        
         /** 
        * @member {jassijs_editor.CodeEditor} - the parent CodeEditor
        * */
 
         this.codeeditor = codeeditor;
         this.layout();
+    }
+    render(){
+        return <any>React.createElement("span", { className:"Panel",style:{border:"1px solid #ccc"}});
+    }
+    componentDidMount(): void {
+       
     }
     layout() {
         this.update();

@@ -13,9 +13,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
     exports.test = exports.MenuItem = void 0;
     let MenuItem = class MenuItem extends Container_1.Container {
         //_components: Component[];
-        constructor() {
-            super();
-            super.init('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>', { noWrapper: true });
+        constructor(props = {}) {
+            super(Object.assign(props, { noWrapper: true }));
+            //super.init('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>');
             this.dom.classList.add("designerNoResizable");
             this._text = "";
             this._icon = "";
@@ -24,6 +24,13 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
             this.items._parent = this;
             this._components = [this.items]; //neede for getEditableComponents
             delete this.items._isRoot;
+        }
+        render() {
+            return React.createElement("li", Object.assign({}, this.props.domProperties, { style: { whiteSpace: "nowrap" } }),
+                React.createElement("div", null,
+                    React.createElement("span", { className: "menuitemspan" },
+                        React.createElement("img", { style: { display: "none" }, className: "menuitemicon" })),
+                    React.createElement("span", { className: "menuitemtext" }, ".")));
         }
         config(config) {
             super.config(config);
@@ -130,7 +137,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
     MenuItem = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] }),
         (0, Registry_1.$Class)("jassijs.ui.MenuItem"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], MenuItem);
     exports.MenuItem = MenuItem;
     async function test() {

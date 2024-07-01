@@ -20,9 +20,12 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
     let AcePanel = AcePanel_1 = class AcePanel extends CodePanel_1.CodePanel {
         constructor() {
             super();
+        }
+        render() {
+            return React.createElement("div", { className: "CodePanel", style: { height: "500px", width: "500px" } });
+        }
+        componentDidMount() {
             var _this = this;
-            var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
-            super.init(test);
             this.domWrapper.style.display = "";
             this._editor = ace.edit(this._id);
             this.file = "";
@@ -45,7 +48,6 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
             var include = /[a-z.]/i;
             this._addEvents();
             this._addCommands();
-            //editor.$blockScrolling = Infinity;
         }
         _addEvents() {
             var _this = this;

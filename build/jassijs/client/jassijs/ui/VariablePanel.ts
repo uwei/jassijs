@@ -17,7 +17,7 @@ export class VariablePanel extends Panel {
     table: any;//Table is hidden in default
     debugpoints: { [n: number]: boolean };
     [_cache: string]: any;
-    _items: any[]=[];
+    _items: any[] = [];
     constructor() {
         super();
 
@@ -26,25 +26,27 @@ export class VariablePanel extends Panel {
         this.debugpoints = {};
     }
     async createTable() {
-       
+
         var Table = (await import("jassijs/ui/Table")).Table
-        this.table = new Table({
-           
-            dataTreeChildFunction: function (obj) {
-                var ret = [];
-                if (typeof (obj.value) === "string")
-                    return ret;
-                for (var v in obj.value) {
-                    var oval = obj.value[v];
-                    ret.push({
-                        
-                        name: v,
-                        value: oval
-                    });
+        this.table = new Table(
+            {
+                options: {
+                    dataTreeChildFunction: function (obj) {
+                        var ret = [];
+                        if (typeof (obj.value) === "string")
+                            return ret;
+                        for (var v in obj.value) {
+                            var oval = obj.value[v];
+                            ret.push({
+
+                                name: v,
+                                value: oval
+                            });
+                        }
+                        return ret;
+                    }
                 }
-                return ret;
-            }
-        });
+            });
         this.table.width = "calc(100% - 2px)";
         this.table.height = "calc(100% - 2px)";
         super.add(this.table);
@@ -74,9 +76,9 @@ export class VariablePanel extends Panel {
         }
         this.update();
     }
-    removeVariable(name:string){
+    removeVariable(name: string) {
         var values = this.value;
-         for (var x = 0; x < values.length; x++) {
+        for (var x = 0; x < values.length; x++) {
             if (values[x].name === name) {
                 values.splice(x, 1);
                 return;
@@ -109,7 +111,7 @@ export class VariablePanel extends Panel {
         }
         if (!found)
             values.push({ name: name, value: value });
-
+        this._cache[name]=value;
         if (refresh !== false)
             this.update();
 
@@ -124,11 +126,11 @@ export class VariablePanel extends Panel {
             var val = vars[x].value;
             var name = vars[x].name;
             this._cache[name] = val;
-           /* if (name === "me" || name === "this") {
-                for (var key in val) {
-                    this._cache[name + "." + key] = val[key];
-                }
-            }*/
+            /* if (name === "me" || name === "this") {
+                 for (var key in val) {
+                     this._cache[name + "." + key] = val[key];
+                 }
+             }*/
         }
         var _this = this;
         function update(key, val) {
@@ -151,12 +153,12 @@ export class VariablePanel extends Panel {
                     }
                     if (comp === undefined)
                         comp = comp;
-                   /* var complist = comp?._components;
-                    if (complist !== undefined) {
-                        for (var o = 0; o < complist.length; o++) {
-                            update(fname, complist[o]);
-                        }
-                    }*/
+                    /* var complist = comp?._components;
+                     if (complist !== undefined) {
+                         for (var o = 0; o < complist.length; o++) {
+                             update(fname, complist[o]);
+                         }
+                     }*/
                 }
             }
         }
@@ -172,7 +174,7 @@ export class VariablePanel extends Panel {
      **/
     getEditableComponents(component, idFromLabel = undefined) {
         var ret = "";
-        if(component._isNotEditableInDesigner===true)
+        if (component._isNotEditableInDesigner === true)
             return ret;
         if (this.getVariableFromObject(component) !== undefined)
             ret = "#" + ((idFromLabel === true) ? component.domWrapper._id : component._id);
@@ -186,13 +188,13 @@ export class VariablePanel extends Panel {
         }
         return ret;
     }
-    private isTypeOf(value,type):boolean{
-        if(value===undefined||value===null)
+    private isTypeOf(value, type): boolean {
+        if (value === undefined || value === null)
             return false;
-        if(typeof type ==="function"){
+        if (typeof type === "function") {
             return value instanceof type;
-        }else 
-            return(value[type]!==undefined);
+        } else
+            return (value[type] !== undefined);
     }
 
     /**
@@ -208,29 +210,29 @@ export class VariablePanel extends Panel {
         for (var x = 0; x < vars.length; x++) {
             var val = vars[x].value;
             var name = vars[x].name;
-            if (this.isTypeOf(val,type)&&ret.indexOf(name)===-1)
+            if (this.isTypeOf(val, type) && ret.indexOf(name) === -1)
                 ret.push(name);
         }
-      /*  //seach in this
-        vars = this._cache["this"];
-        for (let y in vars) {
-
-            if (this.isTypeOf(vars[y],type))//&&ret.indexOf("this." + y)===-1)
-                ret.push("this." + y);
-        }
-        //seach in me
-        vars = this._cache["me"];
-        if (vars !== undefined) {
-            for (let z in vars) {
-
-                if (this.isTypeOf(vars[z],type)&&ret.indexOf("me." + z)===-1)
-                    ret.push("me." + z);
-            }
-        }*/
+        /*  //seach in this
+          vars = this._cache["this"];
+          for (let y in vars) {
+  
+              if (this.isTypeOf(vars[y],type))//&&ret.indexOf("this." + y)===-1)
+                  ret.push("this." + y);
+          }
+          //seach in me
+          vars = this._cache["me"];
+          if (vars !== undefined) {
+              for (let z in vars) {
+  
+                  if (this.isTypeOf(vars[z],type)&&ret.indexOf("me." + z)===-1)
+                      ret.push("me." + z);
+              }
+          }*/
         //search in cache (published by updateCache)
-        for(let key in this._cache ){
-            if(this.isTypeOf(this._cache[key] ,type) &&  ret.indexOf(key)===-1)
-             ret.push(key);
+        for (let key in this._cache) {
+            if (this.isTypeOf(this._cache[key], type) && ret.indexOf(key) === -1)
+                ret.push(key);
         }
         return ret;
 
@@ -369,7 +371,7 @@ export class VariablePanel extends Panel {
     destroy() {
         this.clear();
         this.debugpoints = [];
-        if(this.table)
+        if (this.table)
             this.table.items = [];
         super.destroy();
     }

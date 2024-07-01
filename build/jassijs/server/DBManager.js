@@ -11,7 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var DBManager_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBManager = void 0;
-//@ts-ignore
+//synchronize-server-client 
+//@ts-ignore  
 const typeorm_1 = require("typeorm");
 const Classes_1 = require("jassijs/remote/Classes");
 const Registry_1 = require("jassijs/remote/Registry");
@@ -72,7 +73,7 @@ let DBManager = DBManager_1 = class DBManager {
             // ],
             // "subscribers": [
             //    "src/subscriber/**/*.ts"
-            // ]
+            // ] 
         };
         return opt;
     }
@@ -104,6 +105,7 @@ let DBManager = DBManager_1 = class DBManager {
             }
             catch (err) {
                 console.log("DB corrupt - revert the last change");
+                console.error(err1);
                 console.error(err);
                 _instance = undefined;
                 _initrunning = undefined;

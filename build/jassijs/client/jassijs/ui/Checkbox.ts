@@ -1,9 +1,9 @@
 import { $Class } from "jassijs/remote/Registry";
-import { ComponentConfig, $UIComponent } from "jassijs/ui/Component";
+import { ComponentProperties, $UIComponent } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
-import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 
-export interface CheckboxConfig extends DataComponentConfig {
+export interface CheckboxProperties extends DataComponentProperties {
     /**
   * register an event if the button is clicked
   * @param {function} handler - the function that is called on change
@@ -22,18 +22,31 @@ export interface CheckboxConfig extends DataComponentConfig {
 
 @$UIComponent({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" })
 @$Class("jassijs.ui.Checkbox")
-export class Checkbox extends DataComponent {
+export class Checkbox<T extends CheckboxProperties={}> extends DataComponent<CheckboxProperties> {
     checkbox: HTMLInputElement;
     /* get dom(){
          return this.dom;
      }*/
-    constructor() {
-        super();
-        super.init('<div><input type="checkbox"><span class="checkboxtext" style="width:100%"></span></div>');
+    constructor(properties:CheckboxProperties={}) {
+        super(properties);
+        //super.init('<div><input type="checkbox"><span class="checkboxtext" style="width:100%"></span></div>');
         this.checkbox = <HTMLInputElement>this.dom.firstChild;
     }
-    config(config: CheckboxConfig): Checkbox {
-        super.config(<ComponentConfig>config);
+    render(){
+        return React.createElement("div",{},
+            React.createElement("input",{
+                type:"checkbox",
+
+            },
+                React.createElement("span",{
+                    className:"checkboxtext",
+                    style:{
+                        width:"100%"
+                    }
+                })));
+    }
+    config(config: CheckboxProperties): Checkbox {
+        super.config(<ComponentProperties>config);
         return this;
     }
     @$Property({ default: "function(event){\n\t\n}" })

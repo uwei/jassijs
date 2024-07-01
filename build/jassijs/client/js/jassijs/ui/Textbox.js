@@ -12,20 +12,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textbox = void 0;
     let Textbox = class Textbox extends DataComponent_1.DataComponent {
-        constructor(color = undefined) {
-            super();
+        constructor(props = undefined) {
+            super(props);
             this._value = "";
             this._isFocused = false;
-            super.init('<input type="text" />');
             var _this = this;
-            this.dom.style.color = color;
             this.onblur((e) => _this.blurcalled(e));
             this.onfocus((e) => _this.focuscalled(e));
             // this.converter = undefined;
         }
-        config(config) {
-            super.config(config);
-            return this;
+        render() {
+            return React.createElement("input", { type: "text" });
         }
         get dom() {
             return super.dom;
@@ -191,11 +188,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         __metadata("design:paramtypes", [DefaultConverter_1.DefaultConverter])
     ], Textbox.prototype, "converter", null);
     __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], Textbox.prototype, "readOnly", null);
-    __decorate([
         (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
@@ -232,7 +224,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Textbox = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
         (0, Registry_1.$Class)("jassijs.ui.Textbox"),
-        (0, Property_1.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Textbox);
     exports.Textbox = Textbox;

@@ -14,7 +14,9 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
     class Canavas extends Component_1.Component {
         constructor() {
             super();
-            super.init('<canvas type="pdfviewer"></canvas>');
+        }
+        render() {
+            return React.createElement("canvas", { type: "pdfviewer" });
         }
     }
     let PDFViewer = class PDFViewer extends Panel_1.Panel {

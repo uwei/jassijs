@@ -1,198 +1,33 @@
-define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel"], function (require, exports, Component_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/State", "jassijs/ui/Component", "jassijs/ui/Panel"], function (require, exports, State_1, Component_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
-    /*
-    function j() {
+    exports.test = exports.MyComp = void 0;
+    function MyComp(props) {
+        var colorState = (0, State_1.createState)("green");
+        var textState = (0, State_1.createState)("hallo");
+        var calculateState = (props) => {
+            if (props.mycolor)
+                colorState.current = props.mycolor;
+            if (props.mytext)
+                textState.current = props.mytext;
+        };
+        //<Panel {{calculateState}}>
+        // <Panel {...{calculateState}}>
+        return Component_1.React.createElement(Panel_1.Panel, { calculateState: calculateState },
+            Component_1.React.createElement("input", { value: textState.self }),
+            Component_1.React.createElement("input", { value: textState.self }),
+            Component_1.React.createElement("button", { style: { color: colorState.self }, onClick: () => {
+                    //  alert(8);
+                    colorState.current = "blue";
+                    textState.current = "oo";
+                } }, "dfgdfg"));
     }
-    interface Prop {
-        name?: string;
-    }
-    function createDummy(): HTMLElement {
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-        function drag(ev) {
-            var child: HTMLElement=ev.target;
-            ev.dataTransfer.setDragImage(child.nextSibling,20,20);
-            ev.dataTransfer.setData("text",ev.target.id);
-        }
-        function drop(ev) {
-            ev.preventDefault();
-            var data=ev.dataTransfer.getData("text");
-            ev.target.appendChild(document.getElementById(data));
-        }
-        function keydown(ev) {
-            console.log(ev);
-        }
-        var ret: HTMLComponent=<span className="designdummy" draggable="true" onDragStart={drag} onKeyDown={keydown} style={{
-            verticalAlign: "text-top",display: "inline-block",
-            minWidth: "8px",minHeight: "5px",backgroundColor: "red"
-        }}>
-        </span> as any;
-        //ret.dom.removeEventListener("keydown", keydown);
-        //    ret.dom.addEventListener("keydown", (ev)=>keydown(ev));
-        ret.dom.classList.remove("jcomponent");
-        return ret;
-    }
-    function correctdummy(node: HTMLElement) {
-        for(var x=0;x<node.childNodes.length;x++) {
-            var el=node.childNodes[x] as HTMLElement;
-            if(x%2===0&&!el.classList?.contains("designdummy")) {
-                el.parentNode.insertBefore(createDummy().dom,el);
-            }
-            if(x%2===1&&el.classList?.contains("designdummy")) {
-                el.remove();
-                x=x-1;
-            }
-            if(!el.classList?.contains("designdummy")) {
-                correctdummy(el);
-            }
-        }
-        if(node.childNodes.length===0||(node.childNodes[node.childNodes.length-1] as HTMLElement).classList?.contains("dummy")) {
-            if(node.append!==undefined)
-                node.append(createDummy());
-        }
-    }
-    function keydown(ev) {
-        console.log(ev);
-        ev.preventDefault();
-    }
-    interface Prop {
-        text?: string;
-    }*/
-    var x = 1;
-    /*
-    class MyComp extends Component<Prop> {
-        render() {
-            var _this=this;
-            var ret=<div>
-                {this.props.text}
-                <button onClick={() => {
-                    _this.config({ text: "neu"+x++ });
-                }}>Click
-                </button>
-                Haello
-                <span>kkkk</span>
-            </div>;
-            return ret;
-        }
-    }*/
+    exports.MyComp = MyComp;
     function test() {
-        /*var ret=<Panel height="153">
-            <button width="202" contentEditable="false" style={{ color: "red" }} height="42">hall</button>
-            <Button text="sdfsdfsdf"></Button>
-            dddd
-        </Panel>;
-       */
-        /*  def
-             <Button></Button>
-             <br />
-     
-             <Textbox value={"AA"}></Textbox>
-             <Textbox value="fffrr3"></Textbox>
-     
-             <Panel height={400} width={295}>
-                 <Button></Button>
-                 <Textbox value="fffrr3" width={90}></Textbox>
-             </Panel>*/
-        /*
-       var bt=new Button();
-       bt.onclick(()=>ret.tag="u");
-       bt.text="Hallo"
-       var ret= new HTMLComponent();
-       ret.add(bt);
-       ret.add(new TextComponent({text:"Hallo" }))
-       return ret;
-       */
-        var ret = React.createElement(Panel_1.Panel, { height: 100 },
-            "sddsf",
-            React.createElement("button", { style: { color: "red" } }, "dfgdfg"),
-            "dfg");
-        /*
-          var ret=<span text="sss" height={15}>
-          <button style={{ color: "blue" }}>Hallo2</button>
-          Halo
-              <u>unter
-                  <button>Hall1</button>
-      
-                  ter
-              </u>
-              test
-              <span>das
-                  <b>
-                      fett
-                  </b>ist e
-                  <u>unter
-      
-                      
-      
-      
-                      ter
-      
-                  </u>in
-      
-      
-                  <Panel>
-      
-                      <button>Hallo2
-                      </button>
-                  </Panel>
-                  Te
-      
-                  st
-                  <br />
-                  <b>fe
-      
-                      tts
-      
-                  </b>
-              </span>
-              <Button text="Hallo" domProperties={{ style: { color: "red" },onClick: () => alert(8) }}></Button>s
-              <Button text="Hallo"></Button>
-              a
-              <br />
-      
-      
-              <Button></Button>
-      
-      
-              df
-      
-      
-          </span>;*/
-        /*<Panel>xyzdas
-    
-    
-    
-            istein
-    
-            test
-            <Panel height={100}>Hallo
-            </Panel>
-            bcdefg
-    
-    
-            Hallo</Panel>;*/
-        /*<div>v
-          sdfsdf
-              <div style={{color:"blue"}}>
-                  sdfsdfsdf
-              </div>sdfs
-              <br />
-              d
-              <br />
-      
-      
-      
-              ssss
-              <Table></Table>
-      
-          </div>;*/
-        // var ret= <Button text="Hallo" ></Button>
-        //
-        //<MyComp text="sdfsdfddsdf"></MyComp>;
+        // calculateState
+        var ret = Component_1.React.createElement(MyComp, { mycolor: "yellow", mytext: "Top" });
         var comp = (0, Component_1.createComponent)(ret);
+        comp.config({ mycolor: "red" });
         return comp;
     }
     exports.test = test;

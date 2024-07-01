@@ -18,12 +18,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         constructor(properties = {}) {
             super(properties);
             //super.init('<div><input type="checkbox"><span class="checkboxtext" style="width:100%"></span></div>');
+        }
+        componentDidMount() {
             this.checkbox = this.dom.firstChild;
         }
         render() {
-            return React.createElement("div", {}, React.createElement("input", {
-                type: "checkbox",
-            }, React.createElement("span", {
+            //this.checkbox={current:undefined}
+            return React.createElement("div", {}, React.createElement("input", Object.assign(Object.assign({}, this.props.domProperties), { type: "checkbox" }), React.createElement("span", {
                 className: "checkboxtext",
                 style: {
                     width: "100%"

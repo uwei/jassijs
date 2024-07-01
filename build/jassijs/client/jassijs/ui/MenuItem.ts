@@ -4,9 +4,9 @@ import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Menu } from "jassijs/ui/Menu";
 import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
-import { Container, ContainerConfig } from "jassijs/ui/Container";
+import { Container, ContainerProperties } from "jassijs/ui/Container";
 
-export interface MenuItemConfig extends ContainerConfig {
+export interface MenuItemConfig extends ContainerProperties {
 
     onclick?(handler);
     /**
@@ -20,7 +20,7 @@ export interface MenuItemConfig extends ContainerConfig {
 }
 @$UIComponent({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] })
 @$Class("jassijs.ui.MenuItem")
-export class MenuItem extends Container implements ContainerConfig {
+export class MenuItem extends Container implements ContainerProperties {
     /* get dom(){
          return this.dom;
      }*/

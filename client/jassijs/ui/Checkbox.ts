@@ -4,6 +4,7 @@ import { Property, $Property } from "jassijs/ui/Property";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 
 export interface CheckboxProperties extends DataComponentProperties {
+    domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
     /**
   * register an event if the button is clicked
   * @param {function} handler - the function that is called on change
@@ -22,36 +23,43 @@ export interface CheckboxProperties extends DataComponentProperties {
 
 @$UIComponent({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" })
 @$Class("jassijs.ui.Checkbox")
-export class Checkbox<T extends CheckboxProperties={}> extends DataComponent<CheckboxProperties> {
-    checkbox: HTMLInputElement;
+export class Checkbox<T extends CheckboxProperties = CheckboxProperties> extends DataComponent<T> implements CheckboxProperties {
+
+    private checkbox: HTMLInputElement;
     /* get dom(){
          return this.dom;
      }*/
-    constructor(properties:CheckboxProperties={}) {
+    constructor(properties: CheckboxProperties = {}) {
         super(properties);
         //super.init('<div><input type="checkbox"><span class="checkboxtext" style="width:100%"></span></div>');
+
+    }
+    componentDidMount() {
         this.checkbox = <HTMLInputElement>this.dom.firstChild;
     }
-    render(){
-        return React.createElement("div",{},
-            React.createElement("input",{
-                type:"checkbox",
+    render() {
+        //this.checkbox={current:undefined}
+        return React.createElement("div", {},
+            React.createElement("input", {
+                ...this.props.domProperties,
+                type: "checkbox",
 
             },
-                React.createElement("span",{
-                    className:"checkboxtext",
-                    style:{
-                        width:"100%"
+                React.createElement("span", {
+                    className: "checkboxtext",
+                    style: {
+                        width: "100%"
                     }
                 })));
     }
-    config(config: CheckboxProperties): Checkbox {
-        super.config(<ComponentProperties>config);
+
+    config(config: T): Checkbox {
+        super.config(config);
         return this;
     }
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler) {
-        this.on("click",function () {
+        this.on("click", function () {
             handler();
         });
     }
@@ -61,7 +69,7 @@ export class Checkbox<T extends CheckboxProperties={}> extends DataComponent<Che
         if (value === "false")
             value = false;
 
-        this.checkbox.checked= <boolean>value;
+        this.checkbox.checked = <boolean>value;
     }
     @$Property({ type: "boolean" })
     get value() {
@@ -69,7 +77,7 @@ export class Checkbox<T extends CheckboxProperties={}> extends DataComponent<Che
     }
 
     set text(value: string) { //the Code
-        this.domWrapper.querySelector(".checkboxtext").innerHTML=value===undefined?"":value;
+        this.domWrapper.querySelector(".checkboxtext").innerHTML = value === undefined ? "" : value;
     }
     @$Property()
     get text(): string {

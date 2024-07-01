@@ -184,7 +184,7 @@ define(["require", "exports", "./RegistryIndexer", "jassijs/remote/Registry", ".
                 //if (!await exists(newpath + "/remote"))
                 //    await myfs.mkdir(newpath + "/remote", { recursive: true });
                 if (!await (0, NativeAdapter_1.exists)(newpath + "/modul.ts")) {
-                    await this.saveFiles([modulename + "/modul.js", "js/" + modulename + "/modul.js"], [
+                    await this.saveFiles([modulename + "/modul.ts", "js/" + modulename + "/modul.js"], [
                         "export default {}",
                         'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'
                     ]);

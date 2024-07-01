@@ -1,6 +1,5 @@
 
 
-
 /*declare global {
 
     export class ExtensionAction {
@@ -63,7 +62,6 @@ export class Jassi {
     //  public classes:Classes=undefined;
     [key: string]: any;
     base: { [k: string]: any };
-    public modules: { [key: string]: string };
     public options: any;
     isServer: boolean = false;
     cssFiles:{[key:string]:string};
@@ -90,6 +88,7 @@ export class Jassi {
     includeCSSFile(modulkey:string){
         this.myRequire(this.cssFiles[modulkey]);
     }
+
     /**
      * include a global stylesheet
      * @id - the given id - important for update
@@ -100,6 +99,7 @@ export class Jassi {
         var style: HTMLElement = document.getElementById(id);
         //@ts-ignore
         if (!document.getElementById(id)) {
+            //@ts-ignore
             style =  <HTMLElement>document.createRange().createContextualFragment('<style id=' + id + '></style>').children[0];
             //@ts-ignore
             document.head.appendChild(style);
@@ -162,6 +162,7 @@ export class Jassi {
                 window.document.head.appendChild(js);
             }
         } else {
+            //@ts-ignore
             if(document.getElementById("-->" + url)!=null){
                 if(event)
                     event();

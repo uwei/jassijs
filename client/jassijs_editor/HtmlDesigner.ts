@@ -528,10 +528,11 @@ export class HtmlDesigner extends ComponentDesigner {
         _this.keydown(e);
     }
     createTextComponent(text, par, before): Component {
-        var comp2 = new TextComponent();
+/*        var comp2 = new TextComponent();
         var newone = document.createTextNode(text);
-
-        comp2.init(<any>newone, { noWrapper: true });
+        comp2.init(<any>newone, { noWrapper: true });*/
+        var comp2 = new TextComponent({noWrapper:true});
+        var newone=comp2.dom;
         return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");;
     }
     protected insertLineBreak(sel: Selection) {
@@ -578,9 +579,11 @@ export class HtmlDesigner extends ComponentDesigner {
             return;
         var sel = document.getSelection();
         if (sel.anchorNode === null) {
-            var nd = document.createTextNode("");
+          /*  var nd = document.createTextNode("");
             var comp2 = new TextComponent();
-            comp2.init(<any>nd, { noWrapper: true });
+            comp2.init(<any>nd, { noWrapper: true });*/
+            var comp2 = new TextComponent({noWrapper:true});
+            var nd=comp2.dom;
             if (this.lastSelectedDummy.pre)
                 var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value._parent, this._propertyEditor.value, true, "text");
             else

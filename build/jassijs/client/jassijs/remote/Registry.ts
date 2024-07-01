@@ -1,8 +1,8 @@
 
+import { config } from "jassijs/remote/Config";
 import "reflect-metadata";
 
-
-
+ 
 export function $Class(longclassname: string): Function {
     return function (pclass) {
         registry.register("$Class", pclass, longclassname);
@@ -55,6 +55,7 @@ class JSONDataEntry {
 */
 export class Registry {
     private _nextID: number;
+
     public jsondata: { [service: string]: { [classname: string]: JSONDataEntry } } = undefined;
     public data: { [service: string]: { [classname: string]: DataEntry } } = {};
     public dataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
@@ -63,7 +64,7 @@ export class Registry {
     _eventHandler: { [service: string]: any[] } = {};
     constructor() {
         this._nextID = 10;
-
+        this.isLoading = this.reload();
     }
     getData(service: string, classname: string = undefined): DataEntry[] {
         var olddata = this.data[service];
@@ -255,16 +256,14 @@ export class Registry {
         this.jsondata = { $Class: {} };
         this.jsondataMembers = {};
         var _this = this;
-
         var modultext = "";
         //@ts-ignore
         if (window?.document === undefined) { //on server
-
-            //@ts-ignore
+  
+            //@ts-ignore 
             var fs = await import('fs');
- 
-            modultext = fs.readFileSync("./jassijs.json", 'utf-8');
-            var modules = JSON.parse(modultext).modules;
+            var Filesystem=await import("jassijs/server/Filesystem");
+            var modules = config.server.modules;
             for (let modul in modules) {
                 try {
 
@@ -291,23 +290,33 @@ export class Registry {
             }
 
         } else { //on client
+           // var config=(await import("./Config")).config;
+         //   this.isServer=config.isServer;
             var all = {};
-            var mod = JSON.parse(await (this.loadText("jassijs.json")));
-            for (let modul in mod.modules) {
-                if (!mod.modules[modul].endsWith(".js") && mod.modules[modul].indexOf(".js?") === -1)
-                    //@ts-ignore
-                    requirejs.undef(modul + "/registry");
+            var modules=config.modules;
+            var myrequire;
+            if(config.isServer){
+            //if(require.defined("jassijs/server/Installserver")){
+                myrequire=<any>config.serverrequire;
+                modules=config.server.modules;
+            }else{
+                myrequire=<any>config.clientrequire;
+            }
+            (<any>this).isServer=config.isServer;//is this needed?
+            for (let modul in modules) {
+                if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
+                    myrequire.undef(modul + "/registry");
                 {
                     var m = modul;
                     all[modul] = new Promise((resolve, reject) => {
                         //@ts-ignore
-                        require([m + "/registry"], function (ret) {
+                        myrequire([m + "/registry"], function (ret) {
                             resolve(ret.default);
                         });
                     });
                 }
             }
-            for (let modul in mod.modules) {
+            for (let modul in modules) {
                 var data = await all[modul];
                 _this.initJSONData(data);
             }
@@ -386,13 +395,13 @@ export class Registry {
      * @param service - the service for which we want informations
      */
     async getJSONData(service: string, classname: string = undefined): Promise<JSONDataEntry[]> {
-        if (this.isLoading)
+       // if (this.isLoading)
             await this.isLoading;
-        if (this.jsondata === undefined) {
+       /* if (this.jsondata === undefined) {
             this.isLoading = this.reload();
             await this.isLoading;
         }
-        this.isLoading = undefined;
+        this.isLoading = undefined;*/
         var ret = [];
         var odata = this.jsondata[service];
         if (odata === undefined)

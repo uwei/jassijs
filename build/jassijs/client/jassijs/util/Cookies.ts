@@ -11,6 +11,9 @@ class C{
     }
     remove(name:string, params=undefined){
 
+    }
+    getJSON(){
+        return "";
     } // removed!
 }
 var Cookies:C=cock;

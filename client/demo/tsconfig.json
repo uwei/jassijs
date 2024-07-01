@@ -16,7 +16,6 @@
     //"checkJs":false,
     "target": "es2017",
     "module": "amd",
-    "jsx": "react",
     "moduleResolution": "node",
     "lib": [
       "es2016", 
@@ -25,7 +24,7 @@
     ],
    
     "skipLibCheck": true,
-
+    "jsx": "react",
     "typeRoots": [".././node_modules/@types",".././node_modules2/typescriptservice"],
     "composite": true,
     "inlineSources": true,

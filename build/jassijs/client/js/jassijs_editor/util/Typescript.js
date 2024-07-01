@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Server_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Server_1, Config_1) {
     "use strict";
     var Typescript_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -38,9 +38,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 };
                 //@ts-ignore
                 var comp = ts.transpileModule(content, opt);
-                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js");
+                var extlen = 3;
+                if (fileName.toLowerCase().endsWith(".tsx"))
+                    extlen = 4;
+                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - extlen) + ".js");
                 ret.contents.push(comp.outputText);
-                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js.map");
+                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - extlen) + ".js.map");
                 ret.contents.push(comp.sourceMapText);
             }
             return ret;
@@ -60,6 +63,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 "baseUrl": "./",
                 "module": monaco.languages.typescript.ModuleKind.AMD,
                 "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
+                "jsx": monaco.languages.typescript.JsxEmit.React,
                 typeRoots: ["./node_modules/@types"],
                 rootDir: "./",
                 "sourceMap": true,
@@ -73,11 +77,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
         //load  d.ts from modulpackage
         async includeModulTypes() {
             var nodeFiles = {};
-            for (var mod in jassijs.modules) {
-                var config = (await new Promise((resolve_1, reject_1) => { require([mod + "/modul"], resolve_1, reject_1); })).default;
-                if (config.types) {
-                    for (var key in config.types) {
-                        var file = config.types[key];
+            for (var mod in Config_1.config.modules) {
+                var config1 = (await new Promise((resolve_1, reject_1) => { require([mod + "/modul"], resolve_1, reject_1); })).default;
+                if (config1.types) {
+                    for (var key in config1.types) {
+                        var file = config1.types[key];
                         nodeFiles[key] = new Server_1.Server().loadFile(file);
                     }
                 }
@@ -89,77 +93,83 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
          * functions which uses the languageservice are blocked until ready
          */
         async initService() {
-            if (Typescript_1._isInited !== undefined)
-                return;
-            Typescript_1._isInited = false;
-            Typescript_1.initMonaco();
-            //@ts-ignore
-            //  import("jassijs/ext/typescript").then(async function(ts1) {
-            Typescript_1.ts = ts;
-            var _this = this;
-            var f = (await new Server_1.Server().dir(true)).resolveChilds();
-            var nodeFiles = await this.includeModulTypes();
-            //Load all files to in cache
-            //node_modules with ajax - so we kann cache 
-            var myfiles = [];
-            for (let x in f) {
-                let fname = f[x].fullpath;
-                let fdat = f[x].date;
-                //include js in jassijs/ext
-                if (fname.startsWith("node_modules"))
-                    continue;
-                if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
-                    if (fname.toLocaleLowerCase().endsWith(".js")) {
-                        monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
-                    }
-                    if (fdat === undefined) {
-                        nodeFiles[fname] = new Server_1.Server().loadFile(fname);
-                    }
-                    else {
-                        nodeFiles[fname] = $.ajax({
-                            url: fname,
-                            beforeSend: function (request) {
-                                request.setRequestHeader("X-Custom-FromCache", fdat);
-                            },
-                            dataType: "text"
-                        });
-                    }
-                    //}
-                }
-            }
-            //load TS sources
-            //wait for each nodefiles
-            var code = {};
-            for (let key in nodeFiles) {
-                code[key] = await nodeFiles[key];
-            }
-            for (let key in nodeFiles) {
-                //monaco
+            try {
+                if (Typescript_1._isInited !== undefined)
+                    return;
+                Typescript_1._isInited = false;
+                Typescript_1.initMonaco();
                 //@ts-ignore
-                //	
-                var type = "typescript";
-                if (key.toLocaleLowerCase().endsWith(".ts")) {
-                    //
-                    if (this.initInIdle) {
-                        var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
-                        //console.log(key);
-                        if (!monaco.editor.getModel(ffile))
-                            monaco.editor.createModel(code[key], "typescript", ffile);
-                        //});
-                    }
-                    else {
-                        monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
+                //  import("jassijs/ext/typescript").then(async function(ts1) {
+                Typescript_1.ts = ts;
+                var _this = this;
+                var f = (await new Server_1.Server().dir(true)).resolveChilds();
+                var nodeFiles = await this.includeModulTypes();
+                //Load all files to in cache
+                //node_modules with ajax - so we kann cache 
+                var myfiles = [];
+                for (let x in f) {
+                    let fname = f[x].fullpath;
+                    let fdat = f[x].date;
+                    //include js in jassijs/ext
+                    if (fname.startsWith("node_modules"))
+                        continue;
+                    if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".tsx") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
+                        if (fname.toLocaleLowerCase().endsWith(".js")) {
+                            monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
+                        }
+                        if (fdat === undefined) {
+                            nodeFiles[fname] = new Server_1.Server().loadFile(fname);
+                        }
+                        else {
+                            nodeFiles[fname] = $.ajax({
+                                url: fname,
+                                beforeSend: function (request) {
+                                    request.setRequestHeader("X-Custom-FromCache", fdat);
+                                },
+                                dataType: "text"
+                            });
+                        }
+                        //}
                     }
                 }
-                if (key.toLocaleLowerCase().endsWith(".json"))
-                    type = "json";
-            }
-            //initialize monaco
-            if (!this.initInIdle)
+                //load TS sources
+                //wait for each nodefiles
+                var code = {};
+                for (let key in nodeFiles) {
+                    code[key] = await nodeFiles[key];
+                }
+                for (let key in nodeFiles) {
+                    //monaco
+                    //@ts-ignore
+                    //	
+                    var type = "typescript";
+                    if (key.toLocaleLowerCase().endsWith(".ts") || key.toLocaleLowerCase().endsWith(".tsx")) {
+                        //
+                        if (this.initInIdle) {
+                            var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
+                            //console.log(key);
+                            if (!monaco.editor.getModel(ffile))
+                                monaco.editor.createModel(code[key], "typescript", ffile);
+                            //});
+                        }
+                        else {
+                            monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
+                        }
+                    }
+                    if (key.toLocaleLowerCase().endsWith(".json"))
+                        type = "json";
+                }
+                //initialize monaco
+                //if (!this.initInIdle)
                 monaco.editor.createModel("var a=1;", "typescript", monaco.Uri.from({ path: "/__mydummy.ts", scheme: 'file' }));
-            this.tsWorker = await (await monaco.languages.typescript.getTypeScriptWorker())();
-            Typescript_1._isInited = true;
-            return true;
+                this.tsWorker = await (await monaco.languages.typescript.getTypeScriptWorker())();
+                Typescript_1._isInited = true;
+                return true;
+            }
+            catch (err) {
+                debugger;
+                throw err;
+            }
         }
         /**
          * unused
@@ -410,6 +420,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
         outDir: "./js",
         allowJs: true,
         moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
+        jsx: monaco.languages.typescript.JsxEmit.React,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
         typeRoots: ["./node_modules/@types"]

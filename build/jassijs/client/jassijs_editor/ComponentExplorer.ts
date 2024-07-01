@@ -1,7 +1,7 @@
 import { $Class } from "jassijs/remote/Registry";
-import {Panel} from "jassijs/ui/Panel";
-import {Tree} from "jassijs/ui/Tree";
-import {ComponentDescriptor} from "jassijs/ui/ComponentDescriptor";
+import { Panel } from "jassijs/ui/Panel";
+import { Tree } from "jassijs/ui/Tree";
+import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import { ContextMenu } from "jassijs/ui/ContextMenu";
 import { Action, Actions } from "jassijs/base/Actions";
 import { Container } from "jassijs/ui/Container";
@@ -15,30 +15,30 @@ import { Component } from "jassijs/ui/Component";
 @$Class("jassijs_editor.ComponentExplorer")
 export class ComponentExplorer extends Panel {
     codeEditor;//:CodeEditor;
-    propertyEditor:PropertyEditor;
-    tree:Tree;
+    propertyEditor: PropertyEditor;
+    tree: Tree;
     //contextMenu:ContextMenu;
     _value;
     /**
     * edit object properties
     */
-    constructor(codeEditor,propertyEditor:PropertyEditor) {
+    constructor(codeEditor, propertyEditor: PropertyEditor) {
         super();
         /** @member {jassijs_editor.CodeEditor} - the parent CodeEditor */
         this.codeEditor = codeEditor;
         this.tree = new Tree();
         this.tree.height = "100%";
-        this.contextMenu=new ContextMenu();
+        this.contextMenu = new ContextMenu();
         this.add(this.contextMenu);
         this.layout();
-        this.propertyEditor=propertyEditor;
+        this.propertyEditor = propertyEditor;
     }
     /**
      * @member {jassijs.ui.Component}  - the rendered object 
      */
     set value(value) {
         this._value = value;
-        this.tree.items =(value===undefined?[]:value);
+        this.tree.items = (value === undefined ? [] : value);
         this.tree.expandAll();
     }
     get value() {
@@ -52,19 +52,35 @@ export class ComponentExplorer extends Panel {
     getComponentName(item) {
         return item;
     }
-    
+
     /**
      * get the child components
      * must be override
      * @param {object} item
      */
     getComponentChilds(item) {
-		if(item===undefined)
-			return [];
-        if (item === this.value&&item._components){
-            var all=[];
-            (<Component[]>item._components).forEach((e)=>{
-                if(!e["designDummyFor"])
+        if (this.codeEditor === undefined)
+            return this.getComponentChildsOld(item);
+        if (item === undefined)
+            return [];
+        var ret = []; 
+        if (item.dom?.childNodes) {
+            for (var x = 0; x < item.dom.childNodes.length; x++) {
+                var nd = item.dom.childNodes[x];
+                var varname = this.codeEditor.getVariableFromObject(nd._this);
+                if (varname)
+                    ret.push(nd._this);
+            }
+        }
+        return ret;
+    }
+    getComponentChildsOld(item) {
+        if (item === undefined)
+            return [];
+        if (item === this.value && item._components) {
+            var all = [];
+            (<Component[]>item._components).forEach((e) => {
+                if (!e["designDummyFor"])
                     all.push(e);
             });
             return all;
@@ -74,7 +90,7 @@ export class ComponentExplorer extends Panel {
         var ret = [];
         for (var name in comps) {
             var comp = comps[name];
-            if(comp===undefined)
+            if (comp === undefined)
                 continue;
             var complist = comp._components;
             if (name !== "this" && this.getComponentName(comp) !== undefined) {
@@ -103,40 +119,40 @@ export class ComponentExplorer extends Panel {
         this.tree.propDisplay = function (item) {
             return _this.getComponentName(item);
         }
-        this.contextMenu.getActions=async function(data:any[]):Promise<Action[]>{
-        	var ret=[];
-        	var parent=<Container> data[0]._parent;
-        	
-        	if(parent!==undefined&&parent._components!==undefined){
-        		var hasDummy=(parent._components[parent._components.length-1]["designDummyFor"]!==undefined?1:0);
-        		if((parent._components.length>1+hasDummy)&&parent._components.indexOf(data[0])!==0){
-	        		var ac:Action={
-	        			call:function(){
-	        				
-	        				_this.propertyEditor.swapComponents(parent._components[parent._components.indexOf(data[0])+-1],data[0]);
-	        				_this.tree.items=_this.tree.items;
-	        				_this.tree.value=data[0];
-	        			},
-	        			name:"move up"
-	        		};
-	        		ret.push(ac)
-	        	}
-	        		if(parent._components.length>1+hasDummy&&
-	        	      parent._components.indexOf(data[0])+hasDummy+1<parent._components.length){
-	        			var ac:Action={
-	        			call:function(){
-	        				_this.propertyEditor.swapComponents(data[0],parent._components[parent._components.indexOf(data[0])+1]);
-	        				_this.tree.items=_this.tree.items;
-	        				_this.tree.value=data[0];
-	        			},
-	        			name:"move down"
-	        		};
-	        		ret.push(ac)
-	        	}
-        	}
-        	return ret;
+        this.contextMenu.getActions = async function (data: any[]): Promise<Action[]> {
+            var ret = [];
+            var parent = <Container>data[0]._parent;
+
+            if (parent !== undefined && parent._components !== undefined) {
+                var hasDummy = (parent._components[parent._components.length - 1]["designDummyFor"] !== undefined ? 1 : 0);
+                if ((parent._components.length > 1 + hasDummy) && parent._components.indexOf(data[0]) !== 0) {
+                    var ac: Action = {
+                        call: function () {
+
+                            _this.propertyEditor.swapComponents(parent._components[parent._components.indexOf(data[0]) + -1], data[0]);
+                            _this.tree.items = _this.tree.items;
+                            _this.tree.value = data[0];
+                        },
+                        name: "move up"
+                    };
+                    ret.push(ac)
+                }
+                if (parent._components.length > 1 + hasDummy &&
+                    parent._components.indexOf(data[0]) + hasDummy + 1 < parent._components.length) {
+                    var ac: Action = {
+                        call: function () {
+                            _this.propertyEditor.swapComponents(data[0], parent._components[parent._components.indexOf(data[0]) + 1]);
+                            _this.tree.items = _this.tree.items;
+                            _this.tree.value = data[0];
+                        },
+                        name: "move down"
+                    };
+                    ret.push(ac)
+                }
+            }
+            return ret;
         }
-        this.tree.contextMenu=this.contextMenu;
+        this.tree.contextMenu = this.contextMenu;
         this.add(this.tree);
     }
     update() {
@@ -148,13 +164,13 @@ export class ComponentExplorer extends Panel {
     onclick(handler) {
         this.tree.addEvent("click", handler);
     }
-    destroy(){
-    	this._value=undefined;
-    	super.destroy();
+    destroy() {
+        this._value = undefined;
+        super.destroy();
     }
 }
 export async function test() {
-    var dlg = new ComponentExplorer(undefined,undefined);
+    var dlg = new ComponentExplorer(undefined, undefined);
     dlg.getComponentName = function (item) {
         return classes.getClassName(item);
     };

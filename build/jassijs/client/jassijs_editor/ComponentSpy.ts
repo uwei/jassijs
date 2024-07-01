@@ -62,7 +62,7 @@ export class ComponentSpy extends Panel {
         var me:Me = this.me = {};
 
         me.IDText = new  ErrorPanel();//HTMLPanel();
-        this.css={overflow: "scroll"};
+        this.style={overflow: "scroll"};
         var _this = this;
         me.boxpanel1 = new BoxPanel();
         me.IDUpdate = new Button();

@@ -26,10 +26,13 @@ export class ROList extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        this.init("<ol></ol>");
+      
 
     }
-
+    render(){
+        return React.createElement("ol", { className: "ROList"});
+    }
+   
     @$Property({ chooseFrom: ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"] })
     set type(value: string) {
         this._type = value;

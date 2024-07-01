@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Registry";
+import registry, { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
@@ -17,16 +17,17 @@ import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import { classes } from "jassijs/remote/Classes";
 import { Container } from "jassijs/ui/Container";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
+
 //import { Parser } from "./util/Parser";
 
 
 
-class ClipboardData {
+export class ClipboardData {
     varNamesToCopy: string[] = [];
     children: { [name: string]: string[] } = {};
     properties: { [name: string]: { [propname: string]: any[] } } = {};
     types: { [name: string]: string } = {};
-    allChilds:string[]=[];
+    allChilds: string[] = [];
 }
 
 
@@ -38,7 +39,7 @@ export class ComponentDesigner extends Panel {
     _propertyEditor: PropertyEditor;
     _errors: ErrorPanel;
     _componentPalette: ComponentPalette;
-    _componentExplorer: ComponentExplorer;
+    _componentExplorer: ComponentExplorer; dummy
     _invisibleComponents: CodeEditorInvisibleComponents;
     _designToolbar: Panel;
     _designPlaceholder: Panel;
@@ -53,7 +54,12 @@ export class ComponentDesigner extends Panel {
     inlineEditorPanel: Panel;
     copyButton: Button;
     pasteButton: Button;
-
+    dummyHolder: HTMLSpanElement;
+    lastSelectedDummy={
+        component:undefined,
+        pre:false
+    }
+    private _lastComponent;
     constructor() {
         super();
         this._codeEditor = undefined;
@@ -61,6 +67,7 @@ export class ComponentDesigner extends Panel {
         this.editMode = true;
 
     }
+
     connectParser(parser) {
         this._propertyEditor.parser = parser;
     }
@@ -155,7 +162,7 @@ export class ComponentDesigner extends Panel {
         });
         this._designToolbar.add(this.cutButton);
 
-      
+
         this.copyButton = new Button();
         this.copyButton.icon = "mdi mdi-content-copy mdi-18px";
         this.copyButton.tooltip = "Copy (Ctrl+Shift+C)";
@@ -176,15 +183,17 @@ export class ComponentDesigner extends Panel {
         this.inlineEditorPanel = new Panel();
         this.inlineEditorPanel._id = "i" + this.inlineEditorPanel._id;
         this.inlineEditorPanel.dom.setAttribute("id", this.inlineEditorPanel._id);
-        this.inlineEditorPanel.dom.style.display="inline";
-        this.inlineEditorPanel.domWrapper.style.display="inline";
+        this.inlineEditorPanel.dom.style.display = "inline";
+        this.inlineEditorPanel.domWrapper.style.display = "inline";
         this.inlineEditorPanel.dom.classList.add("InlineEditorPanel");
 
         //   box.height=40;
         box.add(this._designToolbar);
         box.add(this.inlineEditorPanel);
         this.add(box);
-        this._designPlaceholder.domWrapper.style.position="relative";
+        this._designPlaceholder.domWrapper.style.position = "relative";
+        this.dummyHolder = document.createElement("span");
+        this.__dom.append(this.dummyHolder);
         this.add(this._designPlaceholder);
 
     }
@@ -193,8 +202,8 @@ export class ComponentDesigner extends Panel {
    */
     registerKeys() {
         var _this = this;
-        this._codeEditor._design.dom.tabindex= "1";
-        this._codeEditor._design.dom.addEventListener("keydown",function (evt) {
+        this._codeEditor._design.dom.tabindex = "1";
+        this._codeEditor._design.dom.addEventListener("keydown", function (evt) {
             if (evt.keyCode === 115 && evt.shiftKey) {//F4
                 // var thiss=this._this._id;
                 // var editor = ace.edit(this._this._id);
@@ -213,17 +222,17 @@ export class ComponentDesigner extends Panel {
                 evt.preventDefault();
                 return false;
             }
-            if (evt.keyCode === 46|| (evt.keyCode === 88 && evt.ctrlKey&&evt.shiftKey)) {//Del or Ctrl X)
+            if (evt.keyCode === 46 || (evt.keyCode === 88 && evt.ctrlKey && evt.shiftKey)) {//Del or Ctrl X)
                 _this.cutComponent();
                 evt.preventDefault();
                 return false;
             }
-           if (evt.keyCode === 67 && evt.ctrlKey&&evt.shiftKey) {//Ctrl+C
+            if (evt.keyCode === 67 && evt.ctrlKey && evt.shiftKey) {//Ctrl+C
                 _this.copy();
                 evt.preventDefault();
                 return false;
             }
-           if (evt.keyCode === 86 && evt.ctrlKey&&evt.shiftKey) {//Ctrl+V
+            if (evt.keyCode === 86 && evt.ctrlKey && evt.shiftKey) {//Ctrl+V
                 _this.paste();
                 evt.preventDefault();
                 return false;
@@ -273,21 +282,13 @@ export class ComponentDesigner extends Panel {
             return varname;
         };
     }
-    /**
-     * removes the selected component
-     */
-    async cutComponent() {
-        var text=await this.copy();
-        if(await navigator.clipboard.readText()!==text){
-            alert("could not copy to Clipboard.")
-            return;
-        }
-        var clip: ClipboardData = JSON.parse(text);//to Clipboard
-       
+    deleteComponents(text){
+     var clip: ClipboardData = JSON.parse(text);//to Clipboard
+
         var all = [];
         for (var x = 0; x < clip.allChilds.length; x++) {
             var varname = clip.allChilds[x];//this._codeEditor.getVariableFromObject(todel);
-            var todel=this._codeEditor.getObjectFromVariable(varname);
+            var todel = this._codeEditor.getObjectFromVariable(varname);
             if (varname !== "this") {
                 if (todel?.domWrapper?._parent !== undefined) {
                     todel.domWrapper._parent.remove(todel);
@@ -296,9 +297,23 @@ export class ComponentDesigner extends Panel {
                 this._propertyEditor.removeVariableInDesign(varname);
             }
         }
+        console.log(all);
         this._propertyEditor.removeVariablesInCode(all);
+    }
+    /**
+     * removes the selected component
+     */
+    async cutComponent() {
+        var text = await this.copy();
+        if (await navigator.clipboard.readText() !== text) {
+            alert("could not copy to Clipboard.")
+            return;
+        }
+        this.deleteComponents(text);
+
         this._updateInvisibleComponents();
         this._componentExplorer.update();
+        this.updateDummies();
 
     }
     private copyProperties(clip: ClipboardData, component: Component) {
@@ -312,7 +327,7 @@ export class ComponentDesigner extends Panel {
         var editorfields = {};
         ComponentDescriptor.describe(component.constructor)?.fields.forEach((f) => { editorfields[f.name] = f });
         for (var key in parserdata) {
-            if (editorfields[key] || key === "_new_" || key === "add") {
+            //if (editorfields[key] ||key === "_new_" || key === "add") {
                 if (!clip.properties[varname][key]) {
                     clip.properties[varname][key] = []
                 }
@@ -320,7 +335,7 @@ export class ComponentDesigner extends Panel {
                     //only add fields in Propertydescriptor
                     clip.properties[varname][key].push(parserdata[key][i].value);
                 }
-            }
+            //}
         }
         if (component["_components"]) {
             for (var x = 0; x < component["_components"].length; x++) {
@@ -335,13 +350,7 @@ export class ComponentDesigner extends Panel {
             }
         }
     }
-    async copy(): Promise<string> {
-
-        var components = this._propertyEditor.value;
-        if (!Array.isArray(components)) {
-            components = [components];
-        }
-
+    componentsToString(components: Component[]): string {
         var clip = new ClipboardData();
         clip.varNamesToCopy = [];
         for (var x = 0; x < components.length; x++) {
@@ -354,12 +363,23 @@ export class ComponentDesigner extends Panel {
 
 
         var text = JSON.stringify(clip);
+        return text;
+    }
+    async copy(): Promise<string> {
+
+        var components = this._propertyEditor.value;
+        if (!Array.isArray(components)) {
+            components = [components];
+        }
+
+        var text = this.componentsToString(components);
         await navigator.clipboard.writeText(text);
         return text;
     }
-    private async pasteComponent(clip: ClipboardData, target: Container, before: Component,varname: string, variablelistold: any[], variablelistnew: any[]) {
+    private async pasteComponent(clip: ClipboardData, target: Container, before: Component, varname: string, variablelistold: any[], variablelistnew: any[]) {
         var _this = this;
         var created: Component;
+        console.log(clip);
         if (clip.properties[varname] !== undefined && clip.properties[varname]["_new_"] !== undefined) {
 
             var vartype = clip.properties[varname]["_new_"][0];
@@ -371,10 +391,10 @@ export class ComponentDesigner extends Panel {
             var newcomp = { createFromType: clip.types[varname] };
             await classes.loadClass(clip.types[varname]);
             var svarname = varname.split(".")[varname.split(".").length - 1];
-           
-            created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, before, false, svarname);
+
+            created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, before, false, svarname,false);
             variablelistold.push(varname);
-            var newvarname=_this._codeEditor.getVariableFromObject(created);
+            var newvarname = _this._codeEditor.getVariableFromObject(created);
             variablelistnew.push(newvarname);
             //correct designdummy
             for (var t = 0; t < target._components.length; t++) {
@@ -391,29 +411,22 @@ export class ComponentDesigner extends Panel {
         }
         if (clip.children[varname] !== undefined) {
             for (var k = 0; k < clip.children[varname].length; k++) {
-                await _this.pasteComponent(clip, <Container>created,undefined, clip.children[varname][k], variablelistold, variablelistnew);
+                await _this.pasteComponent(clip, <Container>created, undefined, clip.children[varname][k], variablelistold, variablelistnew);
             }
         }
         return created;
     }
-    async paste() {
-        var text = await navigator.clipboard.readText();
-        var created
-        var clip: ClipboardData = JSON.parse(text);
+    async pasteComponents(text: string, parent: Container, before: Component = undefined) {
         var _this = this;
         var variablelistold = [];
         var variablelistnew = [];
+        var clip: ClipboardData = JSON.parse(text);
         //create Components
         for (var x = 0; x < clip.varNamesToCopy.length; x++) {
             var varname = clip.varNamesToCopy[x];
-            var target: Container = _this._propertyEditor.value;
-            if(target._components!==undefined)
-                await _this.pasteComponent(clip, target, undefined,varname, variablelistold, variablelistnew);
-            else{
-               // if(x===0)
-                //    before=target;
-                await _this.pasteComponent(clip, target._parent, target,varname, variablelistold, variablelistnew);
-            }
+
+            await _this.pasteComponent(clip, parent, before, varname, variablelistold, variablelistnew);
+
             //set properties
         }
         //in the new Text the variables are renamed
@@ -477,14 +490,34 @@ export class ComponentDesigner extends Panel {
                 }
             }
         }
-        _this._propertyEditor.value = created;
-        _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+         _this.variables.updateCache();
+    }
+    async paste() {
+        var text = await navigator.clipboard.readText();
+        //    var clip: ClipboardData = JSON.parse(text);
+        var _this = this;
+        var target: Container = _this._propertyEditor.value;
+        var insertBefore=target._components===undefined;
+        if(this.lastSelectedDummy.component===target&&this.lastSelectedDummy.pre)
+            insertBefore=true;
+        if(this.lastSelectedDummy.component===target&&!this.lastSelectedDummy.pre)
+            insertBefore=false;
+        if (!insertBefore)
+            await this.pasteComponents(text, target, undefined); // await _this.pasteComponent(clip, target, undefined, varname, variablelistold, variablelistnew);
+        else {
+            // if(x===0)
+            //    before=target;
+            await this.pasteComponents(text, target._parent, target);//await _this.pasteComponent(clip, target._parent, target, varname, variablelistold, variablelistnew);
+        }
+        //_this._propertyEditor.value = created;
+       // _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
         _this._propertyEditor.updateParser();
-        _this._propertyEditor.callEvent("codeChanged", {});
+        _this.codeHasChanged();
+       // _this._propertyEditor.callEvent("codeChanged", {});
         //include the new element
         _this.editDialog(true);
-        _this._componentExplorer.update();
-        _this._updateInvisibleComponents();
+      //  _this._componentExplorer.update();
+      //  _this._updateInvisibleComponents();
 
     }
     /**
@@ -520,13 +553,14 @@ export class ComponentDesigner extends Panel {
             }
         }
     }
+    createDragAndDropper(): DragAndDropper {
+        return new DragAndDropper();
+    }
     /**
      * dialog edit mode
      * @param {boolean} enable - if true allow resizing and drag and drop 
      */
     editDialog(enable) {
-
-
         var _this = this;
         this.editMode = enable;
         this.editButton.toggle(!this.editMode);
@@ -538,7 +572,7 @@ export class ComponentDesigner extends Panel {
         var component = this._designPlaceholder._components[0];
         //switch designmode
         var comps = component.dom.querySelectorAll(".jcomponent");
-        comps.forEach((c)=>c.classList.add("jdesignmode"));
+        comps.forEach((c) => c.classList.add("jdesignmode"));
         for (var c = 0; c < comps.length; c++) {
 
             if (comps[c]._this["extensionCalled"] !== undefined) {
@@ -576,7 +610,7 @@ export class ComponentDesigner extends Panel {
             } else
                 allcomponents = this.variables.getEditableComponents(component);
             //this._installTinyEditor();
-            this._draganddropper = new DragAndDropper();
+            this._draganddropper = this.createDragAndDropper();
             this._resizer = new Resizer();
             this._resizer.draganddropper = this._draganddropper;
 
@@ -600,22 +634,25 @@ export class ComponentDesigner extends Panel {
                     _this._propertyEditor.value = comp;
                 _this._propertyEditor.setPropertyInCode(prop, value + "", true);
                 _this._propertyEditor.value = _this._propertyEditor.value;
+                _this.updateDummies();
             };
             this._resizer.install(component, allcomponents);
             allcomponents = this.variables.getEditableComponents(component, true);
-            this._draganddropper.install(component, allcomponents);
-            this._draganddropper.onpropertychanged = function (component, top, left, oldParent, newParent, beforeComponent) {
-                _this.moveComponent(component, top, left, oldParent, newParent, beforeComponent);
-            }
-            this._draganddropper.onpropertyadded = function (type, component, top, left, newParent, beforeComponent) {
-                _this.createComponent(type, component, top, left, newParent, beforeComponent);
+            if (this._draganddropper) {
+                this._draganddropper.install(component, allcomponents);
+                this._draganddropper.onpropertychanged = function (component, top, left, oldParent, newParent, beforeComponent) {
+                    _this.moveComponent(component, top, left, oldParent, newParent, beforeComponent);
+                }
+                this._draganddropper.onpropertyadded = function (type, component, top, left, newParent, beforeComponent) {
+                    _this.createComponent(type, component, top, left, newParent, beforeComponent);
 
-            }
+                }
 
-            this._draganddropper.isDragEnabled = function (event, ui) {
-                if (_this._resizer === undefined)
-                    return false;
-                return _this._resizer.componentUnderCursor !== undefined;
+                this._draganddropper.isDragEnabled = function (event, ui) {
+                    if (_this._resizer === undefined)
+                        return false;
+                    return _this._resizer.componentUnderCursor !== undefined;
+                }
             }
         } else {
 
@@ -683,16 +720,23 @@ export class ComponentDesigner extends Panel {
      * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
      * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
      **/
-    createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true, suggestedName: string = undefined): Component {
+    createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true, suggestedName: string = undefined,refresh:boolean=undefined): Component {
         var _this = this;
         /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor&&beforeComponent.type==="atEnd"){
             beforeComponent=undefined;
         }*/
         var file = type.replaceAll(".", "/");
         var stype = file.split("/")[file.split("/").length - 1];
-        _this._propertyEditor.addImportIfNeeded(stype, file);
+        registry.getJSONData("$Class",type).then((data)=>{
+            var filename=data[0].filename;
+             _this._propertyEditor.addImportIfNeeded(stype, filename.substring(0,filename.lastIndexOf(".")));
+        })
+
+       
         var repeater = _this._hasRepeatingContainer(newParent);
         var scope = undefined;
+
+
         if (repeater !== undefined) {
             var repeatername = _this._codeEditor.getVariableFromObject(repeater);
             var test = _this._propertyEditor.parser.getPropertyValue(repeatername, "createRepeatingComponent");
@@ -718,8 +762,12 @@ export class ComponentDesigner extends Panel {
                 _this.variables.updateCache();*/
             }
         }
-        var varvalue = new (classes.getClass(type));
-        var varname = _this.createVariable(type, scope, varvalue, suggestedName);
+        var varvalue;
+        if (classes.getClassName(component) === type)
+            varvalue = component;
+        else
+            varvalue = new (classes.getClass(type));
+        var varname = _this.createVariable(type, scope, varvalue, suggestedName,refresh);
         if (this._propertyEditor.codeEditor !== undefined) {
 
             var newName = _this._codeEditor.getVariableFromObject(newParent);
@@ -746,7 +794,8 @@ export class ComponentDesigner extends Panel {
                  newParent.dom.append(newParent._designDummy.domWrapper)
              }
          }*/
-        _this.variables.updateCache();
+         if(refresh)
+            _this.variables.updateCache();
 
         //set initial properties for the new component
         if (component.createFromParam !== undefined) {
@@ -785,7 +834,7 @@ export class ComponentDesigner extends Panel {
         }
         return varvalue;
     }
-    createVariable(type, scope, varvalue, suggestedName: string = undefined) {
+    createVariable(type, scope, varvalue, suggestedName: string = undefined,refresh:boolean=undefined) {
         if (this._propertyEditor.codeEditor === undefined)
             return;
         var varname = this._propertyEditor.addVariableInCode(type, scope, suggestedName);
@@ -797,7 +846,7 @@ export class ComponentDesigner extends Panel {
              var th = this._codeEditor.getObjectFromVariable("this");
              th[varname.substring(5)] = varvalue;
          } else*/
-        this.variables.addVariable(varname, varvalue);
+        this.variables.addVariable(varname, varvalue,refresh);
         return varname;
     }
     /**
@@ -843,7 +892,253 @@ export class ComponentDesigner extends Panel {
         }
 
     }
+    codeHasChanged(){
+        var _this=this;
+          _this.updateDummies();
+                _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+                _this._propertyEditor.callEvent("codeChanged", {});
+                _this._componentExplorer.update();
+                _this._updateInvisibleComponents();
+    }
+    createPreDummy(node:HTMLElement) {
+        var _this = this;
+        var dummy: HTMLSpanElement;
+        //  if (ComponentDesigner.beforeDummy === undefined) {
+        dummy = <HTMLSpanElement>document.createElement("span");
+        dummy.contentEditable =  node.tagName.toUpperCase()==="BR"?"true":"false";
+        dummy.draggable = true;
+        dummy.classList.add("_dummy_");
+        dummy.onkeydown=(e)=>{
+            if((<any>this).keydown){
+                e.preventDefault();
+                (<any>this).keydown(e);
+            }
+        }
+        dummy.ondrop = (ev) => {
+            ev.preventDefault();
+            async function doit() {
+                var data = ev.dataTransfer.getData("text");
+                if (data.indexOf('"createFromType":') > -1) {
+                    var toCreate: { createFromType: string, createFromParam: string } = <any>JSON.parse(data);
+                    var cl = classes.getClass(toCreate.createFromType);
+                    var newComponent = new cl();
+                    var beforeComponent: Component = (<any>ev.target).nd._this;
+                    var newParent = beforeComponent._parent;
+                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent);// beforeComponent);
+                } else if (data.indexOf('"varNamesToCopy":') > -1) {
+                    var beforeComponent: Component = (<any>ev.target).nd._this;
+                    var newParent = beforeComponent._parent;
+                    await _this.pasteComponents(data, newParent, beforeComponent);
+                    _this.deleteComponents(data);
+                } else {
 
+                }
+                _this.codeHasChanged();
+            };
+            doit();
+        };
+        
+        dummy.onclick=(ev)=>{
+            _this._propertyEditor.value=(<any>ev.target).nd._this;
+            
+            _this.lastSelectedDummy.component=(<any>ev.target).nd._this;
+            this.lastSelectedDummy.pre=true;
+            if(_this.lastSelectedDummy.component.tag?.toUpperCase()==="BR"){
+                //dummy.contentEditable=true;
+                //dummy.focus();//with this the keydown event will work
+                console.log("focus");
+            }
+            getSelection().removeAllRanges();//the next paste is before the component
+        } 
+        dummy.ondragover = (ev) => {
+            ev.preventDefault();
+        }
+        dummy.ondragstart = ev => {
+            ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
+            ev.dataTransfer.setData("text", _this.componentsToString([(<any>event.target).nd._this]));
+        }
+        dummy.style.zIndex = "10000";
+        dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
+        dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+        dummy.style.fontSize = "10px";
+        dummy.style.position = "absolute";
+        dummy.ondragenter = dummy.onmouseenter = (e) => {
+            (<any>e.target).nd._this.dom.classList.add("dummyselected");
+
+        }
+        dummy.ondragleave = dummy.onmouseleave = (e) =>(<any>e.target).nd._this.dom.classList.remove("dummyselected");
+        //  ComponentDesigner.beforeDummy = dummy;
+        // }
+        // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
+        return dummy;
+    }
+    createPostDummy() {
+        var _this = this;
+        var dummy: HTMLSpanElement;
+        //  if (ComponentDesigner.beforeDummy === undefined) {
+        dummy = <HTMLSpanElement>document.createElement("span");
+        dummy.contentEditable = "false";
+        dummy.draggable = true;
+        dummy.classList.add("_dummy_");
+        dummy.classList.add("ui-droppable");
+        dummy.onclick=(ev)=>{ 
+            _this._propertyEditor.value=(<any>ev.target).nd._this;
+             getSelection().removeAllRanges();//the next paste is before the component
+            _this.lastSelectedDummy.component=(<any>ev.target).nd._this;
+            this.lastSelectedDummy.pre=false;
+        }
+        //dummy.onclick = (ev) => console.log(ev);
+        dummy.ondrop = (ev) => {
+            ev.preventDefault();
+
+            async function doit() {
+                var data = ev.dataTransfer.getData("text");
+                if (data.indexOf('"createFromType":') > -1) {
+                    var toCreate: { createFromType: string, createFromParam: string } = <any>JSON.parse(data);
+                    var cl = classes.getClass(toCreate.createFromType);
+                    var newComponent = new cl();
+                    let newParent = (<any>ev.target).nd._this;
+                    _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined);// beforeComponent);
+                } else if (data.indexOf('"varNamesToCopy":') > -1) {
+                    let newParent: Container = (<any>ev.target).nd._this;
+                    await _this.pasteComponents(data, newParent, undefined);
+                    _this.deleteComponents(data);
+                } else {
+
+                }
+                _this.codeHasChanged();
+            };
+            doit();
+
+        };
+        dummy.ondragover = (ev) => {
+            ev.preventDefault();
+            //  ev.dataTransfer.dropEffect = "move";
+        } /*
+        dummy.ondragstart = ev => {
+            ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
+            ev.dataTransfer.setData("text", "Hallo");
+        }*/
+        dummy.style.zIndex = "10000";
+        dummy.style.backgroundColor = "rgba(56, 146, 232, 0.2)";
+        dummy.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+        dummy.style.fontSize = "10px";
+        dummy.style.position = "absolute";
+        dummy.ondragenter = dummy.onmouseenter = (e) => {
+            (<any>e.target).nd._this.dom.classList.add("dummyselected");
+        }
+        dummy.ondragleave = dummy.onmouseleave = (e) => (<any>e.target).nd._this.dom.classList.remove("dummyselected");
+        //   ComponentDesigner.beforeDummy = dummy;
+        // }
+        // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
+        return dummy;
+    }
+    private insertDummies(node: HTMLElement, root: HTMLElement, arr, rootRect: DOMRect) {
+        if(node._this===undefined)
+            return;
+        var node=node._this.dom;//eliminate Wrapper
+        if ((<any>node)._dummyholder === true)
+            return;
+        if (root === undefined)
+            root = node;
+        //only elements with varaiables can have dummies
+        var varname = this._codeEditor.getVariableFromObject(node._this);
+        var comp = node._this;
+        if (!varname && node._thisOther) {
+            for (var x = 0; x < node._thisOther.length; x++) {
+                varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
+                if (varname) {
+                    comp = node._thisOther[x];
+                    break;
+                }
+            } 
+        }
+        if (!varname) {
+            if (node.contentEditable !== "false")
+                node.contentEditable = "false";
+            
+            return;
+        }
+        var hasChildren = false;
+        var desc = ComponentDescriptor.describe(comp.constructor);
+        var fnew = desc.findField("children");
+        if (fnew) {
+            hasChildren = true;
+            if(!node.classList.contains("jeditablecontainer")){
+                node.classList.add("jeditablecontainer");
+            }
+        }
+        if (node.getClientRects === undefined)
+            return;
+
+        var rect = node.getClientRects()[0];
+        if (rect === undefined)
+            return;
+        rect = <any>{
+            left: rect.left - rootRect.left + window.scrollX,
+            top: rect.top - rootRect.top + window.scrollY,
+            right: rect.right - rootRect.left + window.scrollX,
+            bottom: rect.bottom - rootRect.top + window.scrollY
+        }
+        if ((<any>node)?.nd)
+            return;
+        var preDummy = (<any>node)._preDummy_;
+        if (!(<any>node)._preDummy_) {
+            preDummy = this.createPreDummy(node);
+            (<any>preDummy).nd = node;
+            preDummy.title = node.outerHTML;
+            (<any>node)._preDummy_ = preDummy;
+            arr.push(preDummy);
+        }
+        var newTop = rect.top;
+        var newLeft = rect.left;
+        (<any>node).myTop = rect.top;
+        (<any>node).myLeft = rect.left;
+
+        if ((<any>node.parentNode)._preDummy_) {
+            const rp = {
+                top: (<any>node.parentNode).myTop,
+                left: (<any>node.parentNode).myLeft,
+            }
+            if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.left + 5) {
+                newLeft = parseInt((<any>node.parentNode)._preDummy_.style.left.replace("px", "")) + 8;
+            }
+        }
+        preDummy.style.top = newTop + "px";
+        preDummy.style.left = newLeft + "px";
+        if (hasChildren) {
+            var postDummy = (<any>node)._postDummy_;
+            if (!(<any>node)._postDummy_) {
+                postDummy = this.createPostDummy();
+                (<any>postDummy).nd = node;
+                postDummy.title = node.outerHTML;
+                (<any>node)._postDummy_ = postDummy;
+                arr.push(postDummy);
+            }
+            var newBottom = rect.bottom;
+            var newRight = rect.right;
+            (<any>node).myBottom = rect.bottom;
+            (<any>node).myRight = rect.right;
+            var par=(<any>node)._this._parent;
+            if (par.dom._postDummy_) {
+                const rp = {
+                    bottom:par.dom.myBottom,
+                    right: par.dom.myRight,
+                }
+                if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
+                    newRight = par.dom._postDummy_.style.left.replace("px", "") ;
+                }
+            }
+            postDummy.style.top = (newBottom - 14) + "px";
+            postDummy.style.left = (newRight - 14) + "px";
+        }
+        
+        for (var x = 0; x < node.childNodes.length; x++) {
+            if (node._this !==(<any> node.childNodes[x])._this)//Wrapper
+                this.insertDummies(<any>node.childNodes[x], root, arr, rootRect);
+        }
+
+    }
     /**
      * @member {jassijs.ui.Component} - the designed component
      */
@@ -873,10 +1168,37 @@ export class ComponentDesigner extends Panel {
         while (this.inlineEditorPanel.dom.firstChild) {
             this.inlineEditorPanel.dom.firstChild.remove();
         }
+        this.updateDummies();
 
         //var parser=new jassijs.ui.PropertyEditor.Parser();
         //parser.parse(_this.value);
     }
+    updateDummies() {
+        var arr = [];
+        var component = this.designedComponent;//this._componentExplorer.value;
+        if (this._lastComponent !== component) {//delete dummies if the designedComponent has changed
+            //if((<any>this.dom).dummyholder)
+            //  (<any>this.dom).dummyholder.innerHTML="";
+            this.dummyHolder.innerHTML = "";//delete all
+            this._lastComponent = component;
+        }
+        /* if ((<any>this.dom).dummyholder === undefined) {
+             (<any>this.dom).dummyholder = document.createElement("span");
+             (<any>this.dom).dummyholder._dummyholder = true;
+             this.dom.prepend((<any>component.dom).dummyholder);
+         }*/
+        this.insertDummies(component.dom, this.dummyHolder, arr, this.dom.getClientRects()[0]);
+        this.dummyHolder.append(...arr);
+        component.dom.contentEditable = "true";
+        this._designPlaceholder.domWrapper.contentEditable = "false";
+        this._designPlaceholder.dom.contentEditable = "false";
+        //delete removed dummies
+        for(var x=0;x<this.dummyHolder.childNodes.length;x++){
+            if((<any>this.dummyHolder.childNodes[x]).nd._this._parent===undefined){
+                this.dummyHolder.removeChild(this.dummyHolder.childNodes[x]);
+            }
+        }
+        }
     get designedComponent() {
         return this._designPlaceholder._components[0];
     }

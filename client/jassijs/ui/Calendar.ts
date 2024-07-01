@@ -1,11 +1,11 @@
 import "jassijs/ext/jquerylib";
-import { Textbox } from "jassijs/ui/Textbox";
+import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
 import { $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
-import { DataComponentProperties } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 
-export interface CalendarConfig extends ComponentProperties,DataComponentProperties {
+export interface CalendarProperties extends TextboxProperties {
 
     /**
     * @member  - the date
@@ -17,12 +17,12 @@ export interface CalendarConfig extends ComponentProperties,DataComponentPropert
 @$UIComponent({ fullPath: "common/Calendar", icon: "mdi mdi-calendar-month" })
 @$Class("jassijs.ui.Calendar")
 @$Property({ name: "new", type: "string" })
-export class Calendar extends Textbox implements CalendarConfig {
+export class Calendar<T extends CalendarProperties=TextboxProperties> extends Textbox<T> implements CalendarProperties {
     constructor(properties = undefined) { 
         super(properties);
         $(this.dom).datepicker();
     }
-    config(config: CalendarConfig): Calendar {
+    config(config: T): Calendar {
         super.config(config);
         return this;
     }
@@ -32,6 +32,7 @@ export class Calendar extends Textbox implements CalendarConfig {
     set value(val) {
         $(this.dom).datepicker('setDate', val);
     }
+    
     static parseDate(date: string, format = undefined, settings = undefined) {
         if (settings === undefined)
             settings = $.datepicker.regional[navigator.language.split("-")[0]];

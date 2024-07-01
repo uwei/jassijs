@@ -95,7 +95,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
                         var men = new MenuItem_1.MenuItem();
                         men["_classaction"] = true;
                         men.text = path[i];
-                        men.icon = action.icon;
+                        if (action.icon !== undefined)
+                            men.icon = action.icon;
                         men.onclick(() => action.call(_this.value));
                         parent.add(men);
                     }
@@ -129,8 +130,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
             this.addEvent("beforeshow", handler);
         }
         async _callContextmenu(evt) {
-            if (evt.preventDefault !== undefined)
-                evt.preventDefault();
             this.target = evt.target;
             var cancel = this.callEvent("beforeshow", evt);
             if (cancel !== undefined) {
@@ -152,7 +151,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
             this.contextComponents.push(component);
             var _this = this;
             $(component.dom).contextmenu(function (evt) {
-                _this._callContextmenu(evt);
+                if (evt.preventDefault !== undefined)
+                    evt.preventDefault();
+                setTimeout(() => {
+                    _this._callContextmenu(evt);
+                }, 10);
             });
         }
         /**

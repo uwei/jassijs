@@ -1,3 +1,5 @@
+/// <reference types="react" />
+/// <reference types="react" />
 declare module "jassijs_editor/CodePanel" {
     import { Panel } from "jassijs/ui/Panel";
     export abstract class CodePanel extends Panel {
@@ -64,6 +66,13 @@ declare module "jassijs_editor/modul" {
             "jassijs_editor.css": string;
         };
         types: {
+            "node_modules/csstype.d.ts": string;
+            "node_modules/@types/react/canary.d.ts": string;
+            "node_modules/@types/react/experimental.d.ts": string;
+            "node_modules/@types/react/global.d.ts": string;
+            "node_modules/@types/react/index.d.ts": string;
+            "node_modules/@types/react/jsx-runtime.d.ts": string;
+            "node_modules/@types/react/jsx-dev-runtime.d.ts": string;
             "node_modules/monaco.d.ts": string;
             "node_modules/typescript/typescriptServices.d.ts": string;
         };
@@ -81,12 +90,16 @@ declare module "jassijs_editor/modul" {
     };
     export default _default;
 }
+declare module "jassijs_editor/ext/monaco2" {
+    export {};
+}
 /// <amd-dependency name="_monaco" path="vs/editor/editor.main" />
 /// <amd-dependency name="tsWorker" path="vs/language/typescript/tsWorker" />
 declare module "jassijs_editor/ext/monaco" {
     export {};
 }
 declare module "jassijs_editor/util/Typescript" {
+    import "jassijs_editor/ext/monaco2";
     import "jassijs_editor/ext/monaco";
     export class Typescript {
         static instance: Typescript;
@@ -106,6 +119,7 @@ declare module "jassijs_editor/util/Typescript" {
             outDir: string;
             allowJs: boolean;
             moduleResolution: monaco.languages.typescript.ModuleResolutionKind;
+            jsx: monaco.languages.typescript.JsxEmit;
             emitDecoratorMetadata: boolean;
             experimentalDecorators: boolean;
             typeRoots: string[];
@@ -269,6 +283,15 @@ declare module "jassijs_editor/MonacoPanel" {
         private static _tooltipdiv;
         private _lastTooltipRefresh;
         constructor();
+        render(): React.DetailedReactHTMLElement<{
+            className: string;
+            style: {
+                borderSpacing: string;
+                minWidth: string;
+                tableLayout: "fixed";
+            };
+        }, HTMLElement>;
+        componentDidMount(): void;
         private getBreakpointDecoration;
         autocomplete(): void;
         private _mouseDown;
@@ -610,6 +633,8 @@ declare module "jassijs_editor/AcePanel" {
         private _lastTooltipRefresh;
         checkErrorTask: Runlater;
         constructor();
+        render(): any;
+        componentDidMount(): void;
         private _addEvents;
         autocomplete(): void;
         /**
@@ -727,6 +752,8 @@ declare module "jassijs_editor/AcePanelSimple" {
         private _editor;
         private _isInited;
         constructor();
+        render(): any;
+        componentDidMount(): void;
         private _addEvents;
         autocomplete(): void;
         insert(pos: number, text: string): void;
@@ -789,6 +816,8 @@ declare module "jassijs_editor/CodeEditorInvisibleComponents" {
     export class CodeEditorInvisibleComponents extends Panel {
         codeeditor: any;
         constructor(codeeditor: any);
+        render(): any;
+        componentDidMount(): void;
         layout(): void;
         update(): void;
         /**
@@ -829,6 +858,7 @@ declare module "jassijs_editor/ComponentExplorer" {
          * @param {object} item
          */
         getComponentChilds(item: any): any[];
+        getComponentChildsOld(item: any): any[];
         layout(): void;
         update(): void;
         onselect(handler: any): void;
@@ -854,6 +884,7 @@ declare module "jassijs_editor/ComponentPalette" {
          * @param {jassijs.ui.Image} component
          */
         _makeDraggable(component: any): void;
+        _makeDraggable2(component: any): void;
         destroy(): void;
     }
     export function test(): ComponentPalette;
@@ -959,6 +990,22 @@ declare module "jassijs_editor/ComponentDesigner" {
     import { Button } from "jassijs/ui/Button";
     import { Component } from "jassijs/ui/Component";
     import { DragAndDropper } from "jassijs_editor/util/DragAndDropper";
+    import { Container } from "jassijs/ui/Container";
+    export class ClipboardData {
+        varNamesToCopy: string[];
+        children: {
+            [name: string]: string[];
+        };
+        properties: {
+            [name: string]: {
+                [propname: string]: any[];
+            };
+        };
+        types: {
+            [name: string]: string;
+        };
+        allChilds: string[];
+    }
     export class ComponentDesigner extends Panel {
         _codeEditor: any;
         editMode: boolean;
@@ -967,6 +1014,7 @@ declare module "jassijs_editor/ComponentDesigner" {
         _errors: ErrorPanel;
         _componentPalette: ComponentPalette;
         _componentExplorer: ComponentExplorer;
+        dummy: any;
         _invisibleComponents: CodeEditorInvisibleComponents;
         _designToolbar: Panel;
         _designPlaceholder: Panel;
@@ -981,6 +1029,12 @@ declare module "jassijs_editor/ComponentDesigner" {
         inlineEditorPanel: Panel;
         copyButton: Button;
         pasteButton: Button;
+        dummyHolder: HTMLSpanElement;
+        lastSelectedDummy: {
+            component: any;
+            pre: boolean;
+        };
+        private _lastComponent;
         constructor();
         connectParser(parser: any): void;
         set codeEditor(value: any);
@@ -994,13 +1048,16 @@ declare module "jassijs_editor/ComponentDesigner" {
         _installView(): void;
         _updateInvisibleComponents(): void;
         _initComponentExplorer(): void;
+        deleteComponents(text: any): void;
         /**
          * removes the selected component
          */
         cutComponent(): Promise<void>;
         private copyProperties;
+        componentsToString(components: Component[]): string;
         copy(): Promise<string>;
         private pasteComponent;
+        pasteComponents(text: string, parent: Container, before?: Component): Promise<void>;
         paste(): Promise<void>;
         /**
         * execute the current code
@@ -1017,6 +1074,7 @@ declare module "jassijs_editor/ComponentDesigner" {
          */
         undo(): void;
         private getComponentIDsInDesign;
+        createDragAndDropper(): DragAndDropper;
         /**
          * dialog edit mode
          * @param {boolean} enable - if true allow resizing and drag and drop
@@ -1040,18 +1098,23 @@ declare module "jassijs_editor/ComponentDesigner" {
          * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
          * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
          **/
-        createComponent(type: any, component: any, top: any, left: any, newParent: any, beforeComponent: any, doUpdate?: boolean, suggestedName?: string): Component;
-        createVariable(type: any, scope: any, varvalue: any, suggestedName?: string): string;
+        createComponent(type: any, component: any, top: any, left: any, newParent: any, beforeComponent: any, doUpdate?: boolean, suggestedName?: string, refresh?: boolean): Component;
+        createVariable(type: any, scope: any, varvalue: any, suggestedName?: string, refresh?: boolean): string;
         /**
          * is there a parent that acts a repeating container?
          **/
         _hasRepeatingContainer(component: any): any;
         private fillVariables;
+        codeHasChanged(): void;
+        createPreDummy(node: HTMLElement): HTMLSpanElement;
+        createPostDummy(): HTMLSpanElement;
+        private insertDummies;
         /**
          * @member {jassijs.ui.Component} - the designed component
          */
-        set designedComponent(component: Component);
-        get designedComponent(): Component;
+        set designedComponent(component: Component<{}>);
+        updateDummies(): void;
+        get designedComponent(): Component<{}>;
         destroy(): void;
     }
     export function test(): Promise<ComponentDesigner>;
@@ -1162,6 +1225,7 @@ declare module "jassijs_editor/util/Parser" {
             classname: string;
             methodname: string;
         }[];
+        jsxVariables: any;
         code: string;
         /**
         * @member {Object.<string,Object.<string,[object]>> - all properties
@@ -1178,6 +1242,7 @@ declare module "jassijs_editor/util/Parser" {
          */
         constructor();
         getModifiedCode(): string;
+        reformatCode(code: string): string;
         /**
          * add a property
          * @param {string} variable - name of the variable
@@ -1205,7 +1270,9 @@ declare module "jassijs_editor/util/Parser" {
         private parseClass;
         private parseConfig;
         private parseProperties;
+        private parseJSX;
         private visitNode;
+        private visitNodeJSX;
         searchClassnode(node: ts.Node, pos: number): {
             classname: string;
             methodname: string;
@@ -1214,6 +1281,9 @@ declare module "jassijs_editor/util/Parser" {
             classname: string;
             methodname: string;
         };
+        private removePos;
+        private createNode;
+        initJSXVariables(values: any[]): void;
         /**
         * parse the code
         * @param {string} code - the code
@@ -1222,7 +1292,7 @@ declare module "jassijs_editor/util/Parser" {
         parse(code: string, classScope?: {
             classname: string;
             methodname: string;
-        }[]): void;
+        }[], jsxVariables?: any): void;
         private removeNode;
         /**
          * modify a member
@@ -1262,6 +1332,17 @@ declare module "jassijs_editor/util/Parser" {
         * @param [variablescope] - if this scope is defined - the new property would be insert in this variable
         */
         setPropertyInCode(variableName: string, property: string, value: string | ts.Node, classscope: {
+            classname: string;
+            methodname: string;
+        }[], isFunction?: boolean, replace?: boolean, before?: {
+            variablename: string;
+            property: string;
+            value?: any;
+        }, variablescope?: {
+            variablename: string;
+            methodname: any;
+        }): void;
+        setPropertyInJSX(variableName: string, property: string, value: string | ts.Node, classscope: {
             classname: string;
             methodname: string;
         }[], isFunction?: boolean, replace?: boolean, before?: {
@@ -1437,6 +1518,37 @@ declare module "jassijs_editor/DatabaseDesigner" {
         readSchema(): Promise<void>;
     }
     export function test(): Promise<DatabaseDesigner>;
+}
+declare module "jassijs_editor/HtmlDesigner" {
+    import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
+    import { Component } from "jassijs/ui/Component";
+    import { Button } from "jassijs/ui/Button";
+    export class HtmlDesigner extends ComponentDesigner {
+        boldButton: Button;
+        constructor();
+        private getParentList;
+        private htmlToClipboardData;
+        ondrop(ev: DragEvent): void;
+        paste(): Promise<void>;
+        copy(): Promise<string>;
+        registerKeys(): void;
+        private deleteNodeBetween;
+        protected wrapTextNodeIfNeeded(found: Node): ParentNode;
+        bold(): void;
+        setStyle(style: string, value?: any): Component[];
+        applyStyle(comp: Component, stylename: string, value?: any): void;
+        _initDesign(): void;
+        editDialog(enable: any): void;
+        createDragAndDropper(): any;
+        private removeNodes;
+        protected changeText(node: Node, text: string): Node;
+        private splitText;
+        cutComponent(): Promise<void>;
+        createTextComponent(text: any, par: any, before: any): Component;
+        protected insertLineBreak(sel: Selection): void;
+        private keydown;
+    }
+    export function test(): any;
 }
 declare module "jassijs_editor/SearchExplorer" {
     import { Tree } from "jassijs/ui/Tree";

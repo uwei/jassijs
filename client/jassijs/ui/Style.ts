@@ -18,14 +18,19 @@ export interface StyleConfig extends ComponentProperties {
  * on ore mors Style can be assigned to component
  * the style is appended to the head
  **/
-export class Style extends InvisibleComponent implements StyleConfig{
+export class Style extends InvisibleComponent<StyleConfig> implements StyleConfig{
     
-    constructor() {//id connect to existing(not reqired)
-        super();
-        super.init('<span class="InvisibleComponent"></span>');
-
+    constructor(props:StyleConfig={}) {//id connect to existing(not reqired)
+        super(props);
+       
     }
-
+    render() {
+        
+        return React.createElement("span", {  className: "InvisibleComponent"       });
+    }
+    componentDidMount(): void {
+       
+    }
     config(config: StyleConfig): Style {
         super.config(config);
         return this;

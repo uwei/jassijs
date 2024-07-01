@@ -23,8 +23,11 @@ export class RUList extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        this.init("<ul></ul>");
        
+    }
+  
+    render(){
+        return React.createElement("ul", { className: "RUList"});
     }
      /**
       * adds a component to the container before an other component

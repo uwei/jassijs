@@ -1,9 +1,9 @@
 import { Button } from "jassijs/ui/Button";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { $Class } from "jassijs/remote/Registry";
-import { Panel, PanelConfig } from "jassijs/ui/Panel";
+import { Panel, PanelProperties } from "jassijs/ui/Panel";
 import { Databinder } from "jassijs/ui/Databinder";
-import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { DBObject } from "jassijs/remote/DBObject";
@@ -36,7 +36,7 @@ export function $DBObjectView(properties: DBObjectViewProperties): Function {
 }
 type Me = DBObjectViewMe;
 
-export interface DBObjectViewConfig extends PanelConfig {
+export interface DBObjectViewConfig extends PanelProperties {
     /**
        * register an event if the object is created
        * @param {function} handler - the function that is called
@@ -57,8 +57,9 @@ export interface DBObjectViewConfig extends PanelConfig {
     * @param {function} handler - the function that is called
     */
     ondeleted?(handler: (obj: DBObject) => void);
+    value:any;
 }
-@$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh", "me.databinder"] })
+//@$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh", "me.databinder"] })
 @$Class("jassijs/ui/DBObjectView")
 export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isAbsolute"> {
     me;
@@ -158,7 +159,7 @@ export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isA
         this.add(me.main);
         me.main.width = "100%";
         me.main.height = "100%";
-        me.main.css = { position: "relative" };
+        me.main.style = { position: "relative" };
         me.toolbar.add(me.create);
         me.toolbar.add(me.save);
         me.toolbar.horizontal = true;

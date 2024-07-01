@@ -30,7 +30,7 @@ define(["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "j
         __metadata("design:type", String)
     ], ServerReport.prototype, "sort", void 0);
     ServerReport = __decorate([
-        (0, Report_1.$Report)({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/TestServerreport" }),
+        (0, Report_1.$Report)({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/server/TestServerreport" }),
         (0, Registry_1.$Class)("jassijs_report.test.ServerReport")
     ], ServerReport);
     exports.ServerReport = ServerReport;

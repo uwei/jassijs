@@ -13,14 +13,15 @@ import { DesignDummy } from "jassijs/ui/DesignDummy";
 }*/
 
 
-export interface MenuConfig extends ContainerProperties {
-
-    onclick(handler);
+export interface MenuProperties extends ContainerProperties {
+    domProperties?:React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLUListElement>, HTMLUListElement>;
+    noUpdate?:boolean;
+    onclick?(handler);
 }
 
 @$UIComponent({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } })
 @$Class("jassijs.ui.Menu")
-export class Menu extends Container implements MenuConfig {
+export class Menu<T extends MenuProperties=MenuProperties> extends Container<T> implements MenuProperties {
 
     _isRoot: boolean;
     _text: string;
@@ -28,36 +29,42 @@ export class Menu extends Container implements MenuConfig {
     _noUpdate: boolean;
     _mainMenu;
     constructor(options = undefined) {
-        super();
+        super(options);
         this._isRoot = true;
-        super.init('<ul ' + ` style="Menu"></ul>`);
-        if (options !== undefined && options.noUpdate === true) {
+        if (this.props?.noUpdate === true) {
             this._noUpdate = true;
         } else
             $(this.dom).menu();
         this._text = "";
         this._icon = "";
+
     }
-    config(config: MenuConfig): Menu {
+    componentDidMount() {
+
+    }
+    render() {
+        return React.createElement("ul", { className: "InvisibleComponent"/*, style= "Menu" */ });
+    }
+    config(config: T): Menu {
         super.config(config);
         return this;
     }
     _sample() {
-        super.init('<ul ' + ` class="Menu">
-<li>  <div><img  src="res/car.ico" />Save</div></li>
-<li title="create button" onclick="doCreate()"><div><img  src="res/car.ico" />Create</div>
-    <ul class="Menu" style="visibility:hidden">
+        /*   
+    <li>  <div><img  src="res/car.ico" />Save</div></li>
+    <li title="create button" onclick="doCreate()"><div><img  src="res/car.ico" />Create</div>
+        <ul class="Menu" style="visibility:hidden">
+        <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
+        </ul>
+    </li>
+    <li title="update button2"> <div> <img src="res/tree.ico" />Update2</div>
+        <ul style="Menu">
+          <li> <div><img   src="res/car.ico" />Hoho</div></li>
+         <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
+          </ul>
+    </li>
     <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
-    </ul>
-</li>
-<li title="update button2"> <div> <img src="res/tree.ico" />Update2</div>
-    <ul style="Menu">
-      <li> <div><img   src="res/car.ico" />Hoho</div></li>
-     <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
-      </ul>
-</li>
-<li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
-</ul>`);
+    </ul>`);*/
     }
 
     _menueChanged() {
@@ -103,7 +110,7 @@ export class Menu extends Container implements MenuConfig {
 
     @$Property({ name: "onclick", type: "function", default: "function(event){\n\t\n}" })
     onclick(handler) {
-        document.getElementById(this._id).addEventListener("click",function (ob) {
+        document.getElementById(this._id).addEventListener("click", function (ob) {
             handler(ob);
         });
     }

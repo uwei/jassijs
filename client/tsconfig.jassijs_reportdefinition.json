@@ -1,5 +1,5 @@
 {
-  "compilerOptions": { 
+  "compilerOptions": {
     "baseUrl": "./jassijs_reportdefinition",
     "allowJs": true,
     //"checkJs":false,
@@ -7,19 +7,19 @@
     "module": "amd",
     "moduleResolution": "node",
     "lib": [
-      "es2016", 
+      "es2016",
       "dom",
       "es5"
     ],
     "inlineSources": true,
     "outFile": ".././dist/jassijs_reportdefinition.js",
     "rootDir": "./",
-
-     "sourceMap": true,
-
+    "sourceMap": true,
+    "jsx": "react",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
-  "include":["./jassijs_reportdefinition"],
-  
+  "include": [
+    "./jassijs_reportdefinition"
+  ],
 }

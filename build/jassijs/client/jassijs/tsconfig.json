@@ -5,6 +5,7 @@
     //"checkJs":false,
     "target": "es2017",
     "module": "amd",
+    "jsx": "react",
     "moduleResolution": "node",
     "lib": [
       "es2016", 
@@ -24,7 +25,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
-   "include":["./",".././node_modules2"]
- 
+   "include":["./",".././node_modules2", "../jassijs_localserver/modul.ts"],
+  "exclude":["./jassijs/server"]
   
 }

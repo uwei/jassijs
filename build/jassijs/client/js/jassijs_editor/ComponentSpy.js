@@ -38,7 +38,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         layout() {
             var me = this.me = {};
             me.IDText = new ErrorPanel_1.ErrorPanel(); //HTMLPanel();
-            this.css = { overflow: "scroll" };
+            this.style = { overflow: "scroll" };
             var _this = this;
             me.boxpanel1 = new BoxPanel_1.BoxPanel();
             me.IDUpdate = new Button_1.Button();

@@ -3,14 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = exports.Config = void 0;
 class Config {
     constructor() {
+        this.name = './client/jassijs.json';
         if (!window.document) {
             this.isServer = true;
             //@ts-ignore
             var fs = require("fs");
-            this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
+            this.init(fs.readFileSync(this.name, 'utf-8'));
         }
     }
-    init(configtext) {
+    init(configtext, name = undefined) {
+        if (name !== undefined)
+            this.name = name;
         this.jsonData = JSON.parse(configtext);
         this.modules = this.jsonData.modules;
         this.server = {
@@ -22,7 +25,7 @@ class Config {
             this.isServer = true;
             //@ts-ignore
             var fs = require("fs");
-            this.init(fs.readFileSync('./client/jassijs.json', 'utf-8'));
+            this.init(fs.readFileSync(this.name, 'utf-8'));
         }
         else {
             var Server = (await Promise.resolve().then(() => require("jassijs/remote/Server"))).Server;
@@ -32,7 +35,7 @@ class Config {
     }
     async saveJSON() {
         var myfs = (await Promise.resolve().then(() => require("jassijs/server/NativeAdapter"))).myfs;
-        var fname = './client/jassijs.json';
+        var fname = this.name;
         await myfs.writeFile(fname, JSON.stringify(this.jsonData, undefined, "\t"));
         this.init(await myfs.readFile(fname));
     }

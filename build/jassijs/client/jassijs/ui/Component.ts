@@ -5,20 +5,25 @@ import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { CSSProperties } from "jassijs/ui/CSSProperties";
 
+
+
 //import { CSSProperties } from "jassijs/ui/Style";
 
-jassijs.includeCSSFile( "jassijs.css");
-jassijs.includeCSSFile( "materialdesignicons.min.css");
+jassijs.includeCSSFile("jassijs.css");
+jassijs.includeCSSFile("materialdesignicons.min.css");
 
 declare global {
     interface Element {
-        _this: Component;
+        _this: Component<any>;
         _id?: string;
+        _thisOther: Component<any>[];
     }
 
 }
 
-
+//vergleichen
+//jeder bekommt componentid
+//gehe durch baum wenn dom_component fehlt, dann ist kopiert und muss mit id von componentid gerenderd werden
 
 export class UIComponentProperties {
 
@@ -36,18 +41,16 @@ export class UIComponentProperties {
      * allcomponents 
      */
     editableChildComponents?: string[];
+
 }
 export function $UIComponent(properties: UIComponentProperties): Function {
     return function (pclass) {
         registry.register("$UIComponent", pclass, properties);
     }
 }
-export class ComponentCreateProperties {
-    id?: string;
-    noWrapper?: boolean;
-}
 
-export interface ComponentConfig {
+
+export interface ComponentProperties {
     /**
     * called if the component get the focus
     * @param {function} handler - the function which is executed
@@ -91,16 +94,123 @@ export interface ComponentConfig {
     /**
      * ccc-Properties
      */
-    css?: CSSProperties;
+    style?: React.CSSProperties;
     styles?: any[];
 
     /**
      * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
      **/
     contextMenu?;
+    /*
+    ** Component has no Wrapper around the dom-Element dom=domWrapper
+    */
+    noWrapper?: boolean;
+    replaceNode?: any;
+    /*    //React things - we don't need it
+      context: any;
+      state;
+      refs;
+      setState() {
+          throw new Error("not implemented");
+      }
+      forceUpdate() {
+          throw new Error("not implemented");
+      }*/
 }
+
+
+var React = {
+
+    createElement(type: any, props, ...children) {
+
+        if (props === undefined || props === null)//TODO is this right?
+            props = {};
+        if (children) {
+            props.children = children;
+        }
+        var ret = {
+            props: props,
+            type: type
+        }
+        //@ts-ignore
+        for (var x = 0; x < Component._componentHook.length; x++) {
+            //@ts-ignore
+            Component._componentHook[x]("create", ret, "React.createElement");
+        }
+        return ret;
+
+    }
+}
+//@ts-ignore
+React.Component = class {
+    props;
+    constructor(props: any) {
+        this.props = props;
+    }
+};
+export {React};
+declare global {
+    interface Window {
+        fetch: (url: string, options?: {}) => Promise<any>
+    }
+}
+declare global {
+    interface Window {
+        React: any;
+    }
+    interface React {
+        createElement(atype: any, props, ...children);
+    }
+}
+
+window.React = React;
+export function createComponent(node: React.ReactNode) {//node: { key: string, props: any, type: any }):Component {
+    var atype = (<any>node).type;
+    var props = (<any>node).props;
+    var ret;
+    if (typeof atype === "string") {
+        if (props === undefined)
+            props = {};
+        props.tag = atype;
+        ret = new HTMLComponent(props);
+        //ret.tag = atype;
+        var newdom = ret.dom;//document.createElement(atype);
+
+        //ret.init(newdom, { noWrapper: true });
+    } else if (atype.constructor !== undefined) {
+        ret = new atype(props);
+    } else if (typeof atype === "function") {
+        ret = atype(props);
+    } 
+    if ((<any>node)?.props?.children !== undefined) {
+        if (props === null || props === undefined)
+            props = {};
+        props.children = (<any>node)?.props?.children;
+        for (var x = 0; x < props.children.length; x++) {
+            var child = props.children[x];
+            var cchild;
+            if (typeof child === "string") {
+
+
+                cchild = new TextComponent();
+                cchild.tag = "";
+                cchild.text = child;
+                //child.dom = nd;
+            } else {
+                cchild = createComponent(child);
+            }
+            ret.add(cchild);
+        }
+    }
+    return ret;
+
+}
+//class TC <Prop>extends React.Component<Prop,{}>{
 @$Class("jassijs.ui.Component")
-export class Component implements ComponentConfig {
+@$Property({ name: "testuw", type: "string"})
+export class Component<T = {}> implements React.Component<ComponentProperties, {}>  {
+    props: T;
+
     private static _componentHook = [];
     _eventHandler;
     __dom: HTMLElement;
@@ -112,7 +222,7 @@ export class Component implements ComponentConfig {
     _designMode;
     _styles?: any[];
 
-    protected designDummies: Component[];
+    protected designDummies: Component<{}>[];
     /*  get domWrapper():Element{
           return this._domWrapper;
       }
@@ -129,26 +239,57 @@ export class Component implements ComponentConfig {
      * @param {string} [properties.id] -  connect to existing id (not reqired)
      * 
      */
-    constructor(properties: ComponentCreateProperties = undefined) {//id connect to existing(not reqired)
-        if (properties === undefined || properties.id === undefined) {
-        } else {
-
-            this._id = properties.id;
-            this.__dom = document.getElementById(properties.id);
-            this.dom._this = this;
+    constructor(properties: T | any = undefined) {//id connect to existing(not reqired)
+        // super(properties, undefined);
+        this.props = properties;
+        var rend = this.render();
+        if (rend) {
+            var comp = createComponent(rend);
+            this.init((<any>comp).dom);
         }
+        this.config(this.props);
     }
-    config(config: ComponentConfig): Component {
-        for (var key in config) {
-            if (typeof this[key] === 'function') {
-                this[key](config[key]);
-            } else {
-                this[key] = config[key];
+
+
+    render(): React.ReactNode {
+        return undefined;
+    }
+    /*  rerender() {
+          var alt = this.dom;
+          this.init(this.lastinit, { replaceNode: this.dom });
+          this.config(this.lastconfig);
+      }*/
+    config(config: T, forceRender = false): Component<T> {
+        var con: any = Object.assign({}, config);
+        delete con.noWrapper;
+        delete con.replaceNode;
+        // this.lastconfig = config;
+        var notfound = <any>{}
+        for (var key in con) {
+            if (key in this) {
+                var me = <any>this;
+                if (typeof me[key] === 'function') {
+                    me[key](config[key]);
+                } else {
+                    me[key] = config[key];
+                }
+            } else
+                notfound[key] = con;
+        }
+        Object.assign(this.props === undefined ? {} : this.props, config);
+        if (Object.keys(notfound).length > 0 && forceRender) {
+            var rerender = this.render();
+            if (rerender) {
+                this.init(createComponent(rerender).dom);
+                console.log("rerender");
             }
         }
         return this;
         //    return new c();
     }
+    /**
+     * called if the component is created
+     */
     static onComponentCreated(func) {
         this._componentHook.push(func);
     }
@@ -202,11 +343,18 @@ export class Component implements ComponentConfig {
         this.__dom = value;
         /** @member {dom} - the dom-element*/
         /** @member {numer}  - the id of the element */
-        this.dom.classList.add("jinlinecomponent");
-        this.dom.classList.add("jresizeable");
-        if (domalt !== undefined) {
-            domalt.classList.remove("jinlinecomponent");
-            domalt.classList.remove("jresizeable");
+        if (this.dom.classList) {//Textnode!
+            this.dom.classList.add("jinlinecomponent");
+            this.dom.classList.add("jresizeable");
+            if (domalt !== undefined) {
+                domalt.classList.remove("jinlinecomponent");
+                domalt.classList.remove("jresizeable");
+            }
+        }
+        if (this.dom._this && this.dom._this !== this) {
+            if (this.dom._thisOther === undefined)
+                this.dom._thisOther = [];
+            this.dom._thisOther.push(this.dom._this);
         }
         this.dom._this = this;
 
@@ -215,6 +363,7 @@ export class Component implements ComponentConfig {
     onfocus(handler) {
         return this.on("focus", handler);
     }
+
     @$Property({ default: "function(event){\n\t\n}" })
     onblur(handler) {
         return this.on("blur", handler);
@@ -230,13 +379,13 @@ export class Component implements ComponentConfig {
          };*/
         return handler;
     }
-    off(eventname: string, handler: EventListenerOrEventListenerObject=undefined) {
+    off(eventname: string, handler: EventListenerOrEventListenerObject = undefined) {
         this.dom.removeEventListener(eventname, handler);
     }
     private static cloneAttributes(target, source) {
         [...source.attributes].forEach(attr => { target.setAttribute(attr.nodeName === "id" ? 'data-id' : attr.nodeName, attr.nodeValue) })
     }
-    static replaceWrapper(old: Component, newWrapper: HTMLElement) {
+    static replaceWrapper(old: Component<any>, newWrapper: HTMLElement) {
         //Component.cloneAttributes(newWrapper,old.domWrapper);
         var cls = old.domWrapper.getAttribute("class");
 
@@ -256,13 +405,13 @@ export class Component implements ComponentConfig {
      * create an Element from an htmlstring e.g. createDom("<input/>")
      */
     static createHTMLElement(html: string): HTMLElement {
-        var lower=html.toLocaleLowerCase();
-        if(lower.startsWith("<td")||lower.startsWith("<tr")){
+        var lower = html.toLocaleLowerCase();
+        if (lower.startsWith("<td") || lower.startsWith("<tr")) {
             const template = document.createElement("template");
             template.innerHTML = html;
             const node = template.content.firstElementChild;
-            return<HTMLElement> node;
-        }else
+            return <HTMLElement>node;
+        } else
             return <HTMLElement>document.createRange().createContextualFragment(html).children[0];
     }
     /**
@@ -270,15 +419,28 @@ export class Component implements ComponentConfig {
      * @param {dom} dom - init the dom element
      * @paran {object} properties - properties to init
     */
-    init(dom: HTMLElement | string, properties: ComponentCreateProperties = undefined) {
+    init(dom: HTMLElement | string, properties: T = undefined) {
+        // this.lastinit = dom;
+        var oldwrapper = this.domWrapper;
+        var olddom = this.dom;
         if (typeof dom === "string")
             dom = Component.createHTMLElement(dom);
         //is already attached
         if (this.domWrapper !== undefined) {
-            if (this.domWrapper.parentNode !== undefined)
-                this.domWrapper.parentNode.removeChild(this.domWrapper);
+            var thisProperties: ComponentProperties = properties;
+            if (thisProperties?.replaceNode?.parentNode) {
+                thisProperties?.replaceNode.parentNode.replaceChild(dom, thisProperties?.replaceNode);
+                this.dom = dom;
+                if(oldwrapper===olddom)
+                    this.domWrapper=dom;    
+                this.dom.setAttribute("id", thisProperties?.replaceNode.getAttribute("id"));
+                return;
+            }
+
             this.domWrapper._this = undefined;
         }
+
+
         if (this.dom !== undefined) {
             this.__dom._this = undefined;
         }
@@ -291,21 +453,23 @@ export class Component implements ComponentConfig {
         //   jassijs.componentSpy.unwatch(this);
         // }
         this.dom = dom;
-        this._id = "j"+registry.nextID();
-        this.dom.setAttribute("id", this._id);
+        this._id = olddom ? olddom.id : ("j" + registry.nextID());
+        if (this.dom.setAttribute !== undefined)//Textnode
+            this.dom.setAttribute("id", this._id);
         /** @member {Object.<string,function>} - all event handlers*/
         this._eventHandler = {};
         //add _this to the dom element
-        var lid = "j"+registry.nextID();
+        var lid = oldwrapper ? oldwrapper.id : ("j" + registry.nextID());
         var st = 'style="display: inline-block"';
         if (this instanceof classes.getClass("jassijs.ui.Container")) {
             st = "";
         }
 
-        if (properties !== undefined && properties.noWrapper === true) {
+        if (properties !== undefined && (<any>properties).noWrapper === true) {
             this.domWrapper = this.dom;
             this.domWrapper._id = this._id;
-            this.domWrapper.classList.add("jcomponent");
+            if (this.domWrapper.classList !== undefined)
+                this.domWrapper.classList.add("jcomponent");
         } else {
             /** @member {dom} - the dom element for label*/
             let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
@@ -313,6 +477,9 @@ export class Component implements ComponentConfig {
             this.domWrapper._this = this;
             this.domWrapper._id = lid;
             this.domWrapper.appendChild(dom);
+        }
+        if (oldwrapper?.parentNode !== undefined) {
+            oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper);//removeChild(this.domWrapper);
         }
         //append temporary so new elements must not added immediately
         if (document.getElementById("jassitemp") === null) {
@@ -327,10 +494,12 @@ export class Component implements ComponentConfig {
         //if (jassijs.componentSpy !== undefined) {
         //     jassijs.componentSpy.watch(this);
         //  }
-        document.getElementById("jassitemp").appendChild(this.domWrapper);
+        if (!oldwrapper)
+            document.getElementById("jassitemp").appendChild(this.domWrapper);
 
     }
 
+    @$Property({ description: "adds a label above the component" })
     set label(value: string) { //the Code
         if (value === undefined) {
             var lab = this.domWrapper.querySelector(".jlabel"); //this.domWrapper.getElementsByClassName("jlabel");
@@ -346,10 +515,11 @@ export class Component implements ComponentConfig {
         }
     }
 
-    @$Property({ description: "adds a label above the component" })
+
     get label(): string {
         return this.domWrapper.querySelector(".jlabel")?.innerHTML;
     }
+
     @$Property({ description: "tooltip are displayed on mouse over" })
     get tooltip(): string {
         return this.dom.getAttribute("title");
@@ -359,7 +529,7 @@ export class Component implements ComponentConfig {
 
     }
 
-    @$Property({})
+    @$Property()
     get x(): number {
         return Number(this.domWrapper.style.left.replace("px", ""));
     }
@@ -368,8 +538,6 @@ export class Component implements ComponentConfig {
         this.domWrapper.style.left = value.toString().replace("px", "") + "px";
         this.domWrapper.style.position = "absolute";
     }
-
-
 
     @$Property()
     get y(): number {
@@ -383,17 +551,16 @@ export class Component implements ComponentConfig {
 
     @$Property()
     get hidden(): boolean {
-        return (this.dom.getAttribute("hidden")==="");
+        return (this.dom.getAttribute("hidden") === "");
     }
     set hidden(value: boolean) {
-        if(value)
-            this.dom.setAttribute("hidden","");
+        if (value)
+            this.dom.setAttribute("hidden", "");
         else
             this.dom.removeAttribute("hidden");
     }
 
-
-    set width(value: string|number) { //the Code
+    set width(value: string | number) { //the Code
         //  if($.isNumeric(value))
         if (value === undefined)
             value = "";
@@ -409,8 +576,8 @@ export class Component implements ComponentConfig {
         }
         //  
     }
-    @$Property({ type: "string" })
-    get width():string {
+    @$Property({ type: "number" })
+    get width() {
         if (this.domWrapper.style.width !== undefined)
             return this.domWrapper.style.width;
         return this.dom.style.width.replace("px", "");
@@ -431,7 +598,7 @@ export class Component implements ComponentConfig {
             this.domWrapper.style.height = "";
         }
     }
-    @$Property({ type: "string" })
+    @$Property({ type: "number" })
     get height() {
         if (this.domWrapper.style.height !== undefined)
             return this.domWrapper.style.height;
@@ -439,10 +606,13 @@ export class Component implements ComponentConfig {
             return undefined;
         return this.dom.style.height.replace("px", "");
     }
-
     @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
-    set css(properties: CSSProperties) {
+    set style(properties: React.CSSProperties) {
         var prop = CSSProperties.applyTo(properties, this);
+        for (let key in prop) {
+
+                    this.dom.style[key] = prop[key];
+            }
         //if css-properties are already set and now a properties is deleted
         if (this["_lastCssChange"]) {
             for (let key in this["_lastCssChange"]) {
@@ -483,7 +653,7 @@ export class Component implements ComponentConfig {
                 this.dom.classList.add(st);
         });
     }
-
+    
     @$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" })
     get contextMenu() {
         return this._contextMenu;
@@ -540,5 +710,230 @@ export class Component implements ComponentConfig {
     }
     extensionCalled(action: ExtensionAction) {
     }
+    //React things - we don't need it
+    context: any;
+    state;
+    refs;
+    setState() {
+        throw new Error("not implemented");
+    }
+    forceUpdate() {
+        throw new Error("not implemented");
+    }
+}
+interface HTMLComponentProperties extends ComponentProperties,Omit<React.HTMLProps<Element>,"contextMenu">{
+    tag?: string;
+    children?;
+}
 
+
+// ret.tag = atype;
+//        var newdom = document.createElement(atype);
+@$Class("jassijs.ui.HTMLComponent")
+export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Component<HTMLComponentProperties> implements HTMLComponentProperties{
+    _components: Component[] = [];
+    _designDummy: any;
+
+
+    constructor(prop: HTMLComponentProperties = {}) {
+        super(prop);
+        
+        //this.init(document.createElement(tag), { noWrapper: true });
+    }
+   
+    config(props: HTMLComponentProperties, forceRender: boolean = false) {
+        var tag=props?.tag===undefined?"span":props?.tag;
+        if (props?.tag !== this.tag.toLowerCase()) {
+            var childs = this.dom?.childNodes;
+            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
+            if (childs?.length > 0)
+                this.dom.append(...<any>childs);
+        }
+        super.config(props, forceRender);
+        for (var prop in props) {
+
+            if (prop === "style") {
+                for (var key in (<any>props).style) {
+                    var val = (<any>props).style[key];
+                    this.dom.style[key] = val;
+                }
+            } else if (prop in this.dom) {
+                Reflect.set(this.dom, prop, [props[prop]])
+            } else if (prop.toLocaleLowerCase() in this.dom) {
+                Reflect.set(this.dom, prop.toLocaleLowerCase(), props[prop])
+            } else if (prop in this.dom)
+                this.dom.setAttribute(prop, (<any>props)[prop]);
+            // }
+        }
+        if (props?.children) {
+            if (props?.children.length > 0 && props?.children[0] instanceof Component) {
+                this.removeAll(false);
+                for (var x = 0; x < props.children.length; x++) {
+                    this.add(props.children[x]);
+                }
+                delete props.children;
+            }
+        }
+        return this;
+    }
+    set tag(value: string) {
+        var tag=value==undefined?"span":value;
+        if (tag!== this.tag.toLowerCase()) {
+            this.props.tag = value;
+            this.config(this.props);
+            /*
+            var childs = this.dom?.childNodes;
+            this.init(document.createElement(value), { replaceNode: this.dom, noWrapper: true });
+            if (childs?.length > 0)
+                this.dom.append(...<any>childs);
+            */
+        }
+    }
+    @$Property()
+    get tag(): string {
+        var ret=this.dom?.tagName;
+        if(ret===null||ret===undefined)
+            return "";
+        return ret;
+    }
+    /**
+    * adds a component to the container
+    * @param {jassijs.ui.Component} component - the component to add
+    */
+    add(component) {//add a component to the container
+        if (component._parent !== undefined) {
+            component._parent.remove(component);
+        }
+        component._parent = this;
+        component.domWrapper._parent = this;
+
+        /* component._parent=this;
+         component.domWrapper._parent=this;
+         if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
+              component.domWrapper.parentNode.removeChild(component.domWrapper);
+         }*/
+        if (this["designDummyFor"])
+            this.designDummies.push(component);
+        else
+            this._components.push(component);
+        this.dom.appendChild(component.domWrapper);
+    }
+    /**
+     * adds a component to the container before an other component
+     * @param {jassijs.ui.Component} component - the component to add
+     * @param {jassijs.ui.Component} before - the component before then component to add
+     */
+    addBefore(component: Component, before: Component) {//add a component to the container
+        if (component._parent !== undefined) {
+            component._parent.remove(component);
+        }
+        component._parent = this;
+        component.domWrapper["_parent"] = this;
+        var index = this._components.indexOf(before);
+        if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
+            component.domWrapper.parentNode.removeChild(component.domWrapper);
+        }
+        if (component["designDummyFor"])
+            this.designDummies.push(component);
+        else
+            this._components.splice(index, 0, component);
+
+        before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+    }
+    /**
+    * remove the component
+    * @param {jassijs.ui.Component} component - the component to remove
+    * @param {boolean} destroy - if true the component would be destroyed
+    */
+    remove(component, destroy = false) {
+        if (destroy)
+            component.destroy();
+        component._parent = undefined;
+        if (component.domWrapper !== undefined)
+            component.domWrapper._parent = undefined;
+        if (this._components) {
+            var pos = this._components.indexOf(component);
+            if (pos >= 0)
+                this._components.splice(pos, 1);
+        }
+        let posd = this.designDummies?.indexOf(component);
+        if (posd >= 0)
+            this.designDummies.splice(posd, 1);
+        try {
+            this.dom.removeChild(component.domWrapper);
+        } catch (ex) {
+
+        }
+    }
+    /**
+    * remove all component
+    * @param {boolean} destroy - if true the component would be destroyed
+    */
+    removeAll(destroy = undefined) {
+        while (this._components.length > 0) {
+            this.remove(this._components[0], destroy);
+        }
+
+    }
+    destroy() {
+        if (this._components !== undefined) {
+            var tmp = [].concat(this._components);
+            for (var k = 0; k < tmp.length; k++) {
+                tmp[k].destroy();
+            }
+            this._components = [];
+        }
+        super.destroy();
+    }
+
+}
+
+
+export interface TextComponentProperties extends ComponentProperties {
+    text?;
+}
+
+@$Class("jassijs.ui.TextComponent")
+export class TextComponent<T extends TextComponentProperties = {}> extends Component<TextComponentProperties> implements TextComponentProperties{
+    constructor(props: TextComponentProperties = {}) {
+        super(props);
+        
+    }
+    get label(){
+        return "";
+    }
+    get width(){
+        return 0;
+    }
+    get height(){
+        return 0;
+    }
+    get x(){
+        return 0;
+    }
+    get y(){
+        return 0;
+    }
+    get tooltip(){
+        return "";
+    }
+    get hidden(){
+        return false;
+    }
+    config(props: TextComponentProperties, forceRender: boolean = false) {
+        if(this.dom===undefined){
+            this.init(<any>document.createTextNode(props?.text), { noWrapper: true });
+        }
+        super.config(props, forceRender);
+        return this;
+    }
+    @$Property()
+    get text() {
+        return this.dom?.textContent;
+    };
+    set text(value: string) {
+
+       // var p = JSON.parse(value);//`{"a":"` + value + '"}').a;
+        this.dom.textContent = value;
+    };
 }

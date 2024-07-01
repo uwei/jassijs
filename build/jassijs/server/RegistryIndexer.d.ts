@@ -1,4 +1,4 @@
-import { Indexer } from "./Indexer";
+import { Indexer } from "jassijs/server/Indexer";
 export declare class ServerIndexer extends Indexer {
     updateRegistry(): Promise<void>;
     dirFiles(modul: string, path: string, extensions: string[], ignore?: string[]): Promise<string[]>;

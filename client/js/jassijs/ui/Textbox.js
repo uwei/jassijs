@@ -12,7 +12,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textbox = void 0;
     let Textbox = class Textbox extends DataComponent_1.DataComponent {
-        constructor(props = undefined) {
+        constructor(props = {}) {
             super(props);
             this._value = "";
             this._isFocused = false;
@@ -22,7 +22,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             // this.converter = undefined;
         }
         render() {
-            return React.createElement("input", { type: "text" });
+            return React.createElement("input", Object.assign(Object.assign({}, this.props.domProperties), { type: "text" }));
         }
         get dom() {
             return super.dom;

@@ -18,7 +18,7 @@ export function $ReportComponent(properties: ReportComponentProperties): Functio
 
 
 
-@$Class("jassijs_report.ReportComponent")
+@$Class("jassijs_report.RComponent")
 @$Property({ hideBaseClassProperties: true })
 export class RComponent extends Panel {
     private _colSpan: number;
@@ -274,7 +274,7 @@ export class RComponent extends Panel {
     @$Property({ type: "color" })
     get color(): string {
         return this._color;
-    }
+    } 
     set color(value: string) {
         this._color = value;
         this.dom.style.color= value;
@@ -343,21 +343,22 @@ export class RComponent extends Panel {
             return RComponent.findReport(parent._parent);
     }
     @$Property()
+    //@ts-ignore
     get style(): string {
         return this._style;
     }
-
+    //@ts-ignore
     set style(value: string) {
         var old = this._style;
         this._style = value;
         var report = RComponent.findReport(this);
         if (report) {
-            report.styleContainer._components.forEach((comp: RStyle) => {
+            report.styleContainer._components.forEach((comp:any) => {
                 if (comp.name === old) {
                     this.dom.classList.remove(comp.styleid);
                 }
             });
-            report.styleContainer._components.forEach((comp: RStyle) => {
+            report.styleContainer._components.forEach((comp:any) => {
                 if (comp.name === value) {
                     this.dom.classList.add(comp.styleid);
                 }

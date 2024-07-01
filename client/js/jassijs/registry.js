@@ -31,7 +31,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Windows.ts": {
-		"date": 1657655076000,
+		"date": 1719609392405.4172,
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/ext/goldenlayout.ts": {
@@ -65,7 +65,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.ClientError": {}
 	},
 	"jassijs/remote/Config.ts": {
-		"date": 1697209179729.3484
+		"date": 1719331708682.118
 	},
 	"jassijs/remote/Database.ts": {
 		"date": 1655556796000,
@@ -541,7 +541,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1657714030000
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1684401442000,
+		"date": 1719332352671.4578,
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -558,7 +558,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1684515212000
 	},
 	"jassijs/server/Installserver.ts": {
-		"date": 1697209043615.473
+		"date": 1719314261039.9204
 	},
 	"jassijs/server/LocalFS.ts": {
 		"date": 1697206634326.1233
@@ -604,7 +604,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs/ui/ActionNodeMenu": {}
 	},
 	"jassijs/ui/BoxPanel.ts": {
-		"date": 1697484586822.1821,
+		"date": 1719771050036.1804,
 		"jassijs.ui.BoxPanel": {
 			"$UIComponent": [
 				{
@@ -626,7 +626,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Button.ts": {
-		"date": 1697489115565.8855,
+		"date": 1719769956955.6282,
 		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
@@ -641,7 +641,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Calendar.ts": {
-		"date": 1696687306198.7598,
+		"date": 1719769978901.3284,
 		"jassijs.ui.Calendar": {
 			"$UIComponent": [
 				{
@@ -658,7 +658,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Checkbox.ts": {
-		"date": 1697484985748.2979,
+		"date": 1719772853681.473,
 		"jassijs.ui.Checkbox": {
 			"$UIComponent": [
 				{
@@ -670,7 +670,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1699192939210.3342,
+		"date": 1719778583646.973,
 		"jassijs.ui.Component": {
 			"$Property": [
 				{
@@ -692,7 +692,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1699199726930.9116,
+		"date": 1719768359802.573,
 		"jassijs.ui.Container": {
 			"$Property": [
 				{
@@ -703,7 +703,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/ContextMenu.ts": {
-		"date": 1696687306206.7812,
+		"date": 1719778747000.2986,
 		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{
@@ -816,7 +816,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DataComponent.ts": {
-		"date": 1697816808896.5654,
+		"date": 1719769858625.2778,
 		"jassijs.ui.DataComponent": {
 			"@members": {}
 		}
@@ -916,39 +916,15 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DesignDummy": {}
 	},
 	"jassijs/ui/DockingContainer.ts": {
-		"date": 1681513934000,
+		"date": 1719608546166.3955,
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/HTMLEditorPanel.ts": {
 		"date": 1655641682000,
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
-	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1697484228054.6736,
-		"jassijs.ui.HTMLPanel": {
-			"$UIComponent": [
-				{
-					"fullPath": "common/HTMLPanel",
-					"icon": "mdi mdi-cloud-tags"
-				}
-			],
-			"@members": {}
-		}
-	},
-	"jassijs/ui/Image.ts": {
-		"date": 1697484437958.736,
-		"jassijs.ui.Image": {
-			"$UIComponent": [
-				{
-					"fullPath": "default/Image",
-					"icon": "mdi mdi-file-image"
-				}
-			],
-			"@members": {}
-		}
-	},
 	"jassijs/ui/InvisibleComponent.ts": {
-		"date": 1697484252085.1384,
+		"date": 1719775654357.0962,
 		"jassijs.ui.InvisibleComponent": {
 			"$Property": [
 				{
@@ -958,7 +934,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Menu.ts": {
-		"date": 1696691833397.9663,
+		"date": 1719770281057.927,
 		"jassijs.ui.Menu": {
 			"$UIComponent": [
 				{
@@ -972,29 +948,11 @@ define("jassijs/registry",["require"], function(require) {
 			"@members": {}
 		}
 	},
-	"jassijs/ui/MenuItem.ts": {
-		"date": 1696691833393.435,
-		"jassijs.ui.MenuItem": {
-			"$UIComponent": [
-				{
-					"fullPath": "common/MenuItem",
-					"icon": "mdi mdi-menu-open",
-					"initialize": {
-						"text": "menu"
-					},
-					"editableChildComponents": [
-						"items"
-					]
-				}
-			],
-			"@members": {}
-		}
-	},
 	"jassijs/ui/Notify.ts": {
 		"date": 1655585212000
 	},
 	"jassijs/ui/ObjectChooser.ts": {
-		"date": 1697202144277.7021,
+		"date": 1719770359384.1118,
 		"jassijs.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -1015,7 +973,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1698138718755.303,
+		"date": 1719771104740.193,
 		"jassijs.ui.Panel": {
 			"$UIComponent": [
 				{
@@ -1044,16 +1002,6 @@ define("jassijs/registry",["require"], function(require) {
 	"jassijs/ui/Property.ts": {
 		"date": 1658347724000,
 		"jassijs.ui.Property": {}
-	},
-	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1696320466897.5088,
-		"jassijs.ui.PropertyEditor": {},
-		"jassijs.ui.PropertyEditorTestSubProperties": {
-			"@members": {}
-		},
-		"jassijs.ui.PropertyEditorTestProperties": {
-			"@members": {}
-		}
 	},
 	"jassijs/ui/PropertyEditors/BooleanEditor.ts": {
 		"date": 1655556866000,
@@ -1250,7 +1198,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs/ui/PropertyEditors/TableColumnImport": {}
 	},
 	"jassijs/ui/Repeater.ts": {
-		"date": 1697484945129.4937,
+		"date": 1719770406515.1555,
 		"jassijs.ui.RepeaterDesignPanel": {},
 		"jassijs.ui.Repeater": {
 			"$UIComponent": [
@@ -1267,7 +1215,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Select.ts": {
-		"date": 1697485303644.25,
+		"date": 1719770421616.652,
 		"jassijs.ui.Select": {
 			"$UIComponent": [
 				{
@@ -1305,7 +1253,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Style.ts": {
-		"date": 1698508262720.2544,
+		"date": 1719755851416.894,
 		"jassijs.ui.Style": {
 			"$UIComponent": [
 				{
@@ -1317,7 +1265,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1697484708614.0403,
+		"date": 1719774223374.5486,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},
@@ -1339,7 +1287,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textarea.ts": {
-		"date": 1655757394000,
+		"date": 1719770473688.5388,
 		"jassijs.ui.Textarea": {
 			"$UIComponent": [
 				{
@@ -1356,7 +1304,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1697483662800.33,
+		"date": 1719769925716.3665,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -1368,7 +1316,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Tree.ts": {
-		"date": 1696687306236.517,
+		"date": 1719768890018.7583,
 		"jassijs.ui.TreeEditorPropertiesMulti": {
 			"@members": {}
 		},
@@ -1393,7 +1341,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Upload.ts": {
-		"date": 1655847946000,
+		"date": 1719770567272.5264,
 		"jassijs.ui.Upload": {
 			"$UIComponent": [
 				{
@@ -1447,6 +1395,9 @@ define("jassijs/registry",["require"], function(require) {
 	"jassijs/util/Tools.ts": {
 		"date": 1657655420000,
 		"jassijs.util.Tools": {}
+	},
+	"jassijs/ui/State.ts": {
+		"date": 1719830765306.527
 	}
 }
  }

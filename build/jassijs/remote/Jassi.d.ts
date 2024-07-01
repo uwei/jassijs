@@ -27,9 +27,6 @@ export declare class Jassi {
     base: {
         [k: string]: any;
     };
-    modules: {
-        [key: string]: string;
-    };
     options: any;
     isServer: boolean;
     cssFiles: {

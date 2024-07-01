@@ -23,7 +23,7 @@ export interface DataComponentProperties extends ComponentProperties {
 
 var tmpDatabinder = undefined;
 @$Class("jassijs.ui.DataComponent")
-export class DataComponent<T extends DataComponentProperties> extends Component<T> implements DataComponentProperties {
+export class DataComponent<T extends DataComponentProperties=DataComponentProperties> extends Component<T> implements DataComponentProperties {
     _autocommit: boolean;
     _databinder: Databinder;
 
@@ -35,12 +35,12 @@ export class DataComponent<T extends DataComponentProperties> extends Component<
      * @param {string} [properties.id] -  connect to existing id (not reqired)
      * 
      */
-    constructor(properties = undefined) {//id connect to existing(not reqired)
+    constructor(properties:DataComponentProperties={}) {//id connect to existing(not reqired)
         super(properties);
         this._autocommit = false;
     }
    
-   
+    
 
     get autocommit(): boolean {
         return this._autocommit;

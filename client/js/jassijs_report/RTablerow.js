@@ -20,13 +20,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties = undefined) {
-            super(properties);
+        constructor(properties = {}) {
+            super(Object.assign(properties, { noWrapper: true }));
             this.reporttype = "tablerow";
-            properties = undefined === properties ? {} : properties;
-            properties.noWrapper = true;
-            super.init("<tr></tr>", properties);
             this.dom.classList.add("designerNoResizable");
+        }
+        render() {
+            return React.createElement("tr", { className: "RTablerow" });
         }
         oncomponentAdded(callback) {
             this.addEvent("componentAdded", callback);

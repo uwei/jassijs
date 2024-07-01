@@ -226,7 +226,7 @@ export class CodeEditor extends Panel {
         await new Server().saveFile(this._file, code);
 
 
-        var f = this._file.replace(".ts", "");
+        var f = this._file.replace(".tsx", "").replace(".ts", "");
         if (this._file?.startsWith("$serverside/")) {
 
         } else {
@@ -360,67 +360,97 @@ export class CodeEditor extends Panel {
     addVariables(variables) {
         this.variables.addAll(variables);
     }
-    private async fillVariablesAndSetupParser(url: string, root: Component, component: Component, cache: { [componentid: string]: [{ component: Component, line: number, column: number, pos: number, name: string }] }, parser) {
-
+    private async fillVariablesAndSetupParser(url: string, root: Component, thecomponent: Component, cache: { [componentid: string]: [{ component: Component, line: number, column: number, pos: number, name: string }] }, parser, codePositions) {
+        
         var useThis = false;
-        if (cache[component._id] === undefined && component["__stack"] !== undefined) {
-            var lines = component["__stack"]?.split("\n");
-            for (var x = 0; x < lines.length; x++) {
-                var sline: string = lines[x];
-                if (sline.indexOf("$temp.js") > 0) {
-                    var spl = sline.split(":");
-                    var entr = {
+        var connectedComponents = [thecomponent];
+        if (thecomponent.__dom._thisOther)
+            thecomponent.__dom._thisOther.forEach(e => connectedComponents.push(e));
+        for (var i = 0; i < connectedComponents.length; i++) {
+            var component = connectedComponents[i];
 
+            if (cache[component._id] === undefined && component["__stack"] !== undefined && (component?.dom?.classList===undefined || !component.dom.classList.contains("designdummy"))) {
+                var lines = component["__stack"]?.split("\n");
+                for (var x = 0; x < lines.length; x++) {
+                    var sline: string = lines[x];
+                    if (sline.indexOf("$temp.js") > 0) {
+                        var spl = sline.split(":");
+                        var entr = {
+
+                        }
+                        if (cache[component._id] === undefined)
+                            cache[component._id] = <any>[];
+                        var data = {
+                            line: Number(spl[spl.length - 2]),
+                            column: Number(spl[spl.length - 1].replace(")", "")),
+                            component: component,
+                            pos: 0,
+                            name: undefined
+                        };
+                        if (codePositions[data.line + "," + data.column] === undefined) {//we collect first position in the scourecode file
+                            codePositions[data.line + "," + data.column] = data;
+                        }
+                        cache[component._id].push(data);
                     }
-                    if (cache[component._id] === undefined)
-                        cache[component._id] = <any>[];
-                    cache[component._id].push({
-                        line: Number(spl[spl.length - 2]),
-                        column: Number(spl[spl.length - 1].replace(")", "")),
-                        component: component,
-                        pos: 0,
-                        name: undefined
-                    });
                 }
             }
-            if (component["_components"]) {
-                for (var x = 0; x < component["_components"].length; x++) {
-                    this.fillVariablesAndSetupParser(url, root, component["_components"][x], cache, parser);
+        }
+        if (this.file.toLocaleLowerCase().endsWith(".tsx")) {
+            for (var x = 0; x < thecomponent.dom.children.length; x++) {
+                var ch = thecomponent.dom.children[x];
+                if (ch._this) {
+                    this.fillVariablesAndSetupParser(url, root, ch._this, cache, parser, codePositions);
                 }
             }
-            if (component === root) {
-                //fertig
-                var hh = 0;
-                var TSSourceMap = await classes.loadClass("jassijs_editor.util.TSSourceMap");
-                var values = [];
+        } else {
+            if (thecomponent["_components"]) {
+                for (var x = 0; x < thecomponent["_components"].length; x++) {
+                    this.fillVariablesAndSetupParser(url, root, thecomponent["_components"][x], cache, parser, codePositions);
+                }
+            }
+        }
 
-                //@ts-ignore
-                Object.values(cache).forEach((e) => {
-                    e.forEach(f => values.push(f));
+        if (thecomponent === root) {
+            //fertig
+            var hh = 0;
+            var TSSourceMap = await classes.loadClass("jassijs_editor.util.TSSourceMap");
+            var values = [];
+
+            //@ts-ignore
+            Object.values(cache).forEach((e) => {
+                e.forEach(f => values.push(f));
+            });
+
+            var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".tsx", ".js").replace(".ts", ".js"), values)
+            for (var x = 0; x < tmap.length; x++) {
+                var val = values[x];
+                val.column = tmap[x].column;
+                val.line = tmap[x].line;
+                val.pos = this._codePanel.positionToNumber({
+                    row: val.line,
+                    column: val.column
                 });
 
-                var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values)
-                for (var x = 0; x < tmap.length; x++) {
-                    var val = values[x];
-                    val.column = tmap[x].column;
-                    val.line = tmap[x].line;
-                    val.pos = this._codePanel.positionToNumber({
-                        row: val.line,
-                        column: val.column
-                    });
-
-                }
-                //setupClasscope
-                var foundscope;
-                for (var xx = 0; xx < cache[root._id].length; xx++) {
-                    foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
-                    if (foundscope)
-                        break;
-                }
-                var scope = [{ classname: root?.constructor?.name, methodname: "layout" }];
+            }
+            //setupClasscope
+            var foundscope;
+            for (var xx = 0; xx < cache[root._id].length; xx++) {
+                foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
                 if (foundscope)
-                    scope = [{ classname: root?.constructor?.name, methodname: "layout" }, foundscope];
+                    break;
+            }
+            var scope = [{ classname: root?.constructor?.name, methodname: "layout" }];
+            if (foundscope)
+                scope = [{ classname: root?.constructor?.name, methodname: "layout" }, foundscope];
+            if (this.file.toLowerCase().endsWith(".tsx")) {
+                values = Object.values(codePositions);
+                parser.parse(this._codePanel.value, undefined, values);
+                for (var x = 0; x < values.length; x++) {
+                    this.variables.addVariable(values[x].name, values[x].component, false);
+                }
+                // this.variables.addVariable(sname, val.component, false);
 
+            } else {
                 parser.parse(this._codePanel.value, scope);
                 //if layout is rendered and an other variable is assigned to this, then remove ths variable
                 if (parser.classes[root?.constructor?.name] && parser.classes[root?.constructor?.name].members["layout"]) {
@@ -464,15 +494,15 @@ export class CodeEditor extends Panel {
                         }
                     }
                 }
-
-
-
-                this.variables.updateCache();
-                this.variables.update();
-                // parser.parse(,)
             }
-            return parser;
+
+
+            this.variables.updateCache();
+            this.variables.update();
+            // parser.parse(,)
         }
+        return parser;
+
 
     }
     /**
@@ -486,7 +516,13 @@ export class CodeEditor extends Panel {
             //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
             //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
             //   var Parser = classes.getClass("jassijs_editor.base.Parser");
-            var ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
+
+            var ComponentDesigner;
+           // if (this.file.toLowerCase().endsWith(".tsx"))
+                ComponentDesigner = await classes.loadClass("jassijs_editor.HtmlDesigner");
+           // else
+             //   ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
+
             var Parser = await classes.loadClass("jassijs_editor.util.Parser");
             var parser = new Parser();
             // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
@@ -498,10 +534,11 @@ export class CodeEditor extends Panel {
             }
             //@ts-ignore
             _this._design.connectParser(parser);
-            _this._design["designedComponent"] = ret;
-
-            await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
-            _this._design["editDialog"](true);
+           
+            var codePositions = {};
+            await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser, codePositions);
+             (<any>_this._design).designedComponent = ret;
+            (<any>_this._design).editDialog(true);
             //});
         } else if (ret["reportdesign"] !== undefined) {
             var Parser = await classes.loadClass("jassijs_editor.util.Parser");
@@ -556,7 +593,11 @@ export class CodeEditor extends Panel {
         var lines = code.split("\n");
         var _this = this;
         var breakpoints = _this._codePanel.getBreakpoints();
-        var filename = _this._file.replace(".ts", "$temp.ts");
+        var filename = "";
+        if (_this._file.endsWith(".tsx"))
+            filename = _this._file.replace(".tsx", "$temp.tsx");
+        else
+            filename = _this._file.replace(".ts", "$temp.ts");
         await jassijs.debugger.removeBreakpointsForFile(filename);
         for (var line in breakpoints) {
             if (breakpoints[line]) {
@@ -573,59 +614,77 @@ export class CodeEditor extends Panel {
         //@ts-ignore
         if (data.test !== undefined || window.reportdesign) {
             //capure created Components
-            function hook(name, component: Component) {
-                try {
-                    throw new Error("getstack");
-                } catch (ex) {
-                    if (ex?.stack?.indexOf("$temp.js") != -1)
-                        component["__stack"] = ex.stack;
-                }
-            }
-            Component.onComponentCreated(hook);
-            var ret;
-            if (data.test) {
-                ret = await data.test(new Test());
-            } else {
-                //@ts-ignore
-                if (window.reportdesign) {
-                    ret = {
-                         //@ts-ignore
-                        reportdesign: window.reportdesign
+            function hook(name, component: Component, react) {
+                if (name === "create") {
+                    var ex = new Error();
+                    if (ex?.stack?.indexOf("$temp.js") != -1) {
+                        if (react === "React.createElement") {
+                            if (component?.props === undefined)
+                                component.props = {};
+                            component.props["__stack"] = ex.stack;
+                        } else {
+                            //
+                            if (component?.props?.["__stack"]) {
+                                component["__stack"] = component.props["__stack"];
+                                delete component.props["__stack"];
+                            } else
+                                component["__stack"] = ex.stack;
+                        }
                     }
-                } else {
-                    Component.offComponentCreated(hook);
-                    return;
                 }
             }
+            try {
+                Component.onComponentCreated(hook);
+                var ret;
+                if (data.test) {
+                    ret = await data.test(new Test());
+                } else {
+                    //@ts-ignore
+                    if (window.reportdesign) {
+                        ret = {
+                            //@ts-ignore
+                            reportdesign: window.reportdesign
+                        }
+                    } else {
+                        Component.offComponentCreated(hook);
+                        return;
+                    }
+                }
 
-            // Promise.resolve(ret).then(async function(ret) {
-            if (ret !== undefined) {
+                // Promise.resolve(ret).then(async function(ret) {
+                if (ret !== undefined) {
 
-                await this._processEvalResult(ret, filename);
+                    await this._processEvalResult(ret, filename);
+                    // Component.offComponentCreated(hook);
+
+                }
+
+                //  });
+            } finally {
                 Component.offComponentCreated(hook);
-
             }
-            Component.offComponentCreated(hook);
-            //  });
         }
 
     }
     private async saveTempFile(file: string, code: string) {
 
-
         //@ts-ignore 
         var tss = await import("jassijs_editor/util/Typescript");
         //@ts-ignore 
-        var settings = Object.assign({},Typescript.compilerSettings);
+        var settings = Object.assign({}, Typescript.compilerSettings);
         settings["inlineSourceMap"] = true;
         settings["inlineSources"] = true;
-        var files = await tss.default.transpile(file + ".ts", code,settings);
+        var files;
+        if (this.file.endsWith(".tsx"))
+            files = await tss.default.transpile(file + ".tsx", code, settings);
+        else
+            files = await tss.default.transpile(file + ".ts", code, settings);
 
         var codets = -1;
         var codemap = -1;
         var codejs = -1;
         for (var x = 0; x < files.fileNames.length; x++) {
-            if (files.fileNames[x].endsWith(".ts")) {
+            if (files.fileNames[x].endsWith(".ts") || files.fileNames[x].endsWith(".tsx")) {
                 codets = x;
             }
             if (files.fileNames[x].endsWith(".js.map")) {
@@ -687,7 +746,7 @@ export class CodeEditor extends Panel {
         if (this.file?.startsWith("$serverside/")) {
 
             var res = await this.evalServerside();
-            await this._processEvalResult(res,undefined);
+            await this._processEvalResult(res, undefined);
 
             return;
         }
@@ -701,7 +760,7 @@ export class CodeEditor extends Panel {
         code = code;
         var _this = this;
         var tmp = new Date().getTime();
-        var jsfile = _this._file.replace(".ts", "") + "$temp";
+        var jsfile = _this._file.replace(".tsx", "").replace(".ts", "") + "$temp";
         //await new Server().saveFile("tmp/" + _this._file, code);
         //only local - no TS File in Debugger
         await this.saveTempFile(jsfile, code);

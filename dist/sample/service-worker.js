@@ -1,4 +1,4 @@
-var RUNTIME = 'runtime58';
+var RUNTIME = 'runtime59';
 
 var nextid = 0;
 var tempFiles = {};
@@ -10,10 +10,6 @@ var filesdb;
 //deliver local folder
 var localfolderdb;
 
-var localRemoteProtocolList = {};
-var isLocalRemoteprotocolActivated = {};//{clientid}:true
-console.log("start serviceworker");
-var testdate=new Date();
 async function loadLocalFileEntry(handle, fileName) {
   if (fileName.startsWith("./"))
     fileName = fileName.substring(2);
@@ -125,7 +121,7 @@ function getMimeType(filename) {
   return type;
 }
 
-
+var localRemoteProtocolList = {};
 async function doLocalRemoteProtocol(evt) {
   var body = await evt.request.clone().json();
   var client = await self.clients.get(evt.clientId);
@@ -158,7 +154,7 @@ self.addEventListener('activate', event => {
 });
 
 //var todoAfterLoggedin = [];
-
+var isLocalRemoteprotocolActivated = {};//{clientid}:true
 self.addEventListener('message', function (evt) {
   if (evt.data && evt.data.type === "SAVE_FILE") {//this tempFiles could be delivered
     console.log(evt.data.filename);
@@ -174,7 +170,6 @@ self.addEventListener('message', function (evt) {
     localRemoteProtocolList[evt.data.id](evt.data);
     delete localRemoteProtocolList[evt.data.id];
   } else if (evt.data && evt.data.type === "ACTIVATE_REMOTEPROTCOL") {
-    console.log("activate Remoteprotocol "+evt.source.id)
     isLocalRemoteprotocolActivated[evt.source.id] = true;
   } else
     console.log('postMessage received', evt);
@@ -213,9 +208,14 @@ async function handleEvent(event) {
     }
     return res;
   }
-
+  if(event.request.url.endsWith("/tsWorker.js")){
+    
+    while(tempFiles[event.request.url]===undefined){
+      await new Promise((res)=>setTimeout(()=>res(),100));//wait until file is placed
+    }
+  }
   //let cache = await caches.open(RUNTIME)
-  var filename = event.request.url;
+  var filename = event.request.url;  
   if (tempFiles[filename]) {//we deliver tempFiles
     console.log("deliver " + filename + tempFiles[filename].substring(0, 50));
     return new Response(tempFiles[filename], {

@@ -20,7 +20,8 @@ define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Regist
     */
         constructor(id = undefined) {
             super(id);
-            super.init('<div class="DockingContainer"/>');
+        }
+        componentDidMount() {
             this.maximize();
             var _this = this;
             this._registeredcomponents = {};
@@ -36,6 +37,9 @@ define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Regist
                 }
             }, { rootMargin: `0px 0px 0px 0px` });
             this._intersectionObserver.observe(_this.dom);
+        }
+        render() {
+            return React.createElement("div", { className: "DockingContainer" /*, style= "Menu" */ });
         }
         static clearMemoryleak(container) {
             if (container === undefined) {

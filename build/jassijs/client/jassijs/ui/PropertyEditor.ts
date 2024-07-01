@@ -307,7 +307,7 @@ export class PropertyEditor extends Panel {
             this.codeChanges = {};
         if (value !== undefined || value?.dom !== undefined) {
             //if (!$(value.dom).is(":focus"))
-            if (value.dom && document.activeElement !== value.dom)
+            if (value.dom && document.activeElement !== value.dom&&value.dom.focus)
                 (<HTMLElement>value.dom).focus();
         }
         if (value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
@@ -629,14 +629,17 @@ export class PropertyEditor extends Panel {
      * update the parser
      */
     updateParser() {
+        
         if (this.codeEditor === undefined)
+            return;
+        if (this.codeEditor.file.endsWith(".tsx"))
             return;
         if (this.parentPropertyEditor !== undefined) {
             this.parentPropertyEditor.updateParser();
         } else {
             var text = this.codeEditor.value;
             var val = this.codeEditor.getObjectFromVariable("this");
-            if (text)
+            if (text&&this.parser)
                 this.parser.parse(text); 
             // this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
         }
@@ -723,8 +726,8 @@ export class PropertyEditor extends Panel {
         if (doUpdate) {
             //correct spaces
             if (value && value.indexOf && value.indexOf("\n") > -1) {
-                this.codeEditor.value = this.parser.getModifiedCode();
-                this.updateParser();
+               // this.codeEditor.value = this.parser.getModifiedCode();
+               // this.updateParser();
             }
             this.codeEditor.value = this.parser.getModifiedCode();
             this.updateParser();
@@ -751,8 +754,16 @@ export class PropertyEditor extends Panel {
         }
         if (typeof (this._value[property]) === "function")
             this._value[property](value);
-        else
-            this._value[property] = value;
+        else{
+           // if(property==="value"){
+             //   console.log("rerender");
+                //this._value.lastconfig[property]=value;
+                //this._value.rerender();
+           
+                            this._value[property] = value;
+
+          
+        }
 
     }
     /**

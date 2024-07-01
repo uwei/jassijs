@@ -2,7 +2,7 @@ import "jassijs/ext/jquerylib";
 import "jquery.contextMenu";
 import { $Class } from "jassijs/remote/Registry";
 import { Menu } from "jassijs/ui/Menu";
-import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
+import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
 import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
@@ -16,7 +16,7 @@ declare global {
         contextMenu: any;
     }
 }
-export interface ContextMenuConfig extends ComponentProperties {
+export interface ContextMenuProperties extends InvisibleComponentProperties {
     /**
      * @member - includes Actions from @ActionProvider for the objects in value
      */
@@ -27,18 +27,43 @@ export interface ContextMenuConfig extends ComponentProperties {
     * @returns {boolean} - false if the contextmenu should not been shown
     */
     onbeforeshow?(handler);
+    children?;
 }
 //https://github.com/s-yadav/contextMenu.js/
 @$UIComponent({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] })
 @$Class("jassijs.ui.ContextMenu")
-export class ContextMenu extends InvisibleComponent implements ContextMenuConfig {
-    menu: Menu;
+export class ContextMenu<T extends ContextMenuProperties=ContextMenuProperties> extends InvisibleComponent<T> implements ContextMenuProperties {
+    _menu: Menu;
     contextComponents;
     _components: Component[];
     target: any;
     @$Property()
     includeClassActions: boolean;
     private _value;
+    constructor(props:ContextMenuProperties={}) {//id connect to existing(not reqired)
+        super(props);
+    }
+    set menu(val) {
+        this._menu=val;
+    }
+    get menu(){
+        return this._menu;
+    }
+    add(menu:MenuItem){
+        
+        if(menu instanceof MenuItem)
+           this.menu.add(menu); 
+    }
+    addBefore(menu:MenuItem,before){
+        this.menu.addBefore(menu,before); 
+    }
+    remove(item){
+        this.remove(item);
+    }
+   /* set children(data){
+        if(data.length>0)
+            this.menu=data[0];
+    }*/
     /**
      * @member - the objects for the includeClassActions @ActionProvider if  is enabled
      **/
@@ -50,9 +75,11 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
         return this._value;
     }
 
-    constructor() {//id connect to existing(not reqired)
-        super();
-        super.init('<span class="InvisibleComponent"></span>');
+
+    render() {
+        return React.createElement("span", { className: "InvisibleComponent" });
+    }
+    componentDidMount() {
         var _this = this;
         this.menu = new Menu({ noUpdate: true });
         this.menu._mainMenu = this;
@@ -68,7 +95,8 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
         })
     }
 
-    config(config: ContextMenuConfig): ContextMenu {
+
+    config(config: T): ContextMenu {
         super.config(config);
         return this;
     }

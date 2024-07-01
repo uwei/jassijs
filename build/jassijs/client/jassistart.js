@@ -5,6 +5,71 @@ class JassijsStarter {
     cssFiles = {};
     //config data
     config;
+    async enableLocaldir() {
+        var req = indexedDB.open("handles", 3);
+        req.onupgradeneeded = function (ev) {
+            var db = ev.target["result"];
+            var objectStore = db.createObjectStore("handles");
+        }
+        var db = await new Promise((res) => {
+            req.onsuccess = (ev) => {
+                res(ev.target["result"])
+            };
+        });
+        let transaction = db.transaction("handles", 'readwrite');
+        const store = transaction.objectStore("handles");
+        var ret = await store.get("handle");
+        var fileHandle = await new Promise((resolve) => {
+            ret.onsuccess = ev => { resolve(ret.result) }
+        });
+        if (fileHandle) {
+            return await new Promise((resolve) => {
+                var buttonOpen = document.createElement("input");
+                var buttonClose = document.createElement("input");
+                window.enableFileSystem = async () => {
+                    const options = { mode: 'readwrite' };
+                    document.body.removeChild(document.getElementById("loadlocalFolder"));
+                    document.body.removeChild(document.getElementById("closelocalFolder"));
+
+                    if ((await fileHandle.queryPermission(options)) === 'granted') {
+                        resolve(fileHandle);
+                    }
+                    if ((await fileHandle.requestPermission(options)) === 'granted') {
+                        resolve(fileHandle);
+                    } else
+                        resolve(undefined);
+                }
+                window.closeFileSystem = async () => {
+                    
+                    var req = window.indexedDB.open("handles", 3);
+                    var db = await new Promise((resolve) => {
+                        req.onupgradeneeded = function (event) {
+                            var db = event.target["result"];
+                            var objectStore = db.createObjectStore("handles");
+                        }
+                        req.onsuccess = (ev) => {
+                            resolve(ev.target["result"])
+                        };
+                    });
+                    let transaction = db.transaction('handles', 'readwrite');
+                    const store = transaction.objectStore('handles');
+                    store.delete("handle");
+                    await new Promise((resolve) => { transaction.oncomplete = resolve })
+
+                    document.body.removeChild(document.getElementById("loadlocalFolder"));
+                    document.body.removeChild(document.getElementById("closelocalFolder"));
+                    resolve(undefined);
+                }
+
+                document.body.appendChild(buttonOpen);
+                document.body.appendChild(buttonClose);
+
+                buttonOpen.outerHTML = '<input type="button" id="loadlocalFolder" onclick="enableFileSystem()" value="load ' + fileHandle.name + '">';
+                buttonClose.outerHTML = '<input type="button" id="closelocalFolder" onclick="closeFileSystem()" value="close ' + fileHandle.name + '">';
+
+            })
+        }
+    }
     registerServiceWorker() {
 
         var http = new XMLHttpRequest();
@@ -53,51 +118,61 @@ class JassijsStarter {
             window.document.head.appendChild(js);
         });
     }
-    loadModules(res, mods, modules, requireconfig, startlib, beforestartlib) {
+    loadModules(res, mods, modules, requireconfig, startlib, beforestartlib, isServer) {
         for (let x = 0; x < res.length; x++) {
-            if (res[x].default.css) {
-                var mod = mods[x];
-                mod = mod.substring(0, mod.length - "/modul".length);
-                var modpath = modules[mod];
-                for (let key in res[x].default.css) {
-                    let f = res[x].default.css[key];
-                    if (f.indexOf(":") > -1) //https://cdn
-                        this.cssFiles[key] = f;
-                    else if (modpath.endsWith(".js") || modpath.indexOf(".js?") > -1) {
-                        var m = modpath.substring(0, modpath.lastIndexOf("/"));
-                        this.cssFiles[key] = m + "/" + f;
+            var conf = res[x].default;
+            if (isServer)
+                conf = conf.server;
+            if (conf) {
+                if (conf.css) {
+                    var mod = mods[x];
+                    mod = mod.substring(0, mod.length - "/modul".length);
+                    var modpath = modules[mod];
+                    for (let key in conf.css) {
+                        let f = conf.css[key];
+                        if (f.indexOf(":") > -1) //https://cdn
+                            this.cssFiles[key] = f;
+                        else if (modpath.endsWith(".js") || modpath.indexOf(".js?") > -1) {
+                            var m = modpath.substring(0, modpath.lastIndexOf("/"));
+                            this.cssFiles[key] = m + "/" + f;
+                        }
+                        else {
+                            this.cssFiles[key] = modpath + "/" + f;
+                        }
                     }
-                    else {
-                        this.cssFiles[key] = modpath + "/" + f;
+                }
+
+                if (conf.loadonstart) {
+                    conf.loadonstart.forEach((entr) => startlib.push(entr));
+                }
+                if (conf.loadbeforestart) {
+
+
+                    conf.loadbeforestart.forEach((entr) => {
+                        beforestartlib.push(entr);
+                    });
+                }
+                let toadd = conf.require;
+                if (toadd) {
+                    if (!requireconfig.paths) {
+                        requireconfig.paths = {};
                     }
+                    if (toadd.paths)
+                        Object.assign(requireconfig.paths, toadd.paths);
+                    if (!requireconfig.shim) {
+                        requireconfig.shim = {};
+                    }
+                    if (toadd.shim)
+                        Object.assign(requireconfig.shim, toadd.shim);
                 }
-            }
-            if (res[x].default.loadonstart) {
-                res[x].default.loadonstart.forEach((entr) => startlib.push(entr));
-            }
-            if (res[x].default.loadbeforestart) {
-                res[x].default.loadbeforestart.forEach((entr) => beforestartlib.push(entr));
-            }
-            let toadd = res[x].default.require;
-            if (toadd) {
-                if (!requireconfig.paths) {
-                    requireconfig.paths = {};
-                }
-                if (toadd.paths)
-                    Object.assign(requireconfig.paths, toadd.paths);
-                if (!requireconfig.shim) {
-                    requireconfig.shim = {};
-                }
-                if (toadd.shim)
-                    Object.assign(requireconfig.shim, toadd.shim);
             }
         }
     }
-    async loadBeforestart(beforestartlib) {
+    async loadBeforestart(beforestartlib, myrequire) {
         var _this = this;
         for (var x = 0; x < beforestartlib.length; x++) {
             await new Promise((resolve) => {
-                require([beforestartlib[x]], function (beforestart) {
+                myrequire([beforestartlib[x]], function (beforestart) {
                     if (beforestart && beforestart.autostart) {
                         beforestart.autostart().then(() => {
                             resolve(undefined);
@@ -107,7 +182,7 @@ class JassijsStarter {
                     }
                 });
             })
-            
+
         }
     }
     async loadRequirejs(requireconfig) {
@@ -122,12 +197,12 @@ class JassijsStarter {
             await this.loadScript(path);
         }
         //wait for async sample
-        define("async",{
+        define("async", {
             load: function (name, req, onload, config) {
-                var file=name.split(":")[0];
-                var func=name.split(":")[1];
+                var file = name.split(":")[0];
+                var func = name.split(":")[1];
                 req([file], function (value) {
-                        value[func]().then((ret )=>onload(ret));
+                    value[func]().then((ret) => onload(ret));
                 });
             }
         });
@@ -139,35 +214,108 @@ class JassijsStarter {
             }
         };
     }
-    async loadInternetModules(modules) {
-        let allmodules = {};
-        let dowait = [];
-        for (let modul in modules) {
-            if (modules[modul].endsWith(".js") || modules[modul].indexOf(".js?") > -1) {
-                dowait.push(this.loadScript(modules[modul]));
+    async loadInternetModules(modules, myrequire) {
+        var all = await new Promise((resolve) => {
+            myrequire([], () => {
+                let allmodules = {};
+                let dowait = [];
+                for (let modul in modules) {
+                    if (modules[modul].endsWith(".js") || modules[modul].indexOf(".js?") > -1) {
+                        dowait.push(this.loadScript(modules[modul]));
+                    }
+                }
+                resolve(dowait);
+            });
+        });
+        await Promise.all(all);
+    }
+
+    async runContext(modules, myRequire, contextname, configtext, otherRequire,isLocalFolderMapped) {
+        if (modules === undefined || modules.length === 0)
+            return;
+        await this.loadInternetModules(modules, myRequire);
+
+        return await new Promise((resolvemain) => {
+
+
+            // await this.loadInternetModules(servermodules,serverRequire);
+
+            var mods = [];
+            var all = ["jassijs/remote/Jassi", "jassijs/remote/Config"];
+            for (let key in modules) {
+                mods.push(key + "/modul");
+                all.push(key + "/modul");
             }
-        }
-        for (let x = 0; x < dowait.length; x++) {
-            var mod = await dowait[x];
-        }
+            var startlib = [];
+            var beforestartlib = [];
+            var _this = this;
+
+
+
+            myRequire(all, function (remoteJassi, config, ...res) {
+                config.config.init(configtext);
+                config.config.isLocalFolderMapped=isLocalFolderMapped;
+                if (contextname === "server") {
+                    //window.jassijs.modules = _this.config.modules;
+                    config.config.isServer = true;
+                    config.config.clientrequire = otherRequire;
+                    config.config.serverrequire = myRequire;
+                } else {
+                    config.config.isServer = false;
+                    config.config.clientrequire = myRequire;
+                    config.config.serverrequire = otherRequire;
+                }
+                var requireconfig = {};
+                _this.loadModules(res, mods, modules, requireconfig, startlib, beforestartlib, contextname !== "_");
+                window.jassijs.options = _this.config.options;
+                window.jassijs.cssFiles = _this.cssFiles;
+                var h = require.s.contexts[contextname].configure(requireconfig);
+                //            requirejs.config(requireconfig);
+                //var context=JSON.parse(JSON.stringify(require.s.contexts._.config))
+
+
+
+                _this.loadBeforestart(beforestartlib, myRequire).then(() => {
+                    myRequire(startlib, function (jassijs, ...others) {
+                        for (var key in _this.cssFiles) {
+                            //jassijs.default.myRequire(_this.cssFiles[key]);
+                        }
+                        if (_this.runFunction && window[_this.runFunction]) {
+                            window[_this.runFunction]();
+                        }
+                        if (_this.runScript && contextname === "_") {
+                            myRequire([_this.runScript], function () {
+                                resolvemain();
+                            });
+                        } else {
+                            resolvemain();
+
+                        }
+                    });
+                });
+            });
+        });
     }
     async run() {
-        var smodules = await this.loadText(this.configFile);
+        
+        var configtext = await this.loadText(this.configFile);
         var requireconfig = {};
         let modules;
-
-        if (smodules) {
-            let data = JSON.parse(smodules);
+        let servermodules;
+        if (configtext) {
+            var data = JSON.parse(configtext);
             if (data.require)
                 requireconfig = data.require;
             modules = data.modules;
+            servermodules = data.server.modules;
             this.config = data;
             // window.__jassijsconfig__ = data;//is consumed by Jassijs
 
 
         }
+        if(data.runServerInBrowser===true)
+            var localDir=await this.enableLocaldir();
         await this.loadRequirejs(requireconfig);
-        await this.loadInternetModules(modules);
         requirejs.config({
             waitSeconds: 200,
             baseUrl: 'js',
@@ -177,42 +325,19 @@ class JassijsStarter {
 
             }
         });
-        var mods = [];
-        var all = ["jassijs/remote/Jassi"];
-        for (let key in modules) {
-            mods.push(key + "/modul");
-            all.push(key + "/modul");
+
+        var context = JSON.parse(JSON.stringify(require.s.contexts._.config))
+        context.context = "server";
+        context.urlArgs="server=1";
+        let serverRequire;
+        if (data.runServerInBrowser){
+            serverRequire = requirejs.config(context);
+            await this.runContext(servermodules, serverRequire, "server", configtext, requirejs,localDir!==undefined);
         }
-        var startlib = [];
-        var beforestartlib = [];
-        var _this = this;
-        require(all, function (remoteJassi, ...res) {
-            window.jassijs.modules = _this.config.modules;
+        this.runContext(modules, requirejs, "_", configtext, serverRequire,localDir!==undefined);
 
-            _this.loadModules(res, mods, modules, requireconfig, startlib, beforestartlib);
-            window.jassijs.options = _this.config.options;
-            window.jassijs.cssFiles = _this.cssFiles;
-            requirejs.config(requireconfig);
-            //read UserSettings after all beforestartlib are loaded
-           // beforestartlib.push("jassijs/jassi");
-           // beforestartlib.push("jassijs/remote/Settings");
-            //load beforestartlib synchron
 
-            _this.loadBeforestart(beforestartlib).then(() => {
-                require(startlib, function (jassijs, ...others) {
-                    for (var key in _this.cssFiles) {
-                        //jassijs.default.myRequire(_this.cssFiles[key]);
-                    }
-                    if (_this.runFunction && window[_this.runFunction]) {
-                        window[_this.runFunction]();
-                    }
-                    if (_this.runScript) {
-                        require([_this.runScript], function () {
-                        });
-                    }
-                });
-            });
-        });
+
     }
 }
 (() => {

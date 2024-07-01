@@ -71,7 +71,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             for (var k in jassijs.componentSpy.ids) {
                 data.push(jassijs.componentSpy.ids[k]);
             }
-            this.me.IDTable.items = data;
+            try {
+                this.me.IDTable.items = data;
+            }
+            catch (_a) {
+                setTimeout(() => this.me.IDTable.items = data, 100);
+            }
         }
         clear() {
             jassijs.componentSpy.ids = {};
