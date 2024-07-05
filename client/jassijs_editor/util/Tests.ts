@@ -64,7 +64,7 @@ export class TestAction {
                 await TestAction.testNode(file.files, container);
 
             } else {
-                var typescript = (await import("jassijs_editor/util/Typescript")).default;
+                var typescript = (await import("jassijs_editor/util/Typescript")).mytypescript;
                 await typescript.initService();
                 var text: string = typescript.getCode(file.fullpath);
                 if (text !== undefined) {
@@ -72,7 +72,8 @@ export class TestAction {
                     try {
                         if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
                             console.log("test " + file.fullpath);
-                            var func = (await import(file.fullpath.substring(0, file.fullpath.length - 3)))?.test;
+                            var pos=file.fullpath.lastIndexOf(".");
+                            var func = (await import(file.fullpath.substring(0, pos)))?.test;
                             if (typeof func === "function") {
                                 container.alltests++;
                                 container.update();

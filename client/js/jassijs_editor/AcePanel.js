@@ -7,11 +7,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1, Component_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanel = void 0;
+    Registry_2 = __importDefault(Registry_2);
     /// <amd-dependency path="ace/ace" name="ace"/>
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
@@ -111,7 +115,7 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
                 name: "formatDocument",
                 bindKey: { win: "Shift-Alt-f", mac: "Shift-Alt-f" },
                 exec: function (editor) {
-                    Typescript_1.default.formatDocument(_this.file, _this.value).then((val) => {
+                    Typescript_1.mytypescript.formatDocument(_this.file, _this.value).then((val) => {
                         _this.value = val;
                     });
                 }
@@ -135,10 +139,10 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
                     column: pos.column + 1,
                     row: pos.row + 1
                 }) - 1;
-                if (!Typescript_1.default.isInited(this.file))
+                if (!Typescript_1.mytypescript.isInited(this.file))
                     return;
                 var p;
-                Typescript_1.default.getQuickInfoAtPosition(this.file, lpos, this.value).then((p) => {
+                Typescript_1.mytypescript.getQuickInfoAtPosition(this.file, lpos, this.value).then((p) => {
                     if (p !== undefined) {
                         var text = "<div style='font-size:12px'>";
                         for (let x = 0; x < p.displayParts.length; x++) {
@@ -185,7 +189,7 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
          * check if imports are neded and do so
          **/
         _doRequiredImports(pos, name) {
-            if (!Typescript_1.default.isInited(this.file))
+            if (!Typescript_1.mytypescript.isInited(this.file))
                 return;
             if (this.value.indexOf("import " + name + " ") === -1 && this.value.indexOf("import {" + name + "} ") === -1) {
                 let lpos = this.positionToNumber({
@@ -195,7 +199,7 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
                 CodePanel_1.CodePanel.getAutoimport(lpos, this.file, this.value).then((data) => {
                     if (data !== undefined) {
                         this._editor.session.insert(data.pos, data.text);
-                        Typescript_1.default.setCode(this.file, this.value);
+                        Typescript_1.mytypescript.setCode(this.file, this.value);
                     }
                 });
             }
@@ -207,7 +211,7 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
             if (this.file !== undefined && !this.file.toLowerCase().endsWith(".ts"))
                 return;
             var _this = this;
-            Typescript_1.default.waitForInited.then(() => {
+            Typescript_1.mytypescript.waitForInited.then(() => {
                 if (_this._editor !== undefined && _this._editor.getSession() !== undefined) {
                     _this._editor.getSession().setAnnotations([{
                             row: 1,
@@ -216,10 +220,10 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
                             type: "information" // also warning and information
                         }]);
                 }
-                Typescript_1.default.setCode(_this.file, _this.value).then((tt) => {
+                Typescript_1.mytypescript.setCode(_this.file, _this.value).then((tt) => {
                     if (_this.file === undefined)
                         return;
-                    Typescript_1.default.getDiagnostics(_this.file, _this.value).then((diag) => {
+                    Typescript_1.mytypescript.getDiagnostics(_this.file, _this.value).then((diag) => {
                         var annotaions = [];
                         var iserror = false;
                         for (var x = 0; x < diag.semantic.length; x++) {
@@ -324,14 +328,14 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
                 row: pos.row + 1
             });
             var code = this.value;
-            if (Typescript_1.default.isInited(this.file) !== true) {
+            if (Typescript_1.mytypescript.isInited(this.file) !== true) {
                 let entry = { caption: "please try later ... loading in progress", name: "loading", value: "empty", score: 10, meta: "object", parent: "otto", codePanel: _this };
                 ret.push(entry);
                 return;
             }
             if (_this.file.endsWith(".js"))
                 return;
-            Typescript_1.default.getCompletion(_this.file, p, code, { includeExternalModuleExports: true }).then((data) => {
+            Typescript_1.mytypescript.getCompletion(_this.file, p, code, { includeExternalModuleExports: true }).then((data) => {
                 if (data !== undefined) {
                     for (let e = 0; e < data.entries.length; e++) {
                         let entr = data.entries[e];
@@ -368,7 +372,7 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
                 return "";
             var _id = "j" + Registry_2.default.nextID();
             item.docHTML = "<span id='" + _id + "'> please try later ... loading in progress<span>";
-            Typescript_1.default.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
+            Typescript_1.mytypescript.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
                 if (ret === undefined)
                     return;
                 var doc = "<b>";

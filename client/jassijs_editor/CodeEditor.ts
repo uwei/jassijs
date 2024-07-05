@@ -13,7 +13,7 @@ import { Component } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 
 import { AcePanel } from "jassijs_editor/AcePanel";
-import typescript, { Typescript } from "jassijs_editor/util/Typescript";
+import {mytypescript, Typescript } from "jassijs_editor/util/Typescript";
 import { MonacoPanel } from "jassijs_editor/MonacoPanel";
 import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { Test } from "jassijs/remote/Test";
@@ -70,7 +70,7 @@ export class CodeEditor extends Panel {
         if (properties?.codePanel) {
             this._codePanel = properties.codePanel;
         } else {
-            CodePanel.typescript = typescript;
+            CodePanel.typescript = mytypescript;
             if (sett === "ace" || (mobil && (sett === "aceOnBrowser" || sett === undefined))) {
                 this._codePanel = new AcePanel();
 
@@ -677,9 +677,9 @@ export class CodeEditor extends Panel {
         settings["inlineSources"] = true;
         var files;
         if (this.file.endsWith(".tsx"))
-            files = await tss.default.transpile(file + ".tsx", code, settings);
+            files = await tss.mytypescript.transpile(file + ".tsx", code, settings);
         else
-            files = await tss.default.transpile(file + ".ts", code, settings);
+            files = await tss.mytypescript.transpile(file + ".ts", code, settings);
 
         var codets = -1;
         var codemap = -1;

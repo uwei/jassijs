@@ -8,6 +8,7 @@ import { DBObjectExplorer } from "jassijs/ui/DBObjectExplorer";
 import { ActionNodeMenu } from "jassijs/ui/ActionNodeMenu";
 
 async function test() {
+
   //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
     var body = new Panel();//{ id: "body" });
     document.body.appendChild(body.dom);

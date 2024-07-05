@@ -83,7 +83,7 @@ export class Windows {
         });
         this._myLayout.init();
 
-        this.restoreWindows();
+        setTimeout(()=> this.restoreWindows(),100);
         var j = this._myLayout;
 
     }

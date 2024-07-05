@@ -7,6 +7,8 @@ import { StringConverter } from "jassijs/ui/converters/StringConverter";
 import { Textbox } from "jassijs/ui/Textbox";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
+import { $Property, Property } from "jassijs/ui/Property";
+import { $Action } from "jassijs/base/Actions";
 
 type Me = {
     boxpanel?: Panel;
@@ -17,8 +19,10 @@ type Me = {
 };
 @$Class("demo/Dialog2")
 export class Dialog2 extends Panel {
+
     me: Me;
-    data;
+
+    data:string;
     constructor(data) {
         super();
         this.me = {};
@@ -67,6 +71,7 @@ function kk() {
     return "kko";
 }
 export async function test() {
+   
     //var data = await Kunde.find();
     //var ret = new Dialog2(data);
    // return ret;

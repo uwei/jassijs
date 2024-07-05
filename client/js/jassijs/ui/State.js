@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.createState = exports.State = exports.resolveState = void 0;
+    exports.test = exports.createRef = exports.createState = exports.State = exports.createRefs = exports.createStates = exports.resolveState = void 0;
     class StateProp {
     }
     //window.timecount=0;
@@ -26,8 +26,31 @@ define(["require", "exports"], function (require, exports) {
         //window.timecount=window.timecount+new Date().getTime()-test;
     }
     exports.resolveState = resolveState;
-    function createParams(data = {}) {
-        data.ref = new Proxy(data, {
+    function createStates(initialValues = {}) {
+        var data = Object.assign({ _used: [] }, initialValues);
+        return new Proxy(data, {
+            get(target, key) {
+                if (key === "_onconfig")
+                    return target._onconfig;
+                if (target[key] === undefined) {
+                    target[key] = createState(data[key]);
+                    if (target._used.indexOf(key) === -1)
+                        target._used.push(key);
+                }
+                return target[key];
+            },
+            set(target, key, value) {
+                if (key === "_onconfig")
+                    target._onconfig = value;
+                else
+                    throw "not implemented " + key;
+                return true;
+            }
+        });
+    }
+    exports.createStates = createStates;
+    function createRefs(data = {}) {
+        data.refs = new Proxy(data, {
             get(target, key) {
                 if (target[key] === undefined) {
                     target[key] = {
@@ -37,7 +60,7 @@ define(["require", "exports"], function (require, exports) {
                             this._current = value;
                         },
                         get current() {
-                            return this.current;
+                            return this._current;
                         }
                     };
                 }
@@ -46,6 +69,7 @@ define(["require", "exports"], function (require, exports) {
         });
         return data;
     }
+    exports.createRefs = createRefs;
     class State {
         constructor(data = undefined) {
             this.self = this;
@@ -105,11 +129,16 @@ define(["require", "exports"], function (require, exports) {
         return ret;
     }
     exports.createState = createState;
+    function createRef(val = undefined) {
+        var ret;
+        ret.current = val;
+        return ret;
+    }
+    exports.createRef = createRef;
     function test() {
         var me = { a: 6 };
-        debugger;
-        var params = createParams(me);
-        params.ref.hallo.current = "JJJ";
+        var params = createRefs(me);
+        params.refs.hallo.current = "JJJ";
         console.log(me.hallo);
     }
     exports.test = test;

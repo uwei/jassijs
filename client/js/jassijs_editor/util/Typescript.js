@@ -1,17 +1,45 @@
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "jassijs_editor/ext/monaco2", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Server_1, Config_1) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "typescript", "jassijs_editor/ext/monaco2", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Server_1, Config_1, typescript_1) {
     "use strict";
     var Typescript_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Typescript = void 0;
+    exports.mytypescript = exports.Typescript = void 0;
+    typescript_1 = __importDefault(typescript_1);
+    //import "jassijs_editor/ext/monaco";
     let Typescript = Typescript_1 = class Typescript {
         isInited(file) {
             return Typescript_1._isInited === true;
@@ -37,7 +65,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                     fileName: prefix + fileName,
                 };
                 //@ts-ignore
-                var comp = ts.transpileModule(content, opt);
+                var comp = typescript_1.default.transpileModule(content, opt);
                 var extlen = 3;
                 if (fileName.toLowerCase().endsWith(".tsx"))
                     extlen = 4;
@@ -71,6 +99,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 emitDecoratorMetadata: true,
                 allowNonTsExtensions: true,
                 allowJs: true,
+                esModuleInterop: true,
                 experimentalDecorators: true,
             });
         }
@@ -78,7 +107,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
         async includeModulTypes() {
             var nodeFiles = {};
             for (var mod in Config_1.config.modules) {
-                var config1 = (await new Promise((resolve_1, reject_1) => { require([mod + "/modul"], resolve_1, reject_1); })).default;
+                var config1 = (await new Promise((resolve_1, reject_1) => { require([mod + "/modul"], resolve_1, reject_1); }).then(__importStar)).default;
                 if (config1.types) {
                     for (var key in config1.types) {
                         var file = config1.types[key];
@@ -100,7 +129,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 Typescript_1.initMonaco();
                 //@ts-ignore
                 //  import("jassijs/ext/typescript").then(async function(ts1) {
-                Typescript_1.ts = ts;
+                Typescript_1.ts = typescript_1.default;
+                var tsfactory = window.tsfactory;
+                for (var key in tsfactory) {
+                    if (typescript_1.default[key] === undefined)
+                        typescript_1.default[key] = tsfactory[key];
+                }
                 var _this = this;
                 var f = (await new Server_1.Server().dir(true)).resolveChilds();
                 var nodeFiles = await this.includeModulTypes();
@@ -149,16 +183,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                     //	
                     var type = "typescript";
                     if (key.toLocaleLowerCase().endsWith(".ts") || key.toLocaleLowerCase().endsWith(".tsx")) {
-                        //
-                        if (this.initInIdle) {
-                            var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
-                            //console.log(key);
-                            if (!monaco.editor.getModel(ffile))
-                                monaco.editor.createModel(code[key], "typescript", ffile);
-                            //});
+                        try {
+                            //
+                            if (this.initInIdle) {
+                                var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
+                                //console.log(key);
+                                if (!monaco.editor.getModel(ffile))
+                                    monaco.editor.createModel(code[key], "typescript", ffile);
+                                //});
+                            }
+                            else {
+                                monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
+                            }
                         }
-                        else {
-                            monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
+                        catch (_b) {
                         }
                     }
                     if (key.toLocaleLowerCase().endsWith(".json"))
@@ -326,7 +364,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 insertSpaceAfterKeywordsInControlFlowStatements: true,
                 insertSpaceBeforeAndAfterBinaryOperators: true,
                 newLineCharacter: "\n",
-                indentStyle: ts.IndentStyle.Smart,
+                indentStyle: typescript_1.default.IndentStyle.Smart,
                 indentSize: 4,
                 tabSize: 4
             });
@@ -428,6 +466,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
         jsx: monaco.languages.typescript.JsxEmit.React,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
+        esModuleInterop: true,
         typeRoots: ["./node_modules/@types"]
     };
     Typescript = Typescript_1 = __decorate([
@@ -436,8 +475,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
     ], Typescript);
     exports.Typescript = Typescript;
     //@ts-ignore
-    var typescript = new Typescript();
-    Typescript.instance = typescript;
-    exports.default = typescript;
+    var mytypescript = new Typescript();
+    exports.mytypescript = mytypescript;
+    Typescript.instance = mytypescript;
 });
 //# sourceMappingURL=Typescript.js.map

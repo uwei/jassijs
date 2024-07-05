@@ -12,6 +12,7 @@
       "dom",
       "es5"
     ],
+    "esModuleInterop": true,
     //"outFile": "./js/build.js",
     "rootDir": "./",
     "skipLibCheck": true,

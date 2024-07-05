@@ -21,7 +21,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
         CommandsRegistry.registerCommand("autoimport", (o1, model, pos) => {
             var file = model.uri.path.substring(1);
             var code = model.getValue();
-            var p = Typescript_1.default.getPositionOfLineAndCharacter(file, {
+            var p = Typescript_1.mytypescript.getPositionOfLineAndCharacter(file, {
                 line: pos.lineNumber, character: pos.column
             });
             const oldpos = model["lastEditor"].getPosition();
@@ -65,8 +65,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
                     endColumn: word.endColumn
                 };
                 var file = model.uri.path.substring(1);
-                var pos = Typescript_1.default.getPositionOfLineAndCharacter(file, { line: position.lineNumber, character: position.column });
-                var all = await Typescript_1.default.getCompletion(file, pos, undefined, { includeExternalModuleExports: true });
+                var pos = Typescript_1.mytypescript.getPositionOfLineAndCharacter(file, { line: position.lineNumber, character: position.column });
+                var all = await Typescript_1.mytypescript.getCompletion(file, pos, undefined, { includeExternalModuleExports: true });
                 var sug = [];
                 for (var x = 0; x < all.entries.length; x++) {
                     var it = all.entries[x];

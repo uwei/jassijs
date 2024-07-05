@@ -7,11 +7,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/ObjectChooser", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Customer", "northwind/remote/Orders", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, BoxPanel_1, HTMLPanel_1, Databinder_1, ObjectChooser_1, Registry_1, Panel_1, Customer_1, Orders_1, Actions_1, Windows_1) {
     "use strict";
     var CustomerOrders_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CustomerOrders = void 0;
+    Windows_1 = __importDefault(Windows_1);
     let CustomerOrders = CustomerOrders_1 = class CustomerOrders extends Panel_1.Panel {
         constructor() {
             super();

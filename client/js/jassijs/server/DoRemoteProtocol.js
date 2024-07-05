@@ -1,13 +1,40 @@
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Config"], function (require, exports, Registry_1, Classes_1, Serverservice_1, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports._execute = exports.remoteProtocol = void 0;
+    Registry_1 = __importDefault(Registry_1);
     function remoteProtocol(request, response) {
         execute(request, response);
     }
     exports.remoteProtocol = remoteProtocol;
     async function checkSimulateUser(context, request) {
-        var rights = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/security/Rights"], resolve_1, reject_1); })).default;
+        var rights = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/security/Rights"], resolve_1, reject_1); }).then(__importStar)).default;
         var test = request.cookies["simulateUser"];
         if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
             var db = await Serverservice_1.serverservices.db;
@@ -23,7 +50,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
         }
     }
     async function execute(request, res) {
-        var RemoteProtocol = (await new Promise((resolve_2, reject_2) => { require(["jassijs/remote/RemoteProtocol"], resolve_2, reject_2); })).RemoteProtocol;
+        var RemoteProtocol = (await new Promise((resolve_2, reject_2) => { require(["jassijs/remote/RemoteProtocol"], resolve_2, reject_2); }).then(__importStar)).RemoteProtocol;
         var context = {
             isServer: true,
             request: request
@@ -37,7 +64,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
     async function _execute(protext, request, context) {
         // await new Promise((resolve)=>{docls(request,response,resolve)});
         var h = Config_1.config;
-        var RemoteProtocol = (await new Promise((resolve_3, reject_3) => { require(["jassijs/remote/RemoteProtocol"], resolve_3, reject_3); })).RemoteProtocol;
+        var RemoteProtocol = (await new Promise((resolve_3, reject_3) => { require(["jassijs/remote/RemoteProtocol"], resolve_3, reject_3); }).then(__importStar)).RemoteProtocol;
         var prot = new RemoteProtocol();
         var vdata = await prot.parse(protext);
         Object.assign(prot, vdata);

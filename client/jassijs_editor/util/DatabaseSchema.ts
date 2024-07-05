@@ -1,7 +1,7 @@
 import { $Class } from "jassijs/remote/Registry";
 import registry from "jassijs/remote/Registry";
 import "jquery.choosen";
-import typescript from "jassijs_editor/util/Typescript";
+import {mytypescript} from "jassijs_editor/util/Typescript";
 import { Parser, ParsedClass } from "jassijs_editor/util/Parser";
 import { TemplateDBObject } from "jassijs_editor/template/TemplateDBObject";
 import { Tools } from "jassijs/util/Tools";
@@ -378,13 +378,13 @@ export class DatabaseSchema {
     private async parseFiles() {
         this.parsedClasses = {};
         this.definedImports = {};
-        await typescript.waitForInited;
+        await mytypescript.waitForInited;
         var data = await registry.getJSONData("$DBObject");
         for (let x = 0; x < data.length; x++) {
             var entr = data[x];
             var parser = new Parser();
             var file = entr.filename;
-            var code = typescript.getCode(file);
+            var code = mytypescript.getCode(file);
            // if (code === undefined)
            //     code = await new Server().loadFile(file);
          if (code !== undefined) {

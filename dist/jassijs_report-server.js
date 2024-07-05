@@ -42,7 +42,9 @@ define("jassijs_report/registry", ["require"], function (require) {
 define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.createReportDefinition = exports.doGroup = void 0;
+    exports.doGroup = doGroup;
+    exports.createReportDefinition = createReportDefinition;
+    exports.test = test;
     //templating is slow so we chache
     var funccache = {};
     //https://github.com/Mottie/javascript-number-formatter/blob/master/src/format.js
@@ -326,7 +328,6 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
         var sorted = groupSort(ret, "main", groupfields);
         return sorted;
     }
-    exports.doGroup = doGroup;
     //replace the datatable {datable:...} to table:{}
     function replaceDatatable(def, data) {
         var header = def.datatable.header;
@@ -536,7 +537,6 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
         return definition;
         // delete definition.parameter;
     }
-    exports.createReportDefinition = createReportDefinition;
     //add aggregate functions for grouping
     function addGroupFuncions(names, values) {
         names.push("sum");
@@ -651,13 +651,14 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
         s = "${k}".replaceTemplate(h, true);
         s = "${ho()}".replaceTemplate(h, true);
     }
-    exports.test = test;
 });
 define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Server", "jassijs/remote/Validator"], function (require, exports, Registry_1, RemoteObject_1, Server_1, Validator_1) {
     "use strict";
-    var ServerReport_1, _a, _b;
+    var ServerReport_1;
+    var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ServerReport = void 0;
+    exports.ServerReport = void 0;
+    exports.test = test;
     let ServerReport = ServerReport_1 = class ServerReport extends RemoteObject_1.RemoteObject {
         static async getDesign(path, parameter, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -694,31 +695,30 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
             }
         }
     };
+    exports.ServerReport = ServerReport;
     ServerReport.cacheLastParameter = {};
     __decorate([
-        Validator_1.ValidateFunctionParameter(),
-        __param(0, Validator_1.ValidateIsString()),
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, Object, typeof (_a = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _a : Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getDesign", null);
     __decorate([
-        Validator_1.ValidateFunctionParameter(),
-        __param(0, Validator_1.ValidateIsString()),
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, Object, typeof (_b = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _b : Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getBase64", null);
-    ServerReport = ServerReport_1 = __decorate([
-        Registry_1.$Class("jassijs_report.remote.ServerReport")
+    exports.ServerReport = ServerReport = ServerReport_1 = __decorate([
+        (0, Registry_1.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);
-    exports.ServerReport = ServerReport;
     async function test() {
         var ret = await ServerReport.getBase64("jassijs_report/server/TestServerreport", { sort: "name" });
         return ret;
         //    console.log(await new ServerReport().sayHello("Kurt"));
     }
-    exports.test = test;
 });
 define("jassijs_report/server/DoServerreport", ["require", "exports", "jassijs/remote/Config"], function (require, exports, Config_1) {
     "use strict";
@@ -756,7 +756,8 @@ define("jassijs_report/server/DoServerreport", ["require", "exports", "jassijs/r
 define("jassijs_report/server/TestServerreport", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.fill = void 0;
+    exports.fill = fill;
+    exports.test = test;
     var reportdesign = {
         content: [
             {
@@ -797,11 +798,9 @@ define("jassijs_report/server/TestServerreport", ["require", "exports"], functio
             data
         };
     }
-    exports.fill = fill;
     async function test() {
         return await fill(undefined);
     }
-    exports.test = test;
 });
 //ok
 define("jassijs_report/modul", ["require", "exports"], function (require, exports) {
@@ -813,7 +812,7 @@ define("jassijs_report/modul", ["require", "exports"], function (require, export
             paths: {
                 'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
                 'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts',
+                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts', // '../../lib/vfs_fonts',
                 'pdfMakelib': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/pdfmake' //'../../lib/pdfmake'
             },
             shim: {

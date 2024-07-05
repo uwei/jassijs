@@ -4,7 +4,7 @@ import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { CSSProperties } from "jassijs/ui/CSSProperties";
-import { resolveState } from "jassijs/ui/State";
+import { States, createStates, resolveState } from "jassijs/ui/State";
 
 
 
@@ -117,7 +117,7 @@ export interface ComponentProperties {
       forceUpdate() {
           throw new Error("not implemented");
       }*/
-      calculateState?:(any)=>void
+    calculateState?: (any) => void
 }
 
 
@@ -183,8 +183,11 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
             var p = props || {};
             p.renderFunc = atype;
             ret = new FunctionComponent(p);
-        } else
+            
+        } else {
             ret = new atype(props);
+   
+        }
     }
     if ((<any>node)?.props?.children !== undefined) {
         if (props === null || props === undefined)
@@ -225,8 +228,8 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
             ret.add(cchild);
         }
     }
-    if(props?.ref){
-        props.ref.current=ret;
+    if (props?.ref) {
+        props.ref.current = ret;
         delete props?.ref;
     }
     return ret;
@@ -236,9 +239,9 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
 //class TC <Prop>extends React.Component<Prop,{}>{
 @$Class("jassijs.ui.Component")
 @$Property({ name: "testuw", type: "string" })
-export class Component<T extends ComponentProperties = {}> implements React.Component<T, {}>  {
+export class Component<T extends ComponentProperties = {}> implements React.Component<T, {}> {
     props: T;
-
+    states: States<T>;
     private static _componentHook = [];
     _eventHandler;
     __dom: HTMLElement;
@@ -267,15 +270,16 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
      * @param {string} [properties.id] -  connect to existing id (not reqired)
      * 
      */
-    constructor(properties: ComponentProperties={}) {//id connect to existing(not reqired)
+    constructor(properties: ComponentProperties = {}) {//id connect to existing(not reqired)
         // super(properties, undefined);
-       // if(properties===undefined)
-       // properties={};
+        // if(properties===undefined)
+        // properties={};
+        this.states = createStates(this.props);
         this.props = <any>properties;
         this._rerenderMe(true);
         this.config(this.props);
     }
-    private _rerenderMe(firstTime=false) {
+    private _rerenderMe(firstTime = false) {
 
         var rend = this.render();
         if (rend) {
@@ -291,10 +295,10 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
                 this._initComponent((<any>comp).dom);
             }
 
-            
+
         }
-        if(firstTime)
-        this.componentDidMount();
+        if (firstTime)
+            this.componentDidMount();
     }
     componentDidMount() {
 
@@ -307,7 +311,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
           this.init(this.lastinit, { replaceNode: this.dom });
           this.config(this.lastconfig);
       }*/
-    config(config: T):  Component {
+    config(config: T): Component {
 
         var con: any = Object.assign({}, config);
         delete con.noWrapper;
@@ -337,16 +341,20 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
                         me[key] = config[key];
 
                 }
+            } else if (this.states&&this.states._used.indexOf(key) !== -1) {
+                this.states[key].current = config[key];
             } else
                 notfound[key] = con;
         }
+        if(this.states?._onconfig) 
+            this.states._onconfig(config);
         Object.assign(this.props === undefined ? {} : this.props, config);
         if (Object.keys(notfound).length > 0) {
-            if(this.calculateState){
+            if (this.calculateState) {
                 this.calculateState(config);
                 return <any>this;
             }
-           
+
             /* var rerender = this.render();
              if (rerender) {
                  this.init(createComponent(rerender).dom);
@@ -739,8 +747,8 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
 
 
         if (value !== undefined) {
-            if(value.current)
-                value=value.current;
+            if (value.current)
+                value = value.current;
             var ContextMenu = classes.getClass("jassijs.ui.ContextMenu");
             if (value instanceof ContextMenu === false) {
                 throw new Error("value is not of type jassijs.ui.ContextMenu");
@@ -801,18 +809,18 @@ interface FunctionComponentProperties extends ComponentProperties, Omit<React.HT
     tag?: string;
     children?;
     renderFunc;
-    calculateState?:(prop)=>void;
+    calculateState?: (prop) => void;
 }
-export class FunctionComponent<T extends FunctionComponentProperties> extends Component<FunctionComponentProperties>  {
+export class FunctionComponent<T extends FunctionComponentProperties> extends Component<FunctionComponentProperties> {
     _components: Component[] = [];
     _designDummy: any;
-    constructor(properties:FunctionComponentProperties) {
+    constructor(properties: FunctionComponentProperties) {
         super(properties);
     }
-   
+
     render() {
         var Rend = this.props.renderFunc;
-        var ret:any = <React.ReactNode>new Rend(this.props);
+        var ret: any = <React.ReactNode>new Rend(this.props, this.states);
         if (ret.props.calculateState) {
             //@ts-ignore
             this.calculateState = ret.props.calculateState;

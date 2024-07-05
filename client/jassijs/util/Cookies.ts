@@ -16,5 +16,5 @@ class C{
         return "";
     } // removed!
 }
-var Cookies:C=cock;
+var Cookies:C=cock.default;
 export {Cookies};

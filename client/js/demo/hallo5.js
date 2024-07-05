@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/State"], function (require, exports, Component_1, State_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Button", "jassijs/ui/State"], function (require, exports, Component_1, Button_1, State_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -8,28 +8,33 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/State"], funct
             super(p);
         }
         render() {
+            this.me = {};
+            var me = (0, State_1.createRefs)(this.me);
             //        var color: State|any = new State("red");
-            var mycolor = (0, State_1.createState)(this.props.mycolor);
-            this.calculateState = (props) => {
-                if (props.mycolor)
-                    mycolor.current = props.mycolor;
-            };
             //var ret = <div calculateState={calculateState}> 
+            if (this.props.color === undefined)
+                this.states.color.current = "yellow";
+            //{me.states.colorState}  
             var ret = Component_1.React.createElement("div", null,
-                mycolor,
-                Component_1.React.createElement("button", { style: { color: mycolor.self }, onClick: () => {
-                        mycolor.current = "blue";
+                Component_1.React.createElement(Button_1.Button, { ref: me.refs.button, text: "kk", style: { color: this.states.color.self }, onclick: () => {
+                        this.states.color.current = "blue";
+                        me.button.text = "oo";
                         // _this.config({ text: "neu"+x++ });
-                    } }, "Click"),
+                    } }),
                 "Haelloggg",
                 Component_1.React.createElement("span", null, "kkkk"));
-            debugger;
             return ret;
         }
     }
+    function k() {
+        this.a = 9;
+    }
     function test() {
-        var comp = new MyComp({ mycolor: "green" });
-        comp.config({ mycolor: "red" });
+        var ob = {};
+        var o = k.bind(ob);
+        o();
+        var comp = new MyComp({ color: "green" });
+        //   comp.config({ color: "red" });
         return comp;
     }
     exports.test = test;

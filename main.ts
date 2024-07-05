@@ -16,7 +16,7 @@ new Compile().transpileModul("northwind",true);
 new Compile().transpileModul("northwind",false);
 new Compile().transpileModul("tests",false);
 new Compile().transpileModul("tests",true);
-new Compile().transpileModul("demo",false);
+new Compile().transpileModul("demo",false); 
   
 JassiServer();  
    

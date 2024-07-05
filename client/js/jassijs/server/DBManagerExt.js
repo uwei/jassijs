@@ -1,7 +1,11 @@
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "./DBManager", "./TypeORMListener", "typeorm", "./NativeAdapter"], function (require, exports, Classes_1, Database_1, Registry_1, DBManager_1, TypeORMListener_1, typeorm_1, NativeAdapter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendDBManager = void 0;
+    Registry_1 = __importDefault(Registry_1);
     function extendDBManager() {
         //create Admin User if doesn't a user exists 
         DBManager_1.DBManager.prototype["hasLoaded"] = async function () {

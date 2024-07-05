@@ -10,12 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_1, Registry_2, RemoteObject_1, Setting_1, Server_1, Serverservice_1, Validator_1) {
     "use strict";
     var Settings_1;
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.load = exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
+    Registry_2 = __importDefault(Registry_2);
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;

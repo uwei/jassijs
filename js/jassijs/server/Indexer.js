@@ -146,24 +146,31 @@ class Indexer {
         var _a;
         //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
         if (node.kind === NativeAdapter_1.ts.SyntaxKind.ClassDeclaration) {
-            if (node.decorators !== undefined) {
-                var dec = {};
-                var sclass = undefined;
-                for (let x = 0; x < node.decorators.length; x++) {
-                    var decnode = node.decorators[x];
-                    var ex = decnode.expression;
-                    if (ex.expression === undefined) {
-                        dec[ex.text] = []; //Annotation without parameter
-                    }
-                    else {
-                        if (ex.expression.text === "$Class")
-                            sclass = this.convertArgument(ex.arguments[0]);
+            if (node["modifiers"] !== undefined) {
+                var dec;
+                for (var m = 0; m < node["modifiers"].length; m++) {
+                    var decnode = node["modifiers"][m];
+                    if (decnode.kind === NativeAdapter_1.ts.SyntaxKind.Decorator) {
+                        //if (node.decorators !== undefined) {
+                        if (dec === undefined)
+                            dec = {};
+                        var sclass = undefined;
+                        //for (let x = 0; x < node.decorators.length; x++) {
+                        // var decnode = node.decorators[x];
+                        var ex = decnode.expression;
+                        if (ex.expression === undefined) {
+                            dec[ex.text] = []; //Annotation without parameter
+                        }
                         else {
-                            if (dec[ex.expression.text] === undefined) {
-                                dec[ex.expression.text] = [];
-                            }
-                            for (var a = 0; a < ex.arguments.length; a++) {
-                                dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                            if (ex.expression.text === "$Class")
+                                sclass = this.convertArgument(ex.arguments[0]);
+                            else {
+                                if (dec[ex.expression.text] === undefined) {
+                                    dec[ex.expression.text] = [];
+                                }
+                                for (var a = 0; a < ex.arguments.length; a++) {
+                                    dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                }
                             }
                         }
                     }
@@ -174,32 +181,37 @@ class Indexer {
                 for (let x = 0; x < node["members"].length; x++) {
                     var member = node["members"][x];
                     var membername = (_a = node["members"][x].name) === null || _a === void 0 ? void 0 : _a.escapedText;
-                    if (member.decorators !== undefined) {
-                        if (!dec["@members"])
-                            dec["@members"] = {};
-                        var decm = {};
-                        dec["@members"][membername] = decm;
-                        for (let x = 0; x < member.decorators.length; x++) {
-                            var decnode = member.decorators[x];
-                            var ex = decnode.expression;
-                            if (ex.expression === undefined) {
-                                decm[ex.text] = []; //Annotation without parameter
-                            }
-                            else {
-                                if (ex.expression.text === "$Property") {
-                                    //do nothing;
+                    if (member["modifiers"] !== undefined) {
+                        for (var m = 0; m < member["modifiers"].length; m++) {
+                            var decnode = member["modifiers"][m];
+                            if (decnode.kind === NativeAdapter_1.ts.SyntaxKind.Decorator) {
+                                //if (member.decorators !== undefined) {
+                                if (!dec["@members"])
+                                    dec["@members"] = {};
+                                var decm = {};
+                                dec["@members"][membername] = decm;
+                                //for (let x = 0; x < member.decorators.length; x++) {
+                                //  var decnode = member.decorators[x];
+                                var ex = decnode.expression;
+                                if (ex.expression === undefined) {
+                                    decm[ex.text] = []; //Annotation without parameter
                                 }
                                 else {
-                                    if (decm[ex.expression.text] === undefined) {
-                                        decm[ex.expression.text] = [];
+                                    if (ex.expression.text === "$Property") {
+                                        //do nothing;
                                     }
-                                    for (var a = 0; a < ex.arguments.length; a++) {
-                                        decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                    else {
+                                        if (decm[ex.expression.text] === undefined) {
+                                            decm[ex.expression.text] = [];
+                                        }
+                                        for (var a = 0; a < ex.arguments.length; a++) {
+                                            decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                        }
                                     }
                                 }
                             }
                         }
-                        if (Object.keys(dec["@members"][membername]).length === 0) {
+                        if (dec && dec["@members"] && Object.keys(dec["@members"][membername]).length === 0) {
                             delete dec["@members"][membername];
                         }
                     }

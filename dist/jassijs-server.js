@@ -493,13 +493,13 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/Indexer.ts": {
-                "date": 1684515212000
+                "date": 1720184378220.3965
             },
             "jassijs/server/LocalProtocol.ts": {
                 "date": 1697207752396.3682
             },
             "jassijs/server/NativeAdapter.ts": {
-                "date": 1684173750000
+                "date": 1720182392512.7004
             },
             "jassijs/server/RegistryIndexer.ts": {
                 "date": 1682799792000
@@ -536,17 +536,18 @@ define("jassijs/registry", ["require"], function (require) {
 define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.classes = exports.Classes = exports.JassiError = void 0;
+    exports.classes = exports.Classes = exports.JassiError = void 0;
+    exports.test = test;
     let JassiError = class JassiError extends Error {
         constructor(msg) {
             super(msg);
         }
     };
-    JassiError = __decorate([
+    exports.JassiError = JassiError;
+    exports.JassiError = JassiError = __decorate([
         $Class("jassijs.remote.JassiError"),
         __metadata("design:paramtypes", [String])
     ], JassiError);
-    exports.JassiError = JassiError;
     function $Class(longclassname) {
         return function (pclass) {
             Registry_1.default.register("$Class", pclass, longclassname);
@@ -643,11 +644,11 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
             this._cache[name] = data;
         }
     };
-    Classes = __decorate([
+    exports.Classes = Classes;
+    exports.Classes = Classes = __decorate([
         $Class("jassijs.remote.Classes"),
         __metadata("design:paramtypes", [])
     ], Classes);
-    exports.Classes = Classes;
     ;
     let classes = new Classes();
     exports.classes = classes;
@@ -656,7 +657,6 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
         t.expectEqual(cl === await classes.loadClass("jassijs.ui.Button"));
         t.expectEqual(classes.getClassName(cl) === "jassijs.ui.Button");
     }
-    exports.test = test;
 });
 define("jassijs/remote/ClientError", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_2) {
     "use strict";
@@ -667,11 +667,11 @@ define("jassijs/remote/ClientError", ["require", "exports", "jassijs/remote/Regi
             super(msg);
         }
     };
-    ClientError = __decorate([
-        Registry_2.$Class("jassijs.remote.ClientError"),
+    exports.ClientError = ClientError;
+    exports.ClientError = ClientError = __decorate([
+        (0, Registry_2.$Class)("jassijs.remote.ClientError"),
         __metadata("design:paramtypes", [String])
     ], ClientError);
-    exports.ClientError = ClientError;
 });
 define("jassijs/remote/Config", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -792,11 +792,11 @@ define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Registr
             return this.typeDef.get(sclass);
         }
     };
-    Database = __decorate([
-        Registry_3.$Class("jassijs.remote.Database"),
+    exports.Database = Database;
+    exports.Database = Database = __decorate([
+        (0, Registry_3.$Class)("jassijs.remote.Database"),
         __metadata("design:paramtypes", [])
     ], Database);
-    exports.Database = Database;
     //@ts-ignore
     var db = new Database();
     exports.db = db;
@@ -805,7 +805,8 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Re
     "use strict";
     var DatabaseTools_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.DatabaseTools = void 0;
+    exports.DatabaseTools = void 0;
+    exports.test = test;
     let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1.RemoteObject {
         //this is a sample remote function
         static async runSQL(sql, parameter = undefined, context = undefined) {
@@ -830,25 +831,24 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Re
             return await DatabaseTools_1.runSQL("DROP TABLE " + tables.join(","));
         }
     };
+    exports.DatabaseTools = DatabaseTools;
     __decorate([
-        Validator_1.ValidateFunctionParameter(),
-        __param(0, Validator_1.ValidateIsString()),
-        __param(1, Validator_1.ValidateIsArray({ optional: true })),
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_1.ValidateIsString)()),
+        __param(1, (0, Validator_1.ValidateIsArray)({ optional: true })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, Array, RemoteObject_1.Context]),
         __metadata("design:returntype", Promise)
     ], DatabaseTools, "runSQL", null);
-    DatabaseTools = DatabaseTools_1 = __decorate([
-        Registry_4.$Class("jassijs.remote.DatabaseTools")
+    exports.DatabaseTools = DatabaseTools = DatabaseTools_1 = __decorate([
+        (0, Registry_4.$Class)("jassijs.remote.DatabaseTools")
     ], DatabaseTools);
-    exports.DatabaseTools = DatabaseTools;
     async function test() {
         /*  var h=await DatabaseTools.runSQL('DROP TABLE :p1,:p2',[
                               {p1:"te_person2",
                                           p2:"tg_person"}]);//,"te_person2"]);*/
         //var h=await DatabaseTools.runSQL('select * from jassijs_rights'); 
     }
-    exports.test = test;
 });
 define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_5, Classes_3) {
     "use strict";
@@ -927,17 +927,19 @@ define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Registry
             }
         }
     };
-    DBArray = __decorate([
-        Registry_5.$Class("jassijs.remote.DBArray"),
+    exports.DBArray = DBArray;
+    exports.DBArray = DBArray = __decorate([
+        (0, Registry_5.$Class)("jassijs.remote.DBArray"),
         __metadata("design:paramtypes", [Object])
     ], DBArray);
-    exports.DBArray = DBArray;
 });
 define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database", "jassijs/remote/Validator", "jassijs/remote/Serverservice"], function (require, exports, Registry_6, Classes_4, RemoteObject_2, Registry_7, DatabaseSchema_1, Database_1, Validator_2, Serverservice_2) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.DBObject = exports.MyFindManyOptions = exports.$DBObject = void 0;
+    exports.DBObject = exports.MyFindManyOptions = void 0;
+    exports.$DBObject = $DBObject;
+    exports.test = test;
     let cl = Classes_4.classes; //force Classes
     function $DBObject(options) {
         return function (pclass, ...params) {
@@ -948,10 +950,9 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
                 options.name = classname.toLowerCase().replaceAll(".", "_");
             Registry_7.default.register("$DBObject", pclass, options);
             //@ts-ignore
-            DatabaseSchema_1.Entity(options)(pclass, ...params); //pass to orginal Entitiy
+            (0, DatabaseSchema_1.Entity)(options)(pclass, ...params); //pass to orginal Entitiy
         };
     }
-    exports.$DBObject = $DBObject;
     class MyFindManyOptions {
     }
     exports.MyFindManyOptions = MyFindManyOptions;
@@ -961,14 +962,14 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
     * @class DBObject
     */
     let DBObject = DBObject_1 = class DBObject extends RemoteObject_2.RemoteObject {
-        constructor() {
-            super();
-        }
         //clear cache on reload
         static _initFunc() {
             Registry_7.default.onregister("$Class", (data, name) => {
                 delete DBObject_1.cache[name];
             });
+        }
+        constructor() {
+            super();
         }
         isAutoId() {
             var _a;
@@ -982,7 +983,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
             return DBObject_1.cache[classname][id.toString()];
         }
         async validate(options = undefined, throwError = false) {
-            var ret = Validator_2.validate(this, options, throwError);
+            var ret = (0, Validator_2.validate)(this, options, throwError);
             return ret;
         }
         static addToCache(ob) {
@@ -1148,23 +1149,24 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
         _setObjectProperty(dummy, dumm1) {
         }
     };
+    exports.DBObject = DBObject;
     DBObject.cache = {};
     DBObject._init = DBObject_1._initFunc();
-    DBObject = DBObject_1 = __decorate([
-        Registry_6.$Class("jassijs.remote.DBObject"),
+    exports.DBObject = DBObject = DBObject_1 = __decorate([
+        (0, Registry_6.$Class)("jassijs.remote.DBObject"),
         __metadata("design:paramtypes", [])
     ], DBObject);
-    exports.DBObject = DBObject;
     async function test() {
         var h = Database_1.db.getMetadata(Classes_4.classes.getClass("de.Kunde"));
         // debugger;
     }
-    exports.test = test;
 });
 define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Classes_5, Registry_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.DBObjectQuery = exports.$DBObjectQuery = exports.DBObjectQueryProperties = void 0;
+    exports.DBObjectQuery = exports.DBObjectQueryProperties = void 0;
+    exports.$DBObjectQuery = $DBObjectQuery;
+    exports.test = test;
     class DBObjectQueryProperties {
     }
     exports.DBObjectQueryProperties = DBObjectQueryProperties;
@@ -1174,7 +1176,6 @@ define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Cl
             Registry_8.default.registerMember("$DBObjectQuery", target, propertyKey, property);
         };
     }
-    exports.$DBObjectQuery = $DBObjectQuery;
     class DBObjectQuery {
         async execute() {
             return undefined;
@@ -1203,18 +1204,17 @@ define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Cl
         //	var qu=(await DBObjectQuery.getQueries("de.Kunde"))[0];
         //	var j=await qu.execute();
     }
-    exports.test = test;
 });
 define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.extensions = exports.Extensions = exports.$Extension = void 0;
+    exports.extensions = exports.Extensions = void 0;
+    exports.$Extension = $Extension;
     function $Extension(forclass) {
         return function (pclass) {
             Registry_9.default.register("$Extension", pclass, forclass);
         };
     }
-    exports.$Extension = $Extension;
     class ExtensionTarget {
         addFunction(name, func, ifExists) {
         }
@@ -1307,11 +1307,11 @@ define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Registr
             return all;
         }
     };
-    FileNode = __decorate([
-        Registry_10.$Class("jassijs.remote.FileNode"),
+    exports.FileNode = FileNode;
+    exports.FileNode = FileNode = __decorate([
+        (0, Registry_10.$Class)("jassijs.remote.FileNode"),
         __metadata("design:paramtypes", [String])
     ], FileNode);
-    exports.FileNode = FileNode;
 });
 define("jassijs/remote/hallo", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1531,19 +1531,20 @@ define("jassijs/remote/ObjectTransaction", ["require", "exports"], function (req
 define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config", "reflect-metadata"], function (require, exports, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.migrateModul = exports.Registry = exports.$register = exports.$Class = void 0;
+    exports.Registry = void 0;
+    exports.$Class = $Class;
+    exports.$register = $register;
+    exports.migrateModul = migrateModul;
     function $Class(longclassname) {
         return function (pclass) {
             registry.register("$Class", pclass, longclassname);
         };
     }
-    exports.$Class = $Class;
     function $register(servicename, ...params) {
         return function (pclass) {
             registry.register(servicename, pclass, params);
         };
     }
-    exports.$register = $register;
     if (Reflect["_metadataorg"] === undefined) {
         Reflect["_metadataorg"] = Reflect["metadata"];
         if (Reflect["_metadataorg"] === undefined)
@@ -1967,7 +1968,6 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
             newModul.registry.entries = oldModul.registry.entries;
         }
     }
-    exports.migrateModul = migrateModul;
 });
 //jassijs.registry=registry;
 define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, Registry_11, Classes_6, RemoteProtocol_1) {
@@ -2025,10 +2025,10 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Reg
             return ret;
         }
     };
-    RemoteObject = __decorate([
-        Registry_11.$Class("jassijs.remote.RemoteObject")
-    ], RemoteObject);
     exports.RemoteObject = RemoteObject;
+    exports.RemoteObject = RemoteObject = __decorate([
+        (0, Registry_11.$Class)("jassijs.remote.RemoteObject")
+    ], RemoteObject);
 });
 define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_12, Classes_7) {
     "use strict";
@@ -2232,11 +2232,11 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
             var test = await this.parse(s);
         }
     };
-    RemoteProtocol.counter = 0;
-    RemoteProtocol = __decorate([
-        Registry_12.$Class("jassijs.remote.RemoteProtocol")
-    ], RemoteProtocol);
     exports.RemoteProtocol = RemoteProtocol;
+    RemoteProtocol.counter = 0;
+    exports.RemoteProtocol = RemoteProtocol = __decorate([
+        (0, Registry_12.$Class)("jassijs.remote.RemoteProtocol")
+    ], RemoteProtocol);
     class A {
     }
     //jassijs.register("classes", "de.A", A);
@@ -2252,38 +2252,38 @@ define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/D
     //import "jassijs/ext/enableExtension.js?de.Kunde";
     let Group = class Group extends DBObject_2.DBObject {
     };
+    exports.Group = Group;
     __decorate([
-        Validator_3.ValidateIsInt({ optional: true }),
-        DatabaseSchema_2.PrimaryColumn(),
+        (0, Validator_3.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_2.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Group.prototype, "id", void 0);
     __decorate([
-        Validator_3.ValidateIsString(),
-        DatabaseSchema_2.Column(),
+        (0, Validator_3.ValidateIsString)(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Group.prototype, "name", void 0);
     __decorate([
-        Validator_3.ValidateIsArray({ optional: true, type: type => ParentRight_1.ParentRight }),
-        DatabaseSchema_2.JoinTable(),
-        DatabaseSchema_2.ManyToMany(type => ParentRight_1.ParentRight, ob => ob.groups),
+        (0, Validator_3.ValidateIsArray)({ optional: true, type: type => ParentRight_1.ParentRight }),
+        (0, DatabaseSchema_2.JoinTable)(),
+        (0, DatabaseSchema_2.ManyToMany)(type => ParentRight_1.ParentRight, ob => ob.groups),
         __metadata("design:type", Array)
     ], Group.prototype, "parentRights", void 0);
     __decorate([
-        Validator_3.ValidateIsArray({ optional: true, type: type => Right_1.Right }),
-        DatabaseSchema_2.JoinTable(),
-        DatabaseSchema_2.ManyToMany(type => Right_1.Right, ob => ob.groups),
+        (0, Validator_3.ValidateIsArray)({ optional: true, type: type => Right_1.Right }),
+        (0, DatabaseSchema_2.JoinTable)(),
+        (0, DatabaseSchema_2.ManyToMany)(type => Right_1.Right, ob => ob.groups),
         __metadata("design:type", Array)
     ], Group.prototype, "rights", void 0);
     __decorate([
-        Validator_3.ValidateIsArray({ optional: true, type: type => User_1.User }),
-        DatabaseSchema_2.ManyToMany(type => User_1.User, ob => ob.groups),
+        (0, Validator_3.ValidateIsArray)({ optional: true, type: type => User_1.User }),
+        (0, DatabaseSchema_2.ManyToMany)(type => User_1.User, ob => ob.groups),
         __metadata("design:type", Array)
     ], Group.prototype, "users", void 0);
-    Group = __decorate([
-        DBObject_2.$DBObject({ name: "jassijs_group" }),
-        Registry_13.$Class("jassijs.security.Group")
+    exports.Group = Group = __decorate([
+        (0, DBObject_2.$DBObject)({ name: "jassijs_group" }),
+        (0, Registry_13.$Class)("jassijs.security.Group")
     ], Group);
-    exports.Group = Group;
 });
 define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_14, DatabaseSchema_3, Group_1, Validator_4) {
     "use strict";
@@ -2292,51 +2292,51 @@ define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/re
     //import "jassijs/ext/enableExtension.js?de.Kunde";
     let ParentRight = class ParentRight extends DBObject_3.DBObject {
     };
+    exports.ParentRight = ParentRight;
     __decorate([
-        Validator_4.ValidateIsInt({ optional: true }),
-        DatabaseSchema_3.PrimaryGeneratedColumn(),
+        (0, Validator_4.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_3.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "id", void 0);
     __decorate([
-        Validator_4.ValidateIsString(),
-        DatabaseSchema_3.Column(),
+        (0, Validator_4.ValidateIsString)(),
+        (0, DatabaseSchema_3.Column)(),
         __metadata("design:type", String)
     ], ParentRight.prototype, "name", void 0);
     __decorate([
-        Validator_4.ValidateIsString(),
-        DatabaseSchema_3.Column(),
+        (0, Validator_4.ValidateIsString)(),
+        (0, DatabaseSchema_3.Column)(),
         __metadata("design:type", String)
     ], ParentRight.prototype, "classname", void 0);
     __decorate([
-        Validator_4.ValidateIsNumber({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_4.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "i1", void 0);
     __decorate([
-        Validator_4.ValidateIsNumber({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_4.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "i2", void 0);
     __decorate([
-        Validator_4.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], ParentRight.prototype, "s1", void 0);
     __decorate([
-        Validator_4.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], ParentRight.prototype, "s2", void 0);
     __decorate([
-        Validator_4.ValidateIsArray({ optional: true, type: type => Group_1.Group }),
-        DatabaseSchema_3.ManyToMany(type => Group_1.Group, ob => ob.parentRights),
+        (0, Validator_4.ValidateIsArray)({ optional: true, type: type => Group_1.Group }),
+        (0, DatabaseSchema_3.ManyToMany)(type => Group_1.Group, ob => ob.parentRights),
         __metadata("design:type", Array)
     ], ParentRight.prototype, "groups", void 0);
-    ParentRight = __decorate([
-        DBObject_3.$DBObject({ name: "jassijs_parentright" }),
-        Registry_14.$Class("jassijs.security.ParentRight")
+    exports.ParentRight = ParentRight = __decorate([
+        (0, DBObject_3.$DBObject)({ name: "jassijs_parentright" }),
+        (0, Registry_14.$Class)("jassijs.security.ParentRight")
     ], ParentRight);
-    exports.ParentRight = ParentRight;
 });
 define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_4, Registry_15, DatabaseSchema_4, Group_2, Validator_5) {
     "use strict";
@@ -2345,31 +2345,34 @@ define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/D
     //import "jassijs/ext/enableExtension.js?de.Kunde";
     let Right = class Right extends DBObject_4.DBObject {
     };
+    exports.Right = Right;
     __decorate([
-        Validator_5.ValidateIsInt({ optional: true }),
-        DatabaseSchema_4.PrimaryColumn(),
+        (0, Validator_5.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_4.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Right.prototype, "id", void 0);
     __decorate([
-        Validator_5.ValidateIsString(),
-        DatabaseSchema_4.Column(),
+        (0, Validator_5.ValidateIsString)(),
+        (0, DatabaseSchema_4.Column)(),
         __metadata("design:type", String)
     ], Right.prototype, "name", void 0);
     __decorate([
-        Validator_5.ValidateIsArray({ optional: true, type: type => Group_2.Group }),
-        DatabaseSchema_4.ManyToMany(type => Group_2.Group, ob => ob.rights),
+        (0, Validator_5.ValidateIsArray)({ optional: true, type: type => Group_2.Group }),
+        (0, DatabaseSchema_4.ManyToMany)(type => Group_2.Group, ob => ob.rights),
         __metadata("design:type", Array)
     ], Right.prototype, "groups", void 0);
-    Right = __decorate([
-        DBObject_4.$DBObject({ name: "jassijs_right" }),
-        Registry_15.$Class("jassijs.security.Right")
+    exports.Right = Right = __decorate([
+        (0, DBObject_4.$DBObject)({ name: "jassijs_right" }),
+        (0, Registry_15.$Class)("jassijs.security.Right")
     ], Right);
-    exports.Right = Right;
 });
 define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_16, Registry_17, RemoteObject_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Rights = exports.$CheckParentRight = exports.$ParentRights = exports.$Rights = exports.ParentRightProperties = exports.RightProperties = void 0;
+    exports.Rights = exports.ParentRightProperties = exports.RightProperties = void 0;
+    exports.$Rights = $Rights;
+    exports.$ParentRights = $ParentRights;
+    exports.$CheckParentRight = $CheckParentRight;
     class RightProperties {
     }
     exports.RightProperties = RightProperties;
@@ -2381,19 +2384,16 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
             Registry_17.default.register("$Rights", pclass, rights);
         };
     }
-    exports.$Rights = $Rights;
     function $ParentRights(rights) {
         return function (pclass) {
             Registry_17.default.register("$ParentRights", pclass, rights);
         };
     }
-    exports.$ParentRights = $ParentRights;
     function $CheckParentRight() {
         return function (target, propertyKey, descriptor) {
             Registry_17.default.registerMember("$CheckParentRight", target, propertyKey, undefined);
         };
     }
-    exports.$CheckParentRight = $CheckParentRight;
     let Rights = class Rights extends RemoteObject_3.RemoteObject {
         async isAdmin(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -2408,17 +2408,18 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
             }
         }
     };
-    Rights = __decorate([
-        Registry_16.$Class("jassijs.security.Rights")
-    ], Rights);
     exports.Rights = Rights;
+    exports.Rights = Rights = __decorate([
+        (0, Registry_16.$Class)("jassijs.security.Rights")
+    ], Rights);
     var rights = new Rights();
     exports.default = rights;
 });
 define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "../Classes", "jassijs/remote/Validator"], function (require, exports, DBObject_5, Registry_18, DatabaseSchema_5, Classes_8, Validator_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Setting = void 0;
+    exports.Setting = void 0;
+    exports.test = test;
     let Setting = class Setting extends DBObject_5.DBObject {
         constructor() {
             super();
@@ -2439,31 +2440,32 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
             throw new Classes_8.JassiError("not suported");
         }
     };
+    exports.Setting = Setting;
     __decorate([
-        Validator_6.ValidateIsInt({ optional: true }),
-        DatabaseSchema_5.PrimaryColumn(),
+        (0, Validator_6.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_5.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Setting.prototype, "id", void 0);
     __decorate([
-        Validator_6.ValidateIsString({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Setting.prototype, "data", void 0);
-    Setting = __decorate([
-        DBObject_5.$DBObject({ name: "jassijs_setting" }),
-        Registry_18.$Class("jassijs.security.Setting"),
+    exports.Setting = Setting = __decorate([
+        (0, DBObject_5.$DBObject)({ name: "jassijs_setting" }),
+        (0, Registry_18.$Class)("jassijs.security.Setting"),
         __metadata("design:paramtypes", [])
     ], Setting);
-    exports.Setting = Setting;
     async function test() {
     }
-    exports.test = test;
     ;
 });
 define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight", "jassijs/remote/Validator"], function (require, exports, DBObject_6, Registry_19, DatabaseSchema_6, Group_3, ParentRight_2, Validator_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.test = exports.User = void 0;
+    exports.User = void 0;
+    exports.test = test;
+    exports.test2 = test2;
     let User = class User extends DBObject_6.DBObject {
         static async findWithRelations() {
             return this.find({ relations: ["*"] });
@@ -2483,41 +2485,40 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
             return await super.save(context);
         }
     };
+    exports.User = User;
     __decorate([
-        Validator_7.ValidateIsNumber({ optional: true }),
-        DatabaseSchema_6.PrimaryGeneratedColumn(),
+        (0, Validator_7.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_6.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], User.prototype, "id", void 0);
     __decorate([
-        Validator_7.ValidateIsString(),
-        DatabaseSchema_6.Column(),
+        (0, Validator_7.ValidateIsString)(),
+        (0, DatabaseSchema_6.Column)(),
         __metadata("design:type", String)
     ], User.prototype, "email", void 0);
     __decorate([
-        Validator_7.ValidateIsString({ optional: true }),
-        DatabaseSchema_6.Column({ select: false }),
+        (0, Validator_7.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ select: false }),
         __metadata("design:type", String)
     ], User.prototype, "password", void 0);
     __decorate([
-        Validator_7.ValidateIsArray({ optional: true, type: type => Group_3.Group }),
-        DatabaseSchema_6.JoinTable(),
-        DatabaseSchema_6.ManyToMany(type => Group_3.Group, ob => ob.users),
+        (0, Validator_7.ValidateIsArray)({ optional: true, type: type => Group_3.Group }),
+        (0, DatabaseSchema_6.JoinTable)(),
+        (0, DatabaseSchema_6.ManyToMany)(type => Group_3.Group, ob => ob.users),
         __metadata("design:type", Array)
     ], User.prototype, "groups", void 0);
     __decorate([
-        Validator_7.ValidateIsBoolean({ optional: true }),
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, Validator_7.ValidateIsBoolean)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], User.prototype, "isAdmin", void 0);
-    User = __decorate([
-        DBObject_6.$DBObject({ name: "jassijs_user" }),
-        Registry_19.$Class("jassijs.security.User")
+    exports.User = User = __decorate([
+        (0, DBObject_6.$DBObject)({ name: "jassijs_user" }),
+        (0, Registry_19.$Class)("jassijs.security.User")
     ], User);
-    exports.User = User;
     async function test() {
         var gps = await (Group_3.Group.find({}));
     }
-    exports.test = test;
     async function test2() {
         var user = new User();
         user.id = 1;
@@ -2550,11 +2551,11 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
         user.groups = [group1, group2];
         await user.save();
     }
-    exports.test2 = test2;
 });
 define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes", "./Serverservice", "jassijs/remote/Validator", "./Config"], function (require, exports, Registry_20, RemoteObject_4, FileNode_1, Classes_9, Serverservice_3, Validator_8, Config_3) {
     "use strict";
-    var Server_1, _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+    var Server_1;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Server = void 0;
     let Server = Server_1 = class Server extends RemoteObject_4.RemoteObject {
@@ -2973,115 +2974,117 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 return 14; //this is called on server
         }
     };
+    exports.Server = Server;
     Server.isonline = undefined;
     //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsBoolean({ optional: true })),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsBoolean)({ optional: true })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Boolean, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
     ], Server.prototype, "dir", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
-        __param(1, Validator_8.ValidateIsBoolean({ optional: true })),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __param(1, (0, Validator_8.ValidateIsBoolean)({ optional: true })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, Boolean, RemoteObject_4.Context]),
         __metadata("design:returntype", Promise)
     ], Server.prototype, "zip", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsArray({ type: tp => String })),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsArray)({ type: tp => String })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
     ], Server.prototype, "loadFiles", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
     ], Server.prototype, "loadFile", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsArray({ type: type => String })),
-        __param(1, Validator_8.ValidateIsArray({ type: type => String })),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsArray)({ type: type => String })),
+        __param(1, (0, Validator_8.ValidateIsArray)({ type: type => String })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Array, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
     ], Server.prototype, "saveFiles", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
-        __param(1, Validator_8.ValidateIsString()),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __param(1, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, String, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
     ], Server.prototype, "saveFile", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
     ], Server.prototype, "testServersideFile", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
     ], Server.prototype, "removeServerModul", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
     ], Server.prototype, "delete", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
-        __param(1, Validator_8.ValidateIsString()),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
+        __param(1, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, String, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
     ], Server.prototype, "rename", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, String, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
     ], Server.prototype, "createFile", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_l = typeof Promise !== "undefined" && Promise) === "function" ? _l : Object)
     ], Server.prototype, "createFolder", null);
     __decorate([
-        Validator_8.ValidateFunctionParameter(),
-        __param(0, Validator_8.ValidateIsString()),
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, RemoteObject_4.Context]),
         __metadata("design:returntype", typeof (_m = typeof Promise !== "undefined" && Promise) === "function" ? _m : Object)
     ], Server.prototype, "createModule", null);
-    Server = Server_1 = __decorate([
-        Registry_20.$Class("jassijs.remote.Server"),
+    exports.Server = Server = Server_1 = __decorate([
+        (0, Registry_20.$Class)("jassijs.remote.Server"),
         __metadata("design:paramtypes", [])
     ], Server);
-    exports.Server = Server;
 });
 //@ts-ignore
 define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Classes_10, Registry_21) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.$Serverservice = exports.beforeServiceLoad = exports.ServerserviceProperties = void 0;
+    exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.ServerserviceProperties = void 0;
+    exports.beforeServiceLoad = beforeServiceLoad;
+    exports.$Serverservice = $Serverservice;
     class ServerserviceProperties {
     }
     exports.ServerserviceProperties = ServerserviceProperties;
@@ -3091,7 +3094,6 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
     function beforeServiceLoad(func) {
         beforeServiceLoadHandler.push(func);
     }
-    exports.beforeServiceLoad = beforeServiceLoad;
     var serverservices = new Proxy(runningServerservices, {
         get(target, prop, receiver) {
             return new Promise(async (resolve, reject) => {
@@ -3142,15 +3144,19 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
             Registry_21.default.register("$Serverservice", pclass, properties);
         };
     }
-    exports.$Serverservice = $Serverservice;
     var doNotReloadModule = true;
     exports.doNotReloadModule = doNotReloadModule;
 });
 define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_22, Registry_23, RemoteObject_5, Setting_1, Server_2, Serverservice_4, Validator_9) {
     "use strict";
-    var Settings_1, _a, _b;
+    var Settings_1;
+    var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.load = exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
+    exports.settings = exports.Settings = void 0;
+    exports.$SettingsDescriptor = $SettingsDescriptor;
+    exports.autostart = autostart;
+    exports.test = test;
+    exports.load = load;
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;
@@ -3300,38 +3306,38 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
             }
         }
     };
+    exports.Settings = Settings;
     Settings.keys = new Proxy({}, proxyhandler); //the Proxy allwas give the key back
     Settings.browserSettings = undefined;
     Settings.userSettings = undefined;
     Settings.allusersSettings = undefined;
     __decorate([
-        Validator_9.ValidateFunctionParameter(),
-        __param(0, Validator_9.ValidateIsString()),
-        __param(1, Validator_9.ValidateIsIn({ in: ["browser", "user", "allusers"] })),
+        (0, Validator_9.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_9.ValidateIsString)()),
+        __param(1, (0, Validator_9.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, String, RemoteObject_5.Context]),
         __metadata("design:returntype", Promise)
     ], Settings, "remove", null);
     __decorate([
-        Validator_9.ValidateFunctionParameter(),
-        __param(0, Validator_9.ValidateIsString()),
-        __param(2, Validator_9.ValidateIsIn({ in: ["browser", "user", "allusers"] })),
+        (0, Validator_9.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_9.ValidateIsString)()),
+        __param(2, (0, Validator_9.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [typeof (_a = typeof T !== "undefined" && T) === "function" ? _a : Object, typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, String]),
         __metadata("design:returntype", Promise)
     ], Settings, "save", null);
     __decorate([
-        Validator_9.ValidateFunctionParameter(),
-        __param(1, Validator_9.ValidateIsIn({ in: ["browser", "user", "allusers"] })),
-        __param(2, Validator_9.ValidateIsBoolean({ optional: true })),
+        (0, Validator_9.ValidateFunctionParameter)(),
+        __param(1, (0, Validator_9.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
+        __param(2, (0, Validator_9.ValidateIsBoolean)({ optional: true })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, String, Object, RemoteObject_5.Context]),
         __metadata("design:returntype", Promise)
     ], Settings, "saveAll", null);
-    Settings = Settings_1 = __decorate([
-        Registry_22.$Class("jassijs.remote.Settings")
+    exports.Settings = Settings = Settings_1 = __decorate([
+        (0, Registry_22.$Class)("jassijs.remote.Settings")
     ], Settings);
-    exports.Settings = Settings;
     var settings = new Settings();
     exports.settings = settings;
     function $SettingsDescriptor() {
@@ -3339,11 +3345,9 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
             Registry_23.default.register("$SettingsDescriptor", pclass);
         };
     }
-    exports.$SettingsDescriptor = $SettingsDescriptor;
     async function autostart() {
         await Settings.load();
     }
-    exports.autostart = autostart;
     async function test(t) {
         try {
             await Settings.load();
@@ -3376,11 +3380,9 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
             await Settings.remove("antestsetting", "allusers");
         }
     }
-    exports.test = test;
     async function load() {
         return Settings.load();
     }
-    exports.load = load;
 });
 define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_24) {
     "use strict";
@@ -3447,10 +3449,10 @@ define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Registry"],
                 throw new Error("test fails");
         }
     };
-    Test = __decorate([
-        Registry_24.$Class("jassijs.remote.Test")
-    ], Test);
     exports.Test = Test;
+    exports.Test = Test = __decorate([
+        (0, Registry_24.$Class)("jassijs.remote.Test")
+    ], Test);
 });
 define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_25, RemoteObject_6) {
     "use strict";
@@ -3581,15 +3583,29 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
             this.statements.push(ti);
         }
     };
-    Transaction = __decorate([
-        Registry_25.$Class("jassijs.remote.Transaction")
-    ], Transaction);
     exports.Transaction = Transaction;
+    exports.Transaction = Transaction = __decorate([
+        (0, Registry_25.$Class)("jassijs.remote.Transaction")
+    ], Transaction);
 });
 define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ValidateIsString = exports.ValidationIsStringOptions = exports.ValidateIsNumber = exports.ValidationIsNumberOptions = exports.ValidateMin = exports.ValidationMinOptions = exports.ValidateMax = exports.ValidationMaxOptions = exports.ValidateIsInt = exports.ValidationIsIntOptions = exports.ValidateIsInstanceOf = exports.ValidationIsInstanceOfOptions = exports.ValidateIsIn = exports.ValidationIsInOptions = exports.ValidateFunctionParameter = exports.ValidateIsDate = exports.ValidationIsDateOptions = exports.ValidateIsBoolean = exports.ValidationIsBooleanOptions = exports.ValidateIsArray = exports.ValidationIsArrayOptions = exports.validate = exports.ValidationError = exports.registerValidation = exports.ValidationOptions = void 0;
+    exports.ValidationIsStringOptions = exports.ValidationIsNumberOptions = exports.ValidationMinOptions = exports.ValidationMaxOptions = exports.ValidationIsIntOptions = exports.ValidationIsInstanceOfOptions = exports.ValidationIsInOptions = exports.ValidationIsDateOptions = exports.ValidationIsBooleanOptions = exports.ValidationIsArrayOptions = exports.ValidationError = exports.ValidationOptions = void 0;
+    exports.registerValidation = registerValidation;
+    exports.validate = validate;
+    exports.ValidateIsArray = ValidateIsArray;
+    exports.ValidateIsBoolean = ValidateIsBoolean;
+    exports.ValidateIsDate = ValidateIsDate;
+    exports.ValidateFunctionParameter = ValidateFunctionParameter;
+    exports.ValidateIsIn = ValidateIsIn;
+    exports.ValidateIsInstanceOf = ValidateIsInstanceOf;
+    exports.ValidateIsInt = ValidateIsInt;
+    exports.ValidateMax = ValidateMax;
+    exports.ValidateMin = ValidateMin;
+    exports.ValidateIsNumber = ValidateIsNumber;
+    exports.ValidateIsString = ValidateIsString;
+    exports.test = test;
     const paramMetadataKey = Symbol("paramMetadataKey");
     class ValidationOptions {
     }
@@ -3608,7 +3624,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
             Reflect.defineMetadata(paramMetadataKey, params, target, propertyKey);
         };
     }
-    exports.registerValidation = registerValidation;
     function translateMessage(msg, rule, property, target, value, options) {
         if (msg === undefined)
             return undefined;
@@ -3667,7 +3682,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
         }
         return ret;
     }
-    exports.validate = validate;
     class ValidationIsArrayOptions extends ValidationOptions {
     }
     exports.ValidationIsArrayOptions = ValidationIsArrayOptions;
@@ -3701,7 +3715,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
             }
         });
     }
-    exports.ValidateIsArray = ValidateIsArray;
     class ValidationIsBooleanOptions extends ValidationOptions {
     }
     exports.ValidationIsBooleanOptions = ValidationIsBooleanOptions;
@@ -3713,7 +3726,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                 return propertyName + " is not a Boolean";
         });
     }
-    exports.ValidateIsBoolean = ValidateIsBoolean;
     class ValidationIsDateOptions extends ValidationOptions {
     }
     exports.ValidationIsDateOptions = ValidationIsDateOptions;
@@ -3725,7 +3737,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                 return propertyName + " is not a date";
         });
     }
-    exports.ValidateIsDate = ValidateIsDate;
     function ValidateFunctionParameter() {
         return (target, propertyName, descriptor, options) => {
             let method = descriptor.value;
@@ -3757,7 +3768,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
             descriptor.value = newfunc;
         };
     }
-    exports.ValidateFunctionParameter = ValidateFunctionParameter;
     class ValidationIsInOptions extends ValidationOptions {
     }
     exports.ValidationIsInOptions = ValidationIsInOptions;
@@ -3769,7 +3779,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                 return propertyName + " is not valid";
         });
     }
-    exports.ValidateIsIn = ValidateIsIn;
     class ValidationIsInstanceOfOptions extends ValidationOptions {
     }
     exports.ValidationIsInstanceOfOptions = ValidationIsInstanceOfOptions;
@@ -3791,7 +3800,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
             }
         });
     }
-    exports.ValidateIsInstanceOf = ValidateIsInstanceOf;
     class ValidationIsIntOptions extends ValidationOptions {
     }
     exports.ValidationIsIntOptions = ValidationIsIntOptions;
@@ -3803,7 +3811,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                 return propertyName + " is not an Integer";
         });
     }
-    exports.ValidateIsInt = ValidateIsInt;
     class ValidationMaxOptions extends ValidationOptions {
     }
     exports.ValidationMaxOptions = ValidationMaxOptions;
@@ -3813,7 +3820,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                 return "value {value} is not longer then {max}";
         });
     }
-    exports.ValidateMax = ValidateMax;
     class ValidationMinOptions extends ValidationOptions {
     }
     exports.ValidationMinOptions = ValidationMinOptions;
@@ -3823,7 +3829,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                 return "value {value} is not smaller then {min}";
         });
     }
-    exports.ValidateMin = ValidateMin;
     class ValidationIsNumberOptions extends ValidationOptions {
     }
     exports.ValidationIsNumberOptions = ValidationIsNumberOptions;
@@ -3835,7 +3840,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                 return propertyName + " is not a Number";
         });
     }
-    exports.ValidateIsNumber = ValidateIsNumber;
     class ValidationIsStringOptions extends ValidationOptions {
     }
     exports.ValidationIsStringOptions = ValidationIsStringOptions;
@@ -3847,7 +3851,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                 return propertyName + " is not a String";
         });
     }
-    exports.ValidateIsString = ValidateIsString;
     class TestSample {
         constructor() {
             this.test = this;
@@ -3958,7 +3961,6 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
         obj.inprop = "2";
         test.expectEqual(validate(obj).length === 0);
     }
-    exports.test = test;
     var l;
 });
 define("jassijs/UserModel", ["require", "exports"], function (require, exports) {
@@ -4035,7 +4037,7 @@ define("jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAd
             return path.substring(0, path.lastIndexOf("/"));
         }
         async dirFiles(dirname, skip, ret, replaceClientFileName = false) {
-            if (!await NativeAdapter_1.exists(dirname))
+            if (!await (0, NativeAdapter_1.exists)(dirname))
                 return;
             var files = await NativeAdapter_1.myfs.readdir(dirname);
             for (var x = 0; x < files.length; x++) {
@@ -4115,10 +4117,10 @@ define("jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAd
                         debugger;
                     return NativeAdapter_1.ts.createSourceFile(fileName, scode, languageVersion);
                 },
-                getDefaultLibFileName: (defaultLibOptions) => "",
+                getDefaultLibFileName: (defaultLibOptions) => "", //"/" + ts.getDefaultLibFileName(defaultLibOptions),
                 writeFile: (filename, content) => {
                     writing.push(NativeAdapter_1.myfs.writeFile(filename, content));
-                },
+                }, // do nothing
                 getCurrentDirectory: () => "/",
                 getDirectories: (path) => [],
                 fileExists: (fileName) => {
@@ -4175,7 +4177,7 @@ define("jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAd
                 fileName: prefix + fileName
             });
             var pathname = "./" + this.getDirectoryname(fileName);
-            if (!await NativeAdapter_1.exists(pathname)) {
+            if (!await (0, NativeAdapter_1.exists)(pathname)) {
                 await NativeAdapter_1.myfs.mkdir(pathname, { recursive: true });
             }
             //if (!inServerdirectory)
@@ -4190,7 +4192,17 @@ define("jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAd
 define("jassijs/server/DatabaseSchema", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "typeorm"], function (require, exports, Classes_12, Database_2, typeorm_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.EntityOptions = exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
+    exports.EntityOptions = void 0;
+    exports.Entity = Entity;
+    exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
+    exports.JoinColumn = JoinColumn;
+    exports.JoinTable = JoinTable;
+    exports.Column = Column;
+    exports.PrimaryColumn = PrimaryColumn;
+    exports.OneToOne = OneToOne;
+    exports.OneToMany = OneToMany;
+    exports.ManyToOne = ManyToOne;
+    exports.ManyToMany = ManyToMany;
     Object.defineProperty(exports, "EntityOptions", { enumerable: true, get: function () { return typeorm_2.EntityOptions; } });
     function addDecorater(decoratername, delegate, ...args) {
         return function (...fargs) {
@@ -4206,43 +4218,33 @@ define("jassijs/server/DatabaseSchema", ["require", "exports", "jassijs/remote/C
         //DEntity(param)(pclass, ...params);
         return addDecorater("Entity", typeorm_2.Entity, ...param);
     }
-    exports.Entity = Entity;
     function PrimaryGeneratedColumn(...param) {
         return addDecorater("PrimaryGeneratedColumn", typeorm_2.PrimaryGeneratedColumn, ...param);
     }
-    exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
     function JoinColumn(...param) {
         return addDecorater("JoinColumn", typeorm_2.JoinColumn, ...param);
     }
-    exports.JoinColumn = JoinColumn;
     function JoinTable(...param) {
         return addDecorater("JoinTable", typeorm_2.JoinTable, ...param);
     }
-    exports.JoinTable = JoinTable;
     function Column(...param) {
         return addDecorater("Column", typeorm_2.Column, ...param);
     }
-    exports.Column = Column;
     function PrimaryColumn(...param) {
         return addDecorater("PrimaryColumn", typeorm_2.PrimaryColumn, ...param);
     }
-    exports.PrimaryColumn = PrimaryColumn;
     function OneToOne(...param) {
         return addDecorater("OneToOne", typeorm_2.OneToOne, ...param);
     }
-    exports.OneToOne = OneToOne;
     function OneToMany(...param) {
         return addDecorater("OneToMany", typeorm_2.OneToMany, ...param);
     }
-    exports.OneToMany = OneToMany;
     function ManyToOne(...param) {
         return addDecorater("ManyToOne", typeorm_2.ManyToOne, ...param);
     }
-    exports.ManyToOne = ManyToOne;
     function ManyToMany(...param) {
         return addDecorater("ManyToMany", typeorm_2.ManyToMany, ...param);
     }
-    exports.ManyToMany = ManyToMany;
 });
 //export function Entity(options?: EntityOptions): Function;
 //export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
@@ -4255,11 +4257,6 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
     const passwordIteration = 10000;
     var _instance = undefined;
     let DBManager = DBManager_1 = class DBManager {
-        constructor() {
-            this.waitForConnection = undefined;
-            Object.freeze(_instance);
-            this.waitForConnection = this.open();
-        }
         static async getConOpts() {
             var stype = "postgres";
             var shost = "localhost";
@@ -4323,10 +4320,10 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
         }
         async open() {
             var _initrunning = undefined;
-            var test = typeorm_3.getMetadataArgsStorage();
+            var test = (0, typeorm_3.getMetadataArgsStorage)();
             try {
                 var opts = await DBManager_1.getConOpts();
-                _initrunning = typeorm_3.createConnection(opts);
+                _initrunning = (0, typeorm_3.createConnection)(opts);
                 await _initrunning;
             }
             catch (err1) {
@@ -4337,7 +4334,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                         rejectUnauthorized: false
                     };
                     //          opts["ssl"] = true; 
-                    _initrunning = typeorm_3.createConnection(opts);
+                    _initrunning = (0, typeorm_3.createConnection)(opts);
                     await _initrunning;
                 }
                 catch (err) {
@@ -4357,7 +4354,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                 }
             }
             try {
-                var con = typeorm_3.getConnection();
+                var con = (0, typeorm_3.getConnection)();
                 for (var x = 0; x < 500; x++) { //sometimes on reconnect the connection is not ready
                     if (con.isConnected)
                         break;
@@ -4389,7 +4386,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             return this;
         }
         async mySync() {
-            var con = typeorm_3.getConnection();
+            var con = (0, typeorm_3.getConnection)();
             //@ts-ignore
             var schem = await new Promise((resolve_17, reject_17) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_17, reject_17); });
             var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
@@ -4416,29 +4413,29 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             //con.driver.
         }
         static async clearMetadata() {
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().checks);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().columns);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().discriminatorValues);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().embeddeds);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().entityListeners);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().entityRepositories);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().entitySubscribers);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().exclusions);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().tables);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().generations);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().indices);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().inheritances);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().joinColumns);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().joinTables);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().namingStrategies);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().relationCounts);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().relationIds);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().relations);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().tables);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().transactionEntityManagers);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().transactionRepositories);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().trees);
-            DBManager_1.clearArray(typeorm_3.getMetadataArgsStorage().uniques);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().checks);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().columns);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().discriminatorValues);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().embeddeds);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().entityListeners);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().entityRepositories);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().entitySubscribers);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().exclusions);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().tables);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().generations);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().indices);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().inheritances);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().joinColumns);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().joinTables);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().namingStrategies);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().relationCounts);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().relationIds);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().relations);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().tables);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().transactionEntityManagers);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().transactionRepositories);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().trees);
+            DBManager_1.clearArray((0, typeorm_3.getMetadataArgsStorage)().uniques);
         }
         async renewConnection() {
             if (this.waitForConnection !== undefined)
@@ -4451,7 +4448,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             if (waitForCompleteOpen)
                 await this.waitForConnection;
             try {
-                var con = await typeorm_3.getConnection();
+                var con = await (0, typeorm_3.getConnection)();
                 await con.close();
             }
             catch (err) {
@@ -4464,8 +4461,13 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                 arr.pop();
             }
         }
+        constructor() {
+            this.waitForConnection = undefined;
+            Object.freeze(_instance);
+            this.waitForConnection = this.open();
+        }
         connection() {
-            return typeorm_3.getConnection();
+            return (0, typeorm_3.getConnection)();
         }
         async runSQL(context, sql, parameters = undefined) {
             var ret = (await this.waitForConnection).connection().query(sql, parameters);
@@ -4523,7 +4525,6 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             return retob;
         }
         async save(context, entity, options) {
-            var _a;
             await this.waitForConnection;
             await this._checkParentRightsForSave(context, entity);
             if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
@@ -4546,7 +4547,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             //delete entity.password;
             //delete ret["password"];
             //@ts-ignore
-            return (_a = ret) === null || _a === void 0 ? void 0 : _a.id;
+            return ret === null || ret === void 0 ? void 0 : ret.id;
         }
         async _checkParentRightsForSave(context, entity) {
             var _a;
@@ -4680,7 +4681,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                 return ret;
             for (let r = 0; r < relation.length; r++) {
                 if (relation[r] === "*") {
-                    var vdata = typeorm_3.getConnection().getMetadata(Classes_13.classes.getClass(classname));
+                    var vdata = (0, typeorm_3.getConnection)().getMetadata(Classes_13.classes.getClass(classname));
                     for (var re = 0; re < vdata.relations.length; re++) {
                         var s = vdata.relations[re].propertyName;
                         if (ret.indexOf(s) === -1)
@@ -4695,7 +4696,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
         async createUser(context, username, password) {
             await this.waitForConnection;
             //var hh=getConnection().manager.findOne(User,{ email: username });
-            if (await typeorm_3.getConnection().manager.findOne(User_2.User, { email: username }) !== undefined) {
+            if (await (0, typeorm_3.getConnection)().manager.findOne(User_2.User, { email: username }) !== undefined) {
                 throw new Error("User already exists");
             }
             const user = new User_2.User();
@@ -4774,12 +4775,12 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             return test === ids.length;
         }
     };
-    DBManager = DBManager_1 = __decorate([
-        Serverservice_5.$Serverservice({ name: "db", getInstance: async () => { return DBManager_1._get(); } }),
-        Registry_27.$Class("jassijs/server/DBManager"),
+    exports.DBManager = DBManager;
+    exports.DBManager = DBManager = DBManager_1 = __decorate([
+        (0, Serverservice_5.$Serverservice)({ name: "db", getInstance: async () => { return DBManager._get(); } }),
+        (0, Registry_27.$Class)("jassijs/server/DBManager"),
         __metadata("design:paramtypes", [])
     ], DBManager);
-    exports.DBManager = DBManager;
     class RelationInfo {
         constructor(context, className, dbmanager) {
             this.counter = 100;
@@ -5085,7 +5086,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
 define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Database", "jassijs/remote/Registry", "./DBManager", "./TypeORMListener", "typeorm", "./NativeAdapter"], function (require, exports, Classes_14, Database_3, Registry_28, DBManager_2, TypeORMListener_1, typeorm_4, NativeAdapter_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.extendDBManager = void 0;
+    exports.extendDBManager = extendDBManager;
     function extendDBManager() {
         //create Admin User if doesn't a user exists 
         DBManager_2.DBManager.prototype["hasLoaded"] = async function () {
@@ -5149,7 +5150,7 @@ define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Cla
             new typeorm_4.EventSubscriber()(tcl);
             var Filesystem = await Classes_14.classes.loadClass("jassijs.server.Filesystem");
             var data = undefined;
-            if (await NativeAdapter_2.exists("./client/__default.db"))
+            if (await (0, NativeAdapter_2.exists)("./client/__default.db"))
                 data = await NativeAdapter_2.myfs.readFile("./client/__default.db", "binary", false);
             var opt = {
                 database: data,
@@ -5160,16 +5161,15 @@ define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Cla
             return opt;
         };
     }
-    exports.extendDBManager = extendDBManager;
 });
 define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Serverservice", "jassijs/remote/Config"], function (require, exports, Registry_29, Classes_15, Serverservice_6, Config_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports._execute = exports.remoteProtocol = void 0;
+    exports.remoteProtocol = remoteProtocol;
+    exports._execute = _execute;
     function remoteProtocol(request, response) {
         execute(request, response);
     }
-    exports.remoteProtocol = remoteProtocol;
     async function checkSimulateUser(context, request) {
         var rights = (await new Promise((resolve_18, reject_18) => { require(["jassijs/remote/security/Rights"], resolve_18, reject_18); })).default;
         var test = request.cookies["simulateUser"];
@@ -5267,7 +5267,6 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
             return ret;
         }
     }
-    exports._execute = _execute;
 });
 define("client/jassijs/server/ext/EmpyDeclaration", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -5334,10 +5333,9 @@ define("typeorm", ["typeorm/index", "typeorm/platform/PlatformTools", "window.SQ
 });
 define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", "jassijs/remote/Registry", "../remote/Serverservice", "./NativeAdapter", "jassijs/remote/Config", "./Compile"], function (require, exports, RegistryIndexer_1, Registry_30, Serverservice_7, NativeAdapter_3, Config_5, Compile_1) {
     "use strict";
-    var Filesystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
-    let Filesystem = Filesystem_1 = class Filesystem {
+    let Filesystem = class Filesystem {
         constructor() {
             this.path = "./client";
         }
@@ -5404,7 +5402,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
                 //add files in node modules
                 if (parent.name === "" && parentPath === "./client") {
                     for (var key in modules) {
-                        if (await NativeAdapter_3.exists("./node_modules/" + key + "/client")) {
+                        if (await (0, NativeAdapter_3.exists)("./node_modules/" + key + "/client")) {
                             var addFiles = await this.dir("client", appendDate, "./node_modules/" + key);
                             var temp = {};
                             for (var x = 0; x < parent.files.length; x++) {
@@ -5450,7 +5448,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
         }
         async dirFiles(dir, extensions, ignore = []) {
             var results = [];
-            if (!await NativeAdapter_3.exists(dir))
+            if (!await (0, NativeAdapter_3.exists)(dir))
                 return results;
             var list = await NativeAdapter_3.myfs.readdir(dir);
             var _this = this;
@@ -5478,7 +5476,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
             return results;
         }
         async zip(directoryname, serverdir = undefined) {
-            return await NativeAdapter_3.dozip(directoryname, serverdir);
+            return await (0, NativeAdapter_3.dozip)(directoryname, serverdir);
         }
         //Reset ORM config
         /**
@@ -5487,7 +5485,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
          */
         async createFolder(foldername) {
             var newpath = this._pathForFile(foldername);
-            if (await NativeAdapter_3.exists(newpath))
+            if (await (0, NativeAdapter_3.exists)(newpath))
                 return foldername + " allready await exists";
             try {
                 await NativeAdapter_3.myfs.mkdir(newpath, { recursive: true });
@@ -5506,18 +5504,18 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
             var newpath = this._pathForFile(modulename);
             try {
                 //create folder
-                if (!await NativeAdapter_3.exists(newpath))
+                if (!await (0, NativeAdapter_3.exists)(newpath))
                     await NativeAdapter_3.myfs.mkdir(newpath, { recursive: true });
                 //create remotefolder
                 //if (!await exists(newpath + "/remote"))
                 //    await myfs.mkdir(newpath + "/remote", { recursive: true });
-                if (!await NativeAdapter_3.exists(newpath + "/modul.ts")) {
+                if (!await (0, NativeAdapter_3.exists)(newpath + "/modul.ts")) {
                     await this.saveFiles([modulename + "/modul.ts", "js/" + modulename + "/modul.js"], [
                         "export default {}",
                         'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'
                     ]);
                 }
-                if (!await NativeAdapter_3.exists(newpath + "/registry.js")) {
+                if (!await (0, NativeAdapter_3.exists)(newpath + "/registry.js")) {
                     await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], [
                         'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
                         'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
@@ -5553,10 +5551,10 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
         async createFile(filename, content) {
             var newpath = this._pathForFile(filename);
             var parent = this.getDirectoryname(newpath);
-            if (await NativeAdapter_3.exists(newpath))
+            if (await (0, NativeAdapter_3.exists)(newpath))
                 return filename + " allready await exists";
             try {
-                if (!await NativeAdapter_3.exists(parent))
+                if (!await (0, NativeAdapter_3.exists)(parent))
                     await NativeAdapter_3.myfs.mkdir(parent, { recursive: true });
                 await NativeAdapter_3.myfs.writeFile(newpath, content);
             }
@@ -5573,9 +5571,9 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
         async rename(oldfile, newfile) {
             var oldpath = this._pathForFile(oldfile);
             var newpath = this._pathForFile(newfile);
-            if (!await NativeAdapter_3.exists(oldpath))
+            if (!await (0, NativeAdapter_3.exists)(oldpath))
                 return oldfile + " not await exists";
-            if (await NativeAdapter_3.exists(newpath))
+            if (await (0, NativeAdapter_3.exists)(newpath))
                 return newfile + " already await exists";
             try {
                 /*  if(fs.lstatSync(oldpath).isDirectory()
@@ -5596,7 +5594,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
         async removeServerModul(modul) {
             delete Config_5.config.jsonData.server.modules[modul];
             await Config_5.config.saveJSON();
-            if (await NativeAdapter_3.exists(modul)) {
+            if (await (0, NativeAdapter_3.exists)(modul)) {
                 await NativeAdapter_3.myfs.rmdir(modul, { recursive: true });
             }
             return "";
@@ -5607,7 +5605,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
         */
         async remove(file) {
             var path = this._pathForFile(file);
-            if (!await NativeAdapter_3.exists(path))
+            if (!await (0, NativeAdapter_3.exists)(path))
                 return file + " not await exists";
             try {
                 if ((await NativeAdapter_3.myfs.stat(path)).isDirectory()) {
@@ -5662,7 +5660,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
                 var path = this.getDirectoryname(this._pathForFile(fileName, fromServerdirectory)); // require('path').dirname(this._pathForFile(fileName,fromServerdirectory));
                 //check if file is node_module
                 for (var key in modules) {
-                    if (((path + "/").startsWith("./client/" + key + "/")) && await NativeAdapter_3.exists("./node_modules/" + key)) {
+                    if (((path + "/").startsWith("./client/" + key + "/")) && await (0, NativeAdapter_3.exists)("./node_modules/" + key)) {
                         return "packages in node_modules could not be saved";
                     }
                 }
@@ -5671,7 +5669,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
                 }
                 catch (err) {
                 }
-                if (await NativeAdapter_3.exists(this._pathForFile(fileName, fromServerdirectory))) {
+                if (await (0, NativeAdapter_3.exists)(this._pathForFile(fileName, fromServerdirectory))) {
                     rollbackcontents.push(await NativeAdapter_3.myfs.readFile(this._pathForFile(fileName, fromServerdirectory), 'utf-8'));
                 }
                 else {
@@ -5715,7 +5713,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
             ;
             try {
                 if (remotecodeincluded) {
-                    await NativeAdapter_3.reloadJSAll(remoteFiles, async () => {
+                    await (0, NativeAdapter_3.reloadJSAll)(remoteFiles, async () => {
                         if (Serverservice_7.runningServerservices["db"]) {
                             (await Serverservice_7.serverservices.db).renewConnection();
                         }
@@ -5769,23 +5767,23 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
         }
     };
     Filesystem.allModules = {};
-    Filesystem = Filesystem_1 = __decorate([
-        Serverservice_7.$Serverservice({ name: "filesystem", getInstance: async () => { return new Filesystem_1(); } }),
-        Registry_30.$Class("jassijs.server.Filesystem")
+    Filesystem = __decorate([
+        (0, Serverservice_7.$Serverservice)({ name: "filesystem", getInstance: async () => { return new Filesystem(); } }),
+        (0, Registry_30.$Class)("jassijs.server.Filesystem")
     ], Filesystem);
     exports.default = Filesystem;
 });
 define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config"], function (require, exports, Classes_16, Config_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.exists = exports.FS = void 0;
+    exports.FS = void 0;
+    exports.exists = exists;
+    exports.test = test;
     class Stats {
     }
     class FileEntry {
     }
     class FS {
-        constructor() {
-        }
         static async getDB() {
             if (FS.db)
                 return FS.db;
@@ -5801,6 +5799,8 @@ define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes", "ja
             if (root === undefined)
                 await FS._mkdir(FS.db, ".");
             return FS.db;
+        }
+        constructor() {
         }
         static async _readdir(db, folder, withSubfolders = false, fullPath = false) {
             let transaction = db.transaction('files', 'readonly');
@@ -6026,7 +6026,6 @@ define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes", "ja
     async function exists(filename) {
         return new FS()["exists"](filename);
     }
-    exports.exists = exists;
     async function test(tt) {
         if (Config_6.config.serverrequire === undefined)
             return;
@@ -6059,7 +6058,6 @@ define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes", "ja
         //await fs.rmdir(testfolder, { recursive: true })
         debugger;
     }
-    exports.test = test;
 });
 define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_17, Config_7, Serverservice_8, NativeAdapter_4) {
     "use strict";
@@ -6205,24 +6203,31 @@ define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes"
             var _a;
             //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
             if (node.kind === NativeAdapter_4.ts.SyntaxKind.ClassDeclaration) {
-                if (node.decorators !== undefined) {
-                    var dec = {};
-                    var sclass = undefined;
-                    for (let x = 0; x < node.decorators.length; x++) {
-                        var decnode = node.decorators[x];
-                        var ex = decnode.expression;
-                        if (ex.expression === undefined) {
-                            dec[ex.text] = []; //Annotation without parameter
-                        }
-                        else {
-                            if (ex.expression.text === "$Class")
-                                sclass = this.convertArgument(ex.arguments[0]);
+                if (node["modifiers"] !== undefined) {
+                    var dec;
+                    for (var m = 0; m < node["modifiers"].length; m++) {
+                        var decnode = node["modifiers"][m];
+                        if (decnode.kind === NativeAdapter_4.ts.SyntaxKind.Decorator) {
+                            //if (node.decorators !== undefined) {
+                            if (dec === undefined)
+                                dec = {};
+                            var sclass = undefined;
+                            //for (let x = 0; x < node.decorators.length; x++) {
+                            // var decnode = node.decorators[x];
+                            var ex = decnode.expression;
+                            if (ex.expression === undefined) {
+                                dec[ex.text] = []; //Annotation without parameter
+                            }
                             else {
-                                if (dec[ex.expression.text] === undefined) {
-                                    dec[ex.expression.text] = [];
-                                }
-                                for (var a = 0; a < ex.arguments.length; a++) {
-                                    dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                if (ex.expression.text === "$Class")
+                                    sclass = this.convertArgument(ex.arguments[0]);
+                                else {
+                                    if (dec[ex.expression.text] === undefined) {
+                                        dec[ex.expression.text] = [];
+                                    }
+                                    for (var a = 0; a < ex.arguments.length; a++) {
+                                        dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                    }
                                 }
                             }
                         }
@@ -6233,32 +6238,37 @@ define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes"
                     for (let x = 0; x < node["members"].length; x++) {
                         var member = node["members"][x];
                         var membername = (_a = node["members"][x].name) === null || _a === void 0 ? void 0 : _a.escapedText;
-                        if (member.decorators !== undefined) {
-                            if (!dec["@members"])
-                                dec["@members"] = {};
-                            var decm = {};
-                            dec["@members"][membername] = decm;
-                            for (let x = 0; x < member.decorators.length; x++) {
-                                var decnode = member.decorators[x];
-                                var ex = decnode.expression;
-                                if (ex.expression === undefined) {
-                                    decm[ex.text] = []; //Annotation without parameter
-                                }
-                                else {
-                                    if (ex.expression.text === "$Property") {
-                                        //do nothing;
+                        if (member["modifiers"] !== undefined) {
+                            for (var m = 0; m < member["modifiers"].length; m++) {
+                                var decnode = member["modifiers"][m];
+                                if (decnode.kind === NativeAdapter_4.ts.SyntaxKind.Decorator) {
+                                    //if (member.decorators !== undefined) {
+                                    if (!dec["@members"])
+                                        dec["@members"] = {};
+                                    var decm = {};
+                                    dec["@members"][membername] = decm;
+                                    //for (let x = 0; x < member.decorators.length; x++) {
+                                    //  var decnode = member.decorators[x];
+                                    var ex = decnode.expression;
+                                    if (ex.expression === undefined) {
+                                        decm[ex.text] = []; //Annotation without parameter
                                     }
                                     else {
-                                        if (decm[ex.expression.text] === undefined) {
-                                            decm[ex.expression.text] = [];
+                                        if (ex.expression.text === "$Property") {
+                                            //do nothing;
                                         }
-                                        for (var a = 0; a < ex.arguments.length; a++) {
-                                            decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                        else {
+                                            if (decm[ex.expression.text] === undefined) {
+                                                decm[ex.expression.text] = [];
+                                            }
+                                            for (var a = 0; a < ex.arguments.length; a++) {
+                                                decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                            }
                                         }
                                     }
                                 }
                             }
-                            if (Object.keys(dec["@members"][membername]).length === 0) {
+                            if (dec && dec["@members"] && Object.keys(dec["@members"][membername]).length === 0) {
                                 delete dec["@members"][membername];
                             }
                         }
@@ -6284,10 +6294,10 @@ define("jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Se
     navigator.serviceWorker.addEventListener("message", (evt) => {
         var _a;
         if (((_a = evt.data) === null || _a === void 0 ? void 0 : _a.type) === "REQUEST_REMOTEPROTCOL") {
-            LocalProtocol_1.messageReceived(evt);
+            (0, LocalProtocol_1.messageReceived)(evt);
         }
     });
-    Serverservice_9.beforeServiceLoad(async (name, service) => {
+    (0, Serverservice_9.beforeServiceLoad)(async (name, service) => {
         if (name === "db") {
             var man = (await new Promise((resolve_21, reject_21) => { require(["jassijs/server/DBManagerExt"], resolve_21, reject_21); }));
             man.extendDBManager();
@@ -6346,14 +6356,16 @@ define("jassijs/server/Filesystem", ["jassijs/server/Filesystem"], function (fs)
 define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config"], function (require, exports, Classes_18, Config_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.createHandle = exports.deleteHandle = exports.exists = exports.LocalFS = void 0;
+    exports.LocalFS = void 0;
+    exports.exists = exists;
+    exports.deleteHandle = deleteHandle;
+    exports.createHandle = createHandle;
+    exports.test = test;
     class Stats {
     }
     class FileEntry {
     }
     class LocalFS {
-        constructor() {
-        }
         static async getDB() {
             if (LocalFS.db)
                 return LocalFS.db;
@@ -6375,6 +6387,8 @@ define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"
                 ret.onerror = ev => { resolve(undefined); };
             });
             return r;
+        }
+        constructor() {
         }
         async readdir(folder) {
             var handle = await this.loadFileEntry(folder);
@@ -6570,7 +6584,6 @@ define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"
     async function exists(filename) {
         return await new LocalFS()["exists"](filename);
     }
-    exports.exists = exists;
     async function verifyPermission(fileHandle, readWrite) {
         const options = {};
         if (readWrite) {
@@ -6603,7 +6616,6 @@ define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"
         store.delete("handle");
         await new Promise((resolve) => { transaction.oncomplete = resolve; });
     }
-    exports.deleteHandle = deleteHandle;
     async function createHandle() {
         var handle = await window.showDirectoryPicker();
         if (handle === undefined)
@@ -6632,7 +6644,6 @@ define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"
         else
             store.add(handle, "handle");
     }
-    exports.createHandle = createHandle;
     async function test(tt) {
         if (!Config_9.config.isLocalFolderMapped)
             return;
@@ -6667,15 +6678,16 @@ define("jassijs/server/LocalFS", ["require", "exports", "jassijs/remote/Classes"
         // tt.expectEqual(await exists(testfolder));
         debugger;
     }
-    exports.test = test;
 });
 define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_2, Serverservice_10, js_cookie_1, DoRemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.localExec = exports.test = exports.messageReceived = void 0;
+    exports.messageReceived = messageReceived;
+    exports.test = test;
+    exports.localExec = localExec;
     async function messageReceived(param) {
         var configm = param.data;
-        var cookies = js_cookie_1.getJSON();
+        var cookies = (0, js_cookie_1.getJSON)();
         var myRequest = {
             cookies,
             rawBody: JSON.stringify(configm.data),
@@ -6684,7 +6696,7 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
                 user: 1
             }
         };
-        await DoRemoteProtocol_1.remoteProtocol(myRequest, {
+        await (0, DoRemoteProtocol_1.remoteProtocol)(myRequest, {
             send(msg) {
                 navigator.serviceWorker.controller.postMessage({ type: 'RESPONSE_REMOTEPROTCOL', id: configm.id, data: msg });
             }
@@ -6709,7 +6721,6 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
                   ret = "$$undefined$$";
           }*/
     }
-    exports.messageReceived = messageReceived;
     //var stest = '{"url":"remoteprotocol?1682187030801","type":"post","dataType":"text","data":"{\\"__clname__\\":\\"jassijs.remote.RemoteProtocol\\",\\"classname\\":\\"de.remote.MyRemoteObject\\",\\"_this\\":{\\"__clname__\\":\\"de.remote.MyRemoteObject\\",\\"__refid__\\":1},\\"parameter\\":[\\"Kurt\\"],\\"method\\":\\"sayHello\\",\\"__refid__\\":0}"}';
     //var config = JSON.parse(stest);
     async function test() {
@@ -6717,7 +6728,6 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
         // var gg=await texec(config, undefined);
         // debugger;
     }
-    exports.test = test;
     /*async function texec(config, object) {
         return await new Promise((resolve, reject) => {
             //@ts-ignore
@@ -6838,12 +6848,14 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
             return ret;
         }
     }
-    exports.localExec = localExec;
 });
 define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Config", "./FS", "./LocalFS", "./Reloader"], function (require, exports, Config_10, FS_2, LocalFS_1, Reloader_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.doNotReloadModule = exports.transpile = exports.reloadJSAll = exports.dozip = exports.myfs = exports.exists = exports.ts = void 0;
+    exports.doNotReloadModule = exports.myfs = exports.exists = exports.ts = void 0;
+    exports.dozip = dozip;
+    exports.reloadJSAll = reloadJSAll;
+    exports.transpile = transpile;
     //@ts-ignore
     Config_10.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
         require("jassijs/server/NativeAdapter").ts = window.ts;
@@ -6875,7 +6887,6 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
         //var ret = await zip.generateAsync({ type: "base64" });
         return ret;
     }
-    exports.dozip = dozip;
     async function reloadJSAll(filenames, afterUnload) {
         return Reloader_1.Reloader.instance.reloadJSAll(filenames, afterUnload, true);
         /*var Reloader=<any>await new Promise((resolve)=>{
@@ -6885,7 +6896,6 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
         });
         return Reloader.Reloader.instance.reloadJSAll(filenames, afterUnload,true);*/
     }
-    exports.reloadJSAll = reloadJSAll;
     async function transpile(fileName, inServerdirectory = undefined) {
         var tp = await new Promise((resolve) => {
             Config_10.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
@@ -6901,7 +6911,6 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
             await myfs.writeFile(fname, data.contents[x]);
         }
     }
-    exports.transpile = transpile;
     var doNotReloadModule = true;
     exports.doNotReloadModule = doNotReloadModule;
 });
@@ -6915,13 +6924,13 @@ define("jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/
             var path = (await Serverservice_11.serverservices.filesystem).path;
             var modules = Config_11.config.modules;
             for (var m in modules) {
-                if ((await NativeAdapter_5.exists(path + "/" + modules[m]) && !modules[m].endsWith(".js") && modules[m].indexOf(".js?")) === -1) //.js are internet modules
+                if ((await (0, NativeAdapter_5.exists)(path + "/" + modules[m]) && !modules[m].endsWith(".js") && modules[m].indexOf(".js?")) === -1) //.js are internet modules
                     await this.updateModul(path, m, false);
             }
             //server modules
             modules = Config_11.config.server.modules;
             for (var m in modules) {
-                if (await NativeAdapter_5.exists("./" + modules[m]) && !modules[m].endsWith(".js")) //.js are internet modules
+                if (await (0, NativeAdapter_5.exists)("./" + modules[m]) && !modules[m].endsWith(".js")) //.js are internet modules
                     await this.updateModul(".", m, true);
             }
             return;
@@ -6950,7 +6959,7 @@ define("jassijs/server/RegistryIndexer", ["require", "exports", "jassijs/server/
         async fileExists(filename) {
             if (!filename.startsWith("./"))
                 filename = "./" + filename;
-            return await NativeAdapter_5.exists(filename);
+            return await (0, NativeAdapter_5.exists)(filename);
         }
         async readFile(filename) {
             if (!filename.startsWith("./"))
@@ -7211,14 +7220,14 @@ define("jassijs/server/Reloader", ["require", "exports", "jassijs/remote/Config"
             }
         }
     };
+    exports.Reloader = Reloader;
     Reloader.cache = [];
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_2();
-    Reloader = Reloader_2 = __decorate([
-        Registry_31.$Class("jassijs.server.Reloader"),
+    exports.Reloader = Reloader = Reloader_2 = __decorate([
+        (0, Registry_31.$Class)("jassijs.server.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
-    exports.Reloader = Reloader;
 });
 define("jassijs/server/Testuser", ["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Registry"], function (require, exports, DatabaseSchema_7, DBObject_7, Registry_33) {
     "use strict";
@@ -7226,23 +7235,23 @@ define("jassijs/server/Testuser", ["require", "exports", "jassijs/util/DatabaseS
     exports.Testuser = void 0;
     let Testuser = class Testuser {
     };
+    exports.Testuser = Testuser;
     __decorate([
-        DatabaseSchema_7.PrimaryColumn(),
+        (0, DatabaseSchema_7.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Testuser.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_7.Column(),
+        (0, DatabaseSchema_7.Column)(),
         __metadata("design:type", String)
     ], Testuser.prototype, "firstname", void 0);
     __decorate([
-        DatabaseSchema_7.Column(),
+        (0, DatabaseSchema_7.Column)(),
         __metadata("design:type", String)
     ], Testuser.prototype, "lastname", void 0);
-    Testuser = __decorate([
-        DBObject_7.$DBObject(),
-        Registry_33.$Class("Testuser")
+    exports.Testuser = Testuser = __decorate([
+        (0, DBObject_7.$DBObject)(),
+        (0, Registry_33.$Class)("Testuser")
     ], Testuser);
-    exports.Testuser = Testuser;
 });
 define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "./NativeAdapter"], function (require, exports, Registry_34, typeorm_5, NativeAdapter_6) {
     "use strict";
@@ -7357,11 +7366,11 @@ define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/
             // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
         }
     };
-    TypeORMListener = __decorate([
-        typeorm_5.EventSubscriber(),
-        Registry_34.$Class("jassijs.server.TypeORMListener")
-    ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
+    exports.TypeORMListener = TypeORMListener = __decorate([
+        (0, typeorm_5.EventSubscriber)(),
+        (0, Registry_34.$Class)("jassijs.server.TypeORMListener")
+    ], TypeORMListener);
 });
 define("jassijs/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -7430,7 +7439,7 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
                 //'tabulatorlib': '//unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator',
                 'tabulatorlib': '//cdnjs.cloudflare.com/ajax/libs/tabulator/5.4.4/js/tabulator.min',
-                'tinymcelib': tinyurl + '/tinymce.min',
+                'tinymcelib': tinyurl + '/tinymce.min', //also define in tinymce.js
                 'tabulator-tables': "jassijs/ext/tabulator",
                 //"tabulatorext":'jassijs/ext/tabulator',
                 // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js

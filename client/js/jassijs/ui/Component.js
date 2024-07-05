@@ -7,11 +7,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties", "jassijs/ui/State"], function (require, exports, Registry_1, Property_1, Registry_2, Classes_1, CSSProperties_1, State_1) {
     "use strict";
     var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.createComponent = exports.React = exports.$UIComponent = exports.UIComponentProperties = void 0;
+    Registry_2 = __importDefault(Registry_2);
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
@@ -71,8 +75,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 p.renderFunc = atype;
                 ret = new FunctionComponent(p);
             }
-            else
+            else {
                 ret = new atype(props);
+            }
         }
         if (((_a = node === null || node === void 0 ? void 0 : node.props) === null || _a === void 0 ? void 0 : _a.children) !== undefined) {
             if (props === null || props === undefined)
@@ -135,6 +140,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             // super(properties, undefined);
             // if(properties===undefined)
             // properties={};
+            this.states = (0, State_1.createStates)(this.props);
             this.props = properties;
             this._rerenderMe(true);
             this.config(this.props);
@@ -169,7 +175,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
               this.config(this.lastconfig);
           }*/
         config(config) {
-            var _a;
+            var _a, _b;
             var con = Object.assign({}, config);
             delete con.noWrapper;
             delete con.replaceNode;
@@ -196,9 +202,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                             me[key] = config[key];
                     }
                 }
+                else if (this.states && this.states._used.indexOf(key) !== -1) {
+                    this.states[key].current = config[key];
+                }
                 else
                     notfound[key] = con;
             }
+            if ((_b = this.states) === null || _b === void 0 ? void 0 : _b._onconfig)
+                this.states._onconfig(config);
             Object.assign(this.props === undefined ? {} : this.props, config);
             if (Object.keys(notfound).length > 0) {
                 if (this.calculateState) {
@@ -686,7 +697,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         render() {
             var Rend = this.props.renderFunc;
-            var ret = new Rend(this.props);
+            var ret = new Rend(this.props, this.states);
             if (ret.props.calculateState) {
                 //@ts-ignore
                 this.calculateState = ret.props.calculateState;

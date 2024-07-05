@@ -3,7 +3,7 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1719757292376.6711,
+		"date": 1720101244987.3042,
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/AcePanelSimple.ts": {
@@ -15,7 +15,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1719757394281.4602,
+		"date": 1720105520009.7876,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {}
@@ -93,7 +93,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.Debugger": {}
 	},
 	"jassijs_editor/ErrorPanel.ts": {
-		"date": 1682794808000,
+		"date": 1720116488294.8394,
 		"jassijs_editor.ui.ErrorPanel": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -111,7 +111,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/ext/monaco.ts": {
-		"date": 1719861907601.9385
+		"date": 1720105252684.6934
 	},
 	"jassijs_editor/FileExplorer.ts": {
 		"date": 1683575950000,
@@ -221,10 +221,10 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.HtmlDesigner": {}
 	},
 	"jassijs_editor/modul.ts": {
-		"date": 1719846808609.5916
+		"date": 1720105301984.028
 	},
 	"jassijs_editor/MonacoPanel.ts": {
-		"date": 1719865346020.8171,
+		"date": 1720101262364.5872,
 		"jassijs_editor.MonacoPanel": {}
 	},
 	"jassijs_editor/SearchExplorer.ts": {
@@ -246,7 +246,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/StartEditor.ts": {
-		"date": 1697200788486.8972
+		"date": 1720115090825.8567
 	},
 	"jassijs_editor/template/TemplateDBDialog.ts": {
 		"date": 1681570392000,
@@ -327,7 +327,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/util/DatabaseSchema.ts": {
-		"date": 1681569388000,
+		"date": 1720101271019.9363,
 		"jassijs_editor.util.DatabaseSchema": {}
 	},
 	"jassijs_editor/util/DragAndDropper.ts": {
@@ -335,7 +335,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1698524672858.8315,
+		"date": 1720181739843.8818,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
@@ -343,7 +343,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.Resizer": {}
 	},
 	"jassijs_editor/util/Tests.ts": {
-		"date": 1698507857241.7307,
+		"date": 1720185108125.2275,
 		"jassijs_editor.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -360,15 +360,18 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/util/TSSourceMap.ts": {
-		"date": 1682794840000,
+		"date": 1720117379608.988,
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1719865551737.1772,
+		"date": 1720115012657.7117,
 		"jassijs_editor.util.Typescript": {}
 	},
 	"jassijs_editor/ext/monaco2.ts": {
-		"date": 1719864992662.5933
+		"date": 1720090850426.468
+	},
+	"jassijs_editor/ext/typescriptservices.ts": {
+		"date": 1720114589311.0293
 	}
 }
  }

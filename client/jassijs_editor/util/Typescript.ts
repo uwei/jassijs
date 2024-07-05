@@ -1,13 +1,15 @@
 import "jassijs_editor/ext/monaco2";
-import "jassijs_editor/ext/monaco";
+import   "jassijs_editor/ext/monaco";
 import { $Class } from "jassijs/remote/Registry";
 import { Server } from "jassijs/remote/Server";
 import { FileNode } from "jassijs/remote/FileNode";
 
 import { Editor } from "jassijs/ui/PropertyEditors/Editor";
 import { config } from "jassijs/remote/Config";
+import ts from "typescript";//"jassijs_editor/ext/monaco";
+//import "jassijs_editor/ext/monaco";
 
-
+ 
 @$Class("jassijs_editor.util.Typescript")
 export class Typescript {
     static instance: Typescript;
@@ -30,9 +32,10 @@ export class Typescript {
         outDir: "./js",
         allowJs: true,
         moduleResolution: monaco.languages.typescript.ModuleResolutionKind.Classic,
-        jsx:monaco.languages.typescript.JsxEmit.React,
+        jsx: monaco.languages.typescript.JsxEmit.React,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
+        esModuleInterop: true,
         typeRoots: ["./node_modules/@types"]
     }
     public isInited(file) {
@@ -60,9 +63,9 @@ export class Typescript {
             };
             //@ts-ignore
             var comp: any = ts.transpileModule(content, opt);
-            var extlen=3;
-            if(fileName.toLowerCase().endsWith(".tsx"))
-                extlen=4;
+            var extlen = 3;
+            if (fileName.toLowerCase().endsWith(".tsx"))
+                extlen = 4;
             ret.fileNames.push("js/" + fileName.substring(0, fileName.length - extlen) + ".js");
             ret.contents.push(comp.outputText);
             ret.fileNames.push("js/" + fileName.substring(0, fileName.length - extlen) + ".js.map");
@@ -89,7 +92,7 @@ export class Typescript {
             "baseUrl": "./",
             "module": monaco.languages.typescript.ModuleKind.AMD,
             "moduleResolution": monaco.languages.typescript.ModuleResolutionKind.Classic,
-            "jsx":monaco.languages.typescript.JsxEmit.React,
+            "jsx": monaco.languages.typescript.JsxEmit.React,
             typeRoots: ["./node_modules/@types"],
             rootDir: "./",
 
@@ -98,6 +101,7 @@ export class Typescript {
             emitDecoratorMetadata: true,
             allowNonTsExtensions: true,
             allowJs: true,
+            esModuleInterop: true,
             experimentalDecorators: true,
         });
 
@@ -131,7 +135,11 @@ export class Typescript {
             //@ts-ignore
             //  import("jassijs/ext/typescript").then(async function(ts1) {
             Typescript.ts = ts;
-
+            var tsfactory = (<any>window).tsfactory;
+            for (var key in tsfactory) {
+                if (ts[key] === undefined)
+                    ts[key] = tsfactory[key];
+            }
             var _this = this;
             var f: { [path: string]: FileNode } = (await new Server().dir(true)).resolveChilds();
 
@@ -147,12 +155,12 @@ export class Typescript {
                 //include js in jassijs/ext
                 if (fname.startsWith("node_modules"))
                     continue;
-                if (fname.toLowerCase().endsWith(".ts") ||fname.toLowerCase().endsWith(".tsx") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
+                if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".tsx") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
                     if (fname.toLocaleLowerCase().endsWith(".js")) {
-                        try{
-                        monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
-                        }catch{
-                            console.log("Error loading file "+fname);
+                        try {
+                            monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
+                        } catch {
+                            console.log("Error loading file " + fname);
                         }
                     }
                     if (fdat === undefined) {
@@ -184,18 +192,21 @@ export class Typescript {
                 //	
                 var type = "typescript";
 
-                if (key.toLocaleLowerCase().endsWith(".ts")||key.toLocaleLowerCase().endsWith(".tsx")) {
+                if (key.toLocaleLowerCase().endsWith(".ts") || key.toLocaleLowerCase().endsWith(".tsx")) {
+                    try {
+                        //
+                        if (this.initInIdle) {
+                            var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
+                            //console.log(key);
+                            if (!monaco.editor.getModel(ffile))
+                                monaco.editor.createModel(code[key], "typescript", ffile);
+                            //});
+                        } else {
 
-                    //
-                    if (this.initInIdle) {
-                        var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
-                        //console.log(key);
-                        if (!monaco.editor.getModel(ffile))
-                            monaco.editor.createModel(code[key], "typescript", ffile);
-                        //});
-                    } else {
+                            monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
+                        }
+                    } catch { 
 
-                        monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
                     }
                 }
                 if (key.toLocaleLowerCase().endsWith(".json"))
@@ -204,7 +215,7 @@ export class Typescript {
             }
             //initialize monaco
             //if (!this.initInIdle)
-                monaco.editor.createModel("var a=1;", "typescript", monaco.Uri.from({ path: "/__mydummy.ts", scheme: 'file' }));
+            monaco.editor.createModel("var a=1;", "typescript", monaco.Uri.from({ path: "/__mydummy.ts", scheme: 'file' }));
             this.tsWorker = await (await monaco.languages.typescript.getTypeScriptWorker())()
             Typescript._isInited = true;
             return true;
@@ -458,6 +469,6 @@ export class Typescript {
     }
 }
 //@ts-ignore
-var typescript: Typescript = new Typescript();
-Typescript.instance = typescript;
-export default typescript;
+var mytypescript: Typescript = new Typescript();
+Typescript.instance = mytypescript;
+export { mytypescript };

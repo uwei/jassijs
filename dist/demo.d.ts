@@ -31,7 +31,7 @@ declare module "demo/Dialog2" {
     };
     export class Dialog2 extends Panel {
         me: Me;
-        data: any;
+        data: string;
         constructor(data: any);
         layout(me: Me): void;
     }
@@ -117,11 +117,12 @@ declare module "demo/EmptyDialog" {
     export function test(): unknown;
 }
 declare module "demo/hallo" {
+    import { States } from "jassijs/ui/State";
     interface MyCompProp {
         mycolor?: string;
         mytext?: string;
     }
-    export function MyComp(props: MyCompProp): any;
+    export function MyComp(props: MyCompProp, states?: States<MyCompProp>): any;
     export function test(): any;
 }
 declare module "demo/hallo2" {
@@ -156,12 +157,18 @@ declare module "demo/hallo4" {
     export function test(): MyComp;
 }
 declare module "demo/hallo5" {
-    import { Component } from "jassijs/ui/Component";
-    interface Prop {
-        mytext?: string;
-        mycolor?: string;
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    import { Button } from "jassijs/ui/Button";
+    import { State } from "jassijs/ui/State";
+    interface Me {
+        button?: Button;
+        colorState?: State<string>;
+    }
+    interface Prop extends ComponentProperties {
+        color: any;
     }
     class MyComp extends Component<Prop> {
+        me: Me;
         constructor(p: Prop);
         render(): any;
     }

@@ -130,7 +130,7 @@ reportdesign.data = {
 define("demoreports/12-Foreach", ["require", "exports", "jassijs_report/remote/pdfmakejassi"], function (require, exports, pdfmakejassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
+    exports.test = test;
     var reportdesign = {
         content: [
             "A complex nested foreach. This could be better done with a datatable",
@@ -171,14 +171,13 @@ define("demoreports/12-Foreach", ["require", "exports", "jassijs_report/remote/p
             { id: 7, customer: "Alma", city: "Dresden" },
             { id: 9, customer: "Otto", city: "Berlin" }
         ];
-        var groupedData = pdfmakejassi_1.doGroup(sampleData, ["city", "customer"]);
+        var groupedData = (0, pdfmakejassi_1.doGroup)(sampleData, ["city", "customer"]);
         return {
             reportdesign,
             data: groupedData, //data
             // parameter:{}      //parameter
         };
     }
-    exports.test = test;
 });
 reportdesign = {
     content: [

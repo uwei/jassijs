@@ -10,7 +10,7 @@ define("jassijs/ext/sourcemap", ["source.map", "exports"], function (sm, exp) {
     // requirejs.undef("fs");
     // requirejs.undef("path");
     return {
-        default: sm
+        sourceMap: sm
     };
 });
 //# sourceMappingURL=sourcemap.js.map

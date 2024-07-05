@@ -2,7 +2,7 @@
 declare var ace;
 import 'ace/ext/language_tools';
 import "jassijs_editor/Debugger";
-import typescript, { Typescript } from "jassijs_editor/util/Typescript";
+import {mytypescript} from "jassijs_editor/util/Typescript";
 import { $Class } from "jassijs/remote/Registry";
 import registry from "jassijs/remote/Registry";
 import { CodePanel } from "jassijs_editor/CodePanel";
@@ -121,7 +121,7 @@ export class AcePanel extends CodePanel {
             name: "formatDocument",
             bindKey: { win: "Shift-Alt-f", mac: "Shift-Alt-f" },
             exec: function (editor) {
-                typescript.formatDocument(_this.file, _this.value).then((val) => {
+                mytypescript.formatDocument(_this.file, _this.value).then((val) => {
                     _this.value = val;
                 });
             }
@@ -146,10 +146,10 @@ export class AcePanel extends CodePanel {
                 column: pos.column + 1,
                 row: pos.row + 1
             }) - 1;
-            if (!typescript.isInited(this.file))
+            if (!mytypescript.isInited(this.file))
                 return;
             var p;
-            typescript.getQuickInfoAtPosition(this.file, lpos, this.value).then((p) => {
+            mytypescript.getQuickInfoAtPosition(this.file, lpos, this.value).then((p) => {
                 if (p !== undefined) {
                     var text = "<div style='font-size:12px'>";
                     for (let x = 0; x < p.displayParts.length; x++) {
@@ -197,7 +197,7 @@ export class AcePanel extends CodePanel {
      * check if imports are neded and do so 
      **/
     _doRequiredImports(pos: { row: number, column: number }, name: string) {
-        if (!typescript.isInited(this.file))
+        if (!mytypescript.isInited(this.file))
             return;
         if (this.value.indexOf("import " + name + " ") === -1 && this.value.indexOf("import {" + name + "} ") === -1) {
 
@@ -208,7 +208,7 @@ export class AcePanel extends CodePanel {
             CodePanel.getAutoimport(lpos, this.file, this.value).then((data) => {
                 if (data !== undefined) {
                     this._editor.session.insert(data.pos, data.text);
-                    typescript.setCode(this.file, this.value);
+                    mytypescript.setCode(this.file, this.value);
                 }
             });
         }
@@ -220,7 +220,7 @@ export class AcePanel extends CodePanel {
         if (this.file !== undefined && !this.file.toLowerCase().endsWith(".ts"))
             return;
         var _this = this;
-        typescript.waitForInited.then(() => {
+        mytypescript.waitForInited.then(() => {
             if (_this._editor !== undefined && _this._editor.getSession() !== undefined) {
                 _this._editor.getSession().setAnnotations([{
                     row: 1,
@@ -230,10 +230,10 @@ export class AcePanel extends CodePanel {
                 }]);
 
             }
-            typescript.setCode(_this.file, _this.value).then((tt) => {
+            mytypescript.setCode(_this.file, _this.value).then((tt) => {
                 if (_this.file === undefined)
                     return;
-                typescript.getDiagnostics(_this.file, _this.value).then((diag) => {
+                    mytypescript.getDiagnostics(_this.file, _this.value).then((diag) => {
                     var annotaions = [];
                     var iserror = false;
                     for (var x = 0; x < diag.semantic.length; x++) {
@@ -348,14 +348,14 @@ export class AcePanel extends CodePanel {
         });
         var code = this.value;
 
-        if (typescript.isInited(this.file) !== true) {
+        if (mytypescript.isInited(this.file) !== true) {
             let entry = { caption: "please try later ... loading in progress", name: "loading", value: "empty", score: 10, meta: "object", parent: "otto", codePanel: _this };
             ret.push(entry);
             return;
         }
         if (_this.file.endsWith(".js"))
             return;
-        typescript.getCompletion(_this.file, p, code, { includeExternalModuleExports: true }).then((data) => {
+            mytypescript.getCompletion(_this.file, p, code, { includeExternalModuleExports: true }).then((data) => {
             if (data !== undefined) {
                 for (let e = 0; e < data.entries.length; e++) {
                     let entr = data.entries[e];
@@ -395,7 +395,7 @@ export class AcePanel extends CodePanel {
         var _id = "j" + registry.nextID();
         item.docHTML = "<span id='" + _id + "'> please try later ... loading in progress<span>";
 
-        typescript.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
+        mytypescript.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
             if (ret === undefined)
                 return;
             var doc = "<b>";

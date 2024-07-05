@@ -83,7 +83,7 @@ export class ErrorPanel extends Panel {
      * search Errors in code
      **/
     async search() {
-        var typescript = (await import("jassijs_editor/util/Typescript")).default;
+        var typescript = (await import("jassijs_editor/util/Typescript")).mytypescript;
         await typescript.initService();
        
         var all = await typescript.getDiagnosticsForAll();

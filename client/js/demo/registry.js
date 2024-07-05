@@ -6,12 +6,8 @@ define("demo/registry",["require"], function(require) {
 		"date": 1681563014000
 	},
 	"demo/Dialog.ts": {
-		"date": 1655851716000,
+		"date": 1720118478480.0073,
 		"demo/Dialog": {}
-	},
-	"demo/Dialog2.ts": {
-		"date": 1697210915283.1006,
-		"demo/Dialog2": {}
 	},
 	"demo/Dialog3.ts": {
 		"date": 1697378966403.906,
@@ -128,6 +124,10 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/_test1.ts": {
 		"date": 1670673960000
+	},
+	"demo/Dialog2.ts": {
+		"date": 1720184677292.364,
+		"demo/Dialog2": {}
 	}
 }
  }

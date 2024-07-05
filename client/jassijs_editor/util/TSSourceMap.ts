@@ -6,16 +6,18 @@
 
 });*/
 //@ts-ignore
-import sourceMap from "jassijs/ext/sourcemap";
-
+import {sourceMap} from "jassijs/ext/sourcemap";
 import { Server } from "jassijs/remote/Server";
 import { $Class } from "jassijs/remote/Registry";
 import { config } from "jassijs/remote/Config";
+import ts from "typescript";
+
 //var sourceMap=window["sourceMap"];
 @$Class("jassijs_editor.util.TSSourceMap")
 export class TSSourceMap {
     async getCode(file: string) {
-        return $.ajax({ url: file, dataType: "text" });
+        var rr= await $.ajax({ url: file, dataType: "text" });
+        return rr;
         // await new Server().loadFile(file);
     }
     async getLineFromTS(tsfile: string, line, column): Promise<{ line: number, column: number, jsfilename: string }> {

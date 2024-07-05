@@ -1,6 +1,10 @@
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "jassijs_editor/modul"], function (require, exports, modul_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    modul_1 = __importDefault(modul_1);
     //hack to make autocompletion for autoimports from other modules
     //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
     let monacopath = modul_1.default.require.paths.vs.replace("/vs", "");
@@ -35,6 +39,7 @@ define(["require", "exports", "jassijs_editor/modul"], function (require, export
           }*/
         s = s.replace("async getCompletionsAtPosition(fileName, position)", "async getCompletionsAtPosition(fileName, position,settings)");
         s = s.replace("this._languageService.getCompletionsAtPosition(fileName, position, void 0);", "this._languageService.getCompletionsAtPosition(fileName, position, settings);");
+        s = s.replace("var factory2 =", "var factory2 = globalThis.tsfactory =");
         navigator.serviceWorker.controller.postMessage({
             type: 'SAVE_FILE',
             filename: (monacopath + "/vs/language/typescript/tsWorker.js"),

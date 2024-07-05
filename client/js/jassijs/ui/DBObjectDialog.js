@@ -7,11 +7,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, Registry_1, Panel_1, Registry_2, Classes_1, BoxPanel_1, Actions_1, Windows_1) {
     "use strict";
     var DBObjectDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectDialog = void 0;
+    Registry_2 = __importDefault(Registry_2);
+    Windows_1 = __importDefault(Windows_1);
     let DBObjectDialog = DBObjectDialog_1 = class DBObjectDialog extends Panel_1.Panel {
         //data: DBObject[];
         constructor() {

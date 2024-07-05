@@ -1,11 +1,12 @@
 
 import { $Class } from "jassijs/remote/Registry";
 
+import ts from "typescript";
 
-import typescript from "jassijs_editor/util/Typescript";
 import { Tests } from "jassijs_editor/util/Tests";
 import { Test } from "jassijs/remote/Test";
 import { JassiError } from "jassijs/remote/Classes";
+import { mytypescript } from "jassijs_editor/util/Typescript";
 
 
 interface Properties {
@@ -38,6 +39,7 @@ export class ParsedClass {
     members?: { [name: string]: ParsedMember } = {};
     decorator?: { [name: string]: ParsedDecorator } = {};
 }
+
 @$Class("jassijs_editor.util.Parser")
 export class Parser {
     sourceFile: ts.SourceFile = undefined;
@@ -123,7 +125,7 @@ export class Parser {
 
         if (value === undefined || value === null)
             return;
-        if (trim&&(typeof value==="string"))
+        if (trim && (typeof value === "string"))
             value = value.trim();
         property = property.trim();
         if (this.data[variable] === undefined) {
@@ -167,8 +169,8 @@ export class Parser {
     addTypeMe(name: string, type: string) {
         if (!this.typeMeNode)
             return;
-        var tp = ts.createTypeReferenceNode(type, []);
-        var newnode = ts.createPropertySignature(undefined, name + "?", undefined, tp, undefined);
+        var tp = ts.factory.createTypeReferenceNode(type, []);
+        var newnode = ts.factory.createPropertySignature(undefined, name + "?", undefined, tp);
         this.typeMeNode["members"].push(newnode);
     }
     /**
@@ -179,9 +181,9 @@ export class Parser {
     addImportIfNeeded(name: string, file: string) {
         if (this.imports[name] === undefined) {
             //@ts-ignore
-            var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
-            const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
-            this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
+            //            var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
+            const importNode = ts.factory.createImportDeclaration(undefined, ts.factory.createImportClause(false, ts.factory.createIdentifier(name), undefined), ts.factory.createIdentifier("\"" + file + "\""));
+            this.sourceFile = ts.factory.updateSourceFile(this.sourceFile, [importNode, ...this.sourceFile.statements]);
             this.imports[name] = file;
         }
     }
@@ -262,14 +264,18 @@ export class Parser {
             parsedClass.name = node.name.getText();
             parsedClass.node = node;
             this.classes[parsedClass.name] = parsedClass;
-            if (node.decorators !== undefined) {
-                var dec = {};
-                for (let x = 0; x < node.decorators.length; x++) {
-                    var parsedDec = this.parseDecorator(node.decorators[x]);
-                    parsedClass.decorator[parsedDec.name] = parsedDec;
-                    if (parsedClass.decorator["$Class"] && parsedDec.parameter.length > 0)
-                        parsedClass.fullClassname = parsedDec.parameter[0].replaceAll('"', "");
+            if (node["modifiers"] !== undefined) {
+                for (var m = 0; m < node["modifiers"].length; m++) {
+                     var nd:ts.Decorator=node["modifiers"][m];
+                    if(nd.kind===ts.SyntaxKind.Decorator){
+                         var parsedDec = this.parseDecorator(nd);
+                        parsedClass.decorator[parsedDec.name] = parsedDec;
+                        if (parsedClass.decorator["$Class"] && parsedDec.parameter.length > 0)
+                            parsedClass.fullClassname = parsedDec.parameter[0].replaceAll('"', "");
+                    }
+                   
                 }
+
             }
 
             for (var x = 0; x < node["members"].length; x++) {
@@ -293,8 +299,8 @@ export class Parser {
                 for (let x = 0; x < this.classScope.length; x++) {
                     var col = this.classScope[x];
                     if (col.classname === parsedClass.name && parsedClass.members[col.methodname]) {
-                        var nd = parsedClass.members[col.methodname].node;
-                        this.parseProperties(nd);
+                        var nd2 = parsedClass.members[col.methodname].node;
+                        this.parseProperties(nd2);
                     }
                 }
             }
@@ -591,8 +597,10 @@ export class Parser {
         node.end = -1;
         node.forEachChild((ch) => _this.removePos(ch));
     }
-    private createNode(code: string) {
+    private createNode(code: string, completeStatement = false) {
         var ret = ts.createSourceFile('dummytemp.ts', code, ts.ScriptTarget.ES5, true, this.jsxVariables ? ts.ScriptKind.TSX : undefined);
+        if (completeStatement)
+            return ret.statements[0];
         var node = (<any>ret.statements[0]).expression;
         this.removePos(node);
         return node;
@@ -627,7 +635,6 @@ export class Parser {
             this.classScope = classScope;
         else
             classScope = this.classScope;
-
         this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, jsxVariables ? ts.ScriptKind.TSX : undefined);
         if (jsxVariables) {
             this.initJSXVariables(jsxVariables);
@@ -693,14 +700,14 @@ export class Parser {
             if (dec.parameter) {
                 params = [];
                 for (var i = 0; i < dec.parameter.length; i++) {
-                    params.push(ts.createIdentifier(dec.parameter[i]));
+                    params.push(ts.factory.createIdentifier(dec.parameter[i]));
                 }
             }
-            var call = ts.createCall(ts.createIdentifier(dec.name), undefined, params);
-            newdec.push(ts.createDecorator(call));
+            var call = ts.factory.createCallExpression(ts.factory.createIdentifier(dec.name), undefined, params);
+            newdec.push(ts.factory.createDecorator(call));
         }
         //var type=ts.createTy
-        var newmember = ts.createProperty(newdec, undefined, member.name, undefined, ts.createTypeReferenceNode(member.type, []), undefined);
+        var newmember = ts.factory.createPropertyDeclaration(newdec, member.name, undefined, ts.factory.createTypeReferenceNode(member.type, []), undefined);
         var node = undefined;
         for (var key in pclass.members) {
             if (key === member.name)
@@ -900,7 +907,7 @@ export class Parser {
                     prop.pos = -1;
                     prop.len = -1;
                 }
-                node.parent["arguments"][0] = ts.createObjectLiteral(node.parent["arguments"][0].properties, true);
+                node.parent["arguments"][0] = ts.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
             }
         }
     }
@@ -909,15 +916,15 @@ export class Parser {
         before: { variablename: string, property: string, value?} = undefined,
         scope: ts.Node) {
 
-        var svalue: any = typeof value === "string" ? ts.createIdentifier(value) : value;
+        var svalue: any = typeof value === "string" ? ts.factory.createIdentifier(value) : value;
         var config = <any>this.data[variableName]["config"][0].node;
         config = config.arguments[0];
-        var newExpression = ts.createPropertyAssignment(property, <any>svalue);
+        var newExpression = ts.factory.createPropertyAssignment(property, <any>svalue);
         if (property === "add" && replace === false) {
             property = "children";
-            svalue = typeof value === "string" ? ts.createIdentifier(value + ".config({})") : value;
+            svalue = typeof value === "string" ? ts.factory.createIdentifier(value + ".config({})") : value;
             if (this.data[variableName]["children"] == undefined) {//
-                newExpression = ts.createPropertyAssignment(property, ts.createArrayLiteral([svalue], true));
+                newExpression = ts.factory.createPropertyAssignment(property, ts.factory.createArrayLiteralExpression([svalue], true));
                 config.properties.push(newExpression);
             } else {
                 if (before === undefined) {
@@ -1002,7 +1009,7 @@ export class Parser {
             this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
             return;
         }
-        var newValue: any = typeof value === "string" ? ts.createIdentifier(value) : value;
+        var newValue: any = typeof value === "string" ? ts.factory.createIdentifier(value) : value;
         var statements: ts.Statement[] = scope["body"] ? scope["body"].statements : scope["statements"];
         if (property === "new") { //me.panel1=new Panel({});
             let prop = this.data[variableName]["_new_"][0];//.substring(3)];
@@ -1012,13 +1019,14 @@ export class Parser {
             var left = prop.node.getText();
             left = left.substring(0, left.indexOf("=") - 1);
             property = "_new_";
-            newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), newValue));
+            newExpression = ts.factory.createExpressionStatement(ts.factory.createAssignment(ts.factory.createIdentifier(left), newValue));
         } else if (isFunction) {
-            newExpression = ts.createExpressionStatement(ts.createCall(
-                ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
+            //           newExpression=this.createNode(property === "" ? variableName : (variableName + "." + property)+"("+newValue.text+")",true);
+            newExpression = ts.factory.createExpressionStatement(ts.factory.createCallExpression(
+                ts.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
         } else
-            newExpression = ts.createExpressionStatement(ts.createAssignment(
-                ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
+            newExpression = ts.factory.createExpressionStatement(ts.factory.createAssignment(
+                ts.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
         if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) {//edit existing
             let node = this.data[variableName][property][0].node;
 
@@ -1029,7 +1037,6 @@ export class Parser {
             //if (pos >= 0)
             //  node.parent["statements"].splice(pos, 1);
         } else {//insert new
-            debugger;
             if (before) {
                 if (before.value === undefined)
                     throw "not implemented";
@@ -1084,10 +1091,10 @@ export class Parser {
         //    this.data[variableName] = {};
         var newValue: any;
         if (typeof value === "string")
-            newValue = value.startsWith('"') ? ts.createIdentifier(value) : ts.createIdentifier("{" + value + "}");
+            newValue = value.startsWith('"') ? ts.factory.createIdentifier(value) : ts.factory.createIdentifier("{" + value + "}");
         else
             newValue = value;;
-        var newExpression = newExpression = ts.createJsxAttribute(ts.createIdentifier(property), newValue);;
+        var newExpression = newExpression = ts.factory.createJsxAttribute(ts.factory.createIdentifier(property), newValue);;
         if (property === "new") { //me.panel1=new Panel({});
             /*       let prop = this.data[variableName]["_new_"][0];//.substring(3)];
                    var constr = prop.value;
@@ -1118,7 +1125,7 @@ export class Parser {
                 var node;
                 if (classname === "text") {
 
-                    node = ts.createJsxText(<string>"", false);
+                    node = ts.factory.createJsxText(<string>"", false);
                     this.add(value, "text", <string>"", node);
                 } else {
                     node = this.createNode("<" + classname + "></" + classname + ">");
@@ -1159,7 +1166,7 @@ export class Parser {
                 }
                 var pos = parent["children"].indexOf(found);
                 parent["children"].splice(pos, 0, node);
-                parent["children"].splice(pos + 1, 0, ts.createJsxText("\n", true));
+                parent["children"].splice(pos + 1, 0, ts.factory.createJsxText("\n", true));
 
                 this.data[variableName]["add"].splice(ofound, 0, {
                     node: node,
@@ -1172,7 +1179,7 @@ export class Parser {
                 if (parent["children"] === undefined)
                     debugger;
                 parent["children"].push(node);
-                parent["children"].push(ts.createJsxText("\n", true));
+                parent["children"].push(ts.factory.createJsxText("\n", true));
                 this.add(variableName, "add", <string>value, node);
             }
             return;
@@ -1197,8 +1204,8 @@ export class Parser {
         if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined && typeof value === "string") {//edit existing
             let node = this.data[variableName][property][0].node;
             if (node === undefined && property === "tag") {
-                (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
-                (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName = ts.factory.createIdentifier(value.substring(1, value.length - 1));
+                (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName = ts.factory.createIdentifier(value.substring(1, value.length - 1));
                 this.data[variableName][property][0].value = value;
                 node["jname"] = value.replaceAll('"', "");;
                 return;
@@ -1239,10 +1246,10 @@ export class Parser {
                 if (property === "tag" && typeof value === "string") {//HTMLComponent tag
                     (<any>this.data[variableName]["_new_"][0].node)["jname"] = value.replaceAll('"', "");
                     if ((<any>this.data[variableName]["_new_"][0].node).attributes) {
-                        (<any>this.data[variableName]["_new_"][0].node).tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                        (<any>this.data[variableName]["_new_"][0].node).tagName = ts.factory.createIdentifier(value.substring(1, value.length - 1));
                     } else {
-                        (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
-                        (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                        (<any>this.data[variableName]["_new_"][0].node).openingElement.tagName = ts.factory.createIdentifier(value.substring(1, value.length - 1));
+                        (<any>this.data[variableName]["_new_"][0].node).closingElement.tagName = ts.factory.createIdentifier(value.substring(1, value.length - 1));
                     }
                 } else {
                     parent["properties"].push(newExpression);
@@ -1338,8 +1345,9 @@ export class Parser {
                 if (!statements[x].getText().split("\n")[0].includes("new ") && !statements[x].getText().split("\n")[0].includes("var "))
                     break;
             }
-            var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
-            statements.splice(x, 0, ts.createStatement(ass));
+            var st = this.createNode(prefix + varname + "=new " + type + "();", true);
+            // var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
+            statements.splice(x, 0, st);//ts.factory.createStatement(ass));
             if (useMe)
                 this.addTypeMe(varname, type);
         }
@@ -1351,11 +1359,12 @@ export async function tests(t: Test) {
     function clean(s: string): string {
         return s.replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "")
     }
-    await typescript.waitForInited;
+    await mytypescript.waitForInited;
     var parser = new Parser();
     parser.parse("var j;j.config({children:[a,b,c]})");
     parser.swapPropertyWithParameter("j", "add", "c", "a");
-    t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.config({ children: [c, b, a] });');
+   
+    t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.config({ children: [c,b,a] });');
     parser.parse("var j;j.add(a);j.add(b);j.add(c);");
     parser.swapPropertyWithParameter("j", "add", "c", "a");
     t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.add(c);j.add(b);j.add(a);');
@@ -1375,22 +1384,35 @@ export async function tests(t: Test) {
 
     parser.addVariableInCode("MyClass", scope);
     parser.setPropertyInCode("myclass", "a", "9", scope);
-    t.expectEqual(clean(parser.getModifiedCode()) === "function test() { var myclass = new MyClass(); b = 8; myclass.a = 9; }");
+    console.log(clean(parser.getModifiedCode()));
+    t.expectEqual(clean(parser.getModifiedCode()) === "function test() { var myclass=new MyClass(); b=8; myclass.a=9; }");
 
     parser = new Parser();
     parser.parse("");
     parser.addVariableInCode("MyClass", undefined);
     parser.setPropertyInCode("myclass", "a", "9", undefined);
-    t.expectEqual(clean(parser.getModifiedCode()) === "var myclass = new MyClass();myclass.a = 9;");
+    t.expectEqual(clean(parser.getModifiedCode()) === "var myclass=new MyClass();myclass.a=9;");
 
 }
 export async function test() {
-    tests(new Test());
+    var h = ts;
 
-    await typescript.waitForInited;
-    var code = typescript.getCode("demo/hallo.tsx");
+    tests(new Test());
+    return
+    await mytypescript.waitForInited;
+
+    var code = mytypescript.getCode("demo/Dialog2.ts");
     var parser = new Parser();
-    parser.parse(code, undefined, true);
+    var scope = [{ classname: "Dialog2", methodname: "layout" }];
+    parser.parse(code, scope, false);
+    debugger;
+    parser.addImportIfNeeded("table2", "jassijs/ui/Table2");
+    //parser.setPropertyInCode("me.button2","pp","hallo",scope);
+
+    // var j=parser.addVariableInCode("jassijs.ui.Button",[{classname:"Dialog",methodname:"layout"  }]);
+    console.log(parser.getModifiedCode());
+
+
     // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
     // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
     // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";

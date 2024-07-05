@@ -19,9 +19,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             }
         }
     };
-    TestRModul = __decorate([
+    exports.TestRModul = TestRModul;
+    exports.TestRModul = TestRModul = __decorate([
         (0, Registry_1.$Class)("testrmodul.remote.TestRModul")
     ], TestRModul);
-    exports.TestRModul = TestRModul;
 });
 //# sourceMappingURL=TestRModul.js.map

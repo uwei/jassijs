@@ -4,11 +4,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs_editor/util/Parser", "jassijs_editor/template/TemplateDBObject", "jassijs/util/Tools", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/OptionDialog", "jquery.choosen"], function (require, exports, Registry_1, Registry_2, Typescript_1, Parser_1, TemplateDBObject_1, Tools_1, Server_1, Windows_1, OptionDialog_1) {
     "use strict";
     var DatabaseSchema_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test3 = exports.DatabaseSchema = exports.DatabaseClass = exports.DatabaseField = void 0;
+    Registry_2 = __importDefault(Registry_2);
+    Windows_1 = __importDefault(Windows_1);
     class DatabaseField {
         get nullable() {
             var _a;
@@ -361,13 +366,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
         async parseFiles() {
             this.parsedClasses = {};
             this.definedImports = {};
-            await Typescript_1.default.waitForInited;
+            await Typescript_1.mytypescript.waitForInited;
             var data = await Registry_2.default.getJSONData("$DBObject");
             for (let x = 0; x < data.length; x++) {
                 var entr = data[x];
                 var parser = new Parser_1.Parser();
                 var file = entr.filename;
-                var code = Typescript_1.default.getCode(file);
+                var code = Typescript_1.mytypescript.getCode(file);
                 // if (code === undefined)
                 //     code = await new Server().loadFile(file);
                 if (code !== undefined) {

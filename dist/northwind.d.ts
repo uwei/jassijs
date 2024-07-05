@@ -1,54 +1,3 @@
-declare module "northwind/remote/Suppliers" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    export class Suppliers extends DBObject {
-        id: number;
-        constructor();
-        CompanyName: string;
-        ContactName: string;
-        ContactTitle: string;
-        Address: string;
-        City: string;
-        Region: string;
-        PostalCode: string;
-        Country: string;
-        Phone: string;
-        Fax: string;
-        HomePage: string;
-    }
-    export function test(): Promise<void>;
-}
-declare module "northwind/remote/Products" {
-    import { Categories } from "northwind/remote/Categories";
-    import { Suppliers } from "northwind/remote/Suppliers";
-    import { DBObject } from "jassijs/remote/DBObject";
-    export class Products extends DBObject {
-        id: number;
-        constructor();
-        ProductName: string;
-        Supplier: Suppliers;
-        Category: Categories;
-        QuantityPerUnit: string;
-        UnitPrice: number;
-        UnitsInStock: number;
-        UnitsOnOrder: number;
-        ReorderLevel: number;
-        Discontinued: boolean;
-    }
-    export function test(): Promise<void>;
-}
-declare module "northwind/remote/Categories" {
-    import { Products } from "northwind/remote/Products";
-    import { DBObject } from "jassijs/remote/DBObject";
-    export class Categories extends DBObject {
-        id: number;
-        constructor();
-        CategoryName: string;
-        Description: string;
-        Picture: string;
-        Products: Products;
-    }
-    export function test(): Promise<void>;
-}
 declare module "northwind/CategoriesView" {
     import { Table } from "jassijs/ui/Table";
     import { BoxPanel } from "jassijs/ui/BoxPanel";
@@ -72,104 +21,7 @@ declare module "northwind/CategoriesView" {
         get title(): string;
         layout(me: Me): void;
     }
-    export function test(): Promise<CategoriesView>;
-}
-declare module "northwind/remote/Customer" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    export class Customer extends DBObject {
-        id: string;
-        CompanyName: string;
-        ContactName: string;
-        ContactTitle: string;
-        Address: string;
-        City: string;
-        Region: string;
-        PostalCode: string;
-        Country: string;
-        Phone: string;
-        Fax: string;
-        constructor();
-    }
-    export function test(): Promise<void>;
-}
-declare module "northwind/remote/OrderDetails" {
-    import { Products } from "northwind/remote/Products";
-    import { Orders } from "northwind/remote/Orders";
-    import { DBObject } from "jassijs/remote/DBObject";
-    export class OrderDetails extends DBObject {
-        id: number;
-        constructor();
-        Order: Orders;
-        Product: Products;
-        UnitPrice: number;
-        Quantity: number;
-        Discount: number;
-    }
-    export function test(): Promise<void>;
-}
-declare module "northwind/remote/Employees" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    import { Context } from "jassijs/remote/RemoteObject";
-    export class Employees extends DBObject {
-        id: number;
-        constructor();
-        LastName: string;
-        FirstName: string;
-        Title: string;
-        TitleOfCourtesy: string;
-        Address: string;
-        City: string;
-        Region: string;
-        PostalCode: string;
-        Country: string;
-        HomePhone: string;
-        Extension: string;
-        Photo: string;
-        Notes: string;
-        PhotoPath: string;
-        ReportsTo: Employees;
-        BirthDate: Date;
-        HireDate: Date;
-        static find(options?: any, context?: Context): Promise<Employees[]>;
-    }
-    export function test(): Promise<void>;
-    export function test2(): Promise<void>;
-}
-declare module "northwind/remote/Shippers" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    export class Shippers extends DBObject {
-        id: number;
-        constructor();
-        CompanyName: string;
-        Phone: string;
-    }
-    export function test(): Promise<void>;
-}
-declare module "northwind/remote/Orders" {
-    import { OrderDetails } from "northwind/remote/OrderDetails";
-    import { Employees } from "northwind/remote/Employees";
-    import { Customer } from "northwind/remote/Customer";
-    import { DBObject } from "jassijs/remote/DBObject";
-    import { Shippers } from "northwind/remote/Shippers";
-    export class Orders extends DBObject {
-        id: number;
-        constructor();
-        Customer: Customer;
-        Employee: Employees;
-        OrderDate: Date;
-        RequiredDate: Date;
-        ShippedDate: Date;
-        ShipVia: Shippers;
-        Freight: number;
-        ShipName: string;
-        ShipAddress: string;
-        ShipCity: string;
-        ShipRegion: string;
-        ShipPostalCode: string;
-        ShipCountry: string;
-        Details: OrderDetails[];
-    }
-    export function test(): Promise<void>;
+    export function test(): unknown;
 }
 declare module "northwind/CustomerOrders" {
     import { Table } from "jassijs/ui/Table";
@@ -194,10 +46,10 @@ declare module "northwind/CustomerOrders" {
         constructor();
         layout(me: Me): void;
         static showDialog(): void;
-        customerChanged(): Promise<void>;
-        setData(): Promise<void>;
+        customerChanged(): any;
+        setData(): any;
     }
-    export function test(): Promise<CustomerOrders>;
+    export function test(): unknown;
 }
 declare module "northwind/CustomerPhoneList" {
     import { Table } from "jassijs/ui/Table";
@@ -209,10 +61,10 @@ declare module "northwind/CustomerPhoneList" {
         me: Me;
         constructor();
         layout(me: Me): void;
-        setData(): Promise<void>;
+        setData(): any;
         static showDialog(): void;
     }
-    export function test(): Promise<CustomerPhoneList>;
+    export function test(): unknown;
 }
 declare module "northwind/CustomerView" {
     import { Textbox } from "jassijs/ui/Textbox";
@@ -238,7 +90,7 @@ declare module "northwind/CustomerView" {
         get title(): string;
         layout(me: Me): void;
     }
-    export function test(): Promise<CustomerView>;
+    export function test(): unknown;
 }
 declare module "northwind/DetailTest" {
     import { OrderDetails } from "northwind/remote/OrderDetails";
@@ -254,7 +106,7 @@ declare module "northwind/DetailTest" {
         get title(): string;
         layout(me: Me): void;
     }
-    export function test(): Promise<DetailTest>;
+    export function test(): unknown;
 }
 declare module "northwind/EmployeesView" {
     import { ObjectChooser } from "jassijs/ui/ObjectChooser";
@@ -291,7 +143,7 @@ declare module "northwind/EmployeesView" {
         get title(): string;
         layout(me: Me): void;
     }
-    export function test(): Promise<EmployeesView>;
+    export function test(): unknown;
 }
 declare module "northwind/ImportData" {
     import { Button } from "jassijs/ui/Button";
@@ -306,12 +158,18 @@ declare module "northwind/ImportData" {
     export class ImportData extends Panel {
         me: Me;
         constructor();
-        static dummy(): Promise<void>;
-        static showDialog(): Promise<void>;
-        startImport(): Promise<void>;
+        static dummy(): any;
+        static showDialog(): any;
+        startImport(): any;
         layout(me: Me): void;
     }
-    export function test(): Promise<ImportData>;
+    export function test(): unknown;
+}
+declare module "northwind/modul" {
+    const _default: {
+        require: {};
+    };
+    export default _default;
 }
 declare module "northwind/OrdersView" {
     import { Style } from "jassijs/ui/Style";
@@ -361,7 +219,7 @@ declare module "northwind/OrdersView" {
         get title(): string;
         layout(me: Me): void;
     }
-    export function test(): Promise<OrdersView>;
+    export function test(): unknown;
 }
 declare module "northwind/ProductList" {
     import { Checkbox } from "jassijs/ui/Checkbox";
@@ -391,9 +249,9 @@ declare module "northwind/ProductList" {
         constructor();
         layout(me: Me): void;
         static showDialog(): void;
-        setData(): Promise<void>;
+        setData(): any;
     }
-    export function test(): Promise<ProductList>;
+    export function test(): unknown;
 }
 declare module "northwind/ProductView" {
     import { Style } from "jassijs/ui/Style";
@@ -425,7 +283,164 @@ declare module "northwind/ProductView" {
         get title(): string;
         layout(me: Me): void;
     }
-    export function test(): Promise<ProductView>;
+    export function test(): unknown;
+}
+declare module "northwind/remote/Categories" {
+    import { Products } from "northwind/remote/Products";
+    import { DBObject } from "jassijs/remote/DBObject";
+    export class Categories extends DBObject {
+        id: number;
+        constructor();
+        CategoryName: string;
+        Description: string;
+        Picture: string;
+        Products: Products;
+    }
+    export function test(): any;
+}
+declare module "northwind/remote/Customer" {
+    import { DBObject } from "jassijs/remote/DBObject";
+    export class Customer extends DBObject {
+        id: string;
+        CompanyName: string;
+        ContactName: string;
+        ContactTitle: string;
+        Address: string;
+        City: string;
+        Region: string;
+        PostalCode: string;
+        Country: string;
+        Phone: string;
+        Fax: string;
+        constructor();
+    }
+    export function test(): any;
+}
+declare module "northwind/remote/Employees" {
+    import { DBObject } from "jassijs/remote/DBObject";
+    import { Context } from "jassijs/remote/RemoteObject";
+    export class Employees extends DBObject {
+        id: number;
+        constructor();
+        LastName: string;
+        FirstName: string;
+        Title: string;
+        TitleOfCourtesy: string;
+        Address: string;
+        City: string;
+        Region: string;
+        PostalCode: string;
+        Country: string;
+        HomePhone: string;
+        Extension: string;
+        Photo: string;
+        Notes: string;
+        PhotoPath: string;
+        ReportsTo: Employees;
+        BirthDate: Date;
+        HireDate: Date;
+        static find(options?: any, context?: Context): Promise<Employees[]>;
+    }
+    export function test(): any;
+    export function test2(): any;
+}
+declare module "northwind/remote/OrderDetails" {
+    import { Products } from "northwind/remote/Products";
+    import { Orders } from "northwind/remote/Orders";
+    import { DBObject } from "jassijs/remote/DBObject";
+    export class OrderDetails extends DBObject {
+        id: number;
+        constructor();
+        Order: Orders;
+        Product: Products;
+        UnitPrice: number;
+        Quantity: number;
+        Discount: number;
+    }
+    export function test(): any;
+}
+declare module "northwind/remote/Orders" {
+    import { OrderDetails } from "northwind/remote/OrderDetails";
+    import { Employees } from "northwind/remote/Employees";
+    import { Customer } from "northwind/remote/Customer";
+    import { DBObject } from "jassijs/remote/DBObject";
+    import { Shippers } from "northwind/remote/Shippers";
+    export class Orders extends DBObject {
+        id: number;
+        constructor();
+        Customer: Customer;
+        Employee: Employees;
+        OrderDate: Date;
+        RequiredDate: Date;
+        ShippedDate: Date;
+        ShipVia: Shippers;
+        Freight: number;
+        ShipName: string;
+        ShipAddress: string;
+        ShipCity: string;
+        ShipRegion: string;
+        ShipPostalCode: string;
+        ShipCountry: string;
+        Details: OrderDetails[];
+    }
+    export function test(): any;
+}
+declare module "northwind/remote/Products" {
+    import { Categories } from "northwind/remote/Categories";
+    import { Suppliers } from "northwind/remote/Suppliers";
+    import { DBObject } from "jassijs/remote/DBObject";
+    export class Products extends DBObject {
+        id: number;
+        constructor();
+        ProductName: string;
+        Supplier: Suppliers;
+        Category: Categories;
+        QuantityPerUnit: string;
+        UnitPrice: number;
+        UnitsInStock: number;
+        UnitsOnOrder: number;
+        ReorderLevel: number;
+        Discontinued: boolean;
+    }
+    export function test(): any;
+}
+declare module "northwind/remote/Shippers" {
+    import { DBObject } from "jassijs/remote/DBObject";
+    export class Shippers extends DBObject {
+        id: number;
+        constructor();
+        CompanyName: string;
+        Phone: string;
+    }
+    export function test(): any;
+}
+declare module "northwind/remote/Suppliers" {
+    import { DBObject } from "jassijs/remote/DBObject";
+    export class Suppliers extends DBObject {
+        id: number;
+        constructor();
+        CompanyName: string;
+        ContactName: string;
+        ContactTitle: string;
+        Address: string;
+        City: string;
+        Region: string;
+        PostalCode: string;
+        Country: string;
+        Phone: string;
+        Fax: string;
+        HomePage: string;
+    }
+    export function test(): any;
+}
+declare module "northwind/reports/CustomerLabels" {
+    import { Report } from "jassijs_report/Report";
+    export class CustomerLabels extends Report {
+        country?: string;
+        fill(): unknown;
+        static dummy(): any;
+    }
+    export function test(): unknown;
 }
 declare module "northwind/ShippersView" {
     import { Textbox } from "jassijs/ui/Textbox";
@@ -443,7 +458,7 @@ declare module "northwind/ShippersView" {
         get title(): string;
         layout(me: Me): void;
     }
-    export function test(): Promise<ShippersView>;
+    export function test(): unknown;
 }
 declare module "northwind/SuppliersView" {
     import { Textbox } from "jassijs/ui/Textbox";
@@ -470,42 +485,5 @@ declare module "northwind/SuppliersView" {
         get title(): string;
         layout(me: Me): void;
     }
-    export function test(): Promise<SuppliersView>;
-}
-declare module "northwind/modul" {
-    const _default: {
-        require: {};
-    };
-    export default _default;
-}
-declare module "northwind/reports/CustomerLabels" {
-    import { Report } from "jassijs_report/Report";
-    export class CustomerLabels extends Report {
-        country?: string;
-        fill(): Promise<{
-            reportdesign: {
-                content: {
-                    table: {
-                        dontBreakRows: boolean;
-                        widths: string[];
-                        body: any[];
-                    };
-                    layout: string;
-                }[];
-            };
-        }>;
-        static dummy(): Promise<void>;
-    }
-    export function test(): Promise<{
-        reportdesign: {
-            content: {
-                table: {
-                    dontBreakRows: boolean;
-                    widths: string[];
-                    body: any[];
-                };
-                layout: string;
-            }[];
-        };
-    }>;
+    export function test(): unknown;
 }

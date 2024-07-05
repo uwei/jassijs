@@ -11,7 +11,8 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.AcePanel = void 0;
+    exports.AcePanel = void 0;
+    exports.test = test;
     /// <amd-dependency path="ace/ace" name="ace"/>
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
@@ -111,7 +112,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
                 name: "formatDocument",
                 bindKey: { win: "Shift-Alt-f", mac: "Shift-Alt-f" },
                 exec: function (editor) {
-                    Typescript_1.default.formatDocument(_this.file, _this.value).then((val) => {
+                    Typescript_1.mytypescript.formatDocument(_this.file, _this.value).then((val) => {
                         _this.value = val;
                     });
                 }
@@ -135,10 +136,10 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
                     column: pos.column + 1,
                     row: pos.row + 1
                 }) - 1;
-                if (!Typescript_1.default.isInited(this.file))
+                if (!Typescript_1.mytypescript.isInited(this.file))
                     return;
                 var p;
-                Typescript_1.default.getQuickInfoAtPosition(this.file, lpos, this.value).then((p) => {
+                Typescript_1.mytypescript.getQuickInfoAtPosition(this.file, lpos, this.value).then((p) => {
                     if (p !== undefined) {
                         var text = "<div style='font-size:12px'>";
                         for (let x = 0; x < p.displayParts.length; x++) {
@@ -185,7 +186,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
          * check if imports are neded and do so
          **/
         _doRequiredImports(pos, name) {
-            if (!Typescript_1.default.isInited(this.file))
+            if (!Typescript_1.mytypescript.isInited(this.file))
                 return;
             if (this.value.indexOf("import " + name + " ") === -1 && this.value.indexOf("import {" + name + "} ") === -1) {
                 let lpos = this.positionToNumber({
@@ -195,7 +196,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
                 CodePanel_1.CodePanel.getAutoimport(lpos, this.file, this.value).then((data) => {
                     if (data !== undefined) {
                         this._editor.session.insert(data.pos, data.text);
-                        Typescript_1.default.setCode(this.file, this.value);
+                        Typescript_1.mytypescript.setCode(this.file, this.value);
                     }
                 });
             }
@@ -207,7 +208,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
             if (this.file !== undefined && !this.file.toLowerCase().endsWith(".ts"))
                 return;
             var _this = this;
-            Typescript_1.default.waitForInited.then(() => {
+            Typescript_1.mytypescript.waitForInited.then(() => {
                 if (_this._editor !== undefined && _this._editor.getSession() !== undefined) {
                     _this._editor.getSession().setAnnotations([{
                             row: 1,
@@ -216,10 +217,10 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
                             type: "information" // also warning and information
                         }]);
                 }
-                Typescript_1.default.setCode(_this.file, _this.value).then((tt) => {
+                Typescript_1.mytypescript.setCode(_this.file, _this.value).then((tt) => {
                     if (_this.file === undefined)
                         return;
-                    Typescript_1.default.getDiagnostics(_this.file, _this.value).then((diag) => {
+                    Typescript_1.mytypescript.getDiagnostics(_this.file, _this.value).then((diag) => {
                         var annotaions = [];
                         var iserror = false;
                         for (var x = 0; x < diag.semantic.length; x++) {
@@ -230,7 +231,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
                             annotaions.push({
                                 row: err.row - 1,
                                 column: err.column - 1,
-                                text: diag.semantic[x].messageText["messageText"] === undefined ? diag.semantic[x].messageText : diag.semantic[x].messageText["messageText"],
+                                text: diag.semantic[x].messageText["messageText"] === undefined ? diag.semantic[x].messageText : diag.semantic[x].messageText["messageText"], //Bug
                                 type: "error" // also warning and information
                             });
                             iserror = true;
@@ -257,7 +258,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
                             annotaions.push({
                                 row: err.row - 1,
                                 column: err.column - 1,
-                                text: diag.syntactic[x].messageText["messageText"] === undefined ? diag.syntactic[x].messageText : diag.syntactic[x].messageText["messageText"],
+                                text: diag.syntactic[x].messageText["messageText"] === undefined ? diag.syntactic[x].messageText : diag.syntactic[x].messageText["messageText"], //Bug
                                 type: "error" // also warning and information
                             });
                             iserror = true;
@@ -324,14 +325,14 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
                 row: pos.row + 1
             });
             var code = this.value;
-            if (Typescript_1.default.isInited(this.file) !== true) {
+            if (Typescript_1.mytypescript.isInited(this.file) !== true) {
                 let entry = { caption: "please try later ... loading in progress", name: "loading", value: "empty", score: 10, meta: "object", parent: "otto", codePanel: _this };
                 ret.push(entry);
                 return;
             }
             if (_this.file.endsWith(".js"))
                 return;
-            Typescript_1.default.getCompletion(_this.file, p, code, { includeExternalModuleExports: true }).then((data) => {
+            Typescript_1.mytypescript.getCompletion(_this.file, p, code, { includeExternalModuleExports: true }).then((data) => {
                 if (data !== undefined) {
                     for (let e = 0; e < data.entries.length; e++) {
                         let entr = data.entries[e];
@@ -368,7 +369,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
                 return "";
             var _id = "j" + Registry_2.default.nextID();
             item.docHTML = "<span id='" + _id + "'> please try later ... loading in progress<span>";
-            Typescript_1.default.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
+            Typescript_1.mytypescript.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
                 if (ret === undefined)
                     return;
                 var doc = "<b>";
@@ -510,11 +511,11 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
             this._editor.resize();
         }
     };
-    AcePanel = AcePanel_1 = __decorate([
-        Registry_1.$Class("jassijs.ui.AcePanel"),
+    exports.AcePanel = AcePanel;
+    exports.AcePanel = AcePanel = AcePanel_1 = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.AcePanel"),
         __metadata("design:paramtypes", [])
     ], AcePanel);
-    exports.AcePanel = AcePanel;
     async function test() {
         var dlg = new AcePanel();
         dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
@@ -527,12 +528,12 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
         var h = dlg.getBreakpoints();
         return dlg;
     }
-    exports.test = test;
 });
 define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "ace/ext/language_tools"], function (require, exports, ace, Registry_3, CodePanel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.AcePanelSimple = void 0;
+    exports.AcePanelSimple = void 0;
+    exports.test = test;
     /// <amd-dependency path="ace/ace" name="ace"/>
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
@@ -674,11 +675,11 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassi
             this._editor.resize();
         }
     };
-    AcePanelSimple = __decorate([
-        Registry_3.$Class("jassijs.ui.AcePanelSimple"),
+    exports.AcePanelSimple = AcePanelSimple;
+    exports.AcePanelSimple = AcePanelSimple = __decorate([
+        (0, Registry_3.$Class)("jassijs.ui.AcePanelSimple"),
         __metadata("design:paramtypes", [])
     ], AcePanelSimple);
-    exports.AcePanelSimple = AcePanelSimple;
     async function test() {
         var dlg = new AcePanelSimple();
         dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
@@ -691,13 +692,13 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassi
         var h = dlg.getBreakpoints();
         return dlg;
     }
-    exports.test = test;
 });
 define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugger", "jassijs/ui/OptionDialog", "jassijs_editor/util/TSSourceMap", "jassijs/util/Reloader", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/Notify"], function (require, exports, Registry_4, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1, Notify_1) {
     "use strict";
     var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ChromeDebugger = void 0;
+    exports.ChromeDebugger = void 0;
+    exports.test = test;
     var installed = undefined;
     /**
      * debugging in Chrome
@@ -715,7 +716,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
             });
         }
         static showHintExtensionNotInstalled() {
-            Notify_1.notifyAddStyle('downloadlink', {
+            (0, Notify_1.notifyAddStyle)('downloadlink', {
                 html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
                 classes: {
                     base: {
@@ -724,7 +725,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
                     }
                 }
             });
-            Notify_1.notify("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000 });
+            (0, Notify_1.notify)("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000 });
         }
         //on receiving messages from chrome extension
         onChromeMessage(event) {
@@ -883,39 +884,39 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
             this.destroyed = true;
         }
     };
+    exports.ChromeDebugger = ChromeDebugger;
     ChromeDebugger.mid = 0;
-    ChromeDebugger = ChromeDebugger_1 = __decorate([
-        Registry_4.$Class("jassijs_editor.ChromeDebugger"),
+    exports.ChromeDebugger = ChromeDebugger = ChromeDebugger_1 = __decorate([
+        (0, Registry_4.$Class)("jassijs_editor.ChromeDebugger"),
         __metadata("design:paramtypes", [])
     ], ChromeDebugger);
-    exports.ChromeDebugger = ChromeDebugger;
     //if connected then this instance is registred to jassijs.debugger;
     new ChromeDebugger();
     window.postMessage({ toJassiExtension: true, name: "connect" }, "*");
     function test() {
         ChromeDebugger.showHintExtensionNotInstalled();
     }
-    exports.test = test;
 });
 define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs_editor/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test", "jassijs/base/CurrentSettings", "jassijs/base/Windows", "jassijs/ui/Notify"], function (require, exports, Registry_5, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_6, Server_2, Reloader_2, Classes_1, Component_2, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1, CurrentSettings_1, Windows_2, Notify_2) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.CodeEditor = void 0;
+    exports.CodeEditor = void 0;
+    exports.test = test;
     jassijs.includeCSSFile("jassijs_editor.css");
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
     };
     __decorate([
-        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser", chooseFromStrict: true }),
+        (0, Property_1.$Property)({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser", chooseFromStrict: true }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_DefaultEditor", void 0);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light", chooseFromStrict: true }),
+        (0, Property_1.$Property)({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light", chooseFromStrict: true }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
     CodeEditorSettingsDescriptor = __decorate([
-        Settings_1.$SettingsDescriptor(),
-        Registry_5.$Class("jassijs_editor.CodeEditorSettingsDescriptor")
+        (0, Settings_1.$SettingsDescriptor)(),
+        (0, Registry_5.$Class)("jassijs_editor.CodeEditorSettingsDescriptor")
     ], CodeEditorSettingsDescriptor);
     /**
      * Panel for editing sources
@@ -935,7 +936,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 this._codePanel = properties.codePanel;
             }
             else {
-                CodePanel_3.CodePanel.typescript = Typescript_2.default;
+                CodePanel_3.CodePanel.typescript = Typescript_2.mytypescript;
                 if (sett === "ace" || (mobil && (sett === "aceOnBrowser" || sett === undefined))) {
                     this._codePanel = new AcePanel_2.AcePanel();
                 }
@@ -1482,9 +1483,9 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             settings["inlineSources"] = true;
             var files;
             if (this.file.endsWith(".tsx"))
-                files = await tss.default.transpile(file + ".tsx", code, settings);
+                files = await tss.mytypescript.transpile(file + ".tsx", code, settings);
             else
-                files = await tss.default.transpile(file + ".ts", code, settings);
+                files = await tss.mytypescript.transpile(file + ".ts", code, settings);
             var codets = -1;
             var codemap = -1;
             var codejs = -1;
@@ -1528,7 +1529,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             var testcode = await new Server_2.Server().loadFile(this.file);
             var hasModified = testcode !== code;
             if (hasModified) {
-                Notify_2.notify("please save code before test", "error");
+                (0, Notify_2.notify)("please save code before test", "error");
                 return undefined;
             }
             var res = await new Server_2.Server().testServersideFile(this._file.substring(0, this._file.length - 3));
@@ -1726,21 +1727,21 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             this._codePanel.undo();
         }
     };
+    exports.CodeEditor = CodeEditor;
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], CodeEditor.prototype, "file", null);
     __decorate([
-        Property_1.$Property({ isUrlTag: true }),
+        (0, Property_1.$Property)({ isUrlTag: true }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], CodeEditor.prototype, "line", null);
-    CodeEditor = CodeEditor_1 = __decorate([
-        Registry_5.$Class("jassijs_editor.CodeEditor"),
+    exports.CodeEditor = CodeEditor = CodeEditor_1 = __decorate([
+        (0, Registry_5.$Class)("jassijs_editor.CodeEditor"),
         __metadata("design:paramtypes", [Object])
     ], CodeEditor);
-    exports.CodeEditor = CodeEditor;
     async function test() {
         var editor = new CodeEditor();
         //var url = "jassijs_editor/AcePanel.ts";
@@ -1755,7 +1756,6 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
         // debugger;
         // var k=await new Server().testServersideFile("$serverside/jassijs_report/TestServerreport");
     }
-    exports.test = test;
     ;
 });
 //jassijs.myRequire(modul.css["jassijs_editor.css"]);
@@ -1856,11 +1856,11 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
             super.destroy();
         }
     };
-    CodeEditorInvisibleComponents = __decorate([
-        Registry_7.$Class("jassijs_editor.CodeEditorInvisibleComponents"),
+    exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;
+    exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents = __decorate([
+        (0, Registry_7.$Class)("jassijs_editor.CodeEditorInvisibleComponents"),
         __metadata("design:paramtypes", [Object])
     ], CodeEditorInvisibleComponents);
-    exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;
 });
 define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/ui/Notify"], function (require, exports, Registry_9, Panel_3, Router_1, Notify_3) {
     "use strict";
@@ -1976,7 +1976,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
             var pos = this.positionToNumber(this.cursorPosition);
             var test = this.numberToPosition(pos);
             if (!CodePanel_4.typescript.isInited(this.file)) {
-                Notify_3.notify("please try later ... loading in progress", "info", { position: "bottom right" });
+                (0, Notify_3.notify)("please try later ... loading in progress", "info", { position: "bottom right" });
                 return;
             }
             CodePanel_4.typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
@@ -1992,15 +1992,16 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
             });
         }
     };
-    CodePanel = CodePanel_4 = __decorate([
-        Registry_9.$Class("jassijs_editor.CodePanel")
-    ], CodePanel);
     exports.CodePanel = CodePanel;
+    exports.CodePanel = CodePanel = CodePanel_4 = __decorate([
+        (0, Registry_9.$Class)("jassijs_editor.CodePanel")
+    ], CodePanel);
 });
 define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Registry_10, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, ComponentDescriptor_1, Classes_3, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ComponentDesigner = exports.ClipboardData = void 0;
+    exports.ComponentDesigner = exports.ClipboardData = void 0;
+    exports.test = test;
     //import { Parser } from "./util/Parser";
     class ClipboardData {
         constructor() {
@@ -2932,7 +2933,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             return dummy;
         }
         insertDummies(node, root, arr, rootRect) {
-            var _a;
             if (node._this === undefined)
                 return;
             var node = node._this.dom; //eliminate Wrapper
@@ -2977,7 +2977,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 right: rect.right - rootRect.left + window.scrollX,
                 bottom: rect.bottom - rootRect.top + window.scrollY
             };
-            if ((_a = node) === null || _a === void 0 ? void 0 : _a.nd)
+            if (node === null || node === void 0 ? void 0 : node.nd)
                 return;
             var preDummy = node._preDummy_;
             if (!node._preDummy_) {
@@ -3107,22 +3107,22 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             super.destroy();
         }
     };
-    ComponentDesigner = __decorate([
-        Registry_10.$Class("jassijs_editor.ComponentDesigner"),
+    exports.ComponentDesigner = ComponentDesigner;
+    exports.ComponentDesigner = ComponentDesigner = __decorate([
+        (0, Registry_10.$Class)("jassijs_editor.ComponentDesigner"),
         __metadata("design:paramtypes", [])
     ], ComponentDesigner);
-    exports.ComponentDesigner = ComponentDesigner;
     async function test() {
         return new ComponentDesigner();
     }
-    exports.test = test;
     ;
 });
 define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs/ui/PropertyEditor", "jassijs/remote/Classes"], function (require, exports, Registry_11, Panel_5, Tree_1, ComponentDescriptor_2, ContextMenu_1, PropertyEditor_2, Classes_4) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ComponentExplorer = void 0;
+    exports.ComponentExplorer = void 0;
+    exports.test = test;
     let ComponentExplorer = class ComponentExplorer extends Panel_5.Panel {
         /**
         * edit object properties
@@ -3270,11 +3270,11 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
             super.destroy();
         }
     };
-    ComponentExplorer = __decorate([
-        Registry_11.$Class("jassijs_editor.ComponentExplorer"),
+    exports.ComponentExplorer = ComponentExplorer;
+    exports.ComponentExplorer = ComponentExplorer = __decorate([
+        (0, Registry_11.$Class)("jassijs_editor.ComponentExplorer"),
         __metadata("design:paramtypes", [Object, typeof (_a = typeof PropertyEditor_2.PropertyEditor !== "undefined" && PropertyEditor_2.PropertyEditor) === "function" ? _a : Object])
     ], ComponentExplorer);
-    exports.ComponentExplorer = ComponentExplorer;
     async function test() {
         var dlg = new ComponentExplorer(undefined, undefined);
         dlg.getComponentName = function (item) {
@@ -3283,12 +3283,12 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
         dlg.value = dlg;
         return dlg;
     }
-    exports.test = test;
 });
 define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Registry_12, Panel_6, Image_1, Registry_13, Classes_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ComponentPalette = void 0;
+    exports.ComponentPalette = void 0;
+    exports.test = test;
     let ComponentPalette = class ComponentPalette extends Panel_6.Panel {
         constructor() {
             super();
@@ -3484,22 +3484,22 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
             super.destroy();
         }
     };
-    ComponentPalette = __decorate([
-        Registry_12.$Class("jassijs_editor.ComponentPalette"),
+    exports.ComponentPalette = ComponentPalette;
+    exports.ComponentPalette = ComponentPalette = __decorate([
+        (0, Registry_12.$Class)("jassijs_editor.ComponentPalette"),
         __metadata("design:paramtypes", [])
     ], ComponentPalette);
-    exports.ComponentPalette = ComponentPalette;
     function test() {
         var comp = new ComponentPalette();
         comp.service = "$UIComponent";
         return comp;
     }
-    exports.test = test;
 });
 define("jassijs_editor/ComponentSpy", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs_editor/ErrorPanel", "jassijs/ui/Component"], function (require, exports, Registry_14, Panel_7, Table_1, Button_4, BoxPanel_2, Classes_6, Actions_1, Router_2, ErrorPanel_2, Component_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ComponentSpy = void 0;
+    exports.ComponentSpy = void 0;
+    exports.test = test;
     class Me {
     }
     let ComponentSpy = class ComponentSpy extends Panel_7.Panel {
@@ -3608,8 +3608,9 @@ define("jassijs_editor/ComponentSpy", ["require", "exports", "jassijs/remote/Reg
             this.hook = undefined;
         }
     };
+    exports.ComponentSpy = ComponentSpy;
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Administration",
             icon: "mdi mdi-account-cog-outline",
         }),
@@ -3618,7 +3619,7 @@ define("jassijs_editor/ComponentSpy", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:returntype", Promise)
     ], ComponentSpy, "dummy", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Administration/Spy Components",
             icon: "mdi mdi-police-badge",
         }),
@@ -3626,25 +3627,24 @@ define("jassijs_editor/ComponentSpy", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], ComponentSpy, "showDialog", null);
-    ComponentSpy = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Registry_14.$Class("jassijs_editor.ui.ComponentSpy"),
+    exports.ComponentSpy = ComponentSpy = __decorate([
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Registry_14.$Class)("jassijs_editor.ui.ComponentSpy"),
         __metadata("design:paramtypes", [])
     ], ComponentSpy);
-    exports.ComponentSpy = ComponentSpy;
     function test() {
         var sp = new ComponentSpy();
         sp.update();
         sp.height = 100;
         return sp;
     }
-    exports.test = test;
     jassijs.componentSpy = new ComponentSpy();
 });
 define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Databinder", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows", "jassijs_editor/util/DatabaseSchema"], function (require, exports, BoxPanel_3, Button_5, Databinder_1, Select_1, Table_2, Registry_15, Panel_8, OptionDialog_2, Router_3, Actions_2, Windows_3, DatabaseSchema_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.DatabaseDesigner = void 0;
+    exports.DatabaseDesigner = void 0;
+    exports.test = test;
     let DatabaseDesigner = class DatabaseDesigner extends Panel_8.Panel {
         constructor(readShema = true) {
             super();
@@ -3855,8 +3855,9 @@ define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/Box
             this.update();
         }
     };
+    exports.DatabaseDesigner = DatabaseDesigner;
     __decorate([
-        Actions_2.$Action({
+        (0, Actions_2.$Action)({
             name: "Administration/Database Designer",
             icon: "mdi mdi-database-edit",
         }),
@@ -3864,17 +3865,15 @@ define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/Box
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], DatabaseDesigner, "showDialog", null);
-    DatabaseDesigner = __decorate([
-        Actions_2.$ActionProvider("jassijs.base.ActionNode"),
-        Registry_15.$Class("jassijs_editor/DatabaseDesigner"),
+    exports.DatabaseDesigner = DatabaseDesigner = __decorate([
+        (0, Actions_2.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Registry_15.$Class)("jassijs_editor/DatabaseDesigner"),
         __metadata("design:paramtypes", [Object])
     ], DatabaseDesigner);
-    exports.DatabaseDesigner = DatabaseDesigner;
     async function test() {
         var ret = new DatabaseDesigner();
         return ret;
     }
-    exports.test = test;
 });
 define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_16) {
     "use strict";
@@ -4008,11 +4007,11 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Registr
             this.destroyed = true;
         }
     };
-    Debugger = __decorate([
-        Registry_16.$Class("jassijs_editor.Debugger"),
+    exports.Debugger = Debugger;
+    exports.Debugger = Debugger = __decorate([
+        (0, Registry_16.$Class)("jassijs_editor.Debugger"),
         __metadata("design:paramtypes", [])
     ], Debugger);
-    exports.Debugger = Debugger;
     if (jassijs.debugger === undefined)
         jassijs.debugger = new Debugger();
     //@ts-ignore
@@ -4021,7 +4020,8 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Registr
 define("jassijs_editor/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/Notify", "jassijs/ui/Component", "jassijs/remote/Config"], function (require, exports, Panel_9, Errors_1, Registry_17, Button_6, Router_4, Actions_3, Notify_4, Component_4, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.ErrorPanel = void 0;
+    exports.ErrorPanel = void 0;
+    exports.test2 = test2;
     let ErrorPanel = class ErrorPanel extends Panel_9.Panel {
         /**
      * shows errors
@@ -4079,11 +4079,11 @@ define("jassijs_editor/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "
          * search Errors in code
          **/
         async search() {
-            var typescript = (await new Promise((resolve_3, reject_3) => { require(["jassijs_editor/util/Typescript"], resolve_3, reject_3); })).default;
+            var typescript = (await new Promise((resolve_3, reject_3) => { require(["jassijs_editor/util/Typescript"], resolve_3, reject_3); })).mytypescript;
             await typescript.initService();
             var all = await typescript.getDiagnosticsForAll();
             if (all.length === 0)
-                Notify_4.notify("no Errors found", "info", { position: "right" });
+                (0, Notify_4.notify)("no Errors found", "info", { position: "right" });
             for (var x = 0; x < all.length; x++) {
                 var diag = all[x];
                 var s = diag.file.fileName;
@@ -4221,8 +4221,9 @@ define("jassijs_editor/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "
             //this._container
         }
     };
+    exports.ErrorPanel = ErrorPanel;
     __decorate([
-        Actions_3.$Action({
+        (0, Actions_3.$Action)({
             name: "Administration/Errors",
             icon: "mdi mdi-emoticon-confused-outline",
         }),
@@ -4230,17 +4231,15 @@ define("jassijs_editor/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], ErrorPanel, "showDialog", null);
-    ErrorPanel = __decorate([
-        Actions_3.$ActionProvider("jassijs.base.ActionNode"),
-        Registry_17.$Class("jassijs_editor.ui.ErrorPanel"),
+    exports.ErrorPanel = ErrorPanel = __decorate([
+        (0, Actions_3.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Registry_17.$Class)("jassijs_editor.ui.ErrorPanel"),
         __metadata("design:paramtypes", [Object, Object, Object])
     ], ErrorPanel);
-    exports.ErrorPanel = ErrorPanel;
     function test2() {
         var ret = new ErrorPanel();
         return ret;
     }
-    exports.test2 = test2;
     ;
     ErrorPanel.prototype["onsrclink"] = function (param) {
         var data = param.text.split(":");
@@ -4251,11 +4250,10 @@ define("jassijs_editor/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "
     };
     jassijs.ErrorPanel = ErrorPanel;
 });
-define("jassijs_editor/ext/monaco", ["require", "exports", "vs/editor/editor.main", "vs/language/typescript/tsWorker"], function (require, exports, _monaco, tsWorker) {
+/// <amd-dependency path="vs/editor/editor.main" name="_monaco"/>
+define("jassijs_editor/ext/monaco", ["require", "exports", "vs/editor/editor.main"], function (require, exports, _monaco) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /// <amd-dependency path="vs/editor/editor.main" name="_monaco"/>
-    /// <amd-dependency path="vs/language/typescript/tsWorker" name="tsWorker"/>
 });
 define("jassijs_editor/ext/monaco2", ["require", "exports", "jassijs_editor/modul"], function (require, exports, modul_1) {
     "use strict";
@@ -4294,19 +4292,28 @@ define("jassijs_editor/ext/monaco2", ["require", "exports", "jassijs_editor/modu
           }*/
         s = s.replace("async getCompletionsAtPosition(fileName, position)", "async getCompletionsAtPosition(fileName, position,settings)");
         s = s.replace("this._languageService.getCompletionsAtPosition(fileName, position, void 0);", "this._languageService.getCompletionsAtPosition(fileName, position, settings);");
+        s = s.replace("var factory2 =", "var factory2 = globalThis.tsfactory =");
         navigator.serviceWorker.controller.postMessage({
             type: 'SAVE_FILE',
-            filename: "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/dev/vs/language/typescript/tsWorker.js",
+            filename: (monacopath + "/vs/language/typescript/tsWorker.js"),
             code: s
         }, [channel.port2]);
     }
     test();
 });
+/// <amd-dependency path="vs/language/typescript/tsWorker" name="tsWorker"/>
+define("jassijs_editor/ext/typescriptservices", ["require", "exports", "vs/language/typescript/tsWorker"], function (require, exports, tsWorker) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ts = window["ts"];
+    exports.default = ts;
+});
 define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows", "jassijs/remote/Config"], function (require, exports, Registry_18, Tree_2, Panel_10, Textbox_1, Server_3, Router_5, Actions_4, OptionDialog_3, ContextMenu_2, Windows_4, Config_2) {
     "use strict";
     var FileActions_1, FileExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.FileExplorer = exports.FileActions = void 0;
+    exports.FileExplorer = exports.FileActions = void 0;
+    exports.test = test;
     //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
     let FileActions = FileActions_1 = class FileActions {
         static async newFile(all, fileName = undefined, code = "", open = false) {
@@ -4511,8 +4518,9 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
             Router_5.router.navigate("#do=jassijs_editor.CodeEditor&file=" + node.fullpath);
         }
     };
+    exports.FileActions = FileActions;
     __decorate([
-        Actions_4.$Action({
+        (0, Actions_4.$Action)({
             name: "New/File",
             icon: "mdi mdi-file",
             isEnabled: function (all) {
@@ -4524,7 +4532,7 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:returntype", Promise)
     ], FileActions, "newFile", null);
     __decorate([
-        Actions_4.$Action({
+        (0, Actions_4.$Action)({
             name: "Download",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -4535,7 +4543,7 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:returntype", Promise)
     ], FileActions, "download", null);
     __decorate([
-        Actions_4.$Action({
+        (0, Actions_4.$Action)({
             name: "New/Folder",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -4546,7 +4554,7 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:returntype", Promise)
     ], FileActions, "newFolder", null);
     __decorate([
-        Actions_4.$Action({
+        (0, Actions_4.$Action)({
             name: "New/Module",
             isEnabled: function (all) {
                 return all[0].name === "client" && all[0].fullpath === "";
@@ -4557,37 +4565,37 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:returntype", Promise)
     ], FileActions, "newModule", null);
     __decorate([
-        Actions_4.$Action({ name: "Delete" }),
+        (0, Actions_4.$Action)({ name: "Delete" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "dodelete", null);
     __decorate([
-        Actions_4.$Action({ name: "Map local folder", isEnabled: (entr) => entr[0].name === "client" && Config_2.config.serverrequire !== undefined }),
+        (0, Actions_4.$Action)({ name: "Map local folder", isEnabled: (entr) => entr[0].name === "client" && Config_2.config.serverrequire !== undefined }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "mapLocalFolder", null);
     __decorate([
-        Actions_4.$Action({ name: "Close local folder", isEnabled: (entr) => entr[0].name === "client" && Config_2.config.isLocalFolderMapped }),
+        (0, Actions_4.$Action)({ name: "Close local folder", isEnabled: (entr) => entr[0].name === "client" && Config_2.config.isLocalFolderMapped }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "closeLocalFolder", null);
     __decorate([
-        Actions_4.$Action({ name: "Rename" }),
+        (0, Actions_4.$Action)({ name: "Rename" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "rename", null);
     __decorate([
-        Actions_4.$Action({ name: "Refresh" }),
+        (0, Actions_4.$Action)({ name: "Refresh" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], FileActions, "refresh", null);
     __decorate([
-        Actions_4.$Action({
+        (0, Actions_4.$Action)({
             name: "Open", isEnabled: function (all) {
                 return !all[0].isDirectory();
             }
@@ -4596,11 +4604,10 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], FileActions, "open", null);
-    FileActions = FileActions_1 = __decorate([
-        Actions_4.$ActionProvider("jassijs.remote.FileNode"),
-        Registry_18.$Class("jassijs_editor.ui.FileActions")
+    exports.FileActions = FileActions = FileActions_1 = __decorate([
+        (0, Actions_4.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Registry_18.$Class)("jassijs_editor.ui.FileActions")
     ], FileActions);
-    exports.FileActions = FileActions;
     let FileExplorer = FileExplorer_1 = class FileExplorer extends Panel_10.Panel {
         constructor() {
             super();
@@ -4682,9 +4689,10 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
             });
         }
     };
+    exports.FileExplorer = FileExplorer;
     FileExplorer.instance = undefined;
     __decorate([
-        Actions_4.$Action({
+        (0, Actions_4.$Action)({
             name: "Windows/Development/Files",
             icon: "mdi mdi-file-tree",
         }),
@@ -4692,23 +4700,22 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], FileExplorer, "show", null);
-    FileExplorer = FileExplorer_1 = __decorate([
-        Actions_4.$ActionProvider("jassijs.base.ActionNode"),
-        Registry_18.$Class("jassijs.ui.FileExplorer"),
+    exports.FileExplorer = FileExplorer = FileExplorer_1 = __decorate([
+        (0, Actions_4.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Registry_18.$Class)("jassijs.ui.FileExplorer"),
         __metadata("design:paramtypes", [])
     ], FileExplorer);
-    exports.FileExplorer = FileExplorer;
     function test() {
         var exp = new FileExplorer();
         exp.height = 100;
         return exp;
     }
-    exports.test = test;
 });
 define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Button", "jassijs/util/Tools"], function (require, exports, ComponentDesigner_1, Registry_19, Component_5, Classes_7, Button_7, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.HtmlDesigner = void 0;
+    exports.HtmlDesigner = void 0;
+    exports.test = test;
     let HtmlDesigner = class HtmlDesigner extends ComponentDesigner_1.ComponentDesigner {
         constructor() {
             super();
@@ -5206,7 +5213,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             ;
         }
         insertLineBreak(sel) {
-            var enter = Component_5.createComponent(React.createElement("br"));
+            var enter = (0, Component_5.createComponent)(React.createElement("br"));
             var comp = this.splitText(sel)[1];
             var center = this.createComponent(Classes_7.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
             this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this.codeEditor.getVariableFromObject(center));
@@ -5338,21 +5345,20 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             this.updateDummies();
         }
     };
-    HtmlDesigner = __decorate([
-        Registry_19.$Class("jassijs_editor.HtmlDesigner"),
+    exports.HtmlDesigner = HtmlDesigner;
+    exports.HtmlDesigner = HtmlDesigner = __decorate([
+        (0, Registry_19.$Class)("jassijs_editor.HtmlDesigner"),
         __metadata("design:paramtypes", [])
     ], HtmlDesigner);
-    exports.HtmlDesigner = HtmlDesigner;
     function test() {
         var dom = React.createElement("div", {
             contenteditable: "true"
         }, "Hallo", "Du");
-        var ret = Component_5.createComponent(dom);
+        var ret = (0, Component_5.createComponent)(dom);
         //ret.dom.addEventListener("keydown", keydown);
         //windows.add(ret, "Hallo");
         return ret;
     }
-    exports.test = test;
 });
 define("jassijs_editor/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -5369,13 +5375,14 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
             "node_modules/@types/react/jsx-runtime.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/jsx-runtime.d.ts",
             "node_modules/@types/react/jsx-dev-runtime.d.ts": "https://cdn.jsdelivr.net/npm/@types/react@18.2.22/jsx-dev-runtime.d.ts",
             "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/monaco.d.ts",
-            "node_modules/typescript/typescriptServices.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-5.4/lib/typescript.d.ts"
+            "node_modules/@types/typescript.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-5.4/lib/typescript.d.ts"
         },
         "require": {
             paths: {
                 'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
                 'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools',
-                monacoLib: "jassijs_editor/ext/monacoLib",
+                typescript: "jassijs_editor/ext/typescriptservices",
+                //typescript:"https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-5.4/lib/typescript",
                 vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/dev/vs"
             },
             shim: {
@@ -5387,7 +5394,8 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
 define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs/base/CurrentSettings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Registry_20, Router_6, Typescript_3, CodePanel_5, Settings_2, CurrentSettings_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.MonacoPanel = void 0;
+    exports.MonacoPanel = void 0;
+    exports.test = test;
     var inited = false;
     function __init(editor) {
         if (inited)
@@ -5398,7 +5406,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
         CommandsRegistry.registerCommand("autoimport", (o1, model, pos) => {
             var file = model.uri.path.substring(1);
             var code = model.getValue();
-            var p = Typescript_3.default.getPositionOfLineAndCharacter(file, {
+            var p = Typescript_3.mytypescript.getPositionOfLineAndCharacter(file, {
                 line: pos.lineNumber, character: pos.column
             });
             const oldpos = model["lastEditor"].getPosition();
@@ -5442,8 +5450,8 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
                     endColumn: word.endColumn
                 };
                 var file = model.uri.path.substring(1);
-                var pos = Typescript_3.default.getPositionOfLineAndCharacter(file, { line: position.lineNumber, character: position.column });
-                var all = await Typescript_3.default.getCompletion(file, pos, undefined, { includeExternalModuleExports: true });
+                var pos = Typescript_3.mytypescript.getPositionOfLineAndCharacter(file, { line: position.lineNumber, character: position.column });
+                var all = await Typescript_3.mytypescript.getCompletion(file, pos, undefined, { includeExternalModuleExports: true });
                 var sug = [];
                 for (var x = 0; x < all.entries.length; x++) {
                     var it = all.entries[x];
@@ -5683,11 +5691,11 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
             this.value = "var a=window.document;";
         }
     };
-    MonacoPanel = __decorate([
-        Registry_20.$Class("jassijs_editor.MonacoPanel"),
+    exports.MonacoPanel = MonacoPanel;
+    exports.MonacoPanel = MonacoPanel = __decorate([
+        (0, Registry_20.$Class)("jassijs_editor.MonacoPanel"),
         __metadata("design:paramtypes", [])
     ], MonacoPanel);
-    exports.MonacoPanel = MonacoPanel;
     async function test() {
         //await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
         var dlg = new MonacoPanel();
@@ -5707,14 +5715,13 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
         // dlg._editor.getSession().setBreakpoint(2);
         return dlg;
     }
-    exports.test = test;
 });
 //this file is autogenerated don't modify
 define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1719757292376.6711,
+                "date": 1720101244987.3042,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
@@ -5726,7 +5733,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1719757394281.4602,
+                "date": 1720105520009.7876,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -5804,7 +5811,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.Debugger": {}
             },
             "jassijs_editor/ErrorPanel.ts": {
-                "date": 1682794808000,
+                "date": 1720116488294.8394,
                 "jassijs_editor.ui.ErrorPanel": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -5822,7 +5829,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/ext/monaco.ts": {
-                "date": 1719861907601.9385
+                "date": 1720105252684.6934
             },
             "jassijs_editor/FileExplorer.ts": {
                 "date": 1683575950000,
@@ -5932,10 +5939,10 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
-                "date": 1719846808609.5916
+                "date": 1720105301984.028
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1719865346020.8171,
+                "date": 1720101262364.5872,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/SearchExplorer.ts": {
@@ -5957,7 +5964,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/StartEditor.ts": {
-                "date": 1697200788486.8972
+                "date": 1720115090825.8567
             },
             "jassijs_editor/template/TemplateDBDialog.ts": {
                 "date": 1681570392000,
@@ -6038,7 +6045,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/util/DatabaseSchema.ts": {
-                "date": 1681569388000,
+                "date": 1720101271019.9363,
                 "jassijs_editor.util.DatabaseSchema": {}
             },
             "jassijs_editor/util/DragAndDropper.ts": {
@@ -6046,7 +6053,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1698524672858.8315,
+                "date": 1720181739843.8818,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -6054,7 +6061,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
-                "date": 1698507857241.7307,
+                "date": 1720185108125.2275,
                 "jassijs_editor.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -6071,15 +6078,18 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/util/TSSourceMap.ts": {
-                "date": 1682794840000,
+                "date": 1720117379608.988,
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1719865551737.1772,
+                "date": 1720115012657.7117,
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/ext/monaco2.ts": {
-                "date": 1719864992662.5933
+                "date": 1720090850426.468
+            },
+            "jassijs_editor/ext/typescriptservices.ts": {
+                "date": 1720114589311.0293
             }
         }
     };
@@ -6088,7 +6098,8 @@ define("jassijs_editor/SearchExplorer", ["require", "exports", "jassijs/remote/R
     "use strict";
     var SearchExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.SearchExplorer = void 0;
+    exports.SearchExplorer = void 0;
+    exports.test = test;
     let SearchExplorer = SearchExplorer_1 = class SearchExplorer extends Panel_11.Panel {
         constructor() {
             super();
@@ -6174,8 +6185,9 @@ define("jassijs_editor/SearchExplorer", ["require", "exports", "jassijs/remote/R
             this.search.height = 15;
         }
     };
+    exports.SearchExplorer = SearchExplorer;
     __decorate([
-        Actions_5.$Action({
+        (0, Actions_5.$Action)({
             name: "Windows/Development/Search",
             icon: "mdi mdi-folder-search-outline",
         }),
@@ -6183,16 +6195,14 @@ define("jassijs_editor/SearchExplorer", ["require", "exports", "jassijs/remote/R
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], SearchExplorer, "show", null);
-    SearchExplorer = SearchExplorer_1 = __decorate([
-        Actions_5.$ActionProvider("jassijs.base.ActionNode"),
-        Registry_21.$Class("jassijs_editor.ui.SearchExplorer"),
+    exports.SearchExplorer = SearchExplorer = SearchExplorer_1 = __decorate([
+        (0, Actions_5.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Registry_21.$Class)("jassijs_editor.ui.SearchExplorer"),
         __metadata("design:paramtypes", [])
     ], SearchExplorer);
-    exports.SearchExplorer = SearchExplorer;
     function test() {
         return new SearchExplorer();
     }
-    exports.test = test;
 });
 define("jassijs_editor/StartEditor", ["require", "exports", "jassijs_editor/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Button", "jassijs/base/Router", "jassijs_editor/SearchExplorer", "jassijs/ui/DBObjectExplorer", "jassijs/ui/ActionNodeMenu"], function (require, exports, FileExplorer_2, Windows_6, Button_8, Router_8, SearchExplorer_2, DBObjectExplorer_1, ActionNodeMenu_1) {
     "use strict";
@@ -6261,18 +6271,18 @@ export async function test(){
 }`;
     let TemplateDBDialogProperties = class TemplateDBDialogProperties {
     };
+    exports.TemplateDBDialogProperties = TemplateDBDialogProperties;
     __decorate([
-        Property_2.$Property({ decription: "name of the dialog" }),
+        (0, Property_2.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TemplateDBDialogProperties.prototype, "dialogname", void 0);
     __decorate([
-        Property_2.$Property({ type: "classselector", service: "$DBObject" }),
+        (0, Property_2.$Property)({ type: "classselector", service: "$DBObject" }),
         __metadata("design:type", typeof (_a = typeof DBObject_1.DBObject !== "undefined" && DBObject_1.DBObject) === "function" ? _a : Object)
     ], TemplateDBDialogProperties.prototype, "dbobject", void 0);
-    TemplateDBDialogProperties = __decorate([
-        Registry_22.$Class("jassijs_editor.template.TemplateDBDialogProperties")
+    exports.TemplateDBDialogProperties = TemplateDBDialogProperties = __decorate([
+        (0, Registry_22.$Class)("jassijs_editor.template.TemplateDBDialogProperties")
     ], TemplateDBDialogProperties);
-    exports.TemplateDBDialogProperties = TemplateDBDialogProperties;
     let TemplateDBDialog = class TemplateDBDialog {
         static async newFile(all) {
             var props = new TemplateDBDialogProperties();
@@ -6291,9 +6301,10 @@ export async function test(){
             }
         }
     };
+    exports.TemplateDBDialog = TemplateDBDialog;
     TemplateDBDialog.code = code;
     __decorate([
-        Actions_6.$Action({
+        (0, Actions_6.$Action)({
             name: "New/DBDialog",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -6303,11 +6314,10 @@ export async function test(){
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], TemplateDBDialog, "newFile", null);
-    TemplateDBDialog = __decorate([
-        Actions_6.$ActionProvider("jassijs.remote.FileNode"),
-        Registry_22.$Class("jassijs.template.TemplateDBDialog")
+    exports.TemplateDBDialog = TemplateDBDialog = __decorate([
+        (0, Actions_6.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Registry_22.$Class)("jassijs.template.TemplateDBDialog")
     ], TemplateDBDialog);
-    exports.TemplateDBDialog = TemplateDBDialog;
 });
 define("jassijs_editor/template/TemplateDBObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs_editor/FileExplorer"], function (require, exports, Registry_23, Property_3, Actions_7, OptionDialog_5, FileExplorer_4) {
     "use strict";
@@ -6338,18 +6348,18 @@ export async function test() {
 };`;
     let TemplateDBObjectProperties = class TemplateDBObjectProperties {
     };
+    exports.TemplateDBObjectProperties = TemplateDBObjectProperties;
     __decorate([
-        Property_3.$Property({ decription: "name of the db class" }),
+        (0, Property_3.$Property)({ decription: "name of the db class" }),
         __metadata("design:type", String)
     ], TemplateDBObjectProperties.prototype, "name", void 0);
     __decorate([
-        Property_3.$Property({ default: "true", description: "the primary column alue will be automatically generated with an auto-increment value" }),
+        (0, Property_3.$Property)({ default: "true", description: "the primary column alue will be automatically generated with an auto-increment value" }),
         __metadata("design:type", String)
     ], TemplateDBObjectProperties.prototype, "autogeneratedid", void 0);
-    TemplateDBObjectProperties = __decorate([
-        Registry_23.$Class("jassijs_editor.template.TemplateDBObjectProperties")
+    exports.TemplateDBObjectProperties = TemplateDBObjectProperties = __decorate([
+        (0, Registry_23.$Class)("jassijs_editor.template.TemplateDBObjectProperties")
     ], TemplateDBObjectProperties);
-    exports.TemplateDBObjectProperties = TemplateDBObjectProperties;
     let TemplateDBObject = TemplateDBObject_1 = class TemplateDBObject {
         static async newFile(all) {
             var props = new TemplateDBObjectProperties();
@@ -6365,9 +6375,10 @@ export async function test() {
             }
         }
     };
+    exports.TemplateDBObject = TemplateDBObject;
     TemplateDBObject.code = code;
     __decorate([
-        Actions_7.$Action({
+        (0, Actions_7.$Action)({
             name: "New/DBObject",
             isEnabled: function (all) {
                 return all[0].isDirectory() && all[0].fullpath.indexOf("/remote/") !== -1;
@@ -6377,11 +6388,10 @@ export async function test() {
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], TemplateDBObject, "newFile", null);
-    TemplateDBObject = TemplateDBObject_1 = __decorate([
-        Actions_7.$ActionProvider("jassijs.remote.FileNode"),
-        Registry_23.$Class("jassijs.template.TemplateDBObject")
+    exports.TemplateDBObject = TemplateDBObject = TemplateDBObject_1 = __decorate([
+        (0, Actions_7.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Registry_23.$Class)("jassijs.template.TemplateDBObject")
     ], TemplateDBObject);
-    exports.TemplateDBObject = TemplateDBObject;
 });
 define("jassijs_editor/template/TemplateEmptyDialog", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs_editor/FileExplorer"], function (require, exports, Actions_8, Registry_24, OptionDialog_6, FileExplorer_5) {
     "use strict";
@@ -6420,9 +6430,10 @@ export async function test(){
             }
         }
     };
+    exports.TemplateEmptyDialog = TemplateEmptyDialog;
     TemplateEmptyDialog.code = code;
     __decorate([
-        Actions_8.$Action({
+        (0, Actions_8.$Action)({
             name: "New/Dialog",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -6432,11 +6443,10 @@ export async function test(){
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], TemplateEmptyDialog, "newFile", null);
-    TemplateEmptyDialog = __decorate([
-        Actions_8.$ActionProvider("jassijs.remote.FileNode"),
-        Registry_24.$Class("jassijs_editor.template.TemplateEmptyDialog")
+    exports.TemplateEmptyDialog = TemplateEmptyDialog = __decorate([
+        (0, Actions_8.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Registry_24.$Class)("jassijs_editor.template.TemplateEmptyDialog")
     ], TemplateEmptyDialog);
-    exports.TemplateEmptyDialog = TemplateEmptyDialog;
 });
 define("jassijs_editor/template/TemplateRemoteObject", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs_editor/FileExplorer"], function (require, exports, Actions_9, Registry_25, OptionDialog_7, FileExplorer_6) {
     "use strict";
@@ -6470,9 +6480,10 @@ export async function test(){
             }
         }
     };
+    exports.TemplateRemoteObject = TemplateRemoteObject;
     TemplateRemoteObject.code = code;
     __decorate([
-        Actions_9.$Action({
+        (0, Actions_9.$Action)({
             name: "New/RemoteObject",
             isEnabled: function (all) {
                 return all[0].isDirectory() && all[0].fullpath.split("/").length > 1 && all[0].fullpath.split("/")[1] === "remote";
@@ -6482,17 +6493,18 @@ export async function test(){
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], TemplateRemoteObject, "newFile", null);
-    TemplateRemoteObject = __decorate([
-        Actions_9.$ActionProvider("jassijs.remote.FileNode"),
-        Registry_25.$Class("jassijs_editor.template.TemplateRemoteObject")
+    exports.TemplateRemoteObject = TemplateRemoteObject = __decorate([
+        (0, Actions_9.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Registry_25.$Class)("jassijs_editor.template.TemplateRemoteObject")
     ], TemplateRemoteObject);
-    exports.TemplateRemoteObject = TemplateRemoteObject;
 });
 define("jassijs_editor/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs_editor/util/Parser", "jassijs_editor/template/TemplateDBObject", "jassijs/util/Tools", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/OptionDialog", "jquery.choosen"], function (require, exports, Registry_26, Registry_27, Typescript_4, Parser_1, TemplateDBObject_2, Tools_2, Server_4, Windows_7, OptionDialog_8) {
     "use strict";
     var DatabaseSchema_2;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.test3 = exports.DatabaseSchema = exports.DatabaseClass = exports.DatabaseField = void 0;
+    exports.DatabaseSchema = exports.DatabaseClass = exports.DatabaseField = void 0;
+    exports.test3 = test3;
+    exports.test2 = test2;
     class DatabaseField {
         get nullable() {
             var _a;
@@ -6845,13 +6857,13 @@ define("jassijs_editor/util/DatabaseSchema", ["require", "exports", "jassijs/rem
         async parseFiles() {
             this.parsedClasses = {};
             this.definedImports = {};
-            await Typescript_4.default.waitForInited;
+            await Typescript_4.mytypescript.waitForInited;
             var data = await Registry_27.default.getJSONData("$DBObject");
             for (let x = 0; x < data.length; x++) {
                 var entr = data[x];
                 var parser = new Parser_1.Parser();
                 var file = entr.filename;
-                var code = Typescript_4.default.getCode(file);
+                var code = Typescript_4.mytypescript.getCode(file);
                 // if (code === undefined)
                 //     code = await new Server().loadFile(file);
                 if (code !== undefined) {
@@ -7014,11 +7026,11 @@ define("jassijs_editor/util/DatabaseSchema", ["require", "exports", "jassijs/rem
             });
         }
     };
-    DatabaseSchema.basicdatatypes = ["string", "int", "decimal", "boolean", "Date"];
-    DatabaseSchema = DatabaseSchema_2 = __decorate([
-        Registry_26.$Class("jassijs_editor.util.DatabaseSchema")
-    ], DatabaseSchema);
     exports.DatabaseSchema = DatabaseSchema;
+    DatabaseSchema.basicdatatypes = ["string", "int", "decimal", "boolean", "Date"];
+    exports.DatabaseSchema = DatabaseSchema = DatabaseSchema_2 = __decorate([
+        (0, Registry_26.$Class)("jassijs_editor.util.DatabaseSchema")
+    ], DatabaseSchema);
     /*
     @$Class("jassijs.base.DatabaseColumnOptions")
     class ColumnOptions{
@@ -7057,7 +7069,6 @@ define("jassijs_editor/util/DatabaseSchema", ["require", "exports", "jassijs/rem
         //test.pop();
         //schema.visitNode(sourceFile);
     }
-    exports.test3 = test3;
     async function test2() {
         var schema = new DatabaseSchema();
         await schema.loadSchemaFromCode();
@@ -7067,20 +7078,19 @@ define("jassijs_editor/util/DatabaseSchema", ["require", "exports", "jassijs/rem
         debugger;
         f.relationinfo = kk;
     }
-    exports.test2 = test2;
 });
 define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"], function (require, exports, Registry_28) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DragAndDropper = void 0;
     let DragAndDropper = class DragAndDropper {
+        ;
         constructor() {
             this.onpropertychanged = undefined;
             this.onpropertyadded = undefined;
             this.lastDropCanceled = false;
             this.allIDs = "";
         }
-        ;
         /**
          * could be override to block dragging
          */
@@ -7302,16 +7312,18 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
             }
         }
     };
-    DragAndDropper = __decorate([
-        Registry_28.$Class("jassijs_editor.util.DragAndDropper"),
+    exports.DragAndDropper = DragAndDropper;
+    exports.DragAndDropper = DragAndDropper = __decorate([
+        (0, Registry_28.$Class)("jassijs_editor.util.DragAndDropper"),
         __metadata("design:paramtypes", [])
     ], DragAndDropper);
-    exports.DragAndDropper = DragAndDropper;
 });
-define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs/remote/Test", "jassijs/remote/Classes"], function (require, exports, Registry_29, Typescript_5, Test_2, Classes_9) {
+define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/remote/Test", "jassijs/remote/Classes", "jassijs_editor/util/Typescript"], function (require, exports, Registry_29, typescript_1, Test_2, Classes_9, Typescript_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.tests = exports.Parser = exports.ParsedClass = void 0;
+    exports.Parser = exports.ParsedClass = void 0;
+    exports.tests = tests;
+    exports.test = test;
     class ParsedDecorator {
         constructor() {
             this.parsedParameter = [];
@@ -7346,9 +7358,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             /** {[string]} - all code lines*/
         }
         getModifiedCode() {
-            const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
-            const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, /*setParentNodes*/ false, this.jsxVariables ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
-            var result = printer.printNode(ts.EmitHint.Unspecified, this.sourceFile, resultFile);
+            const printer = typescript_1.default.createPrinter({ newLine: typescript_1.default.NewLineKind.LineFeed });
+            const resultFile = typescript_1.default.createSourceFile("dummy.ts", "", typescript_1.default.ScriptTarget.Latest, /*setParentNodes*/ false, this.jsxVariables ? typescript_1.default.ScriptKind.TSX : typescript_1.default.ScriptKind.TS);
+            var result = printer.printNode(typescript_1.default.EmitHint.Unspecified, this.sourceFile, resultFile);
             result = this.reformatCode(result);
             return result;
         }
@@ -7357,24 +7369,24 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 getScriptFileNames: () => [],
                 getScriptVersion: fileName => "1.0",
                 getScriptSnapshot: fileName => {
-                    return ts.ScriptSnapshot.fromString(code);
+                    return typescript_1.default.ScriptSnapshot.fromString(code);
                 },
                 getCurrentDirectory: () => "",
                 getCompilationSettings: () => ({}),
-                getDefaultLibFileName: options => ts.getDefaultLibFilePath(options),
+                getDefaultLibFileName: options => typescript_1.default.getDefaultLibFilePath(options),
                 fileExists: (a) => false,
                 readFile: (a) => code,
                 readDirectory: (a) => []
             };
             var file = this.jsxVariables ? "tempdoc.tsx" : "tempdoc.ts";
-            const languageService = ts.createLanguageService(serviceHost, ts.createDocumentRegistry());
+            const languageService = typescript_1.default.createLanguageService(serviceHost, typescript_1.default.createDocumentRegistry());
             const textChanges = languageService.getFormattingEditsForDocument(file, {
                 convertTabsToSpaces: true,
                 //   insertSpaceAfterCommaDelimiter: true,
                 //  insertSpaceAfterKeywordsInControlFlowStatements: true,
                 // insertSpaceBeforeAndAfterBinaryOperators: true,
                 newLineCharacter: "\n",
-                indentStyle: ts.IndentStyle.Smart,
+                indentStyle: typescript_1.default.IndentStyle.Smart,
                 indentSize: 4,
                 tabSize: 4
             });
@@ -7440,8 +7452,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         addTypeMe(name, type) {
             if (!this.typeMeNode)
                 return;
-            var tp = ts.createTypeReferenceNode(type, []);
-            var newnode = ts.createPropertySignature(undefined, name + "?", undefined, tp, undefined);
+            var tp = typescript_1.default.factory.createTypeReferenceNode(type, []);
+            var newnode = typescript_1.default.factory.createPropertySignature(undefined, name + "?", undefined, tp);
             this.typeMeNode["members"].push(newnode);
         }
         /**
@@ -7452,15 +7464,15 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         addImportIfNeeded(name, file) {
             if (this.imports[name] === undefined) {
                 //@ts-ignore
-                var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
-                const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
-                this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
+                //            var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
+                const importNode = typescript_1.default.factory.createImportDeclaration(undefined, typescript_1.default.factory.createImportClause(false, typescript_1.default.factory.createIdentifier(name), undefined), typescript_1.default.factory.createIdentifier("\"" + file + "\""));
+                this.sourceFile = typescript_1.default.factory.updateSourceFile(this.sourceFile, [importNode, ...this.sourceFile.statements]);
                 this.imports[name] = file;
             }
         }
         parseTypeMeNode(node) {
             var _this = this;
-            if (node.kind === ts.SyntaxKind.TypeLiteral) {
+            if (node.kind === typescript_1.default.SyntaxKind.TypeLiteral) {
                 if (node["members"])
                     this.typeMeNode = node;
                 node["members"].forEach(function (tnode) {
@@ -7477,7 +7489,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         convertArgument(arg) {
             if (arg === undefined)
                 return undefined;
-            if (arg.kind === ts.SyntaxKind.ObjectLiteralExpression) {
+            if (arg.kind === typescript_1.default.SyntaxKind.ObjectLiteralExpression) {
                 var ret = {};
                 var props = arg.properties;
                 if (props !== undefined) {
@@ -7487,29 +7499,29 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 }
                 return ret;
             }
-            else if (arg.kind === ts.SyntaxKind.StringLiteral) {
+            else if (arg.kind === typescript_1.default.SyntaxKind.StringLiteral) {
                 return arg.text;
             }
-            else if (arg.kind === ts.SyntaxKind.ArrayLiteralExpression) {
+            else if (arg.kind === typescript_1.default.SyntaxKind.ArrayLiteralExpression) {
                 let ret = [];
                 for (var p = 0; p < arg.elements.length; p++) {
                     ret.push(this.convertArgument(arg.elements[p]));
                 }
                 return ret;
             }
-            else if (arg.kind === ts.SyntaxKind.Identifier) {
+            else if (arg.kind === typescript_1.default.SyntaxKind.Identifier) {
                 return arg.text;
             }
-            else if (arg.kind === ts.SyntaxKind.TrueKeyword) {
+            else if (arg.kind === typescript_1.default.SyntaxKind.TrueKeyword) {
                 return true;
             }
-            else if (arg.kind === ts.SyntaxKind.FalseKeyword) {
+            else if (arg.kind === typescript_1.default.SyntaxKind.FalseKeyword) {
                 return false;
             }
-            else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
+            else if (arg.kind === typescript_1.default.SyntaxKind.NumericLiteral) {
                 return Number(arg.text);
             }
-            else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
+            else if (arg.kind === typescript_1.default.SyntaxKind.ArrowFunction || arg.kind === typescript_1.default.SyntaxKind.FunctionExpression) {
                 return arg.getText();
             }
             throw new Classes_9.JassiError("Error type not found");
@@ -7532,19 +7544,21 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             return ret;
         }
         parseClass(node) {
-            if (node.kind === ts.SyntaxKind.ClassDeclaration) {
+            if (node.kind === typescript_1.default.SyntaxKind.ClassDeclaration) {
                 var parsedClass = new ParsedClass();
                 parsedClass.parent = this;
                 parsedClass.name = node.name.getText();
                 parsedClass.node = node;
                 this.classes[parsedClass.name] = parsedClass;
-                if (node.decorators !== undefined) {
-                    var dec = {};
-                    for (let x = 0; x < node.decorators.length; x++) {
-                        var parsedDec = this.parseDecorator(node.decorators[x]);
-                        parsedClass.decorator[parsedDec.name] = parsedDec;
-                        if (parsedClass.decorator["$Class"] && parsedDec.parameter.length > 0)
-                            parsedClass.fullClassname = parsedDec.parameter[0].replaceAll('"', "");
+                if (node["modifiers"] !== undefined) {
+                    for (var m = 0; m < node["modifiers"].length; m++) {
+                        var nd = node["modifiers"][m];
+                        if (nd.kind === typescript_1.default.SyntaxKind.Decorator) {
+                            var parsedDec = this.parseDecorator(nd);
+                            parsedClass.decorator[parsedDec.name] = parsedDec;
+                            if (parsedClass.decorator["$Class"] && parsedDec.parameter.length > 0)
+                                parsedClass.fullClassname = parsedDec.parameter[0].replaceAll('"', "");
+                        }
                     }
                 }
                 for (var x = 0; x < node["members"].length; x++) {
@@ -7568,8 +7582,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     for (let x = 0; x < this.classScope.length; x++) {
                         var col = this.classScope[x];
                         if (col.classname === parsedClass.name && parsedClass.members[col.methodname]) {
-                            var nd = parsedClass.members[col.methodname].node;
-                            this.parseProperties(nd);
+                            var nd2 = parsedClass.members[col.methodname].node;
+                            this.parseProperties(nd2);
                         }
                     }
                 }
@@ -7602,21 +7616,21 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         }
         parseProperties(node) {
             var _this = this;
-            if (ts.isVariableDeclaration(node)) {
+            if (typescript_1.default.isVariableDeclaration(node)) {
                 var name = node.name.getText();
                 if (node.initializer !== undefined) {
                     var value = node.initializer.getText();
                     this.add(name, "_new_", value, node.parent.parent);
                 }
             }
-            if ((ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) ||
-                ts.isCallExpression(node)) {
+            if ((typescript_1.default.isBinaryExpression(node) && node.operatorToken.kind === typescript_1.default.SyntaxKind.EqualsToken) ||
+                typescript_1.default.isCallExpression(node)) {
                 var node1;
                 var node2;
                 var left;
                 var value;
                 var isFunction = false;
-                if (ts.isBinaryExpression(node)) {
+                if (typescript_1.default.isBinaryExpression(node)) {
                     node1 = node.left;
                     node2 = node.right;
                     left = node1.getText(); // this.code.substring(node1.pos, node1.end).trim();
@@ -7624,16 +7638,16 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     if (value.startsWith("new "))
                         this.add(left, "_new_", value, node.parent);
                 }
-                if (ts.isCallExpression(node)) {
+                if (typescript_1.default.isCallExpression(node)) {
                     node1 = node.expression;
                     node2 = node.arguments;
                     isFunction = true;
                     left = node1.getText(); // this.code.substring(node1.pos, node1.end).trim();
                     var params = [];
                     node.arguments.forEach((arg) => {
-                        var _a, _b, _c;
+                        var _a, _b;
                         params.push(arg.getText());
-                        if (((_c = (_b = (_a = arg) === null || _a === void 0 ? void 0 : _a.expression) === null || _b === void 0 ? void 0 : _b.name) === null || _c === void 0 ? void 0 : _c.getText()) === "config") {
+                        if (((_b = (_a = arg === null || arg === void 0 ? void 0 : arg.expression) === null || _a === void 0 ? void 0 : _a.name) === null || _b === void 0 ? void 0 : _b.getText()) === "config") {
                             _this.parseConfig(arg);
                         }
                         //arg.getText().indexOf(".config(")
@@ -7705,7 +7719,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (nd.children) {
                     for (var x = 0; x < nd.children.length; x++) {
                         var ch = nd.children[x];
-                        if (ch.kind === ts.SyntaxKind.JsxText) {
+                        if (ch.kind === typescript_1.default.SyntaxKind.JsxText) {
                             if (ch.containsOnlyTriviaWhiteSpaces) {
                                 counttrivial++;
                             }
@@ -7744,10 +7758,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         }
         visitNode(node, consumeProperties = undefined) {
             var _this = this;
-            if (node.kind === ts.SyntaxKind.VariableDeclaration) {
+            if (node.kind === typescript_1.default.SyntaxKind.VariableDeclaration) {
                 this.variables[node["name"].text] = node;
             }
-            if (node.kind === ts.SyntaxKind.ImportDeclaration) {
+            if (node.kind === typescript_1.default.SyntaxKind.ImportDeclaration) {
                 var nd = node;
                 var file = nd.moduleSpecifier.text;
                 if (nd.importClause && nd.importClause.namedBindings) {
@@ -7758,15 +7772,15 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 }
                 return;
             }
-            if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
+            if (node.kind == typescript_1.default.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
                 this.parseTypeMeNode(node);
                 return;
             }
-            else if (node.kind === ts.SyntaxKind.ClassDeclaration) {
+            else if (node.kind === typescript_1.default.SyntaxKind.ClassDeclaration) {
                 this.parseClass(node);
                 return;
             }
-            else if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
+            else if (node && node.kind === typescript_1.default.SyntaxKind.FunctionDeclaration) { //functions out of class
                 this.functions[node["name"].text] = node;
                 if (this.classScope) {
                     for (let x = 0; x < this.classScope.length; x++) {
@@ -7778,7 +7792,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 else if (this.jsxVariables === undefined)
                     consumeProperties = true;
             }
-            if (node.kind === ts.SyntaxKind.JsxElement) {
+            if (node.kind === typescript_1.default.SyntaxKind.JsxElement) {
                 _this.parseJSX(_this, node);
                 return;
             }
@@ -7793,7 +7807,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         }
         visitNodeJSX(node, consumeProperties = undefined) {
             var _this = this;
-            if (node.kind === ts.SyntaxKind.ImportDeclaration) {
+            if (node.kind === typescript_1.default.SyntaxKind.ImportDeclaration) {
                 var nd = node;
                 var file = nd.moduleSpecifier.text;
                 if (nd.importClause && nd.importClause.namedBindings) {
@@ -7804,11 +7818,11 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 }
                 return;
             }
-            if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
+            if (node.kind == typescript_1.default.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
                 this.parseTypeMeNode(node);
                 return;
             }
-            if (node.kind === ts.SyntaxKind.JsxElement || node.kind === ts.SyntaxKind.JsxSelfClosingElement) {
+            if (node.kind === typescript_1.default.SyntaxKind.JsxElement || node.kind === typescript_1.default.SyntaxKind.JsxSelfClosingElement) {
                 _this.parseJSX(_this, node);
                 return;
             }
@@ -7819,13 +7833,13 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
               }*/
         }
         searchClassnode(node, pos) {
-            if (ts.isMethodDeclaration(node)) {
+            if (typescript_1.default.isMethodDeclaration(node)) {
                 return {
                     classname: node.parent["name"]["text"],
                     methodname: node.name["text"]
                 };
             }
-            if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
+            if (node && node.kind === typescript_1.default.SyntaxKind.FunctionDeclaration) { //functions out of class
                 var funcname = node["name"].text;
                 return {
                     classname: undefined,
@@ -7847,7 +7861,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         getClassScopeFromPosition(code, pos) {
             this.data = {};
             this.code = code;
-            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, this.jsxVariables ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+            this.sourceFile = typescript_1.default.createSourceFile('dummy.ts', code, typescript_1.default.ScriptTarget.ES5, true, this.jsxVariables ? typescript_1.default.ScriptKind.TSX : typescript_1.default.ScriptKind.TS);
             return this.searchClassnode(this.sourceFile, pos);
             //return this.parseold(code,onlyfunction);
         }
@@ -7857,8 +7871,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             node.end = -1;
             node.forEachChild((ch) => _this.removePos(ch));
         }
-        createNode(code) {
-            var ret = ts.createSourceFile('dummytemp.ts', code, ts.ScriptTarget.ES5, true, this.jsxVariables ? ts.ScriptKind.TSX : undefined);
+        createNode(code, completeStatement = false) {
+            var ret = typescript_1.default.createSourceFile('dummytemp.ts', code, typescript_1.default.ScriptTarget.ES5, true, this.jsxVariables ? typescript_1.default.ScriptKind.TSX : undefined);
+            if (completeStatement)
+                return ret.statements[0];
             var node = ret.statements[0].expression;
             this.removePos(node);
             return node;
@@ -7891,7 +7907,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 this.classScope = classScope;
             else
                 classScope = this.classScope;
-            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, jsxVariables ? ts.ScriptKind.TSX : undefined);
+            this.sourceFile = typescript_1.default.createSourceFile('dummy.ts', code, typescript_1.default.ScriptTarget.ES5, true, jsxVariables ? typescript_1.default.ScriptKind.TSX : undefined);
             if (jsxVariables) {
                 this.initJSXVariables(jsxVariables);
                 this.visitNodeJSX(this.sourceFile, false);
@@ -7932,7 +7948,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (pos >= 0)
                     node.parent["elements"].splice(pos, 1);
             }
-            else if (node.parent.kind === ts.SyntaxKind.ExpressionStatement) {
+            else if (node.parent.kind === typescript_1.default.SyntaxKind.ExpressionStatement) {
                 var pos = node.parent.parent["statements"].indexOf(node.parent);
                 if (pos >= 0)
                     node.parent.parent["statements"].splice(pos, 1);
@@ -7962,14 +7978,14 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (dec.parameter) {
                     params = [];
                     for (var i = 0; i < dec.parameter.length; i++) {
-                        params.push(ts.createIdentifier(dec.parameter[i]));
+                        params.push(typescript_1.default.factory.createIdentifier(dec.parameter[i]));
                     }
                 }
-                var call = ts.createCall(ts.createIdentifier(dec.name), undefined, params);
-                newdec.push(ts.createDecorator(call));
+                var call = typescript_1.default.factory.createCallExpression(typescript_1.default.factory.createIdentifier(dec.name), undefined, params);
+                newdec.push(typescript_1.default.factory.createDecorator(call));
             }
             //var type=ts.createTy
-            var newmember = ts.createProperty(newdec, undefined, member.name, undefined, ts.createTypeReferenceNode(member.type, []), undefined);
+            var newmember = typescript_1.default.factory.createPropertyDeclaration(newdec, member.name, undefined, typescript_1.default.factory.createTypeReferenceNode(member.type, []), undefined);
             var node = undefined;
             for (var key in pclass.members) {
                 if (key === member.name)
@@ -8167,20 +8183,20 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         prop.pos = -1;
                         prop.len = -1;
                     }
-                    node.parent["arguments"][0] = ts.createObjectLiteral(node.parent["arguments"][0].properties, true);
+                    node.parent["arguments"][0] = typescript_1.default.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
                 }
             }
         }
         setPropertyInConfig(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
-            var svalue = typeof value === "string" ? ts.createIdentifier(value) : value;
+            var svalue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value) : value;
             var config = this.data[variableName]["config"][0].node;
             config = config.arguments[0];
-            var newExpression = ts.createPropertyAssignment(property, svalue);
+            var newExpression = typescript_1.default.factory.createPropertyAssignment(property, svalue);
             if (property === "add" && replace === false) {
                 property = "children";
-                svalue = typeof value === "string" ? ts.createIdentifier(value + ".config({})") : value;
+                svalue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value + ".config({})") : value;
                 if (this.data[variableName]["children"] == undefined) { //
-                    newExpression = ts.createPropertyAssignment(property, ts.createArrayLiteral([svalue], true));
+                    newExpression = typescript_1.default.factory.createPropertyAssignment(property, typescript_1.default.factory.createArrayLiteralExpression([svalue], true));
                     config.properties.push(newExpression);
                 }
                 else {
@@ -8261,7 +8277,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
                 return;
             }
-            var newValue = typeof value === "string" ? ts.createIdentifier(value) : value;
+            var newValue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value) : value;
             var statements = scope["body"] ? scope["body"].statements : scope["statements"];
             if (property === "new") { //me.panel1=new Panel({});
                 let prop = this.data[variableName]["_new_"][0]; //.substring(3)];
@@ -8271,13 +8287,14 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 var left = prop.node.getText();
                 left = left.substring(0, left.indexOf("=") - 1);
                 property = "_new_";
-                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), newValue));
+                newExpression = typescript_1.default.factory.createExpressionStatement(typescript_1.default.factory.createAssignment(typescript_1.default.factory.createIdentifier(left), newValue));
             }
             else if (isFunction) {
-                newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
+                //           newExpression=this.createNode(property === "" ? variableName : (variableName + "." + property)+"("+newValue.text+")",true);
+                newExpression = typescript_1.default.factory.createExpressionStatement(typescript_1.default.factory.createCallExpression(typescript_1.default.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
             }
             else
-                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
+                newExpression = typescript_1.default.factory.createExpressionStatement(typescript_1.default.factory.createAssignment(typescript_1.default.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
                 let node = this.data[variableName][property][0].node;
                 var pos = node.parent["statements"].indexOf(node);
@@ -8287,7 +8304,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 //  node.parent["statements"].splice(pos, 1);
             }
             else { //insert new
-                debugger;
                 if (before) {
                     if (before.value === undefined)
                         throw "not implemented";
@@ -8339,11 +8355,11 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             //    this.data[variableName] = {};
             var newValue;
             if (typeof value === "string")
-                newValue = value.startsWith('"') ? ts.createIdentifier(value) : ts.createIdentifier("{" + value + "}");
+                newValue = value.startsWith('"') ? typescript_1.default.factory.createIdentifier(value) : typescript_1.default.factory.createIdentifier("{" + value + "}");
             else
                 newValue = value;
             ;
-            var newExpression = newExpression = ts.createJsxAttribute(ts.createIdentifier(property), newValue);
+            var newExpression = newExpression = typescript_1.default.factory.createJsxAttribute(typescript_1.default.factory.createIdentifier(property), newValue);
             ;
             if (property === "new") { //me.panel1=new Panel({});
                 /*       let prop = this.data[variableName]["_new_"][0];//.substring(3)];
@@ -8374,7 +8390,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         classname = prop.tag;
                     var node;
                     if (classname === "text") {
-                        node = ts.createJsxText("", false);
+                        node = typescript_1.default.factory.createJsxText("", false);
                         this.add(value, "text", "", node);
                     }
                     else {
@@ -8415,7 +8431,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     }
                     var pos = parent["children"].indexOf(found);
                     parent["children"].splice(pos, 0, node);
-                    parent["children"].splice(pos + 1, 0, ts.createJsxText("\n", true));
+                    parent["children"].splice(pos + 1, 0, typescript_1.default.factory.createJsxText("\n", true));
                     this.data[variableName]["add"].splice(ofound, 0, {
                         node: node,
                         value: jname,
@@ -8427,12 +8443,12 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     if (parent["children"] === undefined)
                         debugger;
                     parent["children"].push(node);
-                    parent["children"].push(ts.createJsxText("\n", true));
+                    parent["children"].push(typescript_1.default.factory.createJsxText("\n", true));
                     this.add(variableName, "add", value, node);
                 }
                 return;
             }
-            if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
+            if (this.data[variableName]["_new_"][0].node.kind === typescript_1.default.SyntaxKind.JsxText) {
                 if (property === "text") {
                     var svalue = value;
                     var old = this.data[variableName][property][0].node.text; //getText() throw error if created manuell
@@ -8450,8 +8466,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined && typeof value === "string") { //edit existing
                 let node = this.data[variableName][property][0].node;
                 if (node === undefined && property === "tag") {
-                    this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
-                    this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                    this.data[variableName]["_new_"][0].node.openingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
+                    this.data[variableName]["_new_"][0].node.closingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
                     this.data[variableName][property][0].value = value;
                     node["jname"] = value.replaceAll('"', "");
                     ;
@@ -8493,11 +8509,11 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     if (property === "tag" && typeof value === "string") { //HTMLComponent tag
                         this.data[variableName]["_new_"][0].node["jname"] = value.replaceAll('"', "");
                         if (this.data[variableName]["_new_"][0].node.attributes) {
-                            this.data[variableName]["_new_"][0].node.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                            this.data[variableName]["_new_"][0].node.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
                         }
                         else {
-                            this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
-                            this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.createIdentifier(value.substring(1, value.length - 1));
+                            this.data[variableName]["_new_"][0].node.openingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
+                            this.data[variableName]["_new_"][0].node.closingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
                         }
                     }
                     else {
@@ -8587,28 +8603,29 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     if (!statements[x].getText().split("\n")[0].includes("new ") && !statements[x].getText().split("\n")[0].includes("var "))
                         break;
                 }
-                var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
-                statements.splice(x, 0, ts.createStatement(ass));
+                var st = this.createNode(prefix + varname + "=new " + type + "();", true);
+                // var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
+                statements.splice(x, 0, st); //ts.factory.createStatement(ass));
                 if (useMe)
                     this.addTypeMe(varname, type);
             }
             return (useMe ? "me." : "") + varname;
         }
     };
-    Parser = __decorate([
-        Registry_29.$Class("jassijs_editor.util.Parser"),
+    exports.Parser = Parser;
+    exports.Parser = Parser = __decorate([
+        (0, Registry_29.$Class)("jassijs_editor.util.Parser"),
         __metadata("design:paramtypes", [])
     ], Parser);
-    exports.Parser = Parser;
     async function tests(t) {
         function clean(s) {
             return s.replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "");
         }
-        await Typescript_5.default.waitForInited;
+        await Typescript_5.mytypescript.waitForInited;
         var parser = new Parser();
         parser.parse("var j;j.config({children:[a,b,c]})");
         parser.swapPropertyWithParameter("j", "add", "c", "a");
-        t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.config({ children: [c, b, a] });');
+        t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.config({ children: [c,b,a] });');
         parser.parse("var j;j.add(a);j.add(b);j.add(c);");
         parser.swapPropertyWithParameter("j", "add", "c", "a");
         t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.add(c);j.add(b);j.add(a);');
@@ -8625,20 +8642,28 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         t.expectEqual(parser.data.b !== undefined);
         parser.addVariableInCode("MyClass", scope);
         parser.setPropertyInCode("myclass", "a", "9", scope);
-        t.expectEqual(clean(parser.getModifiedCode()) === "function test() { var myclass = new MyClass(); b = 8; myclass.a = 9; }");
+        console.log(clean(parser.getModifiedCode()));
+        t.expectEqual(clean(parser.getModifiedCode()) === "function test() { var myclass=new MyClass(); b=8; myclass.a=9; }");
         parser = new Parser();
         parser.parse("");
         parser.addVariableInCode("MyClass", undefined);
         parser.setPropertyInCode("myclass", "a", "9", undefined);
-        t.expectEqual(clean(parser.getModifiedCode()) === "var myclass = new MyClass();myclass.a = 9;");
+        t.expectEqual(clean(parser.getModifiedCode()) === "var myclass=new MyClass();myclass.a=9;");
     }
-    exports.tests = tests;
     async function test() {
+        var h = typescript_1.default;
         tests(new Test_2.Test());
-        await Typescript_5.default.waitForInited;
-        var code = Typescript_5.default.getCode("demo/hallo.tsx");
+        return;
+        await Typescript_5.mytypescript.waitForInited;
+        var code = Typescript_5.mytypescript.getCode("demo/Dialog2.ts");
         var parser = new Parser();
-        parser.parse(code, undefined, true);
+        var scope = [{ classname: "Dialog2", methodname: "layout" }];
+        parser.parse(code, scope, false);
+        debugger;
+        parser.addImportIfNeeded("table2", "jassijs/ui/Table2");
+        //parser.setPropertyInCode("me.button2","pp","hallo",scope);
+        // var j=parser.addVariableInCode("jassijs.ui.Button",[{classname:"Dialog",methodname:"layout"  }]);
+        console.log(parser.getModifiedCode());
         // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
         // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
@@ -8664,7 +8689,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
           const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);
           console.log(result);*/
     }
-    exports.test = test;
 });
 define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"], function (require, exports, Registry_30) {
     "use strict";
@@ -8992,17 +9016,18 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
               this.mouseUp.bound=undefined;*/
         }
     };
-    Resizer = __decorate([
-        Registry_30.$Class("jassijs_editor.util.Resizer"),
+    exports.Resizer = Resizer;
+    exports.Resizer = Resizer = __decorate([
+        (0, Registry_30.$Class)("jassijs_editor.util.Resizer"),
         __metadata("design:paramtypes", [])
     ], Resizer);
-    exports.Resizer = Resizer;
 });
 define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/ui/Component", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs_editor/ErrorPanel", "jassijs/remote/Test"], function (require, exports, Registry_31, Actions_10, Component_6, BoxPanel_4, Windows_8, HTMLPanel_1, Errors_2, ErrorPanel_3, Test_3) {
     "use strict";
     var TestAction_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Tests = exports.TestAction = void 0;
+    exports.Tests = exports.TestAction = void 0;
+    exports.test = test;
     class MyContainer extends BoxPanel_4.BoxPanel {
         constructor() {
             super(...arguments);
@@ -9047,7 +9072,7 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
                     await TestAction_1.testNode(file.files, container);
                 }
                 else {
-                    var typescript = (await new Promise((resolve_8, reject_8) => { require(["jassijs_editor/util/Typescript"], resolve_8, reject_8); })).default;
+                    var typescript = (await new Promise((resolve_8, reject_8) => { require(["jassijs_editor/util/Typescript"], resolve_8, reject_8); })).mytypescript;
                     await typescript.initService();
                     var text = typescript.getCode(file.fullpath);
                     if (text !== undefined) {
@@ -9055,7 +9080,8 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
                         try {
                             if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
                                 console.log("test " + file.fullpath);
-                                var func = (_a = (await new Promise((resolve_9, reject_9) => { require([file.fullpath.substring(0, file.fullpath.length - 3)], resolve_9, reject_9); }))) === null || _a === void 0 ? void 0 : _a.test;
+                                var pos = file.fullpath.lastIndexOf(".");
+                                var func = (_a = (await new Promise((resolve_9, reject_9) => { require([file.fullpath.substring(0, pos)], resolve_9, reject_9); }))) === null || _a === void 0 ? void 0 : _a.test;
                                 if (typeof func === "function") {
                                     container.alltests++;
                                     container.update();
@@ -9100,19 +9126,19 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
             }
         }
     };
+    exports.TestAction = TestAction;
     __decorate([
-        Actions_10.$Action({
+        (0, Actions_10.$Action)({
             name: "Run Tests"
         }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, MyContainer]),
         __metadata("design:returntype", Promise)
     ], TestAction, "testNode", null);
-    TestAction = TestAction_1 = __decorate([
-        Actions_10.$ActionProvider("jassijs.remote.FileNode"),
-        Registry_31.$Class("jassijs_editor.ui.TestAction")
+    exports.TestAction = TestAction = TestAction_1 = __decorate([
+        (0, Actions_10.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Registry_31.$Class)("jassijs_editor.ui.TestAction")
     ], TestAction);
-    exports.TestAction = TestAction;
     class Tests {
     }
     exports.Tests = Tests;
@@ -9124,16 +9150,16 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
             h.a = 9;
         });
     }
-    exports.test = test;
 });
-define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Registry", "jassijs/remote/Config"], function (require, exports, sourcemap_1, Server_5, Registry_32, Config_3) {
+define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Registry", "jassijs/remote/Config", "typescript"], function (require, exports, sourcemap_1, Server_5, Registry_32, Config_3, typescript_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TSSourceMap = void 0;
     //var sourceMap=window["sourceMap"];
     let TSSourceMap = class TSSourceMap {
         async getCode(file) {
-            return $.ajax({ url: file, dataType: "text" });
+            var rr = await $.ajax({ url: file, dataType: "text" });
+            return rr;
             // await new Server().loadFile(file);
         }
         async getLineFromTS(tsfile, line, column) {
@@ -9155,7 +9181,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
                 var pos = jscode.indexOf("//" + "# sourceMappingURL=");
                 if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
                     var b64 = jscode.substring(pos + 50);
-                    mapcode = ts["base64decode"](undefined, b64);
+                    mapcode = typescript_2.default["base64decode"](undefined, b64);
                     //mapcode = decodeURIComponent(escape((b64)));
                 }
                 else {
@@ -9167,11 +9193,11 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             }
             var ret = new Promise((resolve, reject) => {
                 var isinline = false;
-                sourcemap_1.default.SourceMapConsumer.initialize({
+                sourcemap_1.sourceMap.SourceMapConsumer.initialize({
                     "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
                 });
                 var rawSourceMap = JSON.parse(mapcode);
-                sourcemap_1.default.SourceMapConsumer.with(rawSourceMap, null, consumer => {
+                sourcemap_1.sourceMap.SourceMapConsumer.with(rawSourceMap, null, consumer => {
                     var test = consumer.sources;
                     var l = consumer.generatedPositionFor({
                         source: rawSourceMap.sources[filenumber],
@@ -9205,7 +9231,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             }
             else
                 return undefined;
-            sourcemap_1.default.SourceMapConsumer.initialize({
+            sourcemap_1.sourceMap.SourceMapConsumer.initialize({
                 "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
             });
             var rawSourceMap = JSON.parse(mapcode);
@@ -9213,10 +9239,10 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             for (var x = 0; x < data.length; x++) {
                 var one = await new Promise((resolve, reject) => {
                     //for(var x=0;x<data.length;x++){
-                    sourcemap_1.default.SourceMapConsumer.with(rawSourceMap, null, consumer => {
+                    sourcemap_1.sourceMap.SourceMapConsumer.with(rawSourceMap, null, consumer => {
                         var test = consumer.sources;
                         var l = consumer.originalPositionFor({
-                            bias: sourcemap_1.default.SourceMapConsumer.GREATEST_LOWER_BOUND,
+                            bias: sourcemap_1.sourceMap.SourceMapConsumer.GREATEST_LOWER_BOUND,
                             line: data[x].line,
                             column: data[x].column
                         });
@@ -9231,22 +9257,18 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js",function(data){
         }
     };
-    TSSourceMap = __decorate([
-        Registry_32.$Class("jassijs_editor.util.TSSourceMap")
-    ], TSSourceMap);
     exports.TSSourceMap = TSSourceMap;
+    exports.TSSourceMap = TSSourceMap = __decorate([
+        (0, Registry_32.$Class)("jassijs_editor.util.TSSourceMap")
+    ], TSSourceMap);
 });
-define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "jassijs_editor/ext/monaco2", "jassijs_editor/ext/monaco"], function (require, exports, Registry_33, Server_6, Config_4) {
+define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "typescript", "jassijs_editor/ext/monaco2", "jassijs_editor/ext/monaco"], function (require, exports, Registry_33, Server_6, Config_4, typescript_3) {
     "use strict";
     var Typescript_6;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Typescript = void 0;
+    exports.mytypescript = exports.Typescript = void 0;
+    //import "jassijs_editor/ext/monaco";
     let Typescript = Typescript_6 = class Typescript {
-        constructor() {
-            this.initInIdle = true;
-            if (Typescript_6._isInited === undefined)
-                this.waitForInited = this.initService();
-        }
         isInited(file) {
             return Typescript_6._isInited === true;
         }
@@ -9271,7 +9293,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                     fileName: prefix + fileName,
                 };
                 //@ts-ignore
-                var comp = ts.transpileModule(content, opt);
+                var comp = typescript_3.default.transpileModule(content, opt);
                 var extlen = 3;
                 if (fileName.toLowerCase().endsWith(".tsx"))
                     extlen = 4;
@@ -9281,6 +9303,11 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 ret.contents.push(comp.sourceMapText);
             }
             return ret;
+        }
+        constructor() {
+            this.initInIdle = true;
+            if (Typescript_6._isInited === undefined)
+                this.waitForInited = this.initService();
         }
         static initMonaco() {
             /* monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
@@ -9300,6 +9327,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 emitDecoratorMetadata: true,
                 allowNonTsExtensions: true,
                 allowJs: true,
+                esModuleInterop: true,
                 experimentalDecorators: true,
             });
         }
@@ -9329,7 +9357,12 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 Typescript_6.initMonaco();
                 //@ts-ignore
                 //  import("jassijs/ext/typescript").then(async function(ts1) {
-                Typescript_6.ts = ts;
+                Typescript_6.ts = typescript_3.default;
+                var tsfactory = window.tsfactory;
+                for (var key in tsfactory) {
+                    if (typescript_3.default[key] === undefined)
+                        typescript_3.default[key] = tsfactory[key];
+                }
                 var _this = this;
                 var f = (await new Server_6.Server().dir(true)).resolveChilds();
                 var nodeFiles = await this.includeModulTypes();
@@ -9378,16 +9411,20 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                     //	
                     var type = "typescript";
                     if (key.toLocaleLowerCase().endsWith(".ts") || key.toLocaleLowerCase().endsWith(".tsx")) {
-                        //
-                        if (this.initInIdle) {
-                            var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
-                            //console.log(key);
-                            if (!monaco.editor.getModel(ffile))
-                                monaco.editor.createModel(code[key], "typescript", ffile);
-                            //});
+                        try {
+                            //
+                            if (this.initInIdle) {
+                                var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
+                                //console.log(key);
+                                if (!monaco.editor.getModel(ffile))
+                                    monaco.editor.createModel(code[key], "typescript", ffile);
+                                //});
+                            }
+                            else {
+                                monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
+                            }
                         }
-                        else {
-                            monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
+                        catch (_b) {
                         }
                     }
                     if (key.toLocaleLowerCase().endsWith(".json"))
@@ -9555,7 +9592,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 insertSpaceAfterKeywordsInControlFlowStatements: true,
                 insertSpaceBeforeAndAfterBinaryOperators: true,
                 newLineCharacter: "\n",
-                indentStyle: ts.IndentStyle.Smart,
+                indentStyle: typescript_3.default.IndentStyle.Smart,
                 indentSize: 4,
                 tabSize: 4
             });
@@ -9642,6 +9679,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
             };
         }
     };
+    exports.Typescript = Typescript;
     /**
     * resolved if the service is inited
     */
@@ -9657,24 +9695,24 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
         jsx: monaco.languages.typescript.JsxEmit.React,
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
+        esModuleInterop: true,
         typeRoots: ["./node_modules/@types"]
     };
-    Typescript = Typescript_6 = __decorate([
-        Registry_33.$Class("jassijs_editor.util.Typescript"),
+    exports.Typescript = Typescript = Typescript_6 = __decorate([
+        (0, Registry_33.$Class)("jassijs_editor.util.Typescript"),
         __metadata("design:paramtypes", [])
     ], Typescript);
-    exports.Typescript = Typescript;
     //@ts-ignore
-    var typescript = new Typescript();
-    Typescript.instance = typescript;
-    exports.default = typescript;
+    var mytypescript = new Typescript();
+    exports.mytypescript = mytypescript;
+    Typescript.instance = mytypescript;
 });
 //this file is autogenerated don't modify
 define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1719757292376.6711,
+                "date": 1720101244987.3042,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
@@ -9686,7 +9724,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1719757394281.4602,
+                "date": 1720105520009.7876,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -9764,7 +9802,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.Debugger": {}
             },
             "jassijs_editor/ErrorPanel.ts": {
-                "date": 1682794808000,
+                "date": 1720116488294.8394,
                 "jassijs_editor.ui.ErrorPanel": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -9782,7 +9820,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/ext/monaco.ts": {
-                "date": 1719861907601.9385
+                "date": 1720105252684.6934
             },
             "jassijs_editor/FileExplorer.ts": {
                 "date": 1683575950000,
@@ -9892,10 +9930,10 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
-                "date": 1719846808609.5916
+                "date": 1720105301984.028
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1719865346020.8171,
+                "date": 1720101262364.5872,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/SearchExplorer.ts": {
@@ -9917,7 +9955,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/StartEditor.ts": {
-                "date": 1697200788486.8972
+                "date": 1720115090825.8567
             },
             "jassijs_editor/template/TemplateDBDialog.ts": {
                 "date": 1681570392000,
@@ -9998,7 +10036,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/util/DatabaseSchema.ts": {
-                "date": 1681569388000,
+                "date": 1720101271019.9363,
                 "jassijs_editor.util.DatabaseSchema": {}
             },
             "jassijs_editor/util/DragAndDropper.ts": {
@@ -10006,7 +10044,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1698524672858.8315,
+                "date": 1720181739843.8818,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -10014,7 +10052,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
-                "date": 1698507857241.7307,
+                "date": 1720185108125.2275,
                 "jassijs_editor.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -10031,15 +10069,18 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/util/TSSourceMap.ts": {
-                "date": 1682794840000,
+                "date": 1720117379608.988,
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1719865551737.1772,
+                "date": 1720115012657.7117,
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/ext/monaco2.ts": {
-                "date": 1719864992662.5933
+                "date": 1720090850426.468
+            },
+            "jassijs_editor/ext/typescriptservices.ts": {
+                "date": 1720114589311.0293
             }
         }
     };

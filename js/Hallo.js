@@ -5,7 +5,7 @@ class Hallo {
 }
 exports.Hallo = Hallo;
 ;
-function test() { return 14041; }
+function test() { return 31824; }
 exports.test = test;
 ;
 //# sourceMappingURL=Hallo.js.map

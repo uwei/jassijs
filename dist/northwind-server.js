@@ -919,51 +919,52 @@ define("northwind/registry", ["require"], function (require) {
 define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_1, DBObject_1, Registry_1, DatabaseSchema_1, Validator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Categories = void 0;
+    exports.Categories = void 0;
+    exports.test = test;
     let Categories = class Categories extends DBObject_1.DBObject {
         constructor() {
             super();
         }
     };
+    exports.Categories = Categories;
     __decorate([
-        Validator_1.ValidateIsInt({ optional: true }),
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, Validator_1.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Categories.prototype, "id", void 0);
     __decorate([
-        Validator_1.ValidateIsString({ optional: true }),
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "CategoryName", void 0);
     __decorate([
-        Validator_1.ValidateIsString({ optional: true }),
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, Validator_1.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "Description", void 0);
     __decorate([
-        Validator_1.ValidateIsString(),
-        DatabaseSchema_1.Column(),
+        (0, Validator_1.ValidateIsString)(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Categories.prototype, "Picture", void 0);
     __decorate([
-        DatabaseSchema_1.OneToMany(type => Products_1.Products, e => e.Category),
+        (0, DatabaseSchema_1.OneToMany)(type => Products_1.Products, e => e.Category),
         __metadata("design:type", Products_1.Products)
     ], Categories.prototype, "Products", void 0);
-    Categories = __decorate([
-        DBObject_1.$DBObject(),
-        Registry_1.$Class("northwind.Categories"),
+    exports.Categories = Categories = __decorate([
+        (0, DBObject_1.$DBObject)(),
+        (0, Registry_1.$Class)("northwind.Categories"),
         __metadata("design:paramtypes", [])
     ], Categories);
-    exports.Categories = Categories;
     async function test() {
     }
-    exports.test = test;
     ;
 });
 define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_2, Registry_2, DatabaseSchema_2, Validator_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Customer = void 0;
+    exports.Customer = void 0;
+    exports.test = test;
     let Customer = class Customer extends DBObject_2.DBObject {
         constructor() {
             super();
@@ -981,67 +982,69 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
               this.initExtensions();*/
         }
     };
+    exports.Customer = Customer;
     __decorate([
-        Validator_2.ValidateIsString({ optional: true }),
-        DatabaseSchema_2.PrimaryColumn(),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.PrimaryColumn)(),
         __metadata("design:type", String)
     ], Customer.prototype, "id", void 0);
     __decorate([
-        Validator_2.ValidateIsString(),
-        DatabaseSchema_2.Column(),
+        (0, Validator_2.ValidateIsString)(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "CompanyName", void 0);
     __decorate([
-        Validator_2.ValidateIsString(),
-        DatabaseSchema_2.Column(),
+        (0, Validator_2.ValidateIsString)(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactName", void 0);
     __decorate([
-        Validator_2.ValidateIsString(),
-        DatabaseSchema_2.Column(),
+        (0, Validator_2.ValidateIsString)(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactTitle", void 0);
     __decorate([
-        Validator_2.ValidateIsString(),
-        DatabaseSchema_2.Column(),
+        (0, Validator_2.ValidateIsString)(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "Address", void 0);
     __decorate([
-        Validator_2.ValidateIsString(),
-        DatabaseSchema_2.Column(),
+        (0, Validator_2.ValidateIsString)(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "City", void 0);
     __decorate([
-        Validator_2.ValidateIsString({ optional: true }),
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true })
+        // @Column({default:""})
+        ,
         __metadata("design:type", String)
     ], Customer.prototype, "Region", void 0);
     __decorate([
-        Validator_2.ValidateIsString({ optional: true }),
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "PostalCode", void 0);
     __decorate([
-        Validator_2.ValidateIsString({ optional: true }),
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Country", void 0);
     __decorate([
-        Validator_2.ValidateIsString({ optional: true }),
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Phone", void 0);
     __decorate([
-        Validator_2.ValidateIsString({ optional: true }),
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Fax", void 0);
-    Customer = __decorate([
-        DBObject_2.$DBObject(),
-        Registry_2.$Class("northwind.Customer"),
+    exports.Customer = Customer = __decorate([
+        (0, DBObject_2.$DBObject)(),
+        (0, Registry_2.$Class)("northwind.Customer"),
         __metadata("design:paramtypes", [])
     ], Customer);
-    exports.Customer = Customer;
     async function test() {
         var all = await Customer.find();
         //var cus2=<Customer>await Customer.findOne();
@@ -1050,15 +1053,16 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
         //	new de.Kunde().generate();
         //jassijs.db.uploadType(de.Kunde);
     }
-    exports.test = test;
     ;
 });
 define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_3, DatabaseSchema_3, Transaction_1, Serverservice_1, Validator_3) {
     "use strict";
-    var Employees_1, _a, _b;
+    var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.test = exports.Employees = void 0;
-    let Employees = Employees_1 = class Employees extends DBObject_3.DBObject {
+    exports.Employees = void 0;
+    exports.test = test;
+    exports.test2 = test2;
+    let Employees = class Employees extends DBObject_3.DBObject {
         constructor() {
             super();
         }
@@ -1075,108 +1079,107 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
             }
         }
     };
+    exports.Employees = Employees;
     __decorate([
-        Validator_3.ValidateIsInt({ optional: true }),
-        DatabaseSchema_3.PrimaryColumn(),
+        (0, Validator_3.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_3.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Employees.prototype, "id", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "LastName", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "FirstName", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Title", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "TitleOfCourtesy", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Address", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "City", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Region", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PostalCode", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Country", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "HomePhone", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Extension", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Photo", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Notes", void 0);
     __decorate([
-        Validator_3.ValidateIsString({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PhotoPath", void 0);
     __decorate([
-        Validator_3.ValidateIsInstanceOf({ type: type => Employees_1, optional: true }),
-        DatabaseSchema_3.JoinColumn(),
-        DatabaseSchema_3.ManyToOne(type => Employees_1),
+        (0, Validator_3.ValidateIsInstanceOf)({ type: type => Employees, optional: true }),
+        (0, DatabaseSchema_3.JoinColumn)(),
+        (0, DatabaseSchema_3.ManyToOne)(type => Employees),
         __metadata("design:type", Employees)
     ], Employees.prototype, "ReportsTo", void 0);
     __decorate([
-        Validator_3.ValidateIsDate({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
     ], Employees.prototype, "BirthDate", void 0);
     __decorate([
-        Validator_3.ValidateIsDate({ optional: true }),
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, Validator_3.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
     ], Employees.prototype, "HireDate", void 0);
-    Employees = Employees_1 = __decorate([
-        DBObject_3.$DBObject(),
-        Registry_3.$Class("northwind.Employees"),
+    exports.Employees = Employees = __decorate([
+        (0, DBObject_3.$DBObject)(),
+        (0, Registry_3.$Class)("northwind.Employees"),
         __metadata("design:paramtypes", [])
     ], Employees);
-    exports.Employees = Employees;
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
     }
     async function test() {
         var all = await Employees.find({ where: "id>:p", whereParams: { p: 5 } });
     }
-    exports.test = test;
     async function test2() {
         var em = new Employees();
         em.id = getRandomInt(100000);
@@ -1197,339 +1200,338 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
           emp2.ReportsTo = emp;
           //await emp2.save();*/
     }
-    exports.test2 = test2;
     ;
 });
 define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_2, Orders_1, DBObject_4, Registry_4, DatabaseSchema_4, Validator_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.OrderDetails = void 0;
+    exports.OrderDetails = void 0;
+    exports.test = test;
     let OrderDetails = class OrderDetails extends DBObject_4.DBObject {
         constructor() {
             super();
         }
     };
+    exports.OrderDetails = OrderDetails;
     __decorate([
-        Validator_4.ValidateIsInt({ optional: true }),
-        DatabaseSchema_4.PrimaryGeneratedColumn(),
+        (0, Validator_4.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_4.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "id", void 0);
     __decorate([
-        Validator_4.ValidateIsInstanceOf({ type: type => Orders_1.Orders }),
-        DatabaseSchema_4.ManyToOne(type => Orders_1.Orders, e => e.Details),
+        (0, Validator_4.ValidateIsInstanceOf)({ type: type => Orders_1.Orders }),
+        (0, DatabaseSchema_4.ManyToOne)(type => Orders_1.Orders, e => e.Details),
         __metadata("design:type", Orders_1.Orders)
     ], OrderDetails.prototype, "Order", void 0);
     __decorate([
-        Validator_4.ValidateIsInstanceOf({ type: type => Products_2.Products }),
-        DatabaseSchema_4.ManyToOne(type => Products_2.Products),
+        (0, Validator_4.ValidateIsInstanceOf)({ type: type => Products_2.Products }),
+        (0, DatabaseSchema_4.ManyToOne)(type => Products_2.Products),
         __metadata("design:type", Products_2.Products)
     ], OrderDetails.prototype, "Product", void 0);
     __decorate([
-        Validator_4.ValidateIsNumber(),
-        DatabaseSchema_4.Column({ nullable: false, type: "decimal" }),
+        (0, Validator_4.ValidateIsNumber)(),
+        (0, DatabaseSchema_4.Column)({ nullable: false, type: "decimal" }),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "UnitPrice", void 0);
     __decorate([
-        Validator_4.ValidateIsNumber(),
-        DatabaseSchema_4.Column(),
+        (0, Validator_4.ValidateIsNumber)(),
+        (0, DatabaseSchema_4.Column)(),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "Quantity", void 0);
     __decorate([
-        Validator_4.ValidateIsNumber(),
-        DatabaseSchema_4.Column({ nullable: true, type: "decimal" }),
+        (0, Validator_4.ValidateIsNumber)(),
+        (0, DatabaseSchema_4.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "Discount", void 0);
-    OrderDetails = __decorate([
-        DBObject_4.$DBObject(),
-        Registry_4.$Class("northwind.OrderDetails"),
+    exports.OrderDetails = OrderDetails = __decorate([
+        (0, DBObject_4.$DBObject)(),
+        (0, Registry_4.$Class)("northwind.OrderDetails"),
         __metadata("design:paramtypes", [])
     ], OrderDetails);
-    exports.OrderDetails = OrderDetails;
     async function test() {
     }
-    exports.test = test;
     ;
 });
-define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers", "jassijs/remote/Validator"], function (require, exports, OrderDetails_1, Employees_2, Customer_1, DBObject_5, Registry_5, DatabaseSchema_5, Shippers_1, Validator_5) {
+define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers", "jassijs/remote/Validator"], function (require, exports, OrderDetails_1, Employees_1, Customer_1, DBObject_5, Registry_5, DatabaseSchema_5, Shippers_1, Validator_5) {
     "use strict";
     var _a, _b, _c;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Orders = void 0;
+    exports.Orders = void 0;
+    exports.test = test;
     let Orders = class Orders extends DBObject_5.DBObject {
         constructor() {
             super();
         }
     };
+    exports.Orders = Orders;
     __decorate([
-        Validator_5.ValidateIsNumber({ optional: true }),
-        DatabaseSchema_5.PrimaryColumn(),
+        (0, Validator_5.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_5.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Orders.prototype, "id", void 0);
     __decorate([
-        Validator_5.ValidateIsInstanceOf({ type: type => Customer_1.Customer }),
-        DatabaseSchema_5.ManyToOne(type => Customer_1.Customer),
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Customer_1.Customer }),
+        (0, DatabaseSchema_5.ManyToOne)(type => Customer_1.Customer),
         __metadata("design:type", Customer_1.Customer)
     ], Orders.prototype, "Customer", void 0);
     __decorate([
-        Validator_5.ValidateIsInstanceOf({ type: type => Employees_2.Employees }),
-        DatabaseSchema_5.ManyToOne(type => Employees_2.Employees),
-        __metadata("design:type", Employees_2.Employees)
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Employees_1.Employees }),
+        (0, DatabaseSchema_5.ManyToOne)(type => Employees_1.Employees),
+        __metadata("design:type", Employees_1.Employees)
     ], Orders.prototype, "Employee", void 0);
     __decorate([
-        Validator_5.ValidateIsDate({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_5.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
     ], Orders.prototype, "OrderDate", void 0);
     __decorate([
-        Validator_5.ValidateIsDate({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_5.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
     ], Orders.prototype, "RequiredDate", void 0);
     __decorate([
-        Validator_5.ValidateIsDate({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_5.ValidateIsDate)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", typeof (_c = typeof Date !== "undefined" && Date) === "function" ? _c : Object)
     ], Orders.prototype, "ShippedDate", void 0);
     __decorate([
-        Validator_5.ValidateIsInstanceOf({ type: type => Shippers_1.Shippers }),
-        DatabaseSchema_5.ManyToOne(type => Shippers_1.Shippers),
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Shippers_1.Shippers }),
+        (0, DatabaseSchema_5.ManyToOne)(type => Shippers_1.Shippers),
         __metadata("design:type", Shippers_1.Shippers)
     ], Orders.prototype, "ShipVia", void 0);
     __decorate([
-        Validator_5.ValidateIsNumber({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true, type: "decimal" }),
+        (0, Validator_5.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Orders.prototype, "Freight", void 0);
     __decorate([
-        Validator_5.ValidateIsString({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipName", void 0);
     __decorate([
-        Validator_5.ValidateIsString({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipAddress", void 0);
     __decorate([
-        Validator_5.ValidateIsString({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCity", void 0);
     __decorate([
-        Validator_5.ValidateIsString({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipRegion", void 0);
     __decorate([
-        Validator_5.ValidateIsString({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipPostalCode", void 0);
     __decorate([
-        Validator_5.ValidateIsString({ optional: true }),
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCountry", void 0);
     __decorate([
-        Validator_5.ValidateIsArray({ type: type => OrderDetails_1.OrderDetails }),
-        DatabaseSchema_5.OneToMany(type => OrderDetails_1.OrderDetails, e => e.Order),
+        (0, Validator_5.ValidateIsArray)({ type: type => OrderDetails_1.OrderDetails }),
+        (0, DatabaseSchema_5.OneToMany)(type => OrderDetails_1.OrderDetails, e => e.Order),
         __metadata("design:type", Array)
     ], Orders.prototype, "Details", void 0);
-    Orders = __decorate([
-        DBObject_5.$DBObject(),
-        Registry_5.$Class("northwind.Orders"),
+    exports.Orders = Orders = __decorate([
+        (0, DBObject_5.$DBObject)(),
+        (0, Registry_5.$Class)("northwind.Orders"),
         __metadata("design:paramtypes", [])
     ], Orders);
-    exports.Orders = Orders;
     async function test() {
     }
-    exports.test = test;
     ;
 });
 define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Categories_1, Suppliers_1, DBObject_6, Registry_6, DatabaseSchema_6, Validator_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Products = void 0;
+    exports.Products = void 0;
+    exports.test = test;
     let Products = class Products extends DBObject_6.DBObject {
         constructor() {
             super();
         }
     };
+    exports.Products = Products;
     __decorate([
-        Validator_6.ValidateIsInt({ optional: true }),
-        DatabaseSchema_6.PrimaryColumn(),
+        (0, Validator_6.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_6.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Products.prototype, "id", void 0);
     __decorate([
-        Validator_6.ValidateIsString({ optional: true }),
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "ProductName", void 0);
     __decorate([
-        Validator_6.ValidateIsInstanceOf({ type: type => Suppliers_1.Suppliers }),
-        DatabaseSchema_6.ManyToOne(type => Suppliers_1.Suppliers),
+        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Suppliers_1.Suppliers }),
+        (0, DatabaseSchema_6.ManyToOne)(type => Suppliers_1.Suppliers),
         __metadata("design:type", Suppliers_1.Suppliers)
     ], Products.prototype, "Supplier", void 0);
     __decorate([
-        Validator_6.ValidateIsInstanceOf({ type: c => Categories_1.Categories }),
-        DatabaseSchema_6.ManyToOne(type => Categories_1.Categories, e => e.Products),
+        (0, Validator_6.ValidateIsInstanceOf)({ type: c => Categories_1.Categories }),
+        (0, DatabaseSchema_6.ManyToOne)(type => Categories_1.Categories, e => e.Products),
         __metadata("design:type", Categories_1.Categories)
     ], Products.prototype, "Category", void 0);
     __decorate([
-        Validator_6.ValidateIsString({ optional: true }),
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "QuantityPerUnit", void 0);
     __decorate([
-        Validator_6.ValidateIsNumber({ optional: true }),
-        DatabaseSchema_6.Column({ nullable: true, type: "decimal" }),
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitPrice", void 0);
     __decorate([
-        Validator_6.ValidateIsNumber({ optional: true }),
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsInStock", void 0);
     __decorate([
-        Validator_6.ValidateIsNumber({ optional: true }),
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsOnOrder", void 0);
     __decorate([
-        Validator_6.ValidateIsNumber({ optional: true }),
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "ReorderLevel", void 0);
     __decorate([
-        Validator_6.ValidateIsBoolean(),
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, Validator_6.ValidateIsBoolean)(),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], Products.prototype, "Discontinued", void 0);
-    Products = __decorate([
-        DBObject_6.$DBObject(),
-        Registry_6.$Class("northwind.Products"),
+    exports.Products = Products = __decorate([
+        (0, DBObject_6.$DBObject)(),
+        (0, Registry_6.$Class)("northwind.Products"),
         __metadata("design:paramtypes", [])
     ], Products);
-    exports.Products = Products;
     async function test() {
         var p = await Products.findOne();
     }
-    exports.test = test;
     ;
 });
 define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_7, Registry_7, DatabaseSchema_7, Validator_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Shippers = void 0;
+    exports.Shippers = void 0;
+    exports.test = test;
     let Shippers = class Shippers extends DBObject_7.DBObject {
         constructor() {
             super();
         }
     };
+    exports.Shippers = Shippers;
     __decorate([
-        Validator_7.ValidateIsInt({ optional: true }),
-        DatabaseSchema_7.PrimaryColumn(),
+        (0, Validator_7.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_7.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Shippers.prototype, "id", void 0);
     __decorate([
-        Validator_7.ValidateIsString({ optional: true }),
-        DatabaseSchema_7.Column({ nullable: true }),
+        (0, Validator_7.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "CompanyName", void 0);
     __decorate([
-        Validator_7.ValidateIsString({ optional: true }),
-        DatabaseSchema_7.Column({ nullable: true }),
+        (0, Validator_7.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "Phone", void 0);
-    Shippers = __decorate([
-        DBObject_7.$DBObject(),
-        Registry_7.$Class("northwind.Shippers"),
+    exports.Shippers = Shippers = __decorate([
+        (0, DBObject_7.$DBObject)(),
+        (0, Registry_7.$Class)("northwind.Shippers"),
         __metadata("design:paramtypes", [])
     ], Shippers);
-    exports.Shippers = Shippers;
     async function test() {
     }
-    exports.test = test;
     ;
 });
 define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_8, Registry_8, DatabaseSchema_8, Validator_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Suppliers = void 0;
+    exports.Suppliers = void 0;
+    exports.test = test;
     let Suppliers = class Suppliers extends DBObject_8.DBObject {
         constructor() {
             super();
         }
     };
+    exports.Suppliers = Suppliers;
     __decorate([
-        Validator_8.ValidateIsInt({ optional: true }),
-        DatabaseSchema_8.PrimaryColumn(),
+        (0, Validator_8.ValidateIsInt)({ optional: true }),
+        (0, DatabaseSchema_8.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Suppliers.prototype, "id", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "CompanyName", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "ContactName", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "ContactTitle", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Address", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "City", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Region", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "PostalCode", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Country", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Phone", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Fax", void 0);
     __decorate([
-        Validator_8.ValidateIsString({ optional: true }),
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "HomePage", void 0);
-    Suppliers = __decorate([
-        DBObject_8.$DBObject(),
-        Registry_8.$Class("northwind.Suppliers"),
+    exports.Suppliers = Suppliers = __decorate([
+        (0, DBObject_8.$DBObject)(),
+        (0, Registry_8.$Class)("northwind.Suppliers"),
         __metadata("design:paramtypes", [])
     ], Suppliers);
-    exports.Suppliers = Suppliers;
     async function test() {
     }
-    exports.test = test;
     ;
     function ValidateIsIntn(arg0) {
         throw new Error("Function not implemented.");

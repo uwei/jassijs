@@ -30,8 +30,8 @@ export function test() {
    ret.add(new TextComponent({text:"Hallo" }))
    return ret;
    */
-    var ret=<Panel><span></span> 
-        ha12hallo
+    var ret=<Panel><span></span>
+        ha12hallwo
         <span></span>
         o
         <span style={{ "color": "red" }}><u>start
@@ -45,31 +45,8 @@ export function test() {
         </span>hall
 
         o<br />
-        <span><u>endeende</u></span>
-        ka da
-        <br />dd
-        <br />
-        ddddd
-        <br />asd
-        <span style={{ "fontWeight": "bold" }}>fa
-
-        </span>
-        <br />
-        asdfasdfasdf
-        <br />
-        asdf
-
-        asdf
-
-
-
-
-
-
-        <br />
-
-
-
+        <span><u></u></span>
+     
         <br />
     </Panel>;
     var comp=createComponent(ret);

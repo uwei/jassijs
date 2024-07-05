@@ -4,14 +4,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Registry", "jassijs/remote/Config"], function (require, exports, sourcemap_1, Server_1, Registry_1, Config_1) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Registry", "jassijs/remote/Config", "typescript"], function (require, exports, sourcemap_1, Server_1, Registry_1, Config_1, typescript_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TSSourceMap = void 0;
+    typescript_1 = __importDefault(typescript_1);
     //var sourceMap=window["sourceMap"];
     let TSSourceMap = class TSSourceMap {
         async getCode(file) {
-            return $.ajax({ url: file, dataType: "text" });
+            var rr = await $.ajax({ url: file, dataType: "text" });
+            return rr;
             // await new Server().loadFile(file);
         }
         async getLineFromTS(tsfile, line, column) {
@@ -33,7 +38,7 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", 
                 var pos = jscode.indexOf("//" + "# sourceMappingURL=");
                 if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
                     var b64 = jscode.substring(pos + 50);
-                    mapcode = ts["base64decode"](undefined, b64);
+                    mapcode = typescript_1.default["base64decode"](undefined, b64);
                     //mapcode = decodeURIComponent(escape((b64)));
                 }
                 else {
@@ -45,11 +50,11 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", 
             }
             var ret = new Promise((resolve, reject) => {
                 var isinline = false;
-                sourcemap_1.default.SourceMapConsumer.initialize({
+                sourcemap_1.sourceMap.SourceMapConsumer.initialize({
                     "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
                 });
                 var rawSourceMap = JSON.parse(mapcode);
-                sourcemap_1.default.SourceMapConsumer.with(rawSourceMap, null, consumer => {
+                sourcemap_1.sourceMap.SourceMapConsumer.with(rawSourceMap, null, consumer => {
                     var test = consumer.sources;
                     var l = consumer.generatedPositionFor({
                         source: rawSourceMap.sources[filenumber],
@@ -83,7 +88,7 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", 
             }
             else
                 return undefined;
-            sourcemap_1.default.SourceMapConsumer.initialize({
+            sourcemap_1.sourceMap.SourceMapConsumer.initialize({
                 "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
             });
             var rawSourceMap = JSON.parse(mapcode);
@@ -91,10 +96,10 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", 
             for (var x = 0; x < data.length; x++) {
                 var one = await new Promise((resolve, reject) => {
                     //for(var x=0;x<data.length;x++){
-                    sourcemap_1.default.SourceMapConsumer.with(rawSourceMap, null, consumer => {
+                    sourcemap_1.sourceMap.SourceMapConsumer.with(rawSourceMap, null, consumer => {
                         var test = consumer.sources;
                         var l = consumer.originalPositionFor({
-                            bias: sourcemap_1.default.SourceMapConsumer.GREATEST_LOWER_BOUND,
+                            bias: sourcemap_1.sourceMap.SourceMapConsumer.GREATEST_LOWER_BOUND,
                             line: data[x].line,
                             column: data[x].column
                         });

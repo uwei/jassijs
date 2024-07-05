@@ -4,7 +4,7 @@ import "jassijs_editor/Debugger";
 import { $Class } from "jassijs/remote/Registry";
 import { router } from "jassijs/base/Router";
 import "jassijs_editor/ext/monaco";
-import typescript from "jassijs_editor/util/Typescript";
+import {mytypescript} from "jassijs_editor/util/Typescript";
 import { Server } from "jassijs/remote/Server";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { Settings } from "jassijs/remote/Settings";
@@ -21,7 +21,7 @@ function __init(editor: monaco.editor.IStandaloneCodeEditor) {
     CommandsRegistry.registerCommand("autoimport", (o1, model: monaco.editor.ITextModel, pos) => {
         var file = model.uri.path.substring(1);
         var code = model.getValue();
-        var p = typescript.getPositionOfLineAndCharacter(file, {
+        var p = mytypescript.getPositionOfLineAndCharacter(file, {
             line: pos.lineNumber, character: pos.column
         });
         const oldpos = model["lastEditor"].getPosition();
@@ -69,8 +69,8 @@ function __init(editor: monaco.editor.IStandaloneCodeEditor) {
                 endColumn: word.endColumn
             };
             var file = model.uri.path.substring(1);
-            var pos = typescript.getPositionOfLineAndCharacter(file, { line: position.lineNumber, character: position.column });
-            var all = await typescript.getCompletion(file, pos, undefined, { includeExternalModuleExports: true });
+            var pos = mytypescript.getPositionOfLineAndCharacter(file, { line: position.lineNumber, character: position.column });
+            var all = await mytypescript.getCompletion(file, pos, undefined, { includeExternalModuleExports: true });
             var sug = [];
             for (var x = 0; x < all.entries.length; x++) {
                 var it = all.entries[x];

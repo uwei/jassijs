@@ -13,7 +13,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_report/remote/ServerReport", "jassijs_editor/HtmlDesigner", "jassijs_report/RText", "jassijs_report/RTextGroup"], function (require, exports, Registry_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, Classes_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1, ServerReport_1, HtmlDesigner_1, RText_1, RTextGroup_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.test2 = exports.ReportDesigner = void 0;
+    exports.ReportDesigner = void 0;
+    exports.test2 = test2;
+    exports.test = test;
     let ReportDesigner = class ReportDesigner extends HtmlDesigner_1.HtmlDesigner {
         constructor() {
             super();
@@ -348,11 +350,11 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             this._propertyEditor.callEvent("propertyChanged", undefined);
         }
     };
-    ReportDesigner = __decorate([
-        Registry_1.$Class("jassijs_report.designer.ReportDesigner"),
+    exports.ReportDesigner = ReportDesigner;
+    exports.ReportDesigner = ReportDesigner = __decorate([
+        (0, Registry_1.$Class)("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
-    exports.ReportDesigner = ReportDesigner;
     async function test2() {
         var rep = new PDFReport_1.PDFReport();
         var def = {
@@ -400,7 +402,6 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         viewer.height = "200";
         return viewer;
     }
-    exports.test2 = test2;
     ;
     async function test() {
         var CodeEditor = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/CodeEditor"], resolve_1, reject_1); })).CodeEditor;
@@ -435,13 +436,13 @@ export async function test() {
         editor.evalCode();
         return editor;
     }
-    exports.test = test;
     ;
 });
 define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Registry_2, ReportDesigner_1, Tools_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.SimpleReportDesigner = void 0;
+    exports.SimpleReportDesigner = void 0;
+    exports.test = test;
     let SimpleReportDesigner = class SimpleReportDesigner extends ReportDesigner_1.ReportDesigner {
         constructor(layout) {
             super();
@@ -516,11 +517,11 @@ define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "j
                   this._codeChanger.setPropertyInCode("reportdesign",ob);*/
         }
     };
-    SimpleReportDesigner = __decorate([
-        Registry_2.$Class("jassijs_report.designer.SimpleReportDesigner"),
+    exports.SimpleReportDesigner = SimpleReportDesigner;
+    exports.SimpleReportDesigner = SimpleReportDesigner = __decorate([
+        (0, Registry_2.$Class)("jassijs_report.designer.SimpleReportDesigner"),
         __metadata("design:paramtypes", [Object])
     ], SimpleReportDesigner);
-    exports.SimpleReportDesigner = SimpleReportDesigner;
     function test() {
         var reportdesign = {
             content: [
@@ -546,7 +547,6 @@ define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "j
             }
         };
     }
-    exports.test = test;
 });
 define("jassijs_report/ext/pdfjs", ["require", "exports", "pdfjs-dist/build/pdf", "pdfjs-dist/build/pdf.worker"], function (require, exports, pdfjs, worker) {
     "use strict";
@@ -572,7 +572,7 @@ define("jassijs_report/modul", ["require", "exports"], function (require, export
             paths: {
                 'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
                 'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts',
+                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts', // '../../lib/vfs_fonts',
                 'pdfMakelib': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/pdfmake' //'../../lib/pdfmake'
             },
             shim: {
@@ -594,7 +594,8 @@ define("jassijs_report/pdfMake-interface", ["require", "exports"], function (req
 define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/ext/pdfmake", "jassijs_report/PDFViewer", "jassijs_report/remote/pdfmakejassi"], function (require, exports, Registry_3, pdfmake_1, PDFViewer_2, pdfmakejassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.PDFReport = void 0;
+    exports.PDFReport = void 0;
+    exports.test = test;
     let PDFReport = class PDFReport {
         constructor() {
             // @member {object} - the generated report
@@ -604,7 +605,7 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Regist
             //var me = this.me = {};
         }
         fill() {
-            var def = pdfmakejassi_1.createReportDefinition(this.value, this.data, this.parameter);
+            var def = (0, pdfmakejassi_1.createReportDefinition)(this.value, this.data, this.parameter);
             registerFonts(this.value);
             this.report = pdfmake_1.default.createPdf(def);
         }
@@ -630,11 +631,11 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Regist
         }
         ;
     };
-    PDFReport = __decorate([
-        Registry_3.$Class("jassijs_report.PDFReport"),
+    exports.PDFReport = PDFReport;
+    exports.PDFReport = PDFReport = __decorate([
+        (0, Registry_3.$Class)("jassijs_report.PDFReport"),
         __metadata("design:paramtypes", [])
     ], PDFReport);
-    exports.PDFReport = PDFReport;
     //var available = ["Alegreya",    "AlegreyaSans",    "AlegreyaSansSC",    "AlegreyaSC",    "AlmendraSC",    "Amaranth",    "Andada",    "AndadaSC",    "AnonymousPro",    "ArchivoNarrow",    "Arvo",    "Asap",    "AveriaLibre",    "AveriaSansLibre",    "AveriaSerifLibre",    "Cambay",    "Caudex",    "CrimsonText",    "Cuprum",    "Economica",    "Exo2",    "Exo",    "ExpletusSans",    "FiraSans",    "JosefinSans",    "JosefinSlab",    "Karla",    "Lato",    "LobsterTwo",    "Lora",    "Marvel",    "Merriweather",    "MerriweatherSans",    "Nobile",    "NoticiaText",    "Overlock",    "Philosopher",    "PlayfairDisplay",    "PlayfairDisplaySC",    "PT_Serif-Web",    "Puritan",    "Quantico",    "QuattrocentoSans",    "Quicksand",    "Rambla",    "Rosario",    "Sansation",    "Sarabun",    "Scada",    "Share",    "Sitara",    "SourceSansPro",    "TitilliumWeb",    "Volkhov",    "Vollkorn"];
     function registerFonts(data) {
         var fonts = [];
@@ -758,12 +759,12 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Regist
         viewer.height = 300;
         return viewer;
     }
-    exports.test = test;
 });
 define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/BoxPanel"], function (require, exports, Button_1, pdfjs_1, Component_1, Registry_4, Panel_1, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.PDFViewer = void 0;
+    exports.PDFViewer = void 0;
+    exports.test = test;
     class Canavas extends Component_1.Component {
         constructor() {
             super();
@@ -886,11 +887,11 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
             return this._data;
         }
     };
-    PDFViewer = __decorate([
-        Registry_4.$Class("jassijs_report.PDFViewer"),
+    exports.PDFViewer = PDFViewer;
+    exports.PDFViewer = PDFViewer = __decorate([
+        (0, Registry_4.$Class)("jassijs_report.PDFViewer"),
         __metadata("design:paramtypes", [])
     ], PDFViewer);
-    exports.PDFViewer = PDFViewer;
     async function test() {
         var ret = new PDFViewer();
         //testdocument
@@ -911,16 +912,13 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
         //    ret.height=160;
         return ret;
     }
-    exports.test = test;
 });
 define("jassijs_report/RColumns", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_5, ReportDesign_2, RComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RColumns = void 0;
     //Limitations: columnGap not implemented defaultStyle: {columnGap: 20}
-    let RColumns = 
-    //@$Property({ hideBaseClassProperties: true })
-    class RColumns extends RComponent_1.RComponent {
+    let RColumns = class RColumns extends RComponent_1.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -987,21 +985,22 @@ define("jassijs_report/RColumns", ["require", "exports", "jassijs/remote/Registr
             return ret;
         }
     };
-    RColumns = __decorate([
-        RComponent_1.$ReportComponent({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
-        Registry_5.$Class("jassijs_report.RColumns")
+    exports.RColumns = RColumns;
+    exports.RColumns = RColumns = __decorate([
+        (0, RComponent_1.$ReportComponent)({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
+        (0, Registry_5.$Class)("jassijs_report.RColumns")
         //@$Property({ hideBaseClassProperties: true })
         ,
         __metadata("design:paramtypes", [Object])
     ], RColumns);
-    exports.RColumns = RColumns;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
 define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_2, Registry_6, Registry_7, Panel_2, Property_1) {
     "use strict";
     var RComponent_2;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.RComponent = exports.$ReportComponent = exports.ReportComponentProperties = void 0;
+    exports.RComponent = exports.ReportComponentProperties = void 0;
+    exports.$ReportComponent = $ReportComponent;
     //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
     jassijs.includeCSSFile("jassijs_report.css");
     class ReportComponentProperties extends Component_2.UIComponentProperties {
@@ -1012,7 +1011,6 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
             Registry_6.default.register("$ReportComponent", pclass, properties);
         };
     }
-    exports.$ReportComponent = $ReportComponent;
     let RComponent = RComponent_2 = class RComponent extends Panel_2.Panel {
         constructor(properties = undefined) {
             super(properties);
@@ -1433,12 +1431,13 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
             return ret;
         }
     };
+    exports.RComponent = RComponent;
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], RComponent.prototype, "foreach", void 0);
     __decorate([
-        Property_1.$Property({
+        (0, Property_1.$Property)({
             default: undefined,
             isVisible: (component) => {
                 var _a;
@@ -1449,7 +1448,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "counter", null);
     __decorate([
-        Property_1.$Property({
+        (0, Property_1.$Property)({
             name: "listType",
             default: undefined,
             isVisible: (component) => {
@@ -1467,7 +1466,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "listType", null);
     __decorate([
-        Property_1.$Property({
+        (0, Property_1.$Property)({
             type: "color", isVisible: (component) => {
                 var _a;
                 //only in table and column width is posible
@@ -1478,7 +1477,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "fillColor", null);
     __decorate([
-        Property_1.$Property({
+        (0, Property_1.$Property)({
             type: "string", isVisible: (component) => {
                 var _a;
                 //only in table and column width is posible
@@ -1489,7 +1488,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "colSpan", null);
     __decorate([
-        Property_1.$Property({
+        (0, Property_1.$Property)({
             type: "string", isVisible: (component) => {
                 var _a;
                 //only in table and column width is posible
@@ -1500,7 +1499,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "rowSpan", null);
     __decorate([
-        Property_1.$Property({
+        (0, Property_1.$Property)({
             type: "boolean[]",
             default: [false, false, false, false],
             isVisible: (component) => {
@@ -1514,7 +1513,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:paramtypes", [Array])
     ], RComponent.prototype, "border", null);
     __decorate([
-        Property_1.$Property({
+        (0, Property_1.$Property)({
             type: "string", isVisible: (component) => {
                 var _a, _b;
                 //only in table and column width is posible
@@ -1525,7 +1524,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:paramtypes", [Object])
     ], RComponent.prototype, "width", null);
     __decorate([
-        Property_1.$Property({
+        (0, Property_1.$Property)({
             type: "string", isVisible: (component) => {
                 var _a, _b;
                 //only in table and column width is posible
@@ -1536,81 +1535,83 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:paramtypes", [Object])
     ], RComponent.prototype, "height", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], RComponent.prototype, "bold", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], RComponent.prototype, "italics", null);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
+        (0, Property_1.$Property)({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "font", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "fontSize", null);
     __decorate([
-        Property_1.$Property({ type: "color" }),
+        (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "background", null);
     __decorate([
-        Property_1.$Property({ type: "color" }),
+        (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "color", null);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["left", "center", "right"] }),
+        (0, Property_1.$Property)({ chooseFrom: ["left", "center", "right"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "alignment", null);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["underline", "lineThrough", "overline"] }),
+        (0, Property_1.$Property)({ chooseFrom: ["underline", "lineThrough", "overline"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "decoration", null);
     __decorate([
-        Property_1.$Property({ type: "color" }),
+        (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "decorationColor", null);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["dashed", "dotted", "double", "wavy"] }),
+        (0, Property_1.$Property)({ chooseFrom: ["dashed", "dotted", "double", "wavy"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "decorationStyle", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)()
+        //@ts-ignore
+        ,
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RComponent.prototype, "style", null);
     __decorate([
-        Property_1.$Property({ default: 1 }),
+        (0, Property_1.$Property)({ default: 1 }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "lineHeight", null);
     __decorate([
-        Property_1.$Property({ type: "number[]", description: "margin left, top, right, bottom" }),
+        (0, Property_1.$Property)({ type: "number[]", description: "margin left, top, right, bottom" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], RComponent.prototype, "margin", null);
-    RComponent = RComponent_2 = __decorate([
-        Registry_7.$Class("jassijs_report.RComponent"),
-        Property_1.$Property({ hideBaseClassProperties: true }),
+    exports.RComponent = RComponent = RComponent_2 = __decorate([
+        (0, Registry_7.$Class)("jassijs_report.RComponent"),
+        (0, Property_1.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RComponent);
-    exports.RComponent = RComponent;
 });
 define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs_report/RGroupTablerow", "jassijs_report/RTable"], function (require, exports, Registry_8, RComponent_3, RTablerow_1, Property_2, Classes_2, RGroupTablerow_1, RTable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.RDatatable = void 0;
+    exports.RDatatable = void 0;
+    exports.test = test;
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
     let RDatatable = class RDatatable extends RTable_1.RTable {
@@ -1834,24 +1835,23 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Regis
             return ret;
         }
     };
+    exports.RDatatable = RDatatable;
     __decorate([
-        Property_2.$Property(),
+        (0, Property_2.$Property)(),
         __metadata("design:type", String)
     ], RDatatable.prototype, "dataforeach", void 0);
     __decorate([
-        Property_2.$Property(),
+        (0, Property_2.$Property)(),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RDatatable.prototype, "groupCount", null);
-    RDatatable = __decorate([
-        RComponent_3.$ReportComponent({ fullPath: "report/Datatable", icon: "mdi mdi-table-cog", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
-        Registry_8.$Class("jassijs_report.RDatatable"),
+    exports.RDatatable = RDatatable = __decorate([
+        (0, RComponent_3.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-table-cog", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        (0, Registry_8.$Class)("jassijs_report.RDatatable"),
         __metadata("design:paramtypes", [Object])
     ], RDatatable);
-    exports.RDatatable = RDatatable;
     async function test() {
     }
-    exports.test = test;
 });
 //this file is autogenerated don't modify
 define("jassijs_report/registry", ["require"], function (require) {
@@ -2242,7 +2242,9 @@ define("jassijs_report/registry", ["require"], function (require) {
 define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.createReportDefinition = exports.doGroup = void 0;
+    exports.doGroup = doGroup;
+    exports.createReportDefinition = createReportDefinition;
+    exports.test = test;
     //templating is slow so we chache
     var funccache = {};
     //https://github.com/Mottie/javascript-number-formatter/blob/master/src/format.js
@@ -2526,7 +2528,6 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
         var sorted = groupSort(ret, "main", groupfields);
         return sorted;
     }
-    exports.doGroup = doGroup;
     //replace the datatable {datable:...} to table:{}
     function replaceDatatable(def, data) {
         var header = def.datatable.header;
@@ -2736,7 +2737,6 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
         return definition;
         // delete definition.parameter;
     }
-    exports.createReportDefinition = createReportDefinition;
     //add aggregate functions for grouping
     function addGroupFuncions(names, values) {
         names.push("sum");
@@ -2851,13 +2851,14 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
         s = "${k}".replaceTemplate(h, true);
         s = "${ho()}".replaceTemplate(h, true);
     }
-    exports.test = test;
 });
 define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Server", "jassijs/remote/Validator"], function (require, exports, Registry_9, RemoteObject_1, Server_1, Validator_1) {
     "use strict";
-    var ServerReport_2, _a, _b;
+    var ServerReport_2;
+    var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ServerReport = void 0;
+    exports.ServerReport = void 0;
+    exports.test = test;
     let ServerReport = ServerReport_2 = class ServerReport extends RemoteObject_1.RemoteObject {
         static async getDesign(path, parameter, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -2894,37 +2895,39 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
             }
         }
     };
+    exports.ServerReport = ServerReport;
     ServerReport.cacheLastParameter = {};
     __decorate([
-        Validator_1.ValidateFunctionParameter(),
-        __param(0, Validator_1.ValidateIsString()),
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, Object, typeof (_a = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _a : Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getDesign", null);
     __decorate([
-        Validator_1.ValidateFunctionParameter(),
-        __param(0, Validator_1.ValidateIsString()),
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, Object, typeof (_b = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _b : Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getBase64", null);
-    ServerReport = ServerReport_2 = __decorate([
-        Registry_9.$Class("jassijs_report.remote.ServerReport")
+    exports.ServerReport = ServerReport = ServerReport_2 = __decorate([
+        (0, Registry_9.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);
-    exports.ServerReport = ServerReport;
     async function test() {
         var ret = await ServerReport.getBase64("jassijs_report/server/TestServerreport", { sort: "name" });
         return ret;
         //    console.log(await new ServerReport().sayHello("Kurt"));
     }
-    exports.test = test;
 });
 define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs_report/ext/pdfmake", "jassijs/base/Windows", "jassijs/remote/Classes", "jassijs_report/remote/ServerReport", "jassijs_report/PDFReport", "jassijs/base/Actions"], function (require, exports, Registry_10, RemoteObject_2, pdfmake_2, Windows_1, Classes_3, ServerReport_3, PDFReport_2, Actions_1) {
     "use strict";
-    var Report_1, _a;
+    var Report_1;
+    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Report = exports.$Report = exports.ReportProperties = void 0;
+    exports.Report = exports.ReportProperties = void 0;
+    exports.$Report = $Report;
+    exports.test = test;
     //import { ReportViewer } from "jassijs_report/ReportViewer";
     class ReportProperties {
     }
@@ -2934,7 +2937,6 @@ define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry"
             Registry_10.default.register("$Report", pclass, properties);
         };
     }
-    exports.$Report = $Report;
     let Report = Report_1 = class Report extends RemoteObject_2.RemoteObject {
         //this is a sample remote function
         async fill() {
@@ -3043,55 +3045,55 @@ define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry"
             return ret;
         }
     };
+    exports.Report = Report;
     __decorate([
-        Actions_1.$Actions(),
+        (0, Actions_1.$Actions)(),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
     ], Report, "createActions", null);
-    Report = Report_1 = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Registry_10.$Class("jassijs_report.remote.Report")
+    exports.Report = Report = Report_1 = __decorate([
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Registry_10.$Class)("jassijs_report.remote.Report")
     ], Report);
-    exports.Report = Report;
     async function test() {
         //    console.log(await new Report().sayHello("Kurt"));
     }
-    exports.test = test;
 });
 define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable", "jassijs_report/RUList", "jassijs_report/ROList", "jassijs_report/RImage"], function (require, exports, BoxPanel_2, Registry_11, RStack_1, RText_2, RColumns_1, RUnknown_1, Panel_3, RComponent_4, RDatatable_1, Property_3, RStyle_1, RTextGroup_2, RTable_2, RUList_1, ROList_1, RImage_1) {
     "use strict";
     var ReportDesign_3;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ReportDesign = void 0;
+    exports.ReportDesign = void 0;
+    exports.test = test;
     let InfoProperties = class InfoProperties {
     };
     __decorate([
-        Property_3.$Property({ description: "the title of the document" }),
+        (0, Property_3.$Property)({ description: "the title of the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "title", void 0);
     __decorate([
-        Property_3.$Property({ description: "the name of the author" }),
+        (0, Property_3.$Property)({ description: "the name of the author" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "author", void 0);
     __decorate([
-        Property_3.$Property({ description: "the subject of the document" }),
+        (0, Property_3.$Property)({ description: "the subject of the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "subject", void 0);
     __decorate([
-        Property_3.$Property({ description: "keywords associated with the document" }),
+        (0, Property_3.$Property)({ description: "keywords associated with the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "keywords", void 0);
     __decorate([
-        Property_3.$Property({ description: "the creator of the document (default is ‘pdfmake’)" }),
+        (0, Property_3.$Property)({ description: "the creator of the document (default is ‘pdfmake’)" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "creator", void 0);
     __decorate([
-        Property_3.$Property({ description: "the producer of the document" }),
+        (0, Property_3.$Property)({ description: "the producer of the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "producer", void 0);
     InfoProperties = __decorate([
-        Registry_11.$Class("jassijs_report.InfoProperties")
+        (0, Registry_11.$Class)("jassijs_report.InfoProperties")
     ], InfoProperties);
     let PermissionProperties = class PermissionProperties {
         constructor() {
@@ -3104,35 +3106,35 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         }
     };
     __decorate([
-        Property_3.$Property({ chooseFrom: ["lowResolution", "highResolution"], description: 'whether printing is allowed. Specify "lowResolution" to allow degraded printing, or "highResolution" to allow printing with high resolution' }),
+        (0, Property_3.$Property)({ chooseFrom: ["lowResolution", "highResolution"], description: 'whether printing is allowed. Specify "lowResolution" to allow degraded printing, or "highResolution" to allow printing with high resolution' }),
         __metadata("design:type", String)
     ], PermissionProperties.prototype, "printing", void 0);
     __decorate([
-        Property_3.$Property({ description: "whether modifying the file is allowed. Specify true to allow modifying document content" }),
+        (0, Property_3.$Property)({ description: "whether modifying the file is allowed. Specify true to allow modifying document content" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "modifying", void 0);
     __decorate([
-        Property_3.$Property({ description: "whether copying text or graphics is allowed. Specify true to allow copying" }),
+        (0, Property_3.$Property)({ description: "whether copying text or graphics is allowed. Specify true to allow copying" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "copying", void 0);
     __decorate([
-        Property_3.$Property({ description: "whether annotating, form filling is allowed. Specify true to allow annotating and form filling" }),
+        (0, Property_3.$Property)({ description: "whether annotating, form filling is allowed. Specify true to allow annotating and form filling" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "annotating", void 0);
     __decorate([
-        Property_3.$Property({ description: "whether form filling and signing is allowed. Specify true to allow filling in form fields and signing" }),
+        (0, Property_3.$Property)({ description: "whether form filling and signing is allowed. Specify true to allow filling in form fields and signing" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "fillingForms", void 0);
     __decorate([
-        Property_3.$Property({ description: "whether copying text for accessibility is allowed. Specify true to allow copying for accessibility" }),
+        (0, Property_3.$Property)({ description: "whether copying text for accessibility is allowed. Specify true to allow copying for accessibility" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "contentAccessibility", void 0);
     __decorate([
-        Property_3.$Property({ description: "whether assembling document is allowed. Specify true to allow document assembly" }),
+        (0, Property_3.$Property)({ description: "whether assembling document is allowed. Specify true to allow document assembly" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "documentAssembly", void 0);
     PermissionProperties = __decorate([
-        Registry_11.$Class("jassijs_report.PermissionProperties")
+        (0, Registry_11.$Class)("jassijs_report.PermissionProperties")
     ], PermissionProperties);
     let StyleContainer = class StyleContainer extends Panel_3.Panel {
         constructor(props) {
@@ -3145,8 +3147,8 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         }
     };
     StyleContainer = __decorate([
-        Registry_11.$Class("jassijs_report.StyleContainer"),
-        Property_3.$Property({ hideBaseClassProperties: true }),
+        (0, Registry_11.$Class)("jassijs_report.StyleContainer"),
+        (0, Property_3.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], StyleContainer);
     //@$UIComponent({editableChildComponents:["this"]})
@@ -3541,58 +3543,58 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             return r;
         }
     };
+    exports.ReportDesign = ReportDesign;
     __decorate([
-        Property_3.$Property(),
+        (0, Property_3.$Property)(),
         __metadata("design:type", Boolean)
     ], ReportDesign.prototype, "compress", void 0);
     __decorate([
-        Property_3.$Property({ description: "To enable encryption set user password in userPassword (string value). The PDF file will be encrypted when a user password is provided, and users will be prompted to enter the password to decrypt the file when opening it." }),
+        (0, Property_3.$Property)({ description: "To enable encryption set user password in userPassword (string value). The PDF file will be encrypted when a user password is provided, and users will be prompted to enter the password to decrypt the file when opening it." }),
         __metadata("design:type", String)
     ], ReportDesign.prototype, "userPassword", void 0);
     __decorate([
-        Property_3.$Property({ description: "To set access privileges for the PDF file, you need to provide an owner password in ownerPassword (string value) and object permissions with permissions. By default, all operations are disallowed. You need to explicitly allow certain operations." }),
+        (0, Property_3.$Property)({ description: "To set access privileges for the PDF file, you need to provide an owner password in ownerPassword (string value) and object permissions with permissions. By default, all operations are disallowed. You need to explicitly allow certain operations." }),
         __metadata("design:type", String)
     ], ReportDesign.prototype, "ownerPassword", void 0);
     __decorate([
-        Property_3.$Property({ type: "json", componentType: "jassijs_report.InfoProperties" }),
+        (0, Property_3.$Property)({ type: "json", componentType: "jassijs_report.InfoProperties" }),
         __metadata("design:type", InfoProperties)
     ], ReportDesign.prototype, "info", void 0);
     __decorate([
-        Property_3.$Property({ type: "json", componentType: "jassijs_report.PermissionProperties" }),
+        (0, Property_3.$Property)({ type: "json", componentType: "jassijs_report.PermissionProperties" }),
         __metadata("design:type", PermissionProperties)
     ], ReportDesign.prototype, "permissions", void 0);
     __decorate([
-        Property_3.$Property({ type: "number[]", default: [40, 40, 40, 40], description: "margin of the page: left, top, right, bottom" }),
+        (0, Property_3.$Property)({ type: "number[]", default: [40, 40, 40, 40], description: "margin of the page: left, top, right, bottom" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], ReportDesign.prototype, "pageMargins", null);
     __decorate([
-        Property_3.$Property({ description: "the size of the page", default: "A4", chooseFrom: ['4A0', '2A0', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'RA0', 'RA1', 'RA2', 'RA3', 'RA4', 'SRA0', 'SRA1', 'SRA2', 'SRA3', 'SRA4', 'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'] }),
+        (0, Property_3.$Property)({ description: "the size of the page", default: "A4", chooseFrom: ['4A0', '2A0', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'RA0', 'RA1', 'RA2', 'RA3', 'RA4', 'SRA0', 'SRA1', 'SRA2', 'SRA3', 'SRA4', 'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], ReportDesign.prototype, "pageSize", null);
     __decorate([
-        Property_3.$Property({ chooseFrom: ['landscape', 'portrait'], default: "portrait", description: "the orientation of the page landscape or portrait" }),
+        (0, Property_3.$Property)({ chooseFrom: ['landscape', 'portrait'], default: "portrait", description: "the orientation of the page landscape or portrait" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], ReportDesign.prototype, "pageOrientation", null);
-    ReportDesign = ReportDesign_3 = __decorate([
-        RComponent_4.$ReportComponent({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
-        Registry_11.$Class("jassijs_report.ReportDesign"),
-        Property_3.$Property({ hideBaseClassProperties: true }),
+    exports.ReportDesign = ReportDesign = ReportDesign_3 = __decorate([
+        (0, RComponent_4.$ReportComponent)({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
+        (0, Registry_11.$Class)("jassijs_report.ReportDesign"),
+        (0, Property_3.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
-    exports.ReportDesign = ReportDesign;
     //jassijs.myRequire(modul.css["jassijs_report.css"]);
     async function test() {
     }
-    exports.test = test;
 });
 define("jassijs_report/Reports", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Table_1, Registry_12, Panel_4, Router_1, Classes_4, Actions_2, Windows_2) {
     "use strict";
     var Reports_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Reports = void 0;
+    exports.Reports = void 0;
+    exports.test = test;
     let Reports = Reports_1 = class Reports extends Panel_4.Panel {
         constructor() {
             super();
@@ -3664,8 +3666,9 @@ define("jassijs_report/Reports", ["require", "exports", "jassijs/ui/ContextMenu"
             Windows_2.default.add(new Reports_1(), "Reports");
         }
     };
+    exports.Reports = Reports;
     __decorate([
-        Actions_2.$Action({
+        (0, Actions_2.$Action)({
             name: "Tools/Reports",
             icon: "mdi mdi-chart-box-outline",
         }),
@@ -3673,24 +3676,23 @@ define("jassijs_report/Reports", ["require", "exports", "jassijs/ui/ContextMenu"
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], Reports, "show", null);
-    Reports = Reports_1 = __decorate([
-        Actions_2.$ActionProvider("jassijs.base.ActionNode"),
-        Registry_12.$Class("jassijs_report/Reports"),
+    exports.Reports = Reports = Reports_1 = __decorate([
+        (0, Actions_2.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Registry_12.$Class)("jassijs_report/Reports"),
         __metadata("design:paramtypes", [])
     ], Reports);
-    exports.Reports = Reports;
     class ReportEntry {
     }
     async function test() {
         var ret = new Reports();
         return ret;
     }
-    exports.test = test;
 });
 define("jassijs_report/ReportViewer", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs_report/PDFViewer", "jassijs/ui/PropertyEditor", "jassijs/ui/ComponentDescriptor", "jassijs_report/test/ServerReport"], function (require, exports, BoxPanel_3, Registry_13, Panel_5, PDFViewer_3, PropertyEditor_2, ComponentDescriptor_1, ServerReport_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ReportViewer = void 0;
+    exports.ReportViewer = void 0;
+    exports.test = test;
     let ReportViewer = class ReportViewer extends Panel_5.Panel {
         constructor() {
             super();
@@ -3743,26 +3745,23 @@ define("jassijs_report/ReportViewer", ["require", "exports", "jassijs/ui/BoxPane
             });
         }
     };
-    ReportViewer = __decorate([
-        Registry_13.$Class("jassijs_report/ReportViewer"),
+    exports.ReportViewer = ReportViewer;
+    exports.ReportViewer = ReportViewer = __decorate([
+        (0, Registry_13.$Class)("jassijs_report/ReportViewer"),
         __metadata("design:paramtypes", [])
     ], ReportViewer);
-    exports.ReportViewer = ReportViewer;
     async function test() {
         var ret = new ReportViewer();
         ret.value = new ServerReport_4.ServerReport();
         return ret;
     }
-    exports.test = test;
 });
 define("jassijs_report/RGroupTablerow", ["require", "exports", "jassijs_report/RTablerow", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, RTablerow_2, Registry_14, Property_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RGroupTablerow = void 0;
     //@$ReportComponent({ editableChildComponents: ["this"] })
-    let RGroupTablerow = 
-    //@$Property({name:"horizontal",hide:true})
-    class RGroupTablerow extends RTablerow_2.RTablerow {
+    let RGroupTablerow = class RGroupTablerow extends RTablerow_2.RTablerow {
         get expression() {
             var _a, _b, _c;
             var pos = (_a = this.parent) === null || _a === void 0 ? void 0 : _a.groupFooterPanel.indexOf(this);
@@ -3785,25 +3784,23 @@ define("jassijs_report/RGroupTablerow", ["require", "exports", "jassijs_report/R
             return this;
         }
     };
+    exports.RGroupTablerow = RGroupTablerow;
     __decorate([
-        Property_4.$Property(),
+        (0, Property_4.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RGroupTablerow.prototype, "expression", null);
-    RGroupTablerow = __decorate([
-        Registry_14.$Class("jassijs_report.RTablerow")
+    exports.RGroupTablerow = RGroupTablerow = __decorate([
+        (0, Registry_14.$Class)("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
     ], RGroupTablerow);
-    exports.RGroupTablerow = RGroupTablerow;
 });
 define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs_report/RComponent"], function (require, exports, Registry_15, Property_5, RComponent_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RImage = void 0;
     //mdi-format-list-numbered
-    let RImage = 
-    //@$Property({name:"horizontal",hide:true})
-    class RImage extends RComponent_5.RComponent {
+    let RImage = class RImage extends RComponent_5.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -3926,8 +3923,9 @@ define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry"
             return ret;
         }
     };
+    exports.RImage = RImage;
     __decorate([
-        Property_5.$Property({
+        (0, Property_5.$Property)({
             type: "rimage",
             chooseFrom: (data) => {
                 debugger;
@@ -3938,28 +3936,28 @@ define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:paramtypes", [String])
     ], RImage.prototype, "image", null);
     __decorate([
-        Property_5.$Property({ type: "number[]", decription: "fit in rectangle width, height e.g. 10,20" }),
+        (0, Property_5.$Property)({ type: "number[]", decription: "fit in rectangle width, height e.g. 10,20" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], RImage.prototype, "fit", null);
     __decorate([
-        Property_5.$Property({ type: "number" }),
+        (0, Property_5.$Property)({ type: "number" }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RImage.prototype, "opacity", null);
-    RImage = __decorate([
-        RComponent_5.$ReportComponent({ fullPath: "report/Image", icon: "mdi mdi-image-frame" }),
-        Registry_15.$Class("jassijs_report.RImage")
+    exports.RImage = RImage = __decorate([
+        (0, RComponent_5.$ReportComponent)({ fullPath: "report/Image", icon: "mdi mdi-image-frame" }),
+        (0, Registry_15.$Class)("jassijs_report.RImage")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
     ], RImage);
-    exports.RImage = RImage;
 });
 define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databinder", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Databinder_1, Upload_1, Textbox_1, Image_1, Button_2, Repeater_1, Registry_16, Panel_6, Editor_1, RComponent_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.RImageChooser = exports.RImageEditor = void 0;
+    exports.RImageChooser = exports.RImageEditor = void 0;
+    exports.test = test;
     let RImageEditor = class RImageEditor extends Editor_1.Editor {
         /**
          * Checkbox Editor for boolean values
@@ -4048,12 +4046,12 @@ define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databin
             }
         }
     };
-    RImageEditor = __decorate([
-        Editor_1.$PropertyEditor(["rimage"]),
-        Registry_16.$Class("jassi_report/RImagePropertyEditor"),
+    exports.RImageEditor = RImageEditor;
+    exports.RImageEditor = RImageEditor = __decorate([
+        (0, Editor_1.$PropertyEditor)(["rimage"]),
+        (0, Registry_16.$Class)("jassi_report/RImagePropertyEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], RImageEditor);
-    exports.RImageEditor = RImageEditor;
     class RImageChooser extends Panel_6.Panel {
         constructor() {
             super();
@@ -4132,16 +4130,13 @@ define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databin
         var ret = new RImageChooser();
         return ret;
     }
-    exports.test = test;
 });
 define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_17, Component_3, Property_6, ReportDesign_4, RComponent_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ROList = void 0;
     //Limitations not implemented: separator,markerColor, counter is counting also the next elements
-    let ROList = 
-    //@$Property({name:"horizontal",hide:true})
-    class ROList extends RComponent_7.RComponent {
+    let ROList = class ROList extends RComponent_7.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -4249,29 +4244,29 @@ define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry"
             return ret;
         }
     };
+    exports.ROList = ROList;
     __decorate([
-        Property_6.$Property({ chooseFrom: ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"] }),
+        (0, Property_6.$Property)({ chooseFrom: ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], ROList.prototype, "type", null);
     __decorate([
-        Property_6.$Property({ default: false }),
+        (0, Property_6.$Property)({ default: false }),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], ROList.prototype, "reversed", null);
     __decorate([
-        Property_6.$Property({ default: 1 }),
+        (0, Property_6.$Property)({ default: 1 }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], ROList.prototype, "start", null);
-    ROList = __decorate([
-        RComponent_7.$ReportComponent({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] }),
-        Registry_17.$Class("jassijs_report.ROList")
+    exports.ROList = ROList = __decorate([
+        (0, RComponent_7.$ReportComponent)({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] }),
+        (0, Registry_17.$Class)("jassijs_report.ROList")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
     ], ROList);
-    exports.ROList = ROList;
 });
 define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_18, Property_7, ReportDesign_5, RComponent_8) {
     "use strict";
@@ -4342,34 +4337,24 @@ define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Registry"
             return ret;
         }
     };
-    RStack = __decorate([
-        RComponent_8.$ReportComponent({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        Registry_18.$Class("jassijs_report.RStack")
+    exports.RStack = RStack;
+    exports.RStack = RStack = __decorate([
+        (0, RComponent_8.$ReportComponent)({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        (0, Registry_18.$Class)("jassijs_report.RStack")
         //@$Property({name:"horizontal",hide:true})
         ,
-        Property_7.$Property({ name: "children", type: "jassijs_report.RComponent" }),
+        (0, Property_7.$Property)({ name: "children", type: "jassijs_report.RComponent" }),
         __metadata("design:paramtypes", [Object])
     ], RStack);
-    exports.RStack = RStack;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
 define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, RComponent_9, Registry_19, Property_8, Classes_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.RStyle = void 0;
+    exports.RStyle = void 0;
+    exports.test = test;
     //@$UIComponent({editableChildComponents:["this"]})
-    let RStyle = 
-    //@$Property({name:"horizontal",hide:true})
-    class RStyle extends RComponent_9.RComponent {
-        constructor(properties = undefined) {
-            super(properties);
-            this.$isInivisibleComponent = true; //invisible component in designer
-            this.reporttype = "style";
-            var _this = this;
-            this.onstylechanged((param1, param2) => {
-                _this.update();
-            });
-        }
+    let RStyle = class RStyle extends RComponent_9.RComponent {
         set name(value) {
             var old = this._name;
             this._name = value;
@@ -4399,6 +4384,15 @@ define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponen
         }
         get name() {
             return this._name;
+        }
+        constructor(properties = undefined) {
+            super(properties);
+            this.$isInivisibleComponent = true; //invisible component in designer
+            this.reporttype = "style";
+            var _this = this;
+            this.onstylechanged((param1, param2) => {
+                _this.update();
+            });
         }
         toJSON() {
             var ret = super.toJSON();
@@ -4434,29 +4428,29 @@ define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponen
             super.extensionCalled(action);
         }
     };
+    exports.RStyle = RStyle;
     __decorate([
-        Property_8.$Property(),
+        (0, Property_8.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RStyle.prototype, "name", null);
-    RStyle = __decorate([
-        RComponent_9.$ReportComponent({ fullPath: "report/Style", icon: "mdi mdi-virus-outline", editableChildComponents: ["this"] }),
-        Registry_19.$Class("jassijs_report.RStyle")
+    exports.RStyle = RStyle = __decorate([
+        (0, RComponent_9.$ReportComponent)({ fullPath: "report/Style", icon: "mdi mdi-virus-outline", editableChildComponents: ["this"] }),
+        (0, Registry_19.$Class)("jassijs_report.RStyle")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
     ], RStyle);
-    exports.RStyle = RStyle;
     function test() {
         var n = new RStyle();
         var hh = Object.getOwnPropertyDescriptor(n, "name");
     }
-    exports.test = test;
 });
 define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText", "jassijs/util/Tools", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/util/Runlater", "jassijs_report/RTableLayouts"], function (require, exports, Registry_20, RText_3, Tools_3, RComponent_10, RTablerow_3, Property_9, ContextMenu_2, MenuItem_1, Button_3, Runlater_1, RTableLayouts_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.RTable = void 0;
+    exports.RTable = void 0;
+    exports.test = test;
     var allLayouts = Object.keys(RTableLayouts_1.tableLayouts);
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
@@ -5154,24 +5148,23 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             return ret;
         }
     };
+    exports.RTable = RTable;
     __decorate([
-        Property_9.$Property(),
+        (0, Property_9.$Property)(),
         __metadata("design:type", Number)
     ], RTable.prototype, "headerRows", void 0);
     __decorate([
-        Property_9.$Property({ chooseFrom: allLayouts, chooseFromStrict: true }),
+        (0, Property_9.$Property)({ chooseFrom: allLayouts, chooseFromStrict: true }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RTable.prototype, "layoutName", null);
-    RTable = __decorate([
-        RComponent_10.$ReportComponent({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
-        Registry_20.$Class("jassijs_report.RTable"),
+    exports.RTable = RTable = __decorate([
+        (0, RComponent_10.$ReportComponent)({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        (0, Registry_20.$Class)("jassijs_report.RTable"),
         __metadata("design:paramtypes", [Object])
     ], RTable);
-    exports.RTable = RTable;
     async function test() {
     }
-    exports.test = test;
 });
 define("jassijs_report/RTableLayouts", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -5198,7 +5191,7 @@ define("jassijs_report/RTableLayouts", ["require", "exports"], function (require
             }
         },
         headerLineOnly: {
-            isSystem: false,
+            isSystem: false, //is missing in this version of pdfmake
             layout: {
                 hLineWidth: function (i, node) {
                     return (i === 1 ? 2 : 0); //(i === 0 || i === node.table.body.length) ? 4 : 1;
@@ -5283,9 +5276,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTablerow = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
-    let RTablerow = 
-    //@$Property({name:"horizontal",hide:true})
-    class RTablerow extends RComponent_11.RComponent {
+    let RTablerow = class RTablerow extends RComponent_11.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -5436,20 +5427,21 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
             return columns;
         }
     };
-    RTablerow = __decorate([
-        RComponent_11.$ReportComponent({ editableChildComponents: ["this"] }),
-        Registry_21.$Class("jassijs_report.RTablerow")
+    exports.RTablerow = RTablerow;
+    exports.RTablerow = RTablerow = __decorate([
+        (0, RComponent_11.$ReportComponent)({ editableChildComponents: ["this"] }),
+        (0, Registry_21.$Class)("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
     ], RTablerow);
-    exports.RTablerow = RTablerow;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
 define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools", "jassijs/ui/Component"], function (require, exports, Registry_22, RComponent_12, Property_10, ReportDesign_7, CSSProperties_1, Tools_4, Component_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.RText = void 0;
+    exports.RText = void 0;
+    exports.test = test;
     /*
     Object.assign(TextComponent.prototype, {
         toJSON() {
@@ -5513,7 +5505,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             this.__dom.style["overflow"] = "hidden";
             this.dom.classList.add("designerNoResizable");
             delete this._components;
-            CSSProperties_1.loadFontIfNedded("Roboto");
+            (0, CSSProperties_1.loadFontIfNedded)("Roboto");
             var el = this.dom.children[0];
             this._designMode = false;
             this.dom.style["display"] = "block";
@@ -5720,8 +5712,9 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             return ret;
         }
     };
+    exports.RText = RText;
     __decorate([
-        Property_10.$Property({
+        (0, Property_10.$Property)({
             chooseFrom: function (component) {
                 return ReportDesign_7.ReportDesign.getVariables(component);
             }
@@ -5730,35 +5723,31 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "value", null);
     __decorate([
-        Property_10.$Property({ type: "string", chooseFrom: allFormats }),
+        (0, Property_10.$Property)({ type: "string", chooseFrom: allFormats }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "format", null);
-    RText = __decorate([
-        RComponent_12.$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
-        Registry_22.$Class("jassijs_report.RText")
+    exports.RText = RText = __decorate([
+        (0, RComponent_12.$ReportComponent)({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
+        (0, Registry_22.$Class)("jassijs_report.RText")
         //@$Property({hideBaseClassProperties:true})
         ,
-        Property_10.$Property({ name: "value", type: "string", description: "text" }),
+        (0, Property_10.$Property)({ name: "value", type: "string", description: "text" }),
         __metadata("design:paramtypes", [Object])
     ], RText);
-    exports.RText = RText;
     function test() {
         var t = new RText();
         t.value = "a<em>b<strong>cd</strong>e</em><span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>fg<span style='background-color: rgb(186, 55, 42);' data-mce-style='background-color: #ba372a;'>h</span></span><span style='background-color: rgb(186, 55, 42);' data-mce-style='background-color: #ba372a;'>ij<span style='font-size: 14pt;' data-mce-style='font-size: 14pt;'>k</span></span><span style='font-size: 14pt;' data-mce-style='font-size: 14pt;'>l<span style='text-decoration: underline;' data-mce-style='text-decoration: underline;'>m</span></span><span style='text-decoration: underline;' data-mce-style='text-decoration: underline;'>no</span>";
         var obb = t.toJSON();
         //var test = RText.fromJSON(obb);
     }
-    exports.test = test;
 });
 define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportDesign", "jassijs_report/RComponent", "jassijs/remote/Classes"], function (require, exports, Registry_23, ReportDesign_8, RComponent_13, Classes_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTextGroup = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
-    let RTextGroup = 
-    //@$Property({name:"horizontal",hide:true})
-    class RTextGroup extends RComponent_13.RComponent {
+    let RTextGroup = class RTextGroup extends RComponent_13.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -5816,14 +5805,14 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
             return ret;
         }
     };
-    RTextGroup = __decorate([
-        RComponent_13.$ReportComponent({ fullPath: "report/TextGroup", icon: "mdi mdi-text-box-multiple-outline", editableChildComponents: ["this"] }),
-        Registry_23.$Class("jassijs_report.RTextGroup")
+    exports.RTextGroup = RTextGroup;
+    exports.RTextGroup = RTextGroup = __decorate([
+        (0, RComponent_13.$ReportComponent)({ fullPath: "report/TextGroup", icon: "mdi mdi-text-box-multiple-outline", editableChildComponents: ["this"] }),
+        (0, Registry_23.$Class)("jassijs_report.RTextGroup")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
     ], RTextGroup);
-    exports.RTextGroup = RTextGroup;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
 define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_24, Component_6, Property_11, ReportDesign_9, RComponent_14) {
@@ -5831,9 +5820,7 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RUList = void 0;
     //mdi-format-list-numbered
-    let RUList = 
-    //@$Property({name:"horizontal",hide:true})
-    class RUList extends RComponent_14.RComponent {
+    let RUList = class RUList extends RComponent_14.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -5910,19 +5897,19 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
             return ret;
         }
     };
+    exports.RUList = RUList;
     __decorate([
-        Property_11.$Property({ chooseFrom: ["square", "circle", "none"] }),
+        (0, Property_11.$Property)({ chooseFrom: ["square", "circle", "none"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RUList.prototype, "type", null);
-    RUList = __decorate([
-        RComponent_14.$ReportComponent({ fullPath: "report/Unordered List", icon: "mdi mdi-format-list-bulleted", editableChildComponents: ["this"] }),
-        Registry_24.$Class("jassijs_report.RUList")
+    exports.RUList = RUList = __decorate([
+        (0, RComponent_14.$ReportComponent)({ fullPath: "report/Unordered List", icon: "mdi mdi-format-list-bulleted", editableChildComponents: ["this"] }),
+        (0, Registry_24.$Class)("jassijs_report.RUList")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
     ], RUList);
-    exports.RUList = RUList;
 });
 define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent"], function (require, exports, Registry_25, RComponent_15) {
     "use strict";
@@ -5959,16 +5946,17 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registr
             return ret;
         }
     };
-    RUnknown = __decorate([
-        Registry_25.$Class("jassijs_report.RUnknown"),
+    exports.RUnknown = RUnknown;
+    exports.RUnknown = RUnknown = __decorate([
+        (0, Registry_25.$Class)("jassijs_report.RUnknown"),
         __metadata("design:paramtypes", [Object])
     ], RUnknown);
-    exports.RUnknown = RUnknown;
 });
 define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Registry_26, Runlater_2, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_10, Panel_7, Windows_3, DockingContainer_1, VariablePanel_1, Property_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.SimpleReportEditor = void 0;
+    exports.SimpleReportEditor = void 0;
+    exports.test = test;
     class SimpleCodeEditor extends Panel_7.Panel {
         constructor(codePanel) {
             super();
@@ -6181,12 +6169,12 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         }
     }
     __decorate([
-        Property_12.$Property({ isUrlTag: true, id: true }),
+        (0, Property_12.$Property)({ isUrlTag: true, id: true }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], SimpleCodeEditor.prototype, "file", null);
     __decorate([
-        Property_12.$Property({ isUrlTag: true }),
+        (0, Property_12.$Property)({ isUrlTag: true }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], SimpleCodeEditor.prototype, "line", null);
@@ -6268,11 +6256,11 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
             return this.acePanel.value;
         }
     };
-    SimpleReportEditor = __decorate([
-        Registry_26.$Class("jassi_report.SimpleReportEditor"),
+    exports.SimpleReportEditor = SimpleReportEditor;
+    exports.SimpleReportEditor = SimpleReportEditor = __decorate([
+        (0, Registry_26.$Class)("jassi_report.SimpleReportEditor"),
         __metadata("design:paramtypes", [Object])
     ], SimpleReportEditor);
-    exports.SimpleReportEditor = SimpleReportEditor;
     function test() {
         var reportdesign = {
             content: [
@@ -6313,12 +6301,11 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         }, 10);
         //return editor;
     }
-    exports.test = test;
 });
 define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs_editor/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings", "jassijs/base/CurrentSettings"], function (require, exports, FileExplorer_1, Windows_4, Panel_8, Router_2, Settings_1, CurrentSettings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
+    exports.test = test;
     //var h=new RemoteObject().test();
     async function start() {
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
@@ -6361,7 +6348,6 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs_edito
     function test() {
         convertMD();
     }
-    exports.test = test;
 });
 define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs_editor/FileExplorer"], function (require, exports, Actions_3, Registry_27, OptionDialog_1, FileExplorer_2) {
     "use strict";
@@ -6379,9 +6365,10 @@ define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Act
             }
         }
     };
+    exports.TemplateReport = TemplateReport;
     TemplateReport.code = code;
     __decorate([
-        Actions_3.$Action({
+        (0, Actions_3.$Action)({
             name: "New/Report",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -6391,16 +6378,16 @@ define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Act
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], TemplateReport, "newFile", null);
-    TemplateReport = __decorate([
-        Actions_3.$ActionProvider("jassijs.remote.FileNode"),
-        Registry_27.$Class("jassijs_report.TemplateReport")
+    exports.TemplateReport = TemplateReport = __decorate([
+        (0, Actions_3.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Registry_27.$Class)("jassijs_report.TemplateReport")
     ], TemplateReport);
-    exports.TemplateReport = TemplateReport;
 });
 define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_2, Property_13, Registry_28) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ClientReport = void 0;
+    exports.ClientReport = void 0;
+    exports.test = test;
     var reportdesign = {
         content: [
             {
@@ -6425,25 +6412,25 @@ define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_repor
             };
         }
     };
+    exports.ClientReport = ClientReport;
     __decorate([
-        Property_13.$Property(),
+        (0, Property_13.$Property)(),
         __metadata("design:type", String)
     ], ClientReport.prototype, "sort", void 0);
-    ClientReport = __decorate([
-        Report_2.$Report({ name: "test/Sample Clientreport" }),
-        Registry_28.$Class("jassijs_report.test.ClientReport")
+    exports.ClientReport = ClientReport = __decorate([
+        (0, Report_2.$Report)({ name: "test/Sample Clientreport" }),
+        (0, Registry_28.$Class)("jassijs_report.test.ClientReport")
     ], ClientReport);
-    exports.ClientReport = ClientReport;
     async function test() {
         var cl = new ClientReport();
         await cl.open();
     }
-    exports.test = test;
 });
 define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_3, Property_14, Registry_29) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ServerReport = void 0;
+    exports.ServerReport = void 0;
+    exports.test = test;
     /*var reportdesign:JassijsReportDefinition = {
         content: [
             {
@@ -6458,21 +6445,20 @@ define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_repor
     };*/
     let ServerReport = class ServerReport extends Report_3.Report {
     };
+    exports.ServerReport = ServerReport;
     __decorate([
-        Property_14.$Property({ chooseFromStrict: true, chooseFrom: ["name", "lastname"] }),
+        (0, Property_14.$Property)({ chooseFromStrict: true, chooseFrom: ["name", "lastname"] }),
         __metadata("design:type", String)
     ], ServerReport.prototype, "sort", void 0);
-    ServerReport = __decorate([
-        Report_3.$Report({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/server/TestServerreport" }),
-        Registry_29.$Class("jassijs_report.test.ServerReport")
+    exports.ServerReport = ServerReport = __decorate([
+        (0, Report_3.$Report)({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/server/TestServerreport" }),
+        (0, Registry_29.$Class)("jassijs_report.test.ServerReport")
     ], ServerReport);
-    exports.ServerReport = ServerReport;
     async function test() {
         var cl = new ServerReport();
         cl.sort = "lastname";
         await cl.view();
     }
-    exports.test = test;
 });
 //this file is autogenerated don't modify
 define("jassijs_report/registry", ["require"], function (require) {

@@ -14,7 +14,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655740040000
 	},
 	"jassijs/base/Errors.ts": {
-		"date": 1655726580000
+		"date": 1720116065571.527
 	},
 	"jassijs/base/Extensions.ts": {
 		"date": 1655549184000
@@ -31,7 +31,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Windows.ts": {
-		"date": 1719609392405.4172,
+		"date": 1720115647321.4683,
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/ext/goldenlayout.ts": {
@@ -555,7 +555,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1684358274000
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1684515212000
+		"date": 1720184378220.3965
 	},
 	"jassijs/server/Installserver.ts": {
 		"date": 1719314261039.9204
@@ -670,7 +670,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1719778583646.973,
+		"date": 1720029726396.1758,
 		"jassijs.ui.Component": {
 			"$Property": [
 				{
@@ -1357,7 +1357,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.VariablePanel": {}
 	},
 	"jassijs/util/Cookies.ts": {
-		"date": 1682364420000
+		"date": 1720099914948.8174
 	},
 	"jassijs/util/CSVImport.ts": {
 		"date": 1697199596581.038,
@@ -1397,7 +1397,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/ui/State.ts": {
-		"date": 1719830765306.527
+		"date": 1720185196172.8337
 	}
 }
  }

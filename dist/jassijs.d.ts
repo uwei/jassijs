@@ -1,8 +1,281 @@
-/// <reference types="react" />
-/// <reference types="react" />
-/// <reference types="tabulator-tables" />
-/// <reference types="jquery" />
-/// <reference types="jquery.fancytree" />
+declare module "jassijs/base/ActionNode" {
+    export class ActionNode {
+    }
+    export function test(): any;
+}
+declare module "jassijs/base/Actions" {
+    export class ActionProperties {
+        /** @member {string} - the name of the Action */
+        name: string;
+        /**
+        * @member {string} - the description of the Action
+        */
+        description?: string;
+        /**
+        * @member {string}  - the icon of the Action
+        */
+        icon?: string;
+        isEnabled?: {
+            (data?: any[]): boolean | Promise<boolean>;
+        };
+        run?: any;
+    }
+    /**
+     * usage
+     * @$Actions()
+     * static test():ActionProperties[]{
+     * }
+     */
+    export function $Actions(): Function;
+    export function $Action(property: ActionProperties): Function;
+    export function $ActionProvider(longclassname: string): Function;
+    export interface Action {
+        name: string;
+        icon?: string;
+        call: (objects: any[], params?: any) => void;
+        description?: string;
+    }
+    export class Actions {
+        static getActionsFor(vdata: any[]): Promise<Action[]>;
+    }
+    export function test(): any;
+}
+declare module "jassijs/base/CurrentSettings" {
+    import "async!jassijs/remote/Settings:load";
+    var currentsettings: any;
+    export { currentsettings };
+}
+declare module "jassijs/base/Errors" {
+    export class Errors {
+        static errors: Errors;
+        items: any;
+        handler: any;
+        private static _randomID;
+        /**
+        * Error handling.
+        * @class jassijs.base.Error
+        */
+        constructor();
+        addError(err: any): void;
+        /**
+         * raise if error is thrown
+         * @param {function} func - callback function
+         * @param {string} [id] - the id of the component that registers the error
+         */
+        onerror(func: any, id: any): any;
+        /**
+         * delete the error handler
+         * @param {function} func - callback function
+         * @param {string} [id] - the id of the component that registers the error
+         */
+        offerror(id: any): void;
+    }
+    var errors: Errors;
+    export { errors };
+}
+declare module "jassijs/base/Extensions" {
+    export class Extensions {
+        items: any;
+        constructor();
+        /**
+         * extend the class
+         * @param {class} type - extend the type - add functions
+         */
+        extend(classname: any, classdef: any): void;
+        forFile(file: any): unknown;
+        /**
+         * init the Extensions
+         */
+        init(): void;
+        /**
+         * extend an existing class
+         * all methods and property where copied
+         * @param {string} - the name of the class to extend
+         * @param {class} - the class
+         */
+        register(name: any, extClass: any, alias: any): void;
+    }
+    var extensions: any;
+    export default extensions;
+}
+declare module "jassijs/base/LoginDialog" {
+    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
+    import "jassijs/ext/jquerylib";
+    export function doAfterLogin(resolve: any, prot: RemoteProtocol): void;
+    export function login(): unknown;
+    export function test(): void;
+}
+declare module "jassijs/base/PropertyEditorService" {
+    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    import { Property } from "jassijs/ui/Property";
+    export class PropertyEditorService {
+        data: any;
+        private funcRegister;
+        /**
+        * manage all PropertyEditors
+        * @class jassijs.ui.PropertyEditorService
+        */
+        constructor();
+        reset(): void;
+        destroy(): void;
+        private loadType;
+        /**
+         * creates PropertyEditor for type
+         *
+         * @param {string} variablename - the name of the variable
+         * @param {jassijs.ui.Property} property - name of the type
+         * @param {jassijs.ui.PropertyEditor} propertyEditor - the PropertyEditor instance
+         */
+        createFor(property: Property, propertyEditor: PropertyEditor): Editor | Promise<any>;
+        private register;
+    }
+    var propertyeditor: PropertyEditorService;
+    export { propertyeditor };
+}
+declare module "jassijs/base/Router" {
+    export class Router {
+        constructor();
+        /**
+         * registers a database class
+         * @param {string} - the name of the class
+         * @param {class} - the class
+         */
+        register(name: any, data: any): void;
+        /**
+         * resolve the url
+         * @param {string} hash - the hash to resolve
+         */
+        resolve(hash: any): void;
+        /**
+         * generate a URL from the component
+         * @param {jassijs.ui.Component} component - the component to inspect
+         */
+        getURLFromComponent(component: any): void;
+        /**
+         *
+         * @param {string} hash - the hash to navigate
+         */
+        navigate(hash: any): void;
+    }
+    let router: Router;
+    export { router };
+}
+declare module "jassijs/base/Windows" {
+    import { Panel } from "jassijs/ui/Panel";
+    export class Windows {
+        _myLayout: any;
+        _counter: number;
+        _id: string;
+        dom: any;
+        _desktop: Panel;
+        components: any[];
+        inited: boolean;
+        private _noRestore;
+        /**
+         * the window system -> jassijs.windows
+         * @class jassijs.base.Windows
+         */
+        constructor();
+        /**
+         * inits the component
+         */
+        _init(): void;
+        /**
+         * search a window
+         * @param {object|undefined} parent - the parent window
+         * @param {type} name - name of the window
+         * @returns {object} - the founded window
+         */
+        _findDeep(parent: any, name: any): any;
+        /**
+         * true if there a window with that name
+         * @param {string} name
+         * @returns {boolean}
+         */
+        contains(name: any): boolean;
+        /**
+         * activate the window
+         * @param {string} name - the neme of the window
+         * @returns {objet} - the window
+         */
+        show(name: any): any;
+        /**
+         * finds the component for the name
+         * @param {string} name - the name of the window
+         * @returns {jassijs.ui.Component} - the found dom element
+         */
+        findComponent(name: any): any;
+        /**
+         * adds a window to the side (left - area)
+         * @param {dom|jassijs.ui.Component} component - the component to add
+         * @param {string} title - the title
+         */
+        addLeft(component: any, title: any): void;
+        /**
+        * adds a window to the side (left - area)
+        * @param {dom|jassijs.ui.Component} component - the component to add
+        * @param {string} title - the title
+        */
+        addRight(component: any, title: any): void;
+        add(component: any, title: any, name?: any): void;
+        /**
+         * add a window to the main area
+         * @param {dom|jassijs.ui.Component} component - the component to add
+         * @param {string} title - the title
+         * @param {string} [id] - the name (id) - =title if undefined
+         */
+        _add(parent: any, component: any, title: any, name?: any): void;
+        test(): void;
+        /**
+         * gets the url for the given component
+         * @param {jassijs.ui.component} comp - the component to read
+         */
+        getUrlFromComponent(comp: any): string;
+        restoreWindows(): void;
+        saveWindows(): void;
+        /**
+         * fired if component is closing
+         * @param {dom|jassijs.UI.Component} component - the component to register this event
+         * @param {function} func
+         */
+        onclose(component: any, func: any): void;
+    }
+    var windows: Windows;
+    export default windows;
+}
+declare module "jassijs/ext/fancytree" {
+    export {};
+}
+/// <amd-dependency name="goldenlayout" path="goldenlayout" />
+declare module "jassijs/ext/goldenlayout" {
+    var goldenlayout: any;
+    export default goldenlayout;
+}
+declare var def: {};
+declare module "jassijs/ext/jquerylib" {
+    import "jquery";
+    import "jquery.ui";
+    import "jquery.ui.touch";
+}
+/// <amd-dependency name="Papa" path="papaparse" />
+declare module "jassijs/ext/papaparse" {
+    var Papa: any;
+    export default Papa;
+}
+/// <amd-dependency name="spectrum" path="spectrum" />
+declare module "jassijs/ext/spectrum" { }
+/// <amd-module name="tabulator-tables" />
+/// <amd-dependency name="tabulator" path="tabulatorlib" />
+declare module "tabulator-tables" {
+    var Tabulator: any;
+    export { Tabulator };
+}
+/// <amd-dependency name="tinymce" path="tinymcelib" />
+declare module "jassijs/ext/tinymce" {
+    var tinymce: any;
+    export default tinymce;
+}
 declare module "jassijs/modul" {
     const _default: {
         css: {
@@ -28,15 +301,15 @@ declare module "jassijs/modul" {
         };
         require: {
             shim: {
-                goldenlayout: string[];
-                "jquery.choosen": string[];
-                "jquery.contextMenu": string[];
-                'jquery.fancytree': string[];
-                'jquery.fancytree.dnd': string[];
-                'jquery.ui': string[];
-                'jquery.notify': string[];
-                'jquery.ui.touch': string[];
-                spectrum: string[];
+                goldenlayout: {};
+                "jquery.choosen": {};
+                "jquery.contextMenu": {};
+                'jquery.fancytree': {};
+                'jquery.fancytree.dnd': {};
+                'jquery.ui': {};
+                'jquery.notify': {};
+                'jquery.ui.touch': {};
+                spectrum: {};
             };
             paths: {
                 'intersection-observer': string;
@@ -79,7 +352,7 @@ declare module "jassijs/modul" {
                     "window.SQL": string;
                 };
             };
-            loadbeforestart: string[];
+            loadbeforestart: {};
         };
     };
     export default _default;
@@ -101,7 +374,7 @@ declare module "jassijs/remote/Classes" {
          * load the a class
          * @param classname - the class to load
          */
-        loadClass(classname: string): Promise<new (...args: any[]) => any>;
+        loadClass(classname: string): unknown;
         /**
         * get the class of the given classname
         * @param {string} - the classname
@@ -118,7 +391,500 @@ declare module "jassijs/remote/Classes" {
     }
     let classes: Classes;
     export { classes };
-    export function test(t: any): Promise<void>;
+    export function test(t: any): any;
+}
+declare module "jassijs/remote/ClientError" {
+    export class ClientError extends Error {
+        constructor(msg: string);
+    }
+}
+declare module "jassijs/remote/Config" {
+    export class Config {
+        name: string;
+        isLocalFolderMapped: boolean;
+        isServer: boolean;
+        modules: {
+            [modul: string]: string;
+        };
+        server: {
+            modules: {
+                [modul: string]: string;
+            };
+        };
+        jsonData: any;
+        clientrequire: any;
+        serverrequire: any;
+        constructor();
+        init(configtext: string, name?: any): void;
+        reload(): any;
+        saveJSON(): any;
+    }
+    var config: Config;
+    export { config };
+}
+declare module "jassijs/remote/Database" {
+    export class TypeDef {
+        fields: {
+            [fieldname: string]: {
+                [decorater: string]: any[];
+            };
+        };
+        getRelation(fieldname: any): {
+            type: string;
+            oclass: any;
+        };
+    }
+    export class Database {
+        private constructor();
+        typeDef: Map<object, TypeDef>;
+        decoratorCalls: Map<object, any[]>;
+        private removeOld;
+        _setMetadata(constructor: any, field: string, decoratername: string, fieldprops: any[], decoraterprops: any[], delegate: any): void;
+        fillDecorators(): void;
+        getMetadata(sclass: any): TypeDef;
+    }
+    var db: Database;
+    export { db };
+}
+declare module "jassijs/remote/DatabaseTools" {
+    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+    export class DatabaseTools extends RemoteObject {
+        static runSQL(sql: string, parameter?: any[], context?: Context): unknown;
+        static dropTables(tables: string[]): Promise<string>;
+    }
+    export function test(): any;
+}
+declare module "jassijs/remote/DBArray" {
+    export class DBArray
+    /**
+    * Array for jassijs.base.DBObject's
+    * can be saved to db
+    * @class jassijs.base.DBArray
+    */
+     extends Array {
+        constructor(...args: {});
+        private _parentObject;
+        private _parentObjectMember;
+        /**
+         * adds an object
+         * if the object is linked to an other object then update this
+         * @param {object} ob - the object to add
+         */
+        add(ob: any): void;
+        /**
+         * for compatibility
+         */
+        resolve(): unknown;
+        /**
+         * remove an object
+         * if the object is linked to an other object then update this
+         * @param {object} ob - the object to remove
+         */
+        remove(ob: any): void;
+    }
+}
+declare module "jassijs/remote/DBObject" {
+    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+    import { EntityOptions } from "jassijs/util/DatabaseSchema";
+    import { ValidationError } from "jassijs/remote/Validator";
+    export function $DBObject(options?: EntityOptions): Function;
+    export class MyFindManyOptions {
+        relations?: string[];
+        [sampleproperty: string]: any;
+        /**
+         *
+         * where e.g. id>5
+         */
+        where?: string;
+        /**
+         * e.g. where:"id>:param" ,whereParams:{param:5}
+         */
+        whereParams?: any;
+        /**
+       * Offset (paginated) where from entities should be taken.
+       */
+        skip?: number;
+        /**
+         * Limit (paginated) - max number of entities should be taken.
+         */
+        take?: number;
+        /**
+        * Order, in which entities should be ordered.
+        */
+        order?: {
+            [field: string]: "ASC" | "DESC" | 1 | -1;
+        };
+    }
+    /**
+    * base class for all database entfities
+    * all objects which use the jassijs.db must implement this
+    * @class DBObject
+    */
+    export class DBObject extends RemoteObject {
+        id: number | string;
+        private static cache;
+        private static _init;
+        private static _initFunc;
+        constructor();
+        isAutoId(): boolean;
+        static getFromCache(classname: string, id: number | string): DBObject;
+        validate(options?: any, throwError?: boolean): Promise<ValidationError[]>;
+        private static addToCache;
+        static clearCache(classname: string): void;
+        removeFromCache(): void;
+        static _createObject(ob: any): DBObject;
+        /**
+         * replace all childs objects with {id:}
+         */
+        private _replaceObjectWithId;
+        /**
+        * save the object to jassijs.db
+        */
+        save(context?: Context): unknown;
+        _createObjectInDB(context?: Context): unknown;
+        static findOne(options?: any, context?: Context): Promise<DBObject>;
+        static find(options?: MyFindManyOptions, context?: Context): Promise<DBObject[]>;
+        /**
+        * reload the object from jassijs.db
+        */
+        remove(context?: Context): unknown;
+        _getObjectProperty(dummy: any): void;
+        _setObjectProperty(dummy: any, dumm1: any): void;
+    }
+    export function test(): any;
+}
+declare module "jassijs/remote/DBObjectQuery" {
+    import { DBObject } from "jassijs/remote/DBObject";
+    export class DBObjectQueryProperties {
+        name: string;
+        description?: string;
+    }
+    export function $DBObjectQuery(property: DBObjectQueryProperties): Function;
+    export class DBObjectQuery {
+        classname: string;
+        name: string;
+        description: string;
+        _function: any;
+        execute(): Promise<DBObject>;
+        static getQueries(classname: string): Promise<DBObjectQuery[]>;
+    }
+    export function test(): any;
+}
+declare module "jassijs/remote/Extensions" {
+    export function $Extension(forclass: any): Function;
+    class ExtensionTarget {
+        oclass: any;
+        addFunction(name: string, func: (...any: {}) => any, ifExists: "replace" | "append" | "prepend"): void;
+        addMember(name: string): void;
+        annotateMember(member: any, type: any, ...annotations: {}): void;
+    }
+    export interface ExtensionProvider {
+        initExtensions(extend: ExtensionTarget): any;
+    }
+    export class Extensions {
+        constructor();
+        private funcRegister;
+        destroy(): void;
+        annotate(oclass: any, ...annotations: {}): void;
+        register(extensionclass: new (...args: any[]) => any, forclass: any): void;
+        annotateMember(classname: any, member: any, type: any, ...annotations: {}): void;
+    }
+    var extensions: Extensions;
+    export { extensions };
+}
+declare module "jassijs/remote/FileNode" {
+    export class FileNode {
+        name: string;
+        fullpath?: string;
+        parent?: FileNode;
+        files?: FileNode[];
+        date?: any;
+        flag?: string;
+        constructor(fullpath?: string);
+        isDirectory?(): boolean;
+        resolveChilds?(all?: {
+            [path: string]: FileNode;
+        }): {
+            [path: string]: FileNode;
+        };
+    }
+}
+declare module "jassijs/remote/hallo" {
+    export class OO {
+        hallo: string;
+        static test(): void;
+    }
+}
+declare module "jassijs/remote/Jassi" {
+    global {
+        export interface ExtensionAction {
+            componentDesignerSetDesignMode?: {
+                enable: boolean;
+                componentDesigner: any;
+            };
+            componentDesignerComponentCreated?: {
+                newParent: any;
+            };
+            componentDesignerInvisibleComponentClicked?: {
+                codeEditor: any;
+                designButton: any;
+            };
+        }
+    }
+    global {
+        interface String {
+            replaceAll: any;
+        }
+    }
+    /**
+    * main class for jassi
+    * @class Jassi
+    */
+    export class Jassi {
+        [key: string]: any;
+        base: {
+            [k: string]: any;
+        };
+        options: any;
+        isServer: boolean;
+        cssFiles: {
+            [key: string]: string;
+        };
+        constructor();
+        includeCSSFile(modulkey: string): void;
+        /**
+         * include a global stylesheet
+         * @id - the given id - important for update
+         * @data - the css data to insert
+         **/
+        includeCSS(id: string, data: {
+            [cssselector: string]: any;
+        }): void;
+        /**
+        * include a js or a css file
+        * @param {string|string[]} href - url(s) of the js or css file(s)
+        * @param {function} [param] - would be added with? to the url
+        */
+        myRequire(href: any, event?: any, param?: any): void;
+    }
+    global {
+        class JassiStatic extends Jassi {
+        }
+    }
+}
+declare var jassijs: JassiStatic;
+declare module "jassijs/remote/Modules" {
+    class Modules {
+        modules: {
+            [modul: string]: string;
+        };
+        server: Modules;
+        constructor();
+    }
+    var modules: Modules;
+    export { modules };
+}
+declare module "jassijs/remote/ObjectTransaction" {
+    import { Context } from "jassijs/remote/RemoteObject";
+    import { TransactionItem } from "jassijs/remote/Transaction";
+    export class ObjectTransaction {
+        statements: TransactionItem[];
+        saveresolve: any[];
+        private functionsFinally;
+        transactionResolved(context: Context): void;
+        addFunctionFinally(functionToAdd: () => any): void;
+        checkFinally(): void;
+        finally(): any;
+    }
+}
+declare module "jassijs/remote/Registry" {
+    import "reflect-metadata";
+    export function $Class(longclassname: string): Function;
+    export function $register(servicename: string, ...params: {}): Function;
+    class DataEntry {
+        oclass: new (...args: any[]) => any;
+        params: any[];
+    }
+    class JSONDataEntry {
+        classname: string;
+        params: any[];
+        filename: string;
+    }
+    /**
+    * Manage all known data registered by jassijs.register
+    * the data is downloaded by /registry.json
+    * registry.json is updated by the server on code upload
+    * @class jassijs.base.Registry
+    */
+    export class Registry {
+        private _nextID;
+        jsondata: {
+            [service: string]: {
+                [classname: string]: JSONDataEntry;
+            };
+        };
+        data: {
+            [service: string]: {
+                [classname: string]: DataEntry;
+            };
+        };
+        dataMembers: {
+            [service: string]: {
+                [classname: string]: {
+                    [membername: string]: any[];
+                };
+            };
+        };
+        jsondataMembers: {
+            [service: string]: {
+                [classname: string]: {
+                    [membername: string]: any[];
+                };
+            };
+        };
+        private isLoading;
+        _eventHandler: {
+            [service: string]: any[];
+        };
+        constructor();
+        getData(service: string, classname?: string): DataEntry[];
+        onregister(service: string, callback: (oclass: new (...args: any[]) => any, ...params: {}) => void): (oclass: new (...args: any[]) => any, ...params: {}) => void;
+        offregister(service: string, callback: (oclass: new (...args: any[]) => any, ...params: {}) => void): void;
+        /**
+         * register an anotation
+         * Important: this function should only used from an annotation, because the annotation is saved in
+         *            index.json and could be read without loading the class
+         **/
+        register(service: string, oclass: new (...args: any[]) => any, ...params: {}): void;
+        getMemberData(service: string): {
+            [classname: string]: {
+                [membername: string]: any[];
+            };
+        };
+        getJSONMemberData(service: string): {
+            [classname: string]: {
+                [membername: string]: any[];
+            };
+        };
+        /**
+         * register an anotation
+         * Important: this function should only used from an annotation
+         **/
+        registerMember(service: string, oclass: any, membername: string, ...params: {}): void;
+        /**
+        * with every call a new id is generated - used to create a free id for the dom
+        * @returns {number} - the id
+        */
+        nextID(): any;
+        /**
+        * Load text with Ajax synchronously: takes path to file and optional MIME type
+        * @param {string} filePath - the url
+        * @returns {string} content
+        */ private loadText;
+        /**
+         * reload the registry
+         */
+        reload(): any;
+        /**
+        * loads entries from json string
+        * @param {string} json - jsondata
+        */
+        initJSONData(json: any): void;
+        /**
+         *
+         * @param service - the service for which we want informations
+         */
+        getJSONData(service: string, classname?: string): Promise<JSONDataEntry[]>;
+        getAllFilesForService(service: string, classname?: string): string[];
+        loadAllFilesForEntries(entries: JSONDataEntry[]): any;
+        /**
+         * load all files that registered the service
+         * @param {string} service - name of the service
+         * @param {function} callback - called when loading is finished
+         */
+        loadAllFilesForService(service: string): any;
+        /**
+         * load all files
+         * @param {string} files - the files to load
+         */
+        loadAllFiles(files: string[]): unknown;
+    }
+    var registry: Registry;
+    export default registry;
+    export function migrateModul(oldModul: any, newModul: any): void;
+}
+declare module "jassijs/remote/RemoteObject" {
+    export class Context {
+        isServer: boolean;
+        [key: string]: any;
+    }
+    export class RemoteObject {
+        static call(method: (...ars: any) => any, ...parameter: {}): unknown;
+        call(_this: any, method: (...ars: any) => any, ...parameter: {}): unknown;
+    }
+}
+declare module "jassijs/remote/RemoteProtocol" {
+    export class RemoteProtocol {
+        static counter: number;
+        classname: string;
+        _this: any;
+        parameter: any[];
+        method: string;
+        /**
+         * converts object to jsonstring
+         * if class is registerd in classes then the class is used
+         * if id is used then recursive childs are possible
+         * @param obj
+         */
+        stringify(obj: any): any;
+        static simulateUser(user?: string, password?: string): any;
+        exec(config: any, object: any): unknown;
+        /**
+       * call the server
+       */
+        call(): unknown;
+        /**
+         * converts jsonstring to an object
+         */
+        parse(text: string): unknown;
+        test(): any;
+    }
+}
+declare module "jassijs/remote/security/Group" {
+    import { DBObject } from "jassijs/remote/DBObject";
+    import { ParentRight } from "jassijs/remote/security/ParentRight";
+    import { User } from "jassijs/remote/security/User";
+    import { Right } from "jassijs/remote/security/Right";
+    export class Group extends DBObject {
+        id: number;
+        name: string;
+        parentRights: ParentRight[];
+        rights: Right[];
+        users: User[];
+    }
+}
+declare module "jassijs/remote/security/ParentRight" {
+    import { DBObject } from "jassijs/remote/DBObject";
+    import { Group } from "jassijs/remote/security/Group";
+    export class ParentRight extends DBObject {
+        id: number;
+        name: string;
+        classname: string;
+        i1: number;
+        i2: number;
+        s1: string;
+        s2: string;
+        groups: Group[];
+    }
+}
+declare module "jassijs/remote/security/Right" {
+    import { DBObject } from "jassijs/remote/DBObject";
+    import { Group } from "jassijs/remote/security/Group";
+    export class Right extends DBObject {
+        id: number;
+        name: string;
+        groups: Group[];
+    }
 }
 declare module "jassijs/remote/security/Rights" {
     import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
@@ -144,159 +910,481 @@ declare module "jassijs/remote/security/Rights" {
     var rights: Rights;
     export default rights;
 }
-declare module "jassijs/util/Cookies" {
-    class C {
-        set(name: string, value: string, params?: any): void;
-        get(name: string): any;
-        remove(name: string, params?: any): void;
-        getJSON(): string;
-    }
-    var Cookies: C;
-    export { Cookies };
-}
-declare module "jassijs/ext/jquerylib" {
-    import "jquery";
-    import "jquery.ui";
-    import "jquery.ui.touch";
-}
-declare module "jassijs/ui/Property" {
-    export function $Property(property?: Property): Function;
-    export class Property {
-        [key: string]: any;
-        constructorClass?: any;
-        default?: any;
-        /** the name of the property*/
-        name?: string;
-        /** the type of the property*/
-        type?: string;
-        /** the user can choose this entries */
-        chooseFrom?: any[] | ((comp: any, propertyeditor?: any) => any[]);
-        /** @member - the user can select from chooseFrom but can not input own entries*/
-        chooseFromStrict?: boolean;
-        /** @member - the description for tooltip **/
-        decription?: string;
-        /** @member - hides the properties from the base class **/
-        hideBaseClassProperties?: boolean;
-        /** @member - is the property visible */
-        isVisible?: (component: any, propertyeditor?: any) => boolean;
-        /** @member - jassijs.base.Action -   the actions in the PropertyEditor  */
-        editoractions?: any[];
-        /**
-         * Property for PropertyEditor
-         * @class jassijs.ui.EditorProperty
-         */
-        constructor(name?: any, type?: any);
-        componentType?: any;
-        description?: string;
-        hide?: boolean;
-        /**
-         * this property could be set by browser url
-         */
-        isUrlTag?: boolean;
-    }
-}
-declare module "jassijs/ui/ComponentDescriptor" {
-    import { Property } from "jassijs/ui/Property";
-    import { Component } from "jassijs/ui/Component";
-    export class ComponentDescriptor {
-        static cache: any;
-        fields: Property[];
-        editableComponents: any;
-        /**
-        * describes a Component
-        * @class jassijs.ui.EditorProperty
-        */
+declare module "jassijs/remote/security/Setting" {
+    import { DBObject, MyFindManyOptions } from "jassijs/remote/DBObject";
+    import { Context } from "jassijs/remote/RemoteObject";
+    export class Setting extends DBObject {
+        id: number;
         constructor();
-        findField(name: string): Property;
+        data: string;
+        save(context?: Context): any;
+        static findOne(options?: any, context?: Context): Promise<DBObject>;
+        static find(options?: MyFindManyOptions, context?: Context): Promise<DBObject[]>;
         /**
-         * describes a class
-         * @param {class}  type - the type of the class
-         * @param {boolean}  nocache - an uncached version
-         * @returns {jassijs.ui.ComponentDescriptor} - which describes the component
+        * reload the object from jassijs.db
+        */
+        remove(context?: Context): any;
+    }
+    export function test(): any;
+}
+declare module "jassijs/remote/security/User" {
+    import { DBObject } from "jassijs/remote/DBObject";
+    import { Group } from "jassijs/remote/security/Group";
+    import { Context } from "jassijs/remote/RemoteObject";
+    export class User extends DBObject {
+        id: number;
+        email: string;
+        password: string;
+        groups: Group[];
+        isAdmin: boolean;
+        static findWithRelations(): unknown;
+        /**
+       * reload the object from jassijs.db
+       */
+        hallo(context?: Context): unknown;
+        save(context?: Context): unknown;
+    }
+    export function test(): any;
+    export function test2(): any;
+}
+declare module "jassijs/remote/Server" {
+    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+    import { FileNode } from "jassijs/remote/FileNode";
+    export class Server extends RemoteObject {
+        private static isonline;
+        static filesInMap: {
+            [name: string]: {
+                modul: string;
+                id: number;
+            };
+        };
+        constructor();
+        private _convertFileNode;
+        private fillMapModules;
+        fillFilesInMapIfNeeded(): any;
+        addFilesFromMap(root: FileNode): any;
+        /**
+        * gets alls ts/js-files from server
+        * @param {Promise<string>} [async] - returns a Promise for asynchros handling
+        * @returns {string[]} - list of files
+        */
+        dir(withDate?: boolean, context?: Context): Promise<FileNode>;
+        zip(directoryname: string, serverdir?: boolean, context?: Context): unknown;
+        /**
+         * gets the content of a file from server
+         * @param {string} fileNamew
+         * @returns {string} content of the file
          */
-        static describe(type: any, nocache?: boolean): ComponentDescriptor;
+        loadFiles(fileNames: string[], context?: Context): Promise<{
+            [id: string]: string;
+        }>;
         /**
-         * get the ids of all editable Components by the designer
-         * @param {jassijs.ui.Component} component - the component to inspect
-         * @param {boolean} idFromLabel - if true not the id but the id form label is returned
-         * @param {flag} - undocumented-used for recursation
-         **/
-        static getEditableComponents(component: Component, idFromLabel: any, includeFrozenContainer: any, flag: any): string;
-        /** calc editableComponents
-         * @param {object} ob - the object to resolve
-         * @returns {Object.<string,jassijs.ui.Component> - <name,component>
-         **/
-        resolveEditableComponents(ob: any, type?: any, ret?: any): any;
-        /**
-         * remove a field
-         * @param {string} field - the name of the field to remove
+         * gets the content of a file from server
+         * @param {string} fileName
+         * @returns {string} content of the file
          */
-        removeField(field: any): void;
+        loadFile(fileName: string, context?: Context): Promise<string>;
+        /**
+        * put the content to a file
+        * @param [{string}] fileNames - the name of the file
+        * @param [{string}] contents
+        */
+        saveFiles(fileNames: string[], contents: string[], context?: Context): Promise<string>;
+        /**
+        * put the content to a file
+        * @param {string} fileName - the name of the file
+        * @param {string} content
+        */
+        saveFile(fileName: string, content: string, context?: Context): Promise<string>;
+        /**
+       * deletes a server modul
+       **/
+        testServersideFile(name: string, context?: Context): Promise<string>;
+        /**
+       * deletes a server modul
+       **/
+        removeServerModul(name: string, context?: Context): Promise<string>;
+        /**
+        * deletes a file or directory
+        **/
+        delete(name: string, context?: Context): Promise<string>;
+        /**
+         * renames a file or directory
+         **/
+        rename(oldname: string, newname: string, context?: Context): Promise<string>;
+        /**
+        * is the nodes server running
+        **/
+        static isOnline(context?: Context): Promise<boolean>;
+        /**
+         * creates a file
+         **/
+        createFile(filename: string, content: string, context?: Context): Promise<string>;
+        /**
+        * creates a file
+        **/
+        createFolder(foldername: string, context?: Context): Promise<string>;
+        createModule(modulename: string, context?: Context): Promise<string>;
+        static mytest(context?: Context): unknown;
     }
 }
-declare module "jassijs/ui/CSSProperties" {
-    import { Component } from "jassijs/ui/Component";
-    /**
-     * loads googlefonts if needed
-     **/
-    export function loadFontIfNedded(font: string): void;
-    export class CSSProperties {
-        backgroundColor?: string;
-        backgroundImage?: string;
-        borderColor?: string;
-        borderStyle?: string | "none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset" | "inherit" | "initial" | "unset";
-        borderWidth?: string | "thin" | "medium" | "thick" | "2px" | "inherit" | "initial" | "unset";
-        color?: string;
-        cursor?: string | "auto" | "default" | "none" | "context-menu" | "help" | "pointer" | "progress" | "wait" | "cell" | "crosshair" | "text" | "vertical-text" | "alias" | "copy" | "move" | "no-drop" | "not-allowed" | "grab" | "grabbing" | "all-scroll" | "col-resize" | "row-resize" | "n-resize" | "e-resize" | "s-resize" | "w-resize" | "ne-resize" | "nw-resize" | "se-resize" | "sw-resize" | "ew-resize" | "ns-resize" | "nesw-resize" | "nwse-resize" | "zoom-in" | "zoom-out" | "inherit" | "initial" | "unset";
-        filter?: string | "blur(5px)" | "brightness(0.4)" | "contrast(200%)" | "drop-shadow(16px 16px 20px blue)" | "grayscale(50%)" | "hue-rotate(90deg)" | "invert(75%)" | "opacity(25%)" | "saturate(30%)" | "sepia(60%)" | "inherit" | "initial" | "unset";
-        float?: string | "left" | "right" | "none" | "inline-start" | "inline-end" | "inherit" | "initial" | "unset";
-        fontFamily?: string;
-        fontSize?: string | "12px" | "xx-small" | "x-small" | "small" | "medium" | "large" | "x-large" | "xx-large" | "xxx-large" | "larger" | "smaller" | "inherit" | "initial" | "unset";
-        fontVariant?: string | "normal" | "small-caps" | "small-caps slashed-zero" | "common-ligatures tabular-nums" | "no-common-ligatures proportional-nums" | "inherit" | "initial" | "unset";
-        fontWeight?: string | "normal" | "bold" | "lighter" | "bolder" | "100" | "900" | "inherit" | "initial" | "unset";
-        letterSpacing?: string | "normal" | "1px";
-        lineHeight?: string | "normal" | "32px";
-        marginBottom?: string | "3px";
-        marginLeft?: string | "3px";
-        marginRight?: string | "3px";
-        marginTop?: string | "3px";
-        overflow?: string | "visible" | "hidden" | "clip" | "scroll" | "auto" | "inherit" | "initial" | "unset";
-        paddingBottom?: string | "3px";
-        paddingLeft?: string | "3px";
-        paddingRight?: string | "3px";
-        paddingTop?: string | "3px";
-        position?: string | "static" | "relative" | "absolute" | "sticky" | "fixed" | "inherit" | "initial" | "unset";
-        textAlign?: string | "start" | "end" | "left" | "right" | "center" | "justify" | "match-parent" | "inherit" | "initial" | "unset";
-        textDecorationColor?: string;
-        textDecorationLine?: string | "none" | "underline" | "overline" | "line-through" | "blink" | "spelling-error" | "grammar-error" | "inherit" | "initial" | "unset";
-        textDecorationStyle?: string | "solid" | "double" | "dotted" | "dashed" | "wavy" | "inherit" | "initial" | "unset";
-        textDecorationThickness?: string | "3px";
-        textTransform?: string | "none" | "capitalize" | "uppercase" | "lowercase" | "full-width" | "full-size-kana" | "inherit" | "initial" | "unset";
-        verticalAlign?: string | "baseline" | "sub" | "super" | "text-top" | "text-bottom" | "middle" | "top" | "bottom" | "3px" | "inherit" | "initial" | "unset";
-        zIndex?: string | "1" | "2" | "auto";
-        [name: string]: string;
-        static applyTo(properties: React.CSSProperties, component: Component): React.CSSProperties;
+declare module "jassijs/remote/Serverservice" {
+    import "jassijs/remote/Classes";
+    export class ServerserviceProperties {
+        name: string;
+        getInstance: (() => Promise<any>);
+    }
+    var runningServerservices: {};
+    export function beforeServiceLoad(func: (name: string, props: ServerserviceProperties) => void): void;
+    global {
+        interface Serverservice {
+        }
+    }
+    var serverservices: Serverservice;
+    export function $Serverservice(properties: ServerserviceProperties): Function;
+    var doNotReloadModule: boolean;
+    export { serverservices, doNotReloadModule, runningServerservices };
+}
+declare module "jassijs/remote/Settings" {
+    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+    import { Test } from "./Test";
+    global {
+        export interface KnownSettings {
+        }
+    }
+    export class Settings extends RemoteObject {
+        static keys: KnownSettings;
+        private static browserSettings;
+        private static userSettings;
+        private static allusersSettings;
+        /**
+        * loads the settings
+        */
+        static load(context?: Context): unknown;
+        static getAll(scope: "browser" | "user" | "allusers"): {};
+        gets<T>(Settings_key: T): T;
+        static remove(Settings_key: string, scope: "browser" | "user" | "allusers", context?: Context): any;
+        static save<T>(Settings_key: T, value: T, scope: "browser" | "user" | "allusers"): unknown;
+        static saveAll(namevaluepair: {
+            [key: string]: any;
+        }, scope: "browser" | "user" | "allusers", removeOtherKeys?: boolean, context?: Context): unknown;
+    }
+    var settings: Settings;
+    export { settings };
+    export function $SettingsDescriptor(): Function;
+    export function autostart(): any;
+    export function test(t: Test): any;
+    export function load(): unknown;
+}
+declare module "jassijs/remote/Test" {
+    export class Test {
+        /**
+         * fails if the condition is false
+         * @parameter condition
+         **/
+        expectEqual(condition: boolean): void;
+        /**
+         * fails if the func does not throw an error
+         * @parameter func - the function that should failed
+         **/
+        expectError(func: any): void;
+        /**
+        * fails if the func does not throw an error
+        * @parameter func - the function that should failed
+        **/
+        expectErrorAsync(func: any): any;
     }
 }
-declare module "jassijs/ui/State" {
-    class StateProp {
-        ob: any;
-        proppath: string[];
+declare module "jassijs/remote/Transaction" {
+    import { RemoteObject } from "jassijs/remote/RemoteObject";
+    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
+    export class TransactionItem {
+        transaction: Transaction;
+        obj: any;
+        method: (...args: {}) => any;
+        params: any[];
+        promise: Promise<any>;
+        result: any;
+        remoteProtocol: RemoteProtocol;
+        resolve: any;
     }
-    export function resolveState(ob: any, config: any): void;
-    export class State<T> {
-        private data;
-        self: any;
-        _comps_: StateProp[];
-        constructor(data?: any);
-        _observe_(control: any, property: any, atype: any): void;
-        get current(): T;
-        set current(data: T);
+    export class Transaction extends RemoteObject {
+        private statements;
+        private ready;
+        private context;
+        execute(): Promise<any[]>;
+        wait(transactionItem: TransactionItem, prot: RemoteProtocol): Promise<any>;
+        private sendRequest;
+        private doServerStatement;
+        add(obj: any, method: (...args: {}) => any, ...params: {}): void;
     }
-    export function createState<T>(val?: T): State<T>;
-    export function test(): void;
+}
+declare module "jassijs/remote/Validator" {
+    import "reflect-metadata";
+    import { Test } from "jassijs/remote/Test";
+    export class ValidationOptions {
+        message?: string;
+    }
+    export function registerValidation(name: string, options: ValidationOptions, func: (target: any, propertyName: string, value: any, options: any) => string): (target: any, propertyKey: string, parameterIndex: number) => void;
+    export class ValidationError {
+        value: object;
+        target: object;
+        property: string;
+        message: string;
+        constructor(value: any, target: any, property: string, message: string);
+    }
+    class ValidateOptions {
+        /**
+         * e.g. {ValidateInt:{optional:false}} delegates optional:false to all ValidateInt rules
+         * e.g. {ALL:{optional:false}} delegates optional:false to all Validators rules}
+         */
+        delegateOptions?: {
+            [ValidatorClassName: string]: any;
+        };
+    }
+    export function validate(obj: any, options?: ValidateOptions, raiseError?: boolean): ValidationError[];
+    export class ValidationIsArrayOptions extends ValidationOptions {
+        optional?: boolean;
+        type?: (type?: any) => any;
+        alternativeJsonProperties?: string[];
+    }
+    export function ValidateIsArray(options?: ValidationIsArrayOptions): Function;
+    export class ValidationIsBooleanOptions extends ValidationOptions {
+        optional?: boolean;
+        type?: any;
+    }
+    export function ValidateIsBoolean(options?: ValidationIsBooleanOptions): Function;
+    export class ValidationIsDateOptions extends ValidationOptions {
+        optional?: boolean;
+    }
+    export function ValidateIsDate(options?: ValidationIsDateOptions): Function;
+    export function ValidateFunctionParameter(): Function;
+    export class ValidationIsInOptions extends ValidationOptions {
+        optional?: boolean;
+        in: any[];
+    }
+    export function ValidateIsIn(options?: ValidationIsInOptions): Function;
+    export class ValidationIsInstanceOfOptions extends ValidationOptions {
+        optional?: boolean;
+        type: (type?: any) => any;
+        /**
+         * ["id"] means an object {id:9} is also a valid type
+         */
+        alternativeJsonProperties?: string[];
+    }
+    export function ValidateIsInstanceOf(options?: ValidationIsInstanceOfOptions): Function;
+    export class ValidationIsIntOptions extends ValidationOptions {
+        optional?: boolean;
+    }
+    export function ValidateIsInt(options?: ValidationIsIntOptions): Function;
+    export class ValidationMaxOptions extends ValidationOptions {
+        max: number;
+    }
+    export function ValidateMax(options: ValidationMaxOptions): Function;
+    export class ValidationMinOptions extends ValidationOptions {
+        min: number;
+    }
+    export function ValidateMin(options: ValidationMinOptions): Function;
+    export class ValidationIsNumberOptions extends ValidationOptions {
+        optional?: boolean;
+    }
+    export function ValidateIsNumber(options?: ValidationIsNumberOptions): Function;
+    export class ValidationIsStringOptions extends ValidationOptions {
+        optional?: boolean;
+    }
+    export function ValidateIsString(options?: ValidationIsIntOptions): Function;
+    export function test(test: Test): any;
+}
+declare module "jassijs/security/GroupView" {
+    import { Textbox } from "jassijs/ui/Textbox";
+    import { Group } from "jassijs/remote/security/Group";
+    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
+    type Me = {
+        textbox?: Textbox;
+        textbox2?: Textbox;
+    } & DBObjectViewMe;
+    export class GroupView extends DBObjectView {
+        me: Me;
+        value: Group;
+        constructor();
+        get title(): string;
+        layout(me: Me): void;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/security/UserView" {
+    import { Select } from "jassijs/ui/Select";
+    import { Checkbox } from "jassijs/ui/Checkbox";
+    import { Textbox } from "jassijs/ui/Textbox";
+    import { Panel } from "jassijs/ui/Panel";
+    import { User } from "jassijs/remote/security/User";
+    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
+    type Me = {
+        IDID?: Textbox;
+        IDEmail?: Textbox;
+        checkbox?: Checkbox;
+        panel?: Panel;
+        IDGroups?: Select;
+    } & DBObjectViewMe;
+    export class UserView extends DBObjectView {
+        me: Me;
+        value: User;
+        constructor();
+        get title(): string;
+        layout(me: Me): void;
+        createObject(): any;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/ActionNodeMenu" {
+    import { Menu } from "jassijs/ui/Menu";
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
+    type Me = {
+        menu?: Menu;
+    };
+    export class ActionNodeMenuProperties {
+    }
+    export class ActionNodeMenu<T extends ActionNodeMenuProperties = {}> extends Panel<ActionNodeMenuProperties> {
+        me: Me;
+        constructor(props?: ActionNodeMenuProperties);
+        config(config: PanelProperties): ActionNodeMenu;
+        layout(me: Me): void;
+        fillActions(): any;
+    }
+    export function test(): unknown;
+}
+/// <amd-dependency name="Split" path="splitlib" />
+declare module "jassijs/ui/BoxPanel" {
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
+    export interface BoxPanelProperties extends PanelProperties {
+        /**
+         * @member {boolean} - if true then the components are composed horizontally
+         **/
+        horizontal?: boolean;
+        /**
+          * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
+          */
+        spliter?: number[];
+    }
+    export class BoxPanel<T extends BoxPanelProperties = BoxPanelProperties> extends Panel<T> implements BoxPanelProperties {
+        _horizontal: boolean;
+        private _spliter;
+        private _splitcomponent;
+        /**
+        *
+        * @param {object} properties - properties to init
+        * @param {string} [properties.id] -  connect to existing id (not reqired)
+        * @param {boolean} [properties.useSpan] -  use span not div
+        *
+        */
+        constructor(properties?: BoxPanelProperties);
+        config(config: T): BoxPanel;
+        set horizontal(value: boolean);
+        get horizontal(): boolean;
+        /**
+        * adds a component to the container
+        * @param {jassijs.ui.Component} component - the component to add
+        */
+        add(component: any): void;
+        /**
+        * adds a component to the container before an other component
+        * @param {jassijs.ui.Component} component - the component to add
+        * @param {jassijs.ui.Component} before - the component before then component to add
+        */
+        addBefore(component: any, before: any): void;
+        set spliter(size: number[]);
+        get spliter(): number[];
+        updateSpliter(): void;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/Button" {
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    export interface ButtonProperties extends ComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+        /**
+      * register an event if the button is clicked
+      * @param {function} handler - the function that is called on change
+      */
+        onclick?(handler: any, removeOldHandler: boolean): any;
+        /**
+       * @member {string} - the icon of the button
+       */
+        icon?: string;
+        /**
+     * @member {string} - the caption of the button
+     */
+        text?: string;
+    }
+    export class Button<T extends ButtonProperties = ComponentProperties> extends Component<T> implements ButtonProperties {
+        constructor(properties?: ButtonProperties);
+        config(config: T, forceRender?: boolean): Button;
+        get dom(): HTMLButtonElement;
+        set dom(value: HTMLButtonElement);
+        render(): any;
+        onclick(handler: any, removeOldHandler?: boolean): any;
+        set icon(icon: string);
+        get icon(): string;
+        set text(value: string);
+        get text(): string;
+        toggle(setDown?: any): any;
+        destroy(): void;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/Calendar" {
+    import "jassijs/ext/jquerylib";
+    import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
+    export interface CalendarProperties extends TextboxProperties {
+        /**
+        * @member  - the date
+        */
+        value?: any;
+    }
+    export class Calendar<T extends CalendarProperties = TextboxProperties> extends Textbox<T> implements CalendarProperties {
+        constructor(properties?: any);
+        config(config: T): Calendar;
+        get value(): any;
+        set value(val: any);
+        static parseDate(date: string, format?: any, settings?: any): any;
+        static formatDate(date: Date, format?: any, settings?: any): any;
+    }
+    export function test(): Calendar<TextboxProperties>;
+}
+declare module "jassijs/ui/Checkbox" {
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    export interface CheckboxProperties extends DataComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+        /**
+      * register an event if the button is clicked
+      * @param {function} handler - the function that is called on change
+      */
+        onclick?(handler: any): any;
+        /**
+         * @member - true or "true" if selected
+         */
+        value?: string | boolean;
+        /**
+        * @member {string} - the caption of the button
+        */
+        text?: string;
+    }
+    export class Checkbox<T extends CheckboxProperties = CheckboxProperties> extends DataComponent<T> implements CheckboxProperties {
+        private checkbox;
+        constructor(properties?: CheckboxProperties);
+        componentDidMount(): void;
+        render(): any;
+        config(config: T): Checkbox;
+        onclick(handler: any): void;
+        set value(value: string | boolean);
+        get value(): string | boolean;
+        set text(value: string);
+        get text(): string;
+    }
+    export function test(): Checkbox<CheckboxProperties>;
 }
 declare module "jassijs/ui/Component" {
+    import { States } from "jassijs/ui/State";
     global {
         interface Element {
             _this: Component<any>;
@@ -378,7 +1466,7 @@ declare module "jassijs/ui/Component" {
         calculateState?: (any: any) => void;
     }
     var React: {
-        createElement(type: any, props: any, ...children: any[]): {
+        createElement(type: any, props: any, ...children: {}): {
             props: any;
             type: any;
         };
@@ -394,12 +1482,13 @@ declare module "jassijs/ui/Component" {
             React: any;
         }
         interface React {
-            createElement(atype: any, props: any, ...children: any[]): any;
+            createElement(atype: any, props: any, ...children: {}): any;
         }
     }
     export function createComponent(node: React.ReactNode): any;
     export class Component<T extends ComponentProperties = {}> implements React.Component<T, {}> {
         props: T;
+        states: States<T>;
         private static _componentHook;
         _eventHandler: any;
         __dom: HTMLElement;
@@ -443,7 +1532,7 @@ declare module "jassijs/ui/Component" {
          * @param {object} param 3- parameter for the event
          * @param {object} param 4- parameter for the event
          */
-        callEvent(name: any, param1: any, param2?: any, param3?: any, param4?: any): any[];
+        callEvent(name: any, param1: any, param2?: any, param3?: any, param4?: any): {};
         /**
          * @member {dom} - the dom element
          */
@@ -590,178 +1679,849 @@ declare module "jassijs/ui/Component" {
         set text(value: string);
     }
 }
-declare module "jassijs/base/LoginDialog" {
-    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
-    import "jassijs/ext/jquerylib";
-    export function doAfterLogin(resolve: any, prot: RemoteProtocol): void;
-    export function login(): Promise<unknown>;
-    export function test(): void;
-}
-declare module "jassijs/remote/RemoteProtocol" {
-    export class RemoteProtocol {
-        static counter: number;
-        classname: string;
-        _this: any;
-        parameter: any[];
-        method: string;
+declare module "jassijs/ui/ComponentDescriptor" {
+    import { Property } from "jassijs/ui/Property";
+    import { Component } from "jassijs/ui/Component";
+    export class ComponentDescriptor {
+        static cache: any;
+        fields: Property[];
+        editableComponents: any;
         /**
-         * converts object to jsonstring
-         * if class is registerd in classes then the class is used
-         * if id is used then recursive childs are possible
-         * @param obj
+        * describes a Component
+        * @class jassijs.ui.EditorProperty
+        */
+        constructor();
+        findField(name: string): Property;
+        /**
+         * describes a class
+         * @param {class}  type - the type of the class
+         * @param {boolean}  nocache - an uncached version
+         * @returns {jassijs.ui.ComponentDescriptor} - which describes the component
          */
-        stringify(obj: any): string;
-        static simulateUser(user?: string, password?: string): Promise<void>;
-        exec(config: any, object: any): Promise<unknown>;
+        static describe(type: any, nocache?: boolean): ComponentDescriptor;
         /**
-       * call the server
+         * get the ids of all editable Components by the designer
+         * @param {jassijs.ui.Component} component - the component to inspect
+         * @param {boolean} idFromLabel - if true not the id but the id form label is returned
+         * @param {flag} - undocumented-used for recursation
+         **/
+        static getEditableComponents(component: Component, idFromLabel: any, includeFrozenContainer: any, flag: any): string;
+        /** calc editableComponents
+         * @param {object} ob - the object to resolve
+         * @returns {Object.<string,jassijs.ui.Component> - <name,component>
+         **/
+        resolveEditableComponents(ob: any, type?: any, ret?: any): any;
+        /**
+         * remove a field
+         * @param {string} field - the name of the field to remove
+         */
+        removeField(field: any): void;
+    }
+}
+declare module "jassijs/ui/Container" {
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    export interface ContainerProperties extends ComponentProperties {
+        /**
+         * child components
+         */
+        children?: any;
+    }
+    export class Container<T extends ContainerProperties = ComponentProperties> extends Component<T> implements Omit<ContainerProperties, "children"> {
+        _components: Component[];
+        _designDummy: any;
+        /**
+         *
+         * @param {object} properties - properties to init
+         * @param {string} [properties.id] -  connect to existing id (not reqired)
+         *
+         */
+        constructor(properties: ContainerProperties);
+        config(config: T, forceRender?: boolean): Container;
+        /**
+        * inits the component
+        * @param {dom} dom - init the dom element
+        * @paran {object} properties - properties to init
        */
-        call(): Promise<any>;
         /**
-         * converts jsonstring to an object
+         * adds a component to the container
+         * @param {jassijs.ui.Component} component - the component to add
          */
-        parse(text: string): Promise<any>;
-        test(): Promise<void>;
+        add(component: any): void;
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component: Component, before: Component): void;
+        /**
+       * remove the component
+       * @param {jassijs.ui.Component} component - the component to remove
+       * @param {boolean} destroy - if true the component would be destroyed
+       */
+        remove(component: any, destroy?: boolean): void;
+        /**
+       * remove all component
+       * @param {boolean} destroy - if true the component would be destroyed
+       */
+        removeAll(destroy?: any): void;
+        destroy(): void;
     }
 }
-declare module "jassijs/remote/RemoteObject" {
-    export class Context {
-        isServer: boolean;
-        [key: string]: any;
-    }
-    export class RemoteObject {
-        static call(method: (...ars: any) => any, ...parameter: any[]): Promise<any>;
-        call(_this: any, method: (...ars: any) => any, ...parameter: any[]): Promise<any>;
-    }
-}
-declare module "jassijs/remote/FileNode" {
-    export class FileNode {
-        name: string;
-        fullpath?: string;
-        parent?: FileNode;
-        files?: FileNode[];
-        date?: any;
-        flag?: string;
-        constructor(fullpath?: string);
-        isDirectory?(): boolean;
-        resolveChilds?(all?: {
-            [path: string]: FileNode;
-        }): {
-            [path: string]: FileNode;
-        };
-    }
-}
-declare module "jassijs/remote/Serverservice" {
-    import "jassijs/remote/Classes";
-    export class ServerserviceProperties {
-        name: string;
-        getInstance: (() => Promise<any>);
-    }
-    var runningServerservices: {};
-    export function beforeServiceLoad(func: (name: string, props: ServerserviceProperties) => void): void;
+declare module "jassijs/ui/ContextMenu" {
+    import "jassijs/ext/jquerylib";
+    import "jquery.contextMenu";
+    import { Menu } from "jassijs/ui/Menu";
+    import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
+    import { Component } from "jassijs/ui/Component";
+    import { Action } from "jassijs/base/Actions";
+    import { MenuItem } from "jassijs/ui/MenuItem";
     global {
-        interface Serverservice {
+        interface JQuery {
+            contextMenu: any;
         }
     }
-    var serverservices: Serverservice;
-    export function $Serverservice(properties: ServerserviceProperties): Function;
-    var doNotReloadModule: boolean;
-    export { serverservices, doNotReloadModule, runningServerservices };
-}
-declare module "jassijs/remote/Test" {
-    export class Test {
+    export interface ContextMenuProperties extends InvisibleComponentProperties {
         /**
-         * fails if the condition is false
-         * @parameter condition
-         **/
-        expectEqual(condition: boolean): void;
-        /**
-         * fails if the func does not throw an error
-         * @parameter func - the function that should failed
-         **/
-        expectError(func: any): void;
-        /**
-        * fails if the func does not throw an error
-        * @parameter func - the function that should failed
-        **/
-        expectErrorAsync(func: any): Promise<void>;
-    }
-}
-declare module "jassijs/remote/Validator" {
-    import "reflect-metadata";
-    import { Test } from "jassijs/remote/Test";
-    export class ValidationOptions {
-        message?: string;
-    }
-    export function registerValidation(name: string, options: ValidationOptions, func: (target: any, propertyName: string, value: any, options: any) => string): (target: any, propertyKey: string, parameterIndex: number) => void;
-    export class ValidationError {
-        value: object;
-        target: object;
-        property: string;
-        message: string;
-        constructor(value: any, target: any, property: string, message: string);
-    }
-    class ValidateOptions {
-        /**
-         * e.g. {ValidateInt:{optional:false}} delegates optional:false to all ValidateInt rules
-         * e.g. {ALL:{optional:false}} delegates optional:false to all Validators rules}
+         * @member - includes Actions from @ActionProvider for the objects in value
          */
-        delegateOptions?: {
-            [ValidatorClassName: string]: any;
-        };
-    }
-    export function validate(obj: any, options?: ValidateOptions, raiseError?: boolean): ValidationError[];
-    export class ValidationIsArrayOptions extends ValidationOptions {
-        optional?: boolean;
-        type?: (type?: any) => any;
-        alternativeJsonProperties?: string[];
-    }
-    export function ValidateIsArray(options?: ValidationIsArrayOptions): Function;
-    export class ValidationIsBooleanOptions extends ValidationOptions {
-        optional?: boolean;
-        type?: any;
-    }
-    export function ValidateIsBoolean(options?: ValidationIsBooleanOptions): Function;
-    export class ValidationIsDateOptions extends ValidationOptions {
-        optional?: boolean;
-    }
-    export function ValidateIsDate(options?: ValidationIsDateOptions): Function;
-    export function ValidateFunctionParameter(): Function;
-    export class ValidationIsInOptions extends ValidationOptions {
-        optional?: boolean;
-        in: any[];
-    }
-    export function ValidateIsIn(options?: ValidationIsInOptions): Function;
-    export class ValidationIsInstanceOfOptions extends ValidationOptions {
-        optional?: boolean;
-        type: (type?: any) => any;
+        includeClassActions?: boolean;
         /**
-         * ["id"] means an object {id:9} is also a valid type
+        * register an event if the contextmenu is showing
+        * @param {function} handler - the function that is called on change
+        * @returns {boolean} - false if the contextmenu should not been shown
+        */
+        onbeforeshow?(handler: any): any;
+        children?: any;
+    }
+    export class ContextMenu<T extends ContextMenuProperties = ContextMenuProperties> extends InvisibleComponent<T> implements ContextMenuProperties {
+        _menu: Menu;
+        contextComponents: any;
+        _components: Component[];
+        target: any;
+        includeClassActions: boolean;
+        private _value;
+        constructor(props?: ContextMenuProperties);
+        set menu(val: Menu);
+        get menu(): Menu;
+        add(menu: MenuItem): void;
+        addBefore(menu: MenuItem, before: any): void;
+        remove(item: any): void;
+        /**
+         * @member - the objects for the includeClassActions @ActionProvider if  is enabled
+         **/
+        set value(value: any[]);
+        get value(): any[];
+        render(): any;
+        componentDidMount(): void;
+        config(config: T): ContextMenu;
+        /**
+         * could be override to provide Context-actions
+         * exsample:
+         * cmen.getActions=async function(objects:[]){
+         *		return [{name:"hallo",call:ob=>{}]
+         *	};
+         **/
+        getActions(data: any[]): Promise<Action[]>;
+        private _removeClassActions;
+        protected _setDesignMode(enable: any): void;
+        private _updateClassActions;
+        _menueChanged(): void;
+        getMainMenu(): this;
+        onbeforeshow(handler: any): void;
+        _callContextmenu(evt: any): any;
+        /**
+         * register the contextMenu (right click) on the component
+         * @member {jassijs.ui.Component} - the component which gets the contextmenu
+         **/
+        registerComponent(component: any): void;
+        /**
+         * unregister the contextMenu (right click) on the component
+         * @member {jassijs.ui.Component} - the component which gets the contextmenu
+         **/
+        unregisterComponent(component: any): void;
+        /**
+         * shows the contextMenu
          */
-        alternativeJsonProperties?: string[];
+        show(event: any): void;
+        close(): void;
+        extensionCalled(action: ExtensionAction): any;
+        destroy(): void;
     }
-    export function ValidateIsInstanceOf(options?: ValidationIsInstanceOfOptions): Function;
-    export class ValidationIsIntOptions extends ValidationOptions {
-        optional?: boolean;
+    export function test(): unknown;
+}
+declare module "jassijs/ui/converters/DateTimeConverter" {
+    import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
+    import "luxon";
+    import { Component } from "jassijs/ui/Component";
+    class DateTimeConverterProperties {
+        type?: "DATE_SHORT" | "TIME_SIMPLE" | "DATETIME_SHORT" | "TIME_WITH_SECONDS" | "DATETIME_SHORT_WITH_SECONDS";
     }
-    export function ValidateIsInt(options?: ValidationIsIntOptions): Function;
-    export class ValidationMaxOptions extends ValidationOptions {
-        max: number;
+    export class DateTimeConverter extends DefaultConverter {
+        type: "DATE_SHORT" | "TIME_SIMPLE" | "DATETIME_SHORT" | "TIME_WITH_SECONDS" | "DATETIME_SHORT_WITH_SECONDS";
+        constructor(props?: DateTimeConverterProperties);
+        get component(): Component;
+        set component(component: Component);
+        /**
+         * converts a string to the object
+         * an error can be thrown for validation
+         * @param {string} str - the string to convert
+         */
+        stringToObject(str: any): any;
+        /**
+         * converts an object to string
+         * @param  obj - the object to convert
+         */
+        objectToString(obj: any): any;
+        /**
+         * format date to string
+         * @param format- e.g. "yyyy-MM-dd" or "HH:mm:ss"
+         */
+        static toFormat(date: Date, format: string): string;
+        /**
+       * parse date a string
+       * @param format- e.g. "yyyy-MM-dd" or "HH:mm:ss"
+       */
+        static fromFormat(date: string, format: string): Date;
+        static toLocalString(date: Date, format: DateTimeFormat): string;
     }
-    export function ValidateMax(options: ValidationMaxOptions): Function;
-    export class ValidationMinOptions extends ValidationOptions {
+    export type DateTimeFormat = "DATE_SHORT" | "TIME_SIMPLE" | "DATETIME_SHORT" | "TIME_WITH_SECONDS" | "DATETIME_SHORT_WITH_SECONDS" | "DATE_MED" | "DATE_MED_WITH_WEEKDAY" | "DATE_FULL" | "DATE_HUGE" | "TIME_WITH_SHORT_OFFSET" | "TIME_WITH_LONG_OFFSET" | "DATETIME_MED" | "DATETIME_MED_WITH_SECONDS" | "DATETIME_MED_WITH_WEEKDAY" | "DATETIME_FULL" | "DATETIME_FULL_WITH_SECONDS" | "DATETIME_HUGE" | "DATETIME_HUGE_WITH_SECONDS";
+    export function test(): void;
+}
+declare module "jassijs/ui/converters/DefaultConverter" {
+    import { Component } from "jassijs/ui/Component";
+    export class $ConverterProperties {
+        name?: string;
+    }
+    export function $Converter(param: $ConverterProperties): Function;
+    export class DefaultConverter {
+        _component?: Component;
+        constructor();
+        /**
+         * converts a string to the object
+         * an error can be thrown for validation
+         * @param {string} str - the string to convert
+         */
+        stringToObject(str: any): any;
+        /**
+         * converts an object to string
+         * @param {string} obj - the object to convert
+         */
+        objectToString(obj: any): any;
+        get component(): Component;
+        set component(component: Component);
+        /**
+        * converts an object to an formatted string
+        * @param {string} obj - the object to convert
+        */
+        objectToFormatedString(obj: any): any;
+    }
+}
+declare module "jassijs/ui/converters/NumberConverter" {
+    import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
+    class NumberConverterProperties {
+        min?: number;
+        max?: number;
+        format?: string;
+    }
+    export class NumberConverter extends DefaultConverter {
         min: number;
+        max: number;
+        format: string;
+        constructor(props?: NumberConverterProperties);
+        /**
+         * converts a string to the object
+         * an error can be thrown for validation
+         * @param {string} str - the string to convert
+         */
+        stringToObject(str: any): any;
+        /**
+         * converts an object to string
+         * @param  obj - the object to convert
+         */
+        objectToString(obj: any): any;
+        objectToFormatedString(obj: any): any;
     }
-    export function ValidateMin(options: ValidationMinOptions): Function;
-    export class ValidationIsNumberOptions extends ValidationOptions {
-        optional?: boolean;
+}
+declare module "jassijs/ui/converters/StringConverter" {
+    import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
+    class StringConverterProperties {
+        minChars?: number;
+        maxChars?: number;
     }
-    export function ValidateIsNumber(options?: ValidationIsNumberOptions): Function;
-    export class ValidationIsStringOptions extends ValidationOptions {
-        optional?: boolean;
+    export class StringConverter extends DefaultConverter {
+        minChars?: number;
+        maxChars?: number;
+        constructor(props?: StringConverterProperties);
+        /**
+         * converts a string to the object
+         * an error can be thrown for validation
+         * @param {string} str - the string to convert
+         */
+        stringToObject(str: any): any;
+        /**
+         * converts an object to string
+         * @param {string} obj - the object to convert
+         */
+        objectToString(obj: any): any;
     }
-    export function ValidateIsString(options?: ValidationIsIntOptions): Function;
-    export function test(test: Test): Promise<void>;
+}
+declare module "jassijs/ui/CSSProperties" {
+    import { Component } from "jassijs/ui/Component";
+    /**
+     * loads googlefonts if needed
+     **/
+    export function loadFontIfNedded(font: string): void;
+    export class CSSProperties {
+        backgroundColor?: string;
+        backgroundImage?: string;
+        borderColor?: string;
+        borderStyle?: string | "none" | "hidden" | "dotted" | "dashed" | "solid" | "double" | "groove" | "ridge" | "inset" | "outset" | "inherit" | "initial" | "unset";
+        borderWidth?: string | "thin" | "medium" | "thick" | "2px" | "inherit" | "initial" | "unset";
+        color?: string;
+        cursor?: string | "auto" | "default" | "none" | "context-menu" | "help" | "pointer" | "progress" | "wait" | "cell" | "crosshair" | "text" | "vertical-text" | "alias" | "copy" | "move" | "no-drop" | "not-allowed" | "grab" | "grabbing" | "all-scroll" | "col-resize" | "row-resize" | "n-resize" | "e-resize" | "s-resize" | "w-resize" | "ne-resize" | "nw-resize" | "se-resize" | "sw-resize" | "ew-resize" | "ns-resize" | "nesw-resize" | "nwse-resize" | "zoom-in" | "zoom-out" | "inherit" | "initial" | "unset";
+        filter?: string | "blur(5px)" | "brightness(0.4)" | "contrast(200%)" | "drop-shadow(16px 16px 20px blue)" | "grayscale(50%)" | "hue-rotate(90deg)" | "invert(75%)" | "opacity(25%)" | "saturate(30%)" | "sepia(60%)" | "inherit" | "initial" | "unset";
+        float?: string | "left" | "right" | "none" | "inline-start" | "inline-end" | "inherit" | "initial" | "unset";
+        fontFamily?: string;
+        fontSize?: string | "12px" | "xx-small" | "x-small" | "small" | "medium" | "large" | "x-large" | "xx-large" | "xxx-large" | "larger" | "smaller" | "inherit" | "initial" | "unset";
+        fontVariant?: string | "normal" | "small-caps" | "small-caps slashed-zero" | "common-ligatures tabular-nums" | "no-common-ligatures proportional-nums" | "inherit" | "initial" | "unset";
+        fontWeight?: string | "normal" | "bold" | "lighter" | "bolder" | "100" | "900" | "inherit" | "initial" | "unset";
+        letterSpacing?: string | "normal" | "1px";
+        lineHeight?: string | "normal" | "32px";
+        marginBottom?: string | "3px";
+        marginLeft?: string | "3px";
+        marginRight?: string | "3px";
+        marginTop?: string | "3px";
+        overflow?: string | "visible" | "hidden" | "clip" | "scroll" | "auto" | "inherit" | "initial" | "unset";
+        paddingBottom?: string | "3px";
+        paddingLeft?: string | "3px";
+        paddingRight?: string | "3px";
+        paddingTop?: string | "3px";
+        position?: string | "static" | "relative" | "absolute" | "sticky" | "fixed" | "inherit" | "initial" | "unset";
+        textAlign?: string | "start" | "end" | "left" | "right" | "center" | "justify" | "match-parent" | "inherit" | "initial" | "unset";
+        textDecorationColor?: string;
+        textDecorationLine?: string | "none" | "underline" | "overline" | "line-through" | "blink" | "spelling-error" | "grammar-error" | "inherit" | "initial" | "unset";
+        textDecorationStyle?: string | "solid" | "double" | "dotted" | "dashed" | "wavy" | "inherit" | "initial" | "unset";
+        textDecorationThickness?: string | "3px";
+        textTransform?: string | "none" | "capitalize" | "uppercase" | "lowercase" | "full-width" | "full-size-kana" | "inherit" | "initial" | "unset";
+        verticalAlign?: string | "baseline" | "sub" | "super" | "text-top" | "text-bottom" | "middle" | "top" | "bottom" | "3px" | "inherit" | "initial" | "unset";
+        zIndex?: string | "1" | "2" | "auto";
+        [name: string]: string;
+        static applyTo(properties: React.CSSProperties, component: Component): React.CSSProperties;
+    }
+}
+declare module "jassijs/ui/Databinder" {
+    import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
+    import { Component } from "jassijs/ui/Component";
+    interface DatabinderProperties extends InvisibleComponentProperties {
+    }
+    export class Databinder<T extends DatabinderProperties = {}> extends InvisibleComponent<DatabinderProperties> implements DatabinderProperties {
+        components: Component[];
+        private _properties;
+        private _getter;
+        private _setter;
+        private _onChange;
+        private _autocommit;
+        userObject: any;
+        rollbackObject: any;
+        constructor(props?: DatabinderProperties);
+        render(): any;
+        /**
+        * binds the component to the property of the userObject
+        * @param {string} property - the name of the property to bind
+        * @param {jassijs.ui.Component} component - the component to bind
+        * @param {string} [onChange] - functionname to register the  changehandler - if missing no autocommit is possible
+        * @param {function} [getter] - function to get the value of the component - if missing .value is used
+        * @param {function} [setter] - function to put the value of the component - if missing .value is used
+        */
+        add(property: any, component: any, onChange?: any, getter?: any, setter?: any): void;
+        componentChanged(component: any, property: any, event: any): void;
+        remove(component: any): void;
+        /**
+         * defines getter and setter and connect this to the databinder
+         * @param {object} object - the object where we define the property
+         * @param {string} propertyname - the name of the property
+         **/
+        definePropertyFor(object: any, propertyname: any): void;
+        /**
+         * @member {object} value - the binded userobject - call toForm on set
+         */
+        get value(): any;
+        set value(obj: any);
+        doValidation(ob: any): unknown;
+        /**
+         * binds the object to all added components
+         * @param {object} obj - the object to bind
+         */
+        toForm(obj: any): void;
+        validateObject(): any;
+        /**
+         * gets the objectproperties from all added components
+         * @return {object}
+         */
+        fromForm(): Promise<object>;
+        /**
+         * get objectproperty
+         * @param {number} x - the numer of the component
+         */
+        _fromForm(x: any): void;
+        /**
+         * register the autocommit handler if needed
+         * @param {jassijs.ui.DataComponent} component
+         */
+        destroy(): void;
+    }
+}
+declare module "jassijs/ui/DataComponent" {
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    import { Databinder } from "jassijs/ui/Databinder";
+    export interface DataComponentProperties extends ComponentProperties {
+        /**
+            * binds a component to a databinder
+            * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
+            *         {string} property - the property to bind]
+            */
+        bind?: any[];
+        /**
+       * @member {bool} autocommit -  if true the databinder will update the value on every change
+       *                              if false the databinder will update the value on databinder.toForm
+       */
+        autocommit?: boolean;
+        value?: any;
+    }
+    export class DataComponent<T extends DataComponentProperties = DataComponentProperties> extends Component<T> implements DataComponentProperties {
+        _autocommit: boolean;
+        _databinder: Databinder;
+        /**
+        * base class for each Component
+        * @class jassijs.ui.Component
+         * @param {object} properties - properties to init
+         * @param {string} [properties.id] -  connect to existing id (not reqired)
+         *
+         */
+        constructor(properties?: DataComponentProperties);
+        get autocommit(): boolean;
+        set autocommit(value: boolean);
+        /**
+         * @param [databinder:jassijs.ui.Databinder,"propertyToBind"]
+         */
+        set bind(databinder: any[]);
+        destroy(): void;
+    }
+}
+declare module "jassijs/ui/DBObjectDialog" {
+    import { Table } from "jassijs/ui/Table";
+    import { Panel } from "jassijs/ui/Panel";
+    import { DBObjectView } from "jassijs/ui/DBObjectView";
+    import { BoxPanel } from "jassijs/ui/BoxPanel";
+    type Me = {
+        splitpanel1?: BoxPanel;
+        IDDBView?: Panel;
+        table1?: Table;
+    };
+    export class DBObjectDialog extends Panel {
+        me: Me;
+        private _dbclassname;
+        view: DBObjectView;
+        constructor();
+        layout(me: Me): void;
+        /**
+         * set the DBObject-classname to show in this dialog
+         **/
+        set dbclassname(classname: string);
+        get dbclassname(): string;
+        update(): any;
+        private static createFunction;
+        /**
+         * create Action for all DBObjectView with actionname is defined
+         */
+        private static createActions;
+        static createFor(classname: string): unknown;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/DBObjectExplorer" {
+    import { ContextMenu } from "jassijs/ui/ContextMenu";
+    import { Tree } from "jassijs/ui/Tree";
+    import { Panel } from "jassijs/ui/Panel";
+    import { FileNode } from "jassijs/remote/FileNode";
+    export class DBObjectNode {
+        name?: string;
+        filename?: string;
+    }
+    export class DBFileActions {
+        static ViewData(all: FileNode[]): any;
+    }
+    export class DBObjectActions {
+        static ViewData(all: DBObjectNode[]): any;
+        static OpenCode(all: DBObjectNode[]): any;
+    }
+    type Me = {
+        tree?: Tree;
+        contextmenu?: ContextMenu;
+    };
+    export class DBObjectExplorer extends Panel {
+        me: Me;
+        constructor();
+        layout(me: Me): void;
+        static dummy(): any;
+        static dummy2(): any;
+        static show(): any;
+        update(): any;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/DBObjectView" {
+    import { Button } from "jassijs/ui/Button";
+    import { BoxPanel } from "jassijs/ui/BoxPanel";
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
+    import { Databinder } from "jassijs/ui/Databinder";
+    import { DBObject } from "jassijs/remote/DBObject";
+    export type DBObjectViewMe = {
+        databinder?: Databinder;
+        create?: Button;
+        main?: Panel;
+        toolbar?: BoxPanel;
+        save?: Button;
+        remove?: Button;
+        refresh?: Button;
+    };
+    export class DBObjectViewProperties {
+        /**
+         * full path to classifiy the UIComponent e.g common/TopComponent
+         */
+        classname: string;
+        actionname?: string;
+        icon?: string;
+        queryname?: string;
+    }
+    export function $DBObjectView(properties: DBObjectViewProperties): Function;
+    type Me = DBObjectViewMe;
+    export interface DBObjectViewConfig extends PanelProperties {
+        /**
+           * register an event if the object is created
+           * @param {function} handler - the function that is called
+           */
+        oncreated?(handler: (obj: DBObject) => void): any;
+        /**
+        * register an event if the object is saved
+        * @param {function} handler - the function that is called
+        */
+        onsaved?(handler: (obj: DBObject) => void): any;
+        /**
+         * register an event if the object is refreshed
+         * @param {function} handler - the function that is called
+         */
+        onrefreshed?(handler: (obj: DBObject) => void): any;
+        /**
+        * register an event if the object is deleted
+        * @param {function} handler - the function that is called
+        */
+        ondeleted?(handler: (obj: DBObject) => void): any;
+        value: any;
+    }
+    export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isAbsolute"> {
+        me: any;
+        value: any;
+        constructor();
+        config(config: DBObjectViewConfig): DBObjectView;
+        protected _setDesignMode(enable: any): void;
+        /**
+         * create a new object
+         */
+        createObject(): any;
+        oncreated(handler: (obj: DBObject) => void): void;
+        private doSave;
+        /**
+         * saves the object
+         */
+        saveObject(): any;
+        onsaved(handler: (obj: DBObject) => void): void;
+        /**
+         * refresh the object
+         */
+        refreshObject(): void;
+        onrefreshed(handler: (obj: DBObject) => void): void;
+        /**
+         * deletes Object
+         **/
+        deleteObject(): void;
+        ondeleted(handler: (obj: DBObject) => void): void;
+        layout(me: Me): void;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/DesignDummy" {
+    import { Component } from "jassijs/ui/Component";
+    import { Image } from "jassijs/ui/Image";
+    export class DesignDummy extends Image {
+        type: "beforeComponent" | "atEnd";
+        editorselectthis: Component;
+        designDummyFor: Component;
+        constructor();
+        static createIfNeeded(designDummyFor: Component, type: "beforeComponent" | "atEnd", editorselectthis?: Component, oclass?: any): DesignDummy;
+        static destroyIfNeeded(designDummyFor: Component, type: "beforeComponent" | "atEnd"): void;
+    }
+}
+declare module "jassijs/ui/DockingContainer" {
+    import "jassijs/ext/jquerylib";
+    import "jassijs/ext/intersection-observer";
+    import { Container } from "jassijs/ui/Container";
+    export class DockingContainer extends Container {
+        _registeredcomponents: any;
+        _lastSize: number;
+        _intersectionObserver: IntersectionObserver;
+        _myLayout: any;
+        _windowResizer: any;
+        _noDestroyChilds: boolean;
+        /**
+    * a container where the components could be docked
+    * @class jassijs.ui.DockingContainer
+    */
+        constructor(id?: any);
+        componentDidMount(): void;
+        render(): any;
+        static clearMemoryleak(container: any): void;
+        /**
+         * add a component to the container
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {string} title - the caption of the window
+         * @param {string} name - the name of the window
+         */
+        add(component: any, title?: string, name?: any): void;
+        /**
+         * called on resizing could be redefined
+         */
+        onresize(): void;
+        /**
+         * register a component to Golden layout
+         * @param {String} name - the name of the component
+         */
+        _registerGL(name: any): void;
+        /**
+         * remove a component from the container
+         * @param {jassijs.ui.Component} component - the component to add
+         */
+        remove(component: any): void;
+        _init(): void;
+        /**
+         * activate the window
+         * @param {string} name - the name of the window
+         */
+        show(name: any): void;
+        /**
+         * update the layout (size)
+         */
+        update(): void;
+        /**
+         * finds a child in the config
+         */
+        _find(parent: any, name: any): any;
+        /** @member {String} - the layout of the windows */
+        get layout(): any;
+        set layoutold(value: any);
+        set layout(value: any);
+        private addSelectionEvent;
+        destroy(): void;
+    }
+    export function test(): DockingContainer;
+}
+declare module "jassijs/ui/HTMLEditorPanel" {
+    import { Panel } from "jassijs/ui/Panel";
+    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+    import { Button } from "jassijs/ui/Button";
+    class Me {
+        IDHtml?: HTMLPanel;
+        IDChange?: Button;
+    }
+    export class HTMLEditorPanel extends Panel {
+        me: Me;
+        constructor(id?: any);
+        layout(): any;
+        set value(val: any);
+        get value(): any;
+    }
+    export function te(): void;
+}
+declare module "jassijs/ui/HTMLPanel" {
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    global {
+        interface JQuery {
+            doubletap: any;
+        }
+    }
+    export interface HTMLPanelProperties extends DataComponentProperties {
+        newlineafter?: boolean;
+        /**
+         * template string  component.value=new Person();component.template:"{{name}}"}
+         */
+        template?: string;
+        value?: string;
+    }
+    export class HTMLPanel<T extends HTMLPanelProperties = HTMLPanelProperties> extends DataComponent<T> implements HTMLPanelProperties {
+        static oldeditor: any;
+        private _tcm;
+        toolbar: {};
+        private _template;
+        private _value;
+        private inited;
+        editor: any;
+        customToolbarButtons: {
+            [name: string]: {
+                title: string;
+                action: any;
+            };
+        };
+        constructor(properties?: HTMLPanelProperties);
+        render(): any;
+        config(config: T): HTMLPanel;
+        get newlineafter(): boolean;
+        set newlineafter(value: boolean);
+        compileTemplate(template: any): any;
+        get template(): string;
+        set template(value: string);
+        /**
+         * @member {string} code - htmlcode of the component
+         **/
+        set value(code: string);
+        get value(): string;
+        extensionCalled(action: ExtensionAction): void;
+        initIfNeeded(tinymce: any, config: any): void;
+        focusLost(): void;
+        private _initTinymce;
+        /**
+         * activates or deactivates designmode
+         * @param {boolean} enable - true if activate designMode
+         * @param {jassijs.ui.ComponentDesigner} editor - editor instance
+         */
+        _setDesignMode(enable: any, editor: any): void;
+        destroy(): void;
+    }
+    export function test(): HTMLPanel<HTMLPanelProperties>;
+}
+declare module "jassijs/ui/Image" {
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    export interface ImageProperties extends DataComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLImageElement>, HTMLImageElement>;
+        /**
+     * register an event if the image is clicked
+     * @param {function} handler - the function that is called on change
+     */
+        onclick?(handler: any): any;
+        /**
+          * @member {string} - link to image
+          */
+        src?: string;
+        value?: string;
+    }
+    export class Image<T extends ImageProperties = ImageProperties> extends DataComponent<T> implements ImageProperties {
+        constructor(config?: ImageProperties);
+        render(): any;
+        config(config: T): Image;
+        onclick(handler: any): void;
+        /**
+        * @member {string} value - value of the component
+        */
+        set value(value: string);
+        get value(): string;
+        get width(): any;
+        set width(value: any);
+        get height(): string | number;
+        set height(value: string | number);
+        set src(icon: string);
+        get src(): string;
+    }
+    export function test(): Image<ImageProperties>;
+}
+declare module "jassijs/ui/InvisibleComponent" {
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    export interface InvisibleComponentProperties extends ComponentProperties {
+    }
+    /**
+     * invivisible Component
+     **/
+    export class InvisibleComponent<T extends InvisibleComponentProperties = InvisibleComponentProperties> extends Component<T> {
+        $isInivisibleComponent: boolean;
+        constructor(properties?: InvisibleComponentProperties);
+    }
+}
+declare module "jassijs/ui/Menu" {
+    import "jassijs/ext/jquerylib";
+    import { Container, ContainerProperties } from "jassijs/ui/Container";
+    export interface MenuProperties extends ContainerProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLUListElement>, HTMLUListElement>;
+        noUpdate?: boolean;
+        onclick?(handler: any): any;
+    }
+    export class Menu<T extends MenuProperties = MenuProperties> extends Container<T> implements MenuProperties {
+        _isRoot: boolean;
+        _text: string;
+        _icon: string;
+        _noUpdate: boolean;
+        _mainMenu: any;
+        constructor(options?: any);
+        componentDidMount(): void;
+        render(): any;
+        config(config: T): Menu;
+        _sample(): void;
+        _menueChanged(): void;
+        getMainMenu(): any;
+        /**
+        * adds a component to the container before an other component
+        * @param {jassijs.ui.Component} component - the component to add
+        * @param {jassijs.ui.Component} before - the component before then component to add
+        */
+        addBefore(component: any, before: any): void;
+        /**
+          * adds a component to the container
+          * @param {jassijs.ui.Menu} component - the component to add
+          */
+        add(component: any): void;
+        onclick(handler: any): void;
+        extensionCalled(action: ExtensionAction): void;
+        /**
+        * activates or deactivates designmode
+        * @param {boolean} enable - true if activate designMode
+        */
+        protected _setDesignMode(enable: any): void;
+        destroy(): void;
+    }
+    export function test(): Menu<MenuProperties>;
+}
+declare module "jassijs/ui/MenuItem" {
+    import "jassijs/ext/jquerylib";
+    import { Menu } from "jassijs/ui/Menu";
+    import { Container, ContainerProperties } from "jassijs/ui/Container";
+    export interface MenuItemProperties extends ContainerProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLLIElement>, HTMLLIElement>;
+        onclick?(handler: any): any;
+        /**
+         * @member {string} - the icon of the button
+         */
+        icon?: string;
+        /**
+        * @member {string} - the caption of the button
+        */
+        text?: string;
+    }
+    export class MenuItem<T extends MenuItemProperties = MenuItemProperties> extends Container<T> implements MenuItemProperties {
+        _text: string;
+        items: Menu;
+        _icon: string;
+        _mainMenu: Menu;
+        constructor(props?: MenuItemProperties);
+        render(): any;
+        config(config: T): MenuItem;
+        onclick(handler: any): void;
+        set icon(icon: string);
+        get icon(): string;
+        set text(value: string);
+        get text(): string;
+        destroy(): void;
+        getMainMenu(): any;
+        _menueChanged(): void;
+        extensionCalled(action: ExtensionAction): any;
+    }
+    export function test(): unknown;
 }
 declare module "jassijs/ui/Notify" {
     import "jquery";
@@ -769,521 +2529,1853 @@ declare module "jassijs/ui/Notify" {
     export function notify(text: string | object, style: string | any, options?: any): void;
     export function notifyAddStyle(style: any, options: any): void;
 }
-declare module "jassijs/remote/Server" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    import { FileNode } from "jassijs/remote/FileNode";
-    export class Server extends RemoteObject {
-        private static isonline;
-        static filesInMap: {
-            [name: string]: {
-                modul: string;
-                id: number;
-            };
-        };
-        constructor();
-        private _convertFileNode;
-        private fillMapModules;
-        fillFilesInMapIfNeeded(): Promise<void>;
-        addFilesFromMap(root: FileNode): Promise<void>;
+declare module "jassijs/ui/ObjectChooser" {
+    import "jassijs/ext/jquerylib";
+    import { Table } from "jassijs/ui/Table";
+    import { Panel } from "jassijs/ui/Panel";
+    import { Button, ButtonProperties } from "jassijs/ui/Button";
+    import { Textbox } from "jassijs/ui/Textbox";
+    import { Databinder } from "jassijs/ui/Databinder";
+    import { DataComponentProperties } from "jassijs/ui/DataComponent";
+    class Me {
+        IDTable?: Table;
+        IDPanel?: Panel;
+        IDCancel?: Button;
+        IDSearch?: Textbox;
+        IDOK?: Button;
+    }
+    export interface ObjectChooserProperties extends ButtonProperties {
+        dialogHeight?: number;
+        dialogWidth?: number;
         /**
-        * gets alls ts/js-files from server
-        * @param {Promise<string>} [async] - returns a Promise for asynchros handling
-        * @returns {string[]} - list of files
+         * @member {object} value - selection of the component
+         */
+        value?: any;
+        /**
+         * @member {string} items - the items to select or  the classname to generate the items
+         */
+        items?: string | any[];
+        /**
+    * called if value has changed
+    * @param {function} handler - the function which is executed
+    */
+        onchange?(handler: any): any;
+        /**
+         * @member {bool} autocommit -  if true the databinder will update the value on every change
+         *                              if false the databinder will update the value on databinder.toForm
+         */
+        autocommit?: boolean;
+        /**
+           * binds a component to a databinder
+           * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
+           *         {string} property - the property to bind]
+           */
+        bind?: any[];
+    }
+    export class ObjectChooser<T extends ObjectChooserProperties = ObjectChooserProperties> extends Button<T> implements ObjectChooserProperties, DataComponentProperties {
+        dialogHeight: number;
+        dialogWidth: number;
+        _items: any;
+        me: Me;
+        _value: any;
+        _autocommit: boolean;
+        _databinder: Databinder;
+        constructor();
+        config(config: T): ObjectChooser;
+        get title(): string;
+        layout(): void;
+        ok(): void;
+        cancel(): void;
+        set value(value: any);
+        get value(): any;
+        loadObjects(classname: string): unknown;
+        set items(value: any);
+        get items(): any;
+        onchange(handler: any): void;
+        get autocommit(): boolean;
+        set autocommit(value: boolean);
+        /**
+         * binds a component to a databinder
+         * @param {jassijs.ui.Databinder} databinder - the databinder to bind
+         * @param {string} property - the property to bind
+         */
+        set bind(databinder: any[]);
+        destroy(): void;
+    }
+    export function test(): unknown;
+    export function test2(): any;
+}
+declare module "jassijs/ui/OptionDialog" {
+    import "jassijs/ext/jquerylib";
+    import { Panel } from "jassijs/ui/Panel";
+    import { BoxPanel } from "jassijs/ui/BoxPanel";
+    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+    import { Component } from "jassijs/ui/Component";
+    import { Textbox } from "jassijs/ui/Textbox";
+    class Me {
+        boxpanel1?: BoxPanel;
+        htmlpanel1?: HTMLPanel;
+        buttons?: BoxPanel;
+        inputText?: Textbox;
+        propertyEditor?: any;
+    }
+    export interface DialogResult {
+        button: string;
+        text?: string;
+        properties?: any;
+    }
+    export class OptionDialog extends Panel {
+        parentComponent: Component;
+        text: string;
+        options: string[];
+        selectedOption: string;
+        me: Me;
+        /**
+        *
+        * @param {object} properties - properties to init
+        * @param {string} [properties.id] -  connect to existing id (not reqired)
+        * @param {boolean} [properties.useSpan] -  use span not div
+        *
         */
-        dir(withDate?: boolean, context?: Context): Promise<FileNode>;
-        zip(directoryname: string, serverdir?: boolean, context?: Context): Promise<string | {
-            [id: string]: string;
-        }>;
+        constructor(properties?: any);
+        layout(): void;
         /**
-         * gets the content of a file from server
-         * @param {string} fileNamew
-         * @returns {string} content of the file
-         */
-        loadFiles(fileNames: string[], context?: Context): Promise<{
-            [id: string]: string;
-        }>;
-        /**
-         * gets the content of a file from server
-         * @param {string} fileName
-         * @returns {string} content of the file
-         */
-        loadFile(fileName: string, context?: Context): Promise<string>;
-        /**
-        * put the content to a file
-        * @param [{string}] fileNames - the name of the file
-        * @param [{string}] contents
+        * ask for properties in propertygrid
+        * @param text - the text to be displayed
+        * @param  properties - the properties which should be filled, marked by @$Property
+        * @param  options - the options e.g ["ok","Cancel"]
+        * @param parent - the parent component
+        * @param modal - display the dialog modal
         */
-        saveFiles(fileNames: string[], contents: string[], context?: Context): Promise<string>;
+        static askProperties(text: string, properties: any, options: string[], parent?: Component, modal?: boolean): Promise<DialogResult>;
         /**
-        * put the content to a file
-        * @param {string} fileName - the name of the file
-        * @param {string} content
+        * @param text - the text to be displayed
+        * @param  options - the options
+        * @param parent - the parent component
+        * @param modal - display the dialog modal
+        * @param  inputDefaultText - if the user should input something
+        *
         */
-        saveFile(fileName: string, content: string, context?: Context): Promise<string>;
-        /**
-       * deletes a server modul
-       **/
-        testServersideFile(name: string, context?: Context): Promise<string>;
-        /**
-       * deletes a server modul
-       **/
-        removeServerModul(name: string, context?: Context): Promise<string>;
-        /**
-        * deletes a file or directory
-        **/
-        delete(name: string, context?: Context): Promise<string>;
-        /**
-         * renames a file or directory
-         **/
-        rename(oldname: string, newname: string, context?: Context): Promise<string>;
-        /**
-        * is the nodes server running
-        **/
-        static isOnline(context?: Context): Promise<boolean>;
-        /**
-         * creates a file
-         **/
-        createFile(filename: string, content: string, context?: Context): Promise<string>;
-        /**
-        * creates a file
-        **/
-        createFolder(foldername: string, context?: Context): Promise<string>;
-        createModule(modulename: string, context?: Context): Promise<string>;
-        static mytest(context?: Context): Promise<any>;
+        static show(text: string, options: string[], parent?: Component, modal?: boolean, inputDefaultText?: string): Promise<DialogResult>;
+        static _show(text: string, options: string[], parent: Component, modal: boolean, inputDefaultText?: string, properties?: any): Promise<DialogResult>;
     }
+    export function test2(): any;
 }
-declare module "jassijs/server/FS" {
-    import { Test } from "jassijs/remote/Test";
-    class Stats {
-        mtimeMs: number;
-        isDirectory: () => boolean;
-    }
-    export class FS {
-        private static db;
-        private static getDB;
-        constructor();
-        static _readdir(db: IDBDatabase, folder: string, withSubfolders?: boolean, fullPath?: boolean): Promise<string[]>;
-        readdir(folder: string): Promise<string[]>;
-        readFile(file: string, format?: string, fallback?: boolean): Promise<string>;
-        stat(file: string): Promise<Stats>;
-        getDirectoryname(path: any): any;
-        private static _mkdir;
-        mkdir(filename: string, options?: {
-            recursive?: boolean;
-        }): Promise<void>;
-        private loadFileEntry;
-        private static _loadFileEntry;
-        writeFile(file: string, data: string): Promise<void>;
-        rename(oldPath: string, newPath: string): Promise<void>;
-        private static _removeEntry;
-        unlink(file: string): Promise<void>;
-        rmdir(dirName: any, options?: {
-            recursive?: boolean;
-        }): Promise<void>;
-        private exists;
-    }
-    export function exists(filename: string): Promise<boolean>;
-    export function test(tt: Test): Promise<void>;
-}
-declare module "jassijs/server/LocalFS" {
-    import { Test } from "jassijs/remote/Test";
-    class Stats {
-        mtimeMs: number;
-        isDirectory: () => boolean;
-    }
-    export class LocalFS {
-        private static db;
-        private static getDB;
-        constructor();
-        readdir(folder: string): Promise<string[]>;
-        readFile(file: string, format?: string, fallback?: boolean): Promise<string>;
-        stat(file: string): Promise<Stats>;
-        getDirectoryname(path: any): any;
-        mkdir(filename: string, options?: {
-            recursive?: boolean;
-        }): Promise<void>;
-        private loadFileEntry;
-        saveHandle(handle: any): Promise<void>;
-        writeFile(file: string, data: string): Promise<void>;
-        rename(oldPath: string, newPath: string): Promise<void>;
-        unlink(file: string): Promise<void>;
-        rmdir(dirName: any, options?: {
-            recursive?: boolean;
-        }): Promise<void>;
-        private exists;
-    }
-    export function exists(filename: string): Promise<boolean>;
-    export function deleteHandle(): Promise<void>;
-    export function createHandle(): Promise<void>;
-    export function test(tt: Test): Promise<void>;
-}
-declare module "jassijs/server/Reloader" {
-    export class Reloader {
-        static cache: any[];
-        static reloadCodeFromServerIsRunning: boolean;
-        static instance: Reloader;
-        listener: any[];
+declare module "jassijs/ui/Panel" {
+    import { Container, ContainerProperties } from "jassijs/ui/Container";
+    import { Component } from "jassijs/ui/Component";
+    export interface PanelProperties extends ContainerProperties {
         /**
-         * reloads Code
+          * @param {boolean} the elements are ordered absolute
+          **/
+        isAbsolute?: boolean;
+        useSpan?: boolean;
+        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+    }
+    export class Panel<T extends PanelProperties = PanelProperties> extends Container<T> implements PanelProperties {
+        _isAbsolute: boolean;
+        private _activeComponentDesigner;
+        /**
+        *
+        * @param {object} properties - properties to init
+        * @param {string} [properties.id] -  connect to existing id (not reqired)
+        * @param {boolean} [properties.useSpan] -  use span not div
+        *
+        */
+        constructor(properties?: PanelProperties);
+        render(): any;
+        set isAbsolute(value: boolean);
+        get isAbsolute(): boolean;
+        max(): void;
+        extensionCalled(action: ExtensionAction): void;
+        /**
+        * adds a component to the container
+        * @param {jassijs.ui.Component} component - the component to add
+        */
+        add(component: Component): any;
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
          */
-        private constructor();
+        addBefore(component: Component, before: Component): any;
         /**
-         * check code changes out of the browser if localhost and load the changes in to the browser
+         * activates or deactivates designmode
+         * @param {boolean} enable - true if activate designMode
          */
-        static startReloadCodeFromServer(): void;
+        protected _setDesignMode(enable: any): void;
+        destroy(): void;
+    }
+}
+declare module "jassijs/ui/Property" {
+    export function $Property(property?: Property): Function;
+    export class Property {
+        [key: string]: any;
+        constructorClass?: any;
+        default?: any;
+        /** the name of the property*/
+        name?: string;
+        /** the type of the property*/
+        type?: string;
+        /** the user can choose this entries */
+        chooseFrom?: any[] | ((comp: any, propertyeditor?: any) => any[]);
+        /** @member - the user can select from chooseFrom but can not input own entries*/
+        chooseFromStrict?: boolean;
+        /** @member - the description for tooltip **/
+        decription?: string;
+        /** @member - hides the properties from the base class **/
+        hideBaseClassProperties?: boolean;
+        /** @member - is the property visible */
+        isVisible?: (component: any, propertyeditor?: any) => boolean;
+        /** @member - jassijs.base.Action -   the actions in the PropertyEditor  */
+        editoractions?: any[];
         /**
-         * listener for code reloaded
-         * @param {function} func - callfunction for the event
+         * Property for PropertyEditor
+         * @class jassijs.ui.EditorProperty
          */
-        addEventCodeReloaded(func: any): void;
-        removeEventCodeReloaded(func: any): void;
-        private _findScript;
-        reloadJS(fileName: string): Promise<void>;
-        reloadJSAll(fileNames: string[], afterUnload?: () => {}, useServerRequire?: boolean): Promise<void>;
-        migrateModul(allModules: any, file: any, modul: any): void;
-        migrateClasses(file: any, oldmodul: any, modul: any): void;
+        constructor(name?: any, type?: any);
+        componentType?: any;
+        description?: string;
+        hide?: boolean;
+        /**
+         * this property could be set by browser url
+         */
+        isUrlTag?: boolean;
     }
 }
-/// <amd-dependency name="JSZip" path="jszip" />
-declare module "jassijs/server/ext/jszip" {
-    var JSZip: any;
-    export default JSZip;
-}
-declare module "jassijs/server/NativeAdapter" {
-    import { FS, exists as fsexists } from "jassijs/server/FS";
-    var ts: typeof globalThis.ts;
-    export { ts };
-    var exists: typeof fsexists;
-    var myfs: FS;
-    export { exists };
-    export { myfs };
-    export function dozip(directoryname: string, serverdir?: boolean): Promise<string>;
-    export function reloadJSAll(filenames: string[], afterUnload: () => {}): Promise<void>;
-    export function transpile(fileName: string, inServerdirectory?: boolean): Promise<void>;
-    var doNotReloadModule: boolean;
-    export { doNotReloadModule };
-}
-declare module "jassijs/remote/Config" {
-    export class Config {
-        name: string;
-        isLocalFolderMapped: boolean;
-        isServer: boolean;
-        modules: {
-            [modul: string]: string;
-        };
-        server: {
-            modules: {
-                [modul: string]: string;
-            };
-        };
-        jsonData: any;
-        clientrequire: any;
-        serverrequire: any;
-        constructor();
-        init(configtext: string, name?: any): void;
-        reload(): Promise<void>;
-        saveJSON(): Promise<void>;
-    }
-    var config: Config;
-    export { config };
-}
-declare module "jassijs/server/Indexer" {
-    export abstract class Indexer {
-        abstract fileExists(name: any): any;
-        abstract readFile(name: any): any;
-        abstract getFileTime(name: any): any;
-        abstract createDirectory(name: any): any;
-        abstract writeFile(name: string, content: string): any;
-        abstract dirFiles(modul: string, path: string, extensions: string[], ignore: string[]): Promise<string[]>;
-        updateModul(root: any, modul: string, isserver: boolean): Promise<void>;
-        convertArgument(arg: any): any;
-        collectAnnotations(node: ts.Node, outDecorations: any, depth?: number): void;
-    }
-}
-declare module "jassijs/server/RegistryIndexer" {
-    import { Indexer } from "jassijs/server/Indexer";
-    export class ServerIndexer extends Indexer {
-        updateRegistry(): Promise<void>;
-        dirFiles(modul: string, path: string, extensions: string[], ignore?: string[]): Promise<string[]>;
-        writeFile(name: string, content: string): Promise<void>;
-        createDirectory(name: string): Promise<void>;
-        getFileTime(filename: any): Promise<number>;
-        fileExists(filename: any): Promise<boolean>;
-        readFile(filename: any): Promise<any>;
-    }
-}
-declare module "jassijs/server/Compile" {
-    /**
-     * compile
-     */
-    export class Compile {
-        static lastModifiedTSFiles: string[];
-        lastCompiledTSFiles: string[];
-        constructor();
-        serverConfig(): ts.CompilerOptions;
-        getDirectoryname(ppath: any): any;
-        dirFiles(dirname: string, skip: string[], ret: any, replaceClientFileName?: boolean): Promise<void>;
-        readRegistry(file: string, isServer: boolean): Promise<any>;
-        createRegistry(modul: string, isServer: boolean, exclude: string, includeClientRegistry: string, files: any): Promise<void>;
-        readModuleCode(modul: any, isServer: any): Promise<{
-            [file: string]: string;
-        }>;
-        transpileModul(modul: any, isServer: any): Promise<void>;
-        transpileServercode(fileName: string, inServerdirectory?: boolean): Promise<void>;
-    }
-}
-declare module "jassijs/server/Filesystem" {
-    import { FileNode } from "jassijs/remote/FileNode";
+declare module "jassijs/ui/PropertyEditor" {
+    import "jassijs/ext/jquerylib";
+    import "jassijs/base/PropertyEditorService";
+    import { Panel } from "jassijs/ui/Panel";
+    import { Property } from "jassijs/ui/Property";
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    import { Component } from "jassijs/ui/Component";
+    import { Action } from "jassijs/base/Actions";
     global {
-        interface Serverservice {
-            filesystem: Promise<Filesystem>;
+        export interface ExtensionAction {
+            getPropertyEditorActions?: {
+                propertyEditor: PropertyEditor;
+                actions: Action[];
+            };
         }
     }
-    export default class Filesystem {
-        static allModules: {
-            [name: string]: any[];
+    export interface ParserInterface {
+        sourceFile: any;
+        typeMeNode: any;
+        typeMe: {
+            [name: string]: any;
         };
-        path: string;
-        _pathForFile(fileName: string, fromServerdirectory?: boolean): string;
-        dir(curdir?: string, appendDate?: boolean, parentPath?: string, parent?: FileNode): Promise<FileNode>;
-        loadFile(fileName: string): Promise<string>;
-        loadFiles(fileNames: string[]): Promise<{}>;
-        dirFiles(dir: string, extensions: string[], ignore?: string[]): Promise<string[]>;
-        zip(directoryname: string, serverdir?: boolean): Promise<string>;
+        classes: {
+            [name: string]: any;
+        };
+        imports: {
+            [name: string]: string;
+        };
+        functions: {
+            [name: string]: ts.Node;
+        };
+        variables: {
+            [name: string]: ts.Node;
+        };
+        classScope: {
+            classname: string;
+            methodname: string;
+        }[];
+        code: string;
+        data: {
+            [variable: string]: {
+                [property: string]: any[];
+            };
+        };
+        getModifiedCode(): string;
+        addTypeMe(name: string, type: string): any;
         /**
-         * create a folder
-         * @param foldername - the name of the new file
+       * parse the code
+       * @param {string} code - the code
+       * @param {string} onlyfunction - only the code in the function is parsed, e.g. "layout()"
+       */
+        parse(code: string, classScope?: {
+            classname: string;
+            methodname?: string;
+        }[]): any;
+        /**
+         * add import {name} from file
+         * @param name
+         * @param file
          */
-        createFolder(foldername: string): Promise<string>;
+        addImportIfNeeded(name: string, file: string): any;
+        getClassScopeFromPosition(code: string, pos: number): {
+            classname: string;
+            methodname: string;
+        };
         /**
-         * create a module
-         * @param modulname - the name of the module
-      
-         */
-        createModule(modulename: string): Promise<string>;
+         * modify a member
+         **/
+        addOrModifyMember(member: any, pclass: any): any;
         /**
-         * create a file
-         * @param filename - the name of the new file
-         * @param content - then content
-         */
-        createFile(filename: string, content: string): Promise<string>;
-        /**
-         * renames a file or directory
-         * @param oldfile - old filename
-         * @param newfile - new filename
-         */
-        rename(oldfile: string, newfile: string): Promise<string>;
-        /**
-        * deletes a server module
-        * @param modul - to delete
+        * removes the property from code
+        * @param {type} property - the property to remove
+        * @param {type} [onlyValue] - remove the property only if the value is found
+        * @param {string} [variablename] - thpe name of the variable - default=this.variablename
         */
-        removeServerModul(modul: string): Promise<string>;
+        removePropertyInCode(property: string, onlyValue?: any, variablename?: string): any;
         /**
-        * deletes a file or directory
-        * @param file - old filename
+         * removes the variable from code
+         * @param {string} varname - the variable to remove
+         */
+        removeVariablesInCode(varnames: string[]): any;
+        /**
+         * gets the next variablename
+         * */
+        getNextVariableNameForType(type: string, suggestedName?: string): any;
+        /**
+        * modify the property in code
+        * @param variablename - the name of the variable
+        * @param  property - the property
+        * @param value - the new value
+        * @param classscope  - the property would be insert in this block
+        * @param isFunction  - true if the property is a function
+        * @param [replace]  - if true the old value is deleted
+        * @param [before] - the new property is placed before this property
+        * @param [variablescope] - if this scope is defined - the new property would be insert in this variable
         */
-        remove(file: string): Promise<string>;
+        setPropertyInCode(variableName: string, property: string, value: string | any, classscope: {
+            classname: string;
+            methodname: string;
+        }[], isFunction: boolean, replace: boolean, before?: {
+            variablename: string;
+            property: string;
+            value?: any;
+        }, variablescope?: {
+            variablename: string;
+            methodname: any;
+        }): any;
         /**
-         * create modul in ./jassijs.json
-         * @param modul
-         */
-        createRemoteModulIfNeeded(modul: string): Promise<void>;
-        getDirectoryname(ppath: any): any;
+        * swaps two statements indendified by  functionparameter in a variable.property(parameter1) with variable.property(parameter2)
+        **/
+        swapPropertyWithParameter(variable: string, property: string, parameter1: string, parameter2: string): any;
         /**
-         * save files +
-         * transpile remote files and
-         * reload the remote files in server if needed
-         * update db schema
-         * the changes would be reverted if there are errors
-         * @param fileNames
-         * @param contents
-         * @returns "" or the error
+        * adds an Property
+        * @param type - name of the type o create
+        * @param classscope - the scope (methodname) where the variable should be insert Class.layout
+        * @param variablescope - the scope where the variable should be insert e.g. hallo.onclick
+        * @returns  the name of the object
+        */
+        addVariableInCode(fulltype: string, classscope: {
+            classname: string;
+            methodname: string;
+        }[], variablescope?: {
+            variablename: string;
+            methodname: any;
+        }, suggestedName?: any): string;
+        getPropertyValue(variable: any, property: any): any;
+    }
+    export class PropertyEditor extends Panel {
+        readPropertyValueFromDesign: boolean;
+        table: Component;
+        codeEditor: any;
+        parser: ParserInterface;
+        variablename: string;
+        parentPropertyEditor: PropertyEditor;
+        _multiselectEditors: PropertyEditor[];
+        showThisProperties: any;
+        properties: any;
+        _value: any;
+        codeChanges: {
+            [property: string]: string | {};
+        };
+        toolbar: Panel;
+        actions: Action[];
+        /**
+        * edit object properties
+        */
+        constructor(codeEditor?: any, parser?: any);
+        createTable(): any;
+        componentDidMount(): void;
+        /**
+         * adds a new property
+         * @param {string} name  - the name of the property
+         * @param {jassijs.ui.PropertyEditors.Editor} editor - the propertyeditor to render the property
+         * @param {string} description - the the description is tooltip over the name
          */
-        saveFiles(fileNames: string[], contents: string[], rollbackonerror?: boolean): Promise<string>;
-        saveFile(fileName: string, content: string): Promise<void>;
+        addProperty(name: string, editor: Editor, description: string): void;
+        /**
+         * register an event if the property has changed
+         * @param {function} handler - the function that is called on change
+         */
+        oncodeChanged(handler: any): void;
+        /**
+         * register an event if the property has changed
+         * @param {function} handler - the function that is called on change
+         */
+        onpropertyChanged(handler: any): void;
+        /**
+         * delete all properties
+         */
+        clear(): void;
+        /**
+       * if parentPropertyEditor is defined then the value of the property must be substituted
+       * @param {jassijs.ui.PropertyEditor propertyEditor
+       * @param {[opject} props
+       * @param {string} propname the propertyName
+       */
+        /**
+         * if parentPropertyEditor is defined then the properties are defined there
+         * @param {jassijs.ui.PropertyEditor propertyEditor
+         * @param {[opject} props
+         * @param {string} propname the propertyName
+        
+        _addParentEditorProperties(propertyEditor, props, propname) {
+            if (propertyEditor.parentPropertyEditor !== undefined)
+                this._addParentEditorProperties(propertyEditor.parentPropertyEditor, props, propertyEditor.variablename + "/" + propname);
+            else {
+                var ret;
+                if (this.showThisProperties !== undefined) {
+                    ret = Tools.copyObject(this.showThisProperties);
+                } else
+                    ret = ComponentDescriptor.describe(propertyEditor.value.constructor, true).fields;
+                for (var x = 0;x < ret.length;x++) {
+                    if (ret[x].name.startsWith(propname + "/")) {
+                        var test = ret[x].name.substring((propname + "/").length);
+                        if (test.indexOf("/") < 0) {
+                            ret[x].name = test;
+                            props.push(ret[x]);
+                        }
+                    }
+    
+                }
+            }
+        } */
+        /**
+         * get all known instances for type
+         * @param {type} type - the type we are interested
+         * @returns {[string]}
+         */
+        getVariablesForType(type: any): any;
+        /**
+         * get the variablename of an object
+         * @param {object} ob - the object to search
+         * @returns {string}
+         */
+        getVariableFromObject(ob: any): any;
+        /**
+          * gets the name object of the given variabel
+          * @param {string} ob - the name of the variable
+         *  @returns {string}
+         */
+        getObjectFromVariable(ob: any): any;
+        /**
+         * @member {object}  - the rendered object
+         */
+        set value(value: any);
+        private addActions;
+        private createAction;
+        swapComponents(first: Component, second: Component): void;
+        private controlEditor;
+        private _initValue;
+        /**
+         * updates values
+         */
+        update(): void;
+        get value(): any;
+        /**
+         * gets the value of the property
+         * @param {string} property
+         * @param {boolean} [noDefaultValue] - returns no default value of the property
+         * @returns {object}
+         */
+        getPropertyValue(property: Property, noDefaultValue?: any): any;
+        updateCodeEditor(): void;
+        /**
+         * update the parser
+         */
+        updateParser(): void;
+        /**
+         * adds an required file to the code
+         */
+        addImportIfNeeded(name: string, file: string): void;
+        /**
+         * gets the next variablename
+         * */
+        getNextVariableNameForType(type: string): any;
+        /**
+         * adds an Property
+         * @param type - name of the type o create
+         * @param scopename - the scope {variable: ,methodname:} to add the variable - if missing layout()
+         * @returns  the name of the object
+         */
+        addVariableInCode(type: string, scopename: {
+            variablename: string;
+            methodname: string;
+        }, suggestedName?: string): string;
+        /**
+         * modify the property in code
+         * @param {string} property - the property
+         * @param {string} value - the new value
+         * @param {boolean} [replace]  - if true the old value is deleted
+         * @param {string} [variablename] - the name of the variable - default=this.variablename
+         * @param {object} [before] - {variablename,property,value=undefined}
+         * @param {object} scope - the scope {variable: ,methodname:} the scope - if missing layout()
+        */
+        setPropertyInCode(property: string, value: any, replace?: boolean, variableName?: string, before?: {
+            variablename: string;
+            property: string;
+            value?: any;
+        }, scopename?: {
+            variablename: string;
+            methodname: string;
+        }, doUpdate?: boolean): void;
+        /**
+        * modify the property in design
+        * @param {string} property - the property
+        * @param {string} value - the new value
+        */
+        setPropertyInDesign(property: string, value: any): void;
+        /**
+         * goto source position
+         * @param position - in Code
+         */
+        gotoCodePosition(position: number): any;
+        /**
+         * goto source line
+         * @param {number} line - line in Code
+         */
+        gotoCodeLine(line: number): any;
+        /**
+         * renames a variable in code
+         */
+        renameVariableInCode(oldName: string, newName: string): void;
+        /**
+         * renames a variable in design
+         */
+        renameVariableInDesign(oldName: string, newName: string): void;
+        /**
+        * removes the variable from design
+        * @param  varname - the variable to remove
+        */
+        removeVariableInDesign(varname: string): void;
+        /**
+         * removes the variable from code
+         * @param {string} varname - the variable to remove
+         */
+        removeVariablesInCode(varname: string[]): void;
+        /**
+        * removes the property from code
+        * @param {type} property - the property to remove
+        * @param {type} [onlyValue] - remove the property only if the value is found
+        * @param {string} [variablename] - the name of the variable - default=this.variablename
+        */
+        removePropertyInCode(property: string, onlyValue?: any, variablename?: string, doupdate?: boolean): any;
+        /**
+        * removes the property in design
+        */
+        removePropertyInDesign(property: string): void;
+        layout(me?: any): void;
+        destroy(): void;
+    }
+    export class PropertyEditorTestSubProperties {
+        num: number;
+        text: string;
+    }
+    export function test(): PropertyEditor;
+}
+declare module "jassijs/ui/PropertyEditors/BooleanEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    export class BooleanEditor extends Editor {
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onclick(param: any): void;
     }
 }
-declare module "jassijs/remote/Registry" {
-    import "reflect-metadata";
-    export function $Class(longclassname: string): Function;
-    export function $register(servicename: string, ...params: any[]): Function;
-    class DataEntry {
-        oclass: new (...args: any[]) => any;
-        params: any[];
+declare module "jassijs/ui/PropertyEditors/ClassSelectorEditor" {
+    import { Select } from "jassijs/ui/Select";
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    import { JsonEditor } from "jassijs/ui/PropertyEditors/JsonEditor";
+    export class ClassSelectorEditor extends Editor {
+        select: Select;
+        jsonEditor: JsonEditor;
+        me: any;
+        private destroyed;
+        /**
+         * Checkbox Editor for boolean values
+         * used by PropertyEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
+         */
+        constructor(property?: any, propertyEditor?: any);
+        changeConverter(converter: any): void;
+        initSelect(): void;
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onclick(param: any): void;
+        layout(): void;
+        destroy(): void;
     }
-    class JSONDataEntry {
-        classname: string;
-        params: any[];
-        filename: string;
+}
+declare module "jassijs/ui/PropertyEditors/ColorEditor" {
+    import "jassijs/ext/jquerylib";
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    import { Textbox } from "jassijs/ui/Textbox";
+    import { Select } from "jassijs/ui/Select";
+    import "jassijs/ext/spectrum";
+    /**
+    * Editor for color
+    * used by PropertyEditor
+    **/
+    export class ColorEditor extends Editor {
+        icon: Textbox;
+        select: Select;
+        constructor(property: any, propertyEditor: any);
+        onedit(param: any): void;
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        paletteChanged(color: string): void;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onchange(param: any): void;
+    }
+    export function test3(): any;
+    export function test2(): any;
+}
+declare module "jassijs/ui/PropertyEditors/ComponentEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    export class BooleanEditor extends Editor {
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onclick(param: any): void;
+    }
+}
+declare module "jassijs/ui/PropertyEditors/ComponentSelectorEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    /**
+     * select one or more instances of an class
+     * used by PropertyEditor
+     **/
+    export class ComponentSelectorEditor extends Editor {
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onchange(param: any): void;
+    }
+    export function test(): void;
+}
+declare module "jassijs/ui/PropertyEditors/DatabinderEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    export class DatabinderEditor extends Editor {
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+        * intern the value changes
+        * @param {type} param
+        */
+        _onchange(param: any): void;
+    }
+}
+declare module "jassijs/ui/PropertyEditors/DBObjectEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    import { Textbox } from "jassijs/ui/Textbox";
+    import { ObjectChooser } from "jassijs/ui/ObjectChooser";
+    import { DBObject } from "jassijs/remote/DBObject";
+    export class DBObjectEditor extends Editor {
+        _textbox: Textbox;
+        _objectchooser: ObjectChooser;
+        dbobject: DBObject;
+        /**
+         * Checkbox Editor for boolean values
+         * used by PropertyEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
+         */
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        loadObject(id: string): Promise<DBObject>;
+        /**
+        * intern the value changes
+        * @param {type} param
+        */
+        _onchange(param?: any): void;
+    }
+}
+declare module "jassijs/ui/PropertyEditors/DefaultEditor" { }
+declare module "jassijs/ui/PropertyEditors/Editor" {
+    import { Property } from "jassijs/ui/Property";
+    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
+    export function $PropertyEditor(supportedtypes: string[]): Function;
+    export class Editor {
+        component: any;
+        _ob: any;
+        property: Property;
+        propertyEditor: PropertyEditor;
+        _eventHandler: any;
+        /**
+        * Editor for number and string
+        * used by PropertyEditor
+        * @class jassijs.ui.PropertyEditors.DefaultEditor
+        */
+        constructor(property: any, propertyEditor: any);
+        /**
+         * adds an event
+         * @param {type} name - the name of the event
+         * @param {function} func - callfunction for the event
+         */
+        addEvent(name: any, func: any): void;
+        /**
+         * call the event
+         * @param {name} name - the name of the event
+         * @param {object} param 1- parameter for the event
+         * @param {object} param 2- parameter for the event
+         * @param {object} param 3- parameter for the event
+         */
+        callEvent(name: any, param1?: any, param2?: any, param3?: any): void;
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+         * called on value changes
+         * @param handler - function(oldValue,newValue)
+         */
+        onedit(handler: any): void;
+        destroy(): void;
+    }
+}
+declare module "jassijs/ui/PropertyEditors/FontEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    /**
+    * Editor for font
+    * used by PropertyEditor
+    **/
+    export class FontEditor extends Editor {
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onchange(param: any): void;
+    }
+    export function test2(): any;
+    export function test(): any;
+}
+declare module "jassijs/ui/PropertyEditors/FunctionEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    export class FunctionEditor extends Editor {
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onclick(param: any): void;
+    }
+}
+declare module "jassijs/ui/PropertyEditors/HTMLEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    import { Textbox } from "jassijs/ui/Textbox";
+    import { ObjectChooser } from "jassijs/ui/ObjectChooser";
+    export class HTMLEditor extends Editor {
+        _textbox: Textbox;
+        _objectchooser: ObjectChooser;
+        /**
+         * Checkbox Editor for boolean values
+         * used by PropertyEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
+         */
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+        * intern the value changes
+        * @param {type} param
+        */
+        _onchange(param?: any): void;
+    }
+}
+declare module "jassijs/ui/PropertyEditors/ImageEditor" {
+    import "jassijs/ext/jquerylib";
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    import { Panel } from "jassijs/ui/Panel";
+    import { Textbox } from "jassijs/ui/Textbox";
+    import { Button } from "jassijs/ui/Button";
+    export class ImageEditor extends Editor {
+        _textbox: Textbox;
+        _button: Button;
+        dialog: Panel;
+        /**
+         * Checkbox Editor for boolean values
+         * used by PropertyEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
+         */
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+        * intern the value changes
+        * @param {type} param
+        */
+        _onchange(param?: any): void;
+        static dummy(): any;
+        static show(): any;
+        showDialog(onlytest?: any): any;
+    }
+    export function test2(): Panel;
+}
+declare module "jassijs/ui/PropertyEditors/JsonArrayEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    export class JsonArrayEditor extends Editor {
+        /**
+           * Editor for number and string
+           * used by PropertyEditor
+           * @class jassijs.ui.PropertyEditors.DefaultEditor
+           */
+        constructor(property: any, propertyEditor: any);
+        _onclick(param: any): void;
+        /**
+        * get the renderer for the PropertyEditor
+        * @returns - the UI-component for the editor
+        */
+        getComponent(): any;
+        /**
+        * @member {object} ob - the object which is edited
+        */
+        set ob(ob: any);
+        get ob(): any;
+        protected showDialog(control: any, propEditor: any): void;
+    }
+    export function test(): any;
+}
+declare module "jassijs/ui/PropertyEditors/JsonEditor" {
+    import "jassijs/ext/jquerylib";
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    export class JsonEditor extends Editor {
+        showThisProperties: any;
+        parentPropertyEditor: Editor;
+        /**
+         * Editor for number and string
+         * used by PropertyEditor
+         * @class jassijs.ui.PropertyEditors.DefaultEditor
+         */
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        _getPropertyValue(property: any): void;
+        /**
+         * register an event if the property has changed
+         * @param {function} handler - the function that is called on change
+         */
+        onpropertyChanged(handler: any): void;
+        private propertyChanged;
+        /**
+         * initiate the default values in the PropertyEditor from code
+         **/
+        private setCode;
+        private createPropertyEditor;
+        /**
+         * get the propertyvalue from code
+         */
+        private getInitialPropertyValue;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onclick(param: any): any;
+        protected showDialog(control: any, propEditor: any): void;
+    }
+    export function test(): any;
+}
+declare module "jassijs/ui/PropertyEditors/NameEditor" {
+    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    export class NameEditor extends Editor {
+        constructor(property: any, propertyEditor: any);
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob: any);
+        get ob(): any;
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent(): any;
+        /**
+         * intern the value changes
+         * @param {type} param
+         */
+        _onchange(param: any): void;
+    }
+}
+declare module "jassijs/ui/PropertyEditors/TableColumnImport" {
+    import { Panel } from "jassijs/ui/Panel";
+    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
+    type Me = {};
+    export class TableColumnImport extends Panel {
+        me: Me;
+        propertyEditor: PropertyEditor;
+        constructor();
+        layout(me: Me): void;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/Repeater" {
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
+    import { Databinder } from "jassijs/ui/Databinder";
+    import { Component } from "jassijs/ui/Component";
+    import { DataComponentProperties } from "jassijs/ui/DataComponent";
+    class RepeaterDesignPanel extends Panel {
+        databinder: Databinder;
+        me: any;
+    }
+    export interface RepeaterProperties extends PanelProperties {
+        /**
+        *  @member {array} value - the array which objects used to create the repeating components
+        */
+        value?: any;
+        /**
+           * binds a component to a databinder
+           * @param {jassijs.ui.Databinder} databinder - the databinder to bind
+           * @param {string} property - the property to bind
+           */
+        bind?: any[];
+        createRepeatingComponent?(func: any): any;
+    }
+    export class Repeater<T extends RepeaterProperties = RepeaterProperties> extends Panel<T> implements DataComponentProperties, RepeaterProperties {
+        _componentDesigner: any;
+        _autocommit: boolean;
+        _createRepeatingComponent: any;
+        _value: any;
+        _isCreated: boolean;
+        _designer: Component;
+        _databinder: Databinder;
+        design: RepeaterDesignPanel;
+        me: any;
+        /**
+         * can be used for controls in repeating group
+         */
+        binder: Databinder;
+        /**
+        *
+        * @param {object} properties - properties to init
+        * @param {string} [properties.id] -  connect to existing id (not reqired)
+        * @param {boolean} [properties.useSpan] -  use span not div
+        *
+        */
+        constructor(properties?: RepeaterProperties);
+        config(config: T): Repeater;
+        createRepeatingComponent(func: any): void;
+        _copyMeFromParent(me: any, parent: any, override?: boolean): void;
+        update(): void;
+        /**
+         * adds a component to the container
+         * @param {jassijs.ui.Component} component - the component to add
+         */
+        add(component: any): void;
+        _dummy(func: any): void;
+        set value(val: any);
+        get value(): any;
+        extensionCalled(action: ExtensionAction): void;
+        /**
+         * activates or deactivates designmode
+         * @param {boolean} enable - true if activate designMode
+         */
+        _setDesignMode(enable: any, designer?: any): void;
+        set bind(databinder: any[]);
+        destroy(): void;
+    }
+}
+declare module "jassijs/ui/Select" {
+    import "jassijs/ext/jquerylib";
+    import { ComponentProperties } from "jassijs/ui/Component";
+    import { DataComponent } from "jassijs/ui/DataComponent";
+    import "jquery.choosen";
+    export interface SelectProperities extends ComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
+        /**
+          * called if value has changed
+          * @param {function} handler - the function which is executed
+          */
+        onchange?(handler: any): any;
+        /**
+         * if the value is changed then the value of _component is also changed (_component.value)
+         */
+        selectComponent?: {
+            value: number;
+        };
+        /**
+         * @member {string|function}  - property or function to get the displaystring for the object
+         **/
+        display?: any;
+        /**
+         * all objects in the list
+         */
+        items?: any[];
+        /**
+        * @member {object} sel - the selected object
+        */
+        value?: any;
+        multiple?: boolean;
+        allowDeselect?: boolean;
+        placeholder?: string;
+    }
+    export class Select<T extends SelectProperities = SelectProperities> extends DataComponent<T> {
+        domSelect: HTMLElement;
+        _select: {
+            value: number;
+        };
+        options: any;
+        _display: any;
+        _items: any;
+        constructor(properties?: SelectProperities);
+        render(): any;
+        config(config: T): this;
+        refresh(): void;
+        onchange(handler: any): void;
+        set selectComponent(_component: {
+            value: number;
+        });
+        get selectComponent(): {
+            value: number;
+        };
+        set display(value: string | Function);
+        get display(): string | Function;
+        set items(value: any);
+        get items(): any;
+        set value(sel: any);
+        get value(): any;
+        /**
+         * @member {string|number} - the width of the component
+         * e.g. 50 or "100%"
+         */
+        /**
+         * binds a component to a databinder
+         * @param {Databinder} databinder - the databinder to bind
+         * @param {string} property - the property to bind
+        
+        bind(databinder,property){
+            this._databinder=databinder;
+            databinder.add(property,this,"onselect");
+            databinder.checkAutocommit(this);
+        } */
+        destroy(): void;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/SettingsDialog" {
+    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+    import { Select } from "jassijs/ui/Select";
+    import { Panel } from "jassijs/ui/Panel";
+    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
+    import { Button } from "jassijs/ui/Button";
+    global {
+        export interface KnownSettings {
+            myuw: number;
+        }
+    }
+    /** sample
+    @$SettingsDescriptor()
+    @$Class("jassijs_editor.Testuw")
+    class Testuw {
+        @$Property()
+        myuw: number;
+    }
+    @$Class("jassijs.ui.SettingsDialogCurrentSettings")
+    class SettingsDialogCurrentSettings {
+        @$Property()
+        test: string;
+    }
+    */
+    type Me = {
+        propertyeditor?: PropertyEditor;
+        Save?: Button;
+        Scope?: Select;
+        htmlpanel1?: HTMLPanel;
+    };
+    export class SettingsDialog extends Panel {
+        me: Me;
+        constructor();
+        static show(): any;
+        private update;
+        private save;
+        layout(me: Me): void;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/State" {
+    class StateProp {
+        ob: any;
+        proppath: string[];
+    }
+    export function resolveState(ob: any, config: any): void;
+    export type States<T> = {
+        [Property in keyof T]: State<T[Property]>;
+    } & {
+        _used: string[];
+        _onconfig?: (props: any) => void;
+    };
+    export function createStates<T>(initialValues?: T): States<T>;
+    export type OnlyType<T, D> = {
+        [K in keyof T as T[K] extends D ? K : never]: T[K];
+    };
+    export type DropType<T, D> = {
+        [K in keyof T as T[K] extends D ? never : K]: T[K];
+    };
+    export type GroupState<T> = DropType<T, State> & {
+        readonly refs: {
+            readonly [Property in keyof DropType<T, State>]-?: any;
+        };
+    } & {
+        readonly states: {
+            readonly [Property in keyof OnlyType<T, State>]-?: T[Property];
+        };
+    };
+    export function createRefs<T>(data?: any): T & {
+        readonly refs: {
+            readonly [Property in keyof T]-?: {
+                current: T[Property];
+            };
+        };
+    };
+    export class State<T = {}> {
+        private data;
+        self: any;
+        _comps_: StateProp[];
+        constructor(data?: any);
+        _observe_(control: any, property: any, atype: any): void;
+        get current(): T;
+        set current(data: T);
+    }
+    export function createState<T>(val?: T): State<T>;
+    export function createRef<T>(val?: T): {
+        current: T;
+    };
+    export function test(): void;
+}
+declare module "jassijs/ui/Style" {
+    import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
+    import { ComponentProperties } from "jassijs/ui/Component";
+    export interface StyleConfig extends ComponentProperties {
+        /**
+          * sets CSS Properties
+          */
+        style?: React.CSSProperties;
     }
     /**
-    * Manage all known data registered by jassijs.register
-    * the data is downloaded by /registry.json
-    * registry.json is updated by the server on code upload
-    * @class jassijs.base.Registry
-    */
-    export class Registry {
-        private _nextID;
-        jsondata: {
-            [service: string]: {
-                [classname: string]: JSONDataEntry;
-            };
-        };
-        data: {
-            [service: string]: {
-                [classname: string]: DataEntry;
-            };
-        };
-        dataMembers: {
-            [service: string]: {
-                [classname: string]: {
-                    [membername: string]: any[];
-                };
-            };
-        };
-        jsondataMembers: {
-            [service: string]: {
-                [classname: string]: {
-                    [membername: string]: any[];
-                };
-            };
-        };
-        private isLoading;
-        _eventHandler: {
-            [service: string]: any[];
-        };
-        constructor();
-        getData(service: string, classname?: string): DataEntry[];
-        onregister(service: string, callback: (oclass: new (...args: any[]) => any, ...params: any[]) => void): (oclass: new (...args: any[]) => any, ...params: any[]) => void;
-        offregister(service: string, callback: (oclass: new (...args: any[]) => any, ...params: any[]) => void): void;
+     * on ore mors Style can be assigned to component
+     * the style is appended to the head
+     **/
+    export class Style extends InvisibleComponent<StyleConfig> implements StyleConfig {
+        constructor(props?: StyleConfig);
+        render(): any;
+        componentDidMount(): void;
+        config(config: StyleConfig): Style;
+        get styleid(): string;
         /**
-         * register an anotation
-         * Important: this function should only used from an annotation, because the annotation is saved in
-         *            index.json and could be read without loading the class
-         **/
-        register(service: string, oclass: new (...args: any[]) => any, ...params: any[]): void;
-        getMemberData(service: string): {
-            [classname: string]: {
-                [membername: string]: any[];
-            };
-        };
-        getJSONMemberData(service: string): {
-            [classname: string]: {
-                [membername: string]: any[];
-            };
-        };
-        /**
-         * register an anotation
-         * Important: this function should only used from an annotation
-         **/
-        registerMember(service: string, oclass: any, membername: string, ...params: any[]): void;
-        /**
-        * with every call a new id is generated - used to create a free id for the dom
-        * @returns {number} - the id
+        * sets CSS Properties
         */
-        nextID(): string;
+        set style(properties: React.CSSProperties);
+        destroy(): void;
+    }
+    export function test(): void;
+    export function test2(): void;
+}
+declare module "jassijs/ui/Table" {
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    import { Textbox } from "jassijs/ui/Textbox";
+    import { Databinder } from "jassijs/ui/Databinder";
+    import { Tabulator } from "tabulator-tables";
+    import { DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
+    export interface LazyLoadOption {
+        classname: string;
+        loadFunc: string;
+        pageSize?: number;
+    }
+    export interface TableOptions extends Tabulator.Options {
+        dataTreeChildFunction?: ((data: any) => any) | any;
+        lazyLoad?: LazyLoadOption;
+        items?: any[];
+        columns?: MyColumnDefinition[];
+        [unknown: string]: any;
+    }
+    export interface MyColumnDefinition extends Tabulator.ColumnDefinition {
+        formatter?: MyFormatter;
+        formatterParams?: MyFormatterParams;
+        editor?: MyEditor;
+        [unknown: string]: any;
+    }
+    export type MyFormatterParams = Tabulator.FormatterParams | {
+        datefimeformat: DateTimeFormat;
+        numberformat: "#.##0,00" | string;
+        [unknown: string]: any;
+    };
+    export type MyEditor = Tabulator.Editor | "datetimeformat" | "numberformat" | any;
+    export type MyFormatter = Tabulator.Formatter | "datetimeformat" | "numberformat" | any;
+    export interface TableProperties extends DataComponentProperties {
+        options?: TableOptions;
         /**
-        * Load text with Ajax synchronously: takes path to file and optional MIME type
-        * @param {string} filePath - the url
-        * @returns {string} content
-        */ private loadText;
+        * register an event if an item is selected
+        * @param {function} handler - the function that is called on change
+        */
+        onchange?(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void): any;
+        showSearchbox?: boolean;
         /**
-         * reload the registry
+        * if the value is changed then the value of _component is also changed (_component.value)
+        */
+        selectComponent?: any;
+        /**
+         * set the items of the table
          */
-        reload(): Promise<void>;
+        items?: any[];
+        columns?: Tabulator.ColumnDefinition[];
+        bindItems?: any[];
+    }
+    export class Table<T extends TableProperties = TableProperties> extends DataComponent<T> implements TableProperties {
+        table: Tabulator;
+        _selectHandler: any;
+        _select: {
+            value: any;
+        };
+        private _lazyLoadOption;
+        private _lastLazySort;
+        private _lastLazySearch;
+        private _lazyDataHasChanged;
+        _tree: any;
+        _items: any[];
+        _searchbox: Textbox;
+        _databinderItems: Databinder;
+        _lastOptions: TableOptions;
+        private dataTreeChildFunction;
+        constructor(properties?: TableProperties);
+        config(config: T): Table;
+        render(): React.ReactNode;
+        rerender(): void;
+        set options(properties: TableOptions);
+        get options(): TableOptions;
         /**
-        * loads entries from json string
-        * @param {string} json - jsondata
+         * create a SQL-Querry for a search in all visible columns
+         */
+        private sqlForLazySearch;
+        onlazyloaded(func: any): void;
+        /**
+         * loads lazy data from _progressiveLoadFunc
+         */
+        private lazyLoadFunc;
+        private defaultAutoColumnDefinitions;
+        private getChildsFromTreeFunction;
+        private populateTreeData;
+        private onTreeExpanded;
+        update(): any;
+        private _oncontext;
+        private _onselect;
+        onchange(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void): void;
+        get showSearchbox(): boolean;
+        set showSearchbox(enable: boolean);
+        set selectComponent(_component: any);
+        get selectComponent(): any;
+        private _setItemsIntern;
+        set items(value: any[]);
+        get items(): any[];
+        updateOrInsertItem(item: any): unknown;
+        updateItem(item: any): unknown;
+        insertItem(item: any): unknown;
+        removeItem(item: any): any;
+        /**
+         * @member {object} sel - the selected object
+         */
+        set value(sel: any);
+        get value(): any;
+        /**
+        * @member {string|number} - the height of the component
+        * e.g. 50 or "100%"
         */
-        initJSONData(json: any): void;
+        set height(value: string | number);
+        get height(): string | number;
+        set width(value: string | number);
+        get width(): string | number;
+        /**
+         * Searches records in the grid
+         * @param {string} field - name of the search field
+         * @param {string} value - value of the search field
+         * @param {boolean} [doSelect] - if true the first entry is selected
+         */
+        search(field: any, value: any, doSelect: any): void;
+        destroy(): void;
+        set columns(value: Tabulator.ColumnDefinition[]);
+        get columns(): Tabulator.ColumnDefinition[];
+        set bindItems(databinder: any[]);
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/Textarea" {
+    import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
+    export class Textarea<T extends TextboxProperties = TextboxProperties> extends Textbox<T> {
+        constructor(props?: TextboxProperties);
+        render(): any;
+        componentDidMount(): void;
+    }
+}
+declare module "jassijs/ui/Textbox" {
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
+    export interface TextboxProperties extends DataComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+        converter?: DefaultConverter;
+        /**
+        * @member {boolean} disabled - enable or disable the element
+        */
+        disabled?: boolean;
+        /**
+         * @member {string} value - value of the component
+         */
+        value?: any;
+        /**
+        * called if value has changed
+        * @param {function} handler - the function which is executed
+        */
+        onclick?(handler: any): any;
+        /**
+         * called if value has changed
+         * @param {function} handler - the function which is executed
+         */
+        onchange?(handler: any): any;
+        /**
+         * called if a key is pressed down
+         * @param {function} handler - the function which is executed
+         */
+        onkeydown?(handler: any): any;
+        /**
+         * called if user has something typed
+         * @param {function} handler - the function which is executed
+         */
+        oninput?(handler: any): any;
+        placeholder?: string;
+        /**
+        *  @member {string|function} completerDisplay - property or function used to gets the value to display
+        */
+        autocompleterDisplay?: string | ((object: any) => string);
+        /**
+        *  @member {[object]} completer - values used for autocompleting
+        */
+        autocompleter?: any[] | (() => any);
+        /**
+         * @member {boolean} - the textfield is readonly
+         */
+        readOnly?: boolean;
+    }
+    export class Textbox<T extends TextboxProperties = TextboxProperties> extends DataComponent<T> implements TextboxProperties {
+        _converter: DefaultConverter;
+        _autocompleterDisplay: any;
+        _autocompleter: any;
+        private _value;
+        private _isFocused;
+        constructor(props?: TextboxProperties);
+        render(): any;
+        get dom(): HTMLInputElement;
+        set dom(value: HTMLInputElement);
+        set disabled(value: any);
+        get disabled(): any;
+        set readOnly(value: boolean);
+        get converter(): DefaultConverter;
+        set converter(value: DefaultConverter);
+        get readOnly(): boolean;
+        private focuscalled;
+        private updateValue;
+        private blurcalled;
+        set value(value: any);
+        get value(): any;
+        onclick(handler: any): any;
+        onchange(handler: any): any;
+        onkeydown(handler: any): any;
+        oninput(handler: any): any;
+        set placeholder(text: string);
+        get placeholder(): string;
+        set autocompleterDisplay(value: string | ((object: any) => string));
+        get autocompleterDisplay(): string | ((object: any) => string);
+        private fillCompletionList;
+        set autocompleter(value: any[] | (() => any));
+        get autocompleter(): any[] | (() => any);
+        /**
+         * focus the textbox
+         */
+        focus(): void;
+        destroy(): void;
+    }
+    export function test(): Textbox<TextboxProperties>;
+}
+declare module "jassijs/ui/Tree" {
+    import "jassijs/ext/jquerylib";
+    import "jassijs/ext/fancytree";
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    import { CSSProperties } from "jassijs/ui/CSSProperties";
+    export interface TreeProperties extends ComponentProperties {
+        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+        options?: Fancytree.FancytreeOptions;
+        /**
+        * @member - get the property for the display of the item or an function to get the display from an item
+        */
+        propStyle?: string | {
+            (item: any): CSSProperties;
+        };
+        /**
+         * @member - get the property for the display of the item or an function to get the display from an item
+         */
+        propDisplay?: string | {
+            (item: any): string;
+        };
+        /**
+         * @member - get the iconproperty of the item or an function to get the icon from an item
+         */
+        propIcon?: string | {
+            (item: any): string;
+        };
+        /**
+        * @member - get the childs of the item or an function to get the childs from an item
+        */
+        propChilds?: string | {
+            (item: any): any[];
+        };
+        onselect?(handler: any): any;
+        /**
+         * register an event if an item is clicked
+         * @param {function} handler - the function that is called on click
+         */
+        onclick?(handler: (event?: JQueryEventObject, data?: Fancytree.EventData) => void): any;
+        /**
+        * selects items
+        */
+        selection?: any[];
+        /**
+         * set the active item
+         */
+        value?: any;
+        /**
+        * @param value - set the data to show in Tree
+        **/
+        items?: any;
+        /**
+         * if the value is changed then the value of _component is also changed (_component.value)
+         */
+        selectComponent?: {
+            value: number;
+        };
+        /**
+         * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
+         **/
+        contextMenu?: any;
+    }
+    export class Tree<T extends TreeProperties = TreeProperties> extends Component<TreeProperties> implements TreeProperties {
+        _propDisplay: string | {
+            (item: any): string;
+        };
+        _propIcon: string | {
+            (item: any): string;
+        };
+        _propChilds: string | {
+            (item: any): any[];
+        };
+        _propStyle: string | {
+            (item: any): CSSProperties;
+        };
+        _select: {
+            value: number;
+        };
+        tree: Fancytree.Fancytree;
+        _isInited: boolean;
+        _itemToKey: Map<any, string>;
+        private _items;
+        private _allKeysReaded;
+        private _allNodesReaded;
+        _lastOptions: Fancytree.FancytreeOptions;
+        constructor(props?: TreeProperties);
+        render(): any;
+        componentDidMount(): void;
+        config(config: T): Tree;
+        set options(options: Fancytree.FancytreeOptions);
+        get options(): Fancytree.FancytreeOptions;
+        /**
+        * @member - get the property for the display of the item or an function to get the display from an item
+        */
+        set propStyle(value: string | {
+            (item: any): CSSProperties;
+        });
+        get propStyle(): string | {
+            (item: any): CSSProperties;
+        };
+        set propDisplay(value: string | {
+            (item: any): string;
+        });
+        get propDisplay(): string | {
+            (item: any): string;
+        };
+        set propIcon(icon: string | {
+            (item: any): string;
+        });
+        get propIcon(): string | {
+            (item: any): string;
+        };
+        set propChilds(child: string | {
+            (item: any): any[];
+        });
+        get propChilds(): string | {
+            (item: any): any[];
+        };
+        onselect(handler: any): void;
+        onclick(handler: (event?: JQueryEventObject, data?: Fancytree.EventData) => void): void;
+        filter(text: string): void;
+        /**
+        * get title from node
+        */
+        getTitleFromItem(item: any): string;
+        /**
+       * get title from node
+       */
+        getStyleFromItem(item: any): CSSProperties;
+        /**
+        * get icon from node
+        */
+        getIconFromItem(item: any): any;
+        /**
+        * get childs from node
+        */
+        getChildsFromItem(item: any): any;
+        private _onselect;
+        private _onclick;
+        set selection(values: any[]);
+        get selection(): any[];
+        activateKey(key: string, parent?: Fancytree.FancytreeNode): Promise<boolean>;
+        private expandLater;
+        /**
+         * expand all nodes
+         */
+        expandAll(expand?: boolean, parent?: Fancytree.FancytreeNode, allreadySeen?: any[]): any;
+        expandKeys(keys: string[]): any;
+        getExpandedKeys(parent?: Fancytree.FancytreeNode, expandedNodes?: string[]): {};
+        private expandNode;
+        private _readNodeFromItem;
+        private _readNodeFromKey;
+        set value(value: any);
+        /**
+         * get the active item
+         **/
+        get value(): any;
+        private _readAllNodesIfNeeded;
+        getKeyFromItem(item: any): any;
+        /**
+         * read all keys if not allready readed
+         **/
+        private _readAllKeysIfNeeded;
+        set items(value: any);
+        get items(): any;
+        set selectComponent(_component: {
+            value: number;
+        });
+        get selectComponent(): {
+            value: number;
+        };
+        private _callContextmenu;
+        /**
+         * create the contextmenu
+         * @param {object} evt  the click event in the contextmenu
+         **/
+        private _prepareContextmenu;
+        set contextMenu(value: any);
+        get contextMenu(): any;
+        destroy(): void;
+    }
+    export function test(): unknown;
+}
+declare module "jassijs/ui/Upload" {
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    export interface UploadProperties extends ComponentProperties {
+        readAs?: "Text" | "DataUrl" | "ArrayBuffer" | "BinaryString";
+        accept?: string;
+        multiple?: boolean;
+        onuploaded?: (any: any, FileList: any, JQueryEventObject: any) => any;
+    }
+    export class Upload<T extends UploadProperties = UploadProperties> extends Component<T> implements UploadProperties {
+        constructor(props?: UploadProperties);
+        render(): any;
+        config(config: T): Upload;
+        componentDidMount(): void;
+        get dom(): HTMLInputElement;
+        set dom(value: HTMLInputElement);
+        readAs: "Text" | "DataUrl" | "ArrayBuffer" | "BinaryString";
+        get accept(): string;
+        /**
+         * which file types are accepted e.g ".txt,.csv"
+         **/
+        set accept(value: string);
+        get multiple(): boolean;
+        /**
+         * multiple files can be uploaded
+         **/
+        set multiple(value: boolean);
+        private readUpload;
+        /**
+         * register handler to get the uploaded data
+         */
+        onuploaded(handler: (data: {
+            [file: string]: string;
+        }, files: FileList, evt: JQueryEventObject) => any): void;
+    }
+    export function test(): Upload<UploadProperties>;
+}
+declare module "jassijs/ui/VariablePanel" {
+    import { Panel } from "jassijs/ui/Panel";
+    export class VariablePanel extends Panel {
+        table: any;
+        debugpoints: {
+            [n: number]: boolean;
+        };
+        [_cache: string]: any;
+        _items: any[];
+        constructor();
+        createTable(): any;
+        /**
+         * VariabelPanel for id
+         * @id {number} - the id
+         * @returns  {jassijs.ui.VariablePanel}
+        **/
+        static get(id: any): any;
+        clear(): void;
+        /**
+         * add variables to variabelpanel
+         * @param Object<string,object> variables ["name"]=value
+         */
+        addAll(vars: any): void;
+        removeVariable(name: string): void;
         /**
          *
-         * @param service - the service for which we want informations
+         * @param {string} name - name of the variable
+         * @param {object} value - the value of the variable
+         * @param {boolean} [refresh] - refresh the dialog
          */
-        getJSONData(service: string, classname?: string): Promise<JSONDataEntry[]>;
-        getAllFilesForService(service: string, classname?: string): string[];
-        loadAllFilesForEntries(entries: JSONDataEntry[]): Promise<void>;
+        addVariable(name: any, value: any, refresh?: any): void;
         /**
-         * load all files that registered the service
-         * @param {string} service - name of the service
-         * @param {function} callback - called when loading is finished
-         */
-        loadAllFilesForService(service: string): Promise<void>;
+         * analyze describeComponent(desc) -> desc.editableComponents and publish this
+         **/
+        updateCache(): void;
         /**
-         * load all files
-         * @param {string} files - the files to load
-         */
-        loadAllFiles(files: string[]): Promise<unknown>;
-    }
-    var registry: Registry;
-    export default registry;
-    export function migrateModul(oldModul: any, newModul: any): void;
-}
-declare module "jassijs/base/Actions" {
-    export class ActionProperties {
-        /** @member {string} - the name of the Action */
-        name: string;
+         * get the ids of all editable Components by the designer
+         * @param {jassijs.ui.Component} component - the component to inspect
+         * @param {boolean} idFromLabel - if true not the id but the id form label is returned
+         **/
+        getEditableComponents(component: any, idFromLabel?: any): string;
+        private isTypeOf;
         /**
-        * @member {string} - the description of the Action
+        * get all known instances for type
+        * @param {type|string} type - the type we are interested or the member which is implemented
+        * @returns {[string]}
         */
-        description?: string;
+        getVariablesForType(type: any): {};
         /**
-        * @member {string}  - the icon of the Action
+         * gets the name of the variabel that holds the object
+         * @param {object} ob - the
+         */
+        getVariableFromObject(ob: any): string;
+        /**
+         * gets the name object of the given variabel
+         * @param {string} ob - the name of the variable
+         */
+        getObjectFromVariable(varname: any): any;
+        /**
+          * renames a variable in design
+          * @param {string} oldName
+          * @param {string} newName
+          */
+        renameVariable(oldName: any, newName: any): void;
+        /**
+         * refreshes Table
+         */
+        update(): void;
+        set value(value: {});
+        get value(): {};
+        static getMembers(ob: any, withFunction: any): {};
+        static _getMembersProto(proto: any, ret: any, ob: any): void;
+        /**
+        *
+        * @param {string} name - the name of the object
         */
-        icon?: string;
-        isEnabled?: {
-            (data?: any[]): boolean | Promise<boolean>;
-        };
-        run?: any;
+        evalExpression(name: any): any;
+        destroy(): void;
     }
-    /**
-     * usage
-     * @$Actions()
-     * static test():ActionProperties[]{
-     * }
-     */
-    export function $Actions(): Function;
-    export function $Action(property: ActionProperties): Function;
-    export function $ActionProvider(longclassname: string): Function;
-    export interface Action {
-        name: string;
-        icon?: string;
-        call: (objects: any[], params?: any) => void;
-        description?: string;
-    }
-    export class Actions {
-        static getActionsFor(vdata: any[]): Promise<Action[]>;
-    }
-    export function test(): Promise<void>;
 }
-declare module "jassijs/base/ActionNode" {
-    export class ActionNode {
+declare module "jassijs/util/Cookies" {
+    class C {
+        set(name: string, value: string, params?: any): void;
+        get(name: string): any;
+        remove(name: string, params?: any): void;
+        getJSON(): string;
     }
-    export function test(): Promise<void>;
+    var Cookies: C;
+    export { Cookies };
 }
-declare module "jassijs/remote/Database" {
-    export class TypeDef {
-        fields: {
-            [fieldname: string]: {
-                [decorater: string]: any[];
-            };
-        };
-        getRelation(fieldname: any): {
-            type: string;
-            oclass: any;
-        };
+declare module "jassijs/util/CSVImport" {
+    import { Upload } from "jassijs/ui/Upload";
+    import { Button } from "jassijs/ui/Button";
+    import { Textbox } from "jassijs/ui/Textbox";
+    import { BoxPanel } from "jassijs/ui/BoxPanel";
+    import { Select } from "jassijs/ui/Select";
+    import { Table } from "jassijs/ui/Table";
+    import { Panel } from "jassijs/ui/Panel";
+    type Me = {
+        table?: Table;
+        select?: Select;
+        boxpanel1?: BoxPanel;
+        fromLine?: Textbox;
+        next?: Button;
+        upload?: Upload;
+    };
+    export class CSVImport extends Panel {
+        me: Me;
+        data: any[];
+        fieldCount: number;
+        constructor();
+        static showDialog(): any;
+        initTableHeaders(): any;
+        initClasses(): any;
+        readData(csvdata: string): void;
+        updateTable(): void;
+        layout(me: Me): void;
+        /**
+         * imports a csv-file into database
+         * @param urlcsv - the link to the csv which we import
+         * @param dbclass
+         * @param fieldmapping - e.g. {"id":"CUSTOMERID"} if the field id is in csv-column CUSTOMERID or {"id":1} if the field id is in column 1
+         * @param replace - replace text e.g. {"für":"fuer"}
+         * returns the message if succeeded
+         */
+        static startImport(urlcsv: string, dbclass: string, fieldmapping?: {
+            [field: string]: (string | number);
+        }, replace?: {
+            [toReplace: string]: string;
+        }, beforeSave?: any): Promise<string>;
+        doimport(): unknown;
+        private _doimport;
     }
-    export class Database {
-        private constructor();
-        typeDef: Map<object, TypeDef>;
-        decoratorCalls: Map<object, any[]>;
-        private removeOld;
-        _setMetadata(constructor: any, field: string, decoratername: string, fieldprops: any[], decoraterprops: any[], delegate: any): void;
-        fillDecorators(): void;
-        getMetadata(sclass: any): TypeDef;
-    }
-    var db: Database;
-    export { db };
+    export function test(): any;
 }
 declare module "jassijs/util/DatabaseSchema" {
     /**
@@ -1415,8 +4507,8 @@ declare module "jassijs/util/DatabaseSchema" {
      * Column decorator is used to mark a specific class property as a table column.
      */
     export function PrimaryGeneratedColumn(strategy: "rowid", options?: PrimaryGeneratedColumnUUIDOptions): Function;
-    export function JoinColumn(...param: any[]): Function;
-    export function JoinTable(...param: any[]): Function;
+    export function JoinColumn(...param: {}): Function;
+    export function JoinTable(...param: {}): Function;
     /**
      * Column types where spatial properties are used.
      */
@@ -1787,1093 +4879,52 @@ declare module "jassijs/util/DatabaseSchema" {
      */
     export function ManyToMany<T>(typeFunctionOrTarget: string | ((type?: any) => ObjectType<T>), inverseSide?: string | ((object: T) => any), options?: RelationOptions): Function;
 }
-declare module "jassijs/remote/ObjectTransaction" {
-    import { Context } from "jassijs/remote/RemoteObject";
-    import { TransactionItem } from "jassijs/remote/Transaction";
-    export class ObjectTransaction {
-        statements: TransactionItem[];
-        saveresolve: any[];
-        private functionsFinally;
-        transactionResolved(context: Context): void;
-        addFunctionFinally(functionToAdd: () => any): void;
-        checkFinally(): void;
-        finally(): Promise<void>;
+declare module "jassijs/util/Numberformatter" {
+    export class Numberformatter {
+        static format(mask: string, value: number, options?: {}): any;
+        private static getLocaleDecimal;
+        static numberToString(num: number): string;
+        static stringToNumber(num: string): number;
+    }
+    export function test(): void;
+}
+declare module "jassijs/util/Reloader" {
+    export class Reloader {
+        static cache: {};
+        static reloadCodeFromServerIsRunning: boolean;
+        static instance: Reloader;
+        listener: {};
+        /**
+         * reloads Code
+         */
+        private constructor();
+        /**
+         * check code changes out of the browser if localhost and load the changes in to the browser
+         */
+        static startReloadCodeFromServer(): void;
+        /**
+         * listener for code reloaded
+         * @param {function} func - callfunction for the event
+         */
+        addEventCodeReloaded(func: any): void;
+        removeEventCodeReloaded(func: any): void;
+        private _findScript;
+        reloadJS(fileName: string): any;
+        reloadJSAll(fileNames: string[], afterUnload?: () => {}, useServerRequire?: boolean): any;
+        migrateModul(allModules: any, file: any, modul: any): void;
+        migrateClasses(file: any, oldmodul: any, modul: any): void;
     }
 }
-declare module "jassijs/server/DoRemoteProtocol" {
-    import { Context } from "jassijs/remote/RemoteObject";
-    export function remoteProtocol(request: any, response: any): void;
-    export function _execute(protext: string, request: any, context: Context): Promise<string>;
-}
-declare module "jassijs/remote/Transaction" {
-    import { RemoteObject } from "jassijs/remote/RemoteObject";
-    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
-    export class TransactionItem {
-        transaction: Transaction;
-        obj: any;
-        method: (...args: any[]) => any;
-        params: any[];
-        promise: Promise<any>;
-        result: any;
-        remoteProtocol: RemoteProtocol;
-        resolve: any;
+declare module "jassijs/util/Runlater" {
+    export class Runlater {
+        lastRun: number;
+        func: any;
+        timeout: number;
+        isRunning: boolean;
+        constructor(func: any, timeout: any);
+        _checkRun(): void;
+        runlater(): void;
     }
-    export class Transaction extends RemoteObject {
-        private statements;
-        private ready;
-        private context;
-        execute(): Promise<any[]>;
-        wait(transactionItem: TransactionItem, prot: RemoteProtocol): Promise<any>;
-        private sendRequest;
-        private doServerStatement;
-        add(obj: any, method: (...args: any[]) => any, ...params: any[]): void;
-    }
-}
-declare module "jassijs/remote/DBObject" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    import { EntityOptions } from "jassijs/util/DatabaseSchema";
-    import { ValidationError } from "jassijs/remote/Validator";
-    export function $DBObject(options?: EntityOptions): Function;
-    export class MyFindManyOptions {
-        relations?: string[];
-        [sampleproperty: string]: any;
-        /**
-         *
-         * where e.g. id>5
-         */
-        where?: string;
-        /**
-         * e.g. where:"id>:param" ,whereParams:{param:5}
-         */
-        whereParams?: any;
-        /**
-       * Offset (paginated) where from entities should be taken.
-       */
-        skip?: number;
-        /**
-         * Limit (paginated) - max number of entities should be taken.
-         */
-        take?: number;
-        /**
-        * Order, in which entities should be ordered.
-        */
-        order?: {
-            [field: string]: "ASC" | "DESC" | 1 | -1;
-        };
-    }
-    /**
-    * base class for all database entfities
-    * all objects which use the jassijs.db must implement this
-    * @class DBObject
-    */
-    export class DBObject extends RemoteObject {
-        id: number | string;
-        private static cache;
-        private static _init;
-        private static _initFunc;
-        constructor();
-        isAutoId(): boolean;
-        static getFromCache(classname: string, id: number | string): DBObject;
-        validate(options?: any, throwError?: boolean): Promise<ValidationError[]>;
-        private static addToCache;
-        static clearCache(classname: string): void;
-        removeFromCache(): void;
-        static _createObject(ob: any): DBObject;
-        /**
-         * replace all childs objects with {id:}
-         */
-        private _replaceObjectWithId;
-        /**
-        * save the object to jassijs.db
-        */
-        save(context?: Context): Promise<any>;
-        _createObjectInDB(context?: Context): Promise<unknown>;
-        static findOne(options?: any, context?: Context): Promise<DBObject>;
-        static find(options?: MyFindManyOptions, context?: Context): Promise<DBObject[]>;
-        /**
-        * reload the object from jassijs.db
-        */
-        remove(context?: Context): Promise<any>;
-        _getObjectProperty(dummy: any): void;
-        _setObjectProperty(dummy: any, dumm1: any): void;
-    }
-    export function test(): Promise<void>;
-}
-declare module "jassijs/remote/DBObjectQuery" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    export class DBObjectQueryProperties {
-        name: string;
-        description?: string;
-    }
-    export function $DBObjectQuery(property: DBObjectQueryProperties): Function;
-    export class DBObjectQuery {
-        classname: string;
-        name: string;
-        description: string;
-        _function: any;
-        execute(): Promise<DBObject>;
-        static getQueries(classname: string): Promise<DBObjectQuery[]>;
-    }
-    export function test(): Promise<void>;
-}
-declare module "jassijs/remote/security/Setting" {
-    import { DBObject, MyFindManyOptions } from "jassijs/remote/DBObject";
-    import { Context } from "jassijs/remote/RemoteObject";
-    export class Setting extends DBObject {
-        id: number;
-        constructor();
-        data: string;
-        save(context?: Context): Promise<void>;
-        static findOne(options?: any, context?: Context): Promise<DBObject>;
-        static find(options?: MyFindManyOptions, context?: Context): Promise<DBObject[]>;
-        /**
-        * reload the object from jassijs.db
-        */
-        remove(context?: Context): Promise<void>;
-    }
-    export function test(): Promise<void>;
-}
-declare module "jassijs/remote/Settings" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    import { Setting } from "jassijs/remote/security/Setting";
-    import { Test } from "jassijs/remote/Test";
-    global {
-        export interface KnownSettings {
-        }
-    }
-    export class Settings extends RemoteObject {
-        static keys: KnownSettings;
-        private static browserSettings;
-        private static userSettings;
-        private static allusersSettings;
-        /**
-        * loads the settings
-        */
-        static load(context?: Context): Promise<{
-            user: Setting;
-            allusers: Setting;
-        }>;
-        static getAll(scope: "browser" | "user" | "allusers"): {};
-        gets<T>(Settings_key: T): T;
-        static remove(Settings_key: string, scope: "browser" | "user" | "allusers", context?: Context): Promise<void>;
-        static save<T>(Settings_key: T, value: T, scope: "browser" | "user" | "allusers"): Promise<any>;
-        static saveAll(namevaluepair: {
-            [key: string]: any;
-        }, scope: "browser" | "user" | "allusers", removeOtherKeys?: boolean, context?: Context): Promise<any>;
-    }
-    var settings: Settings;
-    export { settings };
-    export function $SettingsDescriptor(): Function;
-    export function autostart(): Promise<void>;
-    export function test(t: Test): Promise<void>;
-    export function load(): Promise<{
-        user: Setting;
-        allusers: Setting;
-    }>;
-}
-declare module "jassijs/base/CurrentSettings" {
-    import "async!jassijs/remote/Settings:load";
-    import { Settings } from "jassijs/remote/Settings";
-    var currentsettings: Settings;
-    export { currentsettings };
-}
-declare module "jassijs/base/Errors" {
-    export class Errors {
-        static errors: Errors;
-        items: any;
-        handler: any;
-        private static _randomID;
-        /**
-        * Error handling.
-        * @class jassijs.base.Error
-        */
-        constructor();
-        addError(err: any): void;
-        /**
-         * raise if error is thrown
-         * @param {function} func - callback function
-         * @param {string} [id] - the id of the component that registers the error
-         */
-        onerror(func: any, id: any): any;
-        /**
-         * delete the error handler
-         * @param {function} func - callback function
-         * @param {string} [id] - the id of the component that registers the error
-         */
-        offerror(id: any): void;
-    }
-    var errors: Errors;
-    export { errors };
-}
-declare module "jassijs/base/Extensions" {
-    export class Extensions {
-        items: any;
-        constructor();
-        /**
-         * extend the class
-         * @param {class} type - extend the type - add functions
-         */
-        extend(classname: any, classdef: any): void;
-        forFile(file: any): Promise<{
-            classname: string;
-            params: any[];
-            filename: string;
-        }>;
-        /**
-         * init the Extensions
-         */
-        init(): void;
-        /**
-         * extend an existing class
-         * all methods and property where copied
-         * @param {string} - the name of the class to extend
-         * @param {class} - the class
-         */
-        register(name: any, extClass: any, alias: any): void;
-    }
-    var extensions: any;
-    export default extensions;
-}
-declare module "jassijs/ui/Container" {
-    import { Component, ComponentProperties } from "jassijs/ui/Component";
-    export interface ContainerProperties extends ComponentProperties {
-        /**
-         * child components
-         */
-        children?: any;
-    }
-    export class Container<T extends ContainerProperties = ComponentProperties> extends Component<T> implements Omit<ContainerProperties, "children"> {
-        _components: Component[];
-        _designDummy: any;
-        /**
-         *
-         * @param {object} properties - properties to init
-         * @param {string} [properties.id] -  connect to existing id (not reqired)
-         *
-         */
-        constructor(properties: ContainerProperties);
-        config(config: T, forceRender?: boolean): Container;
-        /**
-        * inits the component
-        * @param {dom} dom - init the dom element
-        * @paran {object} properties - properties to init
-       */
-        /**
-         * adds a component to the container
-         * @param {jassijs.ui.Component} component - the component to add
-         */
-        add(component: any): void;
-        /**
-         * adds a component to the container before an other component
-         * @param {jassijs.ui.Component} component - the component to add
-         * @param {jassijs.ui.Component} before - the component before then component to add
-         */
-        addBefore(component: Component, before: Component): void;
-        /**
-       * remove the component
-       * @param {jassijs.ui.Component} component - the component to remove
-       * @param {boolean} destroy - if true the component would be destroyed
-       */
-        remove(component: any, destroy?: boolean): void;
-        /**
-       * remove all component
-       * @param {boolean} destroy - if true the component would be destroyed
-       */
-        removeAll(destroy?: any): void;
-        destroy(): void;
-    }
-}
-declare module "jassijs/ui/InvisibleComponent" {
-    import { Component, ComponentProperties } from "jassijs/ui/Component";
-    export interface InvisibleComponentProperties extends ComponentProperties {
-    }
-    /**
-     * invivisible Component
-     **/
-    export class InvisibleComponent<T extends InvisibleComponentProperties = InvisibleComponentProperties> extends Component<T> {
-        $isInivisibleComponent: boolean;
-        constructor(properties?: InvisibleComponentProperties);
-    }
-}
-declare module "jassijs/ui/Databinder" {
-    import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
-    import { Component } from "jassijs/ui/Component";
-    interface DatabinderProperties extends InvisibleComponentProperties {
-    }
-    export class Databinder<T extends DatabinderProperties = {}> extends InvisibleComponent<DatabinderProperties> implements DatabinderProperties {
-        components: Component[];
-        private _properties;
-        private _getter;
-        private _setter;
-        private _onChange;
-        private _autocommit;
-        userObject: any;
-        rollbackObject: any;
-        constructor(props?: DatabinderProperties);
-        render(): React.DetailedReactHTMLElement<{
-            className: string;
-        }, HTMLElement>;
-        /**
-        * binds the component to the property of the userObject
-        * @param {string} property - the name of the property to bind
-        * @param {jassijs.ui.Component} component - the component to bind
-        * @param {string} [onChange] - functionname to register the  changehandler - if missing no autocommit is possible
-        * @param {function} [getter] - function to get the value of the component - if missing .value is used
-        * @param {function} [setter] - function to put the value of the component - if missing .value is used
-        */
-        add(property: any, component: any, onChange?: any, getter?: any, setter?: any): void;
-        componentChanged(component: any, property: any, event: any): void;
-        remove(component: any): void;
-        /**
-         * defines getter and setter and connect this to the databinder
-         * @param {object} object - the object where we define the property
-         * @param {string} propertyname - the name of the property
-         **/
-        definePropertyFor(object: any, propertyname: any): void;
-        /**
-         * @member {object} value - the binded userobject - call toForm on set
-         */
-        get value(): any;
-        set value(obj: any);
-        doValidation(ob: any): Promise<boolean>;
-        /**
-         * binds the object to all added components
-         * @param {object} obj - the object to bind
-         */
-        toForm(obj: any): void;
-        validateObject(): Promise<void>;
-        /**
-         * gets the objectproperties from all added components
-         * @return {object}
-         */
-        fromForm(): Promise<object>;
-        /**
-         * get objectproperty
-         * @param {number} x - the numer of the component
-         */
-        _fromForm(x: any): void;
-        /**
-         * register the autocommit handler if needed
-         * @param {jassijs.ui.DataComponent} component
-         */
-        destroy(): void;
-    }
-}
-declare module "jassijs/ui/DataComponent" {
-    import { Component, ComponentProperties } from "jassijs/ui/Component";
-    import { Databinder } from "jassijs/ui/Databinder";
-    export interface DataComponentProperties extends ComponentProperties {
-        /**
-            * binds a component to a databinder
-            * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
-            *         {string} property - the property to bind]
-            */
-        bind?: any[];
-        /**
-       * @member {bool} autocommit -  if true the databinder will update the value on every change
-       *                              if false the databinder will update the value on databinder.toForm
-       */
-        autocommit?: boolean;
-        value?: any;
-    }
-    export class DataComponent<T extends DataComponentProperties = DataComponentProperties> extends Component<T> implements DataComponentProperties {
-        _autocommit: boolean;
-        _databinder: Databinder;
-        /**
-        * base class for each Component
-        * @class jassijs.ui.Component
-         * @param {object} properties - properties to init
-         * @param {string} [properties.id] -  connect to existing id (not reqired)
-         *
-         */
-        constructor(properties?: DataComponentProperties);
-        get autocommit(): boolean;
-        set autocommit(value: boolean);
-        /**
-         * @param [databinder:jassijs.ui.Databinder,"propertyToBind"]
-         */
-        set bind(databinder: any[]);
-        destroy(): void;
-    }
-}
-declare module "jassijs/ui/Image" {
-    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
-    export interface ImageProperties extends DataComponentProperties {
-        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLImageElement>, HTMLImageElement>;
-        /**
-     * register an event if the image is clicked
-     * @param {function} handler - the function that is called on change
-     */
-        onclick?(handler: any): any;
-        /**
-          * @member {string} - link to image
-          */
-        src?: string;
-        value?: string;
-    }
-    export class Image<T extends ImageProperties = ImageProperties> extends DataComponent<T> implements ImageProperties {
-        constructor(config?: ImageProperties);
-        render(): React.JSX.Element;
-        config(config: T): Image;
-        onclick(handler: any): void;
-        /**
-        * @member {string} value - value of the component
-        */
-        set value(value: string);
-        get value(): string;
-        get width(): string | number;
-        set width(value: string | number);
-        get height(): string | number;
-        set height(value: string | number);
-        set src(icon: string);
-        get src(): string;
-    }
-    export function test(): Image<ImageProperties>;
-}
-declare module "jassijs/ui/DesignDummy" {
-    import { Component } from "jassijs/ui/Component";
-    import { Image } from "jassijs/ui/Image";
-    export class DesignDummy extends Image {
-        type: "beforeComponent" | "atEnd";
-        editorselectthis: Component;
-        designDummyFor: Component;
-        constructor();
-        static createIfNeeded(designDummyFor: Component, type: "beforeComponent" | "atEnd", editorselectthis?: Component, oclass?: any): DesignDummy;
-        static destroyIfNeeded(designDummyFor: Component, type: "beforeComponent" | "atEnd"): void;
-    }
-}
-declare module "jassijs/ui/Panel" {
-    import { Container, ContainerProperties } from "jassijs/ui/Container";
-    import { Component } from "jassijs/ui/Component";
-    export interface PanelProperties extends ContainerProperties {
-        /**
-          * @param {boolean} the elements are ordered absolute
-          **/
-        isAbsolute?: boolean;
-        useSpan?: boolean;
-        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-    }
-    export class Panel<T extends PanelProperties = PanelProperties> extends Container<T> implements PanelProperties {
-        _isAbsolute: boolean;
-        private _activeComponentDesigner;
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties?: PanelProperties);
-        render(): React.DOMElement<{
-            className: string;
-            ref?: React.LegacyRef<HTMLDivElement>;
-            key?: React.Key;
-            defaultChecked?: boolean;
-            defaultValue?: string | number | readonly string[];
-            suppressContentEditableWarning?: boolean;
-            suppressHydrationWarning?: boolean;
-            accessKey?: string;
-            autoFocus?: boolean;
-            contentEditable?: "inherit" | (boolean | "true" | "false");
-            contextMenu?: string;
-            dir?: string;
-            draggable?: boolean | "true" | "false";
-            hidden?: boolean;
-            id?: string;
-            lang?: string;
-            nonce?: string;
-            placeholder?: string;
-            slot?: string;
-            spellCheck?: boolean | "true" | "false";
-            style?: React.CSSProperties;
-            tabIndex?: number;
-            title?: string;
-            translate?: "yes" | "no";
-            radioGroup?: string;
-            role?: React.AriaRole;
-            about?: string;
-            content?: string;
-            datatype?: string;
-            inlist?: any;
-            prefix?: string;
-            property?: string;
-            rel?: string;
-            resource?: string;
-            rev?: string;
-            typeof?: string;
-            vocab?: string;
-            autoCapitalize?: string;
-            autoCorrect?: string;
-            autoSave?: string;
-            color?: string;
-            itemProp?: string;
-            itemScope?: boolean;
-            itemType?: string;
-            itemID?: string;
-            itemRef?: string;
-            results?: number;
-            security?: string;
-            unselectable?: "on" | "off";
-            inputMode?: "text" | "none" | "url" | "decimal" | "numeric" | "email" | "search" | "tel";
-            is?: string;
-            'aria-activedescendant'?: string;
-            'aria-atomic'?: boolean | "true" | "false";
-            'aria-autocomplete'?: "none" | "list" | "inline" | "both";
-            'aria-braillelabel'?: string;
-            'aria-brailleroledescription'?: string;
-            'aria-busy'?: boolean | "true" | "false";
-            'aria-checked'?: boolean | "true" | "false" | "mixed";
-            'aria-colcount'?: number;
-            'aria-colindex'?: number;
-            'aria-colindextext'?: string;
-            'aria-colspan'?: number;
-            'aria-controls'?: string;
-            'aria-current'?: boolean | "page" | "step" | "time" | "date" | "true" | "false" | "location";
-            'aria-describedby'?: string;
-            'aria-description'?: string;
-            'aria-details'?: string;
-            'aria-disabled'?: boolean | "true" | "false";
-            'aria-dropeffect'?: "none" | "copy" | "move" | "link" | "execute" | "popup";
-            'aria-errormessage'?: string;
-            'aria-expanded'?: boolean | "true" | "false";
-            'aria-flowto'?: string;
-            'aria-grabbed'?: boolean | "true" | "false";
-            'aria-haspopup'?: boolean | "menu" | "grid" | "dialog" | "true" | "false" | "listbox" | "tree";
-            'aria-hidden'?: boolean | "true" | "false";
-            'aria-invalid'?: boolean | "true" | "false" | "grammar" | "spelling";
-            'aria-keyshortcuts'?: string;
-            'aria-label'?: string;
-            'aria-labelledby'?: string;
-            'aria-level'?: number;
-            'aria-live'?: "off" | "assertive" | "polite";
-            'aria-modal'?: boolean | "true" | "false";
-            'aria-multiline'?: boolean | "true" | "false";
-            'aria-multiselectable'?: boolean | "true" | "false";
-            'aria-orientation'?: "horizontal" | "vertical";
-            'aria-owns'?: string;
-            'aria-placeholder'?: string;
-            'aria-posinset'?: number;
-            'aria-pressed'?: boolean | "true" | "false" | "mixed";
-            'aria-readonly'?: boolean | "true" | "false";
-            'aria-relevant'?: "text" | "all" | "additions" | "additions removals" | "additions text" | "removals" | "removals additions" | "removals text" | "text additions" | "text removals";
-            'aria-required'?: boolean | "true" | "false";
-            'aria-roledescription'?: string;
-            'aria-rowcount'?: number;
-            'aria-rowindex'?: number;
-            'aria-rowindextext'?: string;
-            'aria-rowspan'?: number;
-            'aria-selected'?: boolean | "true" | "false";
-            'aria-setsize'?: number;
-            'aria-sort'?: "none" | "ascending" | "descending" | "other";
-            'aria-valuemax'?: number;
-            'aria-valuemin'?: number;
-            'aria-valuenow'?: number;
-            'aria-valuetext'?: string;
-            children?: React.ReactNode;
-            dangerouslySetInnerHTML?: {
-                __html: string | TrustedHTML;
-            };
-            onCopy?: React.ClipboardEventHandler<HTMLDivElement>;
-            onCopyCapture?: React.ClipboardEventHandler<HTMLDivElement>;
-            onCut?: React.ClipboardEventHandler<HTMLDivElement>;
-            onCutCapture?: React.ClipboardEventHandler<HTMLDivElement>;
-            onPaste?: React.ClipboardEventHandler<HTMLDivElement>;
-            onPasteCapture?: React.ClipboardEventHandler<HTMLDivElement>;
-            onCompositionEnd?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionEndCapture?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionStart?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionStartCapture?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionUpdate?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionUpdateCapture?: React.CompositionEventHandler<HTMLDivElement>;
-            onFocus?: React.FocusEventHandler<HTMLDivElement>;
-            onFocusCapture?: React.FocusEventHandler<HTMLDivElement>;
-            onBlur?: React.FocusEventHandler<HTMLDivElement>;
-            onBlurCapture?: React.FocusEventHandler<HTMLDivElement>;
-            onChange?: React.FormEventHandler<HTMLDivElement>;
-            onChangeCapture?: React.FormEventHandler<HTMLDivElement>;
-            onBeforeInput?: React.FormEventHandler<HTMLDivElement>;
-            onBeforeInputCapture?: React.FormEventHandler<HTMLDivElement>;
-            onInput?: React.FormEventHandler<HTMLDivElement>;
-            onInputCapture?: React.FormEventHandler<HTMLDivElement>;
-            onReset?: React.FormEventHandler<HTMLDivElement>;
-            onResetCapture?: React.FormEventHandler<HTMLDivElement>;
-            onSubmit?: React.FormEventHandler<HTMLDivElement>;
-            onSubmitCapture?: React.FormEventHandler<HTMLDivElement>;
-            onInvalid?: React.FormEventHandler<HTMLDivElement>;
-            onInvalidCapture?: React.FormEventHandler<HTMLDivElement>;
-            onLoad?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onError?: React.ReactEventHandler<HTMLDivElement>;
-            onErrorCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyPress?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyPressCapture?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyUp?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyUpCapture?: React.KeyboardEventHandler<HTMLDivElement>;
-            onAbort?: React.ReactEventHandler<HTMLDivElement>;
-            onAbortCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onCanPlay?: React.ReactEventHandler<HTMLDivElement>;
-            onCanPlayCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onCanPlayThrough?: React.ReactEventHandler<HTMLDivElement>;
-            onCanPlayThroughCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onDurationChange?: React.ReactEventHandler<HTMLDivElement>;
-            onDurationChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onEmptied?: React.ReactEventHandler<HTMLDivElement>;
-            onEmptiedCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onEncrypted?: React.ReactEventHandler<HTMLDivElement>;
-            onEncryptedCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onEnded?: React.ReactEventHandler<HTMLDivElement>;
-            onEndedCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadedData?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadedDataCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadedMetadata?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadedMetadataCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadStart?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadStartCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onPause?: React.ReactEventHandler<HTMLDivElement>;
-            onPauseCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onPlay?: React.ReactEventHandler<HTMLDivElement>;
-            onPlayCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onPlaying?: React.ReactEventHandler<HTMLDivElement>;
-            onPlayingCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onProgress?: React.ReactEventHandler<HTMLDivElement>;
-            onProgressCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onRateChange?: React.ReactEventHandler<HTMLDivElement>;
-            onRateChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onResize?: React.ReactEventHandler<HTMLDivElement>;
-            onResizeCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onSeeked?: React.ReactEventHandler<HTMLDivElement>;
-            onSeekedCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onSeeking?: React.ReactEventHandler<HTMLDivElement>;
-            onSeekingCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onStalled?: React.ReactEventHandler<HTMLDivElement>;
-            onStalledCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onSuspend?: React.ReactEventHandler<HTMLDivElement>;
-            onSuspendCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onTimeUpdate?: React.ReactEventHandler<HTMLDivElement>;
-            onTimeUpdateCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onVolumeChange?: React.ReactEventHandler<HTMLDivElement>;
-            onVolumeChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onWaiting?: React.ReactEventHandler<HTMLDivElement>;
-            onWaitingCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onAuxClick?: React.MouseEventHandler<HTMLDivElement>;
-            onAuxClickCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onClick?: React.MouseEventHandler<HTMLDivElement>;
-            onClickCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onContextMenu?: React.MouseEventHandler<HTMLDivElement>;
-            onContextMenuCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
-            onDoubleClickCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onDrag?: React.DragEventHandler<HTMLDivElement>;
-            onDragCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragEnd?: React.DragEventHandler<HTMLDivElement>;
-            onDragEndCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragEnter?: React.DragEventHandler<HTMLDivElement>;
-            onDragEnterCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragExit?: React.DragEventHandler<HTMLDivElement>;
-            onDragExitCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragLeave?: React.DragEventHandler<HTMLDivElement>;
-            onDragLeaveCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragOver?: React.DragEventHandler<HTMLDivElement>;
-            onDragOverCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragStart?: React.DragEventHandler<HTMLDivElement>;
-            onDragStartCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDrop?: React.DragEventHandler<HTMLDivElement>;
-            onDropCapture?: React.DragEventHandler<HTMLDivElement>;
-            onMouseDown?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseDownCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseMoveCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseOut?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseOutCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseOver?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseOverCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseUp?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseUpCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onSelect?: React.ReactEventHandler<HTMLDivElement>;
-            onSelectCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onTouchCancel?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchCancelCapture?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchEnd?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchEndCapture?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchMove?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchMoveCapture?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchStart?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchStartCapture?: React.TouchEventHandler<HTMLDivElement>;
-            onPointerDown?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerDownCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerMove?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerMoveCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerUp?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerUpCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerCancel?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerCancelCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerEnter?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerEnterCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerLeave?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerLeaveCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerOver?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerOverCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerOut?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerOutCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onGotPointerCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onGotPointerCaptureCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onLostPointerCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onLostPointerCaptureCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onScroll?: React.UIEventHandler<HTMLDivElement>;
-            onScrollCapture?: React.UIEventHandler<HTMLDivElement>;
-            onWheel?: React.WheelEventHandler<HTMLDivElement>;
-            onWheelCapture?: React.WheelEventHandler<HTMLDivElement>;
-            onAnimationStart?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationStartCapture?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationEndCapture?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationIteration?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationIterationCapture?: React.AnimationEventHandler<HTMLDivElement>;
-            onTransitionEnd?: React.TransitionEventHandler<HTMLDivElement>;
-            onTransitionEndCapture?: React.TransitionEventHandler<HTMLDivElement>;
-        }, HTMLDivElement>;
-        set isAbsolute(value: boolean);
-        get isAbsolute(): boolean;
-        max(): void;
-        extensionCalled(action: ExtensionAction): void;
-        /**
-        * adds a component to the container
-        * @param {jassijs.ui.Component} component - the component to add
-        */
-        add(component: Component): void;
-        /**
-         * adds a component to the container before an other component
-         * @param {jassijs.ui.Component} component - the component to add
-         * @param {jassijs.ui.Component} before - the component before then component to add
-         */
-        addBefore(component: Component, before: Component): void;
-        /**
-         * activates or deactivates designmode
-         * @param {boolean} enable - true if activate designMode
-         */
-        protected _setDesignMode(enable: any): void;
-        destroy(): void;
-    }
-}
-declare module "jassijs/ui/Button" {
-    import { Component, ComponentProperties } from "jassijs/ui/Component";
-    export interface ButtonProperties extends ComponentProperties {
-        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-        /**
-      * register an event if the button is clicked
-      * @param {function} handler - the function that is called on change
-      */
-        onclick?(handler: any, removeOldHandler: boolean): any;
-        /**
-       * @member {string} - the icon of the button
-       */
-        icon?: string;
-        /**
-     * @member {string} - the caption of the button
-     */
-        text?: string;
-    }
-    export class Button<T extends ButtonProperties = ComponentProperties> extends Component<T> implements ButtonProperties {
-        constructor(properties?: ButtonProperties);
-        config(config: T, forceRender?: boolean): Button;
-        get dom(): HTMLButtonElement;
-        set dom(value: HTMLButtonElement);
-        render(): React.DetailedReactHTMLElement<{
-            className: string;
-            contenteditable: boolean;
-            ref?: React.LegacyRef<HTMLButtonElement>;
-            key?: React.Key;
-            disabled?: boolean;
-            form?: string;
-            formAction?: string;
-            formEncType?: string;
-            formMethod?: string;
-            formNoValidate?: boolean;
-            formTarget?: string;
-            name?: string;
-            type?: "button" | "reset" | "submit";
-            value?: string | number | readonly string[];
-            defaultChecked?: boolean;
-            defaultValue?: string | number | readonly string[];
-            suppressContentEditableWarning?: boolean;
-            suppressHydrationWarning?: boolean;
-            accessKey?: string;
-            autoFocus?: boolean;
-            contentEditable?: "inherit" | (boolean | "true" | "false");
-            contextMenu?: string;
-            dir?: string;
-            draggable?: boolean | "true" | "false";
-            hidden?: boolean;
-            id?: string;
-            lang?: string;
-            nonce?: string;
-            placeholder?: string;
-            slot?: string;
-            spellCheck?: boolean | "true" | "false";
-            style?: React.CSSProperties;
-            tabIndex?: number;
-            title?: string;
-            translate?: "yes" | "no";
-            radioGroup?: string;
-            role?: React.AriaRole;
-            about?: string;
-            content?: string;
-            datatype?: string;
-            inlist?: any;
-            prefix?: string;
-            property?: string;
-            rel?: string;
-            resource?: string;
-            rev?: string;
-            typeof?: string;
-            vocab?: string;
-            autoCapitalize?: string;
-            autoCorrect?: string;
-            autoSave?: string;
-            color?: string;
-            itemProp?: string;
-            itemScope?: boolean;
-            itemType?: string;
-            itemID?: string;
-            itemRef?: string;
-            results?: number;
-            security?: string;
-            unselectable?: "on" | "off";
-            inputMode?: "text" | "none" | "url" | "decimal" | "numeric" | "email" | "search" | "tel";
-            is?: string;
-            'aria-activedescendant'?: string;
-            'aria-atomic'?: boolean | "true" | "false";
-            'aria-autocomplete'?: "none" | "list" | "inline" | "both";
-            'aria-braillelabel'?: string;
-            'aria-brailleroledescription'?: string;
-            'aria-busy'?: boolean | "true" | "false";
-            'aria-checked'?: boolean | "true" | "false" | "mixed";
-            'aria-colcount'?: number;
-            'aria-colindex'?: number;
-            'aria-colindextext'?: string;
-            'aria-colspan'?: number;
-            'aria-controls'?: string;
-            'aria-current'?: boolean | "page" | "step" | "time" | "date" | "true" | "false" | "location";
-            'aria-describedby'?: string;
-            'aria-description'?: string;
-            'aria-details'?: string;
-            'aria-disabled'?: boolean | "true" | "false";
-            'aria-dropeffect'?: "none" | "copy" | "move" | "link" | "execute" | "popup";
-            'aria-errormessage'?: string;
-            'aria-expanded'?: boolean | "true" | "false";
-            'aria-flowto'?: string;
-            'aria-grabbed'?: boolean | "true" | "false";
-            'aria-haspopup'?: boolean | "menu" | "grid" | "dialog" | "true" | "false" | "listbox" | "tree";
-            'aria-hidden'?: boolean | "true" | "false";
-            'aria-invalid'?: boolean | "true" | "false" | "grammar" | "spelling";
-            'aria-keyshortcuts'?: string;
-            'aria-label'?: string;
-            'aria-labelledby'?: string;
-            'aria-level'?: number;
-            'aria-live'?: "off" | "assertive" | "polite";
-            'aria-modal'?: boolean | "true" | "false";
-            'aria-multiline'?: boolean | "true" | "false";
-            'aria-multiselectable'?: boolean | "true" | "false";
-            'aria-orientation'?: "horizontal" | "vertical";
-            'aria-owns'?: string;
-            'aria-placeholder'?: string;
-            'aria-posinset'?: number;
-            'aria-pressed'?: boolean | "true" | "false" | "mixed";
-            'aria-readonly'?: boolean | "true" | "false";
-            'aria-relevant'?: "text" | "all" | "additions" | "additions removals" | "additions text" | "removals" | "removals additions" | "removals text" | "text additions" | "text removals";
-            'aria-required'?: boolean | "true" | "false";
-            'aria-roledescription'?: string;
-            'aria-rowcount'?: number;
-            'aria-rowindex'?: number;
-            'aria-rowindextext'?: string;
-            'aria-rowspan'?: number;
-            'aria-selected'?: boolean | "true" | "false";
-            'aria-setsize'?: number;
-            'aria-sort'?: "none" | "ascending" | "descending" | "other";
-            'aria-valuemax'?: number;
-            'aria-valuemin'?: number;
-            'aria-valuenow'?: number;
-            'aria-valuetext'?: string;
-            children?: React.ReactNode;
-            dangerouslySetInnerHTML?: {
-                __html: string | TrustedHTML;
-            };
-            onCopy?: React.ClipboardEventHandler<HTMLButtonElement>;
-            onCopyCapture?: React.ClipboardEventHandler<HTMLButtonElement>;
-            onCut?: React.ClipboardEventHandler<HTMLButtonElement>;
-            onCutCapture?: React.ClipboardEventHandler<HTMLButtonElement>;
-            onPaste?: React.ClipboardEventHandler<HTMLButtonElement>;
-            onPasteCapture?: React.ClipboardEventHandler<HTMLButtonElement>;
-            onCompositionEnd?: React.CompositionEventHandler<HTMLButtonElement>;
-            onCompositionEndCapture?: React.CompositionEventHandler<HTMLButtonElement>;
-            onCompositionStart?: React.CompositionEventHandler<HTMLButtonElement>;
-            onCompositionStartCapture?: React.CompositionEventHandler<HTMLButtonElement>;
-            onCompositionUpdate?: React.CompositionEventHandler<HTMLButtonElement>;
-            onCompositionUpdateCapture?: React.CompositionEventHandler<HTMLButtonElement>;
-            onFocus?: React.FocusEventHandler<HTMLButtonElement>;
-            onFocusCapture?: React.FocusEventHandler<HTMLButtonElement>;
-            onBlur?: React.FocusEventHandler<HTMLButtonElement>;
-            onBlurCapture?: React.FocusEventHandler<HTMLButtonElement>;
-            onChange?: React.FormEventHandler<HTMLButtonElement>;
-            onChangeCapture?: React.FormEventHandler<HTMLButtonElement>;
-            onBeforeInput?: React.FormEventHandler<HTMLButtonElement>;
-            onBeforeInputCapture?: React.FormEventHandler<HTMLButtonElement>;
-            onInput?: React.FormEventHandler<HTMLButtonElement>;
-            onInputCapture?: React.FormEventHandler<HTMLButtonElement>;
-            onReset?: React.FormEventHandler<HTMLButtonElement>;
-            onResetCapture?: React.FormEventHandler<HTMLButtonElement>;
-            onSubmit?: React.FormEventHandler<HTMLButtonElement>;
-            onSubmitCapture?: React.FormEventHandler<HTMLButtonElement>;
-            onInvalid?: React.FormEventHandler<HTMLButtonElement>;
-            onInvalidCapture?: React.FormEventHandler<HTMLButtonElement>;
-            onLoad?: React.ReactEventHandler<HTMLButtonElement>;
-            onLoadCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onError?: React.ReactEventHandler<HTMLButtonElement>;
-            onErrorCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement>;
-            onKeyDownCapture?: React.KeyboardEventHandler<HTMLButtonElement>;
-            onKeyPress?: React.KeyboardEventHandler<HTMLButtonElement>;
-            onKeyPressCapture?: React.KeyboardEventHandler<HTMLButtonElement>;
-            onKeyUp?: React.KeyboardEventHandler<HTMLButtonElement>;
-            onKeyUpCapture?: React.KeyboardEventHandler<HTMLButtonElement>;
-            onAbort?: React.ReactEventHandler<HTMLButtonElement>;
-            onAbortCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onCanPlay?: React.ReactEventHandler<HTMLButtonElement>;
-            onCanPlayCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onCanPlayThrough?: React.ReactEventHandler<HTMLButtonElement>;
-            onCanPlayThroughCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onDurationChange?: React.ReactEventHandler<HTMLButtonElement>;
-            onDurationChangeCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onEmptied?: React.ReactEventHandler<HTMLButtonElement>;
-            onEmptiedCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onEncrypted?: React.ReactEventHandler<HTMLButtonElement>;
-            onEncryptedCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onEnded?: React.ReactEventHandler<HTMLButtonElement>;
-            onEndedCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onLoadedData?: React.ReactEventHandler<HTMLButtonElement>;
-            onLoadedDataCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onLoadedMetadata?: React.ReactEventHandler<HTMLButtonElement>;
-            onLoadedMetadataCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onLoadStart?: React.ReactEventHandler<HTMLButtonElement>;
-            onLoadStartCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onPause?: React.ReactEventHandler<HTMLButtonElement>;
-            onPauseCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onPlay?: React.ReactEventHandler<HTMLButtonElement>;
-            onPlayCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onPlaying?: React.ReactEventHandler<HTMLButtonElement>;
-            onPlayingCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onProgress?: React.ReactEventHandler<HTMLButtonElement>;
-            onProgressCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onRateChange?: React.ReactEventHandler<HTMLButtonElement>;
-            onRateChangeCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onResize?: React.ReactEventHandler<HTMLButtonElement>;
-            onResizeCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onSeeked?: React.ReactEventHandler<HTMLButtonElement>;
-            onSeekedCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onSeeking?: React.ReactEventHandler<HTMLButtonElement>;
-            onSeekingCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onStalled?: React.ReactEventHandler<HTMLButtonElement>;
-            onStalledCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onSuspend?: React.ReactEventHandler<HTMLButtonElement>;
-            onSuspendCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onTimeUpdate?: React.ReactEventHandler<HTMLButtonElement>;
-            onTimeUpdateCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onVolumeChange?: React.ReactEventHandler<HTMLButtonElement>;
-            onVolumeChangeCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onWaiting?: React.ReactEventHandler<HTMLButtonElement>;
-            onWaitingCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onAuxClick?: React.MouseEventHandler<HTMLButtonElement>;
-            onAuxClickCapture?: React.MouseEventHandler<HTMLButtonElement>;
-            onClick?: React.MouseEventHandler<HTMLButtonElement>;
-            onClickCapture?: React.MouseEventHandler<HTMLButtonElement>;
-            onContextMenu?: React.MouseEventHandler<HTMLButtonElement>;
-            onContextMenuCapture?: React.MouseEventHandler<HTMLButtonElement>;
-            onDoubleClick?: React.MouseEventHandler<HTMLButtonElement>;
-            onDoubleClickCapture?: React.MouseEventHandler<HTMLButtonElement>;
-            onDrag?: React.DragEventHandler<HTMLButtonElement>;
-            onDragCapture?: React.DragEventHandler<HTMLButtonElement>;
-            onDragEnd?: React.DragEventHandler<HTMLButtonElement>;
-            onDragEndCapture?: React.DragEventHandler<HTMLButtonElement>;
-            onDragEnter?: React.DragEventHandler<HTMLButtonElement>;
-            onDragEnterCapture?: React.DragEventHandler<HTMLButtonElement>;
-            onDragExit?: React.DragEventHandler<HTMLButtonElement>;
-            onDragExitCapture?: React.DragEventHandler<HTMLButtonElement>;
-            onDragLeave?: React.DragEventHandler<HTMLButtonElement>;
-            onDragLeaveCapture?: React.DragEventHandler<HTMLButtonElement>;
-            onDragOver?: React.DragEventHandler<HTMLButtonElement>;
-            onDragOverCapture?: React.DragEventHandler<HTMLButtonElement>;
-            onDragStart?: React.DragEventHandler<HTMLButtonElement>;
-            onDragStartCapture?: React.DragEventHandler<HTMLButtonElement>;
-            onDrop?: React.DragEventHandler<HTMLButtonElement>;
-            onDropCapture?: React.DragEventHandler<HTMLButtonElement>;
-            onMouseDown?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseDownCapture?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseLeave?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseMove?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseMoveCapture?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseOut?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseOutCapture?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseOver?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseOverCapture?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseUp?: React.MouseEventHandler<HTMLButtonElement>;
-            onMouseUpCapture?: React.MouseEventHandler<HTMLButtonElement>;
-            onSelect?: React.ReactEventHandler<HTMLButtonElement>;
-            onSelectCapture?: React.ReactEventHandler<HTMLButtonElement>;
-            onTouchCancel?: React.TouchEventHandler<HTMLButtonElement>;
-            onTouchCancelCapture?: React.TouchEventHandler<HTMLButtonElement>;
-            onTouchEnd?: React.TouchEventHandler<HTMLButtonElement>;
-            onTouchEndCapture?: React.TouchEventHandler<HTMLButtonElement>;
-            onTouchMove?: React.TouchEventHandler<HTMLButtonElement>;
-            onTouchMoveCapture?: React.TouchEventHandler<HTMLButtonElement>;
-            onTouchStart?: React.TouchEventHandler<HTMLButtonElement>;
-            onTouchStartCapture?: React.TouchEventHandler<HTMLButtonElement>;
-            onPointerDown?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerDownCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerMove?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerMoveCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerUp?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerUpCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerCancel?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerCancelCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerEnter?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerEnterCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerLeave?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerLeaveCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerOver?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerOverCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerOut?: React.PointerEventHandler<HTMLButtonElement>;
-            onPointerOutCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onGotPointerCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onGotPointerCaptureCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onLostPointerCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onLostPointerCaptureCapture?: React.PointerEventHandler<HTMLButtonElement>;
-            onScroll?: React.UIEventHandler<HTMLButtonElement>;
-            onScrollCapture?: React.UIEventHandler<HTMLButtonElement>;
-            onWheel?: React.WheelEventHandler<HTMLButtonElement>;
-            onWheelCapture?: React.WheelEventHandler<HTMLButtonElement>;
-            onAnimationStart?: React.AnimationEventHandler<HTMLButtonElement>;
-            onAnimationStartCapture?: React.AnimationEventHandler<HTMLButtonElement>;
-            onAnimationEnd?: React.AnimationEventHandler<HTMLButtonElement>;
-            onAnimationEndCapture?: React.AnimationEventHandler<HTMLButtonElement>;
-            onAnimationIteration?: React.AnimationEventHandler<HTMLButtonElement>;
-            onAnimationIterationCapture?: React.AnimationEventHandler<HTMLButtonElement>;
-            onTransitionEnd?: React.TransitionEventHandler<HTMLButtonElement>;
-            onTransitionEndCapture?: React.TransitionEventHandler<HTMLButtonElement>;
-        }, HTMLButtonElement>;
-        onclick(handler: any, removeOldHandler?: boolean): EventListenerOrEventListenerObject;
-        set icon(icon: string);
-        get icon(): string;
-        set text(value: string);
-        get text(): string;
-        toggle(setDown?: any): boolean;
-        destroy(): void;
-    }
-    export function test(): Promise<import("jassijs/ui/Panel").Panel<import("jassijs/ui/Panel").PanelProperties>>;
 }
 declare module "jassijs/util/Tools" {
     export class Tools {
@@ -2909,3578 +4960,7 @@ declare module "jassijs/util/Tools" {
         * e.g.
         * { a:"hallo",i:{b:9,c:"test"}} would be convert to{ a:""hallo"",i:{b:"9",c:""test""}}
         **/
-        static stringObjectToJson(ob: any, space: string): string;
+        static stringObjectToJson(ob: any, space: string): any;
     }
-    export function test(): Promise<void>;
-}
-declare module "jassijs/ui/PropertyEditors/Editor" {
-    import { Property } from "jassijs/ui/Property";
-    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
-    export function $PropertyEditor(supportedtypes: string[]): Function;
-    export class Editor {
-        component: any;
-        _ob: any;
-        property: Property;
-        propertyEditor: PropertyEditor;
-        _eventHandler: any;
-        /**
-        * Editor for number and string
-        * used by PropertyEditor
-        * @class jassijs.ui.PropertyEditors.DefaultEditor
-        */
-        constructor(property: any, propertyEditor: any);
-        /**
-         * adds an event
-         * @param {type} name - the name of the event
-         * @param {function} func - callfunction for the event
-         */
-        addEvent(name: any, func: any): void;
-        /**
-         * call the event
-         * @param {name} name - the name of the event
-         * @param {object} param 1- parameter for the event
-         * @param {object} param 2- parameter for the event
-         * @param {object} param 3- parameter for the event
-         */
-        callEvent(name: any, param1?: any, param2?: any, param3?: any): void;
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-         * called on value changes
-         * @param handler - function(oldValue,newValue)
-         */
-        onedit(handler: any): void;
-        destroy(): void;
-    }
-}
-declare module "jassijs/ui/converters/DefaultConverter" {
-    import { Component } from "jassijs/ui/Component";
-    export class $ConverterProperties {
-        name?: string;
-    }
-    export function $Converter(param: $ConverterProperties): Function;
-    export class DefaultConverter {
-        _component?: Component;
-        constructor();
-        /**
-         * converts a string to the object
-         * an error can be thrown for validation
-         * @param {string} str - the string to convert
-         */
-        stringToObject(str: any): any;
-        /**
-         * converts an object to string
-         * @param {string} obj - the object to convert
-         */
-        objectToString(obj: any): any;
-        get component(): Component;
-        set component(component: Component);
-        /**
-        * converts an object to an formatted string
-        * @param {string} obj - the object to convert
-        */
-        objectToFormatedString(obj: any): any;
-    }
-}
-declare module "jassijs/ui/Textbox" {
-    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
-    import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
-    export interface TextboxProperties extends DataComponentProperties {
-        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-        converter?: DefaultConverter;
-        /**
-        * @member {boolean} disabled - enable or disable the element
-        */
-        disabled?: boolean;
-        /**
-         * @member {string} value - value of the component
-         */
-        value?: any;
-        /**
-        * called if value has changed
-        * @param {function} handler - the function which is executed
-        */
-        onclick?(handler: any): any;
-        /**
-         * called if value has changed
-         * @param {function} handler - the function which is executed
-         */
-        onchange?(handler: any): any;
-        /**
-         * called if a key is pressed down
-         * @param {function} handler - the function which is executed
-         */
-        onkeydown?(handler: any): any;
-        /**
-         * called if user has something typed
-         * @param {function} handler - the function which is executed
-         */
-        oninput?(handler: any): any;
-        placeholder?: string;
-        /**
-        *  @member {string|function} completerDisplay - property or function used to gets the value to display
-        */
-        autocompleterDisplay?: string | ((object: any) => string);
-        /**
-        *  @member {[object]} completer - values used for autocompleting
-        */
-        autocompleter?: any[] | (() => any);
-        /**
-         * @member {boolean} - the textfield is readonly
-         */
-        readOnly?: boolean;
-    }
-    export class Textbox<T extends TextboxProperties = TextboxProperties> extends DataComponent<T> implements TextboxProperties {
-        _converter: DefaultConverter;
-        _autocompleterDisplay: any;
-        _autocompleter: any;
-        private _value;
-        private _isFocused;
-        constructor(props?: TextboxProperties);
-        render(): React.DetailedReactHTMLElement<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-        get dom(): HTMLInputElement;
-        set dom(value: HTMLInputElement);
-        set disabled(value: boolean);
-        get disabled(): boolean;
-        set readOnly(value: boolean);
-        get converter(): DefaultConverter;
-        set converter(value: DefaultConverter);
-        get readOnly(): boolean;
-        private focuscalled;
-        private updateValue;
-        private blurcalled;
-        set value(value: any);
-        get value(): any;
-        onclick(handler: any): EventListenerOrEventListenerObject;
-        onchange(handler: any): EventListenerOrEventListenerObject;
-        onkeydown(handler: any): EventListenerOrEventListenerObject;
-        oninput(handler: any): EventListenerOrEventListenerObject;
-        set placeholder(text: string);
-        get placeholder(): string;
-        set autocompleterDisplay(value: string | ((object: any) => string));
-        get autocompleterDisplay(): string | ((object: any) => string);
-        private fillCompletionList;
-        set autocompleter(value: any[] | (() => any));
-        get autocompleter(): any[] | (() => any);
-        /**
-         * focus the textbox
-         */
-        focus(): void;
-        destroy(): void;
-    }
-    export function test(): Textbox<TextboxProperties>;
-}
-declare module "jassijs/ui/PropertyEditors/NameEditor" {
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    export class NameEditor extends Editor {
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-         * intern the value changes
-         * @param {type} param
-         */
-        _onchange(param: any): void;
-    }
-}
-declare module "jassijs/ui/PropertyEditor" {
-    import "jassijs/ext/jquerylib";
-    import "jassijs/base/PropertyEditorService";
-    import { Panel } from "jassijs/ui/Panel";
-    import { Property } from "jassijs/ui/Property";
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { Component } from "jassijs/ui/Component";
-    import { Action } from "jassijs/base/Actions";
-    global {
-        export interface ExtensionAction {
-            getPropertyEditorActions?: {
-                propertyEditor: PropertyEditor;
-                actions: Action[];
-            };
-        }
-    }
-    export interface ParserInterface {
-        sourceFile: any;
-        typeMeNode: any;
-        typeMe: {
-            [name: string]: any;
-        };
-        classes: {
-            [name: string]: any;
-        };
-        imports: {
-            [name: string]: string;
-        };
-        functions: {
-            [name: string]: ts.Node;
-        };
-        variables: {
-            [name: string]: ts.Node;
-        };
-        classScope: {
-            classname: string;
-            methodname: string;
-        }[];
-        code: string;
-        data: {
-            [variable: string]: {
-                [property: string]: any[];
-            };
-        };
-        getModifiedCode(): string;
-        addTypeMe(name: string, type: string): any;
-        /**
-       * parse the code
-       * @param {string} code - the code
-       * @param {string} onlyfunction - only the code in the function is parsed, e.g. "layout()"
-       */
-        parse(code: string, classScope?: {
-            classname: string;
-            methodname?: string;
-        }[]): any;
-        /**
-         * add import {name} from file
-         * @param name
-         * @param file
-         */
-        addImportIfNeeded(name: string, file: string): any;
-        getClassScopeFromPosition(code: string, pos: number): {
-            classname: string;
-            methodname: string;
-        };
-        /**
-         * modify a member
-         **/
-        addOrModifyMember(member: any, pclass: any): any;
-        /**
-        * removes the property from code
-        * @param {type} property - the property to remove
-        * @param {type} [onlyValue] - remove the property only if the value is found
-        * @param {string} [variablename] - thpe name of the variable - default=this.variablename
-        */
-        removePropertyInCode(property: string, onlyValue?: any, variablename?: string): any;
-        /**
-         * removes the variable from code
-         * @param {string} varname - the variable to remove
-         */
-        removeVariablesInCode(varnames: string[]): any;
-        /**
-         * gets the next variablename
-         * */
-        getNextVariableNameForType(type: string, suggestedName?: string): any;
-        /**
-        * modify the property in code
-        * @param variablename - the name of the variable
-        * @param  property - the property
-        * @param value - the new value
-        * @param classscope  - the property would be insert in this block
-        * @param isFunction  - true if the property is a function
-        * @param [replace]  - if true the old value is deleted
-        * @param [before] - the new property is placed before this property
-        * @param [variablescope] - if this scope is defined - the new property would be insert in this variable
-        */
-        setPropertyInCode(variableName: string, property: string, value: string | any, classscope: {
-            classname: string;
-            methodname: string;
-        }[], isFunction: boolean, replace: boolean, before?: {
-            variablename: string;
-            property: string;
-            value?: any;
-        }, variablescope?: {
-            variablename: string;
-            methodname: any;
-        }): any;
-        /**
-        * swaps two statements indendified by  functionparameter in a variable.property(parameter1) with variable.property(parameter2)
-        **/
-        swapPropertyWithParameter(variable: string, property: string, parameter1: string, parameter2: string): any;
-        /**
-        * adds an Property
-        * @param type - name of the type o create
-        * @param classscope - the scope (methodname) where the variable should be insert Class.layout
-        * @param variablescope - the scope where the variable should be insert e.g. hallo.onclick
-        * @returns  the name of the object
-        */
-        addVariableInCode(fulltype: string, classscope: {
-            classname: string;
-            methodname: string;
-        }[], variablescope?: {
-            variablename: string;
-            methodname: any;
-        }, suggestedName?: any): string;
-        getPropertyValue(variable: any, property: any): any;
-    }
-    export class PropertyEditor extends Panel {
-        readPropertyValueFromDesign: boolean;
-        table: Component;
-        codeEditor: any;
-        parser: ParserInterface;
-        variablename: string;
-        parentPropertyEditor: PropertyEditor;
-        _multiselectEditors: PropertyEditor[];
-        showThisProperties: any;
-        properties: any;
-        _value: any;
-        codeChanges: {
-            [property: string]: string | {};
-        };
-        toolbar: Panel;
-        actions: Action[];
-        /**
-        * edit object properties
-        */
-        constructor(codeEditor?: any, parser?: any);
-        createTable(): React.JSX.Element;
-        componentDidMount(): void;
-        /**
-         * adds a new property
-         * @param {string} name  - the name of the property
-         * @param {jassijs.ui.PropertyEditors.Editor} editor - the propertyeditor to render the property
-         * @param {string} description - the the description is tooltip over the name
-         */
-        addProperty(name: string, editor: Editor, description: string): void;
-        /**
-         * register an event if the property has changed
-         * @param {function} handler - the function that is called on change
-         */
-        oncodeChanged(handler: any): void;
-        /**
-         * register an event if the property has changed
-         * @param {function} handler - the function that is called on change
-         */
-        onpropertyChanged(handler: any): void;
-        /**
-         * delete all properties
-         */
-        clear(): void;
-        /**
-       * if parentPropertyEditor is defined then the value of the property must be substituted
-       * @param {jassijs.ui.PropertyEditor propertyEditor
-       * @param {[opject} props
-       * @param {string} propname the propertyName
-       */
-        /**
-         * if parentPropertyEditor is defined then the properties are defined there
-         * @param {jassijs.ui.PropertyEditor propertyEditor
-         * @param {[opject} props
-         * @param {string} propname the propertyName
-        
-        _addParentEditorProperties(propertyEditor, props, propname) {
-            if (propertyEditor.parentPropertyEditor !== undefined)
-                this._addParentEditorProperties(propertyEditor.parentPropertyEditor, props, propertyEditor.variablename + "/" + propname);
-            else {
-                var ret;
-                if (this.showThisProperties !== undefined) {
-                    ret = Tools.copyObject(this.showThisProperties);
-                } else
-                    ret = ComponentDescriptor.describe(propertyEditor.value.constructor, true).fields;
-                for (var x = 0;x < ret.length;x++) {
-                    if (ret[x].name.startsWith(propname + "/")) {
-                        var test = ret[x].name.substring((propname + "/").length);
-                        if (test.indexOf("/") < 0) {
-                            ret[x].name = test;
-                            props.push(ret[x]);
-                        }
-                    }
-    
-                }
-            }
-        } */
-        /**
-         * get all known instances for type
-         * @param {type} type - the type we are interested
-         * @returns {[string]}
-         */
-        getVariablesForType(type: any): any;
-        /**
-         * get the variablename of an object
-         * @param {object} ob - the object to search
-         * @returns {string}
-         */
-        getVariableFromObject(ob: any): any;
-        /**
-          * gets the name object of the given variabel
-          * @param {string} ob - the name of the variable
-         *  @returns {string}
-         */
-        getObjectFromVariable(ob: any): any;
-        /**
-         * @member {object}  - the rendered object
-         */
-        set value(value: any);
-        private addActions;
-        private createAction;
-        swapComponents(first: Component, second: Component): void;
-        private controlEditor;
-        private _initValue;
-        /**
-         * updates values
-         */
-        update(): void;
-        get value(): any;
-        /**
-         * gets the value of the property
-         * @param {string} property
-         * @param {boolean} [noDefaultValue] - returns no default value of the property
-         * @returns {object}
-         */
-        getPropertyValue(property: Property, noDefaultValue?: any): any;
-        updateCodeEditor(): void;
-        /**
-         * update the parser
-         */
-        updateParser(): void;
-        /**
-         * adds an required file to the code
-         */
-        addImportIfNeeded(name: string, file: string): void;
-        /**
-         * gets the next variablename
-         * */
-        getNextVariableNameForType(type: string): any;
-        /**
-         * adds an Property
-         * @param type - name of the type o create
-         * @param scopename - the scope {variable: ,methodname:} to add the variable - if missing layout()
-         * @returns  the name of the object
-         */
-        addVariableInCode(type: string, scopename: {
-            variablename: string;
-            methodname: string;
-        }, suggestedName?: string): string;
-        /**
-         * modify the property in code
-         * @param {string} property - the property
-         * @param {string} value - the new value
-         * @param {boolean} [replace]  - if true the old value is deleted
-         * @param {string} [variablename] - the name of the variable - default=this.variablename
-         * @param {object} [before] - {variablename,property,value=undefined}
-         * @param {object} scope - the scope {variable: ,methodname:} the scope - if missing layout()
-        */
-        setPropertyInCode(property: string, value: any, replace?: boolean, variableName?: string, before?: {
-            variablename: string;
-            property: string;
-            value?: any;
-        }, scopename?: {
-            variablename: string;
-            methodname: string;
-        }, doUpdate?: boolean): void;
-        /**
-        * modify the property in design
-        * @param {string} property - the property
-        * @param {string} value - the new value
-        */
-        setPropertyInDesign(property: string, value: any): void;
-        /**
-         * goto source position
-         * @param position - in Code
-         */
-        gotoCodePosition(position: number): any;
-        /**
-         * goto source line
-         * @param {number} line - line in Code
-         */
-        gotoCodeLine(line: number): any;
-        /**
-         * renames a variable in code
-         */
-        renameVariableInCode(oldName: string, newName: string): void;
-        /**
-         * renames a variable in design
-         */
-        renameVariableInDesign(oldName: string, newName: string): void;
-        /**
-        * removes the variable from design
-        * @param  varname - the variable to remove
-        */
-        removeVariableInDesign(varname: string): void;
-        /**
-         * removes the variable from code
-         * @param {string} varname - the variable to remove
-         */
-        removeVariablesInCode(varname: string[]): void;
-        /**
-        * removes the property from code
-        * @param {type} property - the property to remove
-        * @param {type} [onlyValue] - remove the property only if the value is found
-        * @param {string} [variablename] - the name of the variable - default=this.variablename
-        */
-        removePropertyInCode(property: string, onlyValue?: any, variablename?: string, doupdate?: boolean): any;
-        /**
-        * removes the property in design
-        */
-        removePropertyInDesign(property: string): void;
-        layout(me?: any): void;
-        destroy(): void;
-    }
-    export class PropertyEditorTestSubProperties {
-        num: number;
-        text: string;
-    }
-    export function test(): PropertyEditor;
-}
-declare module "jassijs/base/PropertyEditorService" {
-    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { Property } from "jassijs/ui/Property";
-    export class PropertyEditorService {
-        data: any;
-        private funcRegister;
-        /**
-        * manage all PropertyEditors
-        * @class jassijs.ui.PropertyEditorService
-        */
-        constructor();
-        reset(): void;
-        destroy(): void;
-        private loadType;
-        /**
-         * creates PropertyEditor for type
-         *
-         * @param {string} variablename - the name of the variable
-         * @param {jassijs.ui.Property} property - name of the type
-         * @param {jassijs.ui.PropertyEditor} propertyEditor - the PropertyEditor instance
-         */
-        createFor(property: Property, propertyEditor: PropertyEditor): Editor | Promise<any>;
-        private register;
-    }
-    var propertyeditor: PropertyEditorService;
-    export { propertyeditor };
-}
-declare var def: any[];
-/// <amd-dependency name="goldenlayout" path="goldenlayout" />
-declare module "jassijs/ext/goldenlayout" {
-    var goldenlayout: any;
-    export default goldenlayout;
-}
-declare module "jassijs/ui/DockingContainer" {
-    import "jassijs/ext/jquerylib";
-    import "jassijs/ext/intersection-observer";
-    import { Container } from "jassijs/ui/Container";
-    export class DockingContainer extends Container {
-        _registeredcomponents: any;
-        _lastSize: number;
-        _intersectionObserver: IntersectionObserver;
-        _myLayout: any;
-        _windowResizer: any;
-        _noDestroyChilds: boolean;
-        /**
-    * a container where the components could be docked
-    * @class jassijs.ui.DockingContainer
-    */
-        constructor(id?: any);
-        componentDidMount(): void;
-        render(): React.DetailedReactHTMLElement<{
-            className: string;
-        }, HTMLElement>;
-        static clearMemoryleak(container: any): void;
-        /**
-         * add a component to the container
-         * @param {jassijs.ui.Component} component - the component to add
-         * @param {string} title - the caption of the window
-         * @param {string} name - the name of the window
-         */
-        add(component: any, title?: string, name?: any): void;
-        /**
-         * called on resizing could be redefined
-         */
-        onresize(): void;
-        /**
-         * register a component to Golden layout
-         * @param {String} name - the name of the component
-         */
-        _registerGL(name: any): void;
-        /**
-         * remove a component from the container
-         * @param {jassijs.ui.Component} component - the component to add
-         */
-        remove(component: any): void;
-        _init(): void;
-        /**
-         * activate the window
-         * @param {string} name - the name of the window
-         */
-        show(name: any): void;
-        /**
-         * update the layout (size)
-         */
-        update(): void;
-        /**
-         * finds a child in the config
-         */
-        _find(parent: any, name: any): any;
-        /** @member {String} - the layout of the windows */
-        get layout(): string;
-        set layoutold(value: any);
-        set layout(value: string);
-        private addSelectionEvent;
-        destroy(): void;
-    }
-    export function test(): DockingContainer;
-}
-declare module "jassijs/base/Windows" {
-    import { Panel } from "jassijs/ui/Panel";
-    export class Windows {
-        _myLayout: any;
-        _counter: number;
-        _id: string;
-        dom: any;
-        _desktop: Panel;
-        components: any[];
-        inited: boolean;
-        private _noRestore;
-        /**
-         * the window system -> jassijs.windows
-         * @class jassijs.base.Windows
-         */
-        constructor();
-        /**
-         * inits the component
-         */
-        _init(): void;
-        /**
-         * search a window
-         * @param {object|undefined} parent - the parent window
-         * @param {type} name - name of the window
-         * @returns {object} - the founded window
-         */
-        _findDeep(parent: any, name: any): any;
-        /**
-         * true if there a window with that name
-         * @param {string} name
-         * @returns {boolean}
-         */
-        contains(name: any): boolean;
-        /**
-         * activate the window
-         * @param {string} name - the neme of the window
-         * @returns {objet} - the window
-         */
-        show(name: any): any;
-        /**
-         * finds the component for the name
-         * @param {string} name - the name of the window
-         * @returns {jassijs.ui.Component} - the found dom element
-         */
-        findComponent(name: any): any;
-        /**
-         * adds a window to the side (left - area)
-         * @param {dom|jassijs.ui.Component} component - the component to add
-         * @param {string} title - the title
-         */
-        addLeft(component: any, title: any): void;
-        /**
-        * adds a window to the side (left - area)
-        * @param {dom|jassijs.ui.Component} component - the component to add
-        * @param {string} title - the title
-        */
-        addRight(component: any, title: any): void;
-        add(component: any, title: any, name?: any): void;
-        /**
-         * add a window to the main area
-         * @param {dom|jassijs.ui.Component} component - the component to add
-         * @param {string} title - the title
-         * @param {string} [id] - the name (id) - =title if undefined
-         */
-        _add(parent: any, component: any, title: any, name?: any): void;
-        test(): void;
-        /**
-         * gets the url for the given component
-         * @param {jassijs.ui.component} comp - the component to read
-         */
-        getUrlFromComponent(comp: any): string;
-        restoreWindows(): void;
-        saveWindows(): void;
-        /**
-         * fired if component is closing
-         * @param {dom|jassijs.UI.Component} component - the component to register this event
-         * @param {function} func
-         */
-        onclose(component: any, func: any): void;
-    }
-    var windows: Windows;
-    export default windows;
-}
-declare module "jassijs/base/Router" {
-    export class Router {
-        constructor();
-        /**
-         * registers a database class
-         * @param {string} - the name of the class
-         * @param {class} - the class
-         */
-        register(name: any, data: any): void;
-        /**
-         * resolve the url
-         * @param {string} hash - the hash to resolve
-         */
-        resolve(hash: any): void;
-        /**
-         * generate a URL from the component
-         * @param {jassijs.ui.Component} component - the component to inspect
-         */
-        getURLFromComponent(component: any): void;
-        /**
-         *
-         * @param {string} hash - the hash to navigate
-         */
-        navigate(hash: any): void;
-    }
-    let router: Router;
-    export { router };
-}
-declare module "jassijs/ext/fancytree" {
-    export {};
-}
-/// <amd-dependency name="Papa" path="papaparse" />
-declare module "jassijs/ext/papaparse" {
-    var Papa: any;
-    export default Papa;
-}
-/// <amd-dependency name="spectrum" path="spectrum" />
-declare module "jassijs/ext/spectrum" { }
-/// <amd-module name="tabulator-tables" />
-/// <amd-dependency name="tabulator" path="tabulatorlib" />
-declare module "tabulator-tables" {
-    var Tabulator: any;
-    export { Tabulator };
-}
-/// <amd-dependency name="tinymce" path="tinymcelib" />
-declare module "jassijs/ext/tinymce" {
-    var tinymce: any;
-    export default tinymce;
-}
-declare module "jassijs/remote/ClientError" {
-    export class ClientError extends Error {
-        constructor(msg: string);
-    }
-}
-declare module "jassijs/remote/DBArray" {
-    export class DBArray
-    /**
-    * Array for jassijs.base.DBObject's
-    * can be saved to db
-    * @class jassijs.base.DBArray
-    */
-     extends Array {
-        constructor(...args: any[]);
-        private _parentObject;
-        private _parentObjectMember;
-        /**
-         * adds an object
-         * if the object is linked to an other object then update this
-         * @param {object} ob - the object to add
-         */
-        add(ob: any): void;
-        /**
-         * for compatibility
-         */
-        resolve(): Promise<this>;
-        /**
-         * remove an object
-         * if the object is linked to an other object then update this
-         * @param {object} ob - the object to remove
-         */
-        remove(ob: any): void;
-    }
-}
-declare module "jassijs/remote/DatabaseTools" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    export class DatabaseTools extends RemoteObject {
-        static runSQL(sql: string, parameter?: any[], context?: Context): Promise<any>;
-        static dropTables(tables: string[]): Promise<string>;
-    }
-    export function test(): Promise<void>;
-}
-declare module "jassijs/remote/Extensions" {
-    export function $Extension(forclass: any): Function;
-    class ExtensionTarget {
-        oclass: any;
-        addFunction(name: string, func: (...any: any[]) => any, ifExists: "replace" | "append" | "prepend"): void;
-        addMember(name: string): void;
-        annotateMember(member: any, type: any, ...annotations: any[]): void;
-    }
-    export interface ExtensionProvider {
-        initExtensions(extend: ExtensionTarget): any;
-    }
-    export class Extensions {
-        constructor();
-        private funcRegister;
-        destroy(): void;
-        annotate(oclass: any, ...annotations: any[]): void;
-        register(extensionclass: new (...args: any[]) => any, forclass: any): void;
-        annotateMember(classname: any, member: any, type: any, ...annotations: any[]): void;
-    }
-    var extensions: Extensions;
-    export { extensions };
-}
-declare module "jassijs/remote/Jassi" {
-    global {
-        export interface ExtensionAction {
-            componentDesignerSetDesignMode?: {
-                enable: boolean;
-                componentDesigner: any;
-            };
-            componentDesignerComponentCreated?: {
-                newParent: any;
-            };
-            componentDesignerInvisibleComponentClicked?: {
-                codeEditor: any;
-                designButton: any;
-            };
-        }
-    }
-    global {
-        interface String {
-            replaceAll: any;
-        }
-    }
-    /**
-    * main class for jassi
-    * @class Jassi
-    */
-    export class Jassi {
-        [key: string]: any;
-        base: {
-            [k: string]: any;
-        };
-        options: any;
-        isServer: boolean;
-        cssFiles: {
-            [key: string]: string;
-        };
-        constructor();
-        includeCSSFile(modulkey: string): void;
-        /**
-         * include a global stylesheet
-         * @id - the given id - important for update
-         * @data - the css data to insert
-         **/
-        includeCSS(id: string, data: {
-            [cssselector: string]: any;
-        }): void;
-        /**
-        * include a js or a css file
-        * @param {string|string[]} href - url(s) of the js or css file(s)
-        * @param {function} [param] - would be added with? to the url
-        */
-        myRequire(href: any, event?: any, param?: any): void;
-    }
-    global {
-        class JassiStatic extends Jassi {
-        }
-    }
-}
-declare module "jassijs/remote/Modules" {
-    class Modules {
-        modules: {
-            [modul: string]: string;
-        };
-        server: Modules;
-        constructor();
-    }
-    var modules: Modules;
-    export { modules };
-}
-declare module "jassijs/remote/hallo" {
-    export class OO {
-        hallo: string;
-        static test(): void;
-    }
-}
-declare var jassijs: JassiStatic;
-declare module "jassijs/remote/security/ParentRight" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    import { Group } from "jassijs/remote/security/Group";
-    export class ParentRight extends DBObject {
-        id: number;
-        name: string;
-        classname: string;
-        i1: number;
-        i2: number;
-        s1: string;
-        s2: string;
-        groups: Group[];
-    }
-}
-declare module "jassijs/remote/security/User" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    import { Group } from "jassijs/remote/security/Group";
-    import { Context } from "jassijs/remote/RemoteObject";
-    export class User extends DBObject {
-        id: number;
-        email: string;
-        password: string;
-        groups: Group[];
-        isAdmin: boolean;
-        static findWithRelations(): Promise<DBObject[]>;
-        /**
-       * reload the object from jassijs.db
-       */
-        hallo(context?: Context): Promise<any>;
-        save(context?: Context): Promise<any>;
-    }
-    export function test(): Promise<void>;
-    export function test2(): Promise<void>;
-}
-declare module "jassijs/remote/security/Right" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    import { Group } from "jassijs/remote/security/Group";
-    export class Right extends DBObject {
-        id: number;
-        name: string;
-        groups: Group[];
-    }
-}
-declare module "jassijs/remote/security/Group" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    import { ParentRight } from "jassijs/remote/security/ParentRight";
-    import { User } from "jassijs/remote/security/User";
-    import { Right } from "jassijs/remote/security/Right";
-    export class Group extends DBObject {
-        id: number;
-        name: string;
-        parentRights: ParentRight[];
-        rights: Right[];
-        users: User[];
-    }
-}
-declare module "jassijs/util/Numberformatter" {
-    export class Numberformatter {
-        static format(mask: string, value: number, options?: {}): any;
-        private static getLocaleDecimal;
-        static numberToString(num: number): string;
-        static stringToNumber(num: string): number;
-    }
-    export function test(): void;
-}
-declare module "jassijs/ui/converters/NumberConverter" {
-    import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
-    class NumberConverterProperties {
-        min?: number;
-        max?: number;
-        format?: string;
-    }
-    export class NumberConverter extends DefaultConverter {
-        min: number;
-        max: number;
-        format: string;
-        constructor(props?: NumberConverterProperties);
-        /**
-         * converts a string to the object
-         * an error can be thrown for validation
-         * @param {string} str - the string to convert
-         */
-        stringToObject(str: any): number;
-        /**
-         * converts an object to string
-         * @param  obj - the object to convert
-         */
-        objectToString(obj: any): string;
-        objectToFormatedString(obj: any): any;
-    }
-}
-declare module "jassijs/ui/HTMLPanel" {
-    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
-    global {
-        interface JQuery {
-            doubletap: any;
-        }
-    }
-    export interface HTMLPanelProperties extends DataComponentProperties {
-        newlineafter?: boolean;
-        /**
-         * template string  component.value=new Person();component.template:"{{name}}"}
-         */
-        template?: string;
-        value?: string;
-    }
-    export class HTMLPanel<T extends HTMLPanelProperties = HTMLPanelProperties> extends DataComponent<T> implements HTMLPanelProperties {
-        static oldeditor: any;
-        private _tcm;
-        toolbar: string[];
-        private _template;
-        private _value;
-        private inited;
-        editor: any;
-        customToolbarButtons: {
-            [name: string]: {
-                title: string;
-                action: any;
-            };
-        };
-        constructor(properties?: HTMLPanelProperties);
-        render(): React.JSX.Element;
-        config(config: T): HTMLPanel;
-        get newlineafter(): boolean;
-        set newlineafter(value: boolean);
-        compileTemplate(template: any): Function;
-        get template(): string;
-        set template(value: string);
-        /**
-         * @member {string} code - htmlcode of the component
-         **/
-        set value(code: string);
-        get value(): string;
-        extensionCalled(action: ExtensionAction): void;
-        initIfNeeded(tinymce: any, config: any): void;
-        focusLost(): void;
-        private _initTinymce;
-        /**
-         * activates or deactivates designmode
-         * @param {boolean} enable - true if activate designMode
-         * @param {jassijs.ui.ComponentDesigner} editor - editor instance
-         */
-        _setDesignMode(enable: any, editor: any): void;
-        destroy(): void;
-    }
-    export function test(): HTMLPanel<HTMLPanelProperties>;
-}
-/// <amd-dependency name="Split" path="splitlib" />
-declare module "jassijs/ui/BoxPanel" {
-    import { Panel, PanelProperties } from "jassijs/ui/Panel";
-    export interface BoxPanelProperties extends PanelProperties {
-        /**
-         * @member {boolean} - if true then the components are composed horizontally
-         **/
-        horizontal?: boolean;
-        /**
-          * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
-          */
-        spliter?: number[];
-    }
-    export class BoxPanel<T extends BoxPanelProperties = BoxPanelProperties> extends Panel<T> implements BoxPanelProperties {
-        _horizontal: boolean;
-        private _spliter;
-        private _splitcomponent;
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties?: BoxPanelProperties);
-        config(config: T): BoxPanel;
-        set horizontal(value: boolean);
-        get horizontal(): boolean;
-        /**
-        * adds a component to the container
-        * @param {jassijs.ui.Component} component - the component to add
-        */
-        add(component: any): void;
-        /**
-        * adds a component to the container before an other component
-        * @param {jassijs.ui.Component} component - the component to add
-        * @param {jassijs.ui.Component} before - the component before then component to add
-        */
-        addBefore(component: any, before: any): void;
-        set spliter(size: number[]);
-        get spliter(): number[];
-        updateSpliter(): void;
-    }
-    export function test(): Promise<BoxPanel<BoxPanelProperties>>;
-}
-declare module "jassijs/ui/DBObjectView" {
-    import { Button } from "jassijs/ui/Button";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { Panel, PanelProperties } from "jassijs/ui/Panel";
-    import { Databinder } from "jassijs/ui/Databinder";
-    import { DBObject } from "jassijs/remote/DBObject";
-    export type DBObjectViewMe = {
-        databinder?: Databinder;
-        create?: Button;
-        main?: Panel;
-        toolbar?: BoxPanel;
-        save?: Button;
-        remove?: Button;
-        refresh?: Button;
-    };
-    export class DBObjectViewProperties {
-        /**
-         * full path to classifiy the UIComponent e.g common/TopComponent
-         */
-        classname: string;
-        actionname?: string;
-        icon?: string;
-        queryname?: string;
-    }
-    export function $DBObjectView(properties: DBObjectViewProperties): Function;
-    type Me = DBObjectViewMe;
-    export interface DBObjectViewConfig extends PanelProperties {
-        /**
-           * register an event if the object is created
-           * @param {function} handler - the function that is called
-           */
-        oncreated?(handler: (obj: DBObject) => void): any;
-        /**
-        * register an event if the object is saved
-        * @param {function} handler - the function that is called
-        */
-        onsaved?(handler: (obj: DBObject) => void): any;
-        /**
-         * register an event if the object is refreshed
-         * @param {function} handler - the function that is called
-         */
-        onrefreshed?(handler: (obj: DBObject) => void): any;
-        /**
-        * register an event if the object is deleted
-        * @param {function} handler - the function that is called
-        */
-        ondeleted?(handler: (obj: DBObject) => void): any;
-        value: any;
-    }
-    export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isAbsolute"> {
-        me: any;
-        value: any;
-        constructor();
-        config(config: DBObjectViewConfig): DBObjectView;
-        protected _setDesignMode(enable: any): void;
-        /**
-         * create a new object
-         */
-        createObject(): any;
-        oncreated(handler: (obj: DBObject) => void): void;
-        private doSave;
-        /**
-         * saves the object
-         */
-        saveObject(): Promise<void>;
-        onsaved(handler: (obj: DBObject) => void): void;
-        /**
-         * refresh the object
-         */
-        refreshObject(): void;
-        onrefreshed(handler: (obj: DBObject) => void): void;
-        /**
-         * deletes Object
-         **/
-        deleteObject(): void;
-        ondeleted(handler: (obj: DBObject) => void): void;
-        layout(me: Me): void;
-    }
-    export function test(): Promise<DBObjectView>;
-}
-declare module "jassijs/ui/Calendar" {
-    import "jassijs/ext/jquerylib";
-    import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
-    export interface CalendarProperties extends TextboxProperties {
-        /**
-        * @member  - the date
-        */
-        value?: any;
-    }
-    export class Calendar<T extends CalendarProperties = TextboxProperties> extends Textbox<T> implements CalendarProperties {
-        constructor(properties?: any);
-        config(config: T): Calendar;
-        get value(): any;
-        set value(val: any);
-        static parseDate(date: string, format?: any, settings?: any): Date;
-        static formatDate(date: Date, format?: any, settings?: any): string;
-    }
-    export function test(): Calendar<TextboxProperties>;
-}
-declare module "jassijs/ui/converters/DateTimeConverter" {
-    import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
-    import "luxon";
-    import { Component } from "jassijs/ui/Component";
-    class DateTimeConverterProperties {
-        type?: "DATE_SHORT" | "TIME_SIMPLE" | "DATETIME_SHORT" | "TIME_WITH_SECONDS" | "DATETIME_SHORT_WITH_SECONDS";
-    }
-    export class DateTimeConverter extends DefaultConverter {
-        type: "DATE_SHORT" | "TIME_SIMPLE" | "DATETIME_SHORT" | "TIME_WITH_SECONDS" | "DATETIME_SHORT_WITH_SECONDS";
-        constructor(props?: DateTimeConverterProperties);
-        get component(): Component;
-        set component(component: Component);
-        /**
-         * converts a string to the object
-         * an error can be thrown for validation
-         * @param {string} str - the string to convert
-         */
-        stringToObject(str: any): any;
-        /**
-         * converts an object to string
-         * @param  obj - the object to convert
-         */
-        objectToString(obj: any): any;
-        /**
-         * format date to string
-         * @param format- e.g. "yyyy-MM-dd" or "HH:mm:ss"
-         */
-        static toFormat(date: Date, format: string): string;
-        /**
-       * parse date a string
-       * @param format- e.g. "yyyy-MM-dd" or "HH:mm:ss"
-       */
-        static fromFormat(date: string, format: string): Date;
-        static toLocalString(date: Date, format: DateTimeFormat): string;
-    }
-    export type DateTimeFormat = "DATE_SHORT" | "TIME_SIMPLE" | "DATETIME_SHORT" | "TIME_WITH_SECONDS" | "DATETIME_SHORT_WITH_SECONDS" | "DATE_MED" | "DATE_MED_WITH_WEEKDAY" | "DATE_FULL" | "DATE_HUGE" | "TIME_WITH_SHORT_OFFSET" | "TIME_WITH_LONG_OFFSET" | "DATETIME_MED" | "DATETIME_MED_WITH_SECONDS" | "DATETIME_MED_WITH_WEEKDAY" | "DATETIME_FULL" | "DATETIME_FULL_WITH_SECONDS" | "DATETIME_HUGE" | "DATETIME_HUGE_WITH_SECONDS";
-    export function test(): void;
-}
-declare module "jassijs/ui/Table" {
-    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Databinder } from "jassijs/ui/Databinder";
-    import { Tabulator } from "tabulator-tables";
-    import { DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
-    export interface LazyLoadOption {
-        classname: string;
-        loadFunc: string;
-        pageSize?: number;
-    }
-    export interface TableOptions extends Tabulator.Options {
-        dataTreeChildFunction?: ((data: any) => any) | any;
-        lazyLoad?: LazyLoadOption;
-        items?: any[];
-        columns?: MyColumnDefinition[];
-        [unknown: string]: any;
-    }
-    export interface MyColumnDefinition extends Tabulator.ColumnDefinition {
-        formatter?: MyFormatter;
-        formatterParams?: MyFormatterParams;
-        editor?: MyEditor;
-        [unknown: string]: any;
-    }
-    export type MyFormatterParams = Tabulator.FormatterParams | {
-        datefimeformat: DateTimeFormat;
-        numberformat: "#.##0,00" | string;
-        [unknown: string]: any;
-    };
-    export type MyEditor = Tabulator.Editor | "datetimeformat" | "numberformat" | any;
-    export type MyFormatter = Tabulator.Formatter | "datetimeformat" | "numberformat" | any;
-    export interface TableProperties extends DataComponentProperties {
-        options?: TableOptions;
-        /**
-        * register an event if an item is selected
-        * @param {function} handler - the function that is called on change
-        */
-        onchange?(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void): any;
-        showSearchbox?: boolean;
-        /**
-        * if the value is changed then the value of _component is also changed (_component.value)
-        */
-        selectComponent?: any;
-        /**
-         * set the items of the table
-         */
-        items?: any[];
-        columns?: Tabulator.ColumnDefinition[];
-        bindItems?: any[];
-    }
-    export class Table<T extends TableProperties = TableProperties> extends DataComponent<T> implements TableProperties {
-        table: Tabulator;
-        _selectHandler: any;
-        _select: {
-            value: any;
-        };
-        private _lazyLoadOption;
-        private _lastLazySort;
-        private _lastLazySearch;
-        private _lazyDataHasChanged;
-        _tree: any;
-        _items: any[];
-        _searchbox: Textbox;
-        _databinderItems: Databinder;
-        _lastOptions: TableOptions;
-        private dataTreeChildFunction;
-        constructor(properties?: TableProperties);
-        config(config: T): Table;
-        render(): React.ReactNode;
-        rerender(): void;
-        set options(properties: TableOptions);
-        get options(): TableOptions;
-        /**
-         * create a SQL-Querry for a search in all visible columns
-         */
-        private sqlForLazySearch;
-        onlazyloaded(func: any): void;
-        /**
-         * loads lazy data from _progressiveLoadFunc
-         */
-        private lazyLoadFunc;
-        private defaultAutoColumnDefinitions;
-        private getChildsFromTreeFunction;
-        private populateTreeData;
-        private onTreeExpanded;
-        update(): Promise<void>;
-        private _oncontext;
-        private _onselect;
-        onchange(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void): void;
-        get showSearchbox(): boolean;
-        set showSearchbox(enable: boolean);
-        set selectComponent(_component: any);
-        get selectComponent(): any;
-        private _setItemsIntern;
-        set items(value: any[]);
-        get items(): any[];
-        updateOrInsertItem(item: any): Promise<Tabulator.RowComponent>;
-        updateItem(item: any): Promise<Tabulator.RowComponent>;
-        insertItem(item: any): Promise<Tabulator.RowComponent>;
-        removeItem(item: any): Promise<void>;
-        /**
-         * @member {object} sel - the selected object
-         */
-        set value(sel: any);
-        get value(): any;
-        /**
-        * @member {string|number} - the height of the component
-        * e.g. 50 or "100%"
-        */
-        set height(value: string | number);
-        get height(): string | number;
-        set width(value: string | number);
-        get width(): string | number;
-        /**
-         * Searches records in the grid
-         * @param {string} field - name of the search field
-         * @param {string} value - value of the search field
-         * @param {boolean} [doSelect] - if true the first entry is selected
-         */
-        search(field: any, value: any, doSelect: any): void;
-        destroy(): void;
-        set columns(value: Tabulator.ColumnDefinition[]);
-        get columns(): Tabulator.ColumnDefinition[];
-        set bindItems(databinder: any[]);
-    }
-    export function test(): Promise<Table<TableProperties>>;
-}
-declare module "jassijs/ui/DBObjectDialog" {
-    import { Table } from "jassijs/ui/Table";
-    import { Panel } from "jassijs/ui/Panel";
-    import { DBObjectView } from "jassijs/ui/DBObjectView";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    type Me = {
-        splitpanel1?: BoxPanel;
-        IDDBView?: Panel;
-        table1?: Table;
-    };
-    export class DBObjectDialog extends Panel {
-        me: Me;
-        private _dbclassname;
-        view: DBObjectView;
-        constructor();
-        layout(me: Me): void;
-        /**
-         * set the DBObject-classname to show in this dialog
-         **/
-        set dbclassname(classname: string);
-        get dbclassname(): string;
-        update(): Promise<void>;
-        private static createFunction;
-        /**
-         * create Action for all DBObjectView with actionname is defined
-         */
-        private static createActions;
-        static createFor(classname: string): Promise<DBObjectDialog>;
-    }
-    export function test(): Promise<DBObjectDialog>;
-}
-declare module "jassijs/security/GroupView" {
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Group } from "jassijs/remote/security/Group";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        textbox?: Textbox;
-        textbox2?: Textbox;
-    } & DBObjectViewMe;
-    export class GroupView extends DBObjectView {
-        me: Me;
-        value: Group;
-        constructor();
-        get title(): string;
-        layout(me: Me): void;
-    }
-    export function test(): Promise<GroupView>;
-}
-declare module "jassijs/ui/Select" {
-    import "jassijs/ext/jquerylib";
-    import { ComponentProperties } from "jassijs/ui/Component";
-    import { DataComponent } from "jassijs/ui/DataComponent";
-    import "jquery.choosen";
-    export interface SelectProperities extends ComponentProperties {
-        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
-        /**
-          * called if value has changed
-          * @param {function} handler - the function which is executed
-          */
-        onchange?(handler: any): any;
-        /**
-         * if the value is changed then the value of _component is also changed (_component.value)
-         */
-        selectComponent?: {
-            value: number;
-        };
-        /**
-         * @member {string|function}  - property or function to get the displaystring for the object
-         **/
-        display?: any;
-        /**
-         * all objects in the list
-         */
-        items?: any[];
-        /**
-        * @member {object} sel - the selected object
-        */
-        value?: any;
-        multiple?: boolean;
-        allowDeselect?: boolean;
-        placeholder?: string;
-    }
-    export class Select<T extends SelectProperities = SelectProperities> extends DataComponent<T> {
-        domSelect: HTMLElement;
-        _select: {
-            value: number;
-        };
-        options: any;
-        _display: any;
-        _items: any;
-        constructor(properties?: SelectProperities);
-        render(): React.DetailedReactHTMLElement<{
-            className: string;
-            ref?: React.LegacyRef<HTMLSelectElement>;
-            key?: React.Key;
-            disabled?: boolean;
-            form?: string;
-            formAction?: string;
-            formEncType?: string;
-            formMethod?: string;
-            formNoValidate?: boolean;
-            formTarget?: string;
-            name?: string;
-            type?: "button" | "reset" | "submit";
-            value?: string | number | readonly string[];
-            defaultChecked?: boolean;
-            defaultValue?: string | number | readonly string[];
-            suppressContentEditableWarning?: boolean;
-            suppressHydrationWarning?: boolean;
-            accessKey?: string;
-            autoFocus?: boolean;
-            contentEditable?: "inherit" | (boolean | "true" | "false");
-            contextMenu?: string;
-            dir?: string;
-            draggable?: boolean | "true" | "false";
-            hidden?: boolean;
-            id?: string;
-            lang?: string;
-            nonce?: string;
-            placeholder?: string;
-            slot?: string;
-            spellCheck?: boolean | "true" | "false";
-            style?: React.CSSProperties;
-            tabIndex?: number;
-            title?: string;
-            translate?: "yes" | "no";
-            radioGroup?: string;
-            role?: React.AriaRole;
-            about?: string;
-            content?: string;
-            datatype?: string;
-            inlist?: any;
-            prefix?: string;
-            property?: string;
-            rel?: string;
-            resource?: string;
-            rev?: string;
-            typeof?: string;
-            vocab?: string;
-            autoCapitalize?: string;
-            autoCorrect?: string;
-            autoSave?: string;
-            color?: string;
-            itemProp?: string;
-            itemScope?: boolean;
-            itemType?: string;
-            itemID?: string;
-            itemRef?: string;
-            results?: number;
-            security?: string;
-            unselectable?: "on" | "off";
-            inputMode?: "text" | "none" | "url" | "decimal" | "numeric" | "email" | "search" | "tel";
-            is?: string;
-            'aria-activedescendant'?: string;
-            'aria-atomic'?: boolean | "true" | "false";
-            'aria-autocomplete'?: "none" | "list" | "inline" | "both";
-            'aria-braillelabel'?: string;
-            'aria-brailleroledescription'?: string;
-            'aria-busy'?: boolean | "true" | "false";
-            'aria-checked'?: boolean | "true" | "false" | "mixed";
-            'aria-colcount'?: number;
-            'aria-colindex'?: number;
-            'aria-colindextext'?: string;
-            'aria-colspan'?: number;
-            'aria-controls'?: string;
-            'aria-current'?: boolean | "page" | "step" | "time" | "date" | "true" | "false" | "location";
-            'aria-describedby'?: string;
-            'aria-description'?: string;
-            'aria-details'?: string;
-            'aria-disabled'?: boolean | "true" | "false";
-            'aria-dropeffect'?: "none" | "copy" | "move" | "link" | "execute" | "popup";
-            'aria-errormessage'?: string;
-            'aria-expanded'?: boolean | "true" | "false";
-            'aria-flowto'?: string;
-            'aria-grabbed'?: boolean | "true" | "false";
-            'aria-haspopup'?: boolean | "menu" | "grid" | "dialog" | "true" | "false" | "listbox" | "tree";
-            'aria-hidden'?: boolean | "true" | "false";
-            'aria-invalid'?: boolean | "true" | "false" | "grammar" | "spelling";
-            'aria-keyshortcuts'?: string;
-            'aria-label'?: string;
-            'aria-labelledby'?: string;
-            'aria-level'?: number;
-            'aria-live'?: "off" | "assertive" | "polite";
-            'aria-modal'?: boolean | "true" | "false";
-            'aria-multiline'?: boolean | "true" | "false";
-            'aria-multiselectable'?: boolean | "true" | "false";
-            'aria-orientation'?: "horizontal" | "vertical";
-            'aria-owns'?: string;
-            'aria-placeholder'?: string;
-            'aria-posinset'?: number;
-            'aria-pressed'?: boolean | "true" | "false" | "mixed";
-            'aria-readonly'?: boolean | "true" | "false";
-            'aria-relevant'?: "text" | "all" | "additions" | "additions removals" | "additions text" | "removals" | "removals additions" | "removals text" | "text additions" | "text removals";
-            'aria-required'?: boolean | "true" | "false";
-            'aria-roledescription'?: string;
-            'aria-rowcount'?: number;
-            'aria-rowindex'?: number;
-            'aria-rowindextext'?: string;
-            'aria-rowspan'?: number;
-            'aria-selected'?: boolean | "true" | "false";
-            'aria-setsize'?: number;
-            'aria-sort'?: "none" | "ascending" | "descending" | "other";
-            'aria-valuemax'?: number;
-            'aria-valuemin'?: number;
-            'aria-valuenow'?: number;
-            'aria-valuetext'?: string;
-            children?: React.ReactNode;
-            dangerouslySetInnerHTML?: {
-                __html: string | TrustedHTML;
-            };
-            onCopy?: React.ClipboardEventHandler<HTMLSelectElement>;
-            onCopyCapture?: React.ClipboardEventHandler<HTMLSelectElement>;
-            onCut?: React.ClipboardEventHandler<HTMLSelectElement>;
-            onCutCapture?: React.ClipboardEventHandler<HTMLSelectElement>;
-            onPaste?: React.ClipboardEventHandler<HTMLSelectElement>;
-            onPasteCapture?: React.ClipboardEventHandler<HTMLSelectElement>;
-            onCompositionEnd?: React.CompositionEventHandler<HTMLSelectElement>;
-            onCompositionEndCapture?: React.CompositionEventHandler<HTMLSelectElement>;
-            onCompositionStart?: React.CompositionEventHandler<HTMLSelectElement>;
-            onCompositionStartCapture?: React.CompositionEventHandler<HTMLSelectElement>;
-            onCompositionUpdate?: React.CompositionEventHandler<HTMLSelectElement>;
-            onCompositionUpdateCapture?: React.CompositionEventHandler<HTMLSelectElement>;
-            onFocus?: React.FocusEventHandler<HTMLSelectElement>;
-            onFocusCapture?: React.FocusEventHandler<HTMLSelectElement>;
-            onBlur?: React.FocusEventHandler<HTMLSelectElement>;
-            onBlurCapture?: React.FocusEventHandler<HTMLSelectElement>;
-            onChange?: React.FormEventHandler<HTMLSelectElement>;
-            onChangeCapture?: React.FormEventHandler<HTMLSelectElement>;
-            onBeforeInput?: React.FormEventHandler<HTMLSelectElement>;
-            onBeforeInputCapture?: React.FormEventHandler<HTMLSelectElement>;
-            onInput?: React.FormEventHandler<HTMLSelectElement>;
-            onInputCapture?: React.FormEventHandler<HTMLSelectElement>;
-            onReset?: React.FormEventHandler<HTMLSelectElement>;
-            onResetCapture?: React.FormEventHandler<HTMLSelectElement>;
-            onSubmit?: React.FormEventHandler<HTMLSelectElement>;
-            onSubmitCapture?: React.FormEventHandler<HTMLSelectElement>;
-            onInvalid?: React.FormEventHandler<HTMLSelectElement>;
-            onInvalidCapture?: React.FormEventHandler<HTMLSelectElement>;
-            onLoad?: React.ReactEventHandler<HTMLSelectElement>;
-            onLoadCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onError?: React.ReactEventHandler<HTMLSelectElement>;
-            onErrorCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onKeyDown?: React.KeyboardEventHandler<HTMLSelectElement>;
-            onKeyDownCapture?: React.KeyboardEventHandler<HTMLSelectElement>;
-            onKeyPress?: React.KeyboardEventHandler<HTMLSelectElement>;
-            onKeyPressCapture?: React.KeyboardEventHandler<HTMLSelectElement>;
-            onKeyUp?: React.KeyboardEventHandler<HTMLSelectElement>;
-            onKeyUpCapture?: React.KeyboardEventHandler<HTMLSelectElement>;
-            onAbort?: React.ReactEventHandler<HTMLSelectElement>;
-            onAbortCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onCanPlay?: React.ReactEventHandler<HTMLSelectElement>;
-            onCanPlayCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onCanPlayThrough?: React.ReactEventHandler<HTMLSelectElement>;
-            onCanPlayThroughCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onDurationChange?: React.ReactEventHandler<HTMLSelectElement>;
-            onDurationChangeCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onEmptied?: React.ReactEventHandler<HTMLSelectElement>;
-            onEmptiedCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onEncrypted?: React.ReactEventHandler<HTMLSelectElement>;
-            onEncryptedCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onEnded?: React.ReactEventHandler<HTMLSelectElement>;
-            onEndedCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onLoadedData?: React.ReactEventHandler<HTMLSelectElement>;
-            onLoadedDataCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onLoadedMetadata?: React.ReactEventHandler<HTMLSelectElement>;
-            onLoadedMetadataCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onLoadStart?: React.ReactEventHandler<HTMLSelectElement>;
-            onLoadStartCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onPause?: React.ReactEventHandler<HTMLSelectElement>;
-            onPauseCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onPlay?: React.ReactEventHandler<HTMLSelectElement>;
-            onPlayCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onPlaying?: React.ReactEventHandler<HTMLSelectElement>;
-            onPlayingCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onProgress?: React.ReactEventHandler<HTMLSelectElement>;
-            onProgressCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onRateChange?: React.ReactEventHandler<HTMLSelectElement>;
-            onRateChangeCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onResize?: React.ReactEventHandler<HTMLSelectElement>;
-            onResizeCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onSeeked?: React.ReactEventHandler<HTMLSelectElement>;
-            onSeekedCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onSeeking?: React.ReactEventHandler<HTMLSelectElement>;
-            onSeekingCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onStalled?: React.ReactEventHandler<HTMLSelectElement>;
-            onStalledCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onSuspend?: React.ReactEventHandler<HTMLSelectElement>;
-            onSuspendCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onTimeUpdate?: React.ReactEventHandler<HTMLSelectElement>;
-            onTimeUpdateCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onVolumeChange?: React.ReactEventHandler<HTMLSelectElement>;
-            onVolumeChangeCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onWaiting?: React.ReactEventHandler<HTMLSelectElement>;
-            onWaitingCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onAuxClick?: React.MouseEventHandler<HTMLSelectElement>;
-            onAuxClickCapture?: React.MouseEventHandler<HTMLSelectElement>;
-            onClick?: React.MouseEventHandler<HTMLSelectElement>;
-            onClickCapture?: React.MouseEventHandler<HTMLSelectElement>;
-            onContextMenu?: React.MouseEventHandler<HTMLSelectElement>;
-            onContextMenuCapture?: React.MouseEventHandler<HTMLSelectElement>;
-            onDoubleClick?: React.MouseEventHandler<HTMLSelectElement>;
-            onDoubleClickCapture?: React.MouseEventHandler<HTMLSelectElement>;
-            onDrag?: React.DragEventHandler<HTMLSelectElement>;
-            onDragCapture?: React.DragEventHandler<HTMLSelectElement>;
-            onDragEnd?: React.DragEventHandler<HTMLSelectElement>;
-            onDragEndCapture?: React.DragEventHandler<HTMLSelectElement>;
-            onDragEnter?: React.DragEventHandler<HTMLSelectElement>;
-            onDragEnterCapture?: React.DragEventHandler<HTMLSelectElement>;
-            onDragExit?: React.DragEventHandler<HTMLSelectElement>;
-            onDragExitCapture?: React.DragEventHandler<HTMLSelectElement>;
-            onDragLeave?: React.DragEventHandler<HTMLSelectElement>;
-            onDragLeaveCapture?: React.DragEventHandler<HTMLSelectElement>;
-            onDragOver?: React.DragEventHandler<HTMLSelectElement>;
-            onDragOverCapture?: React.DragEventHandler<HTMLSelectElement>;
-            onDragStart?: React.DragEventHandler<HTMLSelectElement>;
-            onDragStartCapture?: React.DragEventHandler<HTMLSelectElement>;
-            onDrop?: React.DragEventHandler<HTMLSelectElement>;
-            onDropCapture?: React.DragEventHandler<HTMLSelectElement>;
-            onMouseDown?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseDownCapture?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseEnter?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseLeave?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseMove?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseMoveCapture?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseOut?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseOutCapture?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseOver?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseOverCapture?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseUp?: React.MouseEventHandler<HTMLSelectElement>;
-            onMouseUpCapture?: React.MouseEventHandler<HTMLSelectElement>;
-            onSelect?: React.ReactEventHandler<HTMLSelectElement>;
-            onSelectCapture?: React.ReactEventHandler<HTMLSelectElement>;
-            onTouchCancel?: React.TouchEventHandler<HTMLSelectElement>;
-            onTouchCancelCapture?: React.TouchEventHandler<HTMLSelectElement>;
-            onTouchEnd?: React.TouchEventHandler<HTMLSelectElement>;
-            onTouchEndCapture?: React.TouchEventHandler<HTMLSelectElement>;
-            onTouchMove?: React.TouchEventHandler<HTMLSelectElement>;
-            onTouchMoveCapture?: React.TouchEventHandler<HTMLSelectElement>;
-            onTouchStart?: React.TouchEventHandler<HTMLSelectElement>;
-            onTouchStartCapture?: React.TouchEventHandler<HTMLSelectElement>;
-            onPointerDown?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerDownCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerMove?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerMoveCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerUp?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerUpCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerCancel?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerCancelCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerEnter?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerEnterCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerLeave?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerLeaveCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerOver?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerOverCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerOut?: React.PointerEventHandler<HTMLSelectElement>;
-            onPointerOutCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onGotPointerCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onGotPointerCaptureCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onLostPointerCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onLostPointerCaptureCapture?: React.PointerEventHandler<HTMLSelectElement>;
-            onScroll?: React.UIEventHandler<HTMLSelectElement>;
-            onScrollCapture?: React.UIEventHandler<HTMLSelectElement>;
-            onWheel?: React.WheelEventHandler<HTMLSelectElement>;
-            onWheelCapture?: React.WheelEventHandler<HTMLSelectElement>;
-            onAnimationStart?: React.AnimationEventHandler<HTMLSelectElement>;
-            onAnimationStartCapture?: React.AnimationEventHandler<HTMLSelectElement>;
-            onAnimationEnd?: React.AnimationEventHandler<HTMLSelectElement>;
-            onAnimationEndCapture?: React.AnimationEventHandler<HTMLSelectElement>;
-            onAnimationIteration?: React.AnimationEventHandler<HTMLSelectElement>;
-            onAnimationIterationCapture?: React.AnimationEventHandler<HTMLSelectElement>;
-            onTransitionEnd?: React.TransitionEventHandler<HTMLSelectElement>;
-            onTransitionEndCapture?: React.TransitionEventHandler<HTMLSelectElement>;
-        }, HTMLSelectElement>;
-        config(config: T): this;
-        refresh(): void;
-        onchange(handler: any): void;
-        set selectComponent(_component: {
-            value: number;
-        });
-        get selectComponent(): {
-            value: number;
-        };
-        set display(value: string | Function);
-        get display(): string | Function;
-        set items(value: any);
-        get items(): any;
-        set value(sel: any);
-        get value(): any;
-        /**
-         * @member {string|number} - the width of the component
-         * e.g. 50 or "100%"
-         */
-        /**
-         * binds a component to a databinder
-         * @param {Databinder} databinder - the databinder to bind
-         * @param {string} property - the property to bind
-        
-        bind(databinder,property){
-            this._databinder=databinder;
-            databinder.add(property,this,"onselect");
-            databinder.checkAutocommit(this);
-        } */
-        destroy(): void;
-    }
-    export function test(): Promise<any>;
-}
-declare module "jassijs/ui/Checkbox" {
-    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
-    export interface CheckboxProperties extends DataComponentProperties {
-        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-        /**
-      * register an event if the button is clicked
-      * @param {function} handler - the function that is called on change
-      */
-        onclick?(handler: any): any;
-        /**
-         * @member - true or "true" if selected
-         */
-        value?: string | boolean;
-        /**
-        * @member {string} - the caption of the button
-        */
-        text?: string;
-    }
-    export class Checkbox<T extends CheckboxProperties = CheckboxProperties> extends DataComponent<T> implements CheckboxProperties {
-        private checkbox;
-        constructor(properties?: CheckboxProperties);
-        componentDidMount(): void;
-        render(): React.DetailedReactHTMLElement<{}, HTMLElement>;
-        config(config: T): Checkbox;
-        onclick(handler: any): void;
-        set value(value: string | boolean);
-        get value(): string | boolean;
-        set text(value: string);
-        get text(): string;
-    }
-    export function test(): Checkbox<CheckboxProperties>;
-}
-declare module "jassijs/security/UserView" {
-    import { Select } from "jassijs/ui/Select";
-    import { Checkbox } from "jassijs/ui/Checkbox";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Panel } from "jassijs/ui/Panel";
-    import { User } from "jassijs/remote/security/User";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        IDID?: Textbox;
-        IDEmail?: Textbox;
-        checkbox?: Checkbox;
-        panel?: Panel;
-        IDGroups?: Select;
-    } & DBObjectViewMe;
-    export class UserView extends DBObjectView {
-        me: Me;
-        value: User;
-        constructor();
-        get title(): string;
-        layout(me: Me): void;
-        createObject(): any;
-    }
-    export function test(): Promise<UserView>;
-}
-declare module "jassijs/server/DBManager" {
-    import { ConnectionOptions, SaveOptions, FindConditions, FindOneOptions, ObjectType, ObjectID, FindManyOptions, Connection, EntitySchema } from "typeorm";
-    import { DBObject } from "jassijs/remote/DBObject";
-    import { User } from "jassijs/remote/security/User";
-    import { Context } from "jassijs/remote/RemoteObject";
-    export interface MyFindManyOptions<Entity = any> extends FindManyOptions {
-        whereParams?: any;
-        onlyColumns?: string[];
-        order: {
-            [field: string]: "ASC" | "DESC";
-        };
-    }
-    global {
-        export interface Serverservice {
-            db: Promise<DBManager>;
-        }
-    }
-    export class DBManager {
-        waitForConnection: Promise<DBManager>;
-        static getConOpts(): Promise<ConnectionOptions>;
-        private static _get;
-        private open;
-        private mySync;
-        private static clearMetadata;
-        renewConnection(): Promise<void>;
-        destroyConnection(waitForCompleteOpen?: boolean): Promise<void>;
-        private static clearArray;
-        private constructor();
-        connection(): Connection;
-        runSQL(context: Context, sql: string, parameters?: any[]): Promise<any>;
-        remove<Entity>(context: Context, entity: Entity): Promise<void>;
-        private addSaveTransaction;
-        /**
-       * insert a new object
-       * @param obj - the object to insert
-       */
-        insert(context: Context, obj: DBObject): Promise<unknown>;
-        /**
-        * Saves all given entities in the database.
-        * If entities do not exist in the database then inserts, otherwise updates.
-        */
-        save<Entity>(context: Context, entities: Entity[], options?: SaveOptions): Promise<Entity[]>;
-        /**
-         * Saves all given entities in the database.
-         * If entities do not exist in the database then inserts, otherwise updates.
-         */
-        save<Entity>(context: Context, entity: Entity, options?: SaveOptions): Promise<Entity>;
-        private _checkParentRightsForSave;
-        findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, id?: string | number | Date | ObjectID, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
-        /**
-         * Finds first entity that matches given find options.
-         */
-        findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
-        /**
-        * Finds first entity that matches given conditions.
-        */
-        findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, conditions?: FindConditions<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
-        /**
-       * Finds entities that match given options.
-       */
-        find<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, options?: MyFindManyOptions<Entity>): Promise<Entity[]>;
-        /**
-         * Finds entities that match given conditions.
-         */
-        find<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, conditions?: FindConditions<Entity>): Promise<Entity[]>;
-        private resolveWildcharInRelations;
-        createUser(context: Context, username: string, password: string): Promise<User>;
-        login(context: Context, user: string, password: any): Promise<User>;
-        checkParentRight(context: Context, entityClass: any, ids: any[]): Promise<boolean>;
-    }
-}
-declare module "jassijs/server/TypeORMListener" {
-    import { EntitySubscriberInterface, InsertEvent, RemoveEvent, UpdateEvent } from "typeorm";
-    export class TypeORMListener implements EntitySubscriberInterface {
-        savetimer: any;
-        saveDB(event: any): void;
-        /**
-         * Called after entity is loaded.
-         */
-        afterLoad(entity: any): void;
-        /**
-         * Called before post insertion.
-         */
-        beforeInsert(event: InsertEvent<any>): void;
-        /**
-         * Called after entity insertion.
-         */
-        afterInsert(event: InsertEvent<any>): void;
-        /**
-         * Called before entity update.
-         */
-        beforeUpdate(event: UpdateEvent<any>): void;
-        /**
-         * Called after entity update.
-         */
-        afterUpdate(event: UpdateEvent<any>): void;
-        /**
-         * Called before entity removal.
-         */
-        beforeRemove(event: RemoveEvent<any>): void;
-        /**
-         * Called after entity removal.
-         */
-        afterRemove(event: RemoveEvent<any>): void;
-        /**
-         * Called before transaction start.
-         */
-        beforeTransactionStart(event: any): void;
-        /**
-         * Called after transaction start.
-         */
-        afterTransactionStart(event: any): void;
-        /**
-         * Called before transaction commit.
-         */
-        beforeTransactionCommit(event: any): void;
-        /**
-         * Called after transaction commit.
-         */
-        afterTransactionCommit(event: any): void;
-        /**
-         * Called before transaction rollback.
-         */
-        beforeTransactionRollback(event: any): void;
-        /**
-         * Called after transaction rollback.
-         */
-        afterTransactionRollback(event: any): void;
-    }
-}
-declare module "jassijs/server/DBManagerExt" {
-    export function extendDBManager(): void;
-}
-declare module "jassijs/server/DatabaseSchema" {
-    import { EntityOptions } from "typeorm";
-    export function Entity(...param: any[]): Function;
-    export function PrimaryGeneratedColumn(...param: any[]): Function;
-    export function JoinColumn(...param: any[]): Function;
-    export function JoinTable(...param: any[]): Function;
-    export function Column(...param: any[]): Function;
-    export function PrimaryColumn(...param: any[]): Function;
-    export function OneToOne(...param: any[]): Function;
-    export function OneToMany(...param: any[]): Function;
-    export function ManyToOne(...param: any[]): Function;
-    export function ManyToMany(...param: any[]): Function;
-    export { EntityOptions };
-}
-declare module "jassijs/server/LocalProtocol" {
-    import { Context } from "jassijs/remote/RemoteObject";
-    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
-    export function messageReceived(param: any): Promise<void>;
-    export function test(): Promise<void>;
-    export function localExec(prot: RemoteProtocol, context?: Context): Promise<any>;
-}
-declare module "jassijs/server/Installserver" {
-    var autostart: () => Promise<void>;
-    export { autostart };
-}
-declare module "jassijs/server/Testuser" {
-    export class Testuser {
-        id: number;
-        firstname: string;
-        lastname: string;
-    }
-}
-declare module "jassijs/server/ext/EmpyDeclaration" {
-    export {};
-}
-declare module "jassijs/ui/MenuItem" {
-    import "jassijs/ext/jquerylib";
-    import { Menu, MenuProperties } from "jassijs/ui/Menu";
-    import { Container, ContainerProperties } from "jassijs/ui/Container";
-    export interface MenuItemProperties extends ContainerProperties {
-        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLLIElement>, HTMLLIElement>;
-        onclick?(handler: any): any;
-        /**
-         * @member {string} - the icon of the button
-         */
-        icon?: string;
-        /**
-        * @member {string} - the caption of the button
-        */
-        text?: string;
-    }
-    export class MenuItem<T extends MenuItemProperties = MenuItemProperties> extends Container<T> implements MenuItemProperties {
-        _text: string;
-        items: Menu;
-        _icon: string;
-        _mainMenu: Menu;
-        constructor(props?: MenuItemProperties);
-        render(): React.JSX.Element;
-        config(config: T): MenuItem;
-        onclick(handler: any): void;
-        set icon(icon: string);
-        get icon(): string;
-        set text(value: string);
-        get text(): string;
-        destroy(): void;
-        getMainMenu(): any;
-        _menueChanged(): void;
-        extensionCalled(action: ExtensionAction): void;
-    }
-    export function test(): Promise<Menu<MenuProperties>>;
-}
-declare module "jassijs/ui/Menu" {
-    import "jassijs/ext/jquerylib";
-    import { Container, ContainerProperties } from "jassijs/ui/Container";
-    export interface MenuProperties extends ContainerProperties {
-        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLUListElement>, HTMLUListElement>;
-        noUpdate?: boolean;
-        onclick?(handler: any): any;
-    }
-    export class Menu<T extends MenuProperties = MenuProperties> extends Container<T> implements MenuProperties {
-        _isRoot: boolean;
-        _text: string;
-        _icon: string;
-        _noUpdate: boolean;
-        _mainMenu: any;
-        constructor(options?: any);
-        componentDidMount(): void;
-        render(): React.DetailedReactHTMLElement<{
-            className: string;
-        }, HTMLElement>;
-        config(config: T): Menu;
-        _sample(): void;
-        _menueChanged(): void;
-        getMainMenu(): any;
-        /**
-        * adds a component to the container before an other component
-        * @param {jassijs.ui.Component} component - the component to add
-        * @param {jassijs.ui.Component} before - the component before then component to add
-        */
-        addBefore(component: any, before: any): void;
-        /**
-          * adds a component to the container
-          * @param {jassijs.ui.Menu} component - the component to add
-          */
-        add(component: any): void;
-        onclick(handler: any): void;
-        extensionCalled(action: ExtensionAction): void;
-        /**
-        * activates or deactivates designmode
-        * @param {boolean} enable - true if activate designMode
-        */
-        protected _setDesignMode(enable: any): void;
-        destroy(): void;
-    }
-    export function test(): Menu<MenuProperties>;
-}
-declare module "jassijs/ui/ActionNodeMenu" {
-    import { Menu } from "jassijs/ui/Menu";
-    import { Panel, PanelProperties } from "jassijs/ui/Panel";
-    type Me = {
-        menu?: Menu;
-    };
-    export class ActionNodeMenuProperties {
-    }
-    export class ActionNodeMenu<T extends ActionNodeMenuProperties = {}> extends Panel<ActionNodeMenuProperties> {
-        me: Me;
-        constructor(props?: ActionNodeMenuProperties);
-        config(config: PanelProperties): ActionNodeMenu;
-        layout(me: Me): void;
-        fillActions(): Promise<void>;
-    }
-    export function test(): Promise<ActionNodeMenu<{}>>;
-}
-declare module "jassijs/ui/ContextMenu" {
-    import "jassijs/ext/jquerylib";
-    import "jquery.contextMenu";
-    import { Menu } from "jassijs/ui/Menu";
-    import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
-    import { Component } from "jassijs/ui/Component";
-    import { Action } from "jassijs/base/Actions";
-    import { MenuItem } from "jassijs/ui/MenuItem";
-    global {
-        interface JQuery {
-            contextMenu: any;
-        }
-    }
-    export interface ContextMenuProperties extends InvisibleComponentProperties {
-        /**
-         * @member - includes Actions from @ActionProvider for the objects in value
-         */
-        includeClassActions?: boolean;
-        /**
-        * register an event if the contextmenu is showing
-        * @param {function} handler - the function that is called on change
-        * @returns {boolean} - false if the contextmenu should not been shown
-        */
-        onbeforeshow?(handler: any): any;
-        children?: any;
-    }
-    export class ContextMenu<T extends ContextMenuProperties = ContextMenuProperties> extends InvisibleComponent<T> implements ContextMenuProperties {
-        _menu: Menu;
-        contextComponents: any;
-        _components: Component[];
-        target: any;
-        includeClassActions: boolean;
-        private _value;
-        constructor(props?: ContextMenuProperties);
-        set menu(val: Menu<import("jassijs/ui/Menu").MenuProperties>);
-        get menu(): Menu<import("jassijs/ui/Menu").MenuProperties>;
-        add(menu: MenuItem): void;
-        addBefore(menu: MenuItem, before: any): void;
-        remove(item: any): void;
-        /**
-         * @member - the objects for the includeClassActions @ActionProvider if  is enabled
-         **/
-        set value(value: any[]);
-        get value(): any[];
-        render(): React.DetailedReactHTMLElement<{
-            className: string;
-        }, HTMLElement>;
-        componentDidMount(): void;
-        config(config: T): ContextMenu;
-        /**
-         * could be override to provide Context-actions
-         * exsample:
-         * cmen.getActions=async function(objects:[]){
-         *		return [{name:"hallo",call:ob=>{}]
-         *	};
-         **/
-        getActions(data: any[]): Promise<Action[]>;
-        private _removeClassActions;
-        protected _setDesignMode(enable: any): void;
-        private _updateClassActions;
-        _menueChanged(): void;
-        getMainMenu(): this;
-        onbeforeshow(handler: any): void;
-        _callContextmenu(evt: any): Promise<void>;
-        /**
-         * register the contextMenu (right click) on the component
-         * @member {jassijs.ui.Component} - the component which gets the contextmenu
-         **/
-        registerComponent(component: any): void;
-        /**
-         * unregister the contextMenu (right click) on the component
-         * @member {jassijs.ui.Component} - the component which gets the contextmenu
-         **/
-        unregisterComponent(component: any): void;
-        /**
-         * shows the contextMenu
-         */
-        show(event: any): void;
-        close(): void;
-        extensionCalled(action: ExtensionAction): void;
-        destroy(): void;
-    }
-    export function test(): Promise<any>;
-}
-declare module "jassijs/ui/Style" {
-    import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-    import { ComponentProperties } from "jassijs/ui/Component";
-    export interface StyleConfig extends ComponentProperties {
-        /**
-          * sets CSS Properties
-          */
-        style?: React.CSSProperties;
-    }
-    /**
-     * on ore mors Style can be assigned to component
-     * the style is appended to the head
-     **/
-    export class Style extends InvisibleComponent<StyleConfig> implements StyleConfig {
-        constructor(props?: StyleConfig);
-        render(): React.DetailedReactHTMLElement<{
-            className: string;
-        }, HTMLElement>;
-        componentDidMount(): void;
-        config(config: StyleConfig): Style;
-        get styleid(): string;
-        /**
-        * sets CSS Properties
-        */
-        set style(properties: React.CSSProperties);
-        destroy(): void;
-    }
-    export function test(): void;
-    export function test2(): void;
-}
-declare module "jassijs/ui/Tree" {
-    import "jassijs/ext/jquerylib";
-    import "jassijs/ext/fancytree";
-    import { Component, ComponentProperties } from "jassijs/ui/Component";
-    import { CSSProperties } from "jassijs/ui/CSSProperties";
-    export interface TreeProperties extends ComponentProperties {
-        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-        options?: Fancytree.FancytreeOptions;
-        /**
-        * @member - get the property for the display of the item or an function to get the display from an item
-        */
-        propStyle?: string | {
-            (item: any): CSSProperties;
-        };
-        /**
-         * @member - get the property for the display of the item or an function to get the display from an item
-         */
-        propDisplay?: string | {
-            (item: any): string;
-        };
-        /**
-         * @member - get the iconproperty of the item or an function to get the icon from an item
-         */
-        propIcon?: string | {
-            (item: any): string;
-        };
-        /**
-        * @member - get the childs of the item or an function to get the childs from an item
-        */
-        propChilds?: string | {
-            (item: any): any[];
-        };
-        onselect?(handler: any): any;
-        /**
-         * register an event if an item is clicked
-         * @param {function} handler - the function that is called on click
-         */
-        onclick?(handler: (event?: JQueryEventObject, data?: Fancytree.EventData) => void): any;
-        /**
-        * selects items
-        */
-        selection?: any[];
-        /**
-         * set the active item
-         */
-        value?: any;
-        /**
-        * @param value - set the data to show in Tree
-        **/
-        items?: any;
-        /**
-         * if the value is changed then the value of _component is also changed (_component.value)
-         */
-        selectComponent?: {
-            value: number;
-        };
-        /**
-         * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
-         **/
-        contextMenu?: any;
-    }
-    export class Tree<T extends TreeProperties = TreeProperties> extends Component<TreeProperties> implements TreeProperties {
-        _propDisplay: string | {
-            (item: any): string;
-        };
-        _propIcon: string | {
-            (item: any): string;
-        };
-        _propChilds: string | {
-            (item: any): any[];
-        };
-        _propStyle: string | {
-            (item: any): CSSProperties;
-        };
-        _select: {
-            value: number;
-        };
-        tree: Fancytree.Fancytree;
-        _isInited: boolean;
-        _itemToKey: Map<any, string>;
-        private _items;
-        private _allKeysReaded;
-        private _allNodesReaded;
-        _lastOptions: Fancytree.FancytreeOptions;
-        constructor(props?: TreeProperties);
-        render(): React.DetailedReactHTMLElement<{
-            className: string;
-            ref?: React.LegacyRef<HTMLDivElement>;
-            key?: React.Key;
-            disabled?: boolean;
-            form?: string;
-            formAction?: string;
-            formEncType?: string;
-            formMethod?: string;
-            formNoValidate?: boolean;
-            formTarget?: string;
-            name?: string;
-            type?: "button" | "reset" | "submit";
-            value?: string | number | readonly string[];
-            defaultChecked?: boolean;
-            defaultValue?: string | number | readonly string[];
-            suppressContentEditableWarning?: boolean;
-            suppressHydrationWarning?: boolean;
-            accessKey?: string;
-            autoFocus?: boolean;
-            contentEditable?: "inherit" | (boolean | "true" | "false");
-            contextMenu?: string;
-            dir?: string;
-            draggable?: boolean | "true" | "false";
-            hidden?: boolean;
-            id?: string;
-            lang?: string;
-            nonce?: string;
-            placeholder?: string;
-            slot?: string;
-            spellCheck?: boolean | "true" | "false";
-            style?: React.CSSProperties;
-            tabIndex?: number;
-            title?: string;
-            translate?: "yes" | "no";
-            radioGroup?: string;
-            role?: React.AriaRole;
-            about?: string;
-            content?: string;
-            datatype?: string;
-            inlist?: any;
-            prefix?: string;
-            property?: string;
-            rel?: string;
-            resource?: string;
-            rev?: string;
-            typeof?: string;
-            vocab?: string;
-            autoCapitalize?: string;
-            autoCorrect?: string;
-            autoSave?: string;
-            color?: string;
-            itemProp?: string;
-            itemScope?: boolean;
-            itemType?: string;
-            itemID?: string;
-            itemRef?: string;
-            results?: number;
-            security?: string;
-            unselectable?: "on" | "off";
-            inputMode?: "text" | "none" | "url" | "decimal" | "numeric" | "email" | "search" | "tel";
-            is?: string;
-            'aria-activedescendant'?: string;
-            'aria-atomic'?: boolean | "true" | "false";
-            'aria-autocomplete'?: "none" | "list" | "inline" | "both";
-            'aria-braillelabel'?: string;
-            'aria-brailleroledescription'?: string;
-            'aria-busy'?: boolean | "true" | "false";
-            'aria-checked'?: boolean | "true" | "false" | "mixed";
-            'aria-colcount'?: number;
-            'aria-colindex'?: number;
-            'aria-colindextext'?: string;
-            'aria-colspan'?: number;
-            'aria-controls'?: string;
-            'aria-current'?: boolean | "page" | "step" | "time" | "date" | "true" | "false" | "location";
-            'aria-describedby'?: string;
-            'aria-description'?: string;
-            'aria-details'?: string;
-            'aria-disabled'?: boolean | "true" | "false";
-            'aria-dropeffect'?: "none" | "copy" | "move" | "link" | "execute" | "popup";
-            'aria-errormessage'?: string;
-            'aria-expanded'?: boolean | "true" | "false";
-            'aria-flowto'?: string;
-            'aria-grabbed'?: boolean | "true" | "false";
-            'aria-haspopup'?: boolean | "menu" | "grid" | "dialog" | "true" | "false" | "listbox" | "tree";
-            'aria-hidden'?: boolean | "true" | "false";
-            'aria-invalid'?: boolean | "true" | "false" | "grammar" | "spelling";
-            'aria-keyshortcuts'?: string;
-            'aria-label'?: string;
-            'aria-labelledby'?: string;
-            'aria-level'?: number;
-            'aria-live'?: "off" | "assertive" | "polite";
-            'aria-modal'?: boolean | "true" | "false";
-            'aria-multiline'?: boolean | "true" | "false";
-            'aria-multiselectable'?: boolean | "true" | "false";
-            'aria-orientation'?: "horizontal" | "vertical";
-            'aria-owns'?: string;
-            'aria-placeholder'?: string;
-            'aria-posinset'?: number;
-            'aria-pressed'?: boolean | "true" | "false" | "mixed";
-            'aria-readonly'?: boolean | "true" | "false";
-            'aria-relevant'?: "text" | "all" | "additions" | "additions removals" | "additions text" | "removals" | "removals additions" | "removals text" | "text additions" | "text removals";
-            'aria-required'?: boolean | "true" | "false";
-            'aria-roledescription'?: string;
-            'aria-rowcount'?: number;
-            'aria-rowindex'?: number;
-            'aria-rowindextext'?: string;
-            'aria-rowspan'?: number;
-            'aria-selected'?: boolean | "true" | "false";
-            'aria-setsize'?: number;
-            'aria-sort'?: "none" | "ascending" | "descending" | "other";
-            'aria-valuemax'?: number;
-            'aria-valuemin'?: number;
-            'aria-valuenow'?: number;
-            'aria-valuetext'?: string;
-            children?: React.ReactNode;
-            dangerouslySetInnerHTML?: {
-                __html: string | TrustedHTML;
-            };
-            onCopy?: React.ClipboardEventHandler<HTMLDivElement>;
-            onCopyCapture?: React.ClipboardEventHandler<HTMLDivElement>;
-            onCut?: React.ClipboardEventHandler<HTMLDivElement>;
-            onCutCapture?: React.ClipboardEventHandler<HTMLDivElement>;
-            onPaste?: React.ClipboardEventHandler<HTMLDivElement>;
-            onPasteCapture?: React.ClipboardEventHandler<HTMLDivElement>;
-            onCompositionEnd?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionEndCapture?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionStart?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionStartCapture?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionUpdate?: React.CompositionEventHandler<HTMLDivElement>;
-            onCompositionUpdateCapture?: React.CompositionEventHandler<HTMLDivElement>;
-            onFocus?: React.FocusEventHandler<HTMLDivElement>;
-            onFocusCapture?: React.FocusEventHandler<HTMLDivElement>;
-            onBlur?: React.FocusEventHandler<HTMLDivElement>;
-            onBlurCapture?: React.FocusEventHandler<HTMLDivElement>;
-            onChange?: React.FormEventHandler<HTMLDivElement>;
-            onChangeCapture?: React.FormEventHandler<HTMLDivElement>;
-            onBeforeInput?: React.FormEventHandler<HTMLDivElement>;
-            onBeforeInputCapture?: React.FormEventHandler<HTMLDivElement>;
-            onInput?: React.FormEventHandler<HTMLDivElement>;
-            onInputCapture?: React.FormEventHandler<HTMLDivElement>;
-            onReset?: React.FormEventHandler<HTMLDivElement>;
-            onResetCapture?: React.FormEventHandler<HTMLDivElement>;
-            onSubmit?: React.FormEventHandler<HTMLDivElement>;
-            onSubmitCapture?: React.FormEventHandler<HTMLDivElement>;
-            onInvalid?: React.FormEventHandler<HTMLDivElement>;
-            onInvalidCapture?: React.FormEventHandler<HTMLDivElement>;
-            onLoad?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onError?: React.ReactEventHandler<HTMLDivElement>;
-            onErrorCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyPress?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyPressCapture?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyUp?: React.KeyboardEventHandler<HTMLDivElement>;
-            onKeyUpCapture?: React.KeyboardEventHandler<HTMLDivElement>;
-            onAbort?: React.ReactEventHandler<HTMLDivElement>;
-            onAbortCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onCanPlay?: React.ReactEventHandler<HTMLDivElement>;
-            onCanPlayCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onCanPlayThrough?: React.ReactEventHandler<HTMLDivElement>;
-            onCanPlayThroughCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onDurationChange?: React.ReactEventHandler<HTMLDivElement>;
-            onDurationChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onEmptied?: React.ReactEventHandler<HTMLDivElement>;
-            onEmptiedCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onEncrypted?: React.ReactEventHandler<HTMLDivElement>;
-            onEncryptedCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onEnded?: React.ReactEventHandler<HTMLDivElement>;
-            onEndedCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadedData?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadedDataCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadedMetadata?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadedMetadataCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadStart?: React.ReactEventHandler<HTMLDivElement>;
-            onLoadStartCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onPause?: React.ReactEventHandler<HTMLDivElement>;
-            onPauseCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onPlay?: React.ReactEventHandler<HTMLDivElement>;
-            onPlayCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onPlaying?: React.ReactEventHandler<HTMLDivElement>;
-            onPlayingCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onProgress?: React.ReactEventHandler<HTMLDivElement>;
-            onProgressCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onRateChange?: React.ReactEventHandler<HTMLDivElement>;
-            onRateChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onResize?: React.ReactEventHandler<HTMLDivElement>;
-            onResizeCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onSeeked?: React.ReactEventHandler<HTMLDivElement>;
-            onSeekedCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onSeeking?: React.ReactEventHandler<HTMLDivElement>;
-            onSeekingCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onStalled?: React.ReactEventHandler<HTMLDivElement>;
-            onStalledCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onSuspend?: React.ReactEventHandler<HTMLDivElement>;
-            onSuspendCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onTimeUpdate?: React.ReactEventHandler<HTMLDivElement>;
-            onTimeUpdateCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onVolumeChange?: React.ReactEventHandler<HTMLDivElement>;
-            onVolumeChangeCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onWaiting?: React.ReactEventHandler<HTMLDivElement>;
-            onWaitingCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onAuxClick?: React.MouseEventHandler<HTMLDivElement>;
-            onAuxClickCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onClick?: React.MouseEventHandler<HTMLDivElement>;
-            onClickCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onContextMenu?: React.MouseEventHandler<HTMLDivElement>;
-            onContextMenuCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
-            onDoubleClickCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onDrag?: React.DragEventHandler<HTMLDivElement>;
-            onDragCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragEnd?: React.DragEventHandler<HTMLDivElement>;
-            onDragEndCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragEnter?: React.DragEventHandler<HTMLDivElement>;
-            onDragEnterCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragExit?: React.DragEventHandler<HTMLDivElement>;
-            onDragExitCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragLeave?: React.DragEventHandler<HTMLDivElement>;
-            onDragLeaveCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragOver?: React.DragEventHandler<HTMLDivElement>;
-            onDragOverCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDragStart?: React.DragEventHandler<HTMLDivElement>;
-            onDragStartCapture?: React.DragEventHandler<HTMLDivElement>;
-            onDrop?: React.DragEventHandler<HTMLDivElement>;
-            onDropCapture?: React.DragEventHandler<HTMLDivElement>;
-            onMouseDown?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseDownCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseMoveCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseOut?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseOutCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseOver?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseOverCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseUp?: React.MouseEventHandler<HTMLDivElement>;
-            onMouseUpCapture?: React.MouseEventHandler<HTMLDivElement>;
-            onSelect?: React.ReactEventHandler<HTMLDivElement>;
-            onSelectCapture?: React.ReactEventHandler<HTMLDivElement>;
-            onTouchCancel?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchCancelCapture?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchEnd?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchEndCapture?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchMove?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchMoveCapture?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchStart?: React.TouchEventHandler<HTMLDivElement>;
-            onTouchStartCapture?: React.TouchEventHandler<HTMLDivElement>;
-            onPointerDown?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerDownCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerMove?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerMoveCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerUp?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerUpCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerCancel?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerCancelCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerEnter?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerEnterCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerLeave?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerLeaveCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerOver?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerOverCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerOut?: React.PointerEventHandler<HTMLDivElement>;
-            onPointerOutCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onGotPointerCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onGotPointerCaptureCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onLostPointerCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onLostPointerCaptureCapture?: React.PointerEventHandler<HTMLDivElement>;
-            onScroll?: React.UIEventHandler<HTMLDivElement>;
-            onScrollCapture?: React.UIEventHandler<HTMLDivElement>;
-            onWheel?: React.WheelEventHandler<HTMLDivElement>;
-            onWheelCapture?: React.WheelEventHandler<HTMLDivElement>;
-            onAnimationStart?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationStartCapture?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationEndCapture?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationIteration?: React.AnimationEventHandler<HTMLDivElement>;
-            onAnimationIterationCapture?: React.AnimationEventHandler<HTMLDivElement>;
-            onTransitionEnd?: React.TransitionEventHandler<HTMLDivElement>;
-            onTransitionEndCapture?: React.TransitionEventHandler<HTMLDivElement>;
-        }, HTMLDivElement>;
-        componentDidMount(): void;
-        config(config: T): Tree;
-        set options(options: Fancytree.FancytreeOptions);
-        get options(): Fancytree.FancytreeOptions;
-        /**
-        * @member - get the property for the display of the item or an function to get the display from an item
-        */
-        set propStyle(value: string | {
-            (item: any): CSSProperties;
-        });
-        get propStyle(): string | {
-            (item: any): CSSProperties;
-        };
-        set propDisplay(value: string | {
-            (item: any): string;
-        });
-        get propDisplay(): string | {
-            (item: any): string;
-        };
-        set propIcon(icon: string | {
-            (item: any): string;
-        });
-        get propIcon(): string | {
-            (item: any): string;
-        };
-        set propChilds(child: string | {
-            (item: any): any[];
-        });
-        get propChilds(): string | {
-            (item: any): any[];
-        };
-        onselect(handler: any): void;
-        onclick(handler: (event?: JQueryEventObject, data?: Fancytree.EventData) => void): void;
-        filter(text: string): void;
-        /**
-        * get title from node
-        */
-        getTitleFromItem(item: any): string;
-        /**
-       * get title from node
-       */
-        getStyleFromItem(item: any): CSSProperties;
-        /**
-        * get icon from node
-        */
-        getIconFromItem(item: any): any;
-        /**
-        * get childs from node
-        */
-        getChildsFromItem(item: any): any;
-        private _onselect;
-        private _onclick;
-        set selection(values: any[]);
-        get selection(): any[];
-        activateKey(key: string, parent?: Fancytree.FancytreeNode): Promise<boolean>;
-        private expandLater;
-        /**
-         * expand all nodes
-         */
-        expandAll(expand?: boolean, parent?: Fancytree.FancytreeNode, allreadySeen?: any[]): Promise<void>;
-        expandKeys(keys: string[]): Promise<void>;
-        getExpandedKeys(parent?: Fancytree.FancytreeNode, expandedNodes?: string[]): string[];
-        private expandNode;
-        private _readNodeFromItem;
-        private _readNodeFromKey;
-        set value(value: any);
-        /**
-         * get the active item
-         **/
-        get value(): any;
-        private _readAllNodesIfNeeded;
-        getKeyFromItem(item: any): string;
-        /**
-         * read all keys if not allready readed
-         **/
-        private _readAllKeysIfNeeded;
-        set items(value: any);
-        get items(): any;
-        set selectComponent(_component: {
-            value: number;
-        });
-        get selectComponent(): {
-            value: number;
-        };
-        private _callContextmenu;
-        /**
-         * create the contextmenu
-         * @param {object} evt  the click event in the contextmenu
-         **/
-        private _prepareContextmenu;
-        set contextMenu(value: any);
-        get contextMenu(): any;
-        destroy(): void;
-    }
-    export function test(): Promise<Tree<TreeProperties>>;
-}
-declare module "jassijs/ui/DBObjectExplorer" {
-    import { ContextMenu } from "jassijs/ui/ContextMenu";
-    import { Tree } from "jassijs/ui/Tree";
-    import { Panel } from "jassijs/ui/Panel";
-    import { FileNode } from "jassijs/remote/FileNode";
-    export class DBObjectNode {
-        name?: string;
-        filename?: string;
-    }
-    export class DBFileActions {
-        static ViewData(all: FileNode[]): Promise<void>;
-    }
-    export class DBObjectActions {
-        static ViewData(all: DBObjectNode[]): Promise<void>;
-        static OpenCode(all: DBObjectNode[]): Promise<void>;
-    }
-    type Me = {
-        tree?: Tree;
-        contextmenu?: ContextMenu;
-    };
-    export class DBObjectExplorer extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
-        static dummy(): Promise<void>;
-        static dummy2(): Promise<void>;
-        static show(): Promise<void>;
-        update(): Promise<void>;
-    }
-    export function test(): Promise<DBObjectExplorer>;
-}
-declare module "jassijs/ui/HTMLEditorPanel" {
-    import { Panel } from "jassijs/ui/Panel";
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-    import { Button } from "jassijs/ui/Button";
-    class Me {
-        IDHtml?: HTMLPanel;
-        IDChange?: Button;
-    }
-    export class HTMLEditorPanel extends Panel {
-        me: Me;
-        constructor(id?: any);
-        layout(): Promise<void>;
-        set value(val: string);
-        get value(): string;
-    }
-    export function te(): void;
-}
-declare module "jassijs/ui/VariablePanel" {
-    import { Panel } from "jassijs/ui/Panel";
-    import { Component } from "jassijs/ui/Component";
-    export class VariablePanel extends Panel {
-        table: any;
-        debugpoints: {
-            [n: number]: boolean;
-        };
-        [_cache: string]: any;
-        _items: any[];
-        constructor();
-        createTable(): Promise<void>;
-        /**
-         * VariabelPanel for id
-         * @id {number} - the id
-         * @returns  {jassijs.ui.VariablePanel}
-        **/
-        static get(id: any): Component<any> | {
-            __db: boolean;
-            add: () => void;
-            update: () => void;
-        };
-        clear(): void;
-        /**
-         * add variables to variabelpanel
-         * @param Object<string,object> variables ["name"]=value
-         */
-        addAll(vars: any): void;
-        removeVariable(name: string): void;
-        /**
-         *
-         * @param {string} name - name of the variable
-         * @param {object} value - the value of the variable
-         * @param {boolean} [refresh] - refresh the dialog
-         */
-        addVariable(name: any, value: any, refresh?: any): void;
-        /**
-         * analyze describeComponent(desc) -> desc.editableComponents and publish this
-         **/
-        updateCache(): void;
-        /**
-         * get the ids of all editable Components by the designer
-         * @param {jassijs.ui.Component} component - the component to inspect
-         * @param {boolean} idFromLabel - if true not the id but the id form label is returned
-         **/
-        getEditableComponents(component: any, idFromLabel?: any): string;
-        private isTypeOf;
-        /**
-        * get all known instances for type
-        * @param {type|string} type - the type we are interested or the member which is implemented
-        * @returns {[string]}
-        */
-        getVariablesForType(type: any): any[];
-        /**
-         * gets the name of the variabel that holds the object
-         * @param {object} ob - the
-         */
-        getVariableFromObject(ob: any): string;
-        /**
-         * gets the name object of the given variabel
-         * @param {string} ob - the name of the variable
-         */
-        getObjectFromVariable(varname: any): any;
-        /**
-          * renames a variable in design
-          * @param {string} oldName
-          * @param {string} newName
-          */
-        renameVariable(oldName: any, newName: any): void;
-        /**
-         * refreshes Table
-         */
-        update(): void;
-        set value(value: any[]);
-        get value(): any[];
-        static getMembers(ob: any, withFunction: any): any[];
-        static _getMembersProto(proto: any, ret: any, ob: any): void;
-        /**
-        *
-        * @param {string} name - the name of the object
-        */
-        evalExpression(name: any): any;
-        destroy(): void;
-    }
-}
-declare module "jassijs/ui/ObjectChooser" {
-    import "jassijs/ext/jquerylib";
-    import { Table } from "jassijs/ui/Table";
-    import { Panel } from "jassijs/ui/Panel";
-    import { Button, ButtonProperties } from "jassijs/ui/Button";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Databinder } from "jassijs/ui/Databinder";
-    import { DataComponentProperties } from "jassijs/ui/DataComponent";
-    class Me {
-        IDTable?: Table;
-        IDPanel?: Panel;
-        IDCancel?: Button;
-        IDSearch?: Textbox;
-        IDOK?: Button;
-    }
-    export interface ObjectChooserProperties extends ButtonProperties {
-        dialogHeight?: number;
-        dialogWidth?: number;
-        /**
-         * @member {object} value - selection of the component
-         */
-        value?: any;
-        /**
-         * @member {string} items - the items to select or  the classname to generate the items
-         */
-        items?: string | any[];
-        /**
-    * called if value has changed
-    * @param {function} handler - the function which is executed
-    */
-        onchange?(handler: any): any;
-        /**
-         * @member {bool} autocommit -  if true the databinder will update the value on every change
-         *                              if false the databinder will update the value on databinder.toForm
-         */
-        autocommit?: boolean;
-        /**
-           * binds a component to a databinder
-           * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
-           *         {string} property - the property to bind]
-           */
-        bind?: any[];
-    }
-    export class ObjectChooser<T extends ObjectChooserProperties = ObjectChooserProperties> extends Button<T> implements ObjectChooserProperties, DataComponentProperties {
-        dialogHeight: number;
-        dialogWidth: number;
-        _items: any;
-        me: Me;
-        _value: any;
-        _autocommit: boolean;
-        _databinder: Databinder;
-        constructor();
-        config(config: T): ObjectChooser;
-        get title(): string;
-        layout(): void;
-        ok(): void;
-        cancel(): void;
-        set value(value: any);
-        get value(): any;
-        loadObjects(classname: string): Promise<any>;
-        set items(value: any);
-        get items(): any;
-        onchange(handler: any): void;
-        get autocommit(): boolean;
-        set autocommit(value: boolean);
-        /**
-         * binds a component to a databinder
-         * @param {jassijs.ui.Databinder} databinder - the databinder to bind
-         * @param {string} property - the property to bind
-         */
-        set bind(databinder: any[]);
-        destroy(): void;
-    }
-    export function test(): Promise<ObjectChooser<ObjectChooserProperties>>;
-    export function test2(): Promise<void>;
-}
-declare module "jassijs/ui/OptionDialog" {
-    import "jassijs/ext/jquerylib";
-    import { Panel } from "jassijs/ui/Panel";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-    import { Component } from "jassijs/ui/Component";
-    import { Textbox } from "jassijs/ui/Textbox";
-    class Me {
-        boxpanel1?: BoxPanel;
-        htmlpanel1?: HTMLPanel;
-        buttons?: BoxPanel;
-        inputText?: Textbox;
-        propertyEditor?: any;
-    }
-    export interface DialogResult {
-        button: string;
-        text?: string;
-        properties?: any;
-    }
-    export class OptionDialog extends Panel {
-        parentComponent: Component;
-        text: string;
-        options: string[];
-        selectedOption: string;
-        me: Me;
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties?: any);
-        layout(): void;
-        /**
-        * ask for properties in propertygrid
-        * @param text - the text to be displayed
-        * @param  properties - the properties which should be filled, marked by @$Property
-        * @param  options - the options e.g ["ok","Cancel"]
-        * @param parent - the parent component
-        * @param modal - display the dialog modal
-        */
-        static askProperties(text: string, properties: any, options: string[], parent?: Component, modal?: boolean): Promise<DialogResult>;
-        /**
-        * @param text - the text to be displayed
-        * @param  options - the options
-        * @param parent - the parent component
-        * @param modal - display the dialog modal
-        * @param  inputDefaultText - if the user should input something
-        *
-        */
-        static show(text: string, options: string[], parent?: Component, modal?: boolean, inputDefaultText?: string): Promise<DialogResult>;
-        static _show(text: string, options: string[], parent: Component, modal: boolean, inputDefaultText?: string, properties?: any): Promise<DialogResult>;
-    }
-    export function test2(): Promise<void>;
-}
-declare module "jassijs/ui/Repeater" {
-    import { Panel, PanelProperties } from "jassijs/ui/Panel";
-    import { Databinder } from "jassijs/ui/Databinder";
-    import { Component } from "jassijs/ui/Component";
-    import { DataComponentProperties } from "jassijs/ui/DataComponent";
-    class RepeaterDesignPanel extends Panel {
-        databinder: Databinder;
-        me: any;
-    }
-    export interface RepeaterProperties extends PanelProperties {
-        /**
-        *  @member {array} value - the array which objects used to create the repeating components
-        */
-        value?: any;
-        /**
-           * binds a component to a databinder
-           * @param {jassijs.ui.Databinder} databinder - the databinder to bind
-           * @param {string} property - the property to bind
-           */
-        bind?: any[];
-        createRepeatingComponent?(func: any): any;
-    }
-    export class Repeater<T extends RepeaterProperties = RepeaterProperties> extends Panel<T> implements DataComponentProperties, RepeaterProperties {
-        _componentDesigner: any;
-        _autocommit: boolean;
-        _createRepeatingComponent: any;
-        _value: any;
-        _isCreated: boolean;
-        _designer: Component;
-        _databinder: Databinder;
-        design: RepeaterDesignPanel;
-        me: any;
-        /**
-         * can be used for controls in repeating group
-         */
-        binder: Databinder;
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties?: RepeaterProperties);
-        config(config: T): Repeater;
-        createRepeatingComponent(func: any): void;
-        _copyMeFromParent(me: any, parent: any, override?: boolean): void;
-        update(): void;
-        /**
-         * adds a component to the container
-         * @param {jassijs.ui.Component} component - the component to add
-         */
-        add(component: any): void;
-        _dummy(func: any): void;
-        set value(val: any);
-        get value(): any;
-        extensionCalled(action: ExtensionAction): void;
-        /**
-         * activates or deactivates designmode
-         * @param {boolean} enable - true if activate designMode
-         */
-        _setDesignMode(enable: any, designer?: any): void;
-        set bind(databinder: any[]);
-        destroy(): void;
-    }
-}
-declare module "jassijs/ui/SettingsDialog" {
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-    import { Select } from "jassijs/ui/Select";
-    import { Panel } from "jassijs/ui/Panel";
-    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
-    import { Button } from "jassijs/ui/Button";
-    global {
-        export interface KnownSettings {
-            myuw: number;
-        }
-    }
-    /** sample
-    @$SettingsDescriptor()
-    @$Class("jassijs_editor.Testuw")
-    class Testuw {
-        @$Property()
-        myuw: number;
-    }
-    @$Class("jassijs.ui.SettingsDialogCurrentSettings")
-    class SettingsDialogCurrentSettings {
-        @$Property()
-        test: string;
-    }
-    */
-    type Me = {
-        propertyeditor?: PropertyEditor;
-        Save?: Button;
-        Scope?: Select;
-        htmlpanel1?: HTMLPanel;
-    };
-    export class SettingsDialog extends Panel {
-        me: Me;
-        constructor();
-        static show(): Promise<void>;
-        private update;
-        private save;
-        layout(me: Me): void;
-    }
-    export function test(): Promise<SettingsDialog>;
-}
-declare module "jassijs/ui/Textarea" {
-    import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
-    export class Textarea<T extends TextboxProperties = TextboxProperties> extends Textbox<T> {
-        constructor(props?: TextboxProperties);
-        render(): any;
-        componentDidMount(): void;
-    }
-}
-declare module "jassijs/ui/Upload" {
-    import { Component, ComponentProperties } from "jassijs/ui/Component";
-    export interface UploadProperties extends ComponentProperties {
-        readAs?: "Text" | "DataUrl" | "ArrayBuffer" | "BinaryString";
-        accept?: string;
-        multiple?: boolean;
-        onuploaded?: (any: any, FileList: any, JQueryEventObject: any) => any;
-    }
-    export class Upload<T extends UploadProperties = UploadProperties> extends Component<T> implements UploadProperties {
-        constructor(props?: UploadProperties);
-        render(): React.DetailedReactHTMLElement<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-        config(config: T): Upload;
-        componentDidMount(): void;
-        get dom(): HTMLInputElement;
-        set dom(value: HTMLInputElement);
-        readAs: "Text" | "DataUrl" | "ArrayBuffer" | "BinaryString";
-        get accept(): string;
-        /**
-         * which file types are accepted e.g ".txt,.csv"
-         **/
-        set accept(value: string);
-        get multiple(): boolean;
-        /**
-         * multiple files can be uploaded
-         **/
-        set multiple(value: boolean);
-        private readUpload;
-        /**
-         * register handler to get the uploaded data
-         */
-        onuploaded(handler: (data: {
-            [file: string]: string;
-        }, files: FileList, evt: JQueryEventObject) => any): void;
-    }
-    export function test(): Upload<UploadProperties>;
-}
-declare module "jassijs/ui/PropertyEditors/BooleanEditor" {
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    export class BooleanEditor extends Editor {
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-         * intern the value changes
-         * @param {type} param
-         */
-        _onclick(param: any): void;
-    }
-}
-declare module "jassijs/ui/PropertyEditors/JsonEditor" {
-    import "jassijs/ext/jquerylib";
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
-    export class JsonEditor extends Editor {
-        showThisProperties: any;
-        parentPropertyEditor: Editor;
-        /**
-         * Editor for number and string
-         * used by PropertyEditor
-         * @class jassijs.ui.PropertyEditors.DefaultEditor
-         */
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        _getPropertyValue(property: any): void;
-        /**
-         * register an event if the property has changed
-         * @param {function} handler - the function that is called on change
-         */
-        onpropertyChanged(handler: any): void;
-        private propertyChanged;
-        /**
-         * initiate the default values in the PropertyEditor from code
-         **/
-        private setCode;
-        private createPropertyEditor;
-        /**
-         * get the propertyvalue from code
-         */
-        private getInitialPropertyValue;
-        /**
-         * intern the value changes
-         * @param {type} param
-         */
-        _onclick(param: any): Promise<void>;
-        protected showDialog(control: any, propEditor: any): void;
-    }
-    export function test(): PropertyEditor;
-}
-declare module "jassijs/ui/converters/StringConverter" {
-    import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
-    class StringConverterProperties {
-        minChars?: number;
-        maxChars?: number;
-    }
-    export class StringConverter extends DefaultConverter {
-        minChars?: number;
-        maxChars?: number;
-        constructor(props?: StringConverterProperties);
-        /**
-         * converts a string to the object
-         * an error can be thrown for validation
-         * @param {string} str - the string to convert
-         */
-        stringToObject(str: any): any;
-        /**
-         * converts an object to string
-         * @param {string} obj - the object to convert
-         */
-        objectToString(obj: any): any;
-    }
-}
-declare module "jassijs/ui/PropertyEditors/ClassSelectorEditor" {
-    import { Select } from "jassijs/ui/Select";
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { JsonEditor } from "jassijs/ui/PropertyEditors/JsonEditor";
-    export class ClassSelectorEditor extends Editor {
-        select: Select;
-        jsonEditor: JsonEditor;
-        me: any;
-        private destroyed;
-        /**
-         * Checkbox Editor for boolean values
-         * used by PropertyEditor
-         * @class jassijs.ui.PropertyEditors.BooleanEditor
-         */
-        constructor(property?: any, propertyEditor?: any);
-        changeConverter(converter: any): void;
-        initSelect(): void;
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-         * intern the value changes
-         * @param {type} param
-         */
-        _onclick(param: any): void;
-        layout(): void;
-        destroy(): void;
-    }
-}
-declare module "jassijs/ui/PropertyEditors/ColorEditor" {
-    import "jassijs/ext/jquerylib";
-    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Select } from "jassijs/ui/Select";
-    import "jassijs/ext/spectrum";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    /**
-    * Editor for color
-    * used by PropertyEditor
-    **/
-    export class ColorEditor extends Editor {
-        icon: Textbox;
-        select: Select;
-        constructor(property: any, propertyEditor: any);
-        onedit(param: any): void;
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        paletteChanged(color: string): void;
-        /**
-         * intern the value changes
-         * @param {type} param
-         */
-        _onchange(param: any): void;
-    }
-    export function test3(): PropertyEditor;
-    export function test2(): BoxPanel<import("jassijs/ui/BoxPanel").BoxPanelProperties>;
-}
-declare module "jassijs/ui/PropertyEditors/ComponentEditor" {
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    export class BooleanEditor extends Editor {
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-         * intern the value changes
-         * @param {type} param
-         */
-        _onclick(param: any): void;
-    }
-}
-declare module "jassijs/ui/PropertyEditors/ComponentSelectorEditor" {
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    /**
-     * select one or more instances of an class
-     * used by PropertyEditor
-     **/
-    export class ComponentSelectorEditor extends Editor {
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-         * intern the value changes
-         * @param {type} param
-         */
-        _onchange(param: any): void;
-    }
-    export function test(): void;
-}
-declare module "jassijs/ui/PropertyEditors/DBObjectEditor" {
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { ObjectChooser } from "jassijs/ui/ObjectChooser";
-    import { DBObject } from "jassijs/remote/DBObject";
-    export class DBObjectEditor extends Editor {
-        _textbox: Textbox;
-        _objectchooser: ObjectChooser;
-        dbobject: DBObject;
-        /**
-         * Checkbox Editor for boolean values
-         * used by PropertyEditor
-         * @class jassijs.ui.PropertyEditors.BooleanEditor
-         */
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        loadObject(id: string): Promise<DBObject>;
-        /**
-        * intern the value changes
-        * @param {type} param
-        */
-        _onchange(param?: any): void;
-    }
-}
-declare module "jassijs/ui/PropertyEditors/DatabinderEditor" {
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    export class DatabinderEditor extends Editor {
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-        * intern the value changes
-        * @param {type} param
-        */
-        _onchange(param: any): void;
-    }
-}
-declare module "jassijs/ui/PropertyEditors/DefaultEditor" { }
-declare module "jassijs/ui/PropertyEditors/FontEditor" {
-    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    /**
-    * Editor for font
-    * used by PropertyEditor
-    **/
-    export class FontEditor extends Editor {
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-         * intern the value changes
-         * @param {type} param
-         */
-        _onchange(param: any): void;
-    }
-    export function test2(): PropertyEditor;
     export function test(): any;
-}
-declare module "jassijs/ui/PropertyEditors/FunctionEditor" {
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    export class FunctionEditor extends Editor {
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-         * intern the value changes
-         * @param {type} param
-         */
-        _onclick(param: any): void;
-    }
-}
-declare module "jassijs/ui/PropertyEditors/HTMLEditor" {
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { ObjectChooser } from "jassijs/ui/ObjectChooser";
-    export class HTMLEditor extends Editor {
-        _textbox: Textbox;
-        _objectchooser: ObjectChooser;
-        /**
-         * Checkbox Editor for boolean values
-         * used by PropertyEditor
-         * @class jassijs.ui.PropertyEditors.BooleanEditor
-         */
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-        * intern the value changes
-        * @param {type} param
-        */
-        _onchange(param?: any): void;
-    }
-}
-declare module "jassijs/ui/PropertyEditors/ImageEditor" {
-    import "jassijs/ext/jquerylib";
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { Panel } from "jassijs/ui/Panel";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Button } from "jassijs/ui/Button";
-    export class ImageEditor extends Editor {
-        _textbox: Textbox;
-        _button: Button;
-        dialog: Panel;
-        /**
-         * Checkbox Editor for boolean values
-         * used by PropertyEditor
-         * @class jassijs.ui.PropertyEditors.BooleanEditor
-         */
-        constructor(property: any, propertyEditor: any);
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob: any);
-        get ob(): any;
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent(): any;
-        /**
-        * intern the value changes
-        * @param {type} param
-        */
-        _onchange(param?: any): void;
-        static dummy(): Promise<void>;
-        static show(): Promise<void>;
-        showDialog(onlytest?: any): Promise<void>;
-    }
-    export function test2(): Panel<import("jassijs/ui/Panel").PanelProperties>;
-}
-declare module "jassijs/ui/PropertyEditors/JsonArrayEditor" {
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
-    export class JsonArrayEditor extends Editor {
-        /**
-           * Editor for number and string
-           * used by PropertyEditor
-           * @class jassijs.ui.PropertyEditors.DefaultEditor
-           */
-        constructor(property: any, propertyEditor: any);
-        _onclick(param: any): void;
-        /**
-        * get the renderer for the PropertyEditor
-        * @returns - the UI-component for the editor
-        */
-        getComponent(): any;
-        /**
-        * @member {object} ob - the object which is edited
-        */
-        set ob(ob: any);
-        get ob(): any;
-        protected showDialog(control: any, propEditor: any): void;
-    }
-    export function test(): PropertyEditor;
-}
-declare module "jassijs/ui/PropertyEditors/TableColumnImport" {
-    import { Panel } from "jassijs/ui/Panel";
-    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
-    type Me = {};
-    export class TableColumnImport extends Panel {
-        me: Me;
-        propertyEditor: PropertyEditor;
-        constructor();
-        layout(me: Me): void;
-    }
-    export function test(): Promise<TableColumnImport>;
-}
-declare module "jassijs/util/CSVImport" {
-    import { Upload } from "jassijs/ui/Upload";
-    import { Button } from "jassijs/ui/Button";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { Select } from "jassijs/ui/Select";
-    import { Table } from "jassijs/ui/Table";
-    import { Panel } from "jassijs/ui/Panel";
-    type Me = {
-        table?: Table;
-        select?: Select;
-        boxpanel1?: BoxPanel;
-        fromLine?: Textbox;
-        next?: Button;
-        upload?: Upload;
-    };
-    export class CSVImport extends Panel {
-        me: Me;
-        data: any[];
-        fieldCount: number;
-        constructor();
-        static showDialog(): Promise<void>;
-        initTableHeaders(): Promise<void>;
-        initClasses(): Promise<void>;
-        readData(csvdata: string): void;
-        updateTable(): void;
-        layout(me: Me): void;
-        /**
-         * imports a csv-file into database
-         * @param urlcsv - the link to the csv which we import
-         * @param dbclass
-         * @param fieldmapping - e.g. {"id":"CUSTOMERID"} if the field id is in csv-column CUSTOMERID or {"id":1} if the field id is in column 1
-         * @param replace - replace text e.g. {"für":"fuer"}
-         * returns the message if succeeded
-         */
-        static startImport(urlcsv: string, dbclass: string, fieldmapping?: {
-            [field: string]: (string | number);
-        }, replace?: {
-            [toReplace: string]: string;
-        }, beforeSave?: any): Promise<string>;
-        doimport(): Promise<string>;
-        private _doimport;
-    }
-    export function test(): Promise<void>;
-}
-declare module "jassijs/util/Reloader" {
-    export class Reloader {
-        static cache: any[];
-        static reloadCodeFromServerIsRunning: boolean;
-        static instance: Reloader;
-        listener: any[];
-        /**
-         * reloads Code
-         */
-        private constructor();
-        /**
-         * check code changes out of the browser if localhost and load the changes in to the browser
-         */
-        static startReloadCodeFromServer(): void;
-        /**
-         * listener for code reloaded
-         * @param {function} func - callfunction for the event
-         */
-        addEventCodeReloaded(func: any): void;
-        removeEventCodeReloaded(func: any): void;
-        private _findScript;
-        reloadJS(fileName: string): Promise<void>;
-        reloadJSAll(fileNames: string[], afterUnload?: () => {}, useServerRequire?: boolean): Promise<void>;
-        migrateModul(allModules: any, file: any, modul: any): void;
-        migrateClasses(file: any, oldmodul: any, modul: any): void;
-    }
-}
-declare module "jassijs/util/Runlater" {
-    export class Runlater {
-        lastRun: number;
-        func: any;
-        timeout: number;
-        isRunning: boolean;
-        constructor(func: any, timeout: any);
-        _checkRun(): void;
-        runlater(): void;
-    }
 }

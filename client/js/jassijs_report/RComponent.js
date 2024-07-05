@@ -7,11 +7,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_1, Registry_1, Registry_2, Panel_1, Property_1) {
     "use strict";
     var RComponent_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RComponent = exports.$ReportComponent = exports.ReportComponentProperties = void 0;
+    Registry_1 = __importDefault(Registry_1);
     //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
     jassijs.includeCSSFile("jassijs_report.css");
     class ReportComponentProperties extends Component_1.UIComponentProperties {

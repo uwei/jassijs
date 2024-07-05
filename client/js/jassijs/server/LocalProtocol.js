@@ -1,3 +1,26 @@
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/Serverservice", "js-cookie", "jassijs/server/DoRemoteProtocol"], function (require, exports, RemoteProtocol_1, Serverservice_1, js_cookie_1, DoRemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -89,7 +112,7 @@ define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/S
         return ret;
     }*/
     async function localExec(prot, context = undefined) {
-        var classes = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/Classes"], resolve_1, reject_1); })).classes;
+        var classes = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/Classes"], resolve_1, reject_1); }).then(__importStar)).classes;
         var p = new RemoteProtocol_1.RemoteProtocol();
         var C = await classes.loadClass(prot.classname);
         if (context === undefined) {
@@ -102,7 +125,7 @@ define(["require", "exports", "jassijs/remote/RemoteProtocol", "jassijs/remote/S
                     }
                 }
             };
-            var Cookies = (await new Promise((resolve_2, reject_2) => { require(["jassijs/util/Cookies"], resolve_2, reject_2); })).Cookies;
+            var Cookies = (await new Promise((resolve_2, reject_2) => { require(["jassijs/util/Cookies"], resolve_2, reject_2); }).then(__importStar)).Cookies;
             if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
                 var man = await Serverservice_1.serverservices.db;
                 var user = await man.login(context, Cookies.get("simulateUser"), Cookies.get("simulateUserPassword"));

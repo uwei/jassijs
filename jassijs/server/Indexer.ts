@@ -73,7 +73,7 @@ export abstract class Indexer {
             }
         }
         var text = JSON.stringify(index, undefined, "\t");
- 
+
         if (isserver && config.clientrequire === undefined && config.serverrequire === undefined) {//nodes
             if (text !== "{}") {
                 text = '"use strict:"\n' +
@@ -154,23 +154,31 @@ export abstract class Indexer {
     collectAnnotations(node: ts.Node, outDecorations, depth = 0) {
         //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
         if (node.kind === ts.SyntaxKind.ClassDeclaration) {
-            if (node.decorators !== undefined) {
-                var dec = {};
-                var sclass = undefined;
-                for (let x = 0; x < node.decorators.length; x++) {
-                    var decnode = node.decorators[x];
-                    var ex: any = decnode.expression;
-                    if (ex.expression === undefined) {
-                        dec[ex.text] = [];//Annotation without parameter
-                    } else {
-                        if (ex.expression.text === "$Class")
-                            sclass = this.convertArgument(ex.arguments[0]);
-                        else {
-                            if (dec[ex.expression.text] === undefined) {
-                                dec[ex.expression.text] = [];
-                            }
-                            for (var a = 0; a < ex.arguments.length; a++) {
-                                dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+            if (node["modifiers"] !== undefined) {
+                var dec;
+                for (var m = 0; m < node["modifiers"].length; m++) {
+                    var decnode: ts.Decorator = node["modifiers"][m];
+                   
+                    if (decnode.kind === ts.SyntaxKind.Decorator) {
+                        //if (node.decorators !== undefined) {
+                        if(dec===undefined)
+                            dec = {};
+                        var sclass = undefined;
+                        //for (let x = 0; x < node.decorators.length; x++) {
+                        // var decnode = node.decorators[x];
+                        var ex: any = decnode.expression;
+                        if (ex.expression === undefined) {
+                            dec[ex.text] = [];//Annotation without parameter
+                        } else {
+                            if (ex.expression.text === "$Class")
+                                sclass = this.convertArgument(ex.arguments[0]);
+                            else {
+                                if (dec[ex.expression.text] === undefined) { 
+                                    dec[ex.expression.text] = [];
+                                }
+                                for (var a = 0; a < ex.arguments.length; a++) {
+                                    dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                }
                             }
                         }
                     }
@@ -181,39 +189,42 @@ export abstract class Indexer {
                 for (let x = 0; x < node["members"].length; x++) {
                     var member = node["members"][x];
                     var membername = node["members"][x].name?.escapedText;
-                    if (member.decorators !== undefined) {
-                        if (!dec["@members"])
-                            dec["@members"] = {}
 
-                        var decm = {};
-                        dec["@members"][membername] = decm;
-                        for (let x = 0; x < member.decorators.length; x++) {
-                            var decnode = member.decorators[x];
-                            var ex: any = decnode.expression;
+                    if (member["modifiers"] !== undefined) {
 
-                            if (ex.expression === undefined) {
-                                decm[ex.text] = [];//Annotation without parameter
-                            } else {
-                                if (ex.expression.text === "$Property") {
-                                    //do nothing;
+                        for (var m = 0; m < member["modifiers"].length; m++) {
+                            var decnode: ts.Decorator = member["modifiers"][m];
+                            if (decnode.kind === ts.SyntaxKind.Decorator) {
+                                //if (member.decorators !== undefined) {
+                                if (!dec["@members"]) 
+                                    dec["@members"] = {}
+                                var decm = {};
+                                dec["@members"][membername] = decm;
+                                //for (let x = 0; x < member.decorators.length; x++) {
+                                //  var decnode = member.decorators[x];
+                                var ex: any = decnode.expression;
+                                if (ex.expression === undefined) {
+                                    decm[ex.text] = [];//Annotation without parameter
                                 } else {
-                                    if (decm[ex.expression.text] === undefined) {
-                                        decm[ex.expression.text] = [];
-                                    }
-                                    for (var a = 0; a < ex.arguments.length; a++) {
-                                        decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                    if (ex.expression.text === "$Property") {
+                                        //do nothing;
+                                    } else {
+                                        if (decm[ex.expression.text] === undefined) {
+                                            decm[ex.expression.text] = [];
+                                        }
+                                        for (var a = 0; a < ex.arguments.length; a++) {
+                                            decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                        }
                                     }
                                 }
                             }
                         }
-                        if (Object.keys(dec["@members"][membername]).length === 0) {
-                            delete dec["@members"][membername];
+                        if (dec&&dec["@members"]&&Object.keys(dec["@members"][membername]).length === 0) {
+                            delete dec["@members"][membername]; 
                         }
                     }
 
-
                 }
-
             }
         }
         depth++;

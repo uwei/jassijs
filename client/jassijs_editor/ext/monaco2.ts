@@ -39,7 +39,7 @@ async function test(){
       }*/
     s=s.replace("async getCompletionsAtPosition(fileName, position)","async getCompletionsAtPosition(fileName, position,settings)");
     s=s.replace("this._languageService.getCompletionsAtPosition(fileName, position, void 0);","this._languageService.getCompletionsAtPosition(fileName, position, settings);");
-    
+    s=s.replace("var factory2 =","var factory2 = globalThis.tsfactory =")
     navigator.serviceWorker.controller.postMessage({
         type: 'SAVE_FILE',
         filename:(monacopath+"/vs/language/typescript/tsWorker.js"),

@@ -31,7 +31,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel"], funct
        */
         var ret = Component_1.React.createElement(Panel_1.Panel, null,
             Component_1.React.createElement("span", null),
-            "ha12hallo",
+            "ha12hallwo",
             Component_1.React.createElement("span", null),
             "o",
             Component_1.React.createElement("span", { style: { "color": "red" } },
@@ -43,20 +43,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel"], funct
             "hall o",
             Component_1.React.createElement("br", null),
             Component_1.React.createElement("span", null,
-                Component_1.React.createElement("u", null, "endeende")),
-            "ka da",
-            Component_1.React.createElement("br", null),
-            "dd",
-            Component_1.React.createElement("br", null),
-            "ddddd",
-            Component_1.React.createElement("br", null),
-            "asd",
-            Component_1.React.createElement("span", { style: { "fontWeight": "bold" } }, "fa"),
-            Component_1.React.createElement("br", null),
-            "asdfasdfasdf",
-            Component_1.React.createElement("br", null),
-            "asdf asdf",
-            Component_1.React.createElement("br", null),
+                Component_1.React.createElement("u", null)),
             Component_1.React.createElement("br", null));
         var comp = (0, Component_1.createComponent)(ret);
         return comp;
