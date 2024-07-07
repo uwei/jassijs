@@ -27,13 +27,13 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.resolveState = resolveState;
     function createStates(initialValues = {}) {
-        var data = Object.assign({ _used: [] }, initialValues);
+        var data = { _used: [], _data: initialValues };
         return new Proxy(data, {
             get(target, key) {
                 if (key === "_onconfig")
                     return target._onconfig;
                 if (target[key] === undefined) {
-                    target[key] = createState(data[key]);
+                    target[key] = createState(data._data[key]);
                     if (target._used.indexOf(key) === -1)
                         target._used.push(key);
                 }
@@ -50,7 +50,8 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.createStates = createStates;
     function createRefs(data = {}) {
-        data.refs = new Proxy(data, {
+        var me = {};
+        var ret = new Proxy(me, {
             get(target, key) {
                 if (target[key] === undefined) {
                     target[key] = {
@@ -67,7 +68,7 @@ define(["require", "exports"], function (require, exports) {
                 return target[key];
             }
         });
-        return data;
+        return ret;
     }
     exports.createRefs = createRefs;
     class State {
@@ -137,8 +138,8 @@ define(["require", "exports"], function (require, exports) {
     exports.createRef = createRef;
     function test() {
         var me = { a: 6 };
-        var params = createRefs(me);
-        params.refs.hallo.current = "JJJ";
+        var refs = createRefs(me);
+        refs.hallo.current = "JJJ";
         console.log(me.hallo);
     }
     exports.test = test;

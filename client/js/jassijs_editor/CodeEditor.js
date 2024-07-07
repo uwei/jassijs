@@ -357,21 +357,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     }
                 }
             }
-            if (this.file.toLocaleLowerCase().endsWith(".tsx")) {
-                for (var x = 0; x < thecomponent.dom.children.length; x++) {
-                    var ch = thecomponent.dom.children[x];
-                    if (ch._this) {
-                        this.fillVariablesAndSetupParser(url, root, ch._this, cache, parser, codePositions);
-                    }
+            // if (this.file.toLocaleLowerCase().endsWith(".tsx")) {
+            for (var x = 0; x < thecomponent.dom.childNodes.length; x++) { //children
+                var ch = thecomponent.dom.childNodes[x];
+                if (ch._this) {
+                    this.fillVariablesAndSetupParser(url, root, ch._this, cache, parser, codePositions);
                 }
             }
-            else {
-                if (thecomponent["_components"]) {
-                    for (var x = 0; x < thecomponent["_components"].length; x++) {
-                        this.fillVariablesAndSetupParser(url, root, thecomponent["_components"][x], cache, parser, codePositions);
-                    }
-                }
-            }
+            /* } else {
+                 if (thecomponent["_components"]) {
+                     for (var x = 0; x < thecomponent["_components"].length; x++) {
+                         this.fillVariablesAndSetupParser(url, root, thecomponent["_components"][x], cache, parser, codePositions);
+                     }
+                 }
+             }*/
             if (thecomponent === root) {
                 //fertig
                 var hh = 0;
@@ -393,10 +392,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
                 //setupClasscope
                 var foundscope;
-                for (var xx = 0; xx < cache[root._id].length; xx++) {
-                    foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
-                    if (foundscope)
-                        break;
+                if (cache[root._id]) {
+                    for (var xx = 0; xx < cache[root._id].length; xx++) {
+                        foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
+                        if (foundscope)
+                            break;
+                    }
                 }
                 var scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }];
                 if (foundscope)
@@ -404,14 +405,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 if (this.file.toLowerCase().endsWith(".tsx")) {
                     //@ts-ignore
                     values = Object.values(codePositions);
-                    parser.parse(this._codePanel.value, undefined, values);
+                    parser.parse(this._codePanel.value, undefined, values, true);
                     for (var x = 0; x < values.length; x++) {
                         this.variables.addVariable(values[x].name, values[x].component, false);
                     }
                     // this.variables.addVariable(sname, val.component, false);
                 }
                 else {
-                    parser.parse(this._codePanel.value, scope);
+                    parser.parse(this._codePanel.value, undefined, values); //scope);
                     //if layout is rendered and an other variable is assigned to this, then remove ths variable
                     if (parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name] && parser.classes[(_f = root === null || root === void 0 ? void 0 : root.constructor) === null || _f === void 0 ? void 0 : _f.name].members["layout"]) {
                         useThis = true;
@@ -533,6 +534,34 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         });
                     }*/
         }
+        hookComponents(name, component, react) {
+            var _a, _b, _c;
+            if (name === "create") {
+                if ((_a = component === null || component === void 0 ? void 0 : component.props) === null || _a === void 0 ? void 0 : _a["__stack"]) {
+                    component["__stack"] = component.props["__stack"];
+                    delete component.props["__stack"];
+                }
+                else {
+                    var ex = new Error();
+                    if (((_b = ex === null || ex === void 0 ? void 0 : ex.stack) === null || _b === void 0 ? void 0 : _b.indexOf("$temp.js")) === -1) {
+                        ex = {};
+                        //@ts-ignore
+                        Error.captureStackTrace(ex, Component_1.createComponent);
+                    }
+                    if (((_c = ex === null || ex === void 0 ? void 0 : ex.stack) === null || _c === void 0 ? void 0 : _c.indexOf("$temp.js")) != -1) {
+                        if (react === "React.createElement") {
+                            if ((component === null || component === void 0 ? void 0 : component.props) === undefined)
+                                component.props = {};
+                            component.props["__stack"] = ex.stack;
+                        }
+                        else {
+                            //
+                            component["__stack"] = ex.stack;
+                        }
+                    }
+                }
+            }
+        }
         async _evalCodeOnLoad(data) {
             this.variables.clear();
             var code = this._codePanel.value;
@@ -558,30 +587,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             //@ts-ignore
             if (data.test !== undefined || window.reportdesign) {
                 //capure created Components
-                function hook(name, component, react) {
-                    var _a, _b;
-                    if (name === "create") {
-                        var ex = new Error();
-                        if (((_a = ex === null || ex === void 0 ? void 0 : ex.stack) === null || _a === void 0 ? void 0 : _a.indexOf("$temp.js")) != -1) {
-                            if (react === "React.createElement") {
-                                if ((component === null || component === void 0 ? void 0 : component.props) === undefined)
-                                    component.props = {};
-                                component.props["__stack"] = ex.stack;
-                            }
-                            else {
-                                //
-                                if ((_b = component === null || component === void 0 ? void 0 : component.props) === null || _b === void 0 ? void 0 : _b["__stack"]) {
-                                    component["__stack"] = component.props["__stack"];
-                                    delete component.props["__stack"];
-                                }
-                                else
-                                    component["__stack"] = ex.stack;
-                            }
-                        }
-                    }
-                }
                 try {
-                    Component_1.Component.onComponentCreated(hook);
+                    Component_1.Component.onComponentCreated(this.hookComponents);
                     var ret;
                     if (data.test) {
                         ret = await data.test(new Test_1.Test());
@@ -595,7 +602,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                             };
                         }
                         else {
-                            Component_1.Component.offComponentCreated(hook);
+                            Component_1.Component.offComponentCreated(this.hookComponents);
                             return;
                         }
                     }
@@ -607,7 +614,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     //  });
                 }
                 finally {
-                    Component_1.Component.offComponentCreated(hook);
+                    Component_1.Component.offComponentCreated(this.hookComponents);
                 }
             }
         }

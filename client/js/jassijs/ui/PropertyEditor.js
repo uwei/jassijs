@@ -546,12 +546,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          */
         addVariableInCode(type, scopename, suggestedName = undefined) {
             var val = this.codeEditor.getObjectFromVariable("this");
-            var ret = this.parser.addVariableInCode(type, undefined, scopename, suggestedName);
+            var codeHasChanged = {};
+            var ret = this.parser.addVariableInCode(type, undefined, scopename, suggestedName, codeHasChanged);
             /* var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
              { classname: undefined, methodname: "test" }], scopename);
-             */ this.codeEditor.value = this.parser.getModifiedCode();
-            this.updateParser();
-            this.callEvent("codeChanged", {});
+             */
+            if ((codeHasChanged === null || codeHasChanged === void 0 ? void 0 : codeHasChanged.value) === false) {
+            }
+            else {
+                this.codeEditor.value = this.parser.getModifiedCode();
+                this.updateParser();
+                this.callEvent("codeChanged", {});
+            }
             return ret;
         }
         /**

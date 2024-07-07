@@ -166,9 +166,35 @@ declare global {
         createElement(atype: any, props, ...children);
     }
 }
+export function jc(type: "input", props?: React.InputHTMLAttributes<HTMLInputElement> & React.ClassAttributes<HTMLInputElement> | null, ...children: React.ReactNode[]): React.DetailedReactHTMLElement<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+export function jc<P extends React.HTMLAttributes<T>, T extends HTMLElement>(type: keyof React.ReactHTML, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.DetailedReactHTMLElement<P, T>;
+export function jc<P extends React.SVGAttributes<T>, T extends SVGElement>(type: keyof React.ReactSVG, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.ReactSVGElement;
+export function jc<P extends React.DOMAttributes<T>, T extends Element>(type: string, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.DOMElement<P, T>;
 
+
+export function jc<P extends {}>(type: React.FunctionComponent<P>, props?: React.Attributes & P | null, ...children: React.ReactNode[]): React.FunctionComponentElement<P>;
+export function jc<P extends {}>(type: React.ClassType<P, React.ClassicComponent<P, React.ComponentState>, React.ClassicComponentClass<P>>, props?: React.ClassAttributes<React.ClassicComponent<P, React.ComponentState>> & P | null, ...children: React.ReactNode[]): React.CElement<P, React.ClassicComponent<P, React.ComponentState>>;
+export function jc<P extends {}, T extends React.Component<P, React.ComponentState>, C extends React.ComponentClass<P>>(type: React.ClassType<P, T, C>, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.CElement<P, T>;
+export function jc<P extends {}>(type: React.FunctionComponent<P> | React.ComponentClass<P> | string, props?: React.Attributes & P | null, ...children: React.ReactNode[]): React.ReactElement<P>;
+
+export function jc(type: any, props: any, ...children: any[]): any {
+    return React.createElement(type, props, ...children);
+}
+function createFunctionComponent<P extends {}>(
+    type: React.FunctionComponent<P>,
+    props?: React.Attributes & P | null,
+    ...children: React.ReactNode[]): FunctionComponent<P> {
+    var p: any = props || {};
+    p.renderFunc = type;
+    var ret = new FunctionComponent(p);
+    return ret;
+}
 window.React = React;
-export function createComponent(node: React.ReactNode) {//node: { key: string, props: any, type: any }):Component {
+export function createComponent<T>(node: React.FunctionComponentElement<T>): FunctionComponent<T>;
+export function createComponent<T>(node: React.ReactElement<T>): T;//node: { key: string, props: any, type: any }):Component {
+
+
+export function createComponent(node: React.ReactNode): any {//node: { key: string, props: any, type: any }):Component {
     var atype = (<any>node).type;
     var props = (<any>node).props;
     var ret;
@@ -183,10 +209,10 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
             var p = props || {};
             p.renderFunc = atype;
             ret = new FunctionComponent(p);
-            
+
         } else {
             ret = new atype(props);
-   
+
         }
     }
     if ((<any>node)?.props?.children !== undefined) {
@@ -211,6 +237,7 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
                 cchild.tag = "";
 
                 cchild.text = child;
+               
 
                 //child.dom = nd;
             } else if (child?._observe_) {
@@ -218,7 +245,7 @@ export function createComponent(node: React.ReactNode) {//node: { key: string, p
                 cchild.tag = "";
                 child?._observe_(cchild, "text", "property");
                 cchild.text = child.current;
-
+              
 
 
             } else {
@@ -281,7 +308,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     }
     private _rerenderMe(firstTime = false) {
 
-        var rend = this.render();
+        var rend = this.render(this.states);
         if (rend) {
             if (rend instanceof Node) {
                 this._initComponent(<any>rend);
@@ -303,7 +330,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     componentDidMount() {
 
     }
-    render(): React.ReactNode {
+    render() {
         return undefined;
     }
     /*  rerender() {
@@ -341,12 +368,12 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
                         me[key] = config[key];
 
                 }
-            } else if (this.states&&this.states._used.indexOf(key) !== -1) {
+            } else if (this.states && this.states._used.indexOf(key) !== -1) {
                 this.states[key].current = config[key];
             } else
                 notfound[key] = con;
         }
-        if(this.states?._onconfig) 
+        if (this.states?._onconfig)
             this.states._onconfig(config);
         Object.assign(this.props === undefined ? {} : this.props, config);
         if (Object.keys(notfound).length > 0) {
@@ -571,7 +598,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         var oldwrapper = this.domWrapper;
         var olddom = this.dom;
         if (olddom?.parentNode) {
-            olddom.parentNode.replaceChild(olddom, dom);
+            olddom.parentNode.replaceChild(dom, olddom);
         }
         this.dom = dom;
         if (oldwrapper === olddom)
@@ -805,21 +832,24 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         throw new Error("not implemented");
     }
 }
-interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
+/*interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
     tag?: string;
     children?;
     renderFunc;
     calculateState?: (prop) => void;
-}
-export class FunctionComponent<T extends FunctionComponentProperties> extends Component<FunctionComponentProperties> {
+}*/
+export class FunctionComponent<T> extends Component<T> {
     _components: Component[] = [];
     _designDummy: any;
-    constructor(properties: FunctionComponentProperties) {
+    constructor(properties: T) {
         super(properties);
     }
-
+    config(config: T, forceRender = false): FunctionComponent<T> {
+        super.config(config);
+        return this;
+    }
     render() {
-        var Rend = this.props.renderFunc;
+        var Rend = (<any>this.props).renderFunc;
         var ret: any = <React.ReactNode>new Rend(this.props, this.states);
         if (ret.props.calculateState) {
             //@ts-ignore

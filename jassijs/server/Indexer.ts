@@ -215,11 +215,11 @@ export abstract class Indexer {
                                         for (var a = 0; a < ex.arguments.length; a++) {
                                             decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
                                         }
-                                    }
+                                    } 
                                 }
                             }
                         }
-                        if (dec&&dec["@members"]&&Object.keys(dec["@members"][membername]).length === 0) {
+                        if (dec&&dec["@members"]&&dec["@members"][membername]&&Object.keys(dec["@members"][membername]).length === 0) {
                             delete dec["@members"][membername]; 
                         }
                     }

@@ -33,14 +33,15 @@ interface P {
 
 export type States<T> = { [Property in keyof T]: State<T[Property]> } & { _used: string[], _onconfig?: (props) => void };
 export function createStates<T>(initialValues: T = <any>{}): States<T> {
-    var data = Object.assign({ _used: [] }, initialValues);
+    var data ={ _used: [] , _data:initialValues};
 
     return new Proxy(data as any, {
         get(target, key: string) {
+
             if (key === "_onconfig")
                 return target._onconfig;
             if (target[key] === undefined) {
-                target[key] = createState(data[key]);
+                target[key] = createState(data._data[key]);
                 if (target._used.indexOf(key) === -1)
                     target._used.push(key);
             }
@@ -60,8 +61,9 @@ export type OnlyType<T, D> = { [K in keyof T as  T[K] extends D ? K : never]: T[
 export type DropType<T, D> = { [K in keyof T as  T[K] extends D ? never : K]: T[K] };
 export type GroupState<T> = DropType<T, State> & { readonly refs: { readonly [Property in keyof DropType<T, State>]-?: any } } &
 { readonly states: { readonly [Property in keyof OnlyType<T, State>]-?: T[Property] } }
-export function createRefs<T>(data: any = {}): T&{ readonly refs: { readonly [Property in keyof T]-?:{ current: T[Property] } } } {
-    data.refs = new Proxy(data as any, {
+export function createRefs<T>(data: T = <any>{}):  { readonly [Property in keyof T]-?:{ current: T[Property] } }  {
+    var me={};
+    var ret=new Proxy(me, {
         get(target, key: string) {
             if (target[key] === undefined) {
                 target[key] = {
@@ -77,9 +79,9 @@ export function createRefs<T>(data: any = {}): T&{ readonly refs: { readonly [Pr
             }
             return target[key];
         }
-    })
+    });
   
-    return data;
+    return ret;
 }
 
 export class State<T = {}> {
@@ -156,8 +158,8 @@ interface Me {
 
 export function test() {
     var me: Me = <any>{ a: 6 }
-    var params = createRefs<Me>(me);
+    var refs = createRefs<Me>(me);
 
-    params.refs.hallo.current = "JJJ";
+    refs.hallo.current = "JJJ";
     console.log(me.hallo);
 }

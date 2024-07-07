@@ -1,12 +1,14 @@
-import { createState, States } from "jassijs/ui/State";
+import { createState, createStates, State, States } from "jassijs/ui/State";
 import { createComponent, React } from "jassijs/ui/Component";
 import { Panel } from "jassijs/ui/Panel";
+import { Button } from "jassijs/ui/Button";
 
-interface MyCompProp{
+export interface MyCompProp{
     mycolor?:string;
     mytext?:string;
     
 }
+
 export function MyComp(props:MyCompProp,states:States<MyCompProp>=undefined){
     
     states._onconfig=(props:MyCompProp)=>{
@@ -26,9 +28,8 @@ export function MyComp(props:MyCompProp,states:States<MyCompProp>=undefined){
 
     </Panel>;
 }
-
 export function test() {
-    
+
            // calculateState
     
     var ret = <MyComp mycolor="yellow" mytext="Top"></MyComp>

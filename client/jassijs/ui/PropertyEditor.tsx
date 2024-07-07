@@ -24,11 +24,11 @@ declare global {
         getPropertyEditorActions?: { propertyEditor: PropertyEditor, actions: Action[] }
     }
 }
-export interface ParserInterface{
+export interface ParserInterface {
     sourceFile;//: ts.SourceFile = undefined;
     typeMeNode;//: ts.Node;
     typeMe: { [name: string]: any/*Entry*/ };// = {};
-    classes: { [name: string]:any/* ParsedClass*/ };// = {};
+    classes: { [name: string]: any/* ParsedClass*/ };// = {};
     imports: { [name: string]: string };// = {};
     functions: { [name: string]: ts.Node };// = {};
     variables: { [name: string]: ts.Node };// = {};
@@ -38,12 +38,12 @@ export interface ParserInterface{
     data: { [variable: string]: { [property: string]: any[] } };
     getModifiedCode(): string;
     addTypeMe(name: string, type: string);
-     /**
-    * parse the code 
-    * @param {string} code - the code
-    * @param {string} onlyfunction - only the code in the function is parsed, e.g. "layout()"
-    */
-     parse(code: string, classScope?: { classname: string, methodname?: string }[] );
+    /**
+   * parse the code 
+   * @param {string} code - the code
+   * @param {string} onlyfunction - only the code in the function is parsed, e.g. "layout()"
+   */
+    parse(code: string, classScope?: { classname: string, methodname?: string }[]);
     /**
      * add import {name} from file
      * @param name 
@@ -51,7 +51,7 @@ export interface ParserInterface{
      */
     addImportIfNeeded(name: string, file: string);
     //searchClassnode(node: ts.Node, pos: number);
-    getClassScopeFromPosition(code: string, pos: number): { classname: string, methodname: string } ;
+    getClassScopeFromPosition(code: string, pos: number): { classname: string, methodname: string };
 
     /** 
      * modify a member 
@@ -68,7 +68,7 @@ export interface ParserInterface{
      * removes the variable from code
      * @param {string} varname - the variable to remove
      */
-    removeVariablesInCode(varnames: string[]) ;
+    removeVariablesInCode(varnames: string[]);
     /**
      * gets the next variablename
      * */
@@ -86,12 +86,12 @@ export interface ParserInterface{
     */
     setPropertyInCode(variableName: string, property: string, value: string | any/*ts.Node*/,
         classscope: { classname: string, methodname: string }[],
-        isFunction: boolean, replace: boolean ,
+        isFunction: boolean, replace: boolean,
         before?: { variablename: string, property: string, value?},
-        variablescope?: { variablename: string, methodname } ) ;
-     /**
-     * swaps two statements indendified by  functionparameter in a variable.property(parameter1) with variable.property(parameter2)
-     **/
+        variablescope?: { variablename: string, methodname });
+    /**
+    * swaps two statements indendified by  functionparameter in a variable.property(parameter1) with variable.property(parameter2)
+    **/
     swapPropertyWithParameter(variable: string, property: string, parameter1: string, parameter2: string);
     /**
     * adds an Property
@@ -100,7 +100,9 @@ export interface ParserInterface{
     * @param variablescope - the scope where the variable should be insert e.g. hallo.onclick
     * @returns  the name of the object
     */
-    addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope?: { variablename: string, methodname } , suggestedName?): string;
+    addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope?: { variablename: string, methodname }, suggestedName?, codeHasChanged?): string;
+
+    //addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope?: { variablename: string, methodname } , suggestedName?): string;
     getPropertyValue(variable, property): any;
 }
 @$Class("jassijs.ui.PropertyEditor")
@@ -123,10 +125,10 @@ export class PropertyEditor extends Panel {
     */
     constructor(codeEditor = undefined, parser = undefined) {
         super();
-        this.table = createComponent(this.createTable())as any;
+        this.table = createComponent(this.createTable()) as any;
         this.toolbar = new Panel();
         this.parser = parser;
-      
+
         this.add(this.toolbar);
         this.add(this.table);
 
@@ -150,22 +152,22 @@ export class PropertyEditor extends Panel {
 
     }
     createTable() {
-        return <table style={{tableLayout: "fixed",fontSize:"11px"}}>
-        <thead>
-            <tr>
-                <th className="propertyeditorheader">Name</th>
-                <th className="propertyeditorheader">Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr className="propertyeditorrow">
-                <td >a1</td><td>b1</td>
-            </tr>
-        </tbody>
+        return <table style={{ tableLayout: "fixed", fontSize: "11px" }}>
+            <thead>
+                <tr>
+                    <th className="propertyeditorheader">Name</th>
+                    <th className="propertyeditorheader">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr className="propertyeditorrow">
+                    <td >a1</td><td>b1</td>
+                </tr>
+            </tbody>
         </table>;
     }
     componentDidMount(): void {
-       
+
     }
     /**
      * adds a new property
@@ -313,7 +315,7 @@ export class PropertyEditor extends Panel {
             this.codeChanges = {};
         if (value !== undefined || value?.dom !== undefined) {
             //if (!$(value.dom).is(":focus"))
-            if (value.dom && document.activeElement !== value.dom&&value.dom.focus)
+            if (value.dom && document.activeElement !== value.dom && value.dom.focus)
                 (value.dom as HTMLElement).focus();
         }
         if (value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
@@ -339,7 +341,7 @@ export class PropertyEditor extends Panel {
             this._value = value;
         } else
             this._value = value;
-        if (Array.isArray(value)&&value.length === 0) {
+        if (Array.isArray(value) && value.length === 0) {
             this._value = undefined;
             this.addActions();
             return;
@@ -465,7 +467,7 @@ export class PropertyEditor extends Panel {
             } else {
                 _this.properties[props[x].name] = { isVisible: props[x].isVisible, name: props[x].name, component: undefined, description: props[x].description };
 
-                var editor:Editor = propertyeditor.createFor(props[x], _this) as Editor;
+                var editor: Editor = propertyeditor.createFor(props[x], _this) as Editor;
                 if (editor["then"]) {//editor is not loaded yet
                     editorNotLoaded.push(editor);
 
@@ -635,7 +637,7 @@ export class PropertyEditor extends Panel {
      * update the parser
      */
     updateParser() {
-        
+
         if (this.codeEditor === undefined)
             return;
         if (this.codeEditor.file.endsWith(".tsx"))
@@ -645,8 +647,8 @@ export class PropertyEditor extends Panel {
         } else {
             var text = this.codeEditor.value;
             var val = this.codeEditor.getObjectFromVariable("this");
-            if (text&&this.parser)
-                this.parser.parse(text); 
+            if (text && this.parser)
+                this.parser.parse(text);
             // this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
         }
     }
@@ -676,12 +678,18 @@ export class PropertyEditor extends Panel {
      */
     addVariableInCode(type: string, scopename: { variablename: string, methodname: string }, suggestedName: string = undefined): string {
         var val = this.codeEditor.getObjectFromVariable("this");
-        var ret = this.parser.addVariableInCode(type, undefined, scopename, suggestedName);
-       /* var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
-        { classname: undefined, methodname: "test" }], scopename);
-        */this.codeEditor.value = this.parser.getModifiedCode();
-        this.updateParser();
-        this.callEvent("codeChanged", {});
+        var codeHasChanged: any = {}
+        var ret = this.parser.addVariableInCode(type, undefined, scopename, suggestedName,codeHasChanged);
+        /* var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
+         { classname: undefined, methodname: "test" }], scopename);
+         */
+        if (codeHasChanged?.value === false) {
+
+        } else {
+            this.codeEditor.value = this.parser.getModifiedCode();
+            this.updateParser();
+            this.callEvent("codeChanged", {});
+        }
         return ret;
     }
     /**
@@ -732,8 +740,8 @@ export class PropertyEditor extends Panel {
         if (doUpdate) {
             //correct spaces
             if (value && value.indexOf && value.indexOf("\n") > -1) {
-               // this.codeEditor.value = this.parser.getModifiedCode();
-               // this.updateParser();
+                // this.codeEditor.value = this.parser.getModifiedCode();
+                // this.updateParser();
             }
             this.codeEditor.value = this.parser.getModifiedCode();
             this.updateParser();
@@ -760,15 +768,15 @@ export class PropertyEditor extends Panel {
         }
         if (typeof (this._value[property]) === "function")
             this._value[property](value);
-        else{
-           // if(property==="value"){
-             //   console.log("rerender");
-                //this._value.lastconfig[property]=value;
-                //this._value.rerender();
-           
-                            this._value[property] = value;
+        else {
+            // if(property==="value"){
+            //   console.log("rerender");
+            //this._value.lastconfig[property]=value;
+            //this._value.rerender();
 
-          
+            this._value[property] = value;
+
+
         }
 
     }

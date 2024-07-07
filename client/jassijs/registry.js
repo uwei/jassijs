@@ -555,7 +555,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1684358274000
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1720184378220.3965
+		"date": 1720189282241.5964
 	},
 	"jassijs/server/Installserver.ts": {
 		"date": 1719314261039.9204
@@ -626,7 +626,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Button.ts": {
-		"date": 1719769956955.6282,
+		"date": 1720246151798.6426,
 		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
@@ -670,16 +670,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1720029726396.1758,
-		"jassijs.ui.Component": {
-			"$Property": [
-				{
-					"name": "testuw",
-					"type": "string"
-				}
-			],
-			"@members": {}
-		},
+		"date": 1720369178580.0686,
 		"jassijs.ui.HTMLComponent": {
 			"@members": {}
 		},
@@ -973,31 +964,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1719771104740.193,
-		"jassijs.ui.Panel": {
-			"$UIComponent": [
-				{
-					"fullPath": "common/Panel",
-					"icon": "mdi mdi-checkbox-blank-outline",
-					"editableChildComponents": [
-						"this"
-					]
-				}
-			],
-			"$Property": [
-				{
-					"name": "new",
-					"type": "json",
-					"componentType": "jassijs.ui.PanelProperties"
-				},
-				{
-					"name": "new/useSpan",
-					"type": "boolean",
-					"default": false
-				}
-			],
-			"@members": {}
-		}
+		"date": 1720244797759.2253
 	},
 	"jassijs/ui/Property.ts": {
 		"date": 1658347724000,
@@ -1397,7 +1364,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/ui/State.ts": {
-		"date": 1720185196172.8337
+		"date": 1720252991952.6306
 	}
 }
  }

@@ -58,7 +58,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
                 Windows_1.default.addLeft(new SearchExplorer_1(), "Search");
         }
         async doSearch() {
-            var typescript = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); }).then(__importStar)).default;
+            var typescript = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); }).then(__importStar)).mytypescript;
             var all = [];
             var files = []; // [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
             var toFind = this.search.value.toLocaleLowerCase();
@@ -107,7 +107,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
                     var pos = evt.data.pos;
                     var file = evt.data.file;
                     new Promise((resolve_2, reject_2) => { require(["jassijs_editor/util/Typescript"], resolve_2, reject_2); }).then(__importStar).then(Typescript => {
-                        var text = Typescript.default.getCode(file);
+                        var text = Typescript.mytypescript.getCode(file);
                         var line = text.substring(0, pos).split("\n").length;
                         Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
                     });

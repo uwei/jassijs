@@ -207,7 +207,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config",
                                     }
                                 }
                             }
-                            if (dec && dec["@members"] && Object.keys(dec["@members"][membername]).length === 0) {
+                            if (dec && dec["@members"] && dec["@members"][membername] && Object.keys(dec["@members"][membername]).length === 0) {
                                 delete dec["@members"][membername];
                             }
                         }

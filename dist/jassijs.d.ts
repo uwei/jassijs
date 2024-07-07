@@ -1511,7 +1511,7 @@ declare module "jassijs/ui/Component" {
         constructor(properties?: ComponentProperties);
         private _rerenderMe;
         componentDidMount(): void;
-        render(): React.ReactNode;
+        render(states?: any): React.ReactNode;
         config(config: T): Component;
         /**
          * called if the component is created

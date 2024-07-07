@@ -9,11 +9,11 @@ import registry from "jassijs/remote/Registry";
 import { Server } from "jassijs/remote/Server";
 import { Reloader } from "jassijs/util/Reloader";
 import { classes } from "jassijs/remote/Classes";
-import { Component } from "jassijs/ui/Component";
+import { Component, createComponent } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 
 import { AcePanel } from "jassijs_editor/AcePanel";
-import {mytypescript, Typescript } from "jassijs_editor/util/Typescript";
+import { mytypescript, Typescript } from "jassijs_editor/util/Typescript";
 import { MonacoPanel } from "jassijs_editor/MonacoPanel";
 import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { Test } from "jassijs/remote/Test";
@@ -361,7 +361,7 @@ export class CodeEditor extends Panel {
         this.variables.addAll(variables);
     }
     private async fillVariablesAndSetupParser(url: string, root: Component, thecomponent: Component, cache: { [componentid: string]: [{ component: Component, line: number, column: number, pos: number, name: string }] }, parser, codePositions) {
-        
+
         var useThis = false;
         var connectedComponents = [thecomponent];
         if (thecomponent.__dom._thisOther)
@@ -369,7 +369,7 @@ export class CodeEditor extends Panel {
         for (var i = 0; i < connectedComponents.length; i++) {
             var component = connectedComponents[i];
 
-            if (cache[component._id] === undefined && component["__stack"] !== undefined && (component?.dom?.classList===undefined || !component.dom.classList.contains("designdummy"))) {
+            if (cache[component._id] === undefined && component["__stack"] !== undefined && (component?.dom?.classList === undefined || !component.dom.classList.contains("designdummy"))) {
                 var lines = component["__stack"]?.split("\n");
                 for (var x = 0; x < lines.length; x++) {
                     var sline: string = lines[x];
@@ -395,20 +395,20 @@ export class CodeEditor extends Panel {
                 }
             }
         }
-        if (this.file.toLocaleLowerCase().endsWith(".tsx")) {
-            for (var x = 0; x < thecomponent.dom.children.length; x++) {
-                var ch = thecomponent.dom.children[x];
+       // if (this.file.toLocaleLowerCase().endsWith(".tsx")) {
+            for (var x = 0; x < thecomponent.dom.childNodes.length; x++) {//children
+                var ch = <any>thecomponent.dom.childNodes[x];
                 if (ch._this) {
                     this.fillVariablesAndSetupParser(url, root, ch._this, cache, parser, codePositions);
                 }
             }
-        } else {
+       /* } else {
             if (thecomponent["_components"]) {
                 for (var x = 0; x < thecomponent["_components"].length; x++) {
                     this.fillVariablesAndSetupParser(url, root, thecomponent["_components"][x], cache, parser, codePositions);
                 }
             }
-        }
+        }*/
 
         if (thecomponent === root) {
             //fertig
@@ -434,10 +434,12 @@ export class CodeEditor extends Panel {
             }
             //setupClasscope
             var foundscope;
-            for (var xx = 0; xx < cache[root._id].length; xx++) {
-                foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
-                if (foundscope)
-                    break;
+            if (cache[root._id]) {
+                for (var xx = 0; xx < cache[root._id].length; xx++) {
+                    foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
+                    if (foundscope)
+                        break;
+                }
             }
             var scope = [{ classname: root?.constructor?.name, methodname: "layout" }];
             if (foundscope)
@@ -445,14 +447,14 @@ export class CodeEditor extends Panel {
             if (this.file.toLowerCase().endsWith(".tsx")) {
                 //@ts-ignore
                 values = Object.values(codePositions);
-                parser.parse(this._codePanel.value, undefined, values);
+                parser.parse(this._codePanel.value, undefined, values, true);
                 for (var x = 0; x < values.length; x++) {
                     this.variables.addVariable(values[x].name, values[x].component, false);
                 }
                 // this.variables.addVariable(sname, val.component, false);
 
             } else {
-                parser.parse(this._codePanel.value, scope);
+                parser.parse(this._codePanel.value,undefined,values); //scope);
                 //if layout is rendered and an other variable is assigned to this, then remove ths variable
                 if (parser.classes[root?.constructor?.name] && parser.classes[root?.constructor?.name].members["layout"]) {
                     useThis = true;
@@ -519,10 +521,10 @@ export class CodeEditor extends Panel {
             //   var Parser = classes.getClass("jassijs_editor.base.Parser");
 
             var ComponentDesigner;
-           // if (this.file.toLowerCase().endsWith(".tsx"))
-                ComponentDesigner = await classes.loadClass("jassijs_editor.HtmlDesigner");
-           // else
-             //   ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
+            // if (this.file.toLowerCase().endsWith(".tsx"))
+            ComponentDesigner = await classes.loadClass("jassijs_editor.HtmlDesigner");
+            // else
+            //   ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
 
             var Parser = await classes.loadClass("jassijs_editor.util.Parser");
             var parser = new Parser();
@@ -535,10 +537,10 @@ export class CodeEditor extends Panel {
             }
             //@ts-ignore
             _this._design.connectParser(parser);
-           
+
             var codePositions = {};
             await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser, codePositions);
-             (<any>_this._design).designedComponent = ret;
+            (<any>_this._design).designedComponent = ret;
             (<any>_this._design).editDialog(true);
             //});
         } else if (ret["reportdesign"] !== undefined) {
@@ -588,6 +590,33 @@ export class CodeEditor extends Panel {
                     });
                 }*/
     }
+    private  hookComponents(name, component: Component, react) {
+                if (name === "create") {
+                   
+                    if (component?.props?.["__stack"]) {
+                        component["__stack"] = component.props["__stack"];
+                        delete component.props["__stack"];
+                    } else {
+                        var ex = new Error();
+                        if (ex?.stack?.indexOf("$temp.js") === -1){
+                            ex= <any>{};
+                            //@ts-ignore
+                            Error.captureStackTrace(ex,createComponent);
+                        }
+                     
+                        if (ex?.stack?.indexOf("$temp.js") != -1) {
+                            if (react === "React.createElement") {
+                                if (component?.props === undefined)
+                                    component.props = {};
+                                component.props["__stack"] = ex.stack;
+                            } else {
+                                //
+                                  component["__stack"] = ex.stack;   
+                            }
+                        }
+                    }
+                }
+            }
     private async _evalCodeOnLoad(data) {
         this.variables.clear();
         var code = this._codePanel.value;
@@ -615,27 +644,9 @@ export class CodeEditor extends Panel {
         //@ts-ignore
         if (data.test !== undefined || window.reportdesign) {
             //capure created Components
-            function hook(name, component: Component, react) {
-                if (name === "create") {
-                    var ex = new Error();
-                    if (ex?.stack?.indexOf("$temp.js") != -1) {
-                        if (react === "React.createElement") {
-                            if (component?.props === undefined)
-                                component.props = {};
-                            component.props["__stack"] = ex.stack;
-                        } else {
-                            //
-                            if (component?.props?.["__stack"]) {
-                                component["__stack"] = component.props["__stack"];
-                                delete component.props["__stack"];
-                            } else
-                                component["__stack"] = ex.stack;
-                        }
-                    }
-                }
-            }
+          
             try {
-                Component.onComponentCreated(hook);
+                Component.onComponentCreated(this.hookComponents);
                 var ret;
                 if (data.test) {
                     ret = await data.test(new Test());
@@ -647,7 +658,7 @@ export class CodeEditor extends Panel {
                             reportdesign: window.reportdesign
                         }
                     } else {
-                        Component.offComponentCreated(hook);
+                        Component.offComponentCreated(this.hookComponents);
                         return;
                     }
                 }
@@ -662,7 +673,7 @@ export class CodeEditor extends Panel {
 
                 //  });
             } finally {
-                Component.offComponentCreated(hook);
+                Component.offComponentCreated(this.hookComponents);
             }
         }
 

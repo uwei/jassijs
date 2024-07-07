@@ -1771,16 +1771,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1720029726396.1758,
-                "jassijs.ui.Component": {
-                    "$Property": [
-                        {
-                            "name": "testuw",
-                            "type": "string"
-                        }
-                    ],
-                    "@members": {}
-                },
+                "date": 1720188368031.4324,
                 "jassijs.ui.HTMLComponent": {
                     "@members": {}
                 },
@@ -6640,7 +6631,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         }
         _rerenderMe(firstTime = false) {
             var _a;
-            var rend = this.render();
+            var rend = this.render(this.states);
             if (rend) {
                 if (rend instanceof Node) {
                     this._initComponent(rend);
@@ -6659,7 +6650,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         }
         componentDidMount() {
         }
-        render() {
+        render(states = undefined) {
             return undefined;
         }
         /*  rerender() {
@@ -18763,16 +18754,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1720029726396.1758,
-                "jassijs.ui.Component": {
-                    "$Property": [
-                        {
-                            "name": "testuw",
-                            "type": "string"
-                        }
-                    ],
-                    "@members": {}
-                },
+                "date": 1720188368031.4324,
                 "jassijs.ui.HTMLComponent": {
                     "@members": {}
                 },

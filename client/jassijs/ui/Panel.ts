@@ -36,7 +36,7 @@ export class Panel<T extends PanelProperties=PanelProperties > extends Container
         this._designMode = false;
         this.isAbsolute = properties?.isAbsolute === true;
     }
-    render() {
+    render():React.ReactElement{ 
         var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
         return React.createElement(tag, { ...this.props.domProperties,className: "Panel" });
     }

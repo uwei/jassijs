@@ -14,7 +14,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     "use strict";
     var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.createComponent = exports.React = exports.$UIComponent = exports.UIComponentProperties = void 0;
+    exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.createComponent = exports.jc = exports.React = exports.$UIComponent = exports.UIComponentProperties = void 0;
     Registry_2 = __importDefault(Registry_2);
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
@@ -57,6 +57,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.props = props;
         }
     };
+    function jc(type, props, ...children) {
+        return React.createElement(type, props, ...children);
+    }
+    exports.jc = jc;
+    function createFunctionComponent(type, props, ...children) {
+        var p = props || {};
+        p.renderFunc = type;
+        var ret = new FunctionComponent(p);
+        return ret;
+    }
     window.React = React;
     function createComponent(node) {
         var _a, _b;
@@ -147,7 +157,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         _rerenderMe(firstTime = false) {
             var _a;
-            var rend = this.render();
+            var rend = this.render(this.states);
             if (rend) {
                 if (rend instanceof Node) {
                     this._initComponent(rend);
@@ -419,7 +429,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             var oldwrapper = this.domWrapper;
             var olddom = this.dom;
             if (olddom === null || olddom === void 0 ? void 0 : olddom.parentNode) {
-                olddom.parentNode.replaceChild(olddom, dom);
+                olddom.parentNode.replaceChild(dom, olddom);
             }
             this.dom = dom;
             if (oldwrapper === olddom)
@@ -690,10 +700,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         __metadata("design:paramtypes", [Object])
     ], Component);
     exports.Component = Component;
+    /*interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
+        tag?: string;
+        children?;
+        renderFunc;
+        calculateState?: (prop) => void;
+    }*/
     class FunctionComponent extends Component {
         constructor(properties) {
             super(properties);
             this._components = [];
+        }
+        config(config, forceRender = false) {
+            super.config(config);
+            return this;
         }
         render() {
             var Rend = this.props.renderFunc;

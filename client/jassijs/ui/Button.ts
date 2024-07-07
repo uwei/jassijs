@@ -24,11 +24,11 @@ export interface ButtonProperties extends ComponentProperties{
 
 @$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
 @$Class("jassijs.ui.Button")
-export class Button<T extends ButtonProperties=ComponentProperties> extends Component<T> implements ButtonProperties {
+export class Button<T extends ButtonProperties=ButtonProperties> extends Component<T> implements ButtonProperties {
     constructor(properties:ButtonProperties={}){
         super(properties);
     } 
-    config(config: T,forceRender=false): Button{
+    config(config: T,forceRender=false): Button<T>{
         super.config(config);
         return this;
     }
