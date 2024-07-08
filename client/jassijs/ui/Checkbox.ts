@@ -42,15 +42,15 @@ export class Checkbox<T extends CheckboxProperties = CheckboxProperties> extends
         return React.createElement("div", {},
             React.createElement("input", {
                 ...this.props.domProperties,
-                type: "checkbox",
+                type: "checkbox"
 
-            },
-                React.createElement("span", {
+            }),
+            React.createElement("span", {
                     className: "checkboxtext",
                     style: {
                         width: "100%"
                     }
-                })));
+                }));
     }
 
     config(config: T): Checkbox {
@@ -77,7 +77,7 @@ export class Checkbox<T extends CheckboxProperties = CheckboxProperties> extends
     }
 
     set text(value: string) { //the Code
-        this.domWrapper.querySelector(".checkboxtext").innerHTML = value === undefined ? "" : value;
+        this.domWrapper.querySelector(".checkboxtext").innerHTML = (value === undefined ? "" : value);
     }
     @$Property()
     get text(): string {

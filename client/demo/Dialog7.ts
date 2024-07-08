@@ -1,3 +1,4 @@
+import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
@@ -21,21 +22,32 @@ export class Dialog7 extends Panel {
         var refs = createRefs(this.me);
         //var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
         //
-        return jc(Panel, { label: "hh" },
-            jc(Panel, {},
-                jc("br"), "Hahhh",
-                jc(Checkbox, { text: "eeed" }),
-                jc(Button, {
-                    ref: refs.button1,
-                    text: "Hadds",
-                    onclick: () => {
-                        this.me.button1.text = "pp";
-                        return undefined;
-                    },
-                    tooltip: "dfgdfg",
-                    onfocus: function (event) {
-                    }
-                })));
+        return jc(Panel, {
+            label: "hh",
+            children: [
+                jc(Panel, {
+                    children: [
+                        jc("br"),
+                        "Hsssasa",
+                        jc(Panel, {
+                            children: [
+                                jc(Checkbox, { text: "sss" }),
+                            ]
+                        }),
+                        jc(Button, {
+                            text: "Hadds",
+                            onclick: () => {
+                                this.me.button1.text = "pp";
+                                return undefined;
+                            },
+                            tooltip: "dfgdfg",
+                            onfocus: function (event) {
+                            }
+                        })
+                    ]
+                })
+            ]
+        });
     }
 }
 export async function test() {

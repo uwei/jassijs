@@ -315,6 +315,7 @@ declare module "jassijs_editor/CodeEditor" {
          * load the right editor for the returned value
          */
         private _processEvalResult;
+        private hookComponents;
         private _evalCodeOnLoad;
         private saveTempFile;
         evalServerside(): unknown;
@@ -1174,6 +1175,7 @@ declare module "jassijs_editor/util/Parser" {
         value?: any;
         node?: ts.Node;
         isFunction: boolean;
+        isJc?: boolean;
     }
     class ParsedDecorator {
         node?: ts.Decorator;
@@ -1202,6 +1204,7 @@ declare module "jassijs_editor/util/Parser" {
         };
     }
     export class Parser {
+        isJSX: boolean;
         sourceFile: ts.SourceFile;
         typeMeNode: ts.Node;
         typeMe: {
@@ -1223,7 +1226,7 @@ declare module "jassijs_editor/util/Parser" {
             classname: string;
             methodname: string;
         }[];
-        jsxVariables: any;
+        variabelStack: any;
         code: string;
         /**
         * @member {Object.<string,Object.<string,[object]>> - all properties
@@ -1267,6 +1270,7 @@ declare module "jassijs_editor/util/Parser" {
         private parseDecorator;
         private parseClass;
         private parseConfig;
+        private parseJC;
         private parseProperties;
         private parseJSX;
         private visitNode;
@@ -1281,7 +1285,7 @@ declare module "jassijs_editor/util/Parser" {
         };
         private removePos;
         private createNode;
-        initJSXVariables(values: any[]): void;
+        initvariabelStack(values: any[]): void;
         /**
         * parse the code
         * @param {string} code - the code
@@ -1290,7 +1294,7 @@ declare module "jassijs_editor/util/Parser" {
         parse(code: string, classScope?: {
             classname: string;
             methodname: string;
-        }[], jsxVariables?: any): void;
+        }[], variabelStack?: any, isJSX?: boolean): void;
         private removeNode;
         /**
          * modify a member
@@ -1318,6 +1322,7 @@ declare module "jassijs_editor/util/Parser" {
          */
         private switchToMutlilineIfNeeded;
         private setPropertyInConfig;
+        private setPropertyInJC;
         /**
         * modify the property in code
         * @param variablename - the name of the variable
@@ -1368,7 +1373,9 @@ declare module "jassijs_editor/util/Parser" {
         }[], variablescope?: {
             variablename: string;
             methodname: any;
-        }, suggestedName?: any): string;
+        }, suggestedName?: any, codeHasChanged?: {
+            value: boolean;
+        }): string;
     }
     export function tests(t: Test): any;
     export function test(): any;

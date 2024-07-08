@@ -106,6 +106,19 @@ declare module "demo/Dialog6" {
     }
     export function test(): unknown;
 }
+declare module "demo/Dialog7" {
+    import { Panel } from "jassijs/ui/Panel";
+    import { Button } from "jassijs/ui/Button";
+    type Me = {
+        button1?: Button;
+    };
+    export class Dialog7 extends Panel {
+        me: Me;
+        constructor();
+        render(): any;
+    }
+    export function test(): unknown;
+}
 declare module "demo/EmptyDialog" {
     import { HTMLPanel } from "jassijs/ui/HTMLPanel";
     import { Button } from "jassijs/ui/Button";
@@ -128,7 +141,7 @@ declare module "demo/EmptyDialog" {
 }
 declare module "demo/hallo" {
     import { States } from "jassijs/ui/State";
-    interface MyCompProp {
+    export interface MyCompProp {
         mycolor?: string;
         mytext?: string;
     }

@@ -1656,7 +1656,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1684358274000
             },
             "jassijs/server/Indexer.ts": {
-                "date": 1720184378220.3965
+                "date": 1720189282241.5964
             },
             "jassijs/server/Installserver.ts": {
                 "date": 1719314261039.9204
@@ -1727,7 +1727,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
-                "date": 1719769956955.6282,
+                "date": 1720246151798.6426,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
                         {
@@ -1759,7 +1759,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Checkbox.ts": {
-                "date": 1719772853681.473,
+                "date": 1720458180025.6687,
                 "jassijs.ui.Checkbox": {
                     "$UIComponent": [
                         {
@@ -1771,7 +1771,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1720188368031.4324,
+                "date": 1720435811666.1936,
                 "jassijs.ui.HTMLComponent": {
                     "@members": {}
                 },
@@ -2065,31 +2065,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1719771104740.193,
-                "jassijs.ui.Panel": {
-                    "$UIComponent": [
-                        {
-                            "fullPath": "common/Panel",
-                            "icon": "mdi mdi-checkbox-blank-outline",
-                            "editableChildComponents": [
-                                "this"
-                            ]
-                        }
-                    ],
-                    "$Property": [
-                        {
-                            "name": "new",
-                            "type": "json",
-                            "componentType": "jassijs.ui.PanelProperties"
-                        },
-                        {
-                            "name": "new/useSpan",
-                            "type": "boolean",
-                            "default": false
-                        }
-                    ],
-                    "@members": {}
-                }
+                "date": 1720244797759.2253
             },
             "jassijs/ui/Property.ts": {
                 "date": 1658347724000,
@@ -2489,7 +2465,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Tools": {}
             },
             "jassijs/ui/State.ts": {
-                "date": 1720185196172.8337
+                "date": 1720252991952.6306
             }
         }
     };
@@ -6432,12 +6408,12 @@ define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Registry", 
         }
         render() {
             //this.checkbox={current:undefined}
-            return React.createElement("div", {}, React.createElement("input", Object.assign(Object.assign({}, this.props.domProperties), { type: "checkbox" }), React.createElement("span", {
+            return React.createElement("div", {}, React.createElement("input", Object.assign(Object.assign({}, this.props.domProperties), { type: "checkbox" })), React.createElement("span", {
                 className: "checkboxtext",
                 style: {
                     width: "100%"
                 }
-            })));
+            }));
         }
         config(config) {
             super.config(config);
@@ -6459,7 +6435,7 @@ define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Registry", 
             return this.checkbox.checked;
         }
         set text(value) {
-            this.domWrapper.querySelector(".checkboxtext").innerHTML = value === undefined ? "" : value;
+            this.domWrapper.querySelector(".checkboxtext").innerHTML = (value === undefined ? "" : value);
         }
         get text() {
             return this.domWrapper.querySelector(".checkboxtext").innerHTML;
@@ -6501,6 +6477,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.React = exports.UIComponentProperties = void 0;
     exports.$UIComponent = $UIComponent;
+    exports.jc = jc;
     exports.createComponent = createComponent;
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
@@ -6520,7 +6497,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         createElement(type, props, ...children) {
             if (props === undefined || props === null) //TODO is this right?
                 props = {};
-            if (children) {
+            if ((children === null || children === void 0 ? void 0 : children.length) > 0) {
                 props.children = children;
             }
             var ret = {
@@ -6542,6 +6519,15 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             this.props = props;
         }
     };
+    function jc(type, props) {
+        return React.createElement(type, props);
+    }
+    function createFunctionComponent(type, props, ...children) {
+        var p = props || {};
+        p.renderFunc = type;
+        var ret = new FunctionComponent(p);
+        return ret;
+    }
     window.React = React;
     function createComponent(node) {
         var _a, _b;
@@ -6650,7 +6636,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         }
         componentDidMount() {
         }
-        render(states = undefined) {
+        render() {
             return undefined;
         }
         /*  rerender() {
@@ -6903,7 +6889,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             var oldwrapper = this.domWrapper;
             var olddom = this.dom;
             if (olddom === null || olddom === void 0 ? void 0 : olddom.parentNode) {
-                olddom.parentNode.replaceChild(olddom, dom);
+                olddom.parentNode.replaceChild(dom, olddom);
             }
             this.dom = dom;
             if (oldwrapper === olddom)
@@ -7174,10 +7160,20 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         (0, Property_7.$Property)({ name: "testuw", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Component);
+    /*interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
+        tag?: string;
+        children?;
+        renderFunc;
+        calculateState?: (prop) => void;
+    }*/
     class FunctionComponent extends Component {
         constructor(properties) {
             super(properties);
             this._components = [];
+        }
+        config(config, forceRender = false) {
+            super.config(config);
+            return this;
         }
         render() {
             var Rend = this.props.renderFunc;
@@ -11894,12 +11890,18 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
          */
         addVariableInCode(type, scopename, suggestedName = undefined) {
             var val = this.codeEditor.getObjectFromVariable("this");
-            var ret = this.parser.addVariableInCode(type, undefined, scopename, suggestedName);
+            var codeHasChanged = {};
+            var ret = this.parser.addVariableInCode(type, undefined, scopename, suggestedName, codeHasChanged);
             /* var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
              { classname: undefined, methodname: "test" }], scopename);
-             */ this.codeEditor.value = this.parser.getModifiedCode();
-            this.updateParser();
-            this.callEvent("codeChanged", {});
+             */
+            if ((codeHasChanged === null || codeHasChanged === void 0 ? void 0 : codeHasChanged.value) === false) {
+            }
+            else {
+                this.codeEditor.value = this.parser.getModifiedCode();
+                this.updateParser();
+                this.callEvent("codeChanged", {});
+            }
             return ret;
         }
         /**
@@ -14525,13 +14527,13 @@ define("jassijs/ui/State", ["require", "exports"], function (require, exports) {
         //window.timecount=window.timecount+new Date().getTime()-test;
     }
     function createStates(initialValues = {}) {
-        var data = Object.assign({ _used: [] }, initialValues);
+        var data = { _used: [], _data: initialValues };
         return new Proxy(data, {
             get(target, key) {
                 if (key === "_onconfig")
                     return target._onconfig;
                 if (target[key] === undefined) {
-                    target[key] = createState(data[key]);
+                    target[key] = createState(data._data[key]);
                     if (target._used.indexOf(key) === -1)
                         target._used.push(key);
                 }
@@ -14547,7 +14549,8 @@ define("jassijs/ui/State", ["require", "exports"], function (require, exports) {
         });
     }
     function createRefs(data = {}) {
-        data.refs = new Proxy(data, {
+        var me = {};
+        var ret = new Proxy(me, {
             get(target, key) {
                 if (target[key] === undefined) {
                     target[key] = {
@@ -14564,7 +14567,7 @@ define("jassijs/ui/State", ["require", "exports"], function (require, exports) {
                 return target[key];
             }
         });
-        return data;
+        return ret;
     }
     class State {
         constructor(data = undefined) {
@@ -14631,8 +14634,8 @@ define("jassijs/ui/State", ["require", "exports"], function (require, exports) {
     }
     function test() {
         var me = { a: 6 };
-        var params = createRefs(me);
-        params.refs.hallo.current = "JJJ";
+        var refs = createRefs(me);
+        refs.hallo.current = "JJJ";
         console.log(me.hallo);
     }
 });
@@ -18710,7 +18713,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
-                "date": 1719769956955.6282,
+                "date": 1720246151798.6426,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
                         {
@@ -18742,7 +18745,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Checkbox.ts": {
-                "date": 1719772853681.473,
+                "date": 1720458180025.6687,
                 "jassijs.ui.Checkbox": {
                     "$UIComponent": [
                         {
@@ -18754,7 +18757,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1720188368031.4324,
+                "date": 1720435811666.1936,
                 "jassijs.ui.HTMLComponent": {
                     "@members": {}
                 },
@@ -19048,31 +19051,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1719771104740.193,
-                "jassijs.ui.Panel": {
-                    "$UIComponent": [
-                        {
-                            "fullPath": "common/Panel",
-                            "icon": "mdi mdi-checkbox-blank-outline",
-                            "editableChildComponents": [
-                                "this"
-                            ]
-                        }
-                    ],
-                    "$Property": [
-                        {
-                            "name": "new",
-                            "type": "json",
-                            "componentType": "jassijs.ui.PanelProperties"
-                        },
-                        {
-                            "name": "new/useSpan",
-                            "type": "boolean",
-                            "default": false
-                        }
-                    ],
-                    "@members": {}
-                }
+                "date": 1720244797759.2253
             },
             "jassijs/ui/Property.ts": {
                 "date": 1658347724000,
@@ -19472,7 +19451,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Tools": {}
             },
             "jassijs/ui/State.ts": {
-                "date": 1720185196172.8337
+                "date": 1720252991952.6306
             }
         }
     };

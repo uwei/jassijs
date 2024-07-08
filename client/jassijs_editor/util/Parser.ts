@@ -16,7 +16,7 @@ interface Entry {
     value?: any;
     node?: ts.Node;
     isFunction: boolean;
-
+    isJc?: boolean;
 }
 class ParsedDecorator {
     node?: ts.Decorator;
@@ -57,7 +57,7 @@ export class Parser {
     * @member {Object.<string,Object.<string,[object]>> - all properties
     * e.g. data["textbox1"][value]->Entry
     */
-    data: { [variable: string]: { [property: string]: Entry[] }};
+    data: { [variable: string]: { [property: string]: Entry[] } };
     /**
      * parses Code for UI relevant settings
      * @class jassijs_editor.util.Parser
@@ -95,9 +95,9 @@ export class Parser {
         const languageService = ts.createLanguageService(serviceHost, ts.createDocumentRegistry());
         const textChanges = languageService.getFormattingEditsForDocument(file, {
             convertTabsToSpaces: true,
-            
-          //  indentMultiLineObjectLiteralBeginningOnBlankLine:true,
-           // PlaceOpenBraceOnNewLineForFunctions:true,
+
+            //  indentMultiLineObjectLiteralBeginningOnBlankLine:true,
+            // PlaceOpenBraceOnNewLineForFunctions:true,
             //   insertSpaceAfterCommaDelimiter: true,
             //  insertSpaceAfterKeywordsInControlFlowStatements: true,
             // insertSpaceBeforeAndAfterBinaryOperators: true,
@@ -126,7 +126,7 @@ export class Parser {
      * @param {string} value  - code - the value
      * @param node - the node of the statement
      */
-    private add(variable: string, property: string, value: string, node: ts.Node, isFunction = false, trim = true) {
+    private add(variable: string, property: string, value: string, node: ts.Node, isFunction = false, trim = true, isJc = false) {
 
         if (value === undefined || value === null)
             return;
@@ -143,7 +143,8 @@ export class Parser {
             this.data[variable][property].push({
                 value: value,
                 node: node,
-                isFunction
+                isFunction,
+                isJc: isJc
             });
         }
     }
@@ -187,7 +188,7 @@ export class Parser {
         if (this.imports[name] === undefined) {
             //@ts-ignore
             //            var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
-            const importNode = ts.factory.createImportDeclaration(undefined, ts.factory.createImportClause(false, ts.factory.createIdentifier("{"+name+"}"),undefined), ts.factory.createIdentifier("\"" + file + "\""));
+            const importNode = ts.factory.createImportDeclaration(undefined, ts.factory.createImportClause(false, ts.factory.createIdentifier("{" + name + "}"), undefined), ts.factory.createIdentifier("\"" + file + "\""));
             this.sourceFile = ts.factory.updateSourceFile(this.sourceFile, [importNode, ...this.sourceFile.statements]);
             this.imports[name] = file;
         }
@@ -344,8 +345,8 @@ export class Parser {
     private parseJC(node: ts.CallExpression, parent = undefined) {
         var nd: ts.JsxElement = <any>node;
         var element = node;
-        var diff=node.expression.getFullText().length-node.expression.getText().length+"jc".length;
-        if(this.variabelStack===undefined){
+        var diff = node.expression.getFullText().length - node.expression.getText().length + "jc".length;
+        if (this.variabelStack === undefined) {
             console.error("this.variabelStack undefined");
             return;
         }
@@ -360,37 +361,44 @@ export class Parser {
             jsx.name = this.getNextVariableNameForType(jsx.name);
             this.variabelStack[jsx.name] = jsx;
             nd["jname"] = jsx.name;
-            this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
-           
+            this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node, false, false, true);
+            var props: any;
+            var children;
+
             if (jsx && node.arguments.length > 1) {
-              
-                var props: any = node.arguments[1];
+
+                props = node.arguments[1];
                 for (var x = 0; x < props.properties.length; x++) {
                     var prop = props.properties[x];
                     var val: string = prop["initializer"].getText();
+                    if ((<any>prop.name).text === "children")
+                        children = prop;
                     if (val.startsWith("{") && val.endsWith("}"))
                         val = val.substring(1, val.length - 1);
-                    this.add(jsx.name, (<any>prop.name).text, val, prop);
+                    var sname = (<any>prop.name).text;
+                    if (sname === "children")
+                        sname = "add";
+                    this.add(jsx.name, sname, val, prop, false, false, true);
                 }
             }
             if (jsx.component.constructor.name === 'HTMLComponent') {
-                this.add(jsx.name, "tag", '"' + tagname + '"', undefined);
+                this.add(jsx.name, "tag", '"' + tagname + '"', undefined, false, false, true);
             }
             if ((<any>node.parent)?.jname !== undefined) {
-                this.add((<any>node.parent)?.jname, "add", jsx.name, node);
+                this.add((<any>node.parent)?.jname, "add", jsx.name, node, false, false, true);
             }
-            
-            for (var p = 2; p < node.arguments.length; p++) {
-                var ch:any = node.arguments[p];
-                if (ch.kind === ts.SyntaxKind.StringLiteral) {
-                    
+            if (children) {
+                for (var x = 0; x < children.initializer.elements.length; x++) {
+                    var ch: any = children.initializer.elements[x];
+                    if (ch.kind === ts.SyntaxKind.StringLiteral) {
+
                         var varname = this.getNextVariableNameForType("text", "text");
                         var stext = JSON.stringify(ch.text);
-                        this.add(varname, "_new_", stext, ch, false, false);
+                        this.add(varname, "_new_", stext, ch, false, false, true);
                         this.variabelStack[varname] = ch;
-                        this.add(varname, "text", stext, ch, false, false);
+                        this.add(varname, "text", stext, ch, false, false, true);
                         //if ((<any>node.parent)?.jname !== undefined) {
-                        this.add(jsx.name, "add", varname, ch);
+                        this.add(jsx.name, "add", varname, ch, false, false, true);
                         // }
                         var chvar = {
                             pos: ch.pos,
@@ -399,15 +407,17 @@ export class Parser {
                         };
                         this.variabelStack[varname] = chvar;
                         this.variabelStack.__orginalarray__.push(chvar);
-                    
-                } else {
-                   // debugger;
-                    this.parseProperties(ch);
-                   // this.parseJC(ch, {});// consumeProperties)
+
+                    } else {
+                        // debugger;
+                        this.parseProperties(ch);
+                        // this.parseJC(ch, {});// consumeProperties)
+                    }
                 }
             }
+
         }
-        
+
 
     }
     private parseProperties(node: ts.Node) {
@@ -728,6 +738,7 @@ export class Parser {
 
         //    if (this.classScope === undefined)
         this.visitNode(this.sourceFile, true);
+
         //  else
         //    this.visitNode(this.sourceFile);
 
@@ -971,30 +982,33 @@ export class Parser {
         }
         return varname + (counter === 1 ? "" : counter);
     }
-    
+
     /**
      * change objectliteral to mutliline if needed
      */
     private switchToMutlilineIfNeeded(node: ts.Node, newProperty: string, newValue) {
-  
-        var oldValue = node.getText();
-        if (node["multiLine"] !== true) {
-            var len = 0;
-            for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
-                var prop = node.parent["arguments"][0].properties[x];
-                len += (prop.initializer.escapedText ? prop.initializer.escapedText.length : prop.initializer.getText().length);
-                len += prop.name.escapedText.length + 5;
-            }
-            console.log(len);
-            if (oldValue.indexOf("\n") > -1 || (len > 60) || newValue.indexOf("\n") > -1) {
-                //order also old elements
+        try {
+            var oldValue = node.getText();
+            if (node["multiLine"] !== true) {
+                var len = 0;
                 for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
                     var prop = node.parent["arguments"][0].properties[x];
-                    prop.pos = -1;
-                    prop.len = -1;
+                    len += (prop.initializer.escapedText ? prop.initializer.escapedText.length : prop.initializer.getText().length);
+                    len += prop.name.escapedText.length + 5;
                 }
-                node.parent["arguments"][0] = ts.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
+                console.log(len);
+                if (oldValue.indexOf("\n") > -1 || (len > 60) || newValue.indexOf("\n") > -1) {
+                    //order also old elements
+                    for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
+                        var prop = node.parent["arguments"][0].properties[x];
+                        prop.pos = -1;
+                        prop.len = -1;
+                    }
+                    node.parent["arguments"][0] = ts.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
+                }
             }
+        } catch {
+
         }
     }
     private setPropertyInConfig(variableName: string, property: string, value: string | ts.Node,
@@ -1054,17 +1068,36 @@ export class Parser {
         //  node.parent["statements"].splice(pos, 1);
 
     }
-      private setPropertyInJC(variableName: string, property: string, value: string | ts.Node,
+    private setPropertyInJC(variableName: string, property: string, value: string | ts.Node,
         isFunction: boolean = false, replace: boolean = undefined,
         before: { variablename: string, property: string, value?} = undefined,
         scope: ts.Node) {
 
         var svalue: any = typeof value === "string" ? ts.factory.createIdentifier(value) : value;
+        if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.StringLiteral&&property==="text") {
+            this.data[variableName]["_new_"][0].value=value;
+            //@ts-ignore
+            this.data[variableName]["_new_"][0].node.text=value.toString().substring(1,value.toString().length-1);
+             //@ts-ignore
+             this.data[variableName]["_new_"][0].node["end"]=-1;
+            //@ts-ignore
+             this.data[variableName]["_new_"][0].node["pos"]=-1;
+            return;
+        }
         var config = this.data[variableName]["_new_"][0].node["arguments"][1];
+        if (this.data[variableName]["_new_"][0].node["arguments"].length < 2) {
+            config = this.createNode("a={}");
+            config = config.right;
+            this.data[variableName]["_new_"][0].node["arguments"].push(config);
+        }
         var newExpression = ts.factory.createPropertyAssignment(property, <any>svalue);
         var jname;
-         if (property === "add") {//transfer a child to another
-         debugger;
+        if (property === "add") {//transfer a child to another
+            if (this.data[variableName]["add"] === undefined) {
+                newExpression = ts.factory.createPropertyAssignment("children", ts.factory.createArrayLiteralExpression([], true));
+                config.properties.push(newExpression);
+                this.data[variableName]["add"] = [{ node: newExpression, value: [], isFunction: false }];
+            }
             var parent = this.data[variableName]["_new_"][0].node;
             if (typeof value === "string") {
                 jname = value;
@@ -1078,9 +1111,9 @@ export class Parser {
                     node = ts.factory.createIdentifier(value)
                     //this.add(value, "text", <string>"", node);
                 } else {
-                    node = this.createNode("jc("+classname+",{})\n");
-                   // if (classname === "br")
-                     //   node = this.createNode("<" + classname + "/>");
+                    node = this.createNode("jc(" + classname + ",{})\n");
+                    // if (classname === "br")
+                    //   node = this.createNode("<" + classname + "/>");
                 }
                 prop.node = node;
                 prop.value = value;
@@ -1114,9 +1147,13 @@ export class Parser {
                         break;
                     }
                 }
-                var pos = parent["arguments"].indexOf(found);
-                parent["arguments"].splice(pos, 0, node);
-                parent["arguments"].splice(pos + 1, 0, ts.factory.createJsxText("\n", true));
+                debugger;
+                //@ts-ignore
+                var childrenNode = this.data[variableName]["add"][0].node.initializer;
+                var args = childrenNode.elements;
+                var pos = args.indexOf(found);
+                args.splice(pos, 0, node);
+                // config.properties.splice(pos + 1, 0, ts.factory.createJsxText("\n", true));
 
                 this.data[variableName]["add"].splice(ofound, 0, {
                     node: node,
@@ -1126,13 +1163,15 @@ export class Parser {
                 //this.data[variableName]["add"][0].node;
 
             } else {
-                var args=(<any>parent).arguments;
+
+                var childrenNode = this.data[variableName]["add"][0].node["initializer"];
+                var args = childrenNode.elements;
                 args.push(node);
                 this.add(variableName, "add", <string>value, node);
             }
-            // this.switchToMutlilineIfNeeded(config, property, value);
+            this.switchToMutlilineIfNeeded(config, property, value);
             return;
-        }else {  //comp.add(a) --> comp.config({children:[a]})
+        } else {  //comp.add(a) --> comp.config({children:[a]})
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) {//edit existing
                 let node = this.data[variableName][property][0].node;
                 this.data[variableName][property]
@@ -1140,13 +1179,13 @@ export class Parser {
                 config.properties[pos] = newExpression;
                 this.data[variableName][property][0].value = value;
                 this.data[variableName][property][0].node = newExpression;
-            //    this.switchToMutlilineIfNeeded(config, property, value);
+                this.switchToMutlilineIfNeeded(config, property, value);
             } else {
                 config.properties.push(newExpression);
                 if (this.data[variableName][property] === undefined)
                     this.data[variableName][property] = [{ isFunction, value, node: newExpression }];
                 this.data[variableName][property][0].node = newExpression;
-             //   this.switchToMutlilineIfNeeded(config, property, value);
+                this.switchToMutlilineIfNeeded(config, property, value);
             }
         }
 
@@ -1194,8 +1233,8 @@ export class Parser {
             classscope = this.classScope;
         var scope = this.getNodeFromScope(classscope, variablescope);
         var newExpression = undefined;
-        if(this.data[variableName]["_new_"]&&this.data[variableName]["_new_"][0].value.startsWith("jc")){
-              this.setPropertyInJC(variableName, property, value, isFunction, replace, before, scope);
+        if (this.data[variableName]["_new_"] && this.data[variableName]["_new_"][0].isJc) {
+            this.setPropertyInJC(variableName, property, value, isFunction, replace, before, scope);
             return;
         }
         if (this.data[variableName]["config"] !== undefined && property !== "new") {
@@ -1503,8 +1542,8 @@ export class Parser {
     * @param variablescope - the scope where the variable should be insert e.g. hallo.onclick
     * @returns  the name of the object
     */
-    addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope: { variablename: string, methodname } = undefined, suggestedName = undefined,codeHasChanged:{value:boolean}=undefined): string {
-       if (classscope === undefined)
+    addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope: { variablename: string, methodname } = undefined, suggestedName = undefined, codeHasChanged: { value: boolean } = undefined): string {
+        if (classscope === undefined)
             classscope = this.classScope;
         let type = fulltype.split(".")[fulltype.split(".").length - 1];
 
@@ -1515,8 +1554,8 @@ export class Parser {
             this.data[varname] = {
                 "_new_": [<any>{ className: type, tag: suggestedName }]
             }
-            if(codeHasChanged){
-               codeHasChanged.value=false; 
+            if (codeHasChanged) {
+                codeHasChanged.value = false;
             }
             // this.addTypeMe(varname, type);
             return varname;
@@ -1595,11 +1634,11 @@ export async function test() {
     //tests(new Test());
     await mytypescript.waitForInited;
 
-    var code = mytypescript.getCode("demo/Dialog7.ts");
+    var code = mytypescript.getCode("demo/hallo.tsx");
     var parser = new Parser();
     var scope = undefined;// [{ classname: "Dialog2", methodname: "layout" }];
     parser.parse(code, scope, false);
-  
+
     //parser.addImportIfNeeded("table2", "jassijs/ui/Table2");
     //parser.setPropertyInCode("me.button2","pp","hallo",scope);
 

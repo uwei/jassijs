@@ -127,7 +127,7 @@ var React = {
 
         if (props === undefined || props === null)//TODO is this right?
             props = {};
-        if (children) {
+        if (children?.length>0) {
             props.children = children;
         }
 
@@ -177,8 +177,8 @@ export function jc<P extends {}>(type: React.ClassType<P, React.ClassicComponent
 export function jc<P extends {}, T extends React.Component<P, React.ComponentState>, C extends React.ComponentClass<P>>(type: React.ClassType<P, T, C>, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.CElement<P, T>;
 export function jc<P extends {}>(type: React.FunctionComponent<P> | React.ComponentClass<P> | string, props?: React.Attributes & P | null, ...children: React.ReactNode[]): React.ReactElement<P>;
 
-export function jc(type: any, props: any, ...children: any[]): any {
-    return React.createElement(type, props, ...children);
+export function jc(type: any, props: any): any {
+    return React.createElement(type, props);
 }
 function createFunctionComponent<P extends {}>(
     type: React.FunctionComponent<P>,

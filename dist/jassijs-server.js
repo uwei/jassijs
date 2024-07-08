@@ -493,7 +493,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/Indexer.ts": {
-                "date": 1720184378220.3965
+                "date": 1720189282241.5964
             },
             "jassijs/server/LocalProtocol.ts": {
                 "date": 1697207752396.3682
@@ -6268,7 +6268,7 @@ define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes"
                                     }
                                 }
                             }
-                            if (dec && dec["@members"] && Object.keys(dec["@members"][membername]).length === 0) {
+                            if (dec && dec["@members"] && dec["@members"][membername] && Object.keys(dec["@members"][membername]).length === 0) {
                                 delete dec["@members"][membername];
                             }
                         }

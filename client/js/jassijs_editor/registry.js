@@ -335,7 +335,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1720379551860.056,
+		"date": 1720457605031.0369,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {

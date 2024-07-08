@@ -35,7 +35,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         createElement(type, props, ...children) {
             if (props === undefined || props === null) //TODO is this right?
                 props = {};
-            if (children) {
+            if ((children === null || children === void 0 ? void 0 : children.length) > 0) {
                 props.children = children;
             }
             var ret = {
@@ -57,8 +57,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.props = props;
         }
     };
-    function jc(type, props, ...children) {
-        return React.createElement(type, props, ...children);
+    function jc(type, props) {
+        return React.createElement(type, props);
     }
     exports.jc = jc;
     function createFunctionComponent(type, props, ...children) {

@@ -24,12 +24,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         }
         render() {
             //this.checkbox={current:undefined}
-            return React.createElement("div", {}, React.createElement("input", Object.assign(Object.assign({}, this.props.domProperties), { type: "checkbox" }), React.createElement("span", {
+            return React.createElement("div", {}, React.createElement("input", Object.assign(Object.assign({}, this.props.domProperties), { type: "checkbox" })), React.createElement("span", {
                 className: "checkboxtext",
                 style: {
                     width: "100%"
                 }
-            })));
+            }));
         }
         config(config) {
             super.config(config);
@@ -51,7 +51,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             return this.checkbox.checked;
         }
         set text(value) {
-            this.domWrapper.querySelector(".checkboxtext").innerHTML = value === undefined ? "" : value;
+            this.domWrapper.querySelector(".checkboxtext").innerHTML = (value === undefined ? "" : value);
         }
         get text() {
             return this.domWrapper.querySelector(".checkboxtext").innerHTML;

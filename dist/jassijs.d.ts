@@ -1316,9 +1316,9 @@ declare module "jassijs/ui/Button" {
      */
         text?: string;
     }
-    export class Button<T extends ButtonProperties = ComponentProperties> extends Component<T> implements ButtonProperties {
+    export class Button<T extends ButtonProperties = ButtonProperties> extends Component<T> implements ButtonProperties {
         constructor(properties?: ButtonProperties);
-        config(config: T, forceRender?: boolean): Button;
+        config(config: T, forceRender?: boolean): Button<T>;
         get dom(): HTMLButtonElement;
         set dom(value: HTMLButtonElement);
         render(): any;
@@ -1485,7 +1485,16 @@ declare module "jassijs/ui/Component" {
             createElement(atype: any, props: any, ...children: {}): any;
         }
     }
-    export function createComponent(node: React.ReactNode): any;
+    export function jc(type: "input", props?: React.InputHTMLAttributes<HTMLInputElement> & React.ClassAttributes<HTMLInputElement> | null, ...children: React.ReactNode[]): React.DetailedReactHTMLElement<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+    export function jc<P extends React.HTMLAttributes<T>, T extends HTMLElement>(type: keyof React.ReactHTML, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.DetailedReactHTMLElement<P, T>;
+    export function jc<P extends React.SVGAttributes<T>, T extends SVGElement>(type: keyof React.ReactSVG, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.ReactSVGElement;
+    export function jc<P extends React.DOMAttributes<T>, T extends Element>(type: string, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.DOMElement<P, T>;
+    export function jc<P extends {}>(type: React.FunctionComponent<P>, props?: React.Attributes & P | null, ...children: React.ReactNode[]): React.FunctionComponentElement<P>;
+    export function jc<P extends {}>(type: React.ClassType<P, React.ClassicComponent<P, React.ComponentState>, React.ClassicComponentClass<P>>, props?: React.ClassAttributes<React.ClassicComponent<P, React.ComponentState>> & P | null, ...children: React.ReactNode[]): React.CElement<P, React.ClassicComponent<P, React.ComponentState>>;
+    export function jc<P extends {}, T extends React.Component<P, React.ComponentState>, C extends React.ComponentClass<P>>(type: React.ClassType<P, T, C>, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.CElement<P, T>;
+    export function jc<P extends {}>(type: React.FunctionComponent<P> | React.ComponentClass<P> | string, props?: React.Attributes & P | null, ...children: React.ReactNode[]): React.ReactElement<P>;
+    export function createComponent<T>(node: React.FunctionComponentElement<T>): FunctionComponent<T>;
+    export function createComponent<T>(node: React.ReactElement<T>): T;
     export class Component<T extends ComponentProperties = {}> implements React.Component<T, {}> {
         props: T;
         states: States<T>;
@@ -1511,7 +1520,7 @@ declare module "jassijs/ui/Component" {
         constructor(properties?: ComponentProperties);
         private _rerenderMe;
         componentDidMount(): void;
-        render(states?: any): React.ReactNode;
+        render(): any;
         config(config: T): Component;
         /**
          * called if the component is created
@@ -1590,16 +1599,11 @@ declare module "jassijs/ui/Component" {
         setState(): void;
         forceUpdate(): void;
     }
-    interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
-        tag?: string;
-        children?: any;
-        renderFunc: any;
-        calculateState?: (prop: any) => void;
-    }
-    export class FunctionComponent<T extends FunctionComponentProperties> extends Component<FunctionComponentProperties> {
+    export class FunctionComponent<T> extends Component<T> {
         _components: Component[];
         _designDummy: any;
-        constructor(properties: FunctionComponentProperties);
+        constructor(properties: T);
+        config(config: T, forceRender?: boolean): FunctionComponent<T>;
         render(): any;
         /**
         * adds a component to the container
@@ -2683,7 +2687,7 @@ declare module "jassijs/ui/Panel" {
         *
         */
         constructor(properties?: PanelProperties);
-        render(): any;
+        render(): React.ReactElement;
         set isAbsolute(value: boolean);
         get isAbsolute(): boolean;
         max(): void;
@@ -2867,7 +2871,7 @@ declare module "jassijs/ui/PropertyEditor" {
         }[], variablescope?: {
             variablename: string;
             methodname: any;
-        }, suggestedName?: any): string;
+        }, suggestedName?: any, codeHasChanged?: any): string;
         getPropertyValue(variable: any, property: any): any;
     }
     export class PropertyEditor extends Panel {
@@ -3751,11 +3755,9 @@ declare module "jassijs/ui/State" {
             readonly [Property in keyof OnlyType<T, State>]-?: T[Property];
         };
     };
-    export function createRefs<T>(data?: any): T & {
-        readonly refs: {
-            readonly [Property in keyof T]-?: {
-                current: T[Property];
-            };
+    export function createRefs<T>(data?: T): {
+        readonly [Property in keyof T]-?: {
+            current: T[Property];
         };
     };
     export class State<T = {}> {

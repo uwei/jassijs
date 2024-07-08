@@ -22,24 +22,39 @@ define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/remote/Registry", 
             var refs = (0, State_1.createRefs)(this.me);
             //var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
             //
-            return (0, Component_1.jc)(Panel_1.Panel, { label: "hh" }, (0, Component_1.jc)(Panel_1.Panel, {}, (0, Component_1.jc)("br"), "Hahhh", (0, Component_1.jc)(Checkbox_1.Checkbox, { text: "eeed" }), (0, Component_1.jc)(Button_1.Button, {
-                ref: refs.button1,
-                text: "Hadds",
-                onclick: () => {
-                    this.me.button1.text = "pp";
-                    return undefined;
-                },
-                tooltip: "dfgdfg",
-                onfocus: function (event) {
-                }
-            })));
+            return (0, Component_1.jc)(Panel_1.Panel, {
+                label: "hh",
+                children: [
+                    (0, Component_1.jc)(Panel_1.Panel, {
+                        children: [
+                            (0, Component_1.jc)("br"),
+                            "Hsssasa",
+                            (0, Component_1.jc)(Panel_1.Panel, {
+                                children: [
+                                    (0, Component_1.jc)(Checkbox_1.Checkbox, { text: "sss" }),
+                                ]
+                            }),
+                            (0, Component_1.jc)(Button_1.Button, {
+                                text: "Hadds",
+                                onclick: () => {
+                                    this.me.button1.text = "pp";
+                                    return undefined;
+                                },
+                                tooltip: "dfgdfg",
+                                onfocus: function (event) {
+                                }
+                            })
+                        ]
+                    })
+                ]
+            });
         }
     };
-    exports.Dialog7 = Dialog7;
-    exports.Dialog7 = Dialog7 = __decorate([
+    Dialog7 = __decorate([
         (0, Registry_1.$Class)("demo/Dialog7"),
         __metadata("design:paramtypes", [])
     ], Dialog7);
+    exports.Dialog7 = Dialog7;
     async function test() {
         var ret = new Dialog7();
         return ret;

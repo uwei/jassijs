@@ -102,7 +102,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
          * @param {string} value  - code - the value
          * @param node - the node of the statement
          */
-        add(variable, property, value, node, isFunction = false, trim = true) {
+        add(variable, property, value, node, isFunction = false, trim = true, isJc = false) {
             if (value === undefined || value === null)
                 return;
             if (trim && (typeof value === "string"))
@@ -118,7 +118,8 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 this.data[variable][property].push({
                     value: value,
                     node: node,
-                    isFunction
+                    isFunction,
+                    isJc: isJc
                 });
             }
         }
@@ -333,46 +334,55 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 jsx.name = this.getNextVariableNameForType(jsx.name);
                 this.variabelStack[jsx.name] = jsx;
                 nd["jname"] = jsx.name;
-                this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node);
+                this.add(jsx.name, "_new_", nd.getFullText(this.sourceFile), node, false, false, true);
+                var props;
+                var children;
                 if (jsx && node.arguments.length > 1) {
-                    var props = node.arguments[1];
+                    props = node.arguments[1];
                     for (var x = 0; x < props.properties.length; x++) {
                         var prop = props.properties[x];
                         var val = prop["initializer"].getText();
+                        if (prop.name.text === "children")
+                            children = prop;
                         if (val.startsWith("{") && val.endsWith("}"))
                             val = val.substring(1, val.length - 1);
-                        this.add(jsx.name, prop.name.text, val, prop);
+                        var sname = prop.name.text;
+                        if (sname === "children")
+                            sname = "add";
+                        this.add(jsx.name, sname, val, prop, false, false, true);
                     }
                 }
                 if (jsx.component.constructor.name === 'HTMLComponent') {
-                    this.add(jsx.name, "tag", '"' + tagname + '"', undefined);
+                    this.add(jsx.name, "tag", '"' + tagname + '"', undefined, false, false, true);
                 }
                 if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.jname) !== undefined) {
-                    this.add((_b = node.parent) === null || _b === void 0 ? void 0 : _b.jname, "add", jsx.name, node);
+                    this.add((_b = node.parent) === null || _b === void 0 ? void 0 : _b.jname, "add", jsx.name, node, false, false, true);
                 }
-                for (var p = 2; p < node.arguments.length; p++) {
-                    var ch = node.arguments[p];
-                    if (ch.kind === typescript_1.default.SyntaxKind.StringLiteral) {
-                        var varname = this.getNextVariableNameForType("text", "text");
-                        var stext = JSON.stringify(ch.text);
-                        this.add(varname, "_new_", stext, ch, false, false);
-                        this.variabelStack[varname] = ch;
-                        this.add(varname, "text", stext, ch, false, false);
-                        //if ((<any>node.parent)?.jname !== undefined) {
-                        this.add(jsx.name, "add", varname, ch);
-                        // }
-                        var chvar = {
-                            pos: ch.pos,
-                            component: this.variabelStack[jsx.name].component._components[x],
-                            name: varname
-                        };
-                        this.variabelStack[varname] = chvar;
-                        this.variabelStack.__orginalarray__.push(chvar);
-                    }
-                    else {
-                        // debugger;
-                        this.parseProperties(ch);
-                        // this.parseJC(ch, {});// consumeProperties)
+                if (children) {
+                    for (var x = 0; x < children.initializer.elements.length; x++) {
+                        var ch = children.initializer.elements[x];
+                        if (ch.kind === typescript_1.default.SyntaxKind.StringLiteral) {
+                            var varname = this.getNextVariableNameForType("text", "text");
+                            var stext = JSON.stringify(ch.text);
+                            this.add(varname, "_new_", stext, ch, false, false, true);
+                            this.variabelStack[varname] = ch;
+                            this.add(varname, "text", stext, ch, false, false, true);
+                            //if ((<any>node.parent)?.jname !== undefined) {
+                            this.add(jsx.name, "add", varname, ch, false, false, true);
+                            // }
+                            var chvar = {
+                                pos: ch.pos,
+                                component: this.variabelStack[jsx.name].component._components[x],
+                                name: varname
+                            };
+                            this.variabelStack[varname] = chvar;
+                            this.variabelStack.__orginalarray__.push(chvar);
+                        }
+                        else {
+                            // debugger;
+                            this.parseProperties(ch);
+                            // this.parseJC(ch, {});// consumeProperties)
+                        }
                     }
                 }
             }
@@ -936,24 +946,28 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
          * change objectliteral to mutliline if needed
          */
         switchToMutlilineIfNeeded(node, newProperty, newValue) {
-            var oldValue = node.getText();
-            if (node["multiLine"] !== true) {
-                var len = 0;
-                for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
-                    var prop = node.parent["arguments"][0].properties[x];
-                    len += (prop.initializer.escapedText ? prop.initializer.escapedText.length : prop.initializer.getText().length);
-                    len += prop.name.escapedText.length + 5;
-                }
-                console.log(len);
-                if (oldValue.indexOf("\n") > -1 || (len > 60) || newValue.indexOf("\n") > -1) {
-                    //order also old elements
+            try {
+                var oldValue = node.getText();
+                if (node["multiLine"] !== true) {
+                    var len = 0;
                     for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
                         var prop = node.parent["arguments"][0].properties[x];
-                        prop.pos = -1;
-                        prop.len = -1;
+                        len += (prop.initializer.escapedText ? prop.initializer.escapedText.length : prop.initializer.getText().length);
+                        len += prop.name.escapedText.length + 5;
                     }
-                    node.parent["arguments"][0] = typescript_1.default.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
+                    console.log(len);
+                    if (oldValue.indexOf("\n") > -1 || (len > 60) || newValue.indexOf("\n") > -1) {
+                        //order also old elements
+                        for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
+                            var prop = node.parent["arguments"][0].properties[x];
+                            prop.pos = -1;
+                            prop.len = -1;
+                        }
+                        node.parent["arguments"][0] = typescript_1.default.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
+                    }
                 }
+            }
+            catch (_a) {
             }
         }
         setPropertyInConfig(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
@@ -1011,11 +1025,30 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
         }
         setPropertyInJC(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
             var svalue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value) : value;
+            if (this.data[variableName]["_new_"][0].node.kind === typescript_1.default.SyntaxKind.StringLiteral && property === "text") {
+                this.data[variableName]["_new_"][0].value = value;
+                //@ts-ignore
+                this.data[variableName]["_new_"][0].node.text = value.toString().substring(1, value.toString().length - 1);
+                //@ts-ignore
+                this.data[variableName]["_new_"][0].node["end"] = -1;
+                //@ts-ignore
+                this.data[variableName]["_new_"][0].node["pos"] = -1;
+                return;
+            }
             var config = this.data[variableName]["_new_"][0].node["arguments"][1];
+            if (this.data[variableName]["_new_"][0].node["arguments"].length < 2) {
+                config = this.createNode("a={}");
+                config = config.right;
+                this.data[variableName]["_new_"][0].node["arguments"].push(config);
+            }
             var newExpression = typescript_1.default.factory.createPropertyAssignment(property, svalue);
             var jname;
             if (property === "add") { //transfer a child to another
-                debugger;
+                if (this.data[variableName]["add"] === undefined) {
+                    newExpression = typescript_1.default.factory.createPropertyAssignment("children", typescript_1.default.factory.createArrayLiteralExpression([], true));
+                    config.properties.push(newExpression);
+                    this.data[variableName]["add"] = [{ node: newExpression, value: [], isFunction: false }];
+                }
                 var parent = this.data[variableName]["_new_"][0].node;
                 if (typeof value === "string") {
                     jname = value;
@@ -1064,9 +1097,13 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                             break;
                         }
                     }
-                    var pos = parent["arguments"].indexOf(found);
-                    parent["arguments"].splice(pos, 0, node);
-                    parent["arguments"].splice(pos + 1, 0, typescript_1.default.factory.createJsxText("\n", true));
+                    debugger;
+                    //@ts-ignore
+                    var childrenNode = this.data[variableName]["add"][0].node.initializer;
+                    var args = childrenNode.elements;
+                    var pos = args.indexOf(found);
+                    args.splice(pos, 0, node);
+                    // config.properties.splice(pos + 1, 0, ts.factory.createJsxText("\n", true));
                     this.data[variableName]["add"].splice(ofound, 0, {
                         node: node,
                         value: jname,
@@ -1075,11 +1112,12 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     //this.data[variableName]["add"][0].node;
                 }
                 else {
-                    var args = parent.arguments;
+                    var childrenNode = this.data[variableName]["add"][0].node["initializer"];
+                    var args = childrenNode.elements;
                     args.push(node);
                     this.add(variableName, "add", value, node);
                 }
-                // this.switchToMutlilineIfNeeded(config, property, value);
+                this.switchToMutlilineIfNeeded(config, property, value);
                 return;
             }
             else { //comp.add(a) --> comp.config({children:[a]})
@@ -1090,14 +1128,14 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     config.properties[pos] = newExpression;
                     this.data[variableName][property][0].value = value;
                     this.data[variableName][property][0].node = newExpression;
-                    //    this.switchToMutlilineIfNeeded(config, property, value);
+                    this.switchToMutlilineIfNeeded(config, property, value);
                 }
                 else {
                     config.properties.push(newExpression);
                     if (this.data[variableName][property] === undefined)
                         this.data[variableName][property] = [{ isFunction, value, node: newExpression }];
                     this.data[variableName][property][0].node = newExpression;
-                    //   this.switchToMutlilineIfNeeded(config, property, value);
+                    this.switchToMutlilineIfNeeded(config, property, value);
                 }
             }
             console.log("todo correct spaces");
@@ -1138,7 +1176,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 classscope = this.classScope;
             var scope = this.getNodeFromScope(classscope, variablescope);
             var newExpression = undefined;
-            if (this.data[variableName]["_new_"] && this.data[variableName]["_new_"][0].value.startsWith("jc")) {
+            if (this.data[variableName]["_new_"] && this.data[variableName]["_new_"][0].isJc) {
                 this.setPropertyInJC(variableName, property, value, isFunction, replace, before, scope);
                 return;
             }
@@ -1527,7 +1565,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
         var h = typescript_1.default;
         //tests(new Test());
         await Typescript_1.mytypescript.waitForInited;
-        var code = Typescript_1.mytypescript.getCode("demo/Dialog7.ts");
+        var code = Typescript_1.mytypescript.getCode("demo/hallo.tsx");
         var parser = new Parser();
         var scope = undefined; // [{ classname: "Dialog2", methodname: "layout" }];
         parser.parse(code, scope, false);

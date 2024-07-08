@@ -658,7 +658,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Checkbox.ts": {
-		"date": 1719772853681.473,
+		"date": 1720458180025.6687,
 		"jassijs.ui.Checkbox": {
 			"$UIComponent": [
 				{
@@ -670,7 +670,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1720369178580.0686,
+		"date": 1720435811666.1936,
 		"jassijs.ui.HTMLComponent": {
 			"@members": {}
 		},
