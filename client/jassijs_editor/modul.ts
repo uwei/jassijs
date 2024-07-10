@@ -14,10 +14,15 @@ export default {
         "node_modules/@types/typescript.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-5.4/lib/typescript.d.ts"
     },
     "require":{ 
+        map:{
+            "*":{
+                "typescript":"jassijs_editor/ext/typescriptservices",
+            }
+        },
         paths: {
             'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
             'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools',
-            typescript:"jassijs_editor/ext/typescriptservices",
+            
             //typescript:"https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-5.4/lib/typescript",
             vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/dev/vs"
         },

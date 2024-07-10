@@ -944,10 +944,14 @@ declare module "jassijs_editor/modul" {
             "node_modules/@types/typescript.d.ts": string;
         };
         require: {
+            map: {
+                "*": {
+                    typescript: string;
+                };
+            };
             paths: {
                 ace: string;
                 'ace/ext/language_tools': string;
-                typescript: string;
                 vs: string;
             };
             shim: {

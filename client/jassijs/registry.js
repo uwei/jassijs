@@ -512,7 +512,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1697213849686.3022
+		"date": 1720553680038.0745
 	},
 	"jassijs/server/DatabaseSchema.ts": {
 		"date": 1682241710000

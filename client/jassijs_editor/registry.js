@@ -221,7 +221,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.HtmlDesigner": {}
 	},
 	"jassijs_editor/modul.ts": {
-		"date": 1720105301984.028
+		"date": 1720612634385.9824
 	},
 	"jassijs_editor/MonacoPanel.ts": {
 		"date": 1720101262364.5872,
@@ -371,7 +371,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"date": 1720090850426.468
 	},
 	"jassijs_editor/ext/typescriptservices.ts": {
-		"date": 1720114589311.0293
+		"date": 1720556246507.595
 	}
 }
  }

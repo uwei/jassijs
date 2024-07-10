@@ -1,8 +1,34 @@
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
@@ -22,7 +48,7 @@ define("jassijs/base/ActionNode", ["require", "exports", "jassijs/remote/Registr
         (0, Registry_1.$Class)("jassijs.base.ActionNode")
     ], ActionNode);
     async function test() {
-        var Actions = (await new Promise((resolve_1, reject_1) => { require(["jassijs/base/Actions"], resolve_1, reject_1); })).Actions;
+        var Actions = (await new Promise((resolve_1, reject_1) => { require(["jassijs/base/Actions"], resolve_1, reject_1); }).then(__importStar)).Actions;
         var actions = await Actions.getActionsFor([new ActionNode()]); //Class Actions
         console.log("found " + actions.length + " Actions");
     }
@@ -35,6 +61,7 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
     exports.$Action = $Action;
     exports.$ActionProvider = $ActionProvider;
     exports.test = test;
+    Registry_2 = __importDefault(Registry_2);
     class ActionProperties {
     }
     exports.ActionProperties = ActionProperties;
@@ -228,6 +255,7 @@ define("jassijs/base/Extensions", ["require", "exports", "jassijs/remote/Registr
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Extensions = void 0;
+    Registry_4 = __importDefault(Registry_4);
     class Extensions {
         constructor() {
             this.items = {};
@@ -372,6 +400,7 @@ define("jassijs/base/PropertyEditorService", ["require", "exports", "jassijs/rem
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.propertyeditor = exports.PropertyEditorService = void 0;
+    Registry_6 = __importDefault(Registry_6);
     let PropertyEditorService = class PropertyEditorService {
         /**
         * manage all PropertyEditors
@@ -450,7 +479,8 @@ define("jassijs/base/Router", ["require", "exports", "jassijs/remote/Registry", 
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.router = exports.Router = void 0;
-    new Promise((resolve_2, reject_2) => { require(["jassijs/remote/Classes"], resolve_2, reject_2); });
+    Windows_1 = __importDefault(Windows_1);
+    new Promise((resolve_2, reject_2) => { require(["jassijs/remote/Classes"], resolve_2, reject_2); }).then(__importStar);
     let Router = class Router {
         constructor() {
         }
@@ -559,6 +589,7 @@ define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassi
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Windows = void 0;
+    goldenlayout_1 = __importDefault(goldenlayout_1);
     let Windows = class Windows {
         /**
          * the window system -> jassijs.windows
@@ -839,7 +870,7 @@ define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassi
             if (save === undefined || save === "")
                 return;
             var all = save.split(",");
-            new Promise((resolve_3, reject_3) => { require(["./Router"], resolve_3, reject_3); }).then(function (router) {
+            new Promise((resolve_3, reject_3) => { require(["./Router"], resolve_3, reject_3); }).then(__importStar).then(function (router) {
                 for (var x = 0; x < all.length; x++) {
                     router.router.navigate(all[x]);
                 }
@@ -964,6 +995,7 @@ define("jassijs/ext/sourcemap", ["source.map", "exports"], function (sm, exp) {
 define("jassijs/ext/spectrum", ["require", "exports", "spectrum", "jassijs/modul"], function (require, exports, spectrum, modul_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    modul_1 = __importDefault(modul_1);
     //'spectrum':'//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min'
     var path = modul_1.default.require.paths["spectrum"];
     //path=path.substring(0,path.lastIndexOf("/"));
@@ -973,6 +1005,7 @@ define("tabulator-tables", ["require", "exports", "tabulatorlib", "jassijs/modul
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Tabulator = void 0;
+    modul_2 = __importDefault(modul_2);
     var Tabulator = tabulator;
     exports.Tabulator = Tabulator;
     var path = modul_2.default.require.paths["tabulatorlib"];
@@ -1613,7 +1646,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/Compile.ts": {
-                "date": 1697213849686.3022
+                "date": 1720553680038.0745
             },
             "jassijs/server/DatabaseSchema.ts": {
                 "date": 1682241710000
@@ -2475,6 +2508,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classes = exports.Classes = exports.JassiError = void 0;
     exports.test = test;
+    Registry_9 = __importDefault(Registry_9);
     let JassiError = class JassiError extends Error {
         constructor(msg) {
             super(msg);
@@ -2507,7 +2541,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
          * @param classname - the class to load
          */
         async loadClass(classname) {
-            var config = (await new Promise((resolve_4, reject_4) => { require(["./Config"], resolve_4, reject_4); })).config;
+            var config = (await new Promise((resolve_4, reject_4) => { require(["./Config"], resolve_4, reject_4); }).then(__importStar)).config;
             var cl = await Registry_9.default.getJSONData("$Class", classname);
             if (cl === undefined) {
                 try {
@@ -2517,7 +2551,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
                         await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                     }
                     else {
-                        await new Promise((resolve_5, reject_5) => { require([classname.replaceAll(".", "/")], resolve_5, reject_5); });
+                        await new Promise((resolve_5, reject_5) => { require([classname.replaceAll(".", "/")], resolve_5, reject_5); }).then(__importStar);
                     }
                 }
                 catch (err) {
@@ -2542,7 +2576,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
                     var imp = await Promise.resolve().then(() => require.main.require(file.replace(".ts", "")));
                 }
                 else {
-                    var imp = await new Promise((resolve_6, reject_6) => { require([file.replace(".ts", "")], resolve_6, reject_6); });
+                    var imp = await new Promise((resolve_6, reject_6) => { require([file.replace(".ts", "")], resolve_6, reject_6); }).then(__importStar);
                 }
             }
             return this.getClass(classname);
@@ -2641,13 +2675,13 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
                 this.init(fs.readFileSync(this.name, 'utf-8'));
             }
             else {
-                var Server = (await new Promise((resolve_7, reject_7) => { require(["jassijs/remote/Server"], resolve_7, reject_7); })).Server;
+                var Server = (await new Promise((resolve_7, reject_7) => { require(["jassijs/remote/Server"], resolve_7, reject_7); }).then(__importStar)).Server;
                 var text = await new Server().loadFile("jassijs.json");
                 this.init(text);
             }
         }
         async saveJSON() {
-            var myfs = (await new Promise((resolve_8, reject_8) => { require(["jassijs/server/NativeAdapter"], resolve_8, reject_8); })).myfs;
+            var myfs = (await new Promise((resolve_8, reject_8) => { require(["jassijs/server/NativeAdapter"], resolve_8, reject_8); }).then(__importStar)).myfs;
             var fname = this.name;
             await myfs.writeFile(fname, JSON.stringify(this.jsonData, undefined, "\t"));
             this.init(await myfs.readFile(fname));
@@ -2878,6 +2912,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
     exports.DBObject = exports.MyFindManyOptions = void 0;
     exports.$DBObject = $DBObject;
     exports.test = test;
+    Registry_15 = __importDefault(Registry_15);
     let cl = Classes_8.classes; //force Classes
     function $DBObject(options) {
         return function (pclass, ...params) {
@@ -3105,6 +3140,7 @@ define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Cl
     exports.DBObjectQuery = exports.DBObjectQueryProperties = void 0;
     exports.$DBObjectQuery = $DBObjectQuery;
     exports.test = test;
+    Registry_16 = __importDefault(Registry_16);
     class DBObjectQueryProperties {
     }
     exports.DBObjectQueryProperties = DBObjectQueryProperties;
@@ -3148,6 +3184,7 @@ define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Regis
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extensions = exports.Extensions = void 0;
     exports.$Extension = $Extension;
+    Registry_17 = __importDefault(Registry_17);
     function $Extension(forclass) {
         return function (pclass) {
             Registry_17.default.register("$Extension", pclass, forclass);
@@ -3699,8 +3736,8 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
             //@ts-ignore
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
                 //@ts-ignore 
-                var fs = await new Promise((resolve_9, reject_9) => { require(['fs'], resolve_9, reject_9); });
-                var Filesystem = await new Promise((resolve_10, reject_10) => { require(["jassijs/server/Filesystem"], resolve_10, reject_10); });
+                var fs = await new Promise((resolve_9, reject_9) => { require(['fs'], resolve_9, reject_9); }).then(__importStar);
+                var Filesystem = await new Promise((resolve_10, reject_10) => { require(["jassijs/server/Filesystem"], resolve_10, reject_10); }).then(__importStar);
                 var modules = Config_1.config.server.modules;
                 for (let modul in modules) {
                     try {
@@ -4006,12 +4043,12 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
             });
         }
         static async simulateUser(user = undefined, password = undefined) {
-            var rights = (await new Promise((resolve_11, reject_11) => { require(["jassijs/remote/security/Rights"], resolve_11, reject_11); })).default;
+            var rights = (await new Promise((resolve_11, reject_11) => { require(["jassijs/remote/security/Rights"], resolve_11, reject_11); }).then(__importStar)).default;
             //	if(await rights.isAdmin()){
             //		throw new Error("not an admin")
             //	}
             //@ts-ignore
-            var Cookies = (await new Promise((resolve_12, reject_12) => { require(["jassijs/util/Cookies"], resolve_12, reject_12); })).Cookies;
+            var Cookies = (await new Promise((resolve_12, reject_12) => { require(["jassijs/util/Cookies"], resolve_12, reject_12); }).then(__importStar)).Cookies;
             if (user === undefined) {
                 Cookies.remove("simulateUser", {});
                 Cookies.remove("simulateUserPassword", {});
@@ -4064,7 +4101,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                 if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                     redirect = new Promise((resolve) => {
                         //@ts-ignore
-                        new Promise((resolve_13, reject_13) => { require(["jassijs/base/LoginDialog"], resolve_13, reject_13); }).then((lib) => {
+                        new Promise((resolve_13, reject_13) => { require(["jassijs/base/LoginDialog"], resolve_13, reject_13); }).then(__importStar).then((lib) => {
                             lib.doAfterLogin(resolve, _this);
                         });
                     });
@@ -4311,6 +4348,7 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
     exports.$Rights = $Rights;
     exports.$ParentRights = $ParentRights;
     exports.$CheckParentRight = $CheckParentRight;
+    Registry_25 = __importDefault(Registry_25);
     class RightProperties {
     }
     exports.RightProperties = RightProperties;
@@ -4719,7 +4757,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
                 if (res === "") {
                     //@ts-ignore
-                    new Promise((resolve_14, reject_14) => { require(["jassijs/ui/Notify"], resolve_14, reject_14); }).then((el) => {
+                    new Promise((resolve_14, reject_14) => { require(["jassijs/ui/Notify"], resolve_14, reject_14); }).then(__importStar).then((el) => {
                         el.notify(fileName + " saved", "info", { position: "bottom right" });
                     });
                     //if (!fromServerdirectory) {
@@ -4730,7 +4768,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 }
                 else {
                     //@ts-ignore
-                    new Promise((resolve_15, reject_15) => { require(["jassijs/ui/Notify"], resolve_15, reject_15); }).then((el) => {
+                    new Promise((resolve_15, reject_15) => { require(["jassijs/ui/Notify"], resolve_15, reject_15); }).then(__importStar).then((el) => {
                         el.notify(fileName + " not saved", "error", { position: "bottom right" });
                     });
                     throw new Classes_13.JassiError(res);
@@ -4775,7 +4813,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     throw new Classes_13.JassiError("only admins can delete");
                 }
                 //@ts-ignore
-                var test = (await new Promise((resolve_16, reject_16) => { require([name.replaceAll("$serverside/", "")], resolve_16, reject_16); })).test;
+                var test = (await new Promise((resolve_16, reject_16) => { require([name.replaceAll("$serverside/", "")], resolve_16, reject_16); }).then(__importStar)).test;
                 var ret;
                 if (test)
                     ret = await test();
@@ -5023,6 +5061,7 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
     exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.ServerserviceProperties = void 0;
     exports.beforeServiceLoad = beforeServiceLoad;
     exports.$Serverservice = $Serverservice;
+    Registry_29 = __importDefault(Registry_29);
     class ServerserviceProperties {
     }
     exports.ServerserviceProperties = ServerserviceProperties;
@@ -5095,6 +5134,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
     exports.autostart = autostart;
     exports.test = test;
     exports.load = load;
+    Registry_31 = __importDefault(Registry_31);
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;
@@ -5481,7 +5521,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
             else {
                 //@ts-ignore
                 //@ts-ignore
-                var ObjectTransaction = (await new Promise((resolve_17, reject_17) => { require(["jassijs/remote/ObjectTransaction"], resolve_17, reject_17); })).ObjectTransaction;
+                var ObjectTransaction = (await new Promise((resolve_17, reject_17) => { require(["jassijs/remote/ObjectTransaction"], resolve_17, reject_17); }).then(__importStar)).ObjectTransaction;
                 var ot = new ObjectTransaction();
                 ot.statements = [];
                 let ret = [];
@@ -5502,7 +5542,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
         }
         async doServerStatement(statements, ot /*:ObjectTransaction*/, num, context) {
             //@ts-ignore
-            var _execute = (await new Promise((resolve_18, reject_18) => { require(["jassijs/server/DoRemoteProtocol"], resolve_18, reject_18); }))._execute;
+            var _execute = (await new Promise((resolve_18, reject_18) => { require(["jassijs/server/DoRemoteProtocol"], resolve_18, reject_18); }).then(__importStar))._execute;
             var _this = this;
             var newcontext = {};
             Object.assign(newcontext, context);
@@ -6325,7 +6365,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
         __metadata("design:paramtypes", [Object])
     ], Button);
     async function test() {
-        var Panel = (await (new Promise((resolve_19, reject_19) => { require(["jassijs/ui/Panel"], resolve_19, reject_19); }))).Panel;
+        var Panel = (await (new Promise((resolve_19, reject_19) => { require(["jassijs/ui/Panel"], resolve_19, reject_19); }).then(__importStar))).Panel;
         var pan = new Panel();
         var but = new Button();
         but.text = "Hallo";
@@ -6479,6 +6519,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     exports.$UIComponent = $UIComponent;
     exports.jc = jc;
     exports.createComponent = createComponent;
+    Registry_42 = __importDefault(Registry_42);
     //import { CSSProperties } from "jassijs/ui/Style";
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
@@ -7533,6 +7574,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
     var ComponentDescriptor_3;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentDescriptor = void 0;
+    Registry_44 = __importDefault(Registry_44);
     let ComponentDescriptor = ComponentDescriptor_3 = class ComponentDescriptor {
         /**
         * describes a Component
@@ -8328,6 +8370,7 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DefaultConverter = exports.$ConverterProperties = void 0;
     exports.$Converter = $Converter;
+    Registry_49 = __importDefault(Registry_49);
     class $ConverterProperties {
     }
     exports.$ConverterProperties = $ConverterProperties;
@@ -9136,6 +9179,8 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectDialog = void 0;
     exports.test = test;
+    Registry_56 = __importDefault(Registry_56);
+    Windows_2 = __importDefault(Windows_2);
     let DBObjectDialog = DBObjectDialog_1 = class DBObjectDialog extends Panel_5.Panel {
         //data: DBObject[];
         constructor() {
@@ -9298,6 +9343,8 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectExplorer = exports.DBObjectActions = exports.DBFileActions = exports.DBObjectNode = void 0;
     exports.test = test;
+    Registry_58 = __importDefault(Registry_58);
+    Windows_3 = __importDefault(Windows_3);
     let DBObjectNode = class DBObjectNode {
     };
     exports.DBObjectNode = DBObjectNode;
@@ -9460,6 +9507,7 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
     exports.DBObjectView = exports.DBObjectViewProperties = void 0;
     exports.$DBObjectView = $DBObjectView;
     exports.test = test;
+    Registry_60 = __importDefault(Registry_60);
     class DBObjectViewProperties {
     }
     exports.DBObjectViewProperties = DBObjectViewProperties;
@@ -9702,6 +9750,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DockingContainer = void 0;
     exports.test = test;
+    goldenlayout_2 = __importDefault(goldenlayout_2);
     //goldenlayout custom version - fixed leak s.u.
     let DockingContainer = class DockingContainer extends Container_1.Container {
         ;
@@ -10044,6 +10093,8 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLEditorPanel = void 0;
     exports.te = te;
+    tinymce_1 = __importDefault(tinymce_1);
+    Registry_64 = __importDefault(Registry_64);
     class Me {
     }
     let HTMLEditorPanel = class HTMLEditorPanel extends Panel_8.Panel {
@@ -11021,7 +11072,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
     ], ObjectChooser);
     async function test() {
         // kk.o=0;
-        var User = (await new Promise((resolve_20, reject_20) => { require(["jassijs/remote/security/User"], resolve_20, reject_20); })).User;
+        var User = (await new Promise((resolve_20, reject_20) => { require(["jassijs/remote/security/User"], resolve_20, reject_20); }).then(__importStar)).User;
         var dlg = new ObjectChooser();
         dlg.items = "jassijs.security.User";
         dlg.value = (await User.findOne());
@@ -11323,6 +11374,7 @@ define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Registry", 
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Property = void 0;
     exports.$Property = $Property;
+    Registry_74 = __importDefault(Registry_74);
     function $Property(property = undefined) {
         return function (target, propertyKey, descriptor) {
             //debugger;
@@ -12270,6 +12322,7 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClassSelectorEditor = void 0;
+    Registry_78 = __importDefault(Registry_78);
     let ClassSelectorEditor = class ClassSelectorEditor extends Editor_2.Editor {
         /**
          * Checkbox Editor for boolean values
@@ -13022,6 +13075,7 @@ define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remo
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Editor = void 0;
     exports.$PropertyEditor = $PropertyEditor;
+    Registry_86 = __importDefault(Registry_86);
     function $PropertyEditor(supportedtypes) {
         return function (pclass) {
             Registry_86.default.register("$PropertyEditor", pclass, supportedtypes);
@@ -13450,7 +13504,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
                             ic.setAttribute("style", "display:none");
                     }
                 });
-                var file = (await new Promise((resolve_21, reject_21) => { require(["jassijs/modul"], resolve_21, reject_21); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
+                var file = (await new Promise((resolve_21, reject_21) => { require(["jassijs/modul"], resolve_21, reject_21); }).then(__importStar)).default.css["materialdesignicons.min.css"] + "?ooo=9";
                 var text = await $.ajax({ method: "get", url: file, crossDomain: true, contentType: "text/plain" });
                 var all = text.split("}.");
                 var html = "";
@@ -14383,6 +14437,8 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SettingsDialog = void 0;
     exports.test = test;
+    Registry_98 = __importDefault(Registry_98);
+    Windows_4 = __importDefault(Windows_4);
     let SettingsObject = class SettingsObject {
         static customComponentDescriptor() {
             var allcl = Registry_98.default.getData("$SettingsDescriptor");
@@ -14733,6 +14789,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Table = void 0;
     exports.test = test;
+    Registry_100 = __importStar(Registry_100);
     let TableEditorProperties = class TableEditorProperties {
     };
     __decorate([
@@ -15489,6 +15546,7 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Textbox = void 0;
     exports.test = test;
+    Registry_103 = __importDefault(Registry_103);
     let Textbox = class Textbox extends DataComponent_6.DataComponent {
         constructor(props = {}) {
             super(props);
@@ -15720,6 +15778,7 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Registry", "jas
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Tree = void 0;
     exports.test = test;
+    Registry_105 = __importDefault(Registry_105);
     /*declare global {
         interface JQuery {
             fancytree: any;
@@ -16563,7 +16622,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Regist
             this.debugpoints = {};
         }
         async createTable() {
-            var Table = (await new Promise((resolve_22, reject_22) => { require(["jassijs/ui/Table"], resolve_22, reject_22); })).Table;
+            var Table = (await new Promise((resolve_22, reject_22) => { require(["jassijs/ui/Table"], resolve_22, reject_22); }).then(__importStar)).Table;
             this.table = new Table({
                 options: {
                     dataTreeChildFunction: function (obj) {
@@ -16904,6 +16963,7 @@ define("jassijs/util/Cookies", ["require", "exports", "jassijs/ext/js-cookie"], 
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Cookies = void 0;
+    js_cookie_1 = __importDefault(js_cookie_1);
     class C {
         set(name, value, params = undefined) {
         }
@@ -16924,6 +16984,8 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CSVImport = void 0;
     exports.test = test;
+    papaparse_1 = __importDefault(papaparse_1);
+    Registry_109 = __importDefault(Registry_109);
     let CSVImport = CSVImport_1 = class CSVImport extends Panel_20.Panel {
         constructor() {
             super();
@@ -17536,6 +17598,7 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", 
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Reloader = void 0;
+    Registry_112 = __importDefault(Registry_112);
     let Reloader = Reloader_1 = class Reloader {
         /**
          * reloads Code

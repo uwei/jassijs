@@ -1,11 +1,37 @@
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
@@ -453,7 +479,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1611490792000
             },
             "jassijs/server/Compile.ts": {
-                "date": 1697213849686.3022
+                "date": 1720553680038.0745
             },
             "jassijs/server/DatabaseSchema.ts": {
                 "date": 1682241710000
@@ -538,6 +564,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classes = exports.Classes = exports.JassiError = void 0;
     exports.test = test;
+    Registry_1 = __importDefault(Registry_1);
     let JassiError = class JassiError extends Error {
         constructor(msg) {
             super(msg);
@@ -570,7 +597,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
          * @param classname - the class to load
          */
         async loadClass(classname) {
-            var config = (await new Promise((resolve_1, reject_1) => { require(["./Config"], resolve_1, reject_1); })).config;
+            var config = (await new Promise((resolve_1, reject_1) => { require(["./Config"], resolve_1, reject_1); }).then(__importStar)).config;
             var cl = await Registry_1.default.getJSONData("$Class", classname);
             if (cl === undefined) {
                 try {
@@ -580,7 +607,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
                         await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                     }
                     else {
-                        await new Promise((resolve_2, reject_2) => { require([classname.replaceAll(".", "/")], resolve_2, reject_2); });
+                        await new Promise((resolve_2, reject_2) => { require([classname.replaceAll(".", "/")], resolve_2, reject_2); }).then(__importStar);
                     }
                 }
                 catch (err) {
@@ -605,7 +632,7 @@ define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry
                     var imp = await Promise.resolve().then(() => require.main.require(file.replace(".ts", "")));
                 }
                 else {
-                    var imp = await new Promise((resolve_3, reject_3) => { require([file.replace(".ts", "")], resolve_3, reject_3); });
+                    var imp = await new Promise((resolve_3, reject_3) => { require([file.replace(".ts", "")], resolve_3, reject_3); }).then(__importStar);
                 }
             }
             return this.getClass(classname);
@@ -704,13 +731,13 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
                 this.init(fs.readFileSync(this.name, 'utf-8'));
             }
             else {
-                var Server = (await new Promise((resolve_4, reject_4) => { require(["jassijs/remote/Server"], resolve_4, reject_4); })).Server;
+                var Server = (await new Promise((resolve_4, reject_4) => { require(["jassijs/remote/Server"], resolve_4, reject_4); }).then(__importStar)).Server;
                 var text = await new Server().loadFile("jassijs.json");
                 this.init(text);
             }
         }
         async saveJSON() {
-            var myfs = (await new Promise((resolve_5, reject_5) => { require(["jassijs/server/NativeAdapter"], resolve_5, reject_5); })).myfs;
+            var myfs = (await new Promise((resolve_5, reject_5) => { require(["jassijs/server/NativeAdapter"], resolve_5, reject_5); }).then(__importStar)).myfs;
             var fname = this.name;
             await myfs.writeFile(fname, JSON.stringify(this.jsonData, undefined, "\t"));
             this.init(await myfs.readFile(fname));
@@ -940,6 +967,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
     exports.DBObject = exports.MyFindManyOptions = void 0;
     exports.$DBObject = $DBObject;
     exports.test = test;
+    Registry_7 = __importDefault(Registry_7);
     let cl = Classes_4.classes; //force Classes
     function $DBObject(options) {
         return function (pclass, ...params) {
@@ -1167,6 +1195,7 @@ define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Cl
     exports.DBObjectQuery = exports.DBObjectQueryProperties = void 0;
     exports.$DBObjectQuery = $DBObjectQuery;
     exports.test = test;
+    Registry_8 = __importDefault(Registry_8);
     class DBObjectQueryProperties {
     }
     exports.DBObjectQueryProperties = DBObjectQueryProperties;
@@ -1210,6 +1239,7 @@ define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Regis
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extensions = exports.Extensions = void 0;
     exports.$Extension = $Extension;
+    Registry_9 = __importDefault(Registry_9);
     function $Extension(forclass) {
         return function (pclass) {
             Registry_9.default.register("$Extension", pclass, forclass);
@@ -1761,8 +1791,8 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
             //@ts-ignore
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
                 //@ts-ignore 
-                var fs = await new Promise((resolve_6, reject_6) => { require(['fs'], resolve_6, reject_6); });
-                var Filesystem = await new Promise((resolve_7, reject_7) => { require(["jassijs/server/Filesystem"], resolve_7, reject_7); });
+                var fs = await new Promise((resolve_6, reject_6) => { require(['fs'], resolve_6, reject_6); }).then(__importStar);
+                var Filesystem = await new Promise((resolve_7, reject_7) => { require(["jassijs/server/Filesystem"], resolve_7, reject_7); }).then(__importStar);
                 var modules = Config_1.config.server.modules;
                 for (let modul in modules) {
                     try {
@@ -2068,12 +2098,12 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
             });
         }
         static async simulateUser(user = undefined, password = undefined) {
-            var rights = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/security/Rights"], resolve_8, reject_8); })).default;
+            var rights = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/security/Rights"], resolve_8, reject_8); }).then(__importStar)).default;
             //	if(await rights.isAdmin()){
             //		throw new Error("not an admin")
             //	}
             //@ts-ignore
-            var Cookies = (await new Promise((resolve_9, reject_9) => { require(["jassijs/util/Cookies"], resolve_9, reject_9); })).Cookies;
+            var Cookies = (await new Promise((resolve_9, reject_9) => { require(["jassijs/util/Cookies"], resolve_9, reject_9); }).then(__importStar)).Cookies;
             if (user === undefined) {
                 Cookies.remove("simulateUser", {});
                 Cookies.remove("simulateUserPassword", {});
@@ -2126,7 +2156,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                 if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                     redirect = new Promise((resolve) => {
                         //@ts-ignore
-                        new Promise((resolve_10, reject_10) => { require(["jassijs/base/LoginDialog"], resolve_10, reject_10); }).then((lib) => {
+                        new Promise((resolve_10, reject_10) => { require(["jassijs/base/LoginDialog"], resolve_10, reject_10); }).then(__importStar).then((lib) => {
                             lib.doAfterLogin(resolve, _this);
                         });
                     });
@@ -2373,6 +2403,7 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
     exports.$Rights = $Rights;
     exports.$ParentRights = $ParentRights;
     exports.$CheckParentRight = $CheckParentRight;
+    Registry_17 = __importDefault(Registry_17);
     class RightProperties {
     }
     exports.RightProperties = RightProperties;
@@ -2781,7 +2812,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
                 if (res === "") {
                     //@ts-ignore
-                    new Promise((resolve_11, reject_11) => { require(["jassijs/ui/Notify"], resolve_11, reject_11); }).then((el) => {
+                    new Promise((resolve_11, reject_11) => { require(["jassijs/ui/Notify"], resolve_11, reject_11); }).then(__importStar).then((el) => {
                         el.notify(fileName + " saved", "info", { position: "bottom right" });
                     });
                     //if (!fromServerdirectory) {
@@ -2792,7 +2823,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 }
                 else {
                     //@ts-ignore
-                    new Promise((resolve_12, reject_12) => { require(["jassijs/ui/Notify"], resolve_12, reject_12); }).then((el) => {
+                    new Promise((resolve_12, reject_12) => { require(["jassijs/ui/Notify"], resolve_12, reject_12); }).then(__importStar).then((el) => {
                         el.notify(fileName + " not saved", "error", { position: "bottom right" });
                     });
                     throw new Classes_9.JassiError(res);
@@ -2837,7 +2868,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     throw new Classes_9.JassiError("only admins can delete");
                 }
                 //@ts-ignore
-                var test = (await new Promise((resolve_13, reject_13) => { require([name.replaceAll("$serverside/", "")], resolve_13, reject_13); })).test;
+                var test = (await new Promise((resolve_13, reject_13) => { require([name.replaceAll("$serverside/", "")], resolve_13, reject_13); }).then(__importStar)).test;
                 var ret;
                 if (test)
                     ret = await test();
@@ -3085,6 +3116,7 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
     exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.ServerserviceProperties = void 0;
     exports.beforeServiceLoad = beforeServiceLoad;
     exports.$Serverservice = $Serverservice;
+    Registry_21 = __importDefault(Registry_21);
     class ServerserviceProperties {
     }
     exports.ServerserviceProperties = ServerserviceProperties;
@@ -3157,6 +3189,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
     exports.autostart = autostart;
     exports.test = test;
     exports.load = load;
+    Registry_23 = __importDefault(Registry_23);
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;
@@ -3543,7 +3576,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
             else {
                 //@ts-ignore
                 //@ts-ignore
-                var ObjectTransaction = (await new Promise((resolve_14, reject_14) => { require(["jassijs/remote/ObjectTransaction"], resolve_14, reject_14); })).ObjectTransaction;
+                var ObjectTransaction = (await new Promise((resolve_14, reject_14) => { require(["jassijs/remote/ObjectTransaction"], resolve_14, reject_14); }).then(__importStar)).ObjectTransaction;
                 var ot = new ObjectTransaction();
                 ot.statements = [];
                 let ret = [];
@@ -3564,7 +3597,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
         }
         async doServerStatement(statements, ot /*:ObjectTransaction*/, num, context) {
             //@ts-ignore
-            var _execute = (await new Promise((resolve_15, reject_15) => { require(["jassijs/server/DoRemoteProtocol"], resolve_15, reject_15); }))._execute;
+            var _execute = (await new Promise((resolve_15, reject_15) => { require(["jassijs/server/DoRemoteProtocol"], resolve_15, reject_15); }).then(__importStar))._execute;
             var _this = this;
             var newcontext = {};
             Object.assign(newcontext, context);
@@ -4027,7 +4060,8 @@ define("jassijs/server/Compile", ["require", "exports", "jassijs/server/NativeAd
                 jsx: NativeAdapter_1.ts.JsxEmit.React,
                 emitDecoratorMetadata: true,
                 experimentalDecorators: true,
-                noResolve: true
+                noResolve: true,
+                esModuleInterop: true
             };
             return ret;
         }
@@ -4253,6 +4287,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBManager = void 0;
+    Registry_26 = __importDefault(Registry_26);
     const parser = require('js-sql-parser');
     const passwordIteration = 10000;
     var _instance = undefined;
@@ -4375,7 +4410,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined) {
                 try {
                     //@ts-ignore
-                    var types = (await new Promise((resolve_16, reject_16) => { require(['pg'], resolve_16, reject_16); })).types;
+                    var types = (await new Promise((resolve_16, reject_16) => { require(['pg'], resolve_16, reject_16); }).then(__importStar)).types;
                     types.setTypeParser(1700, function (val) {
                         return parseFloat(val);
                     });
@@ -4388,7 +4423,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
         async mySync() {
             var con = (0, typeorm_3.getConnection)();
             //@ts-ignore
-            var schem = await new Promise((resolve_17, reject_17) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_17, reject_17); });
+            var schem = await new Promise((resolve_17, reject_17) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_17, reject_17); }).then(__importStar);
             var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
             schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"] = async function () {
                 //try{
@@ -5087,6 +5122,7 @@ define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Cla
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendDBManager = extendDBManager;
+    Registry_28 = __importDefault(Registry_28);
     function extendDBManager() {
         //create Admin User if doesn't a user exists 
         DBManager_2.DBManager.prototype["hasLoaded"] = async function () {
@@ -5167,11 +5203,12 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.remoteProtocol = remoteProtocol;
     exports._execute = _execute;
+    Registry_29 = __importDefault(Registry_29);
     function remoteProtocol(request, response) {
         execute(request, response);
     }
     async function checkSimulateUser(context, request) {
-        var rights = (await new Promise((resolve_18, reject_18) => { require(["jassijs/remote/security/Rights"], resolve_18, reject_18); })).default;
+        var rights = (await new Promise((resolve_18, reject_18) => { require(["jassijs/remote/security/Rights"], resolve_18, reject_18); }).then(__importStar)).default;
         var test = request.cookies["simulateUser"];
         if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
             var db = await Serverservice_6.serverservices.db;
@@ -5187,7 +5224,7 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
         }
     }
     async function execute(request, res) {
-        var RemoteProtocol = (await new Promise((resolve_19, reject_19) => { require(["jassijs/remote/RemoteProtocol"], resolve_19, reject_19); })).RemoteProtocol;
+        var RemoteProtocol = (await new Promise((resolve_19, reject_19) => { require(["jassijs/remote/RemoteProtocol"], resolve_19, reject_19); }).then(__importStar)).RemoteProtocol;
         var context = {
             isServer: true,
             request: request
@@ -5201,7 +5238,7 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
     async function _execute(protext, request, context) {
         // await new Promise((resolve)=>{docls(request,response,resolve)});
         var h = Config_4.config;
-        var RemoteProtocol = (await new Promise((resolve_20, reject_20) => { require(["jassijs/remote/RemoteProtocol"], resolve_20, reject_20); })).RemoteProtocol;
+        var RemoteProtocol = (await new Promise((resolve_20, reject_20) => { require(["jassijs/remote/RemoteProtocol"], resolve_20, reject_20); }).then(__importStar)).RemoteProtocol;
         var prot = new RemoteProtocol();
         var vdata = await prot.parse(protext);
         Object.assign(prot, vdata);
@@ -5334,6 +5371,7 @@ define("typeorm", ["typeorm/index", "typeorm/platform/PlatformTools", "window.SQ
 define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", "jassijs/remote/Registry", "../remote/Serverservice", "./NativeAdapter", "jassijs/remote/Config", "./Compile"], function (require, exports, RegistryIndexer_1, Registry_30, Serverservice_7, NativeAdapter_3, Config_5, Compile_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    Registry_30 = __importStar(Registry_30);
     var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
     let Filesystem = class Filesystem {
         constructor() {
@@ -6299,7 +6337,7 @@ define("jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Se
     });
     (0, Serverservice_9.beforeServiceLoad)(async (name, service) => {
         if (name === "db") {
-            var man = (await new Promise((resolve_21, reject_21) => { require(["jassijs/server/DBManagerExt"], resolve_21, reject_21); }));
+            var man = (await new Promise((resolve_21, reject_21) => { require(["jassijs/server/DBManagerExt"], resolve_21, reject_21); }).then(__importStar));
             man.extendDBManager();
         }
     });
@@ -6770,7 +6808,7 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
         return ret;
     }*/
     async function localExec(prot, context = undefined) {
-        var classes = (await new Promise((resolve_22, reject_22) => { require(["jassijs/remote/Classes"], resolve_22, reject_22); })).classes;
+        var classes = (await new Promise((resolve_22, reject_22) => { require(["jassijs/remote/Classes"], resolve_22, reject_22); }).then(__importStar)).classes;
         var p = new RemoteProtocol_2.RemoteProtocol();
         var C = await classes.loadClass(prot.classname);
         if (context === undefined) {
@@ -6783,7 +6821,7 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
                     }
                 }
             };
-            var Cookies = (await new Promise((resolve_23, reject_23) => { require(["jassijs/util/Cookies"], resolve_23, reject_23); })).Cookies;
+            var Cookies = (await new Promise((resolve_23, reject_23) => { require(["jassijs/util/Cookies"], resolve_23, reject_23); }).then(__importStar)).Cookies;
             if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
                 var man = await Serverservice_10.serverservices.db;
                 var user = await man.login(context, Cookies.get("simulateUser"), Cookies.get("simulateUserPassword"));
@@ -6872,7 +6910,7 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
     }
     async function dozip(directoryname, serverdir = undefined) {
         //@ts-ignore
-        var JSZip = (await new Promise((resolve_24, reject_24) => { require(["jassijs/server/ext/jszip"], resolve_24, reject_24); })).default;
+        var JSZip = (await new Promise((resolve_24, reject_24) => { require(["jassijs/server/ext/jszip"], resolve_24, reject_24); }).then(__importStar)).default;
         if (serverdir)
             throw new Error("serverdir is unsupported on localserver");
         var zip = new JSZip();
@@ -6974,6 +7012,7 @@ define("jassijs/server/Reloader", ["require", "exports", "jassijs/remote/Config"
     var Reloader_2;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Reloader = void 0;
+    Registry_32 = __importDefault(Registry_32);
     let Reloader = Reloader_2 = class Reloader {
         /**
          * reloads Code

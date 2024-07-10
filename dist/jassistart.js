@@ -119,7 +119,8 @@ class JassijsStarter {
         });
     }
 
-    loadModules(res, mods, modules, requireconfig, startlib, beforestartlib, isServer) {
+    loadModules(res, mods, modules,  startlib, beforestartlib, contextname) {
+        var isServer= contextname !== "_";
         for (let x = 0; x < res.length; x++) {
             var conf = res[x].default;
             if (isServer)
@@ -155,7 +156,8 @@ class JassijsStarter {
                 }
                 let toadd = conf.require;
                 if (toadd) {
-                    if (!requireconfig.paths) {
+                    require.s.contexts[contextname].configure(toadd);
+                    /*if (!requireconfig.paths) {
                         requireconfig.paths = {};
                     }
                     if (toadd.paths)
@@ -163,8 +165,13 @@ class JassijsStarter {
                     if (!requireconfig.shim) {
                         requireconfig.shim = {};
                     }
+                    if (!requireconfig.map) {
+                        requireconfig.map = {};
+                    }
                     if (toadd.shim)
                         Object.assign(requireconfig.shim, toadd.shim);
+                    if (toadd.map)
+                        Object.assign(requireconfig.map, toadd.map);*/
                 }
             }
         }
@@ -266,10 +273,11 @@ class JassijsStarter {
             config.config.serverrequire = otherRequire;
         }
         var requireconfig = {};
-        _this.loadModules(res, mods, modules, requireconfig, startlib, beforestartlib, contextname !== "_");
+        require.s.contexts[contextname].configure(requireconfig);
+        _this.loadModules(res, mods, modules,  startlib, beforestartlib,contextname);
         window.jassijs.options = _this.config.options;
         window.jassijs.cssFiles = _this.cssFiles;
-        var h = require.s.contexts[contextname].configure(requireconfig);
+      
         //            requirejs.config(requireconfig);
         //var context=JSON.parse(JSON.stringify(require.s.contexts._.config))
 

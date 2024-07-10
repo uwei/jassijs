@@ -7,6 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define("demo/DelTest", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -680,6 +683,7 @@ define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassi
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MemoryTest = void 0;
+    Registry_9 = __importDefault(Registry_9);
     function test() {
         //let j=import("de/DK");
         // let dk=new DK();
@@ -1908,6 +1912,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TestUpload = void 0;
     exports.test = test;
+    papaparse_1 = __importDefault(papaparse_1);
     let TestUpload = class TestUpload extends Panel_18.Panel {
         constructor() {
             super();

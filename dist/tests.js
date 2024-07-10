@@ -1,3 +1,26 @@
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -6,6 +29,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 define("tests/BigDataTest", ["require", "exports", "tests/remote/TestBigData", "jassijs/remote/Transaction"], function (require, exports, TestBigData_1, Transaction_1) {
     "use strict";
@@ -210,7 +236,7 @@ define("tests/FileActionsTests", ["require", "exports", "jassijs_editor/FileExpl
             t.expectEqual(testcode === code);
             await new Server_1.Server().saveFile("tests/TestFile.ts", code);
             //@ts-ignore
-            var imp = (await new Promise((resolve_1, reject_1) => { require(["tests/TestFile"], resolve_1, reject_1); })).testfunc;
+            var imp = (await new Promise((resolve_1, reject_1) => { require(["tests/TestFile"], resolve_1, reject_1); }).then(__importStar)).testfunc;
             t.expectEqual(imp() === 2);
             var file = new FileNode_1.FileNode("tests/TestFile.ts");
             await FileExplorer_1.FileActions.dodelete([file], false);
@@ -420,7 +446,7 @@ define("tests/remote/T", ["require", "exports", "jassijs/remote/Registry", "jass
             }
             else {
                 //@ts-ignore
-                var H = await new Promise((resolve_2, reject_2) => { require(["Hallo"], resolve_2, reject_2); });
+                var H = await new Promise((resolve_2, reject_2) => { require(["Hallo"], resolve_2, reject_2); }).then(__importStar);
                 return "Hello " + name + H.test(); //this would be execute on server  
             }
         }
@@ -578,6 +604,7 @@ define("tests/RemoteModulTests", ["require", "exports", "jassijs/remote/FileNode
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = test;
+    Registry_6 = __importDefault(Registry_6);
     async function test(teste) {
         try {
             await new Server_3.Server().createModule("testrmodul");
@@ -641,6 +668,7 @@ define("tests/ServerTests", ["require", "exports", "jassijs/remote/Registry", "j
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = test;
+    Registry_7 = __importDefault(Registry_7);
     async function test(tests) {
         var text = "export class Hallo{};export function test(){return " + Registry_7.default.nextID() + "};";
         await new Server_4.Server().saveFile("$serverside/Hallo.ts", text);

@@ -1,11 +1,37 @@
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
@@ -404,7 +430,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
     }
     ;
     async function test() {
-        var CodeEditor = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/CodeEditor"], resolve_1, reject_1); })).CodeEditor;
+        var CodeEditor = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/CodeEditor"], resolve_1, reject_1); }).then(__importStar)).CodeEditor;
         var editor = new CodeEditor();
         //var url = "jassijs_editor/AcePanel.ts";
         editor.height = 300;
@@ -596,6 +622,7 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Regist
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.PDFReport = void 0;
     exports.test = test;
+    pdfmake_1 = __importDefault(pdfmake_1);
     let PDFReport = class PDFReport {
         constructor() {
             // @member {object} - the generated report
@@ -765,6 +792,7 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.PDFViewer = void 0;
     exports.test = test;
+    pdfjs_1 = __importDefault(pdfjs_1);
     class Canavas extends Component_1.Component {
         constructor() {
             super();
@@ -1001,6 +1029,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RComponent = exports.ReportComponentProperties = void 0;
     exports.$ReportComponent = $ReportComponent;
+    Registry_6 = __importDefault(Registry_6);
     //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
     jassijs.includeCSSFile("jassijs_report.css");
     class ReportComponentProperties extends Component_2.UIComponentProperties {
@@ -2866,7 +2895,7 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
             }
             else {
                 //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/server/DoServerreport"], resolve_2, reject_2); })).DoServerreport;
+                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/server/DoServerreport"], resolve_2, reject_2); }).then(__importStar)).DoServerreport;
                 ServerReport_2.cacheLastParameter[path] = parameter;
                 return await new DoServerreport().getDesign(path, parameter);
             }
@@ -2877,7 +2906,7 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
             }
             else {
                 //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); })).DoServerreport;
+                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); }).then(__importStar)).DoServerreport;
                 if (parameter == "useLastCachedParameter")
                     parameter = ServerReport_2.cacheLastParameter[path];
                 return await new DoServerreport().getBase64(path, parameter);
@@ -2890,7 +2919,7 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
             else {
                 var res = await new Server_1.Server().testServersideFile(file.substring(0, file.length - 3), context);
                 //@ts-ignore 
-                var DoServerreport = (await new Promise((resolve_4, reject_4) => { require(["jassijs_report/server/DoServerreport"], resolve_4, reject_4); })).DoServerreport;
+                var DoServerreport = (await new Promise((resolve_4, reject_4) => { require(["jassijs_report/server/DoServerreport"], resolve_4, reject_4); }).then(__importStar)).DoServerreport;
                 return await new DoServerreport().getBase64FromData(res);
             }
         }
@@ -2928,6 +2957,9 @@ define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry"
     exports.Report = exports.ReportProperties = void 0;
     exports.$Report = $Report;
     exports.test = test;
+    Registry_10 = __importStar(Registry_10);
+    pdfmake_2 = __importDefault(pdfmake_2);
+    Windows_1 = __importDefault(Windows_1);
     //import { ReportViewer } from "jassijs_report/ReportViewer";
     class ReportProperties {
     }
@@ -3015,7 +3047,7 @@ define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry"
             //alert("TODO");
         }
         async view() {
-            var ReportViewer = (await new Promise((resolve_5, reject_5) => { require(["jassijs_report/ReportViewer"], resolve_5, reject_5); })).ReportViewer;
+            var ReportViewer = (await new Promise((resolve_5, reject_5) => { require(["jassijs_report/ReportViewer"], resolve_5, reject_5); }).then(__importStar)).ReportViewer;
             var ret = new ReportViewer();
             ret.value = this;
             Windows_1.default.add(ret, this.getName());
@@ -3595,6 +3627,8 @@ define("jassijs_report/Reports", ["require", "exports", "jassijs/ui/ContextMenu"
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Reports = void 0;
     exports.test = test;
+    Registry_12 = __importStar(Registry_12);
+    Windows_2 = __importDefault(Windows_2);
     let Reports = Reports_1 = class Reports extends Panel_4.Panel {
         constructor() {
             super();
@@ -5957,6 +5991,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SimpleReportEditor = void 0;
     exports.test = test;
+    Windows_3 = __importDefault(Windows_3);
     class SimpleCodeEditor extends Panel_7.Panel {
         constructor(codePanel) {
             super();
@@ -6306,6 +6341,7 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs_edito
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = test;
+    Windows_4 = __importDefault(Windows_4);
     //var h=new RemoteObject().test();
     async function start() {
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");

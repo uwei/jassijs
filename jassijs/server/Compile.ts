@@ -45,7 +45,8 @@ export class Compile {
       jsx: ts.JsxEmit.React,
       emitDecoratorMetadata: true,
       experimentalDecorators: true,
-      noResolve: true
+      noResolve: true,
+      esModuleInterop: true
     }
     return ret;
   };

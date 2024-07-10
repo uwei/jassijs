@@ -1,1 +1,1 @@
-{"version":3,"file":"typescriptservices.js","sourceRoot":"","sources":["../../../jassijs_editor/ext/typescriptservices.ts"],"names":[],"mappings":"AAAA,4EAA4E;;;;IAE5E,IAAI,EAAE,GAAC,MAAM,CAAC,IAAI,CAAC,CAAC;IACpB,kBAAe,EAAE,CAAC"}
+{"version":3,"file":"typescriptservices.js","sourceRoot":"","sources":["../../../jassijs_editor/ext/typescriptservices.ts"],"names":[],"mappings":";;;IAEA,4EAA4E;IAC5E,+DAA+D;IAC/D,IAAI,EAAE,GAAC,MAAM,CAAC,IAAI,CAAC,CAAC;IACpB,kBAAe,EAAE,CAAC"}

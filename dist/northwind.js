@@ -7,6 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Categories", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Table_1, BoxPanel_1, Textarea_1, Textbox_1, Registry_1, Panel_1, Property_1, Categories_1, DBObjectView_1) {
     "use strict";
     var _a;
@@ -87,6 +90,7 @@ define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "j
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CustomerOrders = void 0;
     exports.test = test;
+    Windows_1 = __importDefault(Windows_1);
     let CustomerOrders = CustomerOrders_1 = class CustomerOrders extends Panel_2.Panel {
         constructor() {
             super();
@@ -193,6 +197,7 @@ define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CustomerPhoneList = void 0;
     exports.test = test;
+    Windows_2 = __importDefault(Windows_2);
     let CustomerPhoneList = CustomerPhoneList_1 = class CustomerPhoneList extends Panel_3.Panel {
         constructor() {
             super();
@@ -963,6 +968,7 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ProductList = void 0;
     exports.test = test;
+    Windows_3 = __importDefault(Windows_3);
     let ProductList = ProductList_1 = class ProductList extends Panel_6.Panel {
         constructor() {
             super();
