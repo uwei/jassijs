@@ -518,7 +518,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 var text = this.codeEditor.value;
                 var val = this.codeEditor.getObjectFromVariable("this");
                 if (text && this.parser)
-                    this.parser.parse(text);
+                    this.parser.updateCode(text);
                 // this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
             }
         }
@@ -618,6 +618,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         * @param {string} value - the new value
         */
         setPropertyInDesign(property, value) {
+            var _a, _b;
             if (this._multiselectEditors) {
                 for (var m = 0; m < this._multiselectEditors.length; m++) {
                     this._multiselectEditors[m].setPropertyInDesign(property, value);
@@ -636,7 +637,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 //   console.log("rerender");
                 //this._value.lastconfig[property]=value;
                 //this._value.rerender();
-                this._value[property] = value;
+                if (this._value.config) {
+                    var prop = {};
+                    prop[property] = value;
+                    this._value.config(prop);
+                }
+                else
+                    this._value[property] = value;
+            }
+            var updateDummies = (_a = this.codeEditor) === null || _a === void 0 ? void 0 : _a.getDesigner().updateDummies;
+            if (updateDummies) {
+                (_b = this.codeEditor) === null || _b === void 0 ? void 0 : _b.getDesigner().updateDummies();
             }
         }
         /**

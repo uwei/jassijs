@@ -439,13 +439,13 @@ export class HtmlDesigner extends ComponentDesigner {
         //@ts-ignore
         if (from === to && to.nodeType === from.TEXT_NODE) {
             var neu = to.textContent;
-            this.changeText(to, neu.substring(0, frompos) + "" + neu.substring(topos));
+            this.changeText(to, neu.substring(0, frompos) + "" + neu.substring(topos),true);
         } else {
             if (from.nodeType === from.TEXT_NODE) {
-                this.changeText(from, from.textContent.substring(0, frompos));
+                this.changeText(from, from.textContent.substring(0, frompos),true);
             }
             if (to.nodeType === from.TEXT_NODE) {
-                this.changeText(to, to.textContent.substring(topos));
+                this.changeText(to, to.textContent.substring(topos),true);
             }
             //this.changeText(from, from.textContent.substring(0, frompos));
             //this.changeText(to, to.textContent.substring(topos));
@@ -469,10 +469,16 @@ export class HtmlDesigner extends ComponentDesigner {
             }
         }*/
     }
-    protected changeText(node: Node, text: string): Node {
+    protected changeText(node: Node, text: string, deleteNodeIfEmpty = false): Node {
         var varname = this.codeEditor.getVariableFromObject((<any>node)._this);
-        if (this._propertyEditor.codeEditor)
-            this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+        if (this._propertyEditor.codeEditor) {
+            if (deleteNodeIfEmpty&&text===""){
+                 var s = this.componentsToString([(<any>node)._this]);
+                this.deleteComponents(s);
+            }else
+                this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+
+        }
         if (text === "&nbsp;")
             (<HTMLHtmlElement>node).innerHTML = text
         else
@@ -528,11 +534,11 @@ export class HtmlDesigner extends ComponentDesigner {
         _this.keydown(e);
     }
     createTextComponent(text, par, before): Component {
-/*        var comp2 = new TextComponent();
-        var newone = document.createTextNode(text);
-        comp2.init(<any>newone, { noWrapper: true });*/
-        var comp2 = new TextComponent({noWrapper:true});
-        var newone=comp2.dom;
+        /*        var comp2 = new TextComponent();
+                var newone = document.createTextNode(text);
+                comp2.init(<any>newone, { noWrapper: true });*/
+        var comp2 = new TextComponent({ noWrapper: true });
+        var newone = comp2.dom;
         return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");;
     }
     protected insertLineBreak(sel: Selection) {
@@ -579,11 +585,11 @@ export class HtmlDesigner extends ComponentDesigner {
             return;
         var sel = document.getSelection();
         if (sel.anchorNode === null) {
-          /*  var nd = document.createTextNode("");
-            var comp2 = new TextComponent();
-            comp2.init(<any>nd, { noWrapper: true });*/
-            var comp2 = new TextComponent({noWrapper:true});
-            var nd=comp2.dom;
+            /*  var nd = document.createTextNode("");
+              var comp2 = new TextComponent();
+              comp2.init(<any>nd, { noWrapper: true });*/
+            var comp2 = new TextComponent({ noWrapper: true });
+            var nd = comp2.dom;
             if (this.lastSelectedDummy.pre)
                 var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value._parent, this._propertyEditor.value, true, "text");
             else

@@ -365,8 +365,9 @@ define("demo/Dialog7", ["require", "exports", "jassijs/ui/Checkbox", "jassijs/re
                 children: [
                     (0, Component_4.jc)(Panel_7.Panel, {
                         children: [
-                            (0, Component_4.jc)("br"),
-                            "Hsssasa",
+                            "testv",
+                            (0, Component_4.jc)("br", {}),
+                            "abcdef",
                             (0, Component_4.jc)(Panel_7.Panel, {
                                 children: [
                                     (0, Component_4.jc)(Checkbox_2.Checkbox, { text: "sss" }),
@@ -610,7 +611,7 @@ define("demo/hallo5", ["require", "exports", "jassijs/ui/Component", "jassijs/ui
                         me.button.text = "oo";
                         // _this.config({ text: "neu"+x++ });
                     } }),
-                "Haelloggg",
+                "Haello ggg",
                 Component_9.React.createElement("span", null, "kkkk"));
             return ret;
         }
@@ -883,7 +884,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo/Dialog6": {}
             },
             "demo/Dialog7.ts": {
-                "date": 1720458192811.2207,
+                "date": 1720631271135.5447,
                 "demo/Dialog7": {}
             }
         }
@@ -2261,7 +2262,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo/Dialog6": {}
             },
             "demo/Dialog7.ts": {
-                "date": 1720458192811.2207,
+                "date": 1720631271135.5447,
                 "demo/Dialog7": {}
             }
         }

@@ -268,6 +268,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             }
             console.log(all);
             this._propertyEditor.removeVariablesInCode(all);
+            this._componentExplorer.update();
         }
         /**
          * removes the selected component
@@ -280,7 +281,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             }
             this.deleteComponents(text);
             this._updateInvisibleComponents();
-            this._componentExplorer.update();
             this.updateDummies();
         }
         copyProperties(clip, component) {
@@ -767,6 +767,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 _this.editDialog(true);
                 _this._componentExplorer.update();
                 _this._updateInvisibleComponents();
+                _this.updateDummies();
             }
             return varvalue;
         }
@@ -873,8 +874,29 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             };
             dummy.onclick = (ev) => {
                 var _a;
-                _this._propertyEditor.value = ev.target.nd._this;
-                _this.lastSelectedDummy.component = ev.target.nd._this;
+                var all = [ev.target.nd._this];
+                if (node._thisOther) {
+                    for (var x = 0; x < node._thisOther.length; x++) {
+                        var varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
+                        if (varname) {
+                            all.push(node._thisOther[x]);
+                            break;
+                        }
+                    }
+                }
+                var comp = ev.target.nd._this;
+                if (all.length > 1) { //there are more nodes under cursor so we switch the components
+                    var pos = all.indexOf(_this._propertyEditor.value);
+                    if (pos == -1)
+                        pos = 0;
+                    else
+                        pos++;
+                    if (pos >= all.length)
+                        pos = 0;
+                    comp = all[pos];
+                }
+                _this._propertyEditor.value = comp;
+                _this.lastSelectedDummy.component = comp;
                 this.lastSelectedDummy.pre = true;
                 if (((_a = _this.lastSelectedDummy.component.tag) === null || _a === void 0 ? void 0 : _a.toUpperCase()) === "BR") {
                     //dummy.contentEditable=true;

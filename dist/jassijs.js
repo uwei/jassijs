@@ -11914,7 +11914,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
                 var text = this.codeEditor.value;
                 var val = this.codeEditor.getObjectFromVariable("this");
                 if (text && this.parser)
-                    this.parser.parse(text);
+                    this.parser.updateCode(text);
                 // this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
             }
         }

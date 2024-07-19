@@ -670,7 +670,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1720435811666.1936,
+		"date": 1721403231035.141,
 		"jassijs.ui.HTMLComponent": {
 			"@members": {}
 		},

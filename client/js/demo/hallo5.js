@@ -21,7 +21,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Button", "jass
                         me.button.text = "oo";
                         // _this.config({ text: "neu"+x++ });
                     } }),
-                "Haelloggg",
+                "Haello ggg",
                 Component_1.React.createElement("span", null, "kkkk"));
             return ret;
         }

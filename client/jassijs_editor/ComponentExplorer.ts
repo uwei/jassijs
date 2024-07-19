@@ -63,7 +63,23 @@ export class ComponentExplorer extends Panel {
             return this.getComponentChildsOld(item);
         if (item === undefined)
             return [];
-        var ret = []; 
+        var ret = [];
+        if (item.dom?._thisOther) {
+            // <Comp1><Comp2><div> rsults in Tree Comp1-Comp2-div
+            //
+            var pos = item.dom?._thisOther.indexOf(item);
+            if (pos == -1)
+                pos = 0;
+            else
+                pos++;
+            if (pos < item.dom?._thisOther.length) {
+                var varname = this.codeEditor.getVariableFromObject(item.dom._thisOther[pos]);
+                if (varname) {
+                    ret.push(item.dom._thisOther[pos]);
+                    return ret;
+                }
+            }
+        }
         if (item.dom?.childNodes) {
             for (var x = 0; x < item.dom.childNodes.length; x++) {
                 var nd = item.dom.childNodes[x];

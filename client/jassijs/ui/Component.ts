@@ -458,7 +458,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         if (this.dom._this && this.dom._this !== this) {
             if (this.dom._thisOther === undefined)
                 this.dom._thisOther = [];
-            this.dom._thisOther.push(this.dom._this);
+            this.dom._thisOther.splice(0,0,this.dom._this);
         }
         this.dom._this = this;
 
@@ -1184,7 +1184,10 @@ export class TextComponent<T extends TextComponentProperties = {}> extends Compo
         return false;
     }
     render(): React.ReactNode {
-        return <any>document.createTextNode(this.props?.text);
+        var text=this.props?.text;
+        if(text===undefined)
+            text="";
+        return <any>document.createTextNode(text);
     }
     config(props: TextComponentProperties) {
         //  if (this.dom === undefined) {

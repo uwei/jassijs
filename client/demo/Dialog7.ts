@@ -1,3 +1,6 @@
+import { BoxPanel } from "jassijs/ui/BoxPanel";
+import { $UIComponent,Component,ComponentProperties,HTMLComponent,createComponent } from "jassijs/ui/Component";
+import { TextComponent } from "jassijs/ui/Component";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { $Class } from "jassijs/remote/Registry";
@@ -6,9 +9,38 @@ import { jc } from "jassijs/ui/Component";
 import { Button } from "jassijs/ui/Button";
 import { createRefs } from "jassijs/ui/State";
 import { Table } from "jassijs/ui/Table";
-type Me = {
+import { $Property } from "jassijs/ui/Property";
+type Me={
     button1?: Button;
 };
+interface M1Props extends ComponentProperties {
+    text?: string;
+}
+class M2 extends Component<M1Props> {
+    constructor(props: M1Props) {
+        super(props);
+    }
+    render() {
+        return jc("span",{
+            children: [
+                this.states.text,
+                jc(Checkbox,{}),
+                "M2"
+            ]
+        });
+    }
+}
+@$UIComponent({ fullPath: "common/M1" })
+@$Class("demo/M1")
+@$Property({ name: "text",type: "string" })
+class M1 extends Component<M1Props> {
+    constructor(props: M1Props) {
+        super(props);
+    }
+    render() {
+        return jc(M2,{ text: this.states.text.self });
+    }
+}
 @$Class("demo/Dialog7")
 export class Dialog7 extends Panel {
     me: Me;
@@ -18,39 +50,46 @@ export class Dialog7 extends Panel {
         // this.layout(this.me);
     }
     render() {
-        this.me = {};
-        var refs = createRefs(this.me);
+        this.me={};
+        var refs=createRefs(this.me);
         //var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
         //
-        return jc(Panel, {
+        return jc(Panel,{
             label: "hh",
             children: [
-                jc(Panel, {
+                jc(M1,{ text: "ttsadfasdf",style: { color: "red" } }),
+                jc(Panel,{
                     children: [
-                        jc("br"),
-                        "Hsssasa",
-                        jc(Panel, {
+                        "tessdf",
+                        jc(Checkbox),
+                        jc("br",{ tag: "br" }),
+                        jc(Panel,{
                             children: [
-                                jc(Checkbox, { text: "sss" }),
+                                "text3",
+                                jc(Checkbox,{ text: "uu" })
                             ]
                         }),
-                        jc(Button, {
+                        "test7",
+                        "cvxvxcvxcv ",
+                        jc(Button,{
                             text: "Hadds",
                             onclick: () => {
-                                this.me.button1.text = "pp";
-                                return undefined;
                             },
                             tooltip: "dfgdfg",
-                            onfocus: function (event) {
+                            onfocus: function(event) {
                             }
                         })
-                    ]
+                    ],
+                    label: "fg"
                 })
             ]
         });
     }
 }
 export async function test() {
-    var ret = new Dialog7();
+    //var ret=new Dialog7();
+    var k=jc(Dialog7,{});
+    var ret=createComponent(k);
     return ret;
 }
+

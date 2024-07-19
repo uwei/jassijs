@@ -412,7 +412,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     // this.variables.addVariable(sname, val.component, false);
                 }
                 else {
+                    values = Object.values(codePositions);
                     parser.parse(this._codePanel.value, undefined, values); //scope);
+                    for (var x = 0; x < values.length; x++) {
+                        this.variables.addVariable(values[x].name, values[x].component, false);
+                    }
                     //if layout is rendered and an other variable is assigned to this, then remove ths variable
                     if (parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name] && parser.classes[(_f = root === null || root === void 0 ? void 0 : root.constructor) === null || _f === void 0 ? void 0 : _f.name].members["layout"]) {
                         useThis = true;
@@ -453,12 +457,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                             }
                         }
                     }
+                    this.variables.updateCache();
+                    this.variables.update();
+                    // parser.parse(,)
                 }
-                this.variables.updateCache();
-                this.variables.update();
-                // parser.parse(,)
             }
             return parser;
+        }
+        getDesigner() {
+            return this._design;
         }
         /**
          * load the right editor for the returned value

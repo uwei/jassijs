@@ -56,8 +56,10 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             result = this.reformatCode(result);
             return result;
         }
+        updateCode() {
+            //nothing
+        }
         reformatCode(code) {
-            return code;
             const serviceHost = {
                 getScriptFileNames: () => [],
                 getScriptVersion: fileName => "1.0",
@@ -353,7 +355,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     }
                 }
                 if (jsx.component.constructor.name === 'HTMLComponent') {
-                    this.add(jsx.name, "tag", '"' + tagname + '"', undefined, false, false, true);
+                    this.add(jsx.name, "tag", tagname, undefined, false, false, true);
                 }
                 if (((_a = node.parent) === null || _a === void 0 ? void 0 : _a.jname) !== undefined) {
                     this.add((_b = node.parent) === null || _b === void 0 ? void 0 : _b.jname, "add", jsx.name, node, false, false, true);
@@ -363,6 +365,10 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                         var ch = children.initializer.elements[x];
                         if (ch.kind === typescript_1.default.SyntaxKind.StringLiteral) {
                             var varname = this.getNextVariableNameForType("text", "text");
+                            this.variabelStack[varname] = {
+                                component: jsx.component.dom.childNodes[x]._this
+                            };
+                            //this.variabelStack[0];
                             var stext = JSON.stringify(ch.text);
                             this.add(varname, "_new_", stext, ch, false, false, true);
                             this.variabelStack[varname] = ch;
@@ -838,7 +844,6 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
          * @param {string} varname - the variable to remove
          */
         removeVariablesInCode(varnames) {
-            var _a, _b, _c, _d;
             var allprops = [];
             //collect allNodes to delete
             for (var vv = 0; vv < varnames.length; vv++) {
@@ -865,38 +870,41 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 if (allprops[x].node)
                     this.removeNode(allprops[x].node);
             }
-            for (var vv = 0; vv < varnames.length; vv++) {
-                var varname = varnames[vv];
-                //remove lines where used as parameter
-                for (var propkey in this.data) {
-                    var prop = this.data[propkey];
-                    for (var key in prop) {
-                        var props = prop[key];
-                        for (var x = 0; x < props.length; x++) {
-                            let p = props[x];
-                            var params = p.value.split(",");
-                            for (var i = 0; i < params.length; i++) {
-                                if (params[i] === varname || params[i] === "this." + varname) {
-                                    this.removeNode(p.node);
-                                }
-                            }
-                            //in children:[]
-                            //@ts-ignore
-                            var inconfig = (_c = (_b = (_a = prop[key][0]) === null || _a === void 0 ? void 0 : _a.node) === null || _b === void 0 ? void 0 : _b.initializer) === null || _c === void 0 ? void 0 : _c.elements;
-                            if (inconfig) {
-                                for (var x = 0; x < inconfig.length; x++) {
-                                    if (inconfig[x].getText() === varname || inconfig[x].getText().startsWith(varname)) {
-                                        this.removeNode(inconfig[x]);
-                                    }
-                                }
-                                if (inconfig.length === 0) {
-                                    this.removeNode((_d = prop[key][0]) === null || _d === void 0 ? void 0 : _d.node);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            /*
+           for (var vv = 0; vv < varnames.length; vv++) {
+               var varname = varnames[vv];
+    
+               //remove lines where used as parameter
+              for (var propkey in this.data) {
+                   var prop = this.data[propkey];
+                   for (var key in prop) {
+                       var props = prop[key];
+                       for (var x = 0; x < props.length; x++) {
+                           let p = props[x];
+                           var params = p.value.split(",");
+                           for (var i = 0; i < params.length; i++) {
+                               if (params[i] === varname || params[i] === "this." + varname) {
+                                   this.removeNode(p.node);
+                               }
+                           }
+                           //in children:[]
+                           //@ts-ignore
+                           var inconfig = prop[key][0]?.node?.initializer?.elements;
+                           if (inconfig) {
+                               for (var x = 0; x < inconfig.length; x++) {
+                                   if (inconfig[x].getText() === varname || inconfig[x].getText().startsWith(varname)) {
+                                       this.removeNode(inconfig[x]);
+    
+                                   }
+                               }
+                               if (inconfig.length === 0) {
+                                   this.removeNode(prop[key][0]?.node);
+                               }
+                           }
+                       }
+                   }
+               }
+           }*/
             for (var vv = 0; vv < varnames.length; vv++) {
                 delete this.data[varnames[vv]];
             }
@@ -1049,16 +1057,15 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     config.properties.push(newExpression);
                     this.data[variableName]["add"] = [{ node: newExpression, value: [], isFunction: false }];
                 }
-                var parent = this.data[variableName]["_new_"][0].node;
                 if (typeof value === "string") {
                     jname = value;
                     var prop = this.data[value]["_new_"][0];
                     var classname = prop.className;
                     if (classname === "HTMLComponent")
-                        classname = prop.tag;
+                        classname = "\"" + prop.tag + "\"";
                     var node;
                     if (classname === "text") {
-                        node = typescript_1.default.factory.createIdentifier(value);
+                        node = typescript_1.default.factory.createStringLiteral("\"" + value + "\"");
                         //this.add(value, "text", <string>"", node);
                     }
                     else {
@@ -1067,6 +1074,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                         //   node = this.createNode("<" + classname + "/>");
                     }
                     prop.node = node;
+                    prop.isJc = true;
                     prop.value = value;
                 }
                 else {
@@ -1084,7 +1092,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     prop = this.data[name]["_new_"][0];
                     node = value; //removeold
                 }
-                node.parent = parent;
+                node.parent = this.data[variableName]["_new_"][0].node["arguments"][1].properties[0].initializer;
                 if (before) {
                     let found = undefined;
                     let ofound = -1;
@@ -1097,7 +1105,6 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                             break;
                         }
                     }
-                    debugger;
                     //@ts-ignore
                     var childrenNode = this.data[variableName]["add"][0].node.initializer;
                     var args = childrenNode.elements;
@@ -1123,12 +1130,19 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             else { //comp.add(a) --> comp.config({children:[a]})
                 if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
                     let node = this.data[variableName][property][0].node;
-                    this.data[variableName][property];
-                    var pos = config.properties.indexOf(node);
-                    config.properties[pos] = newExpression;
-                    this.data[variableName][property][0].value = value;
-                    this.data[variableName][property][0].node = newExpression;
-                    this.switchToMutlilineIfNeeded(config, property, value);
+                    if (node === undefined && property === "tag") { //jc("div" => jc("span"
+                        this.data[variableName][property][0].value = value;
+                        var sval = value.substring(1, value.length - 1);
+                        this.data[variableName]["_new_"][0].node["arguments"][0] = typescript_1.default.factory.createStringLiteral(sval);
+                    }
+                    else {
+                        this.data[variableName][property];
+                        var pos = config.properties.indexOf(node);
+                        config.properties[pos] = newExpression;
+                        this.data[variableName][property][0].value = value;
+                        this.data[variableName][property][0].node = newExpression;
+                        this.switchToMutlilineIfNeeded(config, property, value);
+                    }
                 }
                 else {
                     config.properties.push(newExpression);
@@ -1376,8 +1390,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     this.data[variableName]["_new_"][0].node.openingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
                     this.data[variableName]["_new_"][0].node.closingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
                     this.data[variableName][property][0].value = value;
-                    node["jname"] = value.replaceAll('"', "");
-                    ;
+                    this.data[variableName]["_new_"][0].node["jname"] = value.replaceAll('"', "");
                     return;
                 }
                 var pos = node.parent["properties"].indexOf(node);

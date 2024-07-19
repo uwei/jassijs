@@ -299,7 +299,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (this.dom._this && this.dom._this !== this) {
                 if (this.dom._thisOther === undefined)
                     this.dom._thisOther = [];
-                this.dom._thisOther.push(this.dom._this);
+                this.dom._thisOther.splice(0, 0, this.dom._this);
             }
             this.dom._this = this;
         }
@@ -1037,7 +1037,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         render() {
             var _a;
-            return document.createTextNode((_a = this.props) === null || _a === void 0 ? void 0 : _a.text);
+            var text = (_a = this.props) === null || _a === void 0 ? void 0 : _a.text;
+            if (text === undefined)
+                text = "";
+            return document.createTextNode(text);
         }
         config(props) {
             //  if (this.dom === undefined) {

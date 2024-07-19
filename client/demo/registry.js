@@ -134,7 +134,7 @@ define("demo/registry",["require"], function(require) {
 		"demo/Dialog6": {}
 	},
 	"demo/Dialog7.ts": {
-		"date": 1720458192811.2207,
+		"date": 1721408545719.8557,
 		"demo/Dialog7": {}
 	}
 }

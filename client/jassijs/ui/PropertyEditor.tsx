@@ -33,7 +33,7 @@ export interface ParserInterface {
     functions: { [name: string]: ts.Node };// = {};
     variables: { [name: string]: ts.Node };// = {};
     classScope: { classname: string, methodname: string }[];
-
+    updateCode(code:string);
     code: string;
     data: { [variable: string]: { [property: string]: any[] } };
     getModifiedCode(): string;
@@ -648,7 +648,7 @@ export class PropertyEditor extends Panel {
             var text = this.codeEditor.value;
             var val = this.codeEditor.getObjectFromVariable("this");
             if (text && this.parser)
-                this.parser.parse(text);
+                this.parser.updateCode(text);
             // this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
         }
     }
@@ -766,6 +766,7 @@ export class PropertyEditor extends Panel {
             //  this.value=this.codeEditor.getObjectFromVariable(this.variablename);
             return;
         }
+       
         if (typeof (this._value[property]) === "function")
             this._value[property](value);
         else {
@@ -773,12 +774,19 @@ export class PropertyEditor extends Panel {
             //   console.log("rerender");
             //this._value.lastconfig[property]=value;
             //this._value.rerender();
-
-            this._value[property] = value;
+            if(this._value.config){
+                var prop:any={};
+                prop[property]=value;
+                this._value.config(prop);
+            }else
+                this._value[property] = value;
 
 
         }
-
+        var updateDummies=this.codeEditor?.getDesigner().updateDummies;
+        if(updateDummies){
+           this.codeEditor?.getDesigner().updateDummies();
+        }
     }
     /**
      * goto source position

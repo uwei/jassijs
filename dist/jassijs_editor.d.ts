@@ -1247,6 +1247,7 @@ declare module "jassijs_editor/util/Parser" {
          */
         constructor();
         getModifiedCode(): string;
+        updateCode(): void;
         reformatCode(code: string): string;
         /**
          * add a property

@@ -395,20 +395,20 @@ export class CodeEditor extends Panel {
                 }
             }
         }
-       // if (this.file.toLocaleLowerCase().endsWith(".tsx")) {
-            for (var x = 0; x < thecomponent.dom.childNodes.length; x++) {//children
-                var ch = <any>thecomponent.dom.childNodes[x];
-                if (ch._this) {
-                    this.fillVariablesAndSetupParser(url, root, ch._this, cache, parser, codePositions);
-                }
+        // if (this.file.toLocaleLowerCase().endsWith(".tsx")) {
+        for (var x = 0; x < thecomponent.dom.childNodes.length; x++) {//children
+            var ch = <any>thecomponent.dom.childNodes[x];
+            if (ch._this) {
+                this.fillVariablesAndSetupParser(url, root, ch._this, cache, parser, codePositions);
             }
-       /* } else {
-            if (thecomponent["_components"]) {
-                for (var x = 0; x < thecomponent["_components"].length; x++) {
-                    this.fillVariablesAndSetupParser(url, root, thecomponent["_components"][x], cache, parser, codePositions);
-                }
-            }
-        }*/
+        }
+        /* } else {
+             if (thecomponent["_components"]) {
+                 for (var x = 0; x < thecomponent["_components"].length; x++) {
+                     this.fillVariablesAndSetupParser(url, root, thecomponent["_components"][x], cache, parser, codePositions);
+                 }
+             }
+         }*/
 
         if (thecomponent === root) {
             //fertig
@@ -454,7 +454,11 @@ export class CodeEditor extends Panel {
                 // this.variables.addVariable(sname, val.component, false);
 
             } else {
-                parser.parse(this._codePanel.value,undefined,values); //scope);
+                values = Object.values(codePositions);
+                parser.parse(this._codePanel.value, undefined, values); //scope);
+                for (var x = 0; x < values.length; x++) {
+                    this.variables.addVariable(values[x].name, values[x].component, false);
+                }
                 //if layout is rendered and an other variable is assigned to this, then remove ths variable
                 if (parser.classes[root?.constructor?.name] && parser.classes[root?.constructor?.name].members["layout"]) {
                     useThis = true;
@@ -497,16 +501,21 @@ export class CodeEditor extends Panel {
                         }
                     }
                 }
+
+
+
+                this.variables.updateCache();
+                this.variables.update();
+                // parser.parse(,)
             }
-
-
-            this.variables.updateCache();
-            this.variables.update();
-            // parser.parse(,)
         }
         return parser;
 
 
+
+    }
+    getDesigner() {
+        return this._design;
     }
     /**
      * load the right editor for the returned value
@@ -590,33 +599,33 @@ export class CodeEditor extends Panel {
                     });
                 }*/
     }
-    private  hookComponents(name, component: Component, react) {
-                if (name === "create") {
-                   
-                    if (component?.props?.["__stack"]) {
-                        component["__stack"] = component.props["__stack"];
-                        delete component.props["__stack"];
+    private hookComponents(name, component: Component, react) {
+        if (name === "create") {
+
+            if (component?.props?.["__stack"]) {
+                component["__stack"] = component.props["__stack"];
+                delete component.props["__stack"];
+            } else {
+                var ex = new Error();
+                if (ex?.stack?.indexOf("$temp.js") === -1) {
+                    ex = <any>{};
+                    //@ts-ignore
+                    Error.captureStackTrace(ex, createComponent);
+                }
+
+                if (ex?.stack?.indexOf("$temp.js") != -1) {
+                    if (react === "React.createElement") {
+                        if (component?.props === undefined)
+                            component.props = {};
+                        component.props["__stack"] = ex.stack;
                     } else {
-                        var ex = new Error();
-                        if (ex?.stack?.indexOf("$temp.js") === -1){
-                            ex= <any>{};
-                            //@ts-ignore
-                            Error.captureStackTrace(ex,createComponent);
-                        }
-                     
-                        if (ex?.stack?.indexOf("$temp.js") != -1) {
-                            if (react === "React.createElement") {
-                                if (component?.props === undefined)
-                                    component.props = {};
-                                component.props["__stack"] = ex.stack;
-                            } else {
-                                //
-                                  component["__stack"] = ex.stack;   
-                            }
-                        }
+                        //
+                        component["__stack"] = ex.stack;
                     }
                 }
             }
+        }
+    }
     private async _evalCodeOnLoad(data) {
         this.variables.clear();
         var code = this._codePanel.value;
@@ -644,7 +653,7 @@ export class CodeEditor extends Panel {
         //@ts-ignore
         if (data.test !== undefined || window.reportdesign) {
             //capure created Components
-          
+
             try {
                 Component.onComponentCreated(this.hookComponents);
                 var ret;

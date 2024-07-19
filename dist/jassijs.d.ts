@@ -2785,6 +2785,7 @@ declare module "jassijs/ui/PropertyEditor" {
             classname: string;
             methodname: string;
         }[];
+        updateCode(code: string): any;
         code: string;
         data: {
             [variable: string]: {

@@ -414,14 +414,14 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             //@ts-ignore
             if (from === to && to.nodeType === from.TEXT_NODE) {
                 var neu = to.textContent;
-                this.changeText(to, neu.substring(0, frompos) + "" + neu.substring(topos));
+                this.changeText(to, neu.substring(0, frompos) + "" + neu.substring(topos), true);
             }
             else {
                 if (from.nodeType === from.TEXT_NODE) {
-                    this.changeText(from, from.textContent.substring(0, frompos));
+                    this.changeText(from, from.textContent.substring(0, frompos), true);
                 }
                 if (to.nodeType === from.TEXT_NODE) {
-                    this.changeText(to, to.textContent.substring(topos));
+                    this.changeText(to, to.textContent.substring(topos), true);
                 }
                 //this.changeText(from, from.textContent.substring(0, frompos));
                 //this.changeText(to, to.textContent.substring(topos));
@@ -444,10 +444,16 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 }
             }*/
         }
-        changeText(node, text) {
+        changeText(node, text, deleteNodeIfEmpty = false) {
             var varname = this.codeEditor.getVariableFromObject(node._this);
-            if (this._propertyEditor.codeEditor)
-                this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+            if (this._propertyEditor.codeEditor) {
+                if (deleteNodeIfEmpty && text === "") {
+                    var s = this.componentsToString([node._this]);
+                    this.deleteComponents(s);
+                }
+                else
+                    this._propertyEditor.setPropertyInCode("text", '"' + text + '"', true, varname);
+            }
             if (text === "&nbsp;")
                 node.innerHTML = text;
             else

@@ -7,10 +7,38 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/Button", "jassijs/ui/State"], function (require, exports, Checkbox_1, Registry_1, Panel_1, Component_1, Button_1, State_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Checkbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/Button", "jassijs/ui/State", "jassijs/ui/Property"], function (require, exports, Component_1, Checkbox_1, Registry_1, Panel_1, Component_2, Button_1, State_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog7 = void 0;
+    class M2 extends Component_1.Component {
+        constructor(props) {
+            super(props);
+        }
+        render() {
+            return (0, Component_2.jc)("span", {
+                children: [
+                    this.states.text,
+                    (0, Component_2.jc)(Checkbox_1.Checkbox, {}),
+                    "M2"
+                ]
+            });
+        }
+    }
+    let M1 = class M1 extends Component_1.Component {
+        constructor(props) {
+            super(props);
+        }
+        render() {
+            return (0, Component_2.jc)(M2, { text: this.states.text.self });
+        }
+    };
+    M1 = __decorate([
+        (0, Component_1.$UIComponent)({ fullPath: "common/M1" }),
+        (0, Registry_1.$Class)("demo/M1"),
+        (0, Property_1.$Property)({ name: "text", type: "string" }),
+        __metadata("design:paramtypes", [Object])
+    ], M1);
     let Dialog7 = class Dialog7 extends Panel_1.Panel {
         constructor() {
             super();
@@ -22,29 +50,33 @@ define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/remote/Registry", 
             var refs = (0, State_1.createRefs)(this.me);
             //var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
             //
-            return (0, Component_1.jc)(Panel_1.Panel, {
+            return (0, Component_2.jc)(Panel_1.Panel, {
                 label: "hh",
                 children: [
-                    (0, Component_1.jc)(Panel_1.Panel, {
+                    (0, Component_2.jc)(M1, { text: "ttsadfasdf", style: { color: "red" } }),
+                    (0, Component_2.jc)(Panel_1.Panel, {
                         children: [
-                            (0, Component_1.jc)("br"),
-                            "Hsssasa",
-                            (0, Component_1.jc)(Panel_1.Panel, {
+                            "tessdf",
+                            (0, Component_2.jc)(Checkbox_1.Checkbox),
+                            (0, Component_2.jc)("br", { tag: "br" }),
+                            (0, Component_2.jc)(Panel_1.Panel, {
                                 children: [
-                                    (0, Component_1.jc)(Checkbox_1.Checkbox, { text: "sss" }),
+                                    "text3",
+                                    (0, Component_2.jc)(Checkbox_1.Checkbox, { text: "uu" })
                                 ]
                             }),
-                            (0, Component_1.jc)(Button_1.Button, {
+                            "test7",
+                            "cvxvxcvxcv ",
+                            (0, Component_2.jc)(Button_1.Button, {
                                 text: "Hadds",
                                 onclick: () => {
-                                    this.me.button1.text = "pp";
-                                    return undefined;
                                 },
                                 tooltip: "dfgdfg",
                                 onfocus: function (event) {
                                 }
                             })
-                        ]
+                        ],
+                        label: "fg"
                     })
                 ]
             });
@@ -56,7 +88,9 @@ define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/remote/Registry", 
     ], Dialog7);
     exports.Dialog7 = Dialog7;
     async function test() {
-        var ret = new Dialog7();
+        //var ret=new Dialog7();
+        var k = (0, Component_2.jc)(Dialog7, {});
+        var ret = (0, Component_1.createComponent)(k);
         return ret;
     }
     exports.test = test;

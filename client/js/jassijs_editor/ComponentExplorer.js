@@ -51,13 +51,29 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          * @param {object} item
          */
         getComponentChilds(item) {
-            var _a;
+            var _a, _b, _c, _d;
             if (this.codeEditor === undefined)
                 return this.getComponentChildsOld(item);
             if (item === undefined)
                 return [];
             var ret = [];
-            if ((_a = item.dom) === null || _a === void 0 ? void 0 : _a.childNodes) {
+            if ((_a = item.dom) === null || _a === void 0 ? void 0 : _a._thisOther) {
+                // <Comp1><Comp2><div> rsults in Tree Comp1-Comp2-div
+                //
+                var pos = (_b = item.dom) === null || _b === void 0 ? void 0 : _b._thisOther.indexOf(item);
+                if (pos == -1)
+                    pos = 0;
+                else
+                    pos++;
+                if (pos < ((_c = item.dom) === null || _c === void 0 ? void 0 : _c._thisOther.length)) {
+                    var varname = this.codeEditor.getVariableFromObject(item.dom._thisOther[pos]);
+                    if (varname) {
+                        ret.push(item.dom._thisOther[pos]);
+                        return ret;
+                    }
+                }
+            }
+            if ((_d = item.dom) === null || _d === void 0 ? void 0 : _d.childNodes) {
                 for (var x = 0; x < item.dom.childNodes.length; x++) {
                     var nd = item.dom.childNodes[x];
                     var varname = this.codeEditor.getVariableFromObject(nd._this);

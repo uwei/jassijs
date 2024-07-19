@@ -1305,7 +1305,11 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                     // this.variables.addVariable(sname, val.component, false);
                 }
                 else {
+                    values = Object.values(codePositions);
                     parser.parse(this._codePanel.value, undefined, values); //scope);
+                    for (var x = 0; x < values.length; x++) {
+                        this.variables.addVariable(values[x].name, values[x].component, false);
+                    }
                     //if layout is rendered and an other variable is assigned to this, then remove ths variable
                     if (parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name] && parser.classes[(_f = root === null || root === void 0 ? void 0 : root.constructor) === null || _f === void 0 ? void 0 : _f.name].members["layout"]) {
                         useThis = true;
@@ -1346,12 +1350,15 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                             }
                         }
                     }
+                    this.variables.updateCache();
+                    this.variables.update();
+                    // parser.parse(,)
                 }
-                this.variables.updateCache();
-                this.variables.update();
-                // parser.parse(,)
+                return parser;
             }
-            return parser;
+            /**
+             * load the right editor for the returned value
+             */
         }
         /**
          * load the right editor for the returned value
@@ -5781,7 +5788,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1720369110089.379,
+                "date": 1720633680820.4297,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -6101,7 +6108,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1720457605031.0369,
+                "date": 1720633561273.411,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -7419,8 +7426,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             result = this.reformatCode(result);
             return result;
         }
+        updateCode() {
+            //nothing
+        }
         reformatCode(code) {
-            return code;
             const serviceHost = {
                 getScriptFileNames: () => [],
                 getScriptVersion: fileName => "1.0",
@@ -7726,6 +7735,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         var ch = children.initializer.elements[x];
                         if (ch.kind === typescript_1.default.SyntaxKind.StringLiteral) {
                             var varname = this.getNextVariableNameForType("text", "text");
+                            this.variabelStack[varname] = {
+                                component: jsx.component.dom.childNodes[x]._this
+                            };
+                            //this.variabelStack[0];
                             var stext = JSON.stringify(ch.text);
                             this.add(varname, "_new_", stext, ch, false, false, true);
                             this.variabelStack[varname] = ch;
@@ -8418,10 +8431,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     var prop = this.data[value]["_new_"][0];
                     var classname = prop.className;
                     if (classname === "HTMLComponent")
-                        classname = prop.tag;
+                        classname = "\"" + prop.tag + "\"";
                     var node;
                     if (classname === "text") {
-                        node = typescript_1.default.factory.createIdentifier(value);
+                        node = typescript_1.default.factory.createIdentifier("\"" + value + "\"");
                         //this.add(value, "text", <string>"", node);
                     }
                     else {
@@ -8460,7 +8473,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                             break;
                         }
                     }
-                    debugger;
                     //@ts-ignore
                     var childrenNode = this.data[variableName]["add"][0].node.initializer;
                     var args = childrenNode.elements;
@@ -9998,7 +10010,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1720369110089.379,
+                "date": 1720633680820.4297,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -10318,7 +10330,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1720457605031.0369,
+                "date": 1720633561273.411,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
