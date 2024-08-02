@@ -6,7 +6,6 @@ const Classes_1 = require("jassijs/remote/Classes");
 const Config_1 = require("jassijs/remote/Config");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 const NativeAdapter_1 = require("jassijs/server/NativeAdapter");
-const typescript_1 = require("typescript");
 class Indexer {
     async updateModul(root, modul, isserver) {
         var path = root + (root === "" ? "" : "/") + modul;
@@ -53,7 +52,7 @@ class Indexer {
                 if (dat !== entry.date) {
                     var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
                     var isTsx = jsFile.toLowerCase().endsWith(".tsx");
-                    var sourceFile = NativeAdapter_1.ts.createSourceFile(isTsx ? 'hallo.tsx' : 'hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true, isTsx ? typescript_1.ScriptKind.TSX : undefined);
+                    var sourceFile = NativeAdapter_1.ts.createSourceFile(isTsx ? 'hallo.tsx' : 'hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true, isTsx ? 4 /*ScriptKind.TSX*/ : undefined);
                     var outDecorations = [];
                     entry = {};
                     entry.date = undefined;

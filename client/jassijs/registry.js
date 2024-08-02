@@ -553,7 +553,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1684358274000
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1721754067220.996
+		"date": 1722612829860.7268
 	},
 	"jassijs/server/Installserver.ts": {
 		"date": 1719314261039.9204

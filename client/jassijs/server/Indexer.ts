@@ -3,7 +3,7 @@ import { JassiError } from "jassijs/remote/Classes";
 import { config } from "jassijs/remote/Config";
 import { serverservices } from "jassijs/remote/Serverservice";
 import { ts } from 'jassijs/server/NativeAdapter';
-import { ScriptKind } from "typescript";
+
 
 
 export abstract class Indexer {
@@ -64,7 +64,7 @@ export abstract class Indexer {
                 if (dat !== entry.date) {
                     var text = <string>await this.readFile(root + (root === "" ? "" : "/") + fileName);
                     var isTsx=jsFile.toLowerCase().endsWith(".tsx");
-                    var sourceFile = ts.createSourceFile( isTsx?'hallo.tsx':'hallo.ts', text, ts.ScriptTarget.ES5, true,isTsx?ScriptKind.TSX:undefined);
+                    var sourceFile = ts.createSourceFile( isTsx?'hallo.tsx':'hallo.ts', text, ts.ScriptTarget.ES5, true,isTsx?4/*ScriptKind.TSX*/:undefined);
                     var outDecorations = [];
                     entry = {};
                     entry.date = undefined;

@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "typescript"], function (require, exports, Classes_1, Config_1, Serverservice_1, NativeAdapter_1, typescript_1) {
+define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_1, Config_1, Serverservice_1, NativeAdapter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -48,7 +48,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config",
                     if (dat !== entry.date) {
                         var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
                         var isTsx = jsFile.toLowerCase().endsWith(".tsx");
-                        var sourceFile = NativeAdapter_1.ts.createSourceFile(isTsx ? 'hallo.tsx' : 'hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true, isTsx ? typescript_1.ScriptKind.TSX : undefined);
+                        var sourceFile = NativeAdapter_1.ts.createSourceFile(isTsx ? 'hallo.tsx' : 'hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true, isTsx ? 4 /*ScriptKind.TSX*/ : undefined);
                         var outDecorations = [];
                         entry = {};
                         entry.date = undefined;
