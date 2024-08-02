@@ -80,6 +80,7 @@ export class ComponentDescriptor {
                                 if (prop.type === undefined) {
                                     if (info !== undefined && info[key] !== undefined) {
                                         var tp = info[key][0][0];
+                                       
                                         if (tp.name === "String")
                                             prop.type = "string";
                                         else if (tp.name === "Number")

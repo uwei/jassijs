@@ -90,3 +90,8 @@ declare module "tests/TestDialog" {
     }
     export function test(): unknown;
 }
+declare module "tests/TestRepeating" {
+    import "jassijs/ext/jquerylib";
+    import "jquery.choosen";
+    export function test(): unknown;
+}

@@ -1,8 +1,9 @@
 
 import { Component, ComponentProperties } from "jassijs/ui/Component";
-import { Databinder } from "jassijs/ui/Databinder";
 import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
+import { StateDatabinder } from "jassijs/ui/StateBinder";
+import { BoundProperty } from "jassijs/ui/State";
 
 
 export interface DataComponentProperties extends ComponentProperties {
@@ -12,7 +13,8 @@ export interface DataComponentProperties extends ComponentProperties {
         *         {string} property - the property to bind]
         */
   
-    bind?: any[];
+    bind?: any[]|BoundProperty;
+    
     /**
    * @member {bool} autocommit -  if true the databinder will update the value on every change
    *                              if false the databinder will update the value on databinder.toForm 
@@ -25,8 +27,7 @@ var tmpDatabinder = undefined;
 @$Class("jassijs.ui.DataComponent")
 export class DataComponent<T extends DataComponentProperties=DataComponentProperties> extends Component<T> implements DataComponentProperties {
     _autocommit: boolean;
-    _databinder: Databinder;
-
+    private _boundProperty:BoundProperty;
 
     /**
     * base class for each Component
@@ -51,22 +52,24 @@ export class DataComponent<T extends DataComponentProperties=DataComponentProper
         //if (this._databinder !== undefined)
         //    this._databinder.checkAutocommit(this);
     }
+    get bind(){
+        return this._boundProperty;
+    }
     /**
      * @param [databinder:jassijs.ui.Databinder,"propertyToBind"]
      */
-   @$Property({ type: "databinder" })
-    set bind(databinder: any[]) {
-        if(databinder===undefined){
-            if(this._databinder!==undefined){
-                this._databinder.remove(this);
-                this._databinder=undefined;
+    @$Property({ type: "databinder" })
+     set bind(boundProperty: BoundProperty) {
+        this._boundProperty=boundProperty;
+        if(boundProperty===undefined){
+            if(boundProperty._databinder!==undefined){
+                boundProperty._databinder.remove(this);
             }
             return;
         }
-        var property = databinder[1];
-        this._databinder = databinder[0];
-        if (this._databinder !== undefined)
-            this._databinder.add(property, this, "onchange");
+        var property = boundProperty._propertyname;
+        if (this._boundProperty !== undefined)
+            this._boundProperty._databinder.add(property, this, "onchange");
     }
 
   /*  rerender(){
@@ -77,9 +80,8 @@ export class DataComponent<T extends DataComponentProperties=DataComponentProper
         super.rerender();
     }*/
     destroy() {
-        if (this._databinder !== undefined) {
-            this._databinder.remove(this);
-            this._databinder = undefined;
+        if(this._boundProperty?._databinder!==undefined){
+            this._boundProperty?._databinder.remove(this);
         }
         super.destroy();
     }

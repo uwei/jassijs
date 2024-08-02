@@ -1,94 +1,51 @@
 declare module "northwind/CategoriesView" {
-    import { Table } from "jassijs/ui/Table";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { Textarea } from "jassijs/ui/Textarea";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Panel } from "jassijs/ui/Panel";
     import { Categories } from "northwind/remote/Categories";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        boxpanel1?: BoxPanel;
-        Id?: Textbox;
-        name?: Textbox;
-        description?: Textarea;
-        panel1?: Panel;
-        table1?: Table;
-    } & DBObjectViewMe;
-    export class CategoriesView extends DBObjectView {
-        me: Me;
-        value: Categories;
-        constructor();
+    import { DBObjectView } from "jassijs/ui/DBObjectView";
+    export class CategoriesView extends DBObjectView<Categories> {
         get title(): string;
-        layout(me: Me): void;
+        render(): any;
     }
     export function test(): unknown;
 }
 declare module "northwind/CustomerOrders" {
-    import { Table } from "jassijs/ui/Table";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-    import { Databinder } from "jassijs/ui/Databinder";
-    import { ObjectChooser } from "jassijs/ui/ObjectChooser";
-    import { Panel } from "jassijs/ui/Panel";
-    type Me = {
-        IDChooseCustomer?: ObjectChooser;
-        databinderCustomer?: Databinder;
-        htmlpanel?: HTMLPanel;
-        boxpanel?: BoxPanel;
-        boxpanel2?: BoxPanel;
-        htmlpanel2?: HTMLPanel;
-        IDOrders?: Table;
-        databinderOrder?: Databinder;
-        table?: Table;
-    };
-    export class CustomerOrders extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
+    import { Customer } from "northwind/remote/Customer";
+    import { Orders } from "northwind/remote/Orders";
+    import { DBObjectView, DBObjectViewProperties } from "jassijs/ui/DBObjectView";
+    export interface CustomerOrdersProperties extends DBObjectViewProperties<Customer> {
+        orders?: Orders[];
+        order?: Orders;
+    }
+    export class CustomerOrders extends DBObjectView<Customer, CustomerOrdersProperties> {
+        constructor(props?: CustomerOrdersProperties);
+        render(): any;
         static showDialog(): void;
         customerChanged(): any;
-        setData(): any;
+        set value(value: Customer);
+        initData(): any;
     }
     export function test(): unknown;
 }
 declare module "northwind/CustomerPhoneList" {
     import { Table } from "jassijs/ui/Table";
-    import { Panel } from "jassijs/ui/Panel";
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
     type Me = {
         table?: Table;
     };
-    export class CustomerPhoneList extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
+    export class CustomerPhoneList extends Component<ComponentProperties> {
+        refs: Me;
+        constructor(props?: {});
+        render(): any;
         setData(): any;
         static showDialog(): void;
     }
     export function test(): unknown;
 }
 declare module "northwind/CustomerView" {
-    import { Textbox } from "jassijs/ui/Textbox";
     import { Customer } from "northwind/remote/Customer";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        id?: Textbox;
-        companyname?: Textbox;
-        contacttitle?: Textbox;
-        contactname?: Textbox;
-        address?: Textbox;
-        postalcode?: Textbox;
-        textbox1?: Textbox;
-        region?: Textbox;
-        textbox2?: Textbox;
-        phone?: Textbox;
-        fax?: Textbox;
-    } & DBObjectViewMe;
-    export class CustomerView extends DBObjectView {
-        me: Me;
-        value: Customer;
-        constructor();
+    import { DBObjectView } from "jassijs/ui/DBObjectView";
+    export class CustomerView extends DBObjectView<Customer> {
         get title(): string;
-        layout(me: Me): void;
+        render(): any;
     }
     export function test(): unknown;
 }
@@ -109,39 +66,11 @@ declare module "northwind/DetailTest" {
     export function test(): unknown;
 }
 declare module "northwind/EmployeesView" {
-    import { ObjectChooser } from "jassijs/ui/ObjectChooser";
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-    import { Image } from "jassijs/ui/Image";
-    import { Textarea } from "jassijs/ui/Textarea";
-    import { Textbox } from "jassijs/ui/Textbox";
     import { Employees } from "northwind/remote/Employees";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        firstName?: Textbox;
-        lastName?: Textbox;
-        title?: Textbox;
-        titleOfCouttesy?: Textbox;
-        address?: Textbox;
-        postalCode?: Textbox;
-        city?: Textbox;
-        region?: Textbox;
-        state?: Textbox;
-        birthDate?: Textbox;
-        hiredate?: Textbox;
-        homephone?: Textbox;
-        notes?: Textarea;
-        image1?: Image;
-        photoPath?: Textbox;
-        id?: Textbox;
-        reportsTo?: HTMLPanel;
-        objectchooser1?: ObjectChooser;
-    } & DBObjectViewMe;
-    export class EmployeesView extends DBObjectView {
-        me: Me;
-        value: Employees;
-        constructor();
+    import { DBObjectView } from "jassijs/ui/DBObjectView";
+    export class EmployeesView extends DBObjectView<Employees> {
         get title(): string;
-        layout(me: Me): void;
+        render(): any;
     }
     export function test(): unknown;
 }
@@ -172,116 +101,48 @@ declare module "northwind/modul" {
     export default _default;
 }
 declare module "northwind/OrdersView" {
-    import { Style } from "jassijs/ui/Style";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { Repeater } from "jassijs/ui/Repeater";
-    import { ObjectChooser } from "jassijs/ui/ObjectChooser";
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
     import { Textbox } from "jassijs/ui/Textbox";
-    import { Panel } from "jassijs/ui/Panel";
     import { Orders } from "northwind/remote/Orders";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
+    import { DBObjectView, DBObjectViewMe, DBObjectViewProperties } from "jassijs/ui/DBObjectView";
+    import { OrderDetails } from "northwind/remote/OrderDetails";
     type Me = {
-        boxpanel1?: BoxPanel;
-        panel1?: Panel;
         shipName?: Textbox;
         shipAddress?: Textbox;
         shipPostalCode?: Textbox;
         shipCity?: Textbox;
         shipCountry?: Textbox;
         shipRegion?: Textbox;
-        panel2?: Panel;
-        id?: Textbox;
-        freight?: Textbox;
-        panel3?: Panel;
-        customername?: HTMLPanel;
-        choosecustomer?: ObjectChooser;
-        shipVia?: HTMLPanel;
-        shipviaChooser?: ObjectChooser;
-        employeename?: HTMLPanel;
-        chooseEmployee?: ObjectChooser;
-        orderDate?: Textbox;
-        requiredDate?: Textbox;
-        shippedDate?: Textbox;
-        boxpanel2?: BoxPanel;
-        htmlpanel1?: HTMLPanel;
-        htmlpanel2?: HTMLPanel;
-        repeater1?: Repeater;
-        detailsQuantity?: Textbox;
-        detailsProduct?: HTMLPanel;
-        objectchooser1?: ObjectChooser;
-        style1?: Style;
     } & DBObjectViewMe;
-    export class OrdersView extends DBObjectView {
-        me: Me;
-        value: Orders;
-        constructor();
+    interface OrdersViewProperties extends DBObjectViewProperties<Orders> {
+        activeDetail: OrderDetails;
+    }
+    export class OrdersView extends DBObjectView<Orders, OrdersViewProperties> {
+        refs: Me;
+        render(): any;
         get title(): string;
-        layout(me: Me): void;
     }
     export function test(): unknown;
 }
 declare module "northwind/ProductList" {
-    import { Checkbox } from "jassijs/ui/Checkbox";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Repeater } from "jassijs/ui/Repeater";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-    import { Databinder } from "jassijs/ui/Databinder";
-    import { Panel } from "jassijs/ui/Panel";
-    type Me = {
-        databinder?: Databinder;
-        repeater?: Repeater;
-        textbox?: Textbox;
-        htmlpanel?: HTMLPanel;
-        checkbox?: Checkbox;
-        htmlpanel3?: HTMLPanel;
-        boxpanel?: BoxPanel;
-        panel?: Panel;
-        boxpanel2?: BoxPanel;
-        htmlpanel2?: HTMLPanel;
-        textbox2?: Textbox;
-        htmlpanel22?: HTMLPanel;
-        textbox22?: Textbox;
-    };
-    export class ProductList extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
+    import { Panel, PanelProperties } from "jassijs/ui/Panel";
+    import { Products } from "northwind/remote/Products";
+    interface ProductListProperties extends PanelProperties {
+        values?: Products[];
+    }
+    export class ProductList extends Panel<ProductListProperties> {
+        constructor(props?: ProductListProperties);
+        render(): any;
         static showDialog(): void;
         setData(): any;
     }
     export function test(): unknown;
 }
 declare module "northwind/ProductView" {
-    import { Style } from "jassijs/ui/Style";
-    import { ObjectChooser } from "jassijs/ui/ObjectChooser";
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-    import { Checkbox } from "jassijs/ui/Checkbox";
-    import { Textbox } from "jassijs/ui/Textbox";
     import { Products } from "northwind/remote/Products";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        id?: Textbox;
-        productName?: Textbox;
-        quantityPerUnit?: Textbox;
-        unitPrice?: Textbox;
-        unitsInStock?: Textbox;
-        unitsOnOrder?: Textbox;
-        reorderLevel?: Textbox;
-        discontinued?: Checkbox;
-        category?: HTMLPanel;
-        categoryChooser?: ObjectChooser;
-        supplier?: HTMLPanel;
-        supplierchooser?: ObjectChooser;
-        styleNumber?: Style;
-    } & DBObjectViewMe;
-    export class ProductView extends DBObjectView {
-        me: Me;
-        value: Products;
-        constructor();
+    import { DBObjectView } from "jassijs/ui/DBObjectView";
+    export class ProductView extends DBObjectView<Products> {
         get title(): string;
-        layout(me: Me): void;
+        render(): any;
     }
     export function test(): unknown;
 }
@@ -382,6 +243,7 @@ declare module "northwind/remote/Orders" {
         ShipPostalCode: string;
         ShipCountry: string;
         Details: OrderDetails[];
+        static findAllWithDetails(): Promise<Orders[]>;
     }
     export function test(): any;
 }
@@ -443,47 +305,20 @@ declare module "northwind/reports/CustomerLabels" {
     export function test(): unknown;
 }
 declare module "northwind/ShippersView" {
-    import { Textbox } from "jassijs/ui/Textbox";
     import { Shippers } from "northwind/remote/Shippers";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        id?: Textbox;
-        phone?: Textbox;
-        companyName?: Textbox;
-    } & DBObjectViewMe;
-    export class ShippersView extends DBObjectView {
-        me: Me;
-        value: Shippers;
-        constructor();
+    import { DBObjectView } from "jassijs/ui/DBObjectView";
+    export class ShippersView extends DBObjectView<Shippers> {
         get title(): string;
-        layout(me: Me): void;
+        render(): any;
     }
     export function test(): unknown;
 }
 declare module "northwind/SuppliersView" {
-    import { Textbox } from "jassijs/ui/Textbox";
     import { Suppliers } from "northwind/remote/Suppliers";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        id?: Textbox;
-        homepage?: Textbox;
-        fax?: Textbox;
-        phone?: Textbox;
-        Country?: Textbox;
-        region?: Textbox;
-        city?: Textbox;
-        postalCode?: Textbox;
-        address?: Textbox;
-        contactTitle?: Textbox;
-        contactName?: Textbox;
-        companyName?: Textbox;
-    } & DBObjectViewMe;
-    export class SuppliersView extends DBObjectView {
-        me: Me;
-        value: Suppliers;
-        constructor();
+    import { DBObjectView } from "jassijs/ui/DBObjectView";
+    export class SuppliersView extends DBObjectView<Suppliers> {
         get title(): string;
-        layout(me: Me): void;
+        render(): any;
     }
     export function test(): unknown;
 }

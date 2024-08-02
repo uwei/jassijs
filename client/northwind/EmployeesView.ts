@@ -5,220 +5,163 @@ import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 import { Image } from "jassijs/ui/Image";
 import { Textarea } from "jassijs/ui/Textarea";
 import { Textbox } from "jassijs/ui/Textbox";
-import { Button } from "jassijs/ui/Button";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
-import { $Property } from "jassijs/ui/Property";
+
 import { Employees } from "northwind/remote/Employees";
-import { Databinder } from "jassijs/ui/Databinder";
-import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
-import { notify } from "jassijs/ui/Notify";
-import { validate } from "jassijs/remote/Validator";
-type Me = {
-    firstName?: Textbox;
-    lastName?: Textbox;
-    title?: Textbox;
-    titleOfCouttesy?: Textbox;
-    address?: Textbox;
-    postalCode?: Textbox;
-    city?: Textbox;
-    region?: Textbox;
-    state?: Textbox;
-    birthDate?: Textbox;
-    hiredate?: Textbox;
-    homephone?: Textbox;
-    notes?: Textarea;
-    image1?: Image;
-    photoPath?: Textbox;
-    id?: Textbox;
-    reportsTo?: HTMLPanel;
-    objectchooser1?: ObjectChooser;
-} & DBObjectViewMe;
+
+import { DBObjectView, $DBObjectView, DBObjectViewMe, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
+
+import { jc } from "jassijs/ui/Component";
+import { BoxPanel } from "jassijs/ui/BoxPanel";
+
 @$DBObjectView({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" })
 @$Class("northwind.EmployeesView")
-export class EmployeesView extends DBObjectView {
-    declare me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    declare value: Employees;
-    constructor() {
-        super();
-        //this.me = {}; this is called in objectdialog
-        this.layout(this.me);
-    }
+export class EmployeesView extends DBObjectView<Employees> {
     get title() {
         return this.value === undefined ? "EmployeesView" : "EmployeesView " + this.value.id;
     }
-    layout(me: Me) {
-        me.firstName = new Textbox();
-        me.lastName = new Textbox();
-        me.title = new Textbox();
-        me.titleOfCouttesy = new Textbox();
-        me.address = new Textbox();
-        me.postalCode = new Textbox();
-        me.city = new Textbox();
-        me.region = new Textbox();
-        me.state = new Textbox();
-        me.birthDate = new Textbox();
-        me.hiredate = new Textbox();
-        me.homephone = new Textbox();
-        me.notes = new Textarea();
-        me.image1 = new Image();
-        me.photoPath = new Textbox();
-        me.id = new Textbox();
-        me.reportsTo = new HTMLPanel();
-        me.objectchooser1 = new ObjectChooser();
-        this.me.main.config({
+    render() {
+        return jc(Panel, {
             children: [
-                me.id.config({
-                    x: 5,
-                    y: 5,
-                    width: 60,
+                jc(DBObjectViewToolbar, { view: this }),
+                jc(Textbox, {
                     label: "Id",
-                    bind: [me.databinder, "id"],
+                    bind: this.states.value.bind.id,
+                    width: 60,
                     converter: new NumberConverter()
                 }),
-                me.firstName.config({
-                    x: 80,
-                    y: 5,
+                jc(Textbox, {
                     label: "First name",
-                    bind: [me.databinder, "FirstName"]
+                    bind: this.states.value.bind.FirstName,
                 }),
-                me.lastName.config({
-                    x: 250,
-                    y: 5,
+                jc(Textbox, {
                     label: "Last Name",
-                    bind: [me.databinder, "LastName"]
+                    bind: this.states.value.bind.LastName,
                 }),
-                me.title.config({
-                    x: 420,
-                    y: 5,
-                    bind: [me.databinder, "Title"],
+                jc(Textbox, {
+                    bind: this.states.value.bind.Title,
                     label: "Title",
                     width: 90
                 }),
-                me.titleOfCouttesy.config({
-                    x: 525,
-                    y: 5,
+                jc(Textbox, {
                     label: "Title of C.",
                     width: 85,
-                    bind: [me.databinder, "TitleOfCourtesy"]
+                    bind: this.states.value.bind.TitleOfCourtesy
                 }),
-                me.address.config({
-                    x: 5,
-                    y: 50,
-                    label: "Address",
-                    bind: [me.databinder, "Address"],
-                    width: 345
+                jc("br"),
+                jc(BoxPanel, {
+                    horizontal: true,
+                    children: [
+                        jc(Panel, {
+                            children: [
+                                jc(Textbox, {
+                                    label: "Address",
+                                    bind: this.states.value.bind.Address,
+                                    width: 345
+                                }),
+                                jc("br"),
+                                jc(Textbox, {
+                                    label: "Postal Code",
+                                    bind: this.states.value.bind.PostalCode,
+                                    width: 90
+                                }),
+                                jc(Textbox, {
+                                    bind: this.states.value.bind.City,
+                                    label: "City",
+                                    width: 240
+                                }),
+                                jc("br"),
+                                jc(Textbox, {
+                                    bind: this.states.value.bind.Region,
+                                    label: "Region",
+                                    width: 90
+                                }),
+                                jc(Textbox, {
+                                    bind: this.states.value.bind.Country,
+                                    label: "country",
+                                    width: 240
+                                }),
+                                jc("br"),
+                                jc(Textbox, {
+                                    width: 100,
+                                    bind: this.states.value.bind.BirthDate,
+                                    label: "Birth Date",
+                                    converter: new DateTimeConverter()
+                                }),
+                                jc(Textbox, {
+                                    bind: this.states.value.bind.HireDate,
+                                    label: "Hire Date",
+                                    width: 95,
+                                    converter: new DateTimeConverter()
+                                }),
+                                jc("br"),
+                                jc(Textbox, {
+                                    bind: this.states.value.bind.HomePhone,
+                                    label: "Home Phone",
+                                    width: 130
+                                })
+                            ]
+                        }),
+                        jc(Textarea, {
+                            width: 240,
+                            height: 155,
+                            bind: this.states.value.bind.Notes,
+                            label: "Notes"
+                        }),
+                        jc(Image, {
+                            src: "",
+                            style: {
+                                backgroundColor: "black",
+                                borderStyle: "solid"
+                            }
+                            , width: 125, bind: this.states.value.bind.PhotoPath
+                        }),
+                    ]
                 }),
-                me.postalCode.config({
-                    x: 5,
-                    y: 95,
-                    label: "Postal Code",
-                    bind: [me.databinder, "PostalCode"],
-                    width: 90
-                }),
-                me.city.config({
-                    x: 110,
-                    y: 95,
-                    bind: [me.databinder, "City"],
-                    label: "City",
-                    width: 240
-                }),
-                me.region.config({
-                    x: 5,
-                    y: 140,
-                    bind: [me.databinder, "Region"],
-                    label: "Region",
-                    width: 90
-                }),
-                me.state.config({
-                    x: 110,
-                    y: 140,
-                    bind: [me.databinder, "Country"],
-                    label: "country",
-                    width: 240
-                }),
-                me.birthDate.config({
-                    x: 5,
-                    y: 190,
-                    width: 100,
-                    bind: [me.databinder, "BirthDate"],
-                    label: "Birth Date",
-                    converter: new DateTimeConverter()
-                }),
-                me.hiredate.config({
-                    x: 115,
-                    y: 190,
-                    bind: [me.databinder, "HireDate"],
-                    label: "Hire Date",
-                    width: 95,
-                    converter: new DateTimeConverter()
-                }),
-                me.homephone.config({
-                    x: 220,
-                    y: 190,
-                    bind: [me.databinder, "HomePhone"],
-                    label: "Home Phone",
-                    width: 130
-                }),
-                me.photoPath.config({
-                    x: 5,
-                    y: 240,
-                    bind: [me.databinder, "PhotoPath"],
+                jc(Textbox, {
+                    bind: this.states.value.bind.PhotoPath,
                     label: "Photo Path",
                     width: 460
                 }),
-                me.notes.config({
-                    x: 375,
-                    y: 50,
-                    width: 240,
-                    height: 155,
-                    bind: [me.databinder, "Notes"],
-                    label: "Notes"
-                }),
-                me.image1.config({
-                    x: 630,
-                    y: 20,
-                    src: "",
-                    style: {
-                        backgroundColor: "black",
-                        borderStyle: "solid"
-                    },
-                    width: 125,
-                    bind: [me.databinder, "PhotoPath"]
-                }),
-                me.reportsTo.config({
-                    x: 7,
-                    y: 298,
+                jc("br"),
+
+                jc(Panel, {
                     label: "Reports To",
-                    bind: [me.databinder, "ReportsTo"],
-                    template: "{{FirstName}} {{LastName}}",
-                    width: 160
-                }),
-                me.objectchooser1.config({
-                    x: 170,
-                    y: 310,
-                    width: 25,
-                    height: 25,
-                    bind: [me.databinder, "ReportsTo"],
-                    items: "northwind.Employees"
+                    children: [
+                        jc(HTMLPanel, {
+                            bind: this.states.value.bind.ReportsTo.FirstName
+                        }),
+                        " ",
+                        jc(HTMLPanel, {
+                            bind: this.states.value.bind.ReportsTo.LastName
+                        }),
+                        jc(ObjectChooser, {
+                            width: 25,
+                            height: 25,
+                            bind: this.states.value.bind.ReportsTo,
+                            items: "northwind.Employees"
+                        })
+                    ]
                 })
-            ],
-            isAbsolute: true,
-            width: "750",
-            height: "360"
+            ]
         });
     }
+    /*
+     jc(HTMLPanel, {
+                        label: "Reports To",
+                        bind: this.states.value.bind.ReportsTo,
+                        template: "{{FirstName}} {{LastName}}",
+                        width: 160
+                    }),*/
 }
 export async function test() {
     var em = (await Employees.find({ id: 4 }))[0];
     var ret = new EmployeesView;
-    ret["value"] = em;
-    
-    var h=await validate(em);
-    
-   
-   // ret.me.address
+    ret.value = em;
+
+
+    //var h=await validate(em);
+    // ret.me.address
     return ret;
 }

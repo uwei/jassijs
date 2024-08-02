@@ -57,6 +57,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
             var promise = undefined;
             if (property.editor !== undefined) {
                 sclass = property.editor;
+                //   return this.loadType(sclass);
             }
             else {
                 if (this.data[property.type] === undefined) {
@@ -66,6 +67,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
                     sclass = this.data[property.type][0];
             }
             var oclass = Classes_1.classes.getClass(sclass);
+            if (oclass === undefined)
+                return Classes_1.classes.loadClass(sclass);
             if (oclass)
                 return new (oclass)(property, propertyEditor);
             throw new Error("class not loaded " + sclass);

@@ -6,6 +6,7 @@ const Classes_1 = require("jassijs/remote/Classes");
 const Config_1 = require("jassijs/remote/Config");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 const NativeAdapter_1 = require("jassijs/server/NativeAdapter");
+const typescript_1 = require("typescript");
 class Indexer {
     async updateModul(root, modul, isserver) {
         var path = root + (root === "" ? "" : "/") + modul;
@@ -35,7 +36,7 @@ class Indexer {
                 delete index[key];
             }
         }
-        var jsFiles = await this.dirFiles(modul, path, [".ts"], ["node_modules"]);
+        var jsFiles = await this.dirFiles(modul, path, [".ts", ".tsx"], ["node_modules"]);
         for (let x = 0; x < jsFiles.length; x++) {
             var jsFile = jsFiles[x];
             var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
@@ -51,7 +52,8 @@ class Indexer {
                 var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
                 if (dat !== entry.date) {
                     var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
-                    var sourceFile = NativeAdapter_1.ts.createSourceFile('hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true);
+                    var isTsx = jsFile.toLowerCase().endsWith(".tsx");
+                    var sourceFile = NativeAdapter_1.ts.createSourceFile(isTsx ? 'hallo.tsx' : 'hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true, isTsx ? typescript_1.ScriptKind.TSX : undefined);
                     var outDecorations = [];
                     entry = {};
                     entry.date = undefined;
@@ -148,13 +150,13 @@ class Indexer {
         if (node.kind === NativeAdapter_1.ts.SyntaxKind.ClassDeclaration) {
             if (node["modifiers"] !== undefined) {
                 var dec;
+                var sclass = undefined;
                 for (var m = 0; m < node["modifiers"].length; m++) {
                     var decnode = node["modifiers"][m];
                     if (decnode.kind === NativeAdapter_1.ts.SyntaxKind.Decorator) {
                         //if (node.decorators !== undefined) {
                         if (dec === undefined)
                             dec = {};
-                        var sclass = undefined;
                         //for (let x = 0; x < node.decorators.length; x++) {
                         // var decnode = node.decorators[x];
                         var ex = decnode.expression;

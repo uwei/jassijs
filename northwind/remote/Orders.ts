@@ -7,71 +7,76 @@ import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMa
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { Shippers } from "northwind/remote/Shippers";
 import { ValidateIsArray, ValidateIsDate, ValidateIsInstanceOf, ValidateIsNumber, ValidateIsString } from "jassijs/remote/Validator";
+
 @$DBObject()
 @$Class("northwind.Orders")
 export class Orders extends DBObject {
-    @ValidateIsNumber({optional:true})
+    @ValidateIsNumber({ optional: true })
     @PrimaryColumn()
     declare id: number;
     constructor() {
         super();
-    } 
+    }
 
-    @ValidateIsInstanceOf({type:type=>Customer})
+    @ValidateIsInstanceOf({ type: type => Customer })
     @ManyToOne(type => Customer)
     Customer: Customer;
 
-    @ValidateIsInstanceOf({type:type=>Employees})
+    @ValidateIsInstanceOf({ type: type => Employees })
     @ManyToOne(type => Employees)
     Employee: Employees;
 
-    @ValidateIsDate({optional:true})
+    @ValidateIsDate({ optional: true })
     @Column({ nullable: true })
     OrderDate: Date;
 
-    @ValidateIsDate({optional:true})
+    @ValidateIsDate({ optional: true })
     @Column({ nullable: true })
     RequiredDate: Date;
-    
-    @ValidateIsDate({optional:true})
+
+    @ValidateIsDate({ optional: true })
     @Column({ nullable: true })
     ShippedDate: Date;
-    
-    @ValidateIsInstanceOf({type:type=>Shippers})
+
+    @ValidateIsInstanceOf({ type: type => Shippers })
     @ManyToOne(type => Shippers)
     ShipVia: Shippers;
 
-    @ValidateIsNumber({optional:true})
+    @ValidateIsNumber({ optional: true })
     @Column({ nullable: true, type: "decimal" })
     Freight: number;
 
-    @ValidateIsString({optional:true})
+    @ValidateIsString({ optional: true })
     @Column({ nullable: true })
     ShipName: string;
 
-    @ValidateIsString({optional:true})
+    @ValidateIsString({ optional: true })
     @Column({ nullable: true })
     ShipAddress: string;
 
-    @ValidateIsString({optional:true})
+    @ValidateIsString({ optional: true })
     @Column({ nullable: true })
     ShipCity: string;
 
-    @ValidateIsString({optional:true})
+    @ValidateIsString({ optional: true })
     @Column({ nullable: true })
     ShipRegion: string;
 
-    @ValidateIsString({optional:true})
+    @ValidateIsString({ optional: true })
     @Column({ nullable: true })
     ShipPostalCode: string;
 
-    @ValidateIsString({optional:true})
+    @ValidateIsString({ optional: true })
     @Column({ nullable: true })
     ShipCountry: string;
 
-    @ValidateIsArray({type:type=>OrderDetails})
-    @OneToMany(type => OrderDetails, e=>e.Order)
+    @ValidateIsArray({ type: type => OrderDetails })
+    @OneToMany(type => OrderDetails, e => e.Order)
     Details: OrderDetails[];
+    static async findAllWithDetails(): Promise<Orders[]> {
+        return <any>await Orders.find({ relations: ["*"] });
+    }
+
 }
 export async function test() {
 }

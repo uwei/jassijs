@@ -996,8 +996,6 @@ define("jassijs_report/RColumns", ["require", "exports", "jassijs/remote/Registr
             var ret = super.toJSON();
             ret.columns = [];
             for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
                 //@ts-ignore
                 ret.columns.push(this._components[x].toJSON());
             }
@@ -1915,7 +1913,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
-                "date": 1655929934000,
+                "date": 1721763160019.909,
                 "jassijs_report.RColumns": {
                     "$ReportComponent": [
                         {
@@ -1987,7 +1985,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1697200270448.8713,
+                "date": 1721763173671.8528,
                 "jassijs_report.InfoProperties": {
                     "@members": {}
                 },
@@ -2077,7 +2075,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ROList.ts": {
-                "date": 1719588965636.7617,
+                "date": 1721763181480.2773,
                 "jassijs_report.ROList": {
                     "$ReportComponent": [
                         {
@@ -2092,7 +2090,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-                "date": 1699115329566.395,
+                "date": 1721763186807.8606,
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -2127,7 +2125,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-                "date": 1719588905687.799,
+                "date": 1721763274507.0127,
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -2148,7 +2146,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1719757536098.1802,
+                "date": 1721763287323.4111,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -2179,7 +2177,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTextGroup.ts": {
-                "date": 1656016376000,
+                "date": 1721763243509.179,
                 "jassijs_report.RTextGroup": {
                     "$ReportComponent": [
                         {
@@ -2193,7 +2191,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUList.ts": {
-                "date": 1719588330055.1697,
+                "date": 1721763248473.9978,
                 "jassijs_report.RUList": {
                     "$ReportComponent": [
                         {
@@ -3535,44 +3533,54 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             if (this.styleContainer._components.length > 0) {
                 r.styles = {};
                 for (var x = 0; x < this.styleContainer._components.length; x++) {
-                    if (!this.styleContainer._components[0].designDummyFor)
-                        r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
+                    r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
                 }
+                //var _this = this;
+                if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
+                    r.background = this.backgroundPanel.toJSON();
+                }
+                if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
+                    r.header = this.headerPanel.toJSON();
+                }
+                if (!(this.footerPanel._components.length === 0 || (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
+                    r.footer = this.footerPanel.toJSON();
+                }
+                r.content = this.contentPanel.toJSON();
+                if (this.pageOrientation) {
+                    r.pageOrientation = this.pageOrientation;
+                }
+                if (this.pageMargins)
+                    r.pageMargins = this.pageMargins;
+                if (this.pageSize)
+                    r.pageSize = this.pageSize;
+                if (this.info)
+                    r.info = this.info;
+                if (this.compress)
+                    r.compress = this.compress;
+                if (this.userPassword)
+                    r.userPassword = this.userPassword;
+                if (this.ownerPassword)
+                    r.ownerPassword = this.ownerPassword;
+                if (this.permissions)
+                    r.permissions = this.permissions;
+                if (this.images) {
+                    r.images = this.images;
+                }
+                Object.assign(r, this["otherProperties"]);
+                //delete r.data;
+                return r;
             }
-            //var _this = this;
-            if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
-                r.background = this.backgroundPanel.toJSON();
-            }
-            if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
-                r.header = this.headerPanel.toJSON();
-            }
-            if (!(this.footerPanel._components.length === 0 || (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
-                r.footer = this.footerPanel.toJSON();
-            }
-            r.content = this.contentPanel.toJSON();
-            if (this.pageOrientation) {
-                r.pageOrientation = this.pageOrientation;
-            }
-            if (this.pageMargins)
-                r.pageMargins = this.pageMargins;
-            if (this.pageSize)
-                r.pageSize = this.pageSize;
-            if (this.info)
-                r.info = this.info;
-            if (this.compress)
-                r.compress = this.compress;
-            if (this.userPassword)
-                r.userPassword = this.userPassword;
-            if (this.ownerPassword)
-                r.ownerPassword = this.ownerPassword;
-            if (this.permissions)
-                r.permissions = this.permissions;
-            if (this.images) {
-                r.images = this.images;
-            }
-            Object.assign(r, this["otherProperties"]);
-            //delete r.data;
-            return r;
+            /**
+           * adds a component to the container
+           * @param {jassijs.ui.Component} component - the component to add
+           */
+            /* add(component) {
+                 if (component["designPanel"])
+                     super.add(component);
+                 else
+                     super.addBefore(component, this.footerPanel);
+         
+             }*/
         }
     };
     exports.ReportDesign = ReportDesign;
@@ -4251,8 +4259,6 @@ define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry"
             if (this.type)
                 ret.type = this.type;
             for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
                 //@ts-ignore
                 ret.ol.push(this._components[x].toJSON());
             }
@@ -4344,8 +4350,6 @@ define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Registry"
             var ret = super.toJSON();
             ret.stack = [];
             for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
                 //@ts-ignore
                 ret.stack.push(this._components[x].toJSON());
             }
@@ -4658,17 +4662,13 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             removeColumn.items._setDesignMode = (nothing) => { };
             removeColumn.text = "delete column";
             removeColumn.onclick((evt) => {
-                var _a;
                 var info = _this.getInfoFromEvent(evt);
                 if (_this.widths && _this.widths.length > 0)
                     _this.widths.slice(info.column, 0);
                 for (var x = 0; x < _this._components.length; x++) {
                     var tr = _this._components[x];
-                    //@ts-ignore
-                    if (((_a = tr._components[info.column]) === null || _a === void 0 ? void 0 : _a.designDummyFor) === undefined) {
-                        if (tr._components.length > 1)
-                            tr.remove(tr._components[info.column], true);
-                    }
+                    if (tr._components.length > 1)
+                        tr.remove(tr._components[info.column], true);
                 }
                 _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
             });
@@ -5145,9 +5145,6 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;
                 var len = this._components[0]._components.length;
-                //@ts-ignore
-                if (this._components[0]._components[len - 1].designDummyFor !== undefined)
-                    len--;
                 for (var t = r.widths.length; t < len; t++) {
                     r.widths.push("auto");
                 }
@@ -5397,14 +5394,14 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
             this.callEvent("componentAdded", component, this);
             if (this._parent)
                 this._parent.addEmptyCellsIfNeeded(this);
-            if (component.designDummyFor) {
+            /*if (component.designDummyFor) {
                 component.domWrapper.setAttribute("colspan", "100");
-                // if ($(this.dom).width() < 140) {
+               // if ($(this.dom).width() < 140) {
                 //    component.width = 140 - $(this.dom).width();
-                if (this.dom.clientWidth < 140) {
+                 if (this.dom.clientWidth < 140) {
                     component.width = 140 - this.dom.clientWidth;
                 }
-            }
+            }*/
             if ((_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout)
                 (_b = this.parent) === null || _b === void 0 ? void 0 : _b.updateLayout(true);
             /*  var test=component.height;
@@ -5452,8 +5449,6 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
             if (this.forEachDummy)
                 return this.forEachDummy;
             for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
                 //@ts-ignore
                 columns.push(this._components[x].toJSON());
             }
@@ -5801,7 +5796,7 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
         addBefore(component, before) {
             if (component.addToParent)
                 return component.addToParent(this);
-            if (component.reporttype !== "text" && component.reporttype !== "textgroup" && !component.designDummyFor)
+            if (component.reporttype !== "text" && component.reporttype !== "textgroup")
                 throw new Classes_6.JassiError("only text oder textgroup could be added to TextGroup");
             super.addBefore(component, before);
             component.domWrapper.style["display"] = "inline-block";
@@ -5813,7 +5808,7 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
         add(component) {
             if (component.addToParent)
                 return component.addToParent(this);
-            if (component.reporttype !== "text" && component.reporttype !== "textgroup" && !component.designDummyFor)
+            if (component.reporttype !== "text" && component.reporttype !== "textgroup")
                 throw new Classes_6.JassiError("only text oder textgroup could be added to TextGroup");
             super.add(component);
             component.domWrapper.style.display = "inline-block";
@@ -5822,8 +5817,6 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
             var ret = super.toJSON();
             ret.text = [];
             for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
                 //@ts-ignore
                 ret.text.push(this._components[x].toJSON());
             }
@@ -5908,8 +5901,6 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
             var ret = super.toJSON();
             ret.ul = [];
             for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
                 //@ts-ignore
                 ret.ul.push(this._components[x].toJSON());
             }
@@ -6529,7 +6520,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
-                "date": 1655929934000,
+                "date": 1721763160019.909,
                 "jassijs_report.RColumns": {
                     "$ReportComponent": [
                         {
@@ -6601,7 +6592,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1697200270448.8713,
+                "date": 1721763173671.8528,
                 "jassijs_report.InfoProperties": {
                     "@members": {}
                 },
@@ -6691,7 +6682,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ROList.ts": {
-                "date": 1719588965636.7617,
+                "date": 1721763181480.2773,
                 "jassijs_report.ROList": {
                     "$ReportComponent": [
                         {
@@ -6706,7 +6697,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-                "date": 1699115329566.395,
+                "date": 1721763186807.8606,
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -6741,7 +6732,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-                "date": 1719588905687.799,
+                "date": 1721763274507.0127,
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -6762,7 +6753,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1719757536098.1802,
+                "date": 1721763287323.4111,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -6793,7 +6784,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTextGroup.ts": {
-                "date": 1656016376000,
+                "date": 1721763243509.179,
                 "jassijs_report.RTextGroup": {
                     "$ReportComponent": [
                         {
@@ -6807,7 +6798,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUList.ts": {
-                "date": 1719588330055.1697,
+                "date": 1721763248473.9978,
                 "jassijs_report.RUList": {
                     "$ReportComponent": [
                         {

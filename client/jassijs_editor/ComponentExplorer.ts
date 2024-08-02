@@ -96,7 +96,7 @@ export class ComponentExplorer extends Panel {
         if (item === this.value && item._components) {
             var all = [];
             (<Component[]>item._components).forEach((e) => {
-                if (!e["designDummyFor"])
+               
                     all.push(e);
             });
             return all;
@@ -140,8 +140,7 @@ export class ComponentExplorer extends Panel {
             var parent = <Container>data[0]._parent;
 
             if (parent !== undefined && parent._components !== undefined) {
-                var hasDummy = (parent._components[parent._components.length - 1]["designDummyFor"] !== undefined ? 1 : 0);
-                if ((parent._components.length > 1 + hasDummy) && parent._components.indexOf(data[0]) !== 0) {
+                if ((parent._components.length > 1 ) && parent._components.indexOf(data[0]) !== 0) {
                     var ac: Action = {
                         call: function () {
 

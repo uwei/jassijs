@@ -95,6 +95,7 @@ declare module "northwind/remote/Orders" {
         ShipPostalCode: string;
         ShipCountry: string;
         Details: OrderDetails[];
+        static findAllWithDetails(): Promise<Orders[]>;
     }
     export function test(): any;
 }

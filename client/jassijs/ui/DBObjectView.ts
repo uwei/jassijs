@@ -2,41 +2,33 @@ import { Button } from "jassijs/ui/Button";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel, PanelProperties } from "jassijs/ui/Panel";
-import { Databinder } from "jassijs/ui/Databinder";
-import { $UIComponent, ComponentProperties } from "jassijs/ui/Component";
+import { $UIComponent, ComponentProperties, jc } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { DBObject } from "jassijs/remote/DBObject";
-import { $Property } from "jassijs/ui/Property";
+import { $Property, Property } from "jassijs/ui/Property";
 import { $ActionProvider, ActionProperties } from "jassijs/base/Actions";
 import { notify } from "jassijs/ui/Notify";
 
-export type DBObjectViewMe = {
-    databinder?: Databinder,
-    create?: Button,
-    main?: Panel,
-    toolbar?: BoxPanel,
-    save?: Button,
-    remove?: Button,
-    refresh?: Button
-}
-export class DBObjectViewProperties {
+export class $DBObjectViewProperties {
     /**
      * full path to classifiy the UIComponent e.g common/TopComponent 
      */
     classname: string;
     actionname?: string;
     icon?: string;
-    queryname?:string;
+    queryname?: string;
 }
-export function $DBObjectView(properties: DBObjectViewProperties): Function {
+export function $DBObjectView(properties: $DBObjectViewProperties): Function {
     return function (pclass) {
         registry.register("$DBObjectView", pclass, properties);
+        var p:Property={name:"value",componentType:properties.classname, type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }
+        registry.registerMember("$Property", pclass,undefined, p);
     }
 }
-type Me = DBObjectViewMe;
 
-export interface DBObjectViewConfig extends PanelProperties {
+
+export interface DBObjectViewProperties<T> extends PanelProperties {
     /**
        * register an event if the object is created
        * @param {function} handler - the function that is called
@@ -57,27 +49,36 @@ export interface DBObjectViewConfig extends PanelProperties {
     * @param {function} handler - the function that is called
     */
     ondeleted?(handler: (obj: DBObject) => void);
-    value:any;
+    value?: T;
 }
 //@$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh", "me.databinder"] })
 @$Class("jassijs/ui/DBObjectView")
-export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isAbsolute"> {
-    me;
-    value;
-    constructor() {
-        super();
-        this.me = {};
+//see export function $DBObjectView =>@$Property({name:"value", type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
+export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewProperties<P> = DBObjectViewProperties<P>> extends Panel<T> implements Omit<Panel, "isAbsolute"> {
+
+
+    constructor(props: T = <any>{}) {
+        super(props);
         this.dom.classList.add("designerNoResizable");//this should not be resized only me.main
         //everytime call super.layout
-        DBObjectView.prototype.layout.bind(this)(this.me);
+        //DBObjectView.prototype.layout.bind(this)(this.me);
         // this.layout(this.me);
     }
-    config(config: DBObjectViewConfig): DBObjectView {
+    config(config: T): DBObjectView {
         super.config(config);
         return this;
     }
     protected _setDesignMode(enable) {
         //no Icons to add Components in designer
+    }
+
+    
+    set value(value: P) {
+
+        this.states.value.current = value;
+    }
+    get value(): P {
+        return this.states.value.current;
     }
     /**
      * create a new object
@@ -104,10 +105,10 @@ export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isA
      * saves the object
      */
     async saveObject() {
-        var ob = await this.me.databinder.fromForm();
-        if(ob!==undefined){
+        var ob = await this.states.value.bind.$fromForm();
+        if (ob !== undefined) {
             await this.doSave(ob);
-            notify("saved","info");
+            notify("saved", "info");
         }
     }
     @$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" })
@@ -118,7 +119,7 @@ export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isA
      * refresh the object
      */
     refreshObject() {
-        this.me.databinder.toForm(this["value"]);
+        this.states.value.bind.$toForm();//this["value"]);
         this.callEvent("refreshed", this["value"]);
     }
     @$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" })
@@ -129,8 +130,8 @@ export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isA
      * deletes Object
      **/
     deleteObject() {
-        var ob: DBObject = <DBObject>this.me.databinder.fromForm();
-        if(ob===undefined)
+        var ob: DBObject = <DBObject>this.states.value.bind.$fromForm();
+        if (ob === undefined)
             return;
         ob.remove();
 
@@ -144,59 +145,57 @@ export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isA
     ondeleted(handler: (obj: DBObject) => void) {
         this.addEvent("deleted", handler);
     }
-
-    layout(me: Me) {
-        var _this = this;
-        me.toolbar = new BoxPanel();
-        me.save = new Button();
-        me.remove = new Button();
-        me.refresh = new Button();
-        me.create = new Button();
-        me.databinder = new Databinder();
-        me.main = new Panel();
-        me.databinder.definePropertyFor(this, "value");
-        this.add(me.toolbar);
-        this.add(me.main);
-        me.main.width = "100%";
-        me.main.height = "100%";
-        me.main.style = { position: "relative" };
-        me.toolbar.add(me.create);
-        me.toolbar.add(me.save);
-        me.toolbar.horizontal = true;
-        me.toolbar.add(me.refresh);
-        me.toolbar.add(me.remove);
-        me.save.text = "";
-        me.save.tooltip = "save";
-        me.save.icon = "mdi mdi-content-save";
-        me.save.onclick(function (event) {
-            _this.saveObject();
-        });
-        me.remove.text = "";
-        me.remove.icon = "mdi mdi-delete";
-        me.remove.onclick(function (event) {
-            _this.deleteObject();
-        });
-        me.remove.tooltip = "remove";
-        me.refresh.text = "";
-        me.refresh.icon = "mdi mdi-refresh";
-        me.refresh.onclick(function (event) {
-            _this.refreshObject();
-        });
-        me.refresh.tooltip = "refresh";
-        me.create.text = "";
-        me.create.icon = "mdi mdi-tooltip-plus-outline";
-
-        me.create.onclick(function (event) {
-            _this.createObject();
-            //me.binder.toForm();
-        });
-
-        me.create.tooltip = "new";
-
-    }
 }
 
 export async function test() {
     var ret = new DBObjectView();
     return ret;
+}
+export interface DBObjectViewToolbarProperties extends PanelProperties {
+    view: DBObjectView
+}
+//@ts-ignore
+export class DBObjectViewToolbar extends Panel<DBObjectViewToolbarProperties> {
+    constructor(props: DBObjectViewToolbarProperties) {
+        super(<any>props);
+    }
+    render() {
+        return jc(BoxPanel, {
+            horizontal:true,
+            children: [
+                jc(Button, {
+                    text: "",
+                    tooltip: "save",
+                    icon: "mdi mdi-content-save",
+                    onclick: (event) => {
+                        this.props.view.saveObject();
+                    }
+                }),
+                jc(Button, {
+                    text: "",
+                    tooltip: "remove",
+                    icon: "mdi mdi-delete",
+                    onclick: (event) => {
+                        this.props.view.deleteObject();
+                    }
+                }),
+                jc(Button, {
+                    text: "",
+                    tooltip: "refresh",
+                    icon: "mdi mdi-refresh",
+                    onclick: (event) => {
+                        this.props.view.refreshObject();
+                    }
+                }),
+                jc(Button, {
+                    text: "",
+                    tooltip: "new",
+                    icon: "mdi mdi-tooltip-plus-outline",
+                    onclick: (event) => {
+                        this.props.view.createObject();
+                    }
+                })
+            ]
+        });
+    }
 }

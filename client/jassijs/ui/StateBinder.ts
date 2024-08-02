@@ -1,31 +1,26 @@
 
-import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
-import { Component, $UIComponent } from "jassijs/ui/Component";
-import { $Class } from "jassijs/remote/Registry";
-import { DataComponent } from "jassijs/ui/DataComponent";
 import { db, TypeDef } from "jassijs/remote/Database";
-import { classes } from "jassijs/remote/Classes";
 import { ValidationError } from "jassijs/remote/Validator";
 import { notify } from "jassijs/ui/Notify";
+import { State } from "jassijs/ui/State";
 
-interface DatabinderProperties extends InvisibleComponentProperties{
 
+type Component = {
+    __dom?: HTMLElement
 }
-
-@$UIComponent({ fullPath: "common/Databinder", icon: "mdi mdi-connection" })
-@$Class("jassijs.ui.Databinder")
-export class Databinder<T extends DatabinderProperties={}> extends InvisibleComponent<DatabinderProperties> implements DatabinderProperties {
+export class StateDatabinder {
+    connectedState: State;
     components: Component[];
     private _properties: string[];
     private _getter: { (comp: Component): any; }[];
     private _setter: { (comp: Component, value: any): any; }[];
     private _onChange: string[];
     private _autocommit: any[];
-    userObject;
+    //userObject;
     rollbackObject;
-    constructor(props:DatabinderProperties={}) {//id connect to existing(not reqired)
-        super(props);
-       // super.init('<span class="InvisibleComponent"></span>');
+    constructor() {//id connect to existing(not reqired)
+
+        // super.init('<span class="InvisibleComponent"></span>');
         /** @member {[jassijs.ui.Component]} components - all binded components*/
         this.components = [];
         /** @member {[string]} properties - all binded properties*/
@@ -38,13 +33,6 @@ export class Databinder<T extends DatabinderProperties={}> extends InvisibleComp
         this._onChange = [];
         /** @member {[function]} autocommit - autocommitHandler for all components*/
         this._autocommit = [];
-        /** @member [{object}] userObject - the object to bind*/
-        this.userObject = undefined;
-    }
-    render(){
-        return React.createElement("span",{
-            className:"InvisibleComponent"
-        })
     }
 
     /**
@@ -77,10 +65,10 @@ export class Databinder<T extends DatabinderProperties={}> extends InvisibleComp
             this._onChange.push(component["onChange"]);
         } else
             this._onChange.push(onChange);
-
-        if (this.userObject !== undefined) {
+        var ob=this.connectedState?.current;
+        if (ob !== undefined) {
             var acc = new PropertyAccessor();
-            acc.userObject = this.userObject;
+            acc.userObject = ob;
             let setter = this._setter[this._setter.length - 1];
             acc.setProperty(setter, component, property, undefined);
             acc.finalizeSetProperty();
@@ -108,7 +96,18 @@ export class Databinder<T extends DatabinderProperties={}> extends InvisibleComp
             if (this._properties[x] === property && test != val && this.components[x] !== component) {
 
                 this._setter[x](this.components[x], val);
+
             }
+
+        }
+        //set nested Properties
+        for (let x = 0; x < this.components.length; x++) {
+            if (this._properties[x].startsWith(property + ".") && this.components[x] !== component) {
+                this._toForm(x);
+            }
+        }
+        if (property === "this" && this.connectedState) {
+            this.connectedState.current = val;
         }
     }
     remove(component) {
@@ -150,11 +149,11 @@ export class Databinder<T extends DatabinderProperties={}> extends InvisibleComp
      */
     get value() {
         // this.fromForm();
-        return this.userObject;
+        return this.connectedState?.current;
     }
-    set value(obj) {
+    set value(obj:any) {
         var _this = this;
-        if (obj !== undefined && obj.then !== undefined) {
+        if (obj !== undefined && obj?.then !== undefined) {
             obj.then(function (ob2) {
                 _this.toForm(ob2);
             });
@@ -163,23 +162,23 @@ export class Databinder<T extends DatabinderProperties={}> extends InvisibleComp
     }
 
     async doValidation(ob) {
-        var allErr=[];
+        var allErr = [];
         if (ob.validate) {
-            for(var c=0;c<this.components.length;c++){
-                    var comp=this.components[c];
-                    comp.__dom.classList.remove("invalid");
-                     
-                }
-            var validationerrors:ValidationError[] = await ob.validate();
-            for(var x=0;x<validationerrors.length;x++){
-                var err=validationerrors[x];
-                for(var c=0;c<this.components.length;c++){
-                    var comp=this.components[c];
+            for (var c = 0; c < this.components.length; c++) {
+                var comp = this.components[c];
+                comp.__dom.classList.remove("invalid");
+
+            }
+            var validationerrors: ValidationError[] = await ob.validate();
+            for (var x = 0; x < validationerrors.length; x++) {
+                var err = validationerrors[x];
+                for (var c = 0; c < this.components.length; c++) {
+                    var comp = this.components[c];
                     var prop = this._properties[c];
-                    if(err.property===prop){
+                    if (err.property === prop) {
                         //@ts-ignore
-                         $(comp.__dom).notify(err.message,{position: 'bottom left', className: 'error'});
-                         comp.__dom.classList.add("invalid");
+                        $(comp.__dom).notify(err.message, { position: 'bottom left', className: 'error' });
+                        comp.__dom.classList.add("invalid");
                         //(<any>comp.__dom).setCustomValidity(err.message);
                         //(<any>comp.__dom).reportValidity();
                         allErr.push(err.message);
@@ -194,35 +193,49 @@ export class Databinder<T extends DatabinderProperties={}> extends InvisibleComp
         }
         return true;
     }
+    private _toForm(x, setter=undefined) {
+        var fin=false;
+        var ob=this.connectedState.current;
+        if(setter===undefined){
+            setter = new PropertyAccessor();
+            setter.userObject = ob;
+            fin=true;
+        }
+
+        var comp = this.components[x];
+        var prop = this._properties[x];
+        var sfunc = this._setter[x];
+        var sget = this._getter[x];
+        var oldValue = sget(comp);
+        if (prop === "this") {
+            if (oldValue !== ob) {
+                sfunc(comp, ob);
+            }
+        } else {
+            if (ob === undefined) {
+                if (oldValue !== undefined)
+                    sfunc(comp, undefined);
+            } else {
+
+                setter.setProperty(sfunc, comp, prop, oldValue);
+
+            }
+        }
+        if(fin){
+            setter.finalizeSetProperty();
+        }
+    }
     /**
      * binds the object to all added components
      * @param {object} obj - the object to bind
      */
     toForm(obj) {
 
-        this.userObject = obj;
+        this.connectedState.current = obj;
         var setter = new PropertyAccessor();
-        setter.userObject = obj;
+        setter.userObject =this.connectedState.current;
         for (var x = 0; x < this.components.length; x++) {
-            var comp = this.components[x];
-            var prop = this._properties[x];
-            var sfunc = this._setter[x];
-            var sget = this._getter[x];
-            var oldValue = sget(comp);
-            if (prop === "this") {
-                if (oldValue !== this.userObject) {
-                    sfunc(comp, this.userObject);
-                }
-            } else {
-                if (this.userObject === undefined) {
-                    if (oldValue !== undefined)
-                        sfunc(comp, undefined);
-                } else {
-
-                    setter.setProperty(sfunc, comp, prop, oldValue);
-
-                }
-            }
+            this._toForm(x,setter);
         }
         setter.finalizeSetProperty();
     }
@@ -235,41 +248,46 @@ export class Databinder<T extends DatabinderProperties={}> extends InvisibleComp
      */
     async fromForm(): Promise<object> {
         this.rollbackObject = {};
-        if (this.userObject === undefined)
+        var ob=this.connectedState.current;
+        if (ob === undefined)
             return undefined;
         for (var x = 0; x < this.components.length; x++) {
             this._fromForm(x);
         }
-        if (!await this.doValidation(this.userObject)) {//rollback
+        if (!await this.doValidation(ob)) {//rollback
             for (var x = 0; x < this.components.length; x++) {
                 var prop = this._properties[x];
-                 new PropertyAccessor().setNestedProperty(this.userObject, prop, this.rollbackObject[prop]);
+                new PropertyAccessor().setNestedProperty(ob, prop, this.rollbackObject[prop]);
             }
             return undefined;
         }
-        return this.userObject;
+        return ob;
     }
 
     /**
      * get objectproperty
      * @param {number} x - the numer of the component
      */
-    _fromForm(x) {
-
+    private _fromForm(x) {
+        if (this.rollbackObject === undefined)
+            this.rollbackObject = {};
         var comp = this.components[x];
         var prop = this._properties[x];
         var sfunc = this._getter[x];
+        var ob=this.connectedState.current;
+
         var test = sfunc(comp);
         if (test !== undefined) {
             if (prop === "this") {
                 var val = test;
-                this.value = test;
+                if(this.value!==test)
+                    this.value = test;
             } else {
                 // if (comp["converter"] !== undefined) {
                 //     test = comp["converter"].stringToObject(test);
                 // }
-                this.rollbackObject[prop] = new PropertyAccessor().getNestedProperty(this.userObject, prop);
-                new PropertyAccessor().setNestedProperty(this.userObject, prop, test);
+                this.rollbackObject[prop] = new PropertyAccessor().getNestedProperty(ob, prop);
+                new PropertyAccessor().setNestedProperty(ob, prop, test);
             }
         }
     }
@@ -301,16 +319,16 @@ export class Databinder<T extends DatabinderProperties={}> extends InvisibleComp
         this._setter = [];
         this._onChange = [];
         this._autocommit = [];
-        this.userObject = undefined;
-        super.destroy();
+        this.connectedState = undefined;
+
     }
 }
-class PropertyAccessor {
+export class PropertyAccessor {
     relationsToResolve: string[] = [];
     userObject;
     todo: any[] = [];
     getNestedProperty(obj, property: string) {
-        if (obj === undefined)
+        if (obj === undefined||obj===null)
             return undefined;
         var path = property.split(".");
         var ret = obj[path[0]];
@@ -329,7 +347,7 @@ class PropertyAccessor {
         var ob = obj;
         if (path.length > 0)
             ob = this.getNestedProperty(ob, path.join("."));
-        ob[property.split(".")[0]] = value;
+        ob[property.split(".")[property.split(".").length - 1]] = value;
     }
     /**
      * check if relation must be resolved and queue it
@@ -383,5 +401,4 @@ class PropertyAccessor {
         })
     }
 }
-   // return CodeEditor.constructor;
-
+// return CodeEditor.constructor;

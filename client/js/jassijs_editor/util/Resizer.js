@@ -277,9 +277,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"
          */
         install(parentPanel, elements) {
             var _this = this;
-            if (!parentPanel.dom.classList.contains("designerNoResizable")) {
+            /*if (!parentPanel.dom.classList.contains("designerNoResizable")) {
                 $(parentPanel.domWrapper).resizable({
-                    resize: function (evt) {
+                    resize: function (evt: any) {
                         var h = evt.target.offsetHeight;
                         var w = evt.target.offsetWidth;
                         if (_this.onpropertychanged !== undefined) {
@@ -287,12 +287,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"
                             evt.target._this.height = h;
                             _this.onpropertychanged(evt.target._this, "width", w);
                             _this.onpropertychanged(evt.target._this, "height", h);
-                            evt.target._this.domWrapper.style.width = w + "px";
-                            evt.target._this.domWrapper.style.height = h + "px";
+                            evt.target._this.domWrapper.style.width= w + "px";
+                            evt.target._this.domWrapper.style.height= h + "px";
                         }
                     }
                 });
-            }
+            }*/
             if (parentPanel !== undefined)
                 this.parentPanel = parentPanel;
             if (elements !== undefined)

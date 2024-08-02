@@ -1,12 +1,12 @@
 
-import { Component, createComponent,React } from "jassijs/ui/Component";
+import { Component, ComponentProperties, createComponent,React } from "jassijs/ui/Component";
 import { Panel } from "jassijs/ui/Panel";
 import { Button } from "jassijs/ui/Button";
 
 import { Textbox } from "jassijs/ui/Textbox";
 import { createState, State } from "jassijs/ui/State";
 
-interface Prop {
+interface Prop extends ComponentProperties {
     mytext?: string;
      mycolor?:string;
 }
@@ -22,8 +22,8 @@ class MyComp extends Component<Prop> {
         var mycolor = createState("red")
         
         var ret=<div>
-            {mycolor}
-            <button style={{color:mycolor.self}}  onClick={() => {
+            {this.states.mycolor}
+            <button style={{color:this.states.mycolor}}  onClick={() => {
               mycolor.current="blue";
                // _this.config({ text: "neu"+x++ });
             }}>Click

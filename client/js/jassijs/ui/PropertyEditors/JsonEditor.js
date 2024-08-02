@@ -132,7 +132,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
         }
         createPropertyEditor() {
             var propEditor = new PropertyEditor_1.PropertyEditor();
-            debugger;
             propEditor.actions = this.property.editoractions;
             propEditor.readPropertyValueFromDesign = this.propertyEditor.readPropertyValueFromDesign;
             propEditor.showThisProperties = this.showThisProperties;

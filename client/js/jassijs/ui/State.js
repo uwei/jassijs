@@ -1,7 +1,8 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "jassijs/ui/StateBinder", "jassijs/ui/Component"], function (require, exports, StateBinder_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.createRef = exports.createState = exports.State = exports.createRefs = exports.createStates = exports.resolveState = void 0;
+    exports.test = exports.createState = exports.State = exports.createStates = exports.foreach = exports.resolveState = void 0;
+    var teset = new StateBinder_1.StateDatabinder();
     class StateProp {
     }
     //window.timecount=0;
@@ -26,22 +27,58 @@ define(["require", "exports"], function (require, exports) {
         //window.timecount=window.timecount+new Date().getTime()-test;
     }
     exports.resolveState = resolveState;
-    function createStates(initialValues = {}) {
-        var data = { _used: [], _data: initialValues };
+    function foreach(stateWithArray, func) {
+        var retState = createState();
+        //update retState on stateWithArray is changing
+        var updateOB = {
+            set value(ob) {
+                var ret = [];
+                var arr = stateWithArray.current;
+                if (arr !== undefined) {
+                    for (var x = 0; x < arr.length; x++) {
+                        // if (ret === undefined)
+                        //   ret = [];
+                        var comp = func(arr[x]);
+                        if ((ob === null || ob === void 0 ? void 0 : ob.initial) !== true) {
+                            comp = (0, Component_1.createComponent)(comp);
+                        }
+                        ret.push(comp);
+                    }
+                }
+                retState.current = ret;
+            }
+        };
+        updateOB.value = { initial: true }; //fill state
+        stateWithArray._observe_(updateOB, "value");
+        return retState;
+    }
+    exports.foreach = foreach;
+    function createStates(initialValues = undefined, propertyname = undefined) {
+        var data = new State(initialValues); // { _used: [], _data: initialValues };
+        data._$propertyname_ = propertyname;
         return new Proxy(data, {
             get(target, key) {
                 if (key === "_onconfig")
                     return target._onconfig;
-                if (target[key] === undefined) {
-                    target[key] = createState(data._data[key]);
+                if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current") {
+                    var newstate = createStates(data.current !== undefined ? data.current[key] : undefined, key);
+                    target[key] = newstate;
+                    target._observe_(newstate, "_$setparentobject");
                     if (target._used.indexOf(key) === -1)
                         target._used.push(key);
                 }
                 return target[key];
             },
             set(target, key, value) {
-                if (key === "_onconfig")
+                if (key === "_$setparentobject") {
+                    var propname = data._$propertyname_;
+                    target.current = value[propname];
+                }
+                else if (key === "_onconfig")
                     target._onconfig = value;
+                else if (key === "current") {
+                    target.current = value;
+                }
                 else
                     throw "not implemented " + key;
                 return true;
@@ -49,41 +86,23 @@ define(["require", "exports"], function (require, exports) {
         });
     }
     exports.createStates = createStates;
-    function createRefs(data = {}) {
-        var me = {};
-        var ret = new Proxy(me, {
-            get(target, key) {
-                if (target[key] === undefined) {
-                    target[key] = {
-                        _current: undefined,
-                        set current(value) {
-                            data[key] = value;
-                            this._current = value;
-                        },
-                        get current() {
-                            return this._current;
-                        }
-                    };
-                }
-                return target[key];
-            }
-        });
-        return ret;
-    }
-    exports.createRefs = createRefs;
     class State {
         constructor(data = undefined) {
-            this.self = this;
+            //self: any = this;
             this._comps_ = [];
+            this._used = [];
+            this._$isState$_ = true;
+            this.bind = createBoundProperty(this);
             this.data = data;
         }
-        _observe_(control, property, atype) {
+        _observe_(control, property, atype = undefined) {
             this._comps_.push({ ob: control, proppath: [property] });
         }
         get current() {
             return this.data;
         }
         set current(data) {
+            var _a;
             if (this.data === data)
                 return;
             this.data = data;
@@ -100,26 +119,10 @@ define(["require", "exports"], function (require, exports) {
                     else
                         cur = cur[prop];
                 }
-                c.ob.config(newVal);
-                /* if (c.atype === "style") {
-                     //for (var key in (<any>props).style) {
-                     //var val = (<any>props).style[key];
-                     ob.dom.style[prop] = data;
-                     //}
-                 }else    if (c.atype === "dom") {
-                     Reflect.set(ob.dom, prop, data);
-                 }else     if (c.atype === "attribute") {
-     
-                     ob.dom.setAttribute(prop, data);
-                 }else{
-                     Reflect.set(ob,prop,data);
-                 }*/
-                /*else if (prop in this.dom) {
-                           Reflect.set(this.dom, prop, [props[prop]])
-                       } else if (prop.toLocaleLowerCase() in this.dom) {
-                           Reflect.set(this.dom, prop.toLocaleLowerCase(), props[prop])
-                       } else if (prop in this.dom)
-                       this.dom.setAttribute(prop, (<any>props)[prop]);*/
+                if (((_a = c.ob) === null || _a === void 0 ? void 0 : _a._$isState$_) !== true && typeof c.ob.config === "function")
+                    c.ob.config(newVal);
+                else
+                    c.ob[c.proppath[0]] = data;
             }
         }
     }
@@ -130,17 +133,80 @@ define(["require", "exports"], function (require, exports) {
         return ret;
     }
     exports.createState = createState;
-    function createRef(val = undefined) {
-        var ret;
-        ret.current = val;
+    function createBoundProperty(state = undefined, parent = undefined, propertyname = "this") {
+        var data = {
+            _databinder: (parent === undefined ? new StateBinder_1.StateDatabinder() : parent._databinder),
+            _propertyname: propertyname,
+            $fromForm() { return this._databinder.fromForm(); },
+            $toForm() { return this._databinder.toForm(); }
+        };
+        if (state)
+            data._databinder.connectedState = state;
+        var ret = new Proxy(data, {
+            get(target, key) {
+                if (key === "_observe_" || key === "_$isState$_")
+                    return undefined;
+                if (target[key] === undefined) {
+                    var pname = key;
+                    if (target._propertyname !== "this") {
+                        pname = target._propertyname + "." + key;
+                    }
+                    target[key] = createBoundProperty(undefined, ret, pname);
+                }
+                return target[key];
+            },
+            set(target, key, value) {
+                if (key === "_propertyname") {
+                    target[key] = value;
+                    return true;
+                }
+                throw "not implemented " + key;
+            }
+        });
+        if (state !== undefined) {
+            state._observe_(data._databinder, "value", "property");
+        }
         return ret;
     }
-    exports.createRef = createRef;
+    var j = {};
+    var invoices = [
+        {
+            title: "R1",
+            customer: {
+                id: 1,
+                name: "Meier"
+            },
+            positions: [{ id: 1, text: "P1" }, { id: 2, text: "P2" }]
+        },
+        {
+            title: "R2",
+            customer: {
+                id: 2,
+                name: "Lehmann"
+            },
+            positions: [{ id: 3, text: "P3" }, { id: 4, text: "P4" }]
+        },
+        {
+            title: "R3",
+            customer: {
+                id: 3,
+                name: "Schulze"
+            },
+            positions: [{ id: 6, text: "P6" }, { id: 6, text: "P6" }]
+        },
+    ];
+    var inv = {
+        invoice: invoices[1],
+        invoices: invoices
+    };
     function test() {
-        var me = { a: 6 };
-        var refs = createRefs(me);
-        refs.hallo.current = "JJJ";
-        console.log(me.hallo);
+        var k = createStates(undefined);
+        var ll = k.invoice.customer.current;
+        var vname = k.invoice.customer.name;
+        var ll2 = k.invoice.customer.name.current;
+        k.invoice.current = invoices[0];
+        var hhl = k.invoice.customer;
+        ll = k.invoice.customer.name.current;
     }
     exports.test = test;
 });

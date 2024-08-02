@@ -3,6 +3,7 @@ import { JassiError } from "jassijs/remote/Classes";
 import { config } from "jassijs/remote/Config";
 import { serverservices } from "jassijs/remote/Serverservice";
 import { ts } from 'jassijs/server/NativeAdapter';
+import { ScriptKind } from "typescript";
 
 
 export abstract class Indexer {
@@ -44,9 +45,10 @@ export abstract class Indexer {
             }
         }
 
-        var jsFiles: string[] = await this.dirFiles(modul, path, [".ts"], ["node_modules"])
+        var jsFiles: string[] = await this.dirFiles(modul, path, [".ts",".tsx"], ["node_modules"])
         for (let x = 0; x < jsFiles.length; x++) {
             var jsFile = jsFiles[x];
+            
             var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
             if (fileName === undefined)
                 continue;
@@ -61,7 +63,8 @@ export abstract class Indexer {
                 var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName)
                 if (dat !== entry.date) {
                     var text = <string>await this.readFile(root + (root === "" ? "" : "/") + fileName);
-                    var sourceFile = ts.createSourceFile('hallo.ts', text, ts.ScriptTarget.ES5, true);
+                    var isTsx=jsFile.toLowerCase().endsWith(".tsx");
+                    var sourceFile = ts.createSourceFile( isTsx?'hallo.tsx':'hallo.ts', text, ts.ScriptTarget.ES5, true,isTsx?ScriptKind.TSX:undefined);
                     var outDecorations = [];
                     entry = {};
                     entry.date = undefined;
@@ -156,6 +159,7 @@ export abstract class Indexer {
         if (node.kind === ts.SyntaxKind.ClassDeclaration) {
             if (node["modifiers"] !== undefined) {
                 var dec;
+                var sclass = undefined;
                 for (var m = 0; m < node["modifiers"].length; m++) {
                     var decnode: ts.Decorator = node["modifiers"][m];
                    
@@ -163,7 +167,7 @@ export abstract class Indexer {
                         //if (node.decorators !== undefined) {
                         if(dec===undefined)
                             dec = {};
-                        var sclass = undefined;
+                        
                         //for (let x = 0; x < node.decorators.length; x++) {
                         // var decnode = node.decorators[x];
                         var ex: any = decnode.expression;
@@ -179,7 +183,7 @@ export abstract class Indexer {
                                 for (var a = 0; a < ex.arguments.length; a++) {
                                     dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
                                 }
-                            }
+                            } 
                         }
                     }
                 }

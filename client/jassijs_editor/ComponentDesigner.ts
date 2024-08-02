@@ -8,7 +8,6 @@ import { Resizer } from "jassijs_editor/util/Resizer";
 //import DragAndDropper from "jassijs/ui/helper/DragAndDropper";
 import { ErrorPanel } from "jassijs_editor/ErrorPanel";
 import { CodeEditorInvisibleComponents } from "jassijs_editor/CodeEditorInvisibleComponents";
-import { Repeater } from "jassijs/ui/Repeater";
 import "jassijs/ui/Databinder";
 import { Button } from "jassijs/ui/Button";
 import { Component } from "jassijs/ui/Component";
@@ -574,7 +573,10 @@ export class ComponentDesigner extends Panel {
         var component = this._designPlaceholder._components[0];
         //switch designmode
         var comps = component.dom.querySelectorAll(".jcomponent");
-        comps.forEach((c) => c.classList.add("jdesignmode"));
+        if (enable)
+            comps.forEach((c) => c.classList.add("jdesignmode"));
+        else
+            comps.forEach((c) => c.classList.remove("jdesignmode"));
         for (var c = 0; c < comps.length; c++) {
 
             if (comps[c]._this["extensionCalled"] !== undefined) {
@@ -656,8 +658,9 @@ export class ComponentDesigner extends Panel {
                     return _this._resizer.componentUnderCursor !== undefined;
                 }
             }
+            this.dummyHolder.hidden = false;
         } else {
-
+            this.dummyHolder.hidden = true;
         }
         this._componentExplorer.update();
     }
@@ -672,9 +675,6 @@ export class ComponentDesigner extends Panel {
      **/
     moveComponent(component, top, left, oldParent, newParent, beforeComponent) {
         var _this = this;
-        /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor!==undefined){
-            beforeComponent=undefined;
-        }*/
         var oldName = _this._codeEditor.getVariableFromObject(oldParent);
         var newName = _this._codeEditor.getVariableFromObject(newParent);
         var compName = _this._codeEditor.getVariableFromObject(component);
@@ -701,14 +701,6 @@ export class ComponentDesigner extends Panel {
             _this._propertyEditor.setPropertyInCode("add", /*compName*/oldVal, false, newName, before);
 
         }
-        /* if(newParent._components.length>1){//correct dummy
-             var dummy=	newParent._components[newParent._components.length-2];
-             if(dummy.designDummyFor!==undefined){
-                 //var tmp=newParent._components[newParent._components.length-1];
-                 newParent.remove(dummy);//._components[newParent._components.length-1]=newParent._components[newParent._components.length-2];
-                 newParent.add(dummy);//._components[newParent._components.length-1]=tmp;
-             }
-         }*/
         _this.variables.updateCache();
         _this._propertyEditor.value = _this._propertyEditor.value;
         _this._componentExplorer.value = _this._componentExplorer.value;
@@ -735,35 +727,9 @@ export class ComponentDesigner extends Panel {
         })
 
 
-        var repeater = _this._hasRepeatingContainer(newParent);
         var scope = undefined;
 
 
-        if (repeater !== undefined) {
-            var repeatername = _this._codeEditor.getVariableFromObject(repeater);
-            var test = _this._propertyEditor.parser.getPropertyValue(repeatername, "createRepeatingComponent");
-            scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
-            if (test === undefined) {
-                var sfunc = "function(me:Me){\n\t" + repeatername + ".design.config({});\n}";
-                var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassijs.ui.Databinder");
-                if (!_this._propertyEditor.parser.getPropertyValue(repeatername, "config")) {
-                    sfunc = "function(me:Me){\n\t\n}";
-                }
-                _this._propertyEditor.setPropertyInCode("createRepeatingComponent", sfunc, true, repeatername);
-                _this._propertyEditor.updateParser();
-                repeater.createRepeatingComponent(function (me) {
-                    if (this._designMode !== true)
-                        return;
-                    //_this.variables.addVariable(vardatabinder,databinder);
-                    _this.variables.updateCache();
-                });
-                /*var db=new jassijs.ui.Databinder();
-                if(repeater.value!==undefined&&repeater.value.length>0)
-                    db.value=repeater.value[0];
-                _this.variables.add(vardatabinder,db);
-                _this.variables.updateCache();*/
-            }
-        }
         var varvalue;
         if (classes.getClassName(component) === type)
             varvalue = component;
@@ -789,13 +755,6 @@ export class ComponentDesigner extends Panel {
         } else {
             newParent.add(varvalue);
         }
-        /* if(newParent._components.length>1){//correct dummy
-             if(newParent._designDummy){
-                 //var tmp=newParent._components[newParent._components.length-1];
-                 newParent.dom.removeChild(newParent._designDummy.domWrapper)
-                 newParent.dom.append(newParent._designDummy.domWrapper)
-             }
-         }*/
         if (refresh)
             _this.variables.updateCache();
 
@@ -849,22 +808,10 @@ export class ComponentDesigner extends Panel {
              var th = this._codeEditor.getObjectFromVariable("this");
              th[varname.substring(5)] = varvalue;
          } else*/
-        this.variables.addVariable(varname, varvalue, refresh);
+        this.variables.addVariable(varname, varvalue, refresh, true);
         return varname;
     }
-    /**
-     * is there a parent that acts a repeating container?
-     **/
-    _hasRepeatingContainer(component) {
-        if (component === undefined)
-            return undefined;
-        if (this._codeEditor.getVariableFromObject(component) === undefined)
-            return undefined;
-        if (component instanceof Repeater) {
-            return component;
-        }
-        return this._hasRepeatingContainer(component._parent);
-    }
+   
 
     private fillVariables(root: Component, component: Component, cache: { [componentid: string]: { line: number, column: number } }) {
         if (cache[component._id] === undefined && component["__stack"] !== undefined) {
@@ -908,13 +855,14 @@ export class ComponentDesigner extends Panel {
         var dummy: HTMLSpanElement;
         //  if (ComponentDesigner.beforeDummy === undefined) {
         dummy = <HTMLSpanElement>document.createElement("span");
-        dummy.contentEditable = node.tagName.toUpperCase() === "BR" ? "true" : "false";
+        dummy.contentEditable =node.tagName.toUpperCase() === "BR" ? "true" : "false";
         dummy.draggable = true;
         dummy.classList.add("_dummy_");
         dummy.onkeydown = (e) => {
-            if ((<any>this).keydown) {
+            
+            if ((<any>_this).keydown) {
                 e.preventDefault();
-                (<any>this).keydown(e);
+                (<any>_this).keydown(e);
             }
         }
         dummy.ondrop = (ev) => {
@@ -925,11 +873,11 @@ export class ComponentDesigner extends Panel {
                     var toCreate: { createFromType: string, createFromParam: string } = <any>JSON.parse(data);
                     var cl = classes.getClass(toCreate.createFromType);
                     var newComponent = new cl();
-                    var beforeComponent: Component = (<any>ev.target).nd._this;
+                    var beforeComponent: Component = (<any>ev.target)._this;
                     var newParent = beforeComponent._parent;
                     _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent);// beforeComponent);
                 } else if (data.indexOf('"varNamesToCopy":') > -1) {
-                    var beforeComponent: Component = (<any>ev.target).nd._this;
+                    var beforeComponent: Component = (<any>ev.target)._this;
                     var newParent = beforeComponent._parent;
                     await _this.pasteComponents(data, newParent, beforeComponent);
                     _this.deleteComponents(data);
@@ -942,7 +890,8 @@ export class ComponentDesigner extends Panel {
         };
 
         dummy.onclick = (ev) => {
-            var all = [(<any>ev.target).nd._this];
+            ev.preventDefault();
+            var all = [(<any>ev.target)._this];
             if (node._thisOther) {
                 for (var x = 0; x < node._thisOther.length; x++) {
                     var varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
@@ -952,18 +901,18 @@ export class ComponentDesigner extends Panel {
                     }
                 }
             }
-           
-            var comp = (<any>ev.target).nd._this;
-            if (all.length > 1) {//there are more nodes under cursor so we switch the components
-                var pos = all.indexOf(_this._propertyEditor.value);
-                if (pos == -1)
-                    pos = 0;
-                else
-                    pos++;
-                if (pos >= all.length)
-                    pos = 0;
-                comp = all[pos];
-            }
+
+            var comp = (<any>ev.target)._this;
+            /* if (all.length > 1) {//there are more nodes under cursor so we switch the components
+                 var pos = all.indexOf(_this._propertyEditor.value);
+                 if (pos == -1)
+                     pos = 0;
+                 else
+                     pos++;
+                 if (pos >= all.length)
+                     pos = 0;
+                 comp = all[pos];
+             }*/
 
             _this._propertyEditor.value = comp;
 
@@ -974,6 +923,14 @@ export class ComponentDesigner extends Panel {
                 //dummy.focus();//with this the keydown event will work
                 console.log("focus");
             }
+            console.log("setcomp");
+          /*  var newSel = getSelection();
+            var range = document.createRange();
+            range.setStart(_this.lastSelectedDummy.component.dom, 0);
+            newSel.removeAllRanges();
+            newSel.addRange(range);*/
+
+            // (<any>newSel).modify("move", "left", "character");
             getSelection().removeAllRanges();//the next paste is before the component
         }
         dummy.ondragover = (ev) => {
@@ -981,7 +938,7 @@ export class ComponentDesigner extends Panel {
         }
         dummy.ondragstart = ev => {
             ev.dataTransfer.setDragImage((<any>event.target).nd, 20, 20);
-            ev.dataTransfer.setData("text", _this.componentsToString([(<any>event.target).nd._this]));
+            ev.dataTransfer.setData("text", _this.componentsToString([(<any>event.target)._this]));
         }
         dummy.style.zIndex = "10000";
         dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
@@ -989,10 +946,10 @@ export class ComponentDesigner extends Panel {
         dummy.style.fontSize = "10px";
         dummy.style.position = "absolute";
         dummy.ondragenter = dummy.onmouseenter = (e) => {
-            (<any>e.target).nd._this.dom.classList.add("dummyselected");
+            (<any>e.target)._this.dom.classList.add("dummyselected");
 
         }
-        dummy.ondragleave = dummy.onmouseleave = (e) => (<any>e.target).nd._this.dom.classList.remove("dummyselected");
+        dummy.ondragleave = dummy.onmouseleave = (e) => (<any>e.target)._this.dom.classList.remove("dummyselected");
         //  ComponentDesigner.beforeDummy = dummy;
         // }
         // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
@@ -1003,15 +960,17 @@ export class ComponentDesigner extends Panel {
         var dummy: HTMLSpanElement;
         //  if (ComponentDesigner.beforeDummy === undefined) {
         dummy = <HTMLSpanElement>document.createElement("span");
-        dummy.contentEditable = "false";
+        dummy.contentEditable = "true";
         dummy.draggable = true;
         dummy.classList.add("_dummy_");
         dummy.classList.add("ui-droppable");
         dummy.onclick = (ev) => {
-            _this._propertyEditor.value = (<any>ev.target).nd._this;
-            getSelection().removeAllRanges();//the next paste is before the component
-            _this.lastSelectedDummy.component = (<any>ev.target).nd._this;
+            _this._propertyEditor.value = (<any>ev.target)._this;
+            //getSelection().removeAllRanges();//the next paste is before the component
+            _this.lastSelectedDummy.component = (<any>ev.target)._this;
             this.lastSelectedDummy.pre = false;
+            this.select(this.designedComponent.__dom,0);
+            //setTimeout(()=>getSelection().removeAllRanges(),3000);
         }
         //dummy.onclick = (ev) => console.log(ev);
         dummy.ondrop = (ev) => {
@@ -1023,10 +982,10 @@ export class ComponentDesigner extends Panel {
                     var toCreate: { createFromType: string, createFromParam: string } = <any>JSON.parse(data);
                     var cl = classes.getClass(toCreate.createFromType);
                     var newComponent = new cl();
-                    let newParent = (<any>ev.target).nd._this;
+                    let newParent = (<any>ev.target)._this;
                     _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined);// beforeComponent);
                 } else if (data.indexOf('"varNamesToCopy":') > -1) {
-                    let newParent: Container = (<any>ev.target).nd._this;
+                    let newParent: Container = (<any>ev.target)._this;
                     await _this.pasteComponents(data, newParent, undefined);
                     _this.deleteComponents(data);
                 } else {
@@ -1037,6 +996,13 @@ export class ComponentDesigner extends Panel {
             doit();
 
         };
+        /* dummy.onkeydown = (e) => {
+            
+            if ((<any>_this).keydown) {
+                e.preventDefault();
+                (<any>_this).keydown(e);
+            }
+        }*/
         dummy.ondragover = (ev) => {
             ev.preventDefault();
             //  ev.dataTransfer.dropEffect = "move";
@@ -1051,9 +1017,19 @@ export class ComponentDesigner extends Panel {
         dummy.style.fontSize = "10px";
         dummy.style.position = "absolute";
         dummy.ondragenter = dummy.onmouseenter = (e) => {
-            (<any>e.target).nd._this.dom.classList.add("dummyselected");
+            (<any>e.target)._this.dom.classList.add("dummyselected");
+            var name = this._codeEditor.getVariableFromObject((<any>e.target)._this);
+            if ((<any>e.target)._this.dom._backgroundsic === undefined)
+                (<any>e.target)._this.dom._backgroundsic = (<any>e.target)._this.dom.style["background-image"];
+            (<any>e.target)._this.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='12'>" + name + "</text></svg>" + '")';
         }
-        dummy.ondragleave = dummy.onmouseleave = (e) => (<any>e.target).nd._this.dom.classList.remove("dummyselected");
+        dummy.ondragleave = dummy.onmouseleave = (e) => {
+            (<any>e.target)._this.dom.classList.remove("dummyselected");
+
+            (<any>e.target)._this.dom.style["background-image"] = (<any>e.target)._this.dom._backgroundsic;
+            delete (<any>e.target)._this.dom._backgroundsic;
+
+        }
         //   ComponentDesigner.beforeDummy = dummy;
         // }
         // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
@@ -1068,102 +1044,170 @@ export class ComponentDesigner extends Panel {
         if (root === undefined)
             root = node;
         //only elements with varaiables can have dummies
+        var allComponents: Component[] = [];
         var varname = this._codeEditor.getVariableFromObject(node._this);
-        var comp = node._this;
-        if (!varname && node._thisOther) {
+        if (varname)
+            allComponents.push(node._this);
+        if (node._thisOther) {
             for (var x = 0; x < node._thisOther.length; x++) {
-                varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
-                if (varname) {
-                    comp = node._thisOther[x];
-                    break;
+                var varname2 = this._codeEditor.getVariableFromObject(node._thisOther[x]);
+                if (varname2)
+                    allComponents.push(node._thisOther[x]);
+            }
+        }
+        for (var curComponent = 0; curComponent < allComponents.length; curComponent++) {
+
+            varname = this._codeEditor.getVariableFromObject(allComponents[curComponent]);
+            var comp = allComponents[curComponent];
+            /* if (!varname && node._thisOther) {
+                 for (var x = 0; x < node._thisOther.length; x++) {
+                     varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
+                     if (varname) {
+                         comp = node._thisOther[x];
+                         break;
+                     }
+                 }
+             }*/
+
+            var hasChildren = false;
+            var desc = ComponentDescriptor.describe(comp.constructor);
+            var fnew = desc.findField("children");
+            if (fnew) {
+                if (fnew?.createDummyInDesigner !== undefined) {
+                    if (typeof (fnew.createDummyInDesigner) == "boolean") {
+                        hasChildren = fnew.createDummyInDesigner;
+                    } else {
+                        hasChildren = fnew.createDummyInDesigner(comp, false);
+                    }
+
+                } else {
+                    hasChildren = true;
+                }
+                if (hasChildren) {
+                    if (!node.classList.contains("jeditablecontainer")) {
+                        node.classList.add("jeditablecontainer");
+                    }
                 }
             }
-        }
-        if (!varname) {
-            if (node.contentEditable !== "false")
-                node.contentEditable = "false";
+            if (!varname) {
+                if (node.contentEditable !== "false")
+                    node.contentEditable = "false";
+            }
+            if (fnew?.createDummyInDesigner !== undefined) {
+                if (typeof (fnew.createDummyInDesigner) === "boolean") {
+                    if (fnew.createDummyInDesigner === false)
+                        varname = undefined;
 
-            return;
-        }
-        var hasChildren = false;
-        var desc = ComponentDescriptor.describe(comp.constructor);
-        var fnew = desc.findField("children");
-        if (fnew) {
-            hasChildren = true;
-            if (!node.classList.contains("jeditablecontainer")) {
-                node.classList.add("jeditablecontainer");
-            }
-        }
-        if (node.getClientRects === undefined)
-            return;
-
-        var rect = node.getClientRects()[0];
-        if (rect === undefined)
-            return;
-        rect = <any>{
-            left: rect.left - rootRect.left + window.scrollX,
-            top: rect.top - rootRect.top + window.scrollY,
-            right: rect.right - rootRect.left + window.scrollX,
-            bottom: rect.bottom - rootRect.top + window.scrollY
-        }
-        if ((<any>node)?.nd)
-            return;
-        var preDummy = (<any>node)._preDummy_;
-        if (!(<any>node)._preDummy_) {
-            preDummy = this.createPreDummy(node);
-            (<any>preDummy).nd = node;
-            preDummy.title = node.outerHTML;
-            (<any>node)._preDummy_ = preDummy;
-            arr.push(preDummy);
-        }
-        var newTop = rect.top;
-        var newLeft = rect.left;
-        (<any>node).myTop = rect.top;
-        (<any>node).myLeft = rect.left;
-
-        if ((<any>node.parentNode)._preDummy_) {
-            const rp = {
-                top: (<any>node.parentNode).myTop,
-                left: (<any>node.parentNode).myLeft,
-            }
-            if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.left + 5) {
-                newLeft = parseInt((<any>node.parentNode)._preDummy_.style.left.replace("px", "")) + 8;
-            }
-        }
-        preDummy.style.top = newTop + "px";
-        preDummy.style.left = newLeft + "px";
-        if (hasChildren) {
-            var postDummy = (<any>node)._postDummy_;
-            if (!(<any>node)._postDummy_) {
-                postDummy = this.createPostDummy();
-                (<any>postDummy).nd = node;
-                postDummy.title = node.outerHTML;
-                (<any>node)._postDummy_ = postDummy;
-                arr.push(postDummy);
-            }
-            var newBottom = rect.bottom;
-            var newRight = rect.right;
-            (<any>node).myBottom = rect.bottom;
-            (<any>node).myRight = rect.right;
-            var par = (<any>node)._this._parent;
-            if (par.dom._postDummy_) {
-                const rp = {
-                    bottom: par.dom.myBottom,
-                    right: par.dom.myRight,
+                } else {
+                    if (fnew.createDummyInDesigner(comp, true) === false)
+                        varname = undefined;
                 }
-                if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
-                    newRight = par.dom._postDummy_.style.left.replace("px", "");
-                }
-            }
-            postDummy.style.top = (newBottom - 14) + "px";
-            postDummy.style.left = (newRight - 14) + "px";
-        }
 
+            }
+
+
+            if (node.getClientRects === undefined)
+                return;
+
+            var rect = node.getClientRects()[0];
+            if (rect === undefined)
+                return;
+            rect = <any>{
+                left: rect.left - rootRect.left + window.scrollX,
+                top: rect.top - rootRect.top + window.scrollY,
+                right: rect.right - rootRect.left + window.scrollX,
+                bottom: rect.bottom - rootRect.top + window.scrollY
+            }
+            if ((<any>node)?.nd)
+                return;
+            if (varname) {
+                var preDummy = undefined;
+                if ((<any>node)._preDummies_)
+                    preDummy = (<any>node)._preDummies_[curComponent];
+                if (!preDummy) {
+                    if ((<any>node)._preDummies_ === undefined)
+                        (<any>node)._preDummies_ = [];
+                    preDummy = this.createPreDummy(node);
+                    (<any>preDummy).nd = node;
+                    (<any>preDummy)._this = comp;
+                    preDummy.title = varname;
+                    arr.push(preDummy);
+                    (<any>node)._preDummies_.push(preDummy);
+                }
+                var newTop = rect.top;
+                var newLeft = rect.left + curComponent * 8;
+                (<any>node).myTop = rect.top;
+                (<any>node).myLeft = rect.left;
+
+                var parentNode = node.parentNode;
+                //wrapper
+
+                if (node._this === (<any>node.parentNode)._this)
+                    parentNode = node.parentNode.parentNode;
+                if ((<any>parentNode)._preDummies_) {
+
+                    const rp = {
+                        top: (<any>parentNode).myTop,
+                        left: (<any>parentNode).myLeft,
+                        right: (<any>parentNode).myLeft + (<any>parentNode)._preDummies_.length * 8
+                    }
+                    if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.right + 5) {
+                        var pr = (<any>parentNode)._preDummies_[(<any>parentNode)._preDummies_.length - 1];
+                        newLeft = parseInt(pr.style.left.replace("px", "")) + 8;
+                    }
+                }
+                preDummy.style.top = newTop + "px";
+                preDummy.style.left = newLeft + "px";
+            }
+            if (hasChildren) {
+                var postDummy = undefined;
+                if ((<any>node)._postDummies_)
+                    postDummy = (<any>node)._postDummies_[curComponent];
+                if (!(postDummy)) {
+                    if ((<any>node)._postDummies_ === undefined)
+                        (<any>node)._postDummies_ = [];
+                    postDummy = this.createPostDummy();
+                    (<any>postDummy).nd = node;
+                    (<any>postDummy)._this = comp;
+                    postDummy.title = varname;
+                    arr.push(postDummy);
+                    (<any>node)._postDummies_.push(postDummy);
+                }
+                var newBottom = rect.bottom;
+                var newRight = rect.right - curComponent * 8;
+                (<any>node).myBottom = rect.bottom;
+                (<any>node).myRight = rect.right;
+                //var par = (<any>node)._this._parent;
+                if ((<any>parentNode)._postDummies_) {
+                    const rp = {
+                        bottom: (<any>parentNode).myBottom,
+                        right: (<any>parentNode).myRight,
+                        left: (<any>parentNode).myRight - (<any>parentNode)._postDummies_.length * 8
+                    }
+                    if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
+                        var pr = (<any>parentNode)._postDummies_[(<any>parentNode)._postDummies_.length - 1];
+                        newRight = pr.style.left.replace("px", "");
+                    }
+                }
+                postDummy.style.top = (newBottom - 8) + "px";
+                postDummy.style.left = (newRight - 8) + "px";
+            }
+        }
         for (var x = 0; x < node.childNodes.length; x++) {
             if (node._this !== (<any>node.childNodes[x])._this)//Wrapper
                 this.insertDummies(<any>node.childNodes[x], root, arr, rootRect);
         }
 
+    }
+    select(nodeStart: Node, posStart: number, nodeEnd: Node = undefined, posEnd: number = undefined) {
+        var newSel = getSelection();
+        var range = document.createRange();
+        range.setStart(nodeStart, posStart);
+        if (nodeEnd !== undefined)
+            range.setEnd(nodeEnd, posEnd);
+        newSel.removeAllRanges();
+        newSel.addRange(range);
+        return range;
     }
     /**
      * @member {jassijs.ui.Component} - the designed component
@@ -1178,7 +1222,7 @@ export class ComponentDesigner extends Panel {
         if (this._codeEditor.__evalToCursorReached !== true) {
             this._codeEditor._main.show("design");
         }
-        if (this._designPlaceholder._components.length > 0)
+        while (this._designPlaceholder._components.length > 0)
             this._designPlaceholder.remove(this._designPlaceholder._components[0], true);
         this._designPlaceholder.add(component);
         // 
@@ -1195,9 +1239,12 @@ export class ComponentDesigner extends Panel {
             this.inlineEditorPanel.dom.firstChild.remove();
         }
         this.updateDummies();
-
+        this.callEvent("onDesignedComponentChanged", component);
         //var parser=new jassijs.ui.PropertyEditor.Parser();
         //parser.parse(_this.value);
+    }
+    onDesignedComponentChanged(handler: (Component) => void) {
+        this.addEvent("onDesignedComponentChanged", handler);
     }
     updateDummies() {
         var arr = [];
@@ -1220,7 +1267,8 @@ export class ComponentDesigner extends Panel {
         this._designPlaceholder.dom.contentEditable = "false";
         //delete removed dummies
         for (var x = 0; x < this.dummyHolder.childNodes.length; x++) {
-            if ((<any>this.dummyHolder.childNodes[x]).nd._this._parent === undefined) {
+            if ((<any>this.dummyHolder.childNodes[x])._this.dom._this._parent === undefined) {
+                //if ((<any>this.dummyHolder.childNodes[x])._this._parent === undefined) {
                 this.dummyHolder.removeChild(this.dummyHolder.childNodes[x]);
             }
         }

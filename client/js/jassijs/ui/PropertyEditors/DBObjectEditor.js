@@ -1,8 +1,31 @@
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
@@ -11,6 +34,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectEditor = void 0;
+    Registry_1 = __importStar(Registry_1);
     let DBObjectEditor = class DBObjectEditor extends Editor_1.Editor {
         /**
          * Checkbox Editor for boolean values
@@ -23,9 +47,10 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
             this.component = new Panel_1.Panel( /*{useSpan:true}*/);
             this._textbox = new Textbox_1.Textbox();
             this._objectchooser = new ObjectChooser_1.ObjectChooser();
-            this._objectchooser.width = 24;
+            this._objectchooser.width = 16;
+            this._objectchooser.height = 16;
             this._textbox.width = "calc(100% - 34px)";
-            this.component.height = 24;
+            this.component.height = 16;
             this.component.add(this._textbox);
             this.component.add(this._objectchooser);
             var _this = this;
@@ -47,6 +72,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         set ob(ob) {
             super.ob = ob;
             //databinder,"prop"
+            var h = Registry_1.default;
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (value !== undefined) {
                 //jassijs.db.load("de.Kunde",9);

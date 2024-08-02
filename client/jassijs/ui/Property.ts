@@ -37,6 +37,9 @@ export class Property
         public isVisible?:(component,propertyeditor?)=>boolean;
         /** @member - jassijs.base.Action -   the actions in the PropertyEditor  */
         public editoractions?: /*Action*/any[];
+
+        public createDummyInDesigner?:(component,isPreDummy:boolean)=>boolean|boolean;
+
         /**
          * Property for PropertyEditor
          * @class jassijs.ui.EditorProperty

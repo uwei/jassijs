@@ -383,9 +383,8 @@ export class ReportDesign extends BoxPanel {
         if (this.styleContainer._components.length > 0) {
             r.styles = {};
             for (var x = 0; x < this.styleContainer._components.length; x++) {
-            if(!(<any>this.styleContainer._components[0]).designDummyFor)
                 r.styles[this.styleContainer._components[x]["name"]] = (<RStyle>this.styleContainer._components[x]).toJSON();
-            }
+
         }
         //var _this = this;
         if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {

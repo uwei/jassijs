@@ -111,13 +111,7 @@ export class Textbox<T extends TextboxProperties = TextboxProperties> extends Da
             this.dom.value = this.converter.objectToString(this._value)
         }
     }
-    private updateValue() {
-        if (this.converter) {
-            this.value = this.converter.stringToObject(this.dom.value);
-        } else {
-            this.value = this.dom.value;
-        }
-    }
+   
     private blurcalled(evt) {
         this._isFocused = false;
         this.updateValue();
@@ -131,15 +125,25 @@ export class Textbox<T extends TextboxProperties = TextboxProperties> extends Da
         var v = value;
         if (this.converter)
             v = this.converter.objectToFormatedString(v);
-
-        this.dom.value = v === undefined ? "" : v;
+        if(this.dom)
+            this.dom.value = v === undefined ? "" : v;
     }
     @$Property({ type: "string" })
 
     get value() {
-        if (this._isFocused)
+      //  if (this._isFocused)
             this.updateValue();
+       // else if (this.converter) {
+         //   return  this.converter.stringToObject(this.dom.value);
+       //} 
         return this._value;
+    }
+     private updateValue() {
+        if (this.converter) {
+            this.value = this.converter.stringToObject(this.dom.value);
+        } else {
+            this.value = this.dom?.value;
+        }
     }
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler) {

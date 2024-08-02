@@ -10,71 +10,55 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Categories", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Table_1, BoxPanel_1, Textarea_1, Textbox_1, Registry_1, Panel_1, Property_1, Categories_1, DBObjectView_1) {
+define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Table", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Categories", "jassijs/ui/DBObjectView", "jassijs/ui/Component"], function (require, exports, NumberConverter_1, Table_1, Textarea_1, Textbox_1, Registry_1, Panel_1, Property_1, Categories_1, DBObjectView_1, Component_1) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CategoriesView = void 0;
     exports.test = test;
     let CategoriesView = class CategoriesView extends DBObjectView_1.DBObjectView {
-        constructor() {
-            super();
-            // this.me = {}; //this is called in objectdialog
-            this.layout(this.me);
-        }
         get title() {
             return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
         }
-        layout(me) {
-            me.boxpanel1 = new BoxPanel_1.BoxPanel();
-            me.Id = new Textbox_1.Textbox();
-            me.name = new Textbox_1.Textbox();
-            me.description = new Textarea_1.Textarea();
-            me.panel1 = new Panel_1.Panel();
-            me.table1 = new Table_1.Table({ options: { data: this.value } });
-            this.me.main.config({ children: [
-                    me.boxpanel1.config({
-                        children: [
-                            me.Id.config({
-                                label: "Id",
-                                bind: [me.databinder, "id"],
-                                width: 40,
-                                converter: new NumberConverter_1.NumberConverter()
-                            }),
-                            me.name.config({
-                                bind: [me.databinder, "CategoryName"],
-                                label: "Name",
-                                width: 225
-                            })
-                        ],
-                        width: 80,
-                        horizontal: true
+        render() {
+            return (0, Component_1.jc)(Panel_1.Panel, {
+                children: [
+                    (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, {
+                        label: "Id",
+                        bind: this.states.value.bind.id,
+                        width: 40,
+                        converter: new NumberConverter_1.NumberConverter()
                     }),
-                    me.description.config({
-                        height: 70,
+                    (0, Component_1.jc)(Textbox_1.Textbox, {
+                        label: "Name",
+                        bind: this.states.value.bind.CategoryName,
+                        width: 235,
+                        converter: new NumberConverter_1.NumberConverter()
+                    }),
+                    (0, Component_1.jc)("br"),
+                    (0, Component_1.jc)(Textarea_1.Textarea, {
+                        label: "Description",
+                        bind: this.states.value.bind.Description,
                         width: 280,
-                        bind: [me.databinder, "Description"],
-                        label: "Description"
+                        converter: new NumberConverter_1.NumberConverter()
                     }),
-                    me.panel1.config({}),
-                    me.table1.config({
+                    (0, Component_1.jc)(Table_1.Table, {
                         height: "100%",
-                        bindItems: [me.databinder, "Products"],
-                        width: "100%",
-                        tooltip: "e"
-                    })
-                ] });
+                        bindItems: this.states.value.bind.Products,
+                        width: "100%"
+                    }),
+                ]
+            });
         }
     };
     exports.CategoriesView = CategoriesView;
-    __decorate([
-        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Categories_1.Categories !== "undefined" && Categories_1.Categories) === "function" ? _a : Object)
-    ], CategoriesView.prototype, "value", void 0);
     exports.CategoriesView = CategoriesView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
-        (0, Registry_1.$Class)("northwind.CategoriesView"),
-        __metadata("design:paramtypes", [])
+        (0, Registry_1.$Class)("northwind.CategoriesView")
+        //@$Property({name:"value",componentType:"northwind.Categories", type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
+        ,
+        (0, Property_1.$Property)({ name: "aa", type: "string" }),
+        (0, Property_1.$Property)({ name: "ab", type: "string" })
     ], CategoriesView);
     async function test() {
         var ret = new CategoriesView();
@@ -84,94 +68,80 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
         return ret;
     }
 });
-define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/ObjectChooser", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Customer", "northwind/remote/Orders", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_2, BoxPanel_2, HTMLPanel_1, Databinder_1, ObjectChooser_1, Registry_2, Panel_2, Customer_1, Orders_1, Actions_1, Windows_1) {
+define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "jassijs/ui/HTMLPanel", "jassijs/ui/ObjectChooser", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Customer", "northwind/remote/Orders", "jassijs/base/Actions", "jassijs/base/Windows", "jassijs/ui/Component", "jassijs/ui/DBObjectView"], function (require, exports, Table_2, HTMLPanel_1, ObjectChooser_1, Registry_2, Panel_2, Customer_1, Orders_1, Actions_1, Windows_1, Component_2, DBObjectView_2) {
     "use strict";
     var CustomerOrders_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CustomerOrders = void 0;
     exports.test = test;
     Windows_1 = __importDefault(Windows_1);
-    let CustomerOrders = CustomerOrders_1 = class CustomerOrders extends Panel_2.Panel {
-        constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
+    let CustomerOrders = CustomerOrders_1 = class CustomerOrders extends DBObjectView_2.DBObjectView {
+        constructor(props = {}) {
+            super(props);
+            if (!(props === null || props === void 0 ? void 0 : props.order))
+                this.initData();
         }
-        layout(me) {
+        render() {
             var _this = this;
-            me.IDChooseCustomer = new ObjectChooser_1.ObjectChooser();
-            me.databinderCustomer = new Databinder_1.Databinder();
-            me.htmlpanel = new HTMLPanel_1.HTMLPanel();
-            me.boxpanel = new BoxPanel_2.BoxPanel();
-            me.boxpanel2 = new BoxPanel_2.BoxPanel();
-            me.htmlpanel2 = new HTMLPanel_1.HTMLPanel();
-            me.IDOrders = new Table_2.Table();
-            me.databinderOrder = new Databinder_1.Databinder();
-            me.table = new Table_2.Table();
-            this.config({ children: [
-                    me.databinderCustomer.config({}),
-                    me.boxpanel.config({ children: [
-                            me.boxpanel2.config({
-                                children: [
-                                    me.htmlpanel.config({
-                                        width: 185,
-                                        value: "Berglunds snabbköp",
-                                        bind: [me.databinderCustomer, "CompanyName"],
-                                        label: "Company Name",
-                                        height: 20
-                                    }),
-                                    me.IDChooseCustomer.config({
-                                        width: 25,
-                                        bind: [me.databinderCustomer, "this"],
-                                        items: "northwind.Customer",
-                                        onchange: function (event) {
-                                            _this.customerChanged();
-                                        }
-                                    }),
-                                    me.htmlpanel2.config({
-                                        width: 110,
-                                        value: " ",
-                                        bind: [me.databinderCustomer, "Country"],
-                                        label: "Country"
-                                    })
-                                ],
-                                horizontal: true
-                            }),
-                            me.IDOrders.config({
-                                width: "100%",
-                                label: "Click an order...",
-                                height: "180"
-                            }),
-                            me.table.config({
-                                width: "100%",
-                                bindItems: [me.databinderOrder, "Details"],
-                                height: "140",
-                                label: "...to see order details"
-                            })
-                        ] }),
-                    me.databinderOrder.config({})
-                ] });
-            me.IDOrders.selectComponent = me.databinderOrder;
-            this.setData();
-            this.width = "100%";
-            this.height = "100%";
+            return (0, Component_2.jc)(Panel_2.Panel, {
+                children: [
+                    (0, Component_2.jc)(DBObjectView_2.DBObjectViewToolbar, { view: this }),
+                    (0, Component_2.jc)(HTMLPanel_1.HTMLPanel, {
+                        width: 300,
+                        value: "Blauer See Delikatessen",
+                        bind: this.states.value.bind.CompanyName,
+                        label: "Company Name",
+                        height: 20
+                    }),
+                    (0, Component_2.jc)(ObjectChooser_1.ObjectChooser, {
+                        width: 25,
+                        bind: this.states.value.bind,
+                        items: "northwind.Customer",
+                        onchange: function (event) {
+                            _this.customerChanged();
+                        }
+                    }),
+                    (0, Component_2.jc)(HTMLPanel_1.HTMLPanel, {
+                        width: 110,
+                        value: " ",
+                        bind: this.states.value.bind.Country,
+                        label: "Country"
+                    }),
+                    (0, Component_2.jc)(Table_2.Table, {
+                        bind: this.states.order.bind,
+                        bindItems: this.states.orders.bind,
+                        width: "100%",
+                        label: "Click an order...",
+                        height: "180"
+                    }),
+                    (0, Component_2.jc)(Table_2.Table, {
+                        bindItems: this.states.order.bind.Details,
+                        width: "100%",
+                        height: "140",
+                        label: "...to see order details"
+                    })
+                ]
+            });
         }
         static showDialog() {
             Windows_1.default.add(new CustomerOrders_1(), "Customer Orders");
         }
         async customerChanged() {
-            var cust = this.me.databinderCustomer.value;
-            var orders = await Orders_1.Orders.find({ where: "Customer.id=:param",
-                whereParams: { param: cust.id } });
-            this.me.IDOrders.items = orders;
-            this.me.databinderOrder.value = orders[0];
+            var cust = this.states.value.current;
+            this.states.orders.current = await Orders_1.Orders.find({
+                where: "Customer.id=:param",
+                whereParams: { param: cust.id }
+            });
+            this.states.order.current = this.states.orders.current.length === 0 ? undefined : this.states.orders.current[0];
+            //    this.me.IDOrders.items = orders;
+            //   this.me.databinderOrder.value = orders[0];
         }
-        async setData() {
-            var all = await Customer_1.Customer.find();
-            this.me.databinderCustomer.value = all[0];
+        set value(value) {
+            super.value = value;
             this.customerChanged();
-            //        this.me.IDChooseCustomer.items = all;
-            //      this.me.databinderCustomer.value = all[0];
+        }
+        async initData() {
+            this.value = await Customer_1.Customer.findOne();
         }
     };
     exports.CustomerOrders = CustomerOrders;
@@ -184,54 +154,45 @@ define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "j
     exports.CustomerOrders = CustomerOrders = CustomerOrders_1 = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
         (0, Registry_2.$Class)("northwind/CustomerOrders"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], CustomerOrders);
     async function test() {
         var ret = new CustomerOrders();
         return ret;
     }
 });
-define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Customer"], function (require, exports, Table_3, Registry_3, Panel_3, Actions_2, Windows_2, Customer_2) {
+define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Customer", "jassijs/ui/Component"], function (require, exports, Table_3, Registry_3, Actions_2, Windows_2, Customer_2, Component_3) {
     "use strict";
     var CustomerPhoneList_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CustomerPhoneList = void 0;
     exports.test = test;
     Windows_2 = __importDefault(Windows_2);
-    let CustomerPhoneList = CustomerPhoneList_1 = class CustomerPhoneList extends Panel_3.Panel {
-        constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
-        }
-        layout(me) {
-            var _this = this;
-            me.table = new Table_3.Table();
-            this.config({
-                children: [
-                    me.table.config({
-                        width: "100%",
-                        height: "100%",
-                        showSearchbox: true,
-                        options: {
-                            autoColumns: false,
-                            columns: [
-                                { title: "Company Name:", field: "CompanyName" },
-                                { title: "Contact:", field: "ContactName" },
-                                { title: "Phone:", field: "Phone" },
-                                { title: "Fax:", field: "Fax" }
-                            ]
-                        }
-                    })
-                ]
-            });
-            this.width = "100%";
-            this.height = "100%";
+    let CustomerPhoneList = CustomerPhoneList_1 = class CustomerPhoneList extends Component_3.Component {
+        constructor(props = {}) {
+            super(props);
             this.setData();
+        }
+        render() {
+            return (0, Component_3.jc)(Table_3.Table, {
+                ref: this.refs.table,
+                width: "600px",
+                height: "500px",
+                showSearchbox: true,
+                options: {
+                    autoColumns: false,
+                    columns: [
+                        { title: "Company Name:", field: "CompanyName" },
+                        { title: "Contact:", field: "ContactName" },
+                        { title: "Phone:", field: "Phone" },
+                        { title: "Fax:", field: "Fax" }
+                    ]
+                }
+            });
         }
         async setData() {
             var all = await Customer_2.Customer.find();
-            this.me.table.items = all;
+            this.refs.table.items = all;
             //  new Customer().Fax
         }
         static showDialog() {
@@ -248,7 +209,7 @@ define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table",
     exports.CustomerPhoneList = CustomerPhoneList = CustomerPhoneList_1 = __decorate([
         (0, Actions_2.$ActionProvider)("jassijs.base.ActionNode"),
         (0, Registry_3.$Class)("northwind/CustomerPhoneList"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], CustomerPhoneList);
     async function test() {
         var ret = new CustomerPhoneList();
@@ -256,141 +217,102 @@ define("northwind/CustomerPhoneList", ["require", "exports", "jassijs/ui/Table",
         return ret;
     }
 });
-define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Customer", "jassijs/ui/DBObjectView"], function (require, exports, Textbox_2, Registry_4, Property_2, Customer_3, DBObjectView_2) {
+define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "northwind/remote/Customer", "jassijs/ui/DBObjectView", "jassijs/ui/Component", "jassijs/ui/Panel"], function (require, exports, Textbox_2, Registry_4, Customer_3, DBObjectView_3, Component_4, Panel_3) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CustomerView = void 0;
     exports.test = test;
-    let CustomerView = class CustomerView extends DBObjectView_2.DBObjectView {
-        constructor() {
-            super();
-            //this.me = {}; this is called in objectdialog
-            this.layout(this.me);
-        }
+    let CustomerView = class CustomerView extends DBObjectView_3.DBObjectView {
         get title() {
             return this.value === undefined ? "CustomerView" : "CustomerView " + this.value.id;
         }
-        layout(me) {
-            me.id = new Textbox_2.Textbox();
-            me.companyname = new Textbox_2.Textbox();
-            me.contacttitle = new Textbox_2.Textbox();
-            me.contactname = new Textbox_2.Textbox();
-            me.address = new Textbox_2.Textbox();
-            me.postalcode = new Textbox_2.Textbox();
-            me.textbox1 = new Textbox_2.Textbox();
-            me.region = new Textbox_2.Textbox();
-            me.textbox2 = new Textbox_2.Textbox();
-            me.phone = new Textbox_2.Textbox();
-            me.fax = new Textbox_2.Textbox();
-            this.me.main.config({
-                isAbsolute: true,
-                width: 560,
-                height: "300",
+        render() {
+            return (0, Component_4.jc)(Panel_3.Panel, {
                 children: [
-                    me.id.config({
-                        x: 10,
-                        y: 5,
-                        bind: [me.databinder, "id"],
+                    (0, Component_4.jc)(DBObjectView_3.DBObjectViewToolbar, { view: this }),
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
+                        bind: this.states.value.bind.id,
                         width: 65,
                         label: "id"
                     }),
-                    me.contactname.config({
-                        x: 90,
-                        y: 5,
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Contact Name",
-                        bind: [me.databinder, "ContactName"],
-                        width: 260
+                        bind: this.states.value.bind.ContactName,
+                        width: 255
                     }),
-                    me.contacttitle.config({
-                        x: 10,
-                        y: 45,
+                    (0, Component_4.jc)("br"),
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Contact Title",
-                        bind: [me.databinder, "ContactTitle"]
+                        bind: this.states.value.bind.ContactTitle,
                     }),
-                    me.companyname.config({
-                        x: 195,
-                        y: 45,
-                        bind: [me.databinder, "CompanyName"],
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
+                        bind: this.states.value.bind.ContactName,
                         label: "Company Name",
                         width: 155
                     }),
-                    me.address.config({
-                        x: 10,
-                        y: 90,
-                        bind: [me.databinder, "Address"],
+                    (0, Component_4.jc)("br"),
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
+                        bind: this.states.value.bind.Address,
                         label: "Address",
-                        width: 340
+                        width: 325
                     }),
-                    me.postalcode.config({
-                        x: 10,
-                        y: 140,
+                    (0, Component_4.jc)("br"),
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Postal Code",
-                        bind: [me.databinder, "PostalCode"],
+                        bind: this.states.value.bind.PostalCode,
                         width: 90
                     }),
-                    me.textbox1.config({
-                        x: 100,
-                        y: 140,
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "City",
-                        width: 250,
-                        bind: [me.databinder, "City"]
+                        width: 230,
+                        bind: this.states.value.bind.City,
                     }),
-                    me.region.config({
-                        x: 10,
-                        y: 185,
-                        bind: [me.databinder, "Region"],
+                    (0, Component_4.jc)("br"),
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
+                        bind: this.states.value.bind.Region,
                         label: "Region"
                     }),
-                    me.textbox2.config({
-                        x: 195,
-                        y: 185,
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Country",
-                        bind: [me.databinder, "Country"]
+                        bind: this.states.value.bind.Country,
+                        width: 155,
                     }),
-                    me.phone.config({
-                        x: 10,
-                        y: 230,
+                    (0, Component_4.jc)("br"),
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Phone",
-                        bind: [me.databinder, "Phone"]
+                        bind: this.states.value.bind.Phone,
                     }),
-                    me.fax.config({
-                        x: 195,
-                        y: 230,
+                    (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Fax",
-                        bind: [me.databinder, "Fax"]
+                        bind: this.states.value.bind.Fax,
+                        width: 155,
                     })
                 ]
             });
         }
     };
     exports.CustomerView = CustomerView;
-    __decorate([
-        (0, Property_2.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Customer_3.Customer !== "undefined" && Customer_3.Customer) === "function" ? _a : Object)
-    ], CustomerView.prototype, "value", void 0);
     exports.CustomerView = CustomerView = __decorate([
-        (0, DBObjectView_2.$DBObjectView)({
+        (0, DBObjectView_3.$DBObjectView)({
             classname: "northwind.Customer",
             actionname: "Northwind/Customers",
             icon: "mdi mdi-nature-people"
         }),
-        (0, Registry_4.$Class)("northwind/CustomerView"),
-        __metadata("design:paramtypes", [])
+        (0, Registry_4.$Class)("northwind.CustomerView")
     ], CustomerView);
     async function test() {
         var ret = new CustomerView;
-        ret["value"] = await Customer_3.Customer.findOne();
+        ret.value = await Customer_3.Customer.findOne();
         return ret;
     }
 });
-define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/OrderDetails", "jassijs/ui/DBObjectView", "jassijs/ui/Textbox"], function (require, exports, Registry_5, Property_3, OrderDetails_1, DBObjectView_3, Textbox_3) {
+define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/OrderDetails", "jassijs/ui/DBObjectView", "jassijs/ui/Textbox"], function (require, exports, Registry_5, Property_2, OrderDetails_1, DBObjectView_4, Textbox_3) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DetailTest = void 0;
     exports.test = test;
-    let DetailTest = class DetailTest extends DBObjectView_3.DBObjectView {
+    let DetailTest = class DetailTest extends DBObjectView_4.DBObjectView {
         constructor() {
             super();
             //this.me = {}; this is called in objectdialog
@@ -407,11 +329,11 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry",
     };
     exports.DetailTest = DetailTest;
     __decorate([
-        (0, Property_3.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_2.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof OrderDetails_1.OrderDetails !== "undefined" && OrderDetails_1.OrderDetails) === "function" ? _a : Object)
     ], DetailTest.prototype, "value", void 0);
     exports.DetailTest = DetailTest = __decorate([
-        (0, DBObjectView_3.$DBObjectView)({ classname: "northwind.OrderDetails" }),
+        (0, DBObjectView_4.$DBObjectView)({ classname: "northwind.OrderDetails" }),
         (0, Registry_5.$Class)("northwind.DetailTest"),
         __metadata("design:paramtypes", [])
     ], DetailTest);
@@ -422,208 +344,161 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry",
         return ret;
     }
 });
-define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView", "jassijs/remote/Validator"], function (require, exports, DateTimeConverter_1, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Textbox_4, Registry_6, Property_4, Employees_1, DBObjectView_4, Validator_1) {
+define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Employees", "jassijs/ui/DBObjectView", "jassijs/ui/Component", "jassijs/ui/BoxPanel"], function (require, exports, DateTimeConverter_1, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Textbox_4, Registry_6, Panel_4, Employees_1, DBObjectView_5, Component_5, BoxPanel_1) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.EmployeesView = void 0;
     exports.test = test;
-    let EmployeesView = class EmployeesView extends DBObjectView_4.DBObjectView {
-        constructor() {
-            super();
-            //this.me = {}; this is called in objectdialog
-            this.layout(this.me);
-        }
+    let EmployeesView = class EmployeesView extends DBObjectView_5.DBObjectView {
         get title() {
             return this.value === undefined ? "EmployeesView" : "EmployeesView " + this.value.id;
         }
-        layout(me) {
-            me.firstName = new Textbox_4.Textbox();
-            me.lastName = new Textbox_4.Textbox();
-            me.title = new Textbox_4.Textbox();
-            me.titleOfCouttesy = new Textbox_4.Textbox();
-            me.address = new Textbox_4.Textbox();
-            me.postalCode = new Textbox_4.Textbox();
-            me.city = new Textbox_4.Textbox();
-            me.region = new Textbox_4.Textbox();
-            me.state = new Textbox_4.Textbox();
-            me.birthDate = new Textbox_4.Textbox();
-            me.hiredate = new Textbox_4.Textbox();
-            me.homephone = new Textbox_4.Textbox();
-            me.notes = new Textarea_2.Textarea();
-            me.image1 = new Image_1.Image();
-            me.photoPath = new Textbox_4.Textbox();
-            me.id = new Textbox_4.Textbox();
-            me.reportsTo = new HTMLPanel_2.HTMLPanel();
-            me.objectchooser1 = new ObjectChooser_2.ObjectChooser();
-            this.me.main.config({
+        render() {
+            return (0, Component_5.jc)(Panel_4.Panel, {
                 children: [
-                    me.id.config({
-                        x: 5,
-                        y: 5,
-                        width: 60,
+                    (0, Component_5.jc)(DBObjectView_5.DBObjectViewToolbar, { view: this }),
+                    (0, Component_5.jc)(Textbox_4.Textbox, {
                         label: "Id",
-                        bind: [me.databinder, "id"],
+                        bind: this.states.value.bind.id,
+                        width: 60,
                         converter: new NumberConverter_2.NumberConverter()
                     }),
-                    me.firstName.config({
-                        x: 80,
-                        y: 5,
+                    (0, Component_5.jc)(Textbox_4.Textbox, {
                         label: "First name",
-                        bind: [me.databinder, "FirstName"]
+                        bind: this.states.value.bind.FirstName,
                     }),
-                    me.lastName.config({
-                        x: 250,
-                        y: 5,
+                    (0, Component_5.jc)(Textbox_4.Textbox, {
                         label: "Last Name",
-                        bind: [me.databinder, "LastName"]
+                        bind: this.states.value.bind.LastName,
                     }),
-                    me.title.config({
-                        x: 420,
-                        y: 5,
-                        bind: [me.databinder, "Title"],
+                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                        bind: this.states.value.bind.Title,
                         label: "Title",
                         width: 90
                     }),
-                    me.titleOfCouttesy.config({
-                        x: 525,
-                        y: 5,
+                    (0, Component_5.jc)(Textbox_4.Textbox, {
                         label: "Title of C.",
                         width: 85,
-                        bind: [me.databinder, "TitleOfCourtesy"]
+                        bind: this.states.value.bind.TitleOfCourtesy
                     }),
-                    me.address.config({
-                        x: 5,
-                        y: 50,
-                        label: "Address",
-                        bind: [me.databinder, "Address"],
-                        width: 345
+                    (0, Component_5.jc)("br"),
+                    (0, Component_5.jc)(BoxPanel_1.BoxPanel, {
+                        horizontal: true,
+                        children: [
+                            (0, Component_5.jc)(Panel_4.Panel, {
+                                children: [
+                                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                                        label: "Address",
+                                        bind: this.states.value.bind.Address,
+                                        width: 345
+                                    }),
+                                    (0, Component_5.jc)("br"),
+                                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                                        label: "Postal Code",
+                                        bind: this.states.value.bind.PostalCode,
+                                        width: 90
+                                    }),
+                                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                                        bind: this.states.value.bind.City,
+                                        label: "City",
+                                        width: 240
+                                    }),
+                                    (0, Component_5.jc)("br"),
+                                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                                        bind: this.states.value.bind.Region,
+                                        label: "Region",
+                                        width: 90
+                                    }),
+                                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                                        bind: this.states.value.bind.Country,
+                                        label: "country",
+                                        width: 240
+                                    }),
+                                    (0, Component_5.jc)("br"),
+                                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                                        width: 100,
+                                        bind: this.states.value.bind.BirthDate,
+                                        label: "Birth Date",
+                                        converter: new DateTimeConverter_1.DateTimeConverter()
+                                    }),
+                                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                                        bind: this.states.value.bind.HireDate,
+                                        label: "Hire Date",
+                                        width: 95,
+                                        converter: new DateTimeConverter_1.DateTimeConverter()
+                                    }),
+                                    (0, Component_5.jc)("br"),
+                                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                                        bind: this.states.value.bind.HomePhone,
+                                        label: "Home Phone",
+                                        width: 130
+                                    })
+                                ]
+                            }),
+                            (0, Component_5.jc)(Textarea_2.Textarea, {
+                                width: 240,
+                                height: 155,
+                                bind: this.states.value.bind.Notes,
+                                label: "Notes"
+                            }),
+                            (0, Component_5.jc)(Image_1.Image, {
+                                src: "",
+                                style: {
+                                    backgroundColor: "black",
+                                    borderStyle: "solid"
+                                },
+                                width: 125, bind: this.states.value.bind.PhotoPath
+                            }),
+                        ]
                     }),
-                    me.postalCode.config({
-                        x: 5,
-                        y: 95,
-                        label: "Postal Code",
-                        bind: [me.databinder, "PostalCode"],
-                        width: 90
-                    }),
-                    me.city.config({
-                        x: 110,
-                        y: 95,
-                        bind: [me.databinder, "City"],
-                        label: "City",
-                        width: 240
-                    }),
-                    me.region.config({
-                        x: 5,
-                        y: 140,
-                        bind: [me.databinder, "Region"],
-                        label: "Region",
-                        width: 90
-                    }),
-                    me.state.config({
-                        x: 110,
-                        y: 140,
-                        bind: [me.databinder, "Country"],
-                        label: "country",
-                        width: 240
-                    }),
-                    me.birthDate.config({
-                        x: 5,
-                        y: 190,
-                        width: 100,
-                        bind: [me.databinder, "BirthDate"],
-                        label: "Birth Date",
-                        converter: new DateTimeConverter_1.DateTimeConverter()
-                    }),
-                    me.hiredate.config({
-                        x: 115,
-                        y: 190,
-                        bind: [me.databinder, "HireDate"],
-                        label: "Hire Date",
-                        width: 95,
-                        converter: new DateTimeConverter_1.DateTimeConverter()
-                    }),
-                    me.homephone.config({
-                        x: 220,
-                        y: 190,
-                        bind: [me.databinder, "HomePhone"],
-                        label: "Home Phone",
-                        width: 130
-                    }),
-                    me.photoPath.config({
-                        x: 5,
-                        y: 240,
-                        bind: [me.databinder, "PhotoPath"],
+                    (0, Component_5.jc)(Textbox_4.Textbox, {
+                        bind: this.states.value.bind.PhotoPath,
                         label: "Photo Path",
                         width: 460
                     }),
-                    me.notes.config({
-                        x: 375,
-                        y: 50,
-                        width: 240,
-                        height: 155,
-                        bind: [me.databinder, "Notes"],
-                        label: "Notes"
-                    }),
-                    me.image1.config({
-                        x: 630,
-                        y: 20,
-                        src: "",
-                        style: {
-                            backgroundColor: "black",
-                            borderStyle: "solid"
-                        },
-                        width: 125,
-                        bind: [me.databinder, "PhotoPath"]
-                    }),
-                    me.reportsTo.config({
-                        x: 7,
-                        y: 298,
+                    (0, Component_5.jc)("br"),
+                    (0, Component_5.jc)(Panel_4.Panel, {
                         label: "Reports To",
-                        bind: [me.databinder, "ReportsTo"],
-                        template: "{{FirstName}} {{LastName}}",
-                        width: 160
-                    }),
-                    me.objectchooser1.config({
-                        x: 170,
-                        y: 310,
-                        width: 25,
-                        height: 25,
-                        bind: [me.databinder, "ReportsTo"],
-                        items: "northwind.Employees"
+                        children: [
+                            (0, Component_5.jc)(HTMLPanel_2.HTMLPanel, {
+                                bind: this.states.value.bind.ReportsTo.FirstName
+                            }),
+                            " ",
+                            (0, Component_5.jc)(HTMLPanel_2.HTMLPanel, {
+                                bind: this.states.value.bind.ReportsTo.LastName
+                            }),
+                            (0, Component_5.jc)(ObjectChooser_2.ObjectChooser, {
+                                width: 25,
+                                height: 25,
+                                bind: this.states.value.bind.ReportsTo,
+                                items: "northwind.Employees"
+                            })
+                        ]
                     })
-                ],
-                isAbsolute: true,
-                width: "750",
-                height: "360"
+                ]
             });
         }
     };
     exports.EmployeesView = EmployeesView;
-    __decorate([
-        (0, Property_4.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Employees_1.Employees !== "undefined" && Employees_1.Employees) === "function" ? _a : Object)
-    ], EmployeesView.prototype, "value", void 0);
     exports.EmployeesView = EmployeesView = __decorate([
-        (0, DBObjectView_4.$DBObjectView)({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
-        (0, Registry_6.$Class)("northwind.EmployeesView"),
-        __metadata("design:paramtypes", [])
+        (0, DBObjectView_5.$DBObjectView)({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
+        (0, Registry_6.$Class)("northwind.EmployeesView")
     ], EmployeesView);
     async function test() {
         var em = (await Employees_1.Employees.find({ id: 4 }))[0];
         var ret = new EmployeesView;
-        ret["value"] = em;
-        var h = await (0, Validator_1.validate)(em);
+        ret.value = em;
+        //var h=await validate(em);
         // ret.me.address
         return ret;
     }
 });
-define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router", "northwind/remote/OrderDetails", "jassijs/remote/Transaction"], function (require, exports, Button_1, HTMLPanel_3, Registry_7, Panel_4, CSVImport_1, Actions_3, Router_1, OrderDetails_2, Transaction_1) {
+define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router", "northwind/remote/OrderDetails", "jassijs/remote/Transaction"], function (require, exports, Button_1, HTMLPanel_3, Registry_7, Panel_5, CSVImport_1, Actions_3, Router_1, OrderDetails_2, Transaction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ImportData = void 0;
     exports.test = test;
-    let ImportData = class ImportData extends Panel_4.Panel {
+    let ImportData = class ImportData extends Panel_5.Panel {
         constructor() {
             super();
             this.me = {};
@@ -720,327 +595,185 @@ define("northwind/modul", ["require", "exports"], function (require, exports) {
         "require": {}
     };
 });
-define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_2, Style_1, BoxPanel_3, Repeater_1, ObjectChooser_3, HTMLPanel_4, NumberConverter_3, Textbox_5, Registry_8, Panel_5, Property_5, Orders_2, DBObjectView_5) {
+define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/BoxPanel", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Orders", "jassijs/ui/DBObjectView", "jassijs/ui/Component", "jassijs/ui/State"], function (require, exports, DateTimeConverter_2, BoxPanel_2, ObjectChooser_3, HTMLPanel_4, NumberConverter_3, Textbox_5, Registry_8, Panel_6, Orders_2, DBObjectView_6, Component_6, State_1) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.OrdersView = void 0;
     exports.test = test;
-    let OrdersView = class OrdersView extends DBObjectView_5.DBObjectView {
-        constructor() {
-            super();
-            //this.me = {}; this is called in objectdialog
-            this.layout(this.me);
+    function ProductDetails(props, states) {
+        var hh = states.product;
+        return (0, Component_6.jc)(Panel_6.Panel, {
+            children: [
+                (0, Component_6.jc)(Textbox_5.Textbox, { bind: states.product.bind.Quantity, width: 80 }),
+                (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: states.product.bind.Product.ProductName, width: 365 }),
+                (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, {
+                    bind: states.product.bind,
+                    items: "northwind.Products"
+                }),
+                (0, Component_6.jc)("br"),
+            ]
+        });
+    }
+    let OrdersView = class OrdersView extends DBObjectView_6.DBObjectView {
+        render() {
+            return (0, Component_6.jc)(Panel_6.Panel, {
+                children: [
+                    (0, Component_6.jc)(DBObjectView_6.DBObjectViewToolbar, { view: this }),
+                    (0, Component_6.jc)(BoxPanel_2.BoxPanel, {
+                        horizontal: true,
+                        children: [
+                            (0, Component_6.jc)(Panel_6.Panel, {
+                                children: [
+                                    (0, Component_6.jc)(Textbox_5.Textbox, { label: "Ship Name", bind: this.states.value.bind.ShipName, width: 260, ref: this.refs.shipName }),
+                                    (0, Component_6.jc)(Textbox_5.Textbox, {
+                                        label: "Order ID", bind: this.states.value.bind.id, converter: new NumberConverter_3.NumberConverter(), style: {
+                                            textAlign: "right",
+                                            width: 60
+                                        }
+                                    }),
+                                    (0, Component_6.jc)("br", { tag: "br" }),
+                                    (0, Component_6.jc)(Textbox_5.Textbox, { label: "Ship Address", bind: this.states.value.bind.ShipAddress, width: 260, ref: this.refs.shipAddress }),
+                                    (0, Component_6.jc)(Textbox_5.Textbox, {
+                                        label: "Freight", bind: this.states.value.bind.Freight, width: 60, converter: new NumberConverter_3.NumberConverter({ format: "#.##0,00" }), style: {
+                                            textAlign: "right"
+                                        }
+                                    }),
+                                    (0, Component_6.jc)("br", { tag: "br" }),
+                                    (0, Component_6.jc)(Textbox_5.Textbox, { label: "Postal Code", bind: this.states.value.bind.ShipPostalCode, width: 60, hidden: false, ref: this.refs.shipPostalCode }),
+                                    (0, Component_6.jc)(Textbox_5.Textbox, { bind: this.states.value.bind.ShipCity, label: "Ship City", width: 195, value: "shipCity" }),
+                                    (0, Component_6.jc)("br", { tag: "br" }),
+                                    (0, Component_6.jc)(Textbox_5.Textbox, { label: "Ship Region", bind: this.states.value.bind.ShipRegion, width: 150, ref: this.refs.shipRegion }),
+                                    "",
+                                    (0, Component_6.jc)(Textbox_5.Textbox, { label: " Ship Country", bind: this.states.value.bind.ShipCountry, width: 105, ref: this.refs.shipCountry })
+                                ],
+                                width: 485
+                            }),
+                            (0, Component_6.jc)(Panel_6.Panel, {
+                                children: [
+                                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.states.value.bind.Customer.CompanyName, label: "Customer", width: 260 }),
+                                    (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, {
+                                        autocommit: false, items: "northwind.Customer", bind: this.states.value.bind.Customer, height: 25,
+                                        onchange: (data) => {
+                                            var cust = this.states.value.Customer.current;
+                                            this.refs.shipName.value = cust.CompanyName;
+                                            this.refs.shipAddress.value = cust.Address;
+                                            this.refs.shipPostalCode.value = cust.PostalCode;
+                                            this.refs.shipCity.value = cust.City;
+                                            this.refs.shipCountry.value = cust.Country;
+                                            this.refs.shipRegion.value = cust.Region;
+                                        }
+                                    }),
+                                    (0, Component_6.jc)("br", {}),
+                                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.states.value.bind.ShipVia, template: "{{id}} {{CompanyName}}", width: 260, label: "Ship Via" }),
+                                    (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, { items: "northwind.Shippers", bind: this.states.value.bind.ShipVia }),
+                                    (0, Component_6.jc)("br", {}),
+                                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.states.value.bind.Employee, template: "{{id}} {{FirstName}} {{LastName}}", width: 260, label: "Employee", height: 20 }),
+                                    (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, { items: "northwind.Employees", bind: this.states.value.bind.Employee }),
+                                    (0, Component_6.jc)("br", {}),
+                                    (0, Component_6.jc)(Textbox_5.Textbox, { bind: this.states.value.bind.OrderDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Oder Date", width: 95, text: "Oder Date" }),
+                                    (0, Component_6.jc)(Textbox_5.Textbox, { bind: this.states.value.bind.RequiredDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Required Date", width: 95 }),
+                                    (0, Component_6.jc)(Textbox_5.Textbox, { bind: this.states.value.bind.ShippedDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Shipped Date", width: 95 })
+                                ]
+                            })
+                        ]
+                    }),
+                    (0, Component_6.jc)("br", {}),
+                    (0, Component_6.jc)("br", {}),
+                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { value: "Quantity", width: 90 }),
+                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { value: "Text" }),
+                    (0, Component_6.jc)("br", {}),
+                    (0, Component_6.jc)(BoxPanel_2.BoxPanel, {
+                        children: (0, State_1.foreach)(this.states.value.Details, (ob) => (0, Component_6.jc)(ProductDetails, {
+                            product: ob
+                        }))
+                    })
+                    /* jc(Repeater2,{
+                                    items: this.states.value.Details,
+                                bind: this.states.activeDetail.bind,
+                                children: [
+                                jc(Panel,{
+                                    children: [
+                                jc(Button,{text: "hh" }),
+                                jc(Textbox,{bind: this.states.activeDetail.bind.Quantity })
+                                ]
+                             })
+                                ],
+                                width: 105
+                     })*/
+                    // this.states.value?.Details===undefined? jc("br", {}):this.props.value.Details.map((detail) => jc(ProductDetails, {product: detail }))
+                ]
+            });
         }
         get title() {
             return this.value === undefined ? "OrdersView" : "OrdersView " + this.value.id;
         }
-        layout(me) {
-            me.boxpanel1 = new BoxPanel_3.BoxPanel();
-            me.panel1 = new Panel_5.Panel();
-            me.shipName = new Textbox_5.Textbox();
-            me.shipAddress = new Textbox_5.Textbox();
-            me.shipPostalCode = new Textbox_5.Textbox();
-            me.shipCity = new Textbox_5.Textbox();
-            me.shipCountry = new Textbox_5.Textbox();
-            me.shipRegion = new Textbox_5.Textbox();
-            me.panel2 = new Panel_5.Panel();
-            me.id = new Textbox_5.Textbox();
-            me.freight = new Textbox_5.Textbox();
-            me.panel3 = new Panel_5.Panel();
-            me.customername = new HTMLPanel_4.HTMLPanel();
-            me.choosecustomer = new ObjectChooser_3.ObjectChooser();
-            me.shipVia = new HTMLPanel_4.HTMLPanel();
-            me.shipviaChooser = new ObjectChooser_3.ObjectChooser();
-            me.employeename = new HTMLPanel_4.HTMLPanel();
-            me.chooseEmployee = new ObjectChooser_3.ObjectChooser();
-            me.orderDate = new Textbox_5.Textbox();
-            me.requiredDate = new Textbox_5.Textbox();
-            me.shippedDate = new Textbox_5.Textbox();
-            me.boxpanel2 = new BoxPanel_3.BoxPanel();
-            me.htmlpanel1 = new HTMLPanel_4.HTMLPanel();
-            me.htmlpanel2 = new HTMLPanel_4.HTMLPanel();
-            me.repeater1 = new Repeater_1.Repeater();
-            me.style1 = new Style_1.Style();
-            this.me.main.add(me.boxpanel1);
-            this.me.main.add(me.boxpanel2);
-            this.me.main.add(me.repeater1);
-            this.me.main.add(me.style1);
-            me.boxpanel1.add(me.panel1);
-            me.boxpanel1.add(me.panel2);
-            me.boxpanel1.add(me.panel3);
-            me.boxpanel1.height = 230;
-            me.boxpanel1.horizontal = true;
-            me.panel1.add(me.shipName);
-            me.panel1.add(me.shipAddress);
-            me.panel1.add(me.shipPostalCode);
-            me.panel1.add(me.shipCity);
-            me.panel1.add(me.shipRegion);
-            me.panel1.add(me.shipCountry);
-            me.panel1.width = 250;
-            me.panel1.height = 185;
-            me.panel1.isAbsolute = true;
-            me.panel2.add(me.id);
-            me.panel2.add(me.freight);
-            me.panel2.isAbsolute = true;
-            me.panel2.height = 185;
-            me.panel2.width = 105;
-            me.panel3.add(me.customername);
-            me.panel3.add(me.choosecustomer);
-            me.panel3.add(me.shipVia);
-            me.panel3.add(me.shipviaChooser);
-            me.panel3.add(me.employeename);
-            me.panel3.add(me.chooseEmployee);
-            me.panel3.add(me.orderDate);
-            me.panel3.add(me.requiredDate);
-            me.panel3.add(me.shippedDate);
-            me.panel3.isAbsolute = true;
-            me.panel3.height = 185;
-            me.panel3.width = 320;
-            me.boxpanel2.add(me.htmlpanel1);
-            me.boxpanel2.add(me.htmlpanel2);
-            me.boxpanel2.horizontal = true;
-            me.repeater1.createRepeatingComponent(function (me) {
-                me.detailsQuantity = new Textbox_5.Textbox();
-                me.detailsProduct = new HTMLPanel_4.HTMLPanel();
-                me.objectchooser1 = new ObjectChooser_3.ObjectChooser();
-                me.repeater1.design.add(me.detailsQuantity);
-                me.repeater1.design.add(me.detailsProduct);
-                me.repeater1.design.add(me.objectchooser1);
-                me.detailsQuantity.bind = [me.repeater1.design.databinder, "Quantity"];
-                me.detailsQuantity.width = 60;
-                me.detailsProduct.width = 530;
-                me.detailsProduct.bind = [me.repeater1.design.databinder, "Product"];
-                me.detailsProduct.template = "{{ProductName}}";
-                me.detailsProduct.style = {
-                    overflow: "hidden",
-                    marginTop: "5px"
-                };
-                me.detailsProduct.styles = [me.style1];
-                me.objectchooser1.bind = [me.repeater1.design.databinder, "Product"];
-                me.objectchooser1.items = "northwind.Products";
-            });
-            me.repeater1.width = 675;
-            me.repeater1.bind = [me.databinder, "Details"];
-            me.shipName.x = 5;
-            me.shipName.y = 5;
-            me.shipName.bind = [me.databinder, "ShipName"];
-            me.shipName.width = 220;
-            me.shipName.label = "Ship Name";
-            me.shipAddress.x = 5;
-            me.shipAddress.y = 50;
-            me.shipAddress.bind = [me.databinder, "ShipAddress"];
-            me.shipAddress.width = 220;
-            me.shipAddress.label = "Ship Address";
-            me.shipPostalCode.x = 5;
-            me.shipPostalCode.y = 95;
-            me.shipPostalCode.bind = [me.databinder, "ShipPostalCode"];
-            me.shipPostalCode.width = 55;
-            me.shipPostalCode.label = "Postal Code";
-            me.shipCity.x = 75;
-            me.shipCity.y = 95;
-            me.shipCity.bind = [me.databinder, "ShipCity"];
-            me.shipCity.label = "Ship City";
-            me.shipCity.width = 150;
-            me.shipCountry.x = 135;
-            me.shipCountry.y = 140;
-            me.shipCountry.bind = [me.databinder, "ShipCountry"];
-            me.shipCountry.label = "Ship Country";
-            me.shipCountry.width = 90;
-            me.shipRegion.x = 5;
-            me.shipRegion.y = 140;
-            me.shipRegion.bind = [me.databinder, "ShipRegion"];
-            me.shipRegion.label = "Ship Region";
-            me.shipRegion.width = 120;
-            me.id.x = 5;
-            me.id.y = 5;
-            me.id.converter = new NumberConverter_3.NumberConverter();
-            me.id.bind = [me.databinder, "id"];
-            me.id.label = "Order ID";
-            me.id.width = 70;
-            me.id.style = {
-                textAlign: "right"
-            };
-            me.freight.x = 5;
-            me.freight.y = 50;
-            me.freight.bind = [me.databinder, "Freight"];
-            me.freight.width = 70;
-            me.freight.label = "Freight";
-            me.freight.converter = new NumberConverter_3.NumberConverter({ format: "#.##0,00" });
-            me.freight.style = {
-                textAlign: "right"
-            };
-            me.customername.x = 10;
-            me.customername.y = 5;
-            me.customername.width = 265;
-            me.customername.template = "{{id}} {{CompanyName}}";
-            me.customername.bind = [me.databinder, "Customer"];
-            me.customername.value = "VINET Vins et alcools Chevalier";
-            me.customername.label = "Customer";
-            me.customername.height = 15;
-            me.customername.styles = [me.style1];
-            me.choosecustomer.x = 275;
-            me.choosecustomer.y = 15;
-            me.choosecustomer.items = "northwind.Customer";
-            me.choosecustomer.bind = [me.databinder, "Customer"];
-            me.choosecustomer.onchange(function (event) {
-                let cust = me.choosecustomer.value;
-                me.shipName.value = cust.CompanyName;
-                me.shipAddress.value = cust.Address;
-                me.shipPostalCode.value = cust.PostalCode;
-                me.shipCity.value = cust.City;
-                me.shipCountry.value = cust.Country;
-                me.shipRegion.value = cust.Region;
-            });
-            me.shipVia.x = 10;
-            me.shipVia.y = 45;
-            me.shipVia.bind = [me.databinder, "ShipVia"];
-            me.shipVia.template = "{{id}} {{CompanyName}}";
-            me.shipVia.label = "Ship via";
-            me.shipVia.value = "3 Federal Shipping";
-            me.shipVia.width = 260;
-            me.shipVia.height = 20;
-            me.shipVia.styles = [me.style1];
-            me.shipviaChooser.x = 275;
-            me.shipviaChooser.y = 60;
-            me.shipviaChooser.bind = [me.databinder, "ShipVia"];
-            me.shipviaChooser.items = "northwind.Shippers";
-            me.shipviaChooser.width = 30;
-            me.employeename.x = 10;
-            me.employeename.y = 90;
-            me.employeename.bind = [me.databinder, "Employee"];
-            me.employeename.label = "Employee";
-            me.employeename.width = 265;
-            me.employeename.value = "6 Michael Suyama";
-            me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
-            me.employeename.styles = [me.style1];
-            me.chooseEmployee.x = 275;
-            me.chooseEmployee.y = 105;
-            me.chooseEmployee.bind = [me.databinder, "Employee"];
-            me.chooseEmployee.items = "northwind.Employees";
-            me.chooseEmployee.height = 20;
-            me.orderDate.x = 10;
-            me.orderDate.y = 130;
-            me.orderDate.bind = [me.databinder, "OrderDate"];
-            me.orderDate.label = "Order Date";
-            me.orderDate.width = 95;
-            me.orderDate.readOnly = false;
-            me.orderDate.converter = new DateTimeConverter_2.DateTimeConverter();
-            me.requiredDate.x = 110;
-            me.requiredDate.y = 130;
-            me.requiredDate.bind = [me.databinder, "RequiredDate"];
-            me.requiredDate.label = "Required Date";
-            me.requiredDate.width = 95;
-            me.requiredDate.converter = new DateTimeConverter_2.DateTimeConverter();
-            me.shippedDate.x = 210;
-            me.shippedDate.y = 130;
-            me.shippedDate.bind = [me.databinder, "ShippedDate"];
-            me.shippedDate.width = "95";
-            me.shippedDate.label = "Shipped Date";
-            me.shippedDate.converter = new DateTimeConverter_2.DateTimeConverter();
-            me.htmlpanel1.value = "Quantity<br>";
-            me.htmlpanel1.width = 65;
-            me.htmlpanel1.styles = [];
-            me.htmlpanel2.value = "Text<br>";
-            me.htmlpanel2.width = 100;
-            me.style1.style = {};
-        }
     };
     exports.OrdersView = OrdersView;
-    __decorate([
-        (0, Property_5.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Orders_2.Orders !== "undefined" && Orders_2.Orders) === "function" ? _a : Object)
-    ], OrdersView.prototype, "value", void 0);
     exports.OrdersView = OrdersView = __decorate([
-        (0, DBObjectView_5.$DBObjectView)({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text" }),
-        (0, Registry_8.$Class)("northwind.OrdersView"),
-        __metadata("design:paramtypes", [])
+        (0, DBObjectView_6.$DBObjectView)({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text", queryname: "findAllWithDetails" }),
+        (0, Registry_8.$Class)("northwind.OrdersView")
     ], OrdersView);
     async function test() {
-        var ret = new OrdersView;
-        ret["value"] = await Orders_2.Orders.findOne({ id: 10249, relations: ["*"] });
+        var order = await Orders_2.Orders.findOne({ id: 10266, relations: ["*"] });
+        //  var order=await Orders.find({relations: ["*"] });
+        var ret = new OrdersView(); /*{
+            value: order
+        });*/
+        setTimeout(async () => {
+            ret.value = order = await Orders_2.Orders.findOne({ id: 10252, relations: ["*"] });
+            //  var order=await Orders.find({relations: ["*"] });
+        }, 3000);
         return ret;
     }
 });
-define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/Repeater", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Products", "jassijs/ui/converters/NumberConverter"], function (require, exports, Checkbox_1, Textbox_6, Repeater_2, BoxPanel_4, HTMLPanel_5, Databinder_2, Registry_9, Panel_6, Actions_4, Windows_3, Products_1, NumberConverter_4) {
+define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/HTMLPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Products", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Component", "jassijs/ui/State"], function (require, exports, Checkbox_1, Textbox_6, HTMLPanel_5, Registry_9, Panel_7, Actions_4, Windows_3, Products_1, NumberConverter_4, Component_7, State_2) {
     "use strict";
     var ProductList_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ProductList = void 0;
     exports.test = test;
     Windows_3 = __importDefault(Windows_3);
-    let ProductList = ProductList_1 = class ProductList extends Panel_6.Panel {
-        constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
+    function ProductPanel(props, states) {
+        return (0, Component_7.jc)(Panel_7.Panel, {
+            children: [
+                (0, Component_7.jc)(HTMLPanel_5.HTMLPanel, { value: "Product Name:", width: 125 }),
+                (0, Component_7.jc)(Textbox_6.Textbox, { bind: states.value.bind.ProductName }),
+                (0, Component_7.jc)(Checkbox_1.Checkbox, { text: "Discounted", bind: states.value.bind.Discontinued }),
+                (0, Component_7.jc)("br"),
+                (0, Component_7.jc)(HTMLPanel_5.HTMLPanel, { value: "Quantity Per Unit:", width: 125 }),
+                (0, Component_7.jc)(Textbox_6.Textbox, { bind: states.value.bind.QuantityPerUnit }),
+                (0, Component_7.jc)(HTMLPanel_5.HTMLPanel, { value: "Unit Price:" }),
+                (0, Component_7.jc)(Textbox_6.Textbox, {
+                    bind: states.value.bind.UnitPrice, converter: new NumberConverter_4.NumberConverter({
+                        format: "#.##0,00"
+                    })
+                }),
+                (0, Component_7.jc)("br"),
+                (0, Component_7.jc)("br"),
+            ]
+        });
+    }
+    let ProductList = ProductList_1 = class ProductList extends Panel_7.Panel {
+        constructor(props) {
+            super(props);
+            this.setData();
         }
-        layout(me) {
-            var _this = this;
-            me.databinder = new Databinder_2.Databinder();
-            me.repeater = new Repeater_2.Repeater();
-            this.config({
+        render() {
+            return (0, Component_7.jc)(Panel_7.Panel, {
                 children: [
-                    me.databinder.config({}),
-                    me.repeater.config({
-                        //isAbsolute: false,
-                        bind: [me.databinder, "this"],
-                        createRepeatingComponent: function (me) {
-                            me.textbox = new Textbox_6.Textbox();
-                            me.htmlpanel = new HTMLPanel_5.HTMLPanel();
-                            me.checkbox = new Checkbox_1.Checkbox();
-                            me.htmlpanel3 = new HTMLPanel_5.HTMLPanel();
-                            me.boxpanel = new BoxPanel_4.BoxPanel();
-                            me.panel = new Panel_6.Panel();
-                            me.boxpanel2 = new BoxPanel_4.BoxPanel();
-                            me.htmlpanel2 = new HTMLPanel_5.HTMLPanel();
-                            me.textbox2 = new Textbox_6.Textbox();
-                            me.htmlpanel22 = new HTMLPanel_5.HTMLPanel();
-                            me.textbox22 = new Textbox_6.Textbox();
-                            me.repeater.design.config({
-                                children: [
-                                    me.htmlpanel3.config({ value: " " }),
-                                    me.boxpanel.config({
-                                        children: [
-                                            me.htmlpanel.config({ value: "Product Name:", width: "150" }),
-                                            me.textbox.config({
-                                                bind: [me.repeater.design.databinder, "ProductName"],
-                                                readOnly: true,
-                                                width: 290
-                                            }),
-                                            me.checkbox.config({
-                                                bind: [me.repeater.design.databinder, "Discontinued"],
-                                                text: "Discontinued"
-                                            }),
-                                            me.panel.config({})
-                                        ],
-                                        horizontal: true
-                                    }),
-                                    me.boxpanel2.config({
-                                        children: [
-                                            me.htmlpanel2.config({ value: "Quantity Per Unit:", width: "150" }),
-                                            me.textbox2.config({
-                                                readOnly: true,
-                                                width: 175,
-                                                bind: [me.repeater.design.databinder, "QuantityPerUnit"]
-                                            }),
-                                            me.htmlpanel22.config({ value: "&nbsp; &nbsp; &nbsp;Unit Price:", width: 110 }),
-                                            me.textbox22.config({
-                                                readOnly: true,
-                                                width: 100,
-                                                bind: [me.repeater.design.databinder, "UnitPrice"],
-                                                converter: new NumberConverter_4.NumberConverter({ format: "#.##0,00" }),
-                                            })
-                                        ],
-                                        horizontal: true
-                                    })
-                                ]
-                            });
+                    (0, Component_7.jc)(HTMLPanel_5.HTMLPanel, {
+                        value: "Productlist",
+                        style: {
+                            fontSize: "20px",
+                            color: "darkblue"
                         }
+                    }),
+                    (0, Component_7.jc)("br", {}),
+                    (0, Component_7.jc)(Panel_7.Panel, {
+                        children: (0, State_2.foreach)(this.states.values, (ob) => (0, Component_7.jc)(ProductPanel, { value: ob }))
                     })
                 ]
             });
-            this.setData();
         }
         static showDialog() {
             Windows_3.default.add(new ProductList_1(), "ProductList");
@@ -1048,9 +781,7 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
         async setData() {
             var all = await Products_1.Products.find({});
             all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName); });
-            this.me.databinder.value = all;
-            //        this.me.IDChooseCustomer.items = all;
-            //      this.me.databinderCustomer.value = all[0];
+            this.states.values.current = all;
         }
     };
     exports.ProductList = ProductList;
@@ -1063,162 +794,73 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
     exports.ProductList = ProductList = ProductList_1 = __decorate([
         (0, Actions_4.$ActionProvider)("jassijs.base.ActionNode"),
         (0, Registry_9.$Class)("northwind/ProductList"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], ProductList);
     async function test() {
-        var ret = new ProductList();
+        var all = await Products_1.Products.find({});
+        all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName); });
+        //this.states.values.current = [all[0]];
+        var ret = new ProductList({ values: all });
         return ret;
     }
 });
-define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_2, ObjectChooser_4, HTMLPanel_6, Checkbox_2, NumberConverter_5, Textbox_7, Registry_10, Property_6, Products_2, DBObjectView_6) {
+define("northwind/ProductView", ["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Products", "jassijs/ui/DBObjectView", "jassijs/ui/Component"], function (require, exports, ObjectChooser_4, HTMLPanel_6, Checkbox_2, NumberConverter_5, Textbox_7, Registry_10, Panel_8, Products_2, DBObjectView_7, Component_8) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ProductView = void 0;
     exports.test = test;
-    let ProductView = class ProductView extends DBObjectView_6.DBObjectView {
-        constructor() {
-            super();
-            //this.me = {}; this is called in objectdialog
-            this.layout(this.me);
-        }
+    let ProductView = class ProductView extends DBObjectView_7.DBObjectView {
+        //@$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
+        //declare value: Products;
         get title() {
             return this.value === undefined ? "ProductView" : "ProductView " + this.value.id;
         }
-        layout(me) {
-            me.id = new Textbox_7.Textbox();
-            me.styleNumber = new Style_2.Style();
-            me.supplierchooser = new ObjectChooser_4.ObjectChooser();
-            me.supplier = new HTMLPanel_6.HTMLPanel();
-            me.categoryChooser = new ObjectChooser_4.ObjectChooser();
-            me.category = new HTMLPanel_6.HTMLPanel();
-            me.discontinued = new Checkbox_2.Checkbox();
-            me.reorderLevel = new Textbox_7.Textbox();
-            me.unitsOnOrder = new Textbox_7.Textbox();
-            me.unitsInStock = new Textbox_7.Textbox();
-            me.unitPrice = new Textbox_7.Textbox();
-            me.quantityPerUnit = new Textbox_7.Textbox();
-            me.productName = new Textbox_7.Textbox();
-            this.me.main.config({ isAbsolute: true, width: "678", height: "170", children: [
-                    me.id.config({
-                        x: 10,
-                        y: 10,
-                        bind: [me.databinder, "id"],
-                        label: "Id",
-                        width: 65,
-                        converter: new NumberConverter_5.NumberConverter()
+        render() {
+            return (0, Component_8.jc)(Panel_8.Panel, {
+                children: [
+                    (0, Component_8.jc)(DBObjectView_7.DBObjectViewToolbar, { view: this }),
+                    (0, Component_8.jc)(Textbox_7.Textbox, { label: "Id", bind: this.states.value.bind.id, converter: new NumberConverter_5.NumberConverter() }),
+                    (0, Component_8.jc)(Textbox_7.Textbox, { bind: this.states.value.bind.ProductName, label: "Product Name", width: 375, height: 25 }),
+                    (0, Component_8.jc)(Checkbox_2.Checkbox, { label: "Discounted", bind: this.states.value.bind.Discontinued }),
+                    (0, Component_8.jc)("br", {}),
+                    (0, Component_8.jc)(Textbox_7.Textbox, { label: "Quantity per Unit", bind: this.states.value.bind.QuantityPerUnit }),
+                    (0, Component_8.jc)(Textbox_7.Textbox, {
+                        bind: this.states.value.bind.UnitPrice, converter: new NumberConverter_5.NumberConverter({
+                            format: "#.##0,00"
+                        }), label: "Unit Price",
+                        width: 70
                     }),
-                    me.productName.config({
-                        x: 90,
-                        y: 10,
-                        bind: [me.databinder, "ProductName"],
-                        label: "Product Name",
-                        width: 310
+                    (0, Component_8.jc)(Textbox_7.Textbox, {
+                        label: "Units in Stock", bind: this.states.value.bind.UnitsInStock, converter: new NumberConverter_5.NumberConverter({
+                            format: "#.##0,00"
+                        }), width: 80
                     }),
-                    me.discontinued.config({
-                        x: 415,
-                        y: 10,
-                        width: 70,
-                        bind: [me.databinder, "Discontinued"],
-                        label: "Discontinued"
+                    (0, Component_8.jc)(Textbox_7.Textbox, {
+                        bind: this.states.value.bind.UnitsOnOrder, converter: new NumberConverter_5.NumberConverter({
+                            format: "#.##0,00"
+                        }), label: "Units on Order", width: 80
                     }),
-                    me.quantityPerUnit.config({
-                        x: 10,
-                        y: 60,
-                        bind: [me.databinder, "QuantityPerUnit"],
-                        width: 135,
-                        label: "Quantity per Unit"
-                    }),
-                    me.unitPrice.config({
-                        x: 160,
-                        y: 60,
-                        bind: [me.databinder, "UnitPrice"],
-                        label: "Unit Price",
-                        width: 65,
-                        converter: new NumberConverter_5.NumberConverter({ format: "#.##0,00" }),
-                        styles: [me.styleNumber]
-                    }),
-                    me.unitsInStock.config({
-                        x: 240,
-                        y: 60,
-                        bind: [me.databinder, "UnitsInStock"],
-                        label: "Units in Stock",
-                        width: 70,
-                        converter: new NumberConverter_5.NumberConverter({ format: "#.##0,00" }),
-                        styles: [me.styleNumber]
-                    }),
-                    me.unitsOnOrder.config({
-                        x: 325,
-                        y: 60,
-                        bind: [me.databinder, "UnitsOnOrder"],
-                        label: "Units on Order",
-                        width: 75,
-                        converter: new NumberConverter_5.NumberConverter({ format: "#.##0,00" }),
-                        styles: [me.styleNumber]
-                    }),
-                    me.reorderLevel.config({
-                        x: 415,
-                        y: 60,
-                        bind: [me.databinder, "ReorderLevel"],
-                        width: 70,
-                        label: "Reorder Level",
-                        converter: new NumberConverter_5.NumberConverter(),
-                        styles: [me.styleNumber]
-                    }),
-                    me.category.config({
-                        x: 10,
-                        y: 110,
-                        template: "{{CategoryName}}",
-                        value: "Beverages",
-                        bind: [me.databinder, "Category"],
-                        width: 170,
-                        label: "Category"
-                    }),
-                    me.categoryChooser.config({
-                        x: 185,
-                        y: 125,
-                        items: "northwind.Categories",
-                        bind: [me.databinder, "Category"],
-                        width: 30,
-                        value: "Beverages"
-                    }),
-                    me.supplier.config({
-                        x: 225,
-                        y: 110,
-                        bind: [me.databinder, "Supplier"],
-                        value: "New Orleans Cajun Delights",
-                        template: "{{CompanyName}}",
-                        label: "Supplier",
-                        width: 230
-                    }),
-                    me.supplierchooser.config({
-                        x: 460,
-                        y: 125,
-                        bind: [me.databinder, "Supplier"],
-                        items: "northwind.Suppliers"
-                    }),
-                    me.styleNumber.config({
-                        style: {
-                            textAlign: "right"
-                        }
-                    })
-                ] });
+                    (0, Component_8.jc)(Textbox_7.Textbox, { bind: this.states.value.bind.ReorderLevel, label: "Reorder Level", width: 185 }),
+                    (0, Component_8.jc)("br", {}),
+                    (0, Component_8.jc)(HTMLPanel_6.HTMLPanel, { label: "Category", bind: this.states.value.bind.Category.CategoryName, width: 245 }),
+                    (0, Component_8.jc)(ObjectChooser_4.ObjectChooser, { bind: this.states.value.bind.Category, items: "northwind.Categories" }),
+                    (0, Component_8.jc)(HTMLPanel_6.HTMLPanel, { label: "Supplier", bind: this.states.value.bind.Supplier.CompanyName, width: 310 }),
+                    (0, Component_8.jc)(ObjectChooser_4.ObjectChooser, { bind: this.states.value.bind.Supplier, items: "northwind.Suppliers" })
+                ]
+            });
         }
     };
     exports.ProductView = ProductView;
-    __decorate([
-        (0, Property_6.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Products_2.Products !== "undefined" && Products_2.Products) === "function" ? _a : Object)
-    ], ProductView.prototype, "value", void 0);
     exports.ProductView = ProductView = __decorate([
-        (0, DBObjectView_6.$DBObjectView)({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" }),
-        (0, Registry_10.$Class)("northwind.ProductView"),
-        __metadata("design:paramtypes", [])
+        (0, DBObjectView_7.$DBObjectView)({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" }),
+        (0, Registry_10.$Class)("northwind.ProductView")
     ], ProductView);
     async function test() {
-        var ret = new ProductView;
+        var prod = await Products_2.Products.findOne({ relations: ["*"] });
+        var ret = new ProductView({
+            value: prod
+        });
         //var h=await Products.find({relations:["Category"]});
-        ret["value"] = await Products_2.Products.findOne({ relations: ["*"] });
         return ret;
     }
 });
@@ -1227,7 +869,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1697199759329.1274,
+                "date": 1722605033849.076,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -1236,11 +878,20 @@ define("northwind/registry", ["require"], function (require) {
                             "icon": "mdi mdi-cube"
                         }
                     ],
-                    "@members": {}
+                    "$Property": [
+                        {
+                            "name": "aa",
+                            "type": "string"
+                        },
+                        {
+                            "name": "ab",
+                            "type": "string"
+                        }
+                    ]
                 }
             },
             "northwind/CustomerOrders.ts": {
-                "date": 1656502358000,
+                "date": 1722605062499.3147,
                 "northwind/CustomerOrders": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1258,7 +909,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerPhoneList.ts": {
-                "date": 1681640214000,
+                "date": 1721666518282.6287,
                 "northwind/CustomerPhoneList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1276,16 +927,15 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1682164038000,
-                "northwind/CustomerView": {
+                "date": 1722605075950.047,
+                "northwind.CustomerView": {
                     "$DBObjectView": [
                         {
                             "classname": "northwind.Customer",
                             "actionname": "Northwind/Customers",
                             "icon": "mdi mdi-nature-people"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/DetailTest.ts": {
@@ -1300,7 +950,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1698508046916.7515,
+                "date": 1722605088492.314,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1308,8 +958,7 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Employees",
                             "icon": "mdi mdi-account-tie"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/ImportData.ts": {
@@ -1342,20 +991,20 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1698507857261.209,
+                "date": 1722605111019.898,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
                             "classname": "northwind.Orders",
                             "actionname": "Northwind/Orders",
-                            "icon": "mdi mdi-script-text"
+                            "icon": "mdi mdi-script-text",
+                            "queryname": "findAllWithDetails"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/ProductList.ts": {
-                "date": 1697197602604.6377,
+                "date": 1722600004856.538,
                 "northwind/ProductList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1373,7 +1022,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1698508046916.7515,
+                "date": 1722605123673.773,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -1381,8 +1030,7 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Products",
                             "icon": "mdi mdi-reproduction"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/remote/Categories.ts": {
@@ -1391,19 +1039,9 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "CategoryName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1411,11 +1049,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Description": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1423,7 +1056,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Picture": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Products": {
@@ -1441,39 +1073,24 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "ContactName": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "ContactTitle": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Address": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "City": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Region": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1481,11 +1098,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1493,11 +1105,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1505,11 +1112,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1517,11 +1119,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Fax": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1532,24 +1129,14 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1681322814000,
+                "date": 1721688634922.4763,
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "LastName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1557,11 +1144,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "FirstName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1569,11 +1151,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Title": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1581,11 +1158,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "TitleOfCourtesy": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1593,11 +1165,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Address": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1605,11 +1172,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "City": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1617,11 +1179,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Region": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1629,11 +1186,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1641,11 +1193,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1653,11 +1200,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HomePhone": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1679,11 +1221,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Notes": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1691,11 +1228,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PhotoPath": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1703,23 +1235,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ReportsTo": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function",
-                                    "optional": true
-                                }
-                            ],
-                            "JoinColumn": [],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "BirthDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1727,11 +1247,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HireDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1742,41 +1257,25 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/OrderDetails.ts": {
-                "date": 1681322822000,
+                "date": 1722528161852.004,
                 "northwind.OrderDetails": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryGeneratedColumn": []
                         },
                         "Order": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function",
                                 "function"
                             ]
                         },
                         "Product": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "UnitPrice": {
-                            "ValidateIsNumber": [],
                             "Column": [
                                 {
                                     "nullable": false,
@@ -1785,11 +1284,9 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Quantity": {
-                            "ValidateIsNumber": [],
                             "Column": []
                         },
                         "Discount": {
-                            "ValidateIsNumber": [],
                             "Column": [
                                 {
                                     "nullable": true,
@@ -1801,44 +1298,24 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1681322834000,
+                "date": 1722531390341.5852,
                 "northwind.Orders": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "Customer": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "Employee": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "OrderDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1846,11 +1323,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "RequiredDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1858,11 +1330,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShippedDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1870,21 +1337,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipVia": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "Freight": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true,
@@ -1893,11 +1350,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1905,11 +1357,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipAddress": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1917,11 +1364,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipCity": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1929,11 +1371,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipRegion": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1941,11 +1378,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipPostalCode": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1953,11 +1385,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipCountry": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1965,11 +1392,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Details": {
-                            "ValidateIsArray": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "OneToMany": [
                                 "function",
                                 "function"
@@ -1984,19 +1406,9 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "ProductName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2004,32 +1416,17 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Supplier": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "Category": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function",
                                 "function"
                             ]
                         },
                         "QuantityPerUnit": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2037,11 +1434,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "UnitPrice": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true,
@@ -2050,11 +1442,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "UnitsInStock": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2062,11 +1449,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "UnitsOnOrder": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2074,11 +1456,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ReorderLevel": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2086,7 +1463,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Discontinued": {
-                            "ValidateIsBoolean": [],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2102,19 +1478,9 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2122,11 +1488,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2142,19 +1503,9 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2162,11 +1513,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ContactName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2174,11 +1520,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ContactTitle": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2186,11 +1527,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Address": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2198,11 +1534,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "City": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2210,11 +1541,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Region": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2222,11 +1548,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2234,11 +1555,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2246,11 +1562,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2258,11 +1569,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Fax": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2270,11 +1576,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HomePage": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -2310,7 +1611,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ShippersView.ts": {
-                "date": 1656683118000,
+                "date": 1722605134497.6565,
                 "northwind.ShippersView": {
                     "$DBObjectView": [
                         {
@@ -2318,12 +1619,11 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Shippers",
                             "icon": "mdi mdi-truck-delivery"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/SuppliersView.ts": {
-                "date": 1656683258000,
+                "date": 1722605148088.2056,
                 "northwind.SuppliersView": {
                     "$DBObjectView": [
                         {
@@ -2331,14 +1631,13 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Suppliers",
                             "icon": "mdi mdi-office-building-outline"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             }
         }
     };
 });
-define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_3, DBObject_1, Registry_11, DatabaseSchema_1, Validator_2) {
+define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_3, DBObject_1, Registry_11, DatabaseSchema_1, Validator_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2351,22 +1650,22 @@ define("northwind/remote/Categories", ["require", "exports", "northwind/remote/P
     };
     exports.Categories = Categories;
     __decorate([
-        (0, Validator_2.ValidateIsInt)({ optional: true }),
+        (0, Validator_1.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Categories.prototype, "id", void 0);
     __decorate([
-        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "CategoryName", void 0);
     __decorate([
-        (0, Validator_2.ValidateIsString)({ optional: true }),
+        (0, Validator_1.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "Description", void 0);
     __decorate([
-        (0, Validator_2.ValidateIsString)(),
+        (0, Validator_1.ValidateIsString)(),
         (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Categories.prototype, "Picture", void 0);
@@ -2383,7 +1682,7 @@ define("northwind/remote/Categories", ["require", "exports", "northwind/remote/P
     }
     ;
 });
-define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_2, Registry_12, DatabaseSchema_2, Validator_3) {
+define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_2, Registry_12, DatabaseSchema_2, Validator_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Customer = void 0;
@@ -2407,59 +1706,59 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
     };
     exports.Customer = Customer;
     __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.PrimaryColumn)(),
         __metadata("design:type", String)
     ], Customer.prototype, "id", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)(),
+        (0, Validator_2.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "CompanyName", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)(),
+        (0, Validator_2.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactName", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)(),
+        (0, Validator_2.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactTitle", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)(),
+        (0, Validator_2.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "Address", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)(),
+        (0, Validator_2.ValidateIsString)(),
         (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "City", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true })
         // @Column({default:""})
         ,
         __metadata("design:type", String)
     ], Customer.prototype, "Region", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "PostalCode", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Country", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Phone", void 0);
     __decorate([
-        (0, Validator_3.ValidateIsString)({ optional: true }),
+        (0, Validator_2.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Fax", void 0);
@@ -2478,7 +1777,7 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
     }
     ;
 });
-define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_13, DatabaseSchema_3, Transaction_2, Serverservice_1, Validator_4) {
+define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_13, DatabaseSchema_3, Transaction_2, Serverservice_1, Validator_3) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2491,9 +1790,13 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
         }
         static async find(options = undefined, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                if (options === undefined)
+                if ((options === null || options === void 0 ? void 0 : options.relations) === undefined) {
+                    if (options === undefined)
+                        options = {};
                     options = { relations: ["ReportsTo"] };
-                return await this.call(this.find, options, context);
+                }
+                var ret = await this.call(this.find, options, context);
+                return ret;
             }
             else {
                 //@ts-ignore
@@ -2504,57 +1807,57 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
     };
     exports.Employees = Employees;
     __decorate([
-        (0, Validator_4.ValidateIsInt)({ optional: true }),
+        (0, Validator_3.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_3.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Employees.prototype, "id", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "LastName", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "FirstName", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Title", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "TitleOfCourtesy", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Address", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "City", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Region", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PostalCode", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Country", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "HomePhone", void 0);
@@ -2567,28 +1870,28 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
         __metadata("design:type", String)
     ], Employees.prototype, "Photo", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Notes", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsString)({ optional: true }),
+        (0, Validator_3.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PhotoPath", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsInstanceOf)({ type: type => Employees, optional: true }),
+        (0, Validator_3.ValidateIsInstanceOf)({ type: type => Employees, optional: true }),
         (0, DatabaseSchema_3.JoinColumn)(),
         (0, DatabaseSchema_3.ManyToOne)(type => Employees),
         __metadata("design:type", Employees)
     ], Employees.prototype, "ReportsTo", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsDate)({ optional: true }),
+        (0, Validator_3.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
     ], Employees.prototype, "BirthDate", void 0);
     __decorate([
-        (0, Validator_4.ValidateIsDate)({ optional: true }),
+        (0, Validator_3.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
     ], Employees.prototype, "HireDate", void 0);
@@ -2625,7 +1928,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
     }
     ;
 });
-define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_4, Orders_3, DBObject_4, Registry_14, DatabaseSchema_4, Validator_5) {
+define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_4, Orders_3, DBObject_4, Registry_14, DatabaseSchema_4, Validator_4) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2638,32 +1941,32 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
     };
     exports.OrderDetails = OrderDetails;
     __decorate([
-        (0, Validator_5.ValidateIsInt)({ optional: true }),
+        (0, Validator_4.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_4.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "id", void 0);
     __decorate([
-        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Orders_3.Orders }),
+        (0, Validator_4.ValidateIsInstanceOf)({ type: type => Orders_3.Orders }),
         (0, DatabaseSchema_4.ManyToOne)(type => Orders_3.Orders, e => e.Details),
         __metadata("design:type", typeof (_a = typeof Orders_3.Orders !== "undefined" && Orders_3.Orders) === "function" ? _a : Object)
     ], OrderDetails.prototype, "Order", void 0);
     __decorate([
-        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Products_4.Products }),
+        (0, Validator_4.ValidateIsInstanceOf)({ type: type => Products_4.Products }),
         (0, DatabaseSchema_4.ManyToOne)(type => Products_4.Products),
         __metadata("design:type", typeof (_b = typeof Products_4.Products !== "undefined" && Products_4.Products) === "function" ? _b : Object)
     ], OrderDetails.prototype, "Product", void 0);
     __decorate([
-        (0, Validator_5.ValidateIsNumber)(),
+        (0, Validator_4.ValidateIsNumber)(),
         (0, DatabaseSchema_4.Column)({ nullable: false, type: "decimal" }),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "UnitPrice", void 0);
     __decorate([
-        (0, Validator_5.ValidateIsNumber)(),
+        (0, Validator_4.ValidateIsNumber)(),
         (0, DatabaseSchema_4.Column)(),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "Quantity", void 0);
     __decorate([
-        (0, Validator_5.ValidateIsNumber)(),
+        (0, Validator_4.ValidateIsNumber)(),
         (0, DatabaseSchema_4.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "Discount", void 0);
@@ -2676,94 +1979,98 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
     }
     ;
 });
-define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers", "jassijs/remote/Validator"], function (require, exports, OrderDetails_3, Employees_2, Customer_4, DBObject_5, Registry_15, DatabaseSchema_5, Shippers_1, Validator_6) {
+define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers", "jassijs/remote/Validator"], function (require, exports, OrderDetails_3, Employees_2, Customer_4, DBObject_5, Registry_15, DatabaseSchema_5, Shippers_1, Validator_5) {
     "use strict";
+    var Orders_4;
     var _a, _b, _c, _d, _e, _f;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Orders = void 0;
     exports.test = test;
-    let Orders = class Orders extends DBObject_5.DBObject {
+    let Orders = Orders_4 = class Orders extends DBObject_5.DBObject {
         constructor() {
             super();
+        }
+        static async findAllWithDetails() {
+            return await Orders_4.find({ relations: ["*"] });
         }
     };
     exports.Orders = Orders;
     __decorate([
-        (0, Validator_6.ValidateIsNumber)({ optional: true }),
+        (0, Validator_5.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_5.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Orders.prototype, "id", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Customer_4.Customer }),
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Customer_4.Customer }),
         (0, DatabaseSchema_5.ManyToOne)(type => Customer_4.Customer),
         __metadata("design:type", typeof (_a = typeof Customer_4.Customer !== "undefined" && Customer_4.Customer) === "function" ? _a : Object)
     ], Orders.prototype, "Customer", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Employees_2.Employees }),
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Employees_2.Employees }),
         (0, DatabaseSchema_5.ManyToOne)(type => Employees_2.Employees),
         __metadata("design:type", typeof (_b = typeof Employees_2.Employees !== "undefined" && Employees_2.Employees) === "function" ? _b : Object)
     ], Orders.prototype, "Employee", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsDate)({ optional: true }),
+        (0, Validator_5.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", typeof (_c = typeof Date !== "undefined" && Date) === "function" ? _c : Object)
     ], Orders.prototype, "OrderDate", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsDate)({ optional: true }),
+        (0, Validator_5.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", typeof (_d = typeof Date !== "undefined" && Date) === "function" ? _d : Object)
     ], Orders.prototype, "RequiredDate", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsDate)({ optional: true }),
+        (0, Validator_5.ValidateIsDate)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", typeof (_e = typeof Date !== "undefined" && Date) === "function" ? _e : Object)
     ], Orders.prototype, "ShippedDate", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Shippers_1.Shippers }),
+        (0, Validator_5.ValidateIsInstanceOf)({ type: type => Shippers_1.Shippers }),
         (0, DatabaseSchema_5.ManyToOne)(type => Shippers_1.Shippers),
         __metadata("design:type", typeof (_f = typeof Shippers_1.Shippers !== "undefined" && Shippers_1.Shippers) === "function" ? _f : Object)
     ], Orders.prototype, "ShipVia", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsNumber)({ optional: true }),
+        (0, Validator_5.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Orders.prototype, "Freight", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipName", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipAddress", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCity", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipRegion", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipPostalCode", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsString)({ optional: true }),
+        (0, Validator_5.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCountry", void 0);
     __decorate([
-        (0, Validator_6.ValidateIsArray)({ type: type => OrderDetails_3.OrderDetails }),
+        (0, Validator_5.ValidateIsArray)({ type: type => OrderDetails_3.OrderDetails }),
         (0, DatabaseSchema_5.OneToMany)(type => OrderDetails_3.OrderDetails, e => e.Order),
         __metadata("design:type", Array)
     ], Orders.prototype, "Details", void 0);
-    exports.Orders = Orders = __decorate([
+    exports.Orders = Orders = Orders_4 = __decorate([
         (0, DBObject_5.$DBObject)(),
         (0, Registry_15.$Class)("northwind.Orders"),
         __metadata("design:paramtypes", [])
@@ -2772,7 +2079,7 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Order
     }
     ;
 });
-define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Categories_2, Suppliers_1, DBObject_6, Registry_16, DatabaseSchema_6, Validator_7) {
+define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Categories_2, Suppliers_1, DBObject_6, Registry_16, DatabaseSchema_6, Validator_6) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2785,52 +2092,52 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
     };
     exports.Products = Products;
     __decorate([
-        (0, Validator_7.ValidateIsInt)({ optional: true }),
+        (0, Validator_6.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_6.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Products.prototype, "id", void 0);
     __decorate([
-        (0, Validator_7.ValidateIsString)({ optional: true }),
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "ProductName", void 0);
     __decorate([
-        (0, Validator_7.ValidateIsInstanceOf)({ type: type => Suppliers_1.Suppliers }),
+        (0, Validator_6.ValidateIsInstanceOf)({ type: type => Suppliers_1.Suppliers }),
         (0, DatabaseSchema_6.ManyToOne)(type => Suppliers_1.Suppliers),
         __metadata("design:type", typeof (_a = typeof Suppliers_1.Suppliers !== "undefined" && Suppliers_1.Suppliers) === "function" ? _a : Object)
     ], Products.prototype, "Supplier", void 0);
     __decorate([
-        (0, Validator_7.ValidateIsInstanceOf)({ type: c => Categories_2.Categories }),
+        (0, Validator_6.ValidateIsInstanceOf)({ type: c => Categories_2.Categories }),
         (0, DatabaseSchema_6.ManyToOne)(type => Categories_2.Categories, e => e.Products),
         __metadata("design:type", typeof (_b = typeof Categories_2.Categories !== "undefined" && Categories_2.Categories) === "function" ? _b : Object)
     ], Products.prototype, "Category", void 0);
     __decorate([
-        (0, Validator_7.ValidateIsString)({ optional: true }),
+        (0, Validator_6.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "QuantityPerUnit", void 0);
     __decorate([
-        (0, Validator_7.ValidateIsNumber)({ optional: true }),
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitPrice", void 0);
     __decorate([
-        (0, Validator_7.ValidateIsNumber)({ optional: true }),
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsInStock", void 0);
     __decorate([
-        (0, Validator_7.ValidateIsNumber)({ optional: true }),
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsOnOrder", void 0);
     __decorate([
-        (0, Validator_7.ValidateIsNumber)({ optional: true }),
+        (0, Validator_6.ValidateIsNumber)({ optional: true }),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "ReorderLevel", void 0);
     __decorate([
-        (0, Validator_7.ValidateIsBoolean)(),
+        (0, Validator_6.ValidateIsBoolean)(),
         (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], Products.prototype, "Discontinued", void 0);
@@ -2844,7 +2151,7 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
     }
     ;
 });
-define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_7, Registry_17, DatabaseSchema_7, Validator_8) {
+define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_7, Registry_17, DatabaseSchema_7, Validator_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Shippers = void 0;
@@ -2856,17 +2163,17 @@ define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObj
     };
     exports.Shippers = Shippers;
     __decorate([
-        (0, Validator_8.ValidateIsInt)({ optional: true }),
+        (0, Validator_7.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_7.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Shippers.prototype, "id", void 0);
     __decorate([
-        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, Validator_7.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "CompanyName", void 0);
     __decorate([
-        (0, Validator_8.ValidateIsString)({ optional: true }),
+        (0, Validator_7.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "Phone", void 0);
@@ -2879,7 +2186,7 @@ define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObj
     }
     ;
 });
-define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_8, Registry_18, DatabaseSchema_8, Validator_9) {
+define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_8, Registry_18, DatabaseSchema_8, Validator_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Suppliers = void 0;
@@ -2891,62 +2198,62 @@ define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBOb
     };
     exports.Suppliers = Suppliers;
     __decorate([
-        (0, Validator_9.ValidateIsInt)({ optional: true }),
+        (0, Validator_8.ValidateIsInt)({ optional: true }),
         (0, DatabaseSchema_8.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Suppliers.prototype, "id", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "CompanyName", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "ContactName", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "ContactTitle", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Address", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "City", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Region", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "PostalCode", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Country", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Phone", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Fax", void 0);
     __decorate([
-        (0, Validator_9.ValidateIsString)({ optional: true }),
+        (0, Validator_8.ValidateIsString)({ optional: true }),
         (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "HomePage", void 0);
@@ -2962,7 +2269,7 @@ define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBOb
         throw new Error("Function not implemented.");
     }
 });
-define("northwind/reports/CustomerLabels", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry", "northwind/remote/Customer", "jassijs/base/Actions"], function (require, exports, Report_1, Property_7, Registry_19, Customer_5, Actions_5) {
+define("northwind/reports/CustomerLabels", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry", "northwind/remote/Customer", "jassijs/base/Actions"], function (require, exports, Report_1, Property_3, Registry_19, Customer_5, Actions_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CustomerLabels = void 0;
@@ -3020,7 +2327,7 @@ define("northwind/reports/CustomerLabels", ["require", "exports", "jassijs_repor
     };
     exports.CustomerLabels = CustomerLabels;
     __decorate([
-        (0, Property_7.$Property)({ chooseFrom: function () {
+        (0, Property_3.$Property)({ chooseFrom: function () {
                 return allCountries;
             } }),
         __metadata("design:type", String)
@@ -3046,50 +2353,34 @@ define("northwind/reports/CustomerLabels", ["require", "exports", "jassijs_repor
         //await cl.open();
     }
 });
-define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_6, Textbox_8, Registry_20, Property_8, Shippers_2, DBObjectView_7) {
+define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Shippers", "jassijs/ui/DBObjectView", "jassijs/ui/Component"], function (require, exports, NumberConverter_6, Textbox_8, Registry_20, Panel_9, Shippers_2, DBObjectView_8, Component_9) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ShippersView = void 0;
     exports.test = test;
-    let ShippersView = class ShippersView extends DBObjectView_7.DBObjectView {
-        constructor() {
-            super();
-            //this.me = {}; this is called in objectdialog
-            this.layout(this.me);
-        }
+    let ShippersView = class ShippersView extends DBObjectView_8.DBObjectView {
         get title() {
             return this.value === undefined ? "ShippersView" : "ShippersView " + this.value.id;
         }
-        layout(me) {
-            me.id = new Textbox_8.Textbox();
-            me.phone = new Textbox_8.Textbox();
-            me.companyName = new Textbox_8.Textbox();
-            this.me.main.config({
-                isAbsolute: true,
-                width: "626",
-                height: "150",
+        render() {
+            return (0, Component_9.jc)(Panel_9.Panel, {
                 children: [
-                    me.id.config({
+                    (0, Component_9.jc)(DBObjectView_8.DBObjectViewToolbar, { view: this }),
+                    (0, Component_9.jc)(Textbox_8.Textbox, {
                         converter: new NumberConverter_6.NumberConverter(),
-                        bind: [me.databinder, "id"],
+                        bind: this.states.value.bind.id, //[me.databinder, "id"],
                         label: "Id",
                         width: 40,
-                        x: 5,
-                        y: 0
                     }),
-                    me.companyName.config({
-                        x: 60,
-                        y: 0,
-                        bind: [me.databinder, "CompanyName"],
+                    (0, Component_9.jc)(Textbox_8.Textbox, {
+                        bind: this.states.value.bind.CompanyName, // [me.databinder, "CompanyName"],
                         label: "Company name",
                         width: 160
                     }),
-                    me.phone.config({
-                        x: 5,
-                        y: 50,
+                    (0, Component_9.jc)("br"),
+                    (0, Component_9.jc)(Textbox_8.Textbox, {
                         width: 215,
-                        bind: [me.databinder, "Phone"],
+                        bind: this.states.value.bind.Phone, //[me.databinder, "Phone"],
                         label: "Phone"
                     })
                 ]
@@ -3097,150 +2388,61 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
         }
     };
     exports.ShippersView = ShippersView;
-    __decorate([
-        (0, Property_8.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Shippers_2.Shippers !== "undefined" && Shippers_2.Shippers) === "function" ? _a : Object)
-    ], ShippersView.prototype, "value", void 0);
     exports.ShippersView = ShippersView = __decorate([
-        (0, DBObjectView_7.$DBObjectView)({ classname: "northwind.Shippers", actionname: "Northwind/Shippers", icon: "mdi mdi-truck-delivery" }),
-        (0, Registry_20.$Class)("northwind.ShippersView"),
-        __metadata("design:paramtypes", [])
+        (0, DBObjectView_8.$DBObjectView)({ classname: "northwind.Shippers", actionname: "Northwind/Shippers", icon: "mdi mdi-truck-delivery" }),
+        (0, Registry_20.$Class)("northwind.ShippersView")
     ], ShippersView);
     async function test() {
-        var ret = new ShippersView;
-        ret["value"] = await Shippers_2.Shippers.findOne();
+        var ret = new ShippersView();
+        ret.value = await Shippers_2.Shippers.findOne();
         return ret;
     }
 });
-define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_7, Textbox_9, Registry_21, Property_9, Suppliers_2, DBObjectView_8) {
+define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView", "jassijs/ui/Component"], function (require, exports, NumberConverter_7, Textbox_9, Registry_21, Panel_10, Suppliers_2, DBObjectView_9, Component_10) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SuppliersView = void 0;
     exports.test = test;
-    let SuppliersView = class SuppliersView extends DBObjectView_8.DBObjectView {
-        constructor() {
-            super();
-            //this.me = {}; this is called in objectdialog
-            this.layout(this.me);
-        }
+    let SuppliersView = class SuppliersView extends DBObjectView_9.DBObjectView {
         get title() {
             return this.value === undefined ? "SuppliersView" : "SuppliersView " + this.value.id;
         }
-        layout(me) {
-            me.id = new Textbox_9.Textbox();
-            me.homepage = new Textbox_9.Textbox();
-            me.fax = new Textbox_9.Textbox();
-            me.phone = new Textbox_9.Textbox();
-            me.Country = new Textbox_9.Textbox();
-            me.region = new Textbox_9.Textbox();
-            me.city = new Textbox_9.Textbox();
-            me.postalCode = new Textbox_9.Textbox();
-            me.address = new Textbox_9.Textbox();
-            me.contactTitle = new Textbox_9.Textbox();
-            me.contactName = new Textbox_9.Textbox();
-            me.companyName = new Textbox_9.Textbox();
-            this.me.main.config({ isAbsolute: true, width: "800", height: "800", children: [
-                    me.id.config({
-                        x: 10,
-                        y: 5,
-                        converter: new NumberConverter_7.NumberConverter(),
-                        width: 50,
-                        bind: [me.databinder, "id"],
-                        label: "Id"
-                    }),
-                    me.companyName.config({
-                        x: 75,
-                        y: 5,
-                        label: "Company Name",
-                        bind: [me.databinder, "CompanyName"],
-                        width: 290
-                    }),
-                    me.contactName.config({
-                        x: 10,
-                        y: 50,
-                        bind: [me.databinder, "ContactName"],
-                        label: "Contact Name"
-                    }),
-                    me.contactTitle.config({
-                        x: 180,
-                        y: 50,
-                        bind: [me.databinder, "ContactTitle"],
-                        label: "Contact Title",
-                        width: 185
-                    }),
-                    me.address.config({
-                        x: 10,
-                        y: 95,
-                        bind: [me.databinder, "Address"],
-                        label: "Address",
-                        width: 355
-                    }),
-                    me.postalCode.config({
-                        x: 10,
-                        y: 140,
-                        bind: [me.databinder, "PostalCode"],
-                        width: 95,
-                        label: "Postal Code"
-                    }),
-                    me.city.config({
-                        x: 120,
-                        y: 140,
-                        bind: [me.databinder, "City"],
-                        label: "City",
-                        width: 245
-                    }),
-                    me.region.config({
-                        x: 10,
-                        y: 185,
-                        bind: [me.databinder, "Region"],
-                        label: "Region",
-                        width: 155
-                    }),
-                    me.Country.config({
-                        x: 180,
-                        y: 185,
-                        bind: [me.databinder, "Country"],
-                        label: "Country",
-                        width: 185
-                    }),
-                    me.phone.config({
-                        x: 10,
-                        y: 230,
-                        bind: [me.databinder, "Phone"],
-                        label: "Phone",
-                        width: 155
-                    }),
-                    me.fax.config({
-                        x: 180,
-                        y: 230,
-                        bind: [me.databinder, "Fax"],
-                        label: "Fax",
-                        width: 185
-                    }),
-                    me.homepage.config({
-                        x: 10,
-                        y: 275,
-                        bind: [me.databinder, "HomePage"],
-                        label: "Home Page",
-                        width: 355
-                    })
-                ] });
+        render() {
+            return (0, Component_10.jc)(Panel_10.Panel, {
+                children: [
+                    (0, Component_10.jc)(DBObjectView_9.DBObjectViewToolbar, { view: this }),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { bind: this.states.value.bind.id, converter: new NumberConverter_7.NumberConverter(), label: "Id" }),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { bind: this.states.value.bind.CompanyName, label: "Company Name" }),
+                    (0, Component_10.jc)("br", {}),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { bind: this.states.value.bind.ContactName, label: "Contact Name" }),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { label: "Contact Title", bind: this.states.value.bind.ContactTitle }),
+                    (0, Component_10.jc)("br", {}),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { bind: this.states.value.bind.Address, label: "Address", width: 330 }),
+                    (0, Component_10.jc)("br", {}),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { bind: this.states.value.bind.PostalCode, label: "Postal Code" }),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { bind: this.states.value.bind.City, label: "City" }),
+                    (0, Component_10.jc)("br", {}),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { bind: this.states.value.bind.Region, label: "Region" }),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { bind: this.states.value.bind.Country, label: "Country" }),
+                    (0, Component_10.jc)("br", {}),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { label: "Phone", bind: this.states.value.bind.Phone }),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { label: "Fax", bind: this.states.value.bind.Fax }),
+                    (0, Component_10.jc)("br", {}),
+                    (0, Component_10.jc)(Textbox_9.Textbox, { label: "Homepage", bind: this.states.value.bind.HomePage, width: 330 })
+                ]
+            });
         }
     };
     exports.SuppliersView = SuppliersView;
-    __decorate([
-        (0, Property_9.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Suppliers_2.Suppliers !== "undefined" && Suppliers_2.Suppliers) === "function" ? _a : Object)
-    ], SuppliersView.prototype, "value", void 0);
     exports.SuppliersView = SuppliersView = __decorate([
-        (0, DBObjectView_8.$DBObjectView)({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" }),
-        (0, Registry_21.$Class)("northwind.SuppliersView"),
-        __metadata("design:paramtypes", [])
+        (0, DBObjectView_9.$DBObjectView)({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" }),
+        (0, Registry_21.$Class)("northwind.SuppliersView")
     ], SuppliersView);
     async function test() {
-        var ret = new SuppliersView;
-        ret["value"] = await Suppliers_2.Suppliers.findOne();
+        var sup = await Suppliers_2.Suppliers.findOne();
+        var ret = new SuppliersView({
+            value: sup
+        });
         return ret;
     }
 });
@@ -3249,7 +2451,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1697199759329.1274,
+                "date": 1722605033849.076,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -3258,11 +2460,20 @@ define("northwind/registry", ["require"], function (require) {
                             "icon": "mdi mdi-cube"
                         }
                     ],
-                    "@members": {}
+                    "$Property": [
+                        {
+                            "name": "aa",
+                            "type": "string"
+                        },
+                        {
+                            "name": "ab",
+                            "type": "string"
+                        }
+                    ]
                 }
             },
             "northwind/CustomerOrders.ts": {
-                "date": 1656502358000,
+                "date": 1722605062499.3147,
                 "northwind/CustomerOrders": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -3280,7 +2491,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerPhoneList.ts": {
-                "date": 1681640214000,
+                "date": 1721666518282.6287,
                 "northwind/CustomerPhoneList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -3298,16 +2509,15 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1682164038000,
-                "northwind/CustomerView": {
+                "date": 1722605075950.047,
+                "northwind.CustomerView": {
                     "$DBObjectView": [
                         {
                             "classname": "northwind.Customer",
                             "actionname": "Northwind/Customers",
                             "icon": "mdi mdi-nature-people"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/DetailTest.ts": {
@@ -3322,7 +2532,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1698508046916.7515,
+                "date": 1722605088492.314,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -3330,8 +2540,7 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Employees",
                             "icon": "mdi mdi-account-tie"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/ImportData.ts": {
@@ -3364,20 +2573,20 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1698507857261.209,
+                "date": 1722605111019.898,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
                             "classname": "northwind.Orders",
                             "actionname": "Northwind/Orders",
-                            "icon": "mdi mdi-script-text"
+                            "icon": "mdi mdi-script-text",
+                            "queryname": "findAllWithDetails"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/ProductList.ts": {
-                "date": 1697197602604.6377,
+                "date": 1722600004856.538,
                 "northwind/ProductList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -3395,7 +2604,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1698508046916.7515,
+                "date": 1722605123673.773,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -3403,8 +2612,7 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Products",
                             "icon": "mdi mdi-reproduction"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/remote/Categories.ts": {
@@ -3413,19 +2621,9 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "CategoryName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3433,11 +2631,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Description": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3445,7 +2638,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Picture": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Products": {
@@ -3463,39 +2655,24 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "ContactName": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "ContactTitle": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Address": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "City": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "Region": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3503,11 +2680,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3515,11 +2687,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3527,11 +2694,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3539,11 +2701,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Fax": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3554,24 +2711,14 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1681322814000,
+                "date": 1721688634922.4763,
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "LastName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3579,11 +2726,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "FirstName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3591,11 +2733,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Title": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3603,11 +2740,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "TitleOfCourtesy": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3615,11 +2747,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Address": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3627,11 +2754,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "City": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3639,11 +2761,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Region": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3651,11 +2768,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3663,11 +2775,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3675,11 +2782,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HomePhone": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3701,11 +2803,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Notes": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3713,11 +2810,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PhotoPath": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3725,23 +2817,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ReportsTo": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function",
-                                    "optional": true
-                                }
-                            ],
-                            "JoinColumn": [],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "BirthDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3749,11 +2829,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HireDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3764,41 +2839,25 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/OrderDetails.ts": {
-                "date": 1681322822000,
+                "date": 1722528161852.004,
                 "northwind.OrderDetails": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryGeneratedColumn": []
                         },
                         "Order": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function",
                                 "function"
                             ]
                         },
                         "Product": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "UnitPrice": {
-                            "ValidateIsNumber": [],
                             "Column": [
                                 {
                                     "nullable": false,
@@ -3807,11 +2866,9 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Quantity": {
-                            "ValidateIsNumber": [],
                             "Column": []
                         },
                         "Discount": {
-                            "ValidateIsNumber": [],
                             "Column": [
                                 {
                                     "nullable": true,
@@ -3823,44 +2880,24 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1681322834000,
+                "date": 1722531390341.5852,
                 "northwind.Orders": {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "Customer": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "Employee": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "OrderDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3868,11 +2905,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "RequiredDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3880,11 +2912,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShippedDate": {
-                            "ValidateIsDate": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3892,21 +2919,11 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipVia": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "Freight": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true,
@@ -3915,11 +2932,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3927,11 +2939,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipAddress": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3939,11 +2946,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipCity": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3951,11 +2953,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipRegion": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3963,11 +2960,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipPostalCode": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3975,11 +2967,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ShipCountry": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -3987,11 +2974,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Details": {
-                            "ValidateIsArray": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "OneToMany": [
                                 "function",
                                 "function"
@@ -4006,19 +2988,9 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "ProductName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4026,32 +2998,17 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Supplier": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function"
                             ]
                         },
                         "Category": {
-                            "ValidateIsInstanceOf": [
-                                {
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToOne": [
                                 "function",
                                 "function"
                             ]
                         },
                         "QuantityPerUnit": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4059,11 +3016,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "UnitPrice": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true,
@@ -4072,11 +3024,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "UnitsInStock": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4084,11 +3031,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "UnitsOnOrder": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4096,11 +3038,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ReorderLevel": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4108,7 +3045,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Discontinued": {
-                            "ValidateIsBoolean": [],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4124,19 +3060,9 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4144,11 +3070,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4164,19 +3085,9 @@ define("northwind/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "CompanyName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4184,11 +3095,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ContactName": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4196,11 +3102,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "ContactTitle": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4208,11 +3109,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Address": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4220,11 +3116,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "City": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4232,11 +3123,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Region": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4244,11 +3130,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "PostalCode": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4256,11 +3137,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Country": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4268,11 +3144,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Phone": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4280,11 +3151,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "Fax": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4292,11 +3158,6 @@ define("northwind/registry", ["require"], function (require) {
                             ]
                         },
                         "HomePage": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -4332,7 +3193,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ShippersView.ts": {
-                "date": 1656683118000,
+                "date": 1722605134497.6565,
                 "northwind.ShippersView": {
                     "$DBObjectView": [
                         {
@@ -4340,12 +3201,11 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Shippers",
                             "icon": "mdi mdi-truck-delivery"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             },
             "northwind/SuppliersView.ts": {
-                "date": 1656683258000,
+                "date": 1722605148088.2056,
                 "northwind.SuppliersView": {
                     "$DBObjectView": [
                         {
@@ -4353,8 +3213,7 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Suppliers",
                             "icon": "mdi mdi-office-building-outline"
                         }
-                    ],
-                    "@members": {}
+                    ]
                 }
             }
         }

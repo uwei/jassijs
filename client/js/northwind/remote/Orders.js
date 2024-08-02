@@ -9,11 +9,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers", "jassijs/remote/Validator"], function (require, exports, OrderDetails_1, Employees_1, Customer_1, DBObject_1, Registry_1, DatabaseSchema_1, Shippers_1, Validator_1) {
     "use strict";
+    var Orders_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Orders = void 0;
-    let Orders = class Orders extends DBObject_1.DBObject {
+    let Orders = Orders_1 = class Orders extends DBObject_1.DBObject {
         constructor() {
             super();
+        }
+        static async findAllWithDetails() {
+            return await Orders_1.find({ relations: ["*"] });
         }
     };
     __decorate([
@@ -91,7 +95,7 @@ define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote
         (0, DatabaseSchema_1.OneToMany)(type => OrderDetails_1.OrderDetails, e => e.Order),
         __metadata("design:type", Array)
     ], Orders.prototype, "Details", void 0);
-    Orders = __decorate([
+    Orders = Orders_1 = __decorate([
         (0, DBObject_1.$DBObject)(),
         (0, Registry_1.$Class)("northwind.Orders"),
         __metadata("design:paramtypes", [])

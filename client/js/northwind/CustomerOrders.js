@@ -10,93 +10,79 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/ObjectChooser", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Customer", "northwind/remote/Orders", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, BoxPanel_1, HTMLPanel_1, Databinder_1, ObjectChooser_1, Registry_1, Panel_1, Customer_1, Orders_1, Actions_1, Windows_1) {
+define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/HTMLPanel", "jassijs/ui/ObjectChooser", "jassijs/remote/Registry", "jassijs/ui/Panel", "northwind/remote/Customer", "northwind/remote/Orders", "jassijs/base/Actions", "jassijs/base/Windows", "jassijs/ui/Component", "jassijs/ui/DBObjectView"], function (require, exports, Table_1, HTMLPanel_1, ObjectChooser_1, Registry_1, Panel_1, Customer_1, Orders_1, Actions_1, Windows_1, Component_1, DBObjectView_1) {
     "use strict";
     var CustomerOrders_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CustomerOrders = void 0;
     Windows_1 = __importDefault(Windows_1);
-    let CustomerOrders = CustomerOrders_1 = class CustomerOrders extends Panel_1.Panel {
-        constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
+    let CustomerOrders = CustomerOrders_1 = class CustomerOrders extends DBObjectView_1.DBObjectView {
+        constructor(props = {}) {
+            super(props);
+            if (!(props === null || props === void 0 ? void 0 : props.order))
+                this.initData();
         }
-        layout(me) {
+        render() {
             var _this = this;
-            me.IDChooseCustomer = new ObjectChooser_1.ObjectChooser();
-            me.databinderCustomer = new Databinder_1.Databinder();
-            me.htmlpanel = new HTMLPanel_1.HTMLPanel();
-            me.boxpanel = new BoxPanel_1.BoxPanel();
-            me.boxpanel2 = new BoxPanel_1.BoxPanel();
-            me.htmlpanel2 = new HTMLPanel_1.HTMLPanel();
-            me.IDOrders = new Table_1.Table();
-            me.databinderOrder = new Databinder_1.Databinder();
-            me.table = new Table_1.Table();
-            this.config({ children: [
-                    me.databinderCustomer.config({}),
-                    me.boxpanel.config({ children: [
-                            me.boxpanel2.config({
-                                children: [
-                                    me.htmlpanel.config({
-                                        width: 185,
-                                        value: "Berglunds snabbköp",
-                                        bind: [me.databinderCustomer, "CompanyName"],
-                                        label: "Company Name",
-                                        height: 20
-                                    }),
-                                    me.IDChooseCustomer.config({
-                                        width: 25,
-                                        bind: [me.databinderCustomer, "this"],
-                                        items: "northwind.Customer",
-                                        onchange: function (event) {
-                                            _this.customerChanged();
-                                        }
-                                    }),
-                                    me.htmlpanel2.config({
-                                        width: 110,
-                                        value: " ",
-                                        bind: [me.databinderCustomer, "Country"],
-                                        label: "Country"
-                                    })
-                                ],
-                                horizontal: true
-                            }),
-                            me.IDOrders.config({
-                                width: "100%",
-                                label: "Click an order...",
-                                height: "180"
-                            }),
-                            me.table.config({
-                                width: "100%",
-                                bindItems: [me.databinderOrder, "Details"],
-                                height: "140",
-                                label: "...to see order details"
-                            })
-                        ] }),
-                    me.databinderOrder.config({})
-                ] });
-            me.IDOrders.selectComponent = me.databinderOrder;
-            this.setData();
-            this.width = "100%";
-            this.height = "100%";
+            return (0, Component_1.jc)(Panel_1.Panel, {
+                children: [
+                    (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
+                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, {
+                        width: 300,
+                        value: "Blauer See Delikatessen",
+                        bind: this.states.value.bind.CompanyName,
+                        label: "Company Name",
+                        height: 20
+                    }),
+                    (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, {
+                        width: 25,
+                        bind: this.states.value.bind,
+                        items: "northwind.Customer",
+                        onchange: function (event) {
+                            _this.customerChanged();
+                        }
+                    }),
+                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, {
+                        width: 110,
+                        value: " ",
+                        bind: this.states.value.bind.Country,
+                        label: "Country"
+                    }),
+                    (0, Component_1.jc)(Table_1.Table, {
+                        bind: this.states.order.bind,
+                        bindItems: this.states.orders.bind,
+                        width: "100%",
+                        label: "Click an order...",
+                        height: "180"
+                    }),
+                    (0, Component_1.jc)(Table_1.Table, {
+                        bindItems: this.states.order.bind.Details,
+                        width: "100%",
+                        height: "140",
+                        label: "...to see order details"
+                    })
+                ]
+            });
         }
         static showDialog() {
             Windows_1.default.add(new CustomerOrders_1(), "Customer Orders");
         }
         async customerChanged() {
-            var cust = this.me.databinderCustomer.value;
-            var orders = await Orders_1.Orders.find({ where: "Customer.id=:param",
-                whereParams: { param: cust.id } });
-            this.me.IDOrders.items = orders;
-            this.me.databinderOrder.value = orders[0];
+            var cust = this.states.value.current;
+            this.states.orders.current = await Orders_1.Orders.find({
+                where: "Customer.id=:param",
+                whereParams: { param: cust.id }
+            });
+            this.states.order.current = this.states.orders.current.length === 0 ? undefined : this.states.orders.current[0];
+            //    this.me.IDOrders.items = orders;
+            //   this.me.databinderOrder.value = orders[0];
         }
-        async setData() {
-            var all = await Customer_1.Customer.find();
-            this.me.databinderCustomer.value = all[0];
+        set value(value) {
+            super.value = value;
             this.customerChanged();
-            //        this.me.IDChooseCustomer.items = all;
-            //      this.me.databinderCustomer.value = all[0];
+        }
+        async initData() {
+            this.value = await Customer_1.Customer.findOne();
         }
     };
     __decorate([
@@ -108,7 +94,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassij
     CustomerOrders = CustomerOrders_1 = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
         (0, Registry_1.$Class)("northwind/CustomerOrders"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], CustomerOrders);
     exports.CustomerOrders = CustomerOrders;
     async function test() {

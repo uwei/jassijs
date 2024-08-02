@@ -1,22 +1,6 @@
 declare module "demo/DelTest" {
     export function test(): any;
 }
-declare module "demo/Dialog" {
-    import { Button } from "jassijs/ui/Button";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { Panel } from "jassijs/ui/Panel";
-    type Me = {
-        boxpanel1?: BoxPanel;
-        button1?: Button;
-        button2?: Button;
-    };
-    export class Dialog extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
-    }
-    export function test(): Dialog;
-}
 declare module "demo/Dialog2" {
     import { Button } from "jassijs/ui/Button";
     import { Table } from "jassijs/ui/Table";
@@ -108,34 +92,16 @@ declare module "demo/Dialog6" {
 }
 declare module "demo/Dialog7" {
     import { Panel } from "jassijs/ui/Panel";
-    import { Button } from "jassijs/ui/Button";
-    type Me = {
-        button1?: Button;
-    };
     export class Dialog7 extends Panel {
-        me: Me;
         constructor();
         render(): any;
     }
     export function test(): unknown;
 }
-declare module "demo/EmptyDialog" {
-    import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-    import { Button } from "jassijs/ui/Button";
-    import { Repeater } from "jassijs/ui/Repeater";
+declare module "demo/Dialog8" {
     import { Panel } from "jassijs/ui/Panel";
-    type Me = {
-        repeater1?: Repeater;
-        button1?: Button;
-        htmlpanel1?: HTMLPanel;
-        htmlpanel2?: HTMLPanel;
-        button2?: Button;
-        htmlpanel3?: HTMLPanel;
-    };
-    export class EmptyDialog extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
+    export class Dialog7 extends Panel {
+        render(): any;
     }
     export function test(): unknown;
 }
@@ -152,15 +118,13 @@ declare module "demo/hallo2" {
     export function test(): any;
 }
 declare module "demo/hallo3" {
-    import { Component } from "jassijs/ui/Component";
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
     import { State } from "jassijs/ui/State";
-    interface Prop {
+    interface Prop extends ComponentProperties {
         mytext?: string;
         mycolor?: State | any;
     }
     class MyComp extends Component<Prop> {
-        mycolor: State<string>;
-        mytext: State<string>;
         makeGreen(): void;
         constructor(p: Prop);
         render(): any;
@@ -168,8 +132,8 @@ declare module "demo/hallo3" {
     export function test(): MyComp;
 }
 declare module "demo/hallo4" {
-    import { Component } from "jassijs/ui/Component";
-    interface Prop {
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    interface Prop extends ComponentProperties {
         mytext?: string;
         mycolor?: string;
     }
@@ -181,21 +145,19 @@ declare module "demo/hallo4" {
 }
 declare module "demo/hallo5" {
     import { Component, ComponentProperties } from "jassijs/ui/Component";
-    import { Button } from "jassijs/ui/Button";
-    import { State } from "jassijs/ui/State";
-    interface Me {
-        button?: Button;
-        colorState?: State<string>;
+    interface MProp extends ComponentProperties {
+        color?: string;
     }
-    interface Prop extends ComponentProperties {
-        color: any;
-    }
-    class MyComp extends Component<Prop> {
-        me: Me;
-        constructor(p: Prop);
+    type Refs = {};
+    class MyComp<Prop> extends Component<MProp> {
+        refs: Refs;
+        constructor(p: MProp);
         render(): any;
     }
-    export function test(): MyComp;
+    export function test(): MyComp<unknown>;
+}
+declare module "demo/hallo6" {
+    export function test(): any;
 }
 declare module "demo/LargeReport" {
     export function test(): {
@@ -214,9 +176,6 @@ declare module "demo/modul" {
         require: {};
     };
     export default _default;
-}
-declare module "demo/MyTest" {
-    export function test(): any;
 }
 declare module "demo/Report1" {
     export function test(): {
@@ -328,6 +287,34 @@ declare module "demo/Testmenu" {
 }
 declare module "demo/TestProTable" {
     export function test(): unknown;
+}
+declare module "demo/TestStatebinder" {
+    import { Component, ComponentProperties } from "jassijs/ui/Component";
+    import { StateDatabinder } from "jassijs/ui/StateBinder";
+    interface Invoice {
+        title?: string;
+        customer?: Customer;
+        positions?: Position[];
+    }
+    interface Customer {
+        name: string;
+        id: number;
+    }
+    interface Position {
+        id?: number;
+        text?: string;
+    }
+    interface Props2 extends ComponentProperties {
+        invoice?: Invoice;
+        invoices?: Invoice[];
+        currentPosition?: Position;
+    }
+    class TestStatebinder extends Component<Props2> {
+        stateBinder: StateDatabinder;
+        constructor(props: Props2);
+        render(): any;
+    }
+    export function test(): TestStatebinder;
 }
 declare module "demo/Testtable" {
     export function test(): unknown;

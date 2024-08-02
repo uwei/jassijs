@@ -10,29 +10,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ui/Notify"], function (require, exports, Button_1, BoxPanel_1, Registry_1, Panel_1, Databinder_1, Registry_2, Classes_1, Property_1, Notify_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ui/Notify"], function (require, exports, Button_1, BoxPanel_1, Registry_1, Panel_1, Component_1, Registry_2, Classes_1, Property_1, Notify_1) {
     "use strict";
-    var DBObjectView_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.DBObjectView = exports.$DBObjectView = exports.DBObjectViewProperties = void 0;
+    exports.DBObjectViewToolbar = exports.test = exports.DBObjectView = exports.$DBObjectView = exports.$DBObjectViewProperties = void 0;
     Registry_2 = __importDefault(Registry_2);
-    class DBObjectViewProperties {
+    class $DBObjectViewProperties {
     }
-    exports.DBObjectViewProperties = DBObjectViewProperties;
+    exports.$DBObjectViewProperties = $DBObjectViewProperties;
     function $DBObjectView(properties) {
         return function (pclass) {
             Registry_2.default.register("$DBObjectView", pclass, properties);
+            var p = { name: "value", componentType: properties.classname, type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" };
+            Registry_2.default.registerMember("$Property", pclass, undefined, p);
         };
     }
     exports.$DBObjectView = $DBObjectView;
     //@$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh", "me.databinder"] })
-    let DBObjectView = DBObjectView_1 = class DBObjectView extends Panel_1.Panel {
-        constructor() {
-            super();
-            this.me = {};
+    let DBObjectView = class DBObjectView extends Panel_1.Panel {
+        constructor(props = {}) {
+            super(props);
             this.dom.classList.add("designerNoResizable"); //this should not be resized only me.main
             //everytime call super.layout
-            DBObjectView_1.prototype.layout.bind(this)(this.me);
+            //DBObjectView.prototype.layout.bind(this)(this.me);
             // this.layout(this.me);
         }
         config(config) {
@@ -41,6 +41,12 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         }
         _setDesignMode(enable) {
             //no Icons to add Components in designer
+        }
+        set value(value) {
+            this.states.value.current = value;
+        }
+        get value() {
+            return this.states.value.current;
         }
         /**
          * create a new object
@@ -64,7 +70,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
          * saves the object
          */
         async saveObject() {
-            var ob = await this.me.databinder.fromForm();
+            var ob = await this.states.value.bind.$fromForm();
             if (ob !== undefined) {
                 await this.doSave(ob);
                 (0, Notify_1.notify)("saved", "info");
@@ -77,7 +83,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
          * refresh the object
          */
         refreshObject() {
-            this.me.databinder.toForm(this["value"]);
+            this.states.value.bind.$toForm(); //this["value"]);
             this.callEvent("refreshed", this["value"]);
         }
         onrefreshed(handler) {
@@ -87,7 +93,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
          * deletes Object
          **/
         deleteObject() {
-            var ob = this.me.databinder.fromForm();
+            var ob = this.states.value.bind.$fromForm();
             if (ob === undefined)
                 return;
             ob.remove();
@@ -99,52 +105,6 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         }
         ondeleted(handler) {
             this.addEvent("deleted", handler);
-        }
-        layout(me) {
-            var _this = this;
-            me.toolbar = new BoxPanel_1.BoxPanel();
-            me.save = new Button_1.Button();
-            me.remove = new Button_1.Button();
-            me.refresh = new Button_1.Button();
-            me.create = new Button_1.Button();
-            me.databinder = new Databinder_1.Databinder();
-            me.main = new Panel_1.Panel();
-            me.databinder.definePropertyFor(this, "value");
-            this.add(me.toolbar);
-            this.add(me.main);
-            me.main.width = "100%";
-            me.main.height = "100%";
-            me.main.style = { position: "relative" };
-            me.toolbar.add(me.create);
-            me.toolbar.add(me.save);
-            me.toolbar.horizontal = true;
-            me.toolbar.add(me.refresh);
-            me.toolbar.add(me.remove);
-            me.save.text = "";
-            me.save.tooltip = "save";
-            me.save.icon = "mdi mdi-content-save";
-            me.save.onclick(function (event) {
-                _this.saveObject();
-            });
-            me.remove.text = "";
-            me.remove.icon = "mdi mdi-delete";
-            me.remove.onclick(function (event) {
-                _this.deleteObject();
-            });
-            me.remove.tooltip = "remove";
-            me.refresh.text = "";
-            me.refresh.icon = "mdi mdi-refresh";
-            me.refresh.onclick(function (event) {
-                _this.refreshObject();
-            });
-            me.refresh.tooltip = "refresh";
-            me.create.text = "";
-            me.create.icon = "mdi mdi-tooltip-plus-outline";
-            me.create.onclick(function (event) {
-                _this.createObject();
-                //me.binder.toForm();
-            });
-            me.create.tooltip = "new";
         }
     };
     __decorate([
@@ -171,9 +131,11 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "ondeleted", null);
-    DBObjectView = DBObjectView_1 = __decorate([
-        (0, Registry_1.$Class)("jassijs/ui/DBObjectView"),
-        __metadata("design:paramtypes", [])
+    DBObjectView = __decorate([
+        (0, Registry_1.$Class)("jassijs/ui/DBObjectView")
+        //see export function $DBObjectView =>@$Property({name:"value", type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
+        ,
+        __metadata("design:paramtypes", [Object])
     ], DBObjectView);
     exports.DBObjectView = DBObjectView;
     async function test() {
@@ -181,5 +143,51 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         return ret;
     }
     exports.test = test;
+    //@ts-ignore
+    class DBObjectViewToolbar extends Panel_1.Panel {
+        constructor(props) {
+            super(props);
+        }
+        render() {
+            return (0, Component_1.jc)(BoxPanel_1.BoxPanel, {
+                horizontal: true,
+                children: [
+                    (0, Component_1.jc)(Button_1.Button, {
+                        text: "",
+                        tooltip: "save",
+                        icon: "mdi mdi-content-save",
+                        onclick: (event) => {
+                            this.props.view.saveObject();
+                        }
+                    }),
+                    (0, Component_1.jc)(Button_1.Button, {
+                        text: "",
+                        tooltip: "remove",
+                        icon: "mdi mdi-delete",
+                        onclick: (event) => {
+                            this.props.view.deleteObject();
+                        }
+                    }),
+                    (0, Component_1.jc)(Button_1.Button, {
+                        text: "",
+                        tooltip: "refresh",
+                        icon: "mdi mdi-refresh",
+                        onclick: (event) => {
+                            this.props.view.refreshObject();
+                        }
+                    }),
+                    (0, Component_1.jc)(Button_1.Button, {
+                        text: "",
+                        tooltip: "new",
+                        icon: "mdi mdi-tooltip-plus-outline",
+                        onclick: (event) => {
+                            this.props.view.createObject();
+                        }
+                    })
+                ]
+            });
+        }
+    }
+    exports.DBObjectViewToolbar = DBObjectViewToolbar;
 });
 //# sourceMappingURL=DBObjectView.js.map

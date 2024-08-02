@@ -1,3 +1,8 @@
+import { PropertyAccessor, StateDatabinder } from "jassijs/ui/StateBinder";
+import { createComponent } from "jassijs/ui/Component";
+
+var teset = new StateDatabinder()
+
 class StateProp {
     ob;
     proppath: string[];
@@ -30,71 +35,88 @@ interface P {
     st1: State<any>;
 }
 
+export function foreach(stateWithArray: {current:any[]}, func: (ob) => any): State<React.ReactElement> {
 
-export type States<T> = { [Property in keyof T]: State<T[Property]> } & { _used: string[], _onconfig?: (props) => void };
-export function createStates<T>(initialValues: T = <any>{}): States<T> {
-    var data ={ _used: [] , _data:initialValues};
+    var retState = createState();
 
+    //update retState on stateWithArray is changing
+    var updateOB = {
+        set value(ob) {
+            var ret = [];
+            var arr = stateWithArray.current;
+            if (arr !== undefined) {
+                for (var x = 0; x < arr.length; x++) {
+                    // if (ret === undefined)
+                    //   ret = [];
+                    var comp = func(arr[x]);
+                    if (ob?.initial !== true) {
+                        comp = createComponent(comp);
+                    }
+                    ret.push(comp);
+                }
+            }
+            retState.current = ret;
+        }
+    }
+    updateOB.value = { initial: true };//fill state
+    (<any>stateWithArray)._observe_(updateOB, "value");
+
+    return <any>retState;
+}
+
+export type States<T> = { [Property in keyof T]: States<T[Property]> & { bind?: BoundProperty<T[Property]> } } & { current: T, _used?: string[], _onconfig?: (props) => void };
+export function createStates<T>(initialValues: T = undefined, propertyname: string = undefined): States<T> {
+    var data: any = new State(initialValues);// { _used: [], _data: initialValues };
+    data._$propertyname_ = propertyname;
     return new Proxy(data as any, {
-        get(target, key: string) {
+        get(target: State, key: string) {
 
             if (key === "_onconfig")
                 return target._onconfig;
-            if (target[key] === undefined) {
-                target[key] = createState(data._data[key]);
+            if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current") {
+                var newstate: State = <any>createStates(data.current !== undefined ? data.current[key] : undefined, key);
+
+                target[key] = newstate;
+                target._observe_(newstate, "_$setparentobject");
                 if (target._used.indexOf(key) === -1)
                     target._used.push(key);
             }
             return target[key];
         },
         set(target, key: string, value) {
-            if (key === "_onconfig")
+            if (key === "_$setparentobject") {
+                var propname: string = data._$propertyname_;
+                target.current = value[propname];
+            }
+            else if (key === "_onconfig")
                 target._onconfig = value;
-            else
+            else if (key === "current") {
+                target.current = value;
+            } else
                 throw "not implemented " + key;
             return true;
         }
     });
 }
-
 export type OnlyType<T, D> = { [K in keyof T as  T[K] extends D ? K : never]: T[K] };
 export type DropType<T, D> = { [K in keyof T as  T[K] extends D ? never : K]: T[K] };
 export type GroupState<T> = DropType<T, State> & { readonly refs: { readonly [Property in keyof DropType<T, State>]-?: any } } &
 { readonly states: { readonly [Property in keyof OnlyType<T, State>]-?: T[Property] } }
-export function createRefs<T>(data: T = <any>{}):  { readonly [Property in keyof T]-?:{ current: T[Property] } }  {
-    var me={};
-    var ret=new Proxy(me, {
-        get(target, key: string) {
-            if (target[key] === undefined) {
-                target[key] = {
-                    _current: undefined,
-                    set current(value) {
-                        data[key] = value;
-                        this._current = value;
-                    },
-                    get current() {
-                        return this._current;
-                    }
-                }
-            }
-            return target[key];
-        }
-    });
-  
-    return ret;
-}
 
+type ClientState<T> = { [K in keyof T]: ClientState<T[K]> & { current: State<T> } };
 export class State<T = {}> {
     private data;
-    self: any = this;
+    //self: any = this;
     _comps_: StateProp[] = [];
+    _used: string[] = [];
+    _$isState$_ = true;
     constructor(data = undefined) {
         this.data = data;
     }
-    _observe_(control, property, atype) {
+    _observe_(control, property, atype = undefined) {
         this._comps_.push({ ob: control, proppath: [property] });
     }
-
+    bind?: BoundProperty<T> = createBoundProperty(this);
     get current(): T {
         return this.data;
     }
@@ -116,27 +138,10 @@ export class State<T = {}> {
                     cur = cur[prop];
 
             }
-            c.ob.config(newVal);
-            /* if (c.atype === "style") {
-                 //for (var key in (<any>props).style) {
-                 //var val = (<any>props).style[key];
-                 ob.dom.style[prop] = data;
-                 //}
-             }else    if (c.atype === "dom") {
-                 Reflect.set(ob.dom, prop, data);
-             }else     if (c.atype === "attribute") {
- 
-                 ob.dom.setAttribute(prop, data);
-             }else{
-                 Reflect.set(ob,prop,data);
-             }*/
-
-            /*else if (prop in this.dom) {
-                       Reflect.set(this.dom, prop, [props[prop]])
-                   } else if (prop.toLocaleLowerCase() in this.dom) {
-                       Reflect.set(this.dom, prop.toLocaleLowerCase(), props[prop])
-                   } else if (prop in this.dom)
-                   this.dom.setAttribute(prop, (<any>props)[prop]);*/
+            if (c.ob?._$isState$_ !== true && typeof c.ob.config === "function")
+                c.ob.config(newVal);
+            else
+                c.ob[c.proppath[0]] = data;
         }
 
     }
@@ -146,20 +151,109 @@ export function createState<T>(val: T = undefined) {
     ret.current = val;
     return ret;
 }
-export function createRef<T>(val: T = undefined): { current: T } {
-    var ret;
-    ret.current = val;
+
+
+export type BoundProperty<T = {}> = { $fromForm: () => T } & { $toForm: () => any } & { [Property in keyof T]: BoundProperty<T[Property]> } & { _databinder: StateDatabinder } & { _propertyname: string };
+
+function createBoundProperty<T>(state: State = undefined, parent: BoundProperty<any> = undefined, propertyname: string = "this"): BoundProperty<T> {
+    var data: any = {
+        _databinder: (parent === undefined ? new StateDatabinder() : parent._databinder),
+        _propertyname: propertyname,
+        $fromForm() { return this._databinder.fromForm() },
+        $toForm() { return this._databinder.toForm() }
+    };
+    if (state)
+        data._databinder.connectedState = state;
+    var ret = new Proxy(data as any, {
+        get(target, key: string) {
+            if (key === "_observe_" || key === "_$isState$_")
+                return undefined;
+            if (target[key] === undefined) {
+
+                var pname = key;
+
+                if (target._propertyname !== "this") {
+                    pname = target._propertyname + "." + key;
+                }
+
+                target[key] = createBoundProperty(undefined, ret, pname);
+            }
+            return target[key];
+        },
+        set(target, key: string, value) {
+            if (key === "_propertyname") {
+                target[key] = value;
+                return true;
+            }
+
+            throw "not implemented " + key;
+        }
+    });
+    if (state !== undefined) {
+        state._observe_(data._databinder, "value", "property");
+    }
     return ret;
 }
-interface Me {
-    hallo?: string;
-
+interface Invoice {
+    title?: string;
+    customer?: Customer;
+    positions?: Position[];
 }
-
+interface Customer {
+    name: string;
+    id: number;
+}
+interface Position {
+    id?: number;
+    text?: string;
+}
+interface Props2 {
+    invoice?: Invoice;
+    invoices?: Invoice[];
+    currentPosition?: Position;
+}
+var j: Props2 = {};
+var invoices = [
+    {
+        title: "R1",
+        customer: {
+            id: 1,
+            name: "Meier"
+        },
+        positions: [{ id: 1, text: "P1" }, { id: 2, text: "P2" }]
+    },
+    {
+        title: "R2",
+        customer: {
+            id: 2,
+            name: "Lehmann"
+        },
+        positions: [{ id: 3, text: "P3" }, { id: 4, text: "P4" }]
+    },
+    {
+        title: "R3",
+        customer: {
+            id: 3,
+            name: "Schulze"
+        },
+        positions: [{ id: 6, text: "P6" }, { id: 6, text: "P6" }]
+    },
+];
+var inv: Props2 = {
+    invoice: invoices[1],
+    invoices: invoices
+};
 export function test() {
-    var me: Me = <any>{ a: 6 }
-    var refs = createRefs<Me>(me);
+    var k = createStates(undefined);
+    var ll: any = k.invoice.customer.current;
 
-    refs.hallo.current = "JJJ";
-    console.log(me.hallo);
+    var vname: string = k.invoice.customer.name;
+    var ll2: any = k.invoice.customer.name.current;
+
+    k.invoice.current = invoices[0];
+
+    var hhl = k.invoice.customer;
+    ll = k.invoice.customer.name.current;
+
 }
+

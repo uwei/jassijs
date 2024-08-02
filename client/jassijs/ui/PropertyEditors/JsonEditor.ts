@@ -142,7 +142,6 @@ export class JsonEditor extends Editor {
     private createPropertyEditor(): PropertyEditor {
        
         var propEditor = new PropertyEditor();
-         debugger;
         propEditor.actions=this.property.editoractions;
         propEditor.readPropertyValueFromDesign = this.propertyEditor.readPropertyValueFromDesign;
         propEditor.showThisProperties = this.showThisProperties;

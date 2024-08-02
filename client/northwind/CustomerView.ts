@@ -2,133 +2,89 @@ import { Textbox } from "jassijs/ui/Textbox";
 import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
 import { Customer } from "northwind/remote/Customer";
-import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-type Me = {
-    id?: Textbox;
-    companyname?: Textbox;
-    contacttitle?: Textbox;
-    contactname?: Textbox;
-    address?: Textbox;
-    postalcode?: Textbox;
-    textbox1?: Textbox;
-    region?: Textbox;
-    textbox2?: Textbox;
-    phone?: Textbox;
-    fax?: Textbox;
-} & DBObjectViewMe;
+import { DBObjectView, $DBObjectView, DBObjectViewMe, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
+import { jc } from "jassijs/ui/Component";
+import { Panel } from "jassijs/ui/Panel";
+
 @$DBObjectView({
     classname: "northwind.Customer",
     actionname: "Northwind/Customers",
     icon: "mdi mdi-nature-people"
 })
-@$Class("northwind/CustomerView")
-export class CustomerView extends DBObjectView {
-    declare me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    declare value: Customer;
-    constructor() {
-        super();
-        //this.me = {}; this is called in objectdialog
-        this.layout(this.me);
-    }
+@$Class("northwind.CustomerView")
+export class CustomerView extends DBObjectView<Customer> {
+  
     get title() {
         return this.value === undefined ? "CustomerView" : "CustomerView " + this.value.id;
     }
-    layout(me: Me) {
-        me.id = new Textbox();
-        me.companyname = new Textbox();
-        me.contacttitle = new Textbox();
-        me.contactname = new Textbox();
-        me.address = new Textbox();
-        me.postalcode = new Textbox();
-        me.textbox1 = new Textbox();
-        me.region = new Textbox();
-        me.textbox2 = new Textbox();
-        me.phone = new Textbox();
-        me.fax = new Textbox();
-        this.me.main.config({
-            isAbsolute: true,
-            width: 560,
-            height: "300",
+    render() {
+        return jc(Panel, {
             children: [
-                me.id.config({
-                    x: 10,
-                    y: 5,
-                    bind: [me.databinder, "id"],
+                jc(DBObjectViewToolbar, { view: this }),
+                jc(Textbox, {
+                    bind: this.states.value.bind.id,
                     width: 65,
                     label: "id"
                 }),
-                me.contactname.config({
-                    x: 90,
-                    y: 5,
+                jc(Textbox, {
                     label: "Contact Name",
-                    bind: [me.databinder, "ContactName"],
-                    width: 260
+                    bind: this.states.value.bind.ContactName,
+                    width: 255
                 }),
-                me.contacttitle.config({
-                    x: 10,
-                    y: 45,
+                jc("br"),
+                jc(Textbox, {
                     label: "Contact Title",
-                    bind: [me.databinder, "ContactTitle"]
+                    bind: this.states.value.bind.ContactTitle,
                 }),
-                me.companyname.config({
-                    x: 195,
-                    y: 45,
-                    bind: [me.databinder, "CompanyName"],
+                jc(Textbox, {
+                    bind: this.states.value.bind.ContactName,
                     label: "Company Name",
                     width: 155
                 }),
-                me.address.config({
-                    x: 10,
-                    y: 90,
-                    bind: [me.databinder, "Address"],
+                jc("br"),
+                jc(Textbox, {
+                    bind: this.states.value.bind.Address,
                     label: "Address",
-                    width: 340
+                    width: 325
                 }),
-                me.postalcode.config({
-                    x: 10,
-                    y: 140,
+                jc("br"),
+                jc(Textbox, {
                     label: "Postal Code",
-                    bind: [me.databinder, "PostalCode"],
+                    bind: this.states.value.bind.PostalCode,
                     width: 90
                 }),
-                me.textbox1.config({
-                    x: 100,
-                    y: 140,
+                jc(Textbox, {
                     label: "City",
-                    width: 250,
-                    bind: [me.databinder, "City"]
+                    width: 230,
+                    bind: this.states.value.bind.City,
                 }),
-                me.region.config({
-                    x: 10,
-                    y: 185,
-                    bind: [me.databinder, "Region"],
+                jc("br"),
+                jc(Textbox, {
+                    bind: this.states.value.bind.Region,
                     label: "Region"
                 }),
-                me.textbox2.config({
-                    x: 195,
-                    y: 185,
+                jc(Textbox, {
                     label: "Country",
-                    bind: [me.databinder, "Country"]
+                    bind: this.states.value.bind.Country,
+                    width: 155,
                 }),
-                me.phone.config({
-                    x: 10,
-                    y: 230,
+                jc("br"),
+                jc(Textbox, {
                     label: "Phone",
-                    bind: [me.databinder, "Phone"]
+                    bind: this.states.value.bind.Phone,
                 }),
-                me.fax.config({
-                    x: 195,
-                    y: 230,
+                jc(Textbox, {
                     label: "Fax",
-                    bind: [me.databinder, "Fax"]
+                    bind: this.states.value.bind.Fax,
+                    width: 155,
                 })
             ]
         });
     }
+   
 }
 export async function test() {
     var ret = new CustomerView;
-    ret["value"] = <Customer>await Customer.findOne();
+    ret.value = <Customer>await Customer.findOne();
     return ret;
 }

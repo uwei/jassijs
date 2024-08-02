@@ -61,7 +61,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         (0, Registry_1.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
     let Table = class Table extends DataComponent_1.DataComponent {
-        ;
         constructor(properties) {
             super(properties);
             this._lastLazySort = undefined;
@@ -405,8 +404,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                 }
             }
             this._items = value;
-            if (value !== undefined && updateData)
-                this.table.setData(value);
+            if (value !== undefined && updateData) {
+                // try{
+                // this.table.setData(value);
+                var _this = this;
+                // }catch{
+                setTimeout(() => { _this.table.setData(value); }, 100);
+                //}
+            }
             return value;
         }
         set items(value) {
@@ -553,10 +558,29 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         get columns() {
             return this.table.getColumnDefinitions();
         }
+        get bindItems() {
+            return this._bindItems;
+        }
         set bindItems(databinder) {
+            if (!Array.isArray(databinder)) {
+                this.bindItems2 = databinder;
+                return;
+            }
             this._databinderItems = databinder[0];
             var _this = this;
             this._databinderItems.add(databinder[1], this, undefined, (tab) => {
+                return tab.items;
+            }, (tab, val) => {
+                tab.items = val;
+            });
+            //databinderItems.add(property, this, "onchange");
+            //databinder.checkAutocommit(this);
+        }
+        set bindItems2(bound) {
+            this._bindItems = bound;
+            this._databinderItems = bound._databinder;
+            var _this = this;
+            this._databinderItems.add(bound._propertyname, this, undefined, (tab) => {
                 return tab.items;
             }, (tab, val) => {
                 tab.items = val;
@@ -593,9 +617,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
     ], Table.prototype, "width", null);
     __decorate([
         (0, Property_1.$Property)({ type: "databinder" }),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [Array])
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
     ], Table.prototype, "bindItems", null);
+    __decorate([
+        (0, Property_1.$Property)({ type: "databinder" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Table.prototype, "bindItems2", null);
     Table = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
         (0, Registry_1.$Class)("jassijs.ui.Table"),

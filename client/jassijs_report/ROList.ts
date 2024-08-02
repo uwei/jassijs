@@ -107,8 +107,7 @@ export class ROList extends RComponent {
             ret.type = this.type;
 
         for (let x = 0; x < this._components.length; x++) {
-            if (this._components[x]["designDummyFor"])
-                continue;
+          
             //@ts-ignore
             ret.ol.push(this._components[x].toJSON());
         }

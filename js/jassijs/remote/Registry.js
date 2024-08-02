@@ -150,21 +150,37 @@ class Registry {
      * Important: this function should only used from an annotation
      **/
     registerMember(service, oclass /*new (...args: any[]) => any*/, membername, ...params) {
+        var _a, _b;
         var m = oclass;
         if (oclass.prototype !== undefined)
             m = oclass.prototype;
-        //the classname is not already known so we temporarly store the data in oclass.$$tempRegisterdMembers$$
-        //and register the member in register("$Class",....)
-        if (m.$$tempRegisterdMembers$$ === undefined) {
-            m.$$tempRegisterdMembers$$ = {};
+        var clname = (_b = (_a = oclass.prototype) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b._classname;
+        if (clname) {
+            if (this.dataMembers[service] === undefined) {
+                this.dataMembers[service] = {};
+            }
+            if (this.dataMembers[service][clname] === undefined) {
+                this.dataMembers[service][clname] = {};
+            }
+            if (this.dataMembers[service][clname][membername] === undefined) {
+                this.dataMembers[service][clname][membername] = [];
+            }
+            this.dataMembers[service][clname][membername].push(params);
         }
-        if (m.$$tempRegisterdMembers$$[service] === undefined) {
-            m.$$tempRegisterdMembers$$[service] = {};
+        else {
+            //the classname is not already known so we temporarly store the data in oclass.$$tempRegisterdMembers$$
+            //and register the member in register("$Class",....)
+            if (m.$$tempRegisterdMembers$$ === undefined) {
+                m.$$tempRegisterdMembers$$ = {};
+            }
+            if (m.$$tempRegisterdMembers$$[service] === undefined) {
+                m.$$tempRegisterdMembers$$[service] = {};
+            }
+            if (m.$$tempRegisterdMembers$$[service][membername] === undefined) {
+                m.$$tempRegisterdMembers$$[service][membername] = [];
+            }
+            m.$$tempRegisterdMembers$$[service][membername].push(params);
         }
-        if (m.$$tempRegisterdMembers$$[service][membername] === undefined) {
-            m.$$tempRegisterdMembers$$[service][membername] = [];
-        }
-        m.$$tempRegisterdMembers$$[service][membername].push(params);
     }
     /**
     * with every call a new id is generated - used to create a free id for the dom
@@ -419,6 +435,8 @@ class Registry {
                 var name = files[x];
                 if (name.endsWith(".ts"))
                     name = name.substring(0, name.length - 3);
+                else if (name.endsWith(".tsx"))
+                    name = name.substring(0, name.length - 4);
                 dependency.push(name);
             }
             var req = require;

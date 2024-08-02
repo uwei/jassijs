@@ -61,10 +61,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
              if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
                   component.domWrapper.parentNode.removeChild(component.domWrapper);
              }*/
-            if (this["designDummyFor"])
-                this.designDummies.push(component);
-            else
-                this._components.push(component);
+            this._components.push(component);
             this.dom.appendChild(component.domWrapper);
         }
         /**
@@ -82,10 +79,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
                 component.domWrapper.parentNode.removeChild(component.domWrapper);
             }
-            if (component["designDummyFor"])
-                this.designDummies.push(component);
-            else
-                this._components.splice(index, 0, component);
+            this._components.splice(index, 0, component);
             this.dom.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
             //before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
         }

@@ -10,6 +10,7 @@ import { classes } from "jassijs/remote/Classes";
 import { Tabulator } from "tabulator-tables";
 import { DateTimeConverter, DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
 import { Numberformatter } from "jassijs/util/Numberformatter";
+import { BoundProperty } from "jassijs/ui/State";
 export interface LazyLoadOption {
     classname: string;
     loadFunc: string;
@@ -68,7 +69,7 @@ export interface TableProperties extends DataComponentProperties {
      */
     items?: any[];
     columns?: Tabulator.ColumnDefinition[];
-    bindItems?: any[];
+    bindItems?: any[]| BoundProperty;
 }
 @$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" })
 @$Class("jassijs.ui.Table")
@@ -79,7 +80,7 @@ export class Table<T extends TableProperties = TableProperties> extends DataComp
     _select: {
         value: any;
     };
-    ;
+    _bindItems:BoundProperty;
     private _lazyLoadOption: LazyLoadOption;
     private _lastLazySort = undefined;
     private _lastLazySearch = undefined;
@@ -434,8 +435,14 @@ export class Table<T extends TableProperties = TableProperties> extends DataComp
             }
         }
         this._items = value;
-        if (value !== undefined && updateData)
-            this.table.setData(value);
+        if (value !== undefined && updateData){
+           // try{
+           // this.table.setData(value);
+            var _this=this;
+           // }catch{
+                setTimeout(()=>{_this.table.setData(value);},100);
+            //}
+        }
         return value;
     }
     set items(value: any[]) {
@@ -583,11 +590,31 @@ export class Table<T extends TableProperties = TableProperties> extends DataComp
     get columns(): Tabulator.ColumnDefinition[] {
         return this.table.getColumnDefinitions();
     }
+    get bindItems() {
+        return this._bindItems;
+    }
     @$Property({ type: "databinder" })
-    set bindItems(databinder: any[]) {
+    set bindItems(databinder: any[]| BoundProperty) {
+        if(!Array.isArray(databinder)){
+            this.bindItems2=databinder;
+            return;
+        }
         this._databinderItems = databinder[0];
         var _this = this;
         this._databinderItems.add(databinder[1], this, undefined, (tab) => {
+            return tab.items;
+        }, (tab, val) => {
+            tab.items = val;
+        });
+        //databinderItems.add(property, this, "onchange");
+        //databinder.checkAutocommit(this);
+    }
+     @$Property({ type: "databinder" })
+    set bindItems2(bound: BoundProperty) {
+        this._bindItems=bound;
+        this._databinderItems = <any>bound._databinder;
+        var _this = this;
+        this._databinderItems.add(bound._propertyname, this, undefined, (tab) => {
             return tab.items;
         }, (tab, val) => {
             tab.items = val;

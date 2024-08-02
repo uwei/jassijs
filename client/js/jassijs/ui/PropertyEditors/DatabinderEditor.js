@@ -7,13 +7,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Textbox"], function (require, exports, Editor_1, Databinder_1, Registry_1, Textbox_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Textbox", "jassijs/ui/Component"], function (require, exports, Editor_1, Registry_1, Textbox_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabinderEditor = void 0;
     let DatabinderEditor = class DatabinderEditor extends Editor_1.Editor {
+        /**
+         * Checkbox Editor for boolean values
+         * used by PropertyEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
+         */
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
+            this.foundBounds = {};
+            this.foundFunctionComponents = {};
             /** @member - the renedering component **/
             this.component = new Textbox_1.Textbox(); //Select();
             this.component.width = "100%";
@@ -21,6 +28,34 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/D
             this.component.onchange(function (param) {
                 _this._onchange(param);
             });
+        }
+        collectStates(comp, found) {
+            var keys = [...comp.dom._this.states._used];
+            for (var k in comp.dom._this.props) {
+                keys.push(k);
+            }
+            for (var x = 0; x < keys.length; x++) {
+                var prop = keys[x];
+                var ob = comp.dom._this.states[prop].current;
+                if (found.indexOf(prop) === -1) {
+                    found.push(prop);
+                    this.foundBounds[prop] = comp.dom._this.states[prop].bind;
+                    if (comp.dom._this instanceof Component_1.FunctionComponent)
+                        this.foundFunctionComponents[prop] = true;
+                }
+                if (ob) {
+                    for (var key in ob) {
+                        if (found.indexOf(prop + "." + key) === -1) {
+                            found.push(prop + "." + key);
+                            if (comp.dom._this instanceof Component_1.FunctionComponent)
+                                this.foundFunctionComponents[prop + "." + key] = true;
+                            this.foundBounds[prop + "." + key] = comp.dom._this.states[prop].bind[key];
+                        }
+                    }
+                }
+            }
+            if (comp._parent)
+                this.collectStates(comp._parent, found);
         }
         /**
          * @member {object} ob - the object which is edited
@@ -30,25 +65,22 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/D
             //databinder,"prop"
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (value !== undefined) {
-                try {
-                    if (value.startsWith("["))
-                        value = value.substring(1);
-                    if (value.endsWith("]"))
-                        value = value.substring(0, value.length - 1);
-                    var sp = value.replaceAll('"', "").split(",");
-                    value = sp[1] + "-" + sp[0];
-                    this.component.value = value;
-                }
-                catch ( //PropertyEditor without codeeditor
-                _a) { //PropertyEditor without codeeditor
-                    this.component.value = "";
-                }
+                if (value.startsWith("this."))
+                    value = value.substring(5);
+                if (value.startsWith("states."))
+                    value = value.substring(7);
+                value = value.replace(".bind.", ".");
+                this.component.value = value;
             }
             else {
                 this.component.value = "";
             }
+            var comps = [];
+            this.foundBounds = {};
+            this.foundFunctionComponents = {};
+            this.collectStates(this._ob._parent, comps);
             //TODO call this on focus
-            var binders = this.propertyEditor.getVariablesForType(Databinder_1.Databinder);
+            /*var binders = this.propertyEditor.getVariablesForType(Databinder);
             if (binders !== undefined) {
                 var comps = [];
                 for (var x = 0; x < binders.length; x++) {
@@ -56,15 +88,14 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/D
                     if (binder === undefined)
                         continue;
                     let ob = binder.value;
-                    if (ob !== undefined && !Array.isArray(ob)) {
+                    if (ob !== undefined&&!Array.isArray(ob)) {
                         for (var m in ob) {
                             comps.push(m + "-" + binders[x]);
                         }
                     }
                     comps.push("this-" + binders[x]);
-                }
-                this.component.autocompleter = comps;
-            }
+                }*/
+            this.component.autocompleter = comps;
         }
         get ob() {
             return this._ob;
@@ -82,12 +113,15 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/D
         */
         _onchange(param) {
             var val = this.component.value;
-            var sp = val.split("-");
-            val = "[" + sp[1] + ',"' + sp[0] + '"]';
-            this.propertyEditor.setPropertyInCode(this.property.name, val);
-            var func = this.propertyEditor.value[this.property.name];
-            var binder = this.propertyEditor.getObjectFromVariable(sp[1]);
-            this.propertyEditor.value[this.property.name] = [binder, sp[0]];
+            var sp = "this.states." + val.split(".")[0] + ".bind."; //funcioncomponents doesnt have this
+            if (this.foundFunctionComponents[val])
+                sp = "states." + val.split(".")[0] + ".bind.";
+            if (val.split(".").length > 1)
+                sp = sp + val.substring(val.indexOf(".") + 1);
+            this.propertyEditor.setPropertyInCode(this.property.name, sp);
+            //var func = this.propertyEditor.value[this.property.name];
+            //var binder = this.propertyEditor.getObjectFromVariable(sp[1]);
+            this.propertyEditor.value[this.property.name] = this.foundBounds[val];
             //setPropertyInDesign(this.property.name,val);
             super.callEvent("edit", param);
         }

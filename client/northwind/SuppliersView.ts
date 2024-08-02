@@ -1,3 +1,4 @@
+import { HTMLComponent } from "jassijs/ui/Component";
 import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 import { Textbox } from "jassijs/ui/Textbox";
 import { $Class } from "jassijs/remote/Registry";
@@ -5,139 +6,47 @@ import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { Suppliers } from "northwind/remote/Suppliers";
 import { Databinder } from "jassijs/ui/Databinder";
-import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
+import { DBObjectView,$DBObjectView,DBObjectViewMe, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
-type Me = {
-    id?: Textbox;
-    homepage?: Textbox;
-    fax?: Textbox;
-    phone?: Textbox;
-    Country?: Textbox;
-    region?: Textbox;
-    city?: Textbox;
-    postalCode?: Textbox;
-    address?: Textbox;
-    contactTitle?: Textbox;
-    contactName?: Textbox;
-    companyName?: Textbox;
-} & DBObjectViewMe;
-@$DBObjectView({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" })
+import { jc } from "jassijs/ui/Component";
+
+@$DBObjectView({ classname: "northwind.Suppliers",actionname: "Northwind/Suppliers",icon: "mdi mdi-office-building-outline" })
 @$Class("northwind.SuppliersView")
-export class SuppliersView extends DBObjectView {
-    declare me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    declare value: Suppliers;
-    constructor() {
-        super();
-        //this.me = {}; this is called in objectdialog
-        this.layout(this.me);
-    }
+export class SuppliersView extends DBObjectView<Suppliers> {
     get title() {
-        return this.value === undefined ? "SuppliersView" : "SuppliersView " + this.value.id;
+        return this.value===undefined? "SuppliersView":"SuppliersView "+this.value.id;
     }
-    layout(me: Me) {
-        me.id = new Textbox();
-        me.homepage = new Textbox();
-        me.fax = new Textbox();
-        me.phone = new Textbox();
-        me.Country = new Textbox();
-        me.region = new Textbox();
-        me.city = new Textbox();
-        me.postalCode = new Textbox();
-        me.address = new Textbox();
-        me.contactTitle = new Textbox();
-        me.contactName = new Textbox();
-        me.companyName = new Textbox();
-        this.me.main.config({ isAbsolute: true, width: "800", height: "800", children: [
-                me.id.config({
-                    x: 10,
-                    y: 5,
-                    converter: new NumberConverter(),
-                    width: 50,
-                    bind: [me.databinder, "id"],
-                    label: "Id"
-                }),
-                me.companyName.config({
-                    x: 75,
-                    y: 5,
-                    label: "Company Name",
-                    bind: [me.databinder, "CompanyName"],
-                    width: 290
-                }),
-                me.contactName.config({
-                    x: 10,
-                    y: 50,
-                    bind: [me.databinder, "ContactName"],
-                    label: "Contact Name"
-                }),
-                me.contactTitle.config({
-                    x: 180,
-                    y: 50,
-                    bind: [me.databinder, "ContactTitle"],
-                    label: "Contact Title",
-                    width: 185
-                }),
-                me.address.config({
-                    x: 10,
-                    y: 95,
-                    bind: [me.databinder, "Address"],
-                    label: "Address",
-                    width: 355
-                }),
-                me.postalCode.config({
-                    x: 10,
-                    y: 140,
-                    bind: [me.databinder, "PostalCode"],
-                    width: 95,
-                    label: "Postal Code"
-                }),
-                me.city.config({
-                    x: 120,
-                    y: 140,
-                    bind: [me.databinder, "City"],
-                    label: "City",
-                    width: 245
-                }),
-                me.region.config({
-                    x: 10,
-                    y: 185,
-                    bind: [me.databinder, "Region"],
-                    label: "Region",
-                    width: 155
-                }),
-                me.Country.config({
-                    x: 180,
-                    y: 185,
-                    bind: [me.databinder, "Country"],
-                    label: "Country",
-                    width: 185
-                }),
-                me.phone.config({
-                    x: 10,
-                    y: 230,
-                    bind: [me.databinder, "Phone"],
-                    label: "Phone",
-                    width: 155
-                }),
-                me.fax.config({
-                    x: 180,
-                    y: 230,
-                    bind: [me.databinder, "Fax"],
-                    label: "Fax",
-                    width: 185
-                }),
-                me.homepage.config({
-                    x: 10,
-                    y: 275,
-                    bind: [me.databinder, "HomePage"],
-                    label: "Home Page",
-                    width: 355
-                })
-            ] });
+    render() {
+        return jc(Panel,{
+            children: [
+                jc(DBObjectViewToolbar,{ view: this }),
+                jc(Textbox,{ bind: this.states.value.bind.id,converter: new NumberConverter(),label: "Id" }),
+                jc(Textbox,{ bind: this.states.value.bind.CompanyName,label: "Company Name" }),
+                jc("br",{}),
+                jc(Textbox,{ bind: this.states.value.bind.ContactName,label: "Contact Name" }),
+                jc(Textbox,{ label: "Contact Title",bind: this.states.value.bind.ContactTitle }),
+                jc("br",{}),
+                jc(Textbox,{ bind: this.states.value.bind.Address,label: "Address",width: 330 }),
+                jc("br",{}),
+                jc(Textbox,{ bind: this.states.value.bind.PostalCode,label: "Postal Code" }),
+                jc(Textbox,{ bind: this.states.value.bind.City,label: "City" }),
+                jc("br",{}),
+                jc(Textbox,{ bind: this.states.value.bind.Region,label: "Region" }),
+                jc(Textbox,{ bind: this.states.value.bind.Country,label: "Country" }),
+                jc("br",{}),
+                jc(Textbox,{ label: "Phone",bind: this.states.value.bind.Phone }),
+                jc(Textbox,{ label: "Fax",bind: this.states.value.bind.Fax }),
+                jc("br",{}),
+                jc(Textbox,{ label: "Homepage",bind: this.states.value.bind.HomePage,width: 330 })
+            ]
+        });
     }
+   
 }
 export async function test() {
-    var ret = new SuppliersView;
-    ret["value"] = <Suppliers>await Suppliers.findOne();
-    return ret;
+    var sup=<Suppliers>await Suppliers.findOne();
+        var ret = new SuppliersView({
+            value: sup
+    });
+        return ret;
 }

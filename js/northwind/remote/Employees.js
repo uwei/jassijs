@@ -23,9 +23,13 @@ let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
     }
     static async find(options = undefined, context = undefined) {
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-            if (options === undefined)
+            if ((options === null || options === void 0 ? void 0 : options.relations) === undefined) {
+                if (options === undefined)
+                    options = {};
                 options = { relations: ["ReportsTo"] };
-            return await this.call(this.find, options, context);
+            }
+            var ret = await this.call(this.find, options, context);
+            return ret;
         }
         else {
             //@ts-ignore

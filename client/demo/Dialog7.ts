@@ -1,3 +1,5 @@
+import { MenuItem } from "jassijs/ui/MenuItem";
+import { Menu } from "jassijs/ui/Menu";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { $UIComponent,Component,ComponentProperties,HTMLComponent,createComponent } from "jassijs/ui/Component";
 import { TextComponent } from "jassijs/ui/Component";
@@ -7,7 +9,6 @@ import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { jc } from "jassijs/ui/Component";
 import { Button } from "jassijs/ui/Button";
-import { createRefs } from "jassijs/ui/State";
 import { Table } from "jassijs/ui/Table";
 import { $Property } from "jassijs/ui/Property";
 type Me={
@@ -38,20 +39,17 @@ class M1 extends Component<M1Props> {
         super(props);
     }
     render() {
-        return jc(M2,{ text: this.states.text.self });
+        return jc(M2,{ text: this.states.text });
     }
 }
 @$Class("demo/Dialog7")
 export class Dialog7 extends Panel {
-    me: Me;
     constructor() {
         super();
         //  this.me = {};
         // this.layout(this.me);
     }
     render() {
-        this.me={};
-        var refs=createRefs(this.me);
         //var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
         //
         return jc(Panel,{
@@ -77,10 +75,14 @@ export class Dialog7 extends Panel {
                             },
                             tooltip: "dfgdfg",
                             onfocus: function(event) {
-                            }
+                            },
+                            hidden: false
                         })
                     ],
                     label: "fg"
+                }),
+                jc(Menu,{
+                    children: [jc(MenuItem,{})]
                 })
             ]
         });
@@ -92,4 +94,3 @@ export async function test() {
     var ret=createComponent(k);
     return ret;
 }
-

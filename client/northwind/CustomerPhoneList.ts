@@ -6,6 +6,7 @@ import windows from "jassijs/base/Windows";
 import { Customer } from "northwind/remote/Customer";
 import { Button } from "jassijs/ui/Button";
 import { Tabulator } from "tabulator-tables";
+import { jc, Component, ComponentProperties } from "jassijs/ui/Component";
 
 type Me = {
     table?: Table;
@@ -14,41 +15,34 @@ type Me = {
 
 @$ActionProvider("jassijs.base.ActionNode")
 @$Class("northwind/CustomerPhoneList")
-export class CustomerPhoneList extends Panel {
-    me: Me;
-    constructor() {
-        super();
-        this.me = {};
-        this.layout(this.me);
-    }
-    layout(me: Me) {
-        var _this = this;
-        me.table = new Table();
-        this.config({
-            children: [
-                me.table.config({
-                    width: "100%",
-                    height: "100%",
-                    showSearchbox: true,
-                    options: {
-                        autoColumns: false,
-                        columns: [
-                            { title: "Company Name:", field: "CompanyName" },
-                            { title: "Contact:", field: "ContactName" },
-                            { title: "Phone:", field: "Phone" },
-                            { title: "Fax:", field: "Fax" }
-                        ]
-                    }
-                })
-            ]
-        });
-        this.width = "100%";
-        this.height = "100%";
+export class CustomerPhoneList extends Component<ComponentProperties> {
+    declare refs: Me;
+    constructor(props = {}) {
+        super(props);
         this.setData();
     }
+    render() {
+        return jc(Table, {
+            ref:this.refs.table,
+            width: "600px",
+            height: "500px",
+            showSearchbox: true,
+            options: {
+                autoColumns: false,
+                columns: [
+                    { title: "Company Name:", field: "CompanyName" },
+                    { title: "Contact:", field: "ContactName" },
+                    { title: "Phone:", field: "Phone" },
+                    { title: "Fax:", field: "Fax" }
+                ]
+            }
+
+        });
+    }
+
     async setData() {
         var all = await Customer.find();
-        this.me.table.items = all;
+        this.refs.table.items = all;
         //  new Customer().Fax
     }
     @$Action({ name: "Northwind/Customer Phone List", icon: "mdi-script-text-play-outline" })
@@ -58,6 +52,6 @@ export class CustomerPhoneList extends Panel {
 }
 export async function test() {
     var ret = new CustomerPhoneList();
-//    alert(ret.me.table.height);
+    //    alert(ret.me.table.height);
     return ret;
 }

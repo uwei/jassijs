@@ -61,14 +61,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 this.dom.value = this.converter.objectToString(this._value);
             }
         }
-        updateValue() {
-            if (this.converter) {
-                this.value = this.converter.stringToObject(this.dom.value);
-            }
-            else {
-                this.value = this.dom.value;
-            }
-        }
         blurcalled(evt) {
             this._isFocused = false;
             this.updateValue();
@@ -81,12 +73,25 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             var v = value;
             if (this.converter)
                 v = this.converter.objectToFormatedString(v);
-            this.dom.value = v === undefined ? "" : v;
+            if (this.dom)
+                this.dom.value = v === undefined ? "" : v;
         }
         get value() {
-            if (this._isFocused)
-                this.updateValue();
+            //  if (this._isFocused)
+            this.updateValue();
+            // else if (this.converter) {
+            //   return  this.converter.stringToObject(this.dom.value);
+            //} 
             return this._value;
+        }
+        updateValue() {
+            var _a;
+            if (this.converter) {
+                this.value = this.converter.stringToObject(this.dom.value);
+            }
+            else {
+                this.value = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.value;
+            }
         }
         onclick(handler) {
             return this.on("click", handler);

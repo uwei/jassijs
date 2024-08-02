@@ -33,7 +33,7 @@ export class RTextGroup extends RComponent {
     addBefore(component, before) {
         if (component.addToParent)
             return component.addToParent(this);
-        if (component.reporttype !== "text" && component.reporttype !== "textgroup" && !component.designDummyFor)
+        if (component.reporttype !== "text" && component.reporttype !== "textgroup")
             throw new JassiError("only text oder textgroup could be added to TextGroup");
         super.addBefore(component, before);
         component.domWrapper.style["display"]="inline-block";
@@ -45,7 +45,7 @@ export class RTextGroup extends RComponent {
     add(component) {
         if (component.addToParent)
             return component.addToParent(this);
-        if (component.reporttype !== "text" && component.reporttype !== "textgroup" && !component.designDummyFor)
+        if (component.reporttype !== "text" && component.reporttype !== "textgroup" )
             throw new JassiError("only text oder textgroup could be added to TextGroup");
         super.add(component);
         component.domWrapper.style.display="inline-block";
@@ -54,8 +54,7 @@ export class RTextGroup extends RComponent {
         var ret = super.toJSON();
         ret.text = [];
         for (let x = 0; x < this._components.length; x++) {
-            if (this._components[x]["designDummyFor"])
-                continue;
+           
             //@ts-ignore
             ret.text.push(this._components[x].toJSON());
         }

@@ -10,10 +10,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel"], funct
         //<Panel {{calculateState}}>
         // <Panel {...{calculateState}}>
         return Component_1.React.createElement(Panel_1.Panel, null,
-            Component_1.React.createElement("input", { value: states.mytext.self }),
-            Component_1.React.createElement("input", { value: states.mytext.self }),
+            Component_1.React.createElement("input", { value: states.mytext }),
+            Component_1.React.createElement("input", { value: states.mytext }),
             Component_1.React.createElement("span", null, "Hallo"),
-            Component_1.React.createElement("button", { style: { color: states.mycolor.self }, onClick: () => {
+            Component_1.React.createElement("button", { style: { color: states.mycolor }, onClick: () => {
                     //  alert(8);
                     states.mycolor.current = "blue";
                     states.mytext.current = "oo";

@@ -83,9 +83,13 @@ export class Employees extends DBObject {
     HireDate: Date;
     static async find(options = undefined,context:Context=undefined): Promise<Employees[]> {
         if (!context?.isServer) {
-            if(options===undefined)
+            if(options?.relations===undefined){
+                if(options===undefined)
+                    options={};
                 options={relations:["ReportsTo"]}
-            return await this.call(this.find, options,context);
+            }
+            var ret=await this.call(this.find, options,context);
+            return ret;
         }
         else {
             //@ts-ignore

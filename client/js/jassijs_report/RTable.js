@@ -184,17 +184,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             removeColumn.items._setDesignMode = (nothing) => { };
             removeColumn.text = "delete column";
             removeColumn.onclick((evt) => {
-                var _a;
                 var info = _this.getInfoFromEvent(evt);
                 if (_this.widths && _this.widths.length > 0)
                     _this.widths.slice(info.column, 0);
                 for (var x = 0; x < _this._components.length; x++) {
                     var tr = _this._components[x];
-                    //@ts-ignore
-                    if (((_a = tr._components[info.column]) === null || _a === void 0 ? void 0 : _a.designDummyFor) === undefined) {
-                        if (tr._components.length > 1)
-                            tr.remove(tr._components[info.column], true);
-                    }
+                    if (tr._components.length > 1)
+                        tr.remove(tr._components[info.column], true);
                 }
                 _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
             });
@@ -671,9 +667,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;
                 var len = this._components[0]._components.length;
-                //@ts-ignore
-                if (this._components[0]._components[len - 1].designDummyFor !== undefined)
-                    len--;
                 for (var t = r.widths.length; t < len; t++) {
                     r.widths.push("auto");
                 }

@@ -9,105 +9,90 @@ import { Customer } from "northwind/remote/Customer";
 import { Orders } from "northwind/remote/Orders";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import windows from "jassijs/base/Windows";
-type Me = {
-    IDChooseCustomer?: ObjectChooser;
-    databinderCustomer?: Databinder;
-    htmlpanel?: HTMLPanel;
-    boxpanel?: BoxPanel;
-    boxpanel2?: BoxPanel;
-    htmlpanel2?: HTMLPanel;
-    IDOrders?: Table;
-    databinderOrder?: Databinder;
-    table?: Table;
-};
+import { jc } from "jassijs/ui/Component";
+import { DBObjectView, DBObjectViewProperties, DBObjectViewToolbar, ObjectViewToolbar } from "jassijs/ui/DBObjectView";
+
+export interface CustomerOrdersProperties extends DBObjectViewProperties<Customer> {
+    orders?: Orders[];
+    order?: Orders;
+}
 @$ActionProvider("jassijs.base.ActionNode")
 @$Class("northwind/CustomerOrders")
-export class CustomerOrders extends Panel {
-    me: Me;
-    constructor() {
-        super();
-        this.me = {};
-        this.layout(this.me);
+export class CustomerOrders extends DBObjectView<Customer, CustomerOrdersProperties> {
+    constructor(props: CustomerOrdersProperties = {}) {
+        super(props);
+        if(!props?.order)
+            this.initData();
     }
-    layout(me: Me) {
+    render() {
         var _this = this;
-        me.IDChooseCustomer = new ObjectChooser();
-        me.databinderCustomer = new Databinder();
-        me.htmlpanel = new HTMLPanel();
-        me.boxpanel = new BoxPanel();
-        me.boxpanel2 = new BoxPanel();
-        me.htmlpanel2 = new HTMLPanel();
-        me.IDOrders = new Table();
-        me.databinderOrder = new Databinder();
-        me.table = new Table();
-        this.config({ children: [
-                me.databinderCustomer.config({}),
-                me.boxpanel.config({ children: [
-                        me.boxpanel2.config({
-                            children: [
-                                me.htmlpanel.config({
-                                    width: 185,
-                                    value: "Berglunds snabbköp",
-                                    bind: [me.databinderCustomer, "CompanyName"],
-                                    label: "Company Name",
-                                    height: 20
-                                }),
-                                me.IDChooseCustomer.config({
-                                    width: 25,
-                                    bind: [me.databinderCustomer, "this"],
-                                    items: "northwind.Customer",
-                                    onchange: function (event) {
-                                        _this.customerChanged();
-                                    }
-                                }),
-                                me.htmlpanel2.config({
-                                    width: 110,
-                                    value: " ",
-                                    bind: [me.databinderCustomer, "Country"],
-                                    label: "Country"
-                                })
-                            ],
-                            horizontal: true
-                        }),
-                        me.IDOrders.config({
-                            width: "100%",
-                            label: "Click an order...",
-                            height: "180"
-                        }),
-                        me.table.config({
-                            width: "100%",
-                            bindItems: [me.databinderOrder, "Details"],
-                            height: "140",
-                            label: "...to see order details"
-                        })
-                    ] }),
-                me.databinderOrder.config({})
-            ] });
-        me.IDOrders.selectComponent = me.databinderOrder;
-        this.setData();
-        this.width = "100%";
-        this.height = "100%";
+        return jc(Panel, {
+            children: [
+               jc(DBObjectViewToolbar,{ view: this }),
+                 jc(HTMLPanel, {
+                    width: 300,
+                    value: "Blauer See Delikatessen",
+                    bind: this.states.value.bind.CompanyName,
+                    label: "Company Name",
+                    height: 20
+                }),
+                jc(ObjectChooser, {
+                    width: 25,
+                    bind: this.states.value.bind,
+                    items: "northwind.Customer",
+                    onchange: function (event) {
+                        _this.customerChanged();
+                    }
+                }),
+                jc(HTMLPanel, {
+                    width: 110,
+                    value: " ",
+                    bind: this.states.value.bind.Country,
+                    label: "Country"
+                }),
+                jc(Table, {
+                    bind: this.states.order.bind,
+                    bindItems: this.states.orders.bind,
+                    width: "100%",
+                    label: "Click an order...",
+                    height: "180"
+                }),
+                jc(Table, {
+                    bindItems: this.states.order.bind.Details,
+                    width: "100%",
+                    height: "140",
+                    label: "...to see order details"
+                })
+
+            ]
+        });
     }
-    @$Action({name:"Northwind/Customer Orders",icon:"mdi-script-text-play-outline"})
-    static showDialog(){
-        windows.add(new CustomerOrders(),"Customer Orders");
+   
+    @$Action({ name: "Northwind/Customer Orders", icon: "mdi-script-text-play-outline" })
+    static showDialog() {
+        windows.add(new CustomerOrders(), "Customer Orders");
     }
     async customerChanged() {
-        var cust: Customer = this.me.databinderCustomer.value;
-        var orders = await Orders.find({ where: "Customer.id=:param",
-            whereParams: { param: cust.id } });
-        this.me.IDOrders.items = orders;
-        this.me.databinderOrder.value=orders[0];
+        var cust: Customer = this.states.value.current;
+        this.states.orders.current = <Orders[]>await Orders.find({
+            where: "Customer.id=:param",
+            whereParams: { param: cust.id }
+        });
+        this.states.order.current=this.states.orders.current.length===0?undefined:this.states.orders.current[0];
+        //    this.me.IDOrders.items = orders;
+        //   this.me.databinderOrder.value = orders[0];
     }
-    async setData() {
-        var all = await Customer.find();
-        this.me.databinderCustomer.value = all[0];
+    set value(value: Customer) {
+        super.value = value;
         this.customerChanged();
-        //        this.me.IDChooseCustomer.items = all;
-        //      this.me.databinderCustomer.value = all[0];
     }
+    async initData(){
+        this.value = <Customer>await Customer.findOne();
+    }
+
 }
 export async function test() {
     var ret = new CustomerOrders();
+    
     return ret;
 }

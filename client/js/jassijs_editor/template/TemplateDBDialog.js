@@ -35,39 +35,35 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateDBDialog = exports.TemplateDBDialogProperties = void 0;
     Registry_1 = __importStar(Registry_1);
-    const code = `import { $Class } from "jassijs/remote/Registry";
-import {Panel} from "jassijs/ui/Panel";
-import { $Property } from "jassijs/ui/Property";
+    const code = `
+import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
+import { Textbox } from "jassijs/ui/Textbox";
+import { $Class } from "jassijs/remote/Registry";
+import { Panel } from "jassijs/ui/Panel";
 import { {{dbclassname}} } from "{{dbfilename}}";
-import { Databinder } from "jassijs/ui/Databinder";
-import { DBObjectView,  $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
+import { DBObjectView, $DBObjectView, ObjectViewToolbar } from "jassijs/ui/DBObjectView";
+import { jc } from "jassijs/ui/Component";
 
-type Me = {
-}&DBObjectViewMe
+
 
 @$DBObjectView({classname:"{{fulldbclassname}}"})
 @$Class("{{fullclassname}}")
-export class {{dialogname}} extends DBObjectView {
-    declare me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" })
-    declare value: {{dbclassname}};
-    constructor() {
-        super();
-        //this.me = {}; this is called in objectdialog
-        this.layout(this.me);
-    }
+export class {{dialogname}} extends DBObjectView<{{dbclassname}}> {
     get title() {
         return this.value === undefined ? "{{dialogname}}" : "{{dialogname}} " + this.value.id;
     }
-    layout(me: Me) {
+    render() {
+        return jc(Panel, {
+            children: [
+                jc(ObjectViewToolbar, { view: this })
+            ]
+        })
     }
 }
 
 export async function test(){
 	var ret=new {{dialogname}}();
-	
-	ret["value"]=<{{dbclassname}}>await {{dbclassname}}.findOne();
+	ret.value=<{{dbclassname}}>await {{dbclassname}}.findOne();
 	return ret;
 }`;
     let TemplateDBDialogProperties = class TemplateDBDialogProperties {

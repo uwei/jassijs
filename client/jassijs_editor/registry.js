@@ -15,7 +15,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1721405024120.9358,
+		"date": 1721763750903.6765,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {}
@@ -33,15 +33,15 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1721408943099.5364,
+		"date": 1722610308085.8442,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
-		"date": 1721395259975.0068,
+		"date": 1721763138779.0403,
 		"jassijs_editor.ComponentExplorer": {}
 	},
 	"jassijs_editor/ComponentPalette.ts": {
-		"date": 1699116219018.671,
+		"date": 1721754620068.305,
 		"jassijs_editor.ComponentPalette": {}
 	},
 	"jassijs_editor/ComponentSpy.ts": {
@@ -112,6 +112,12 @@ define("jassijs_editor/registry",["require"], function(require) {
 	},
 	"jassijs_editor/ext/monaco.ts": {
 		"date": 1720105252684.6934
+	},
+	"jassijs_editor/ext/monaco2.ts": {
+		"date": 1720090850426.468
+	},
+	"jassijs_editor/ext/typescriptservices.ts": {
+		"date": 1720556246507.595
 	},
 	"jassijs_editor/FileExplorer.ts": {
 		"date": 1683575950000,
@@ -217,7 +223,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/HtmlDesigner.ts": {
-		"date": 1721232759468.0234,
+		"date": 1722603189586.473,
 		"jassijs_editor.HtmlDesigner": {}
 	},
 	"jassijs_editor/modul.ts": {
@@ -249,7 +255,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"date": 1720115090825.8567
 	},
 	"jassijs_editor/template/TemplateDBDialog.ts": {
-		"date": 1681570392000,
+		"date": 1721659030283.6165,
 		"jassijs_editor.template.TemplateDBDialogProperties": {
 			"@members": {}
 		},
@@ -335,11 +341,11 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1721408465200.1873,
+		"date": 1722105568121.3489,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
-		"date": 1697234630938.0537,
+		"date": 1721761536007.891,
 		"jassijs_editor.util.Resizer": {}
 	},
 	"jassijs_editor/util/Tests.ts": {
@@ -366,12 +372,6 @@ define("jassijs_editor/registry",["require"], function(require) {
 	"jassijs_editor/util/Typescript.ts": {
 		"date": 1720115012657.7117,
 		"jassijs_editor.util.Typescript": {}
-	},
-	"jassijs_editor/ext/monaco2.ts": {
-		"date": 1720090850426.468
-	},
-	"jassijs_editor/ext/typescriptservices.ts": {
-		"date": 1720556246507.595
 	}
 }
  }

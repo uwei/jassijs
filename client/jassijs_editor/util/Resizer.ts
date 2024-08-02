@@ -318,7 +318,7 @@ export class Resizer {
      */
     install(parentPanel:Component, elements:string) {
         var _this = this;
-        if (!parentPanel.dom.classList.contains("designerNoResizable")) {
+        /*if (!parentPanel.dom.classList.contains("designerNoResizable")) {
             $(parentPanel.domWrapper).resizable({
                 resize: function (evt: any) {
                     var h = evt.target.offsetHeight;
@@ -333,7 +333,7 @@ export class Resizer {
                     }
                 }
             });
-        }
+        }*/
         if (parentPanel !== undefined)
             this.parentPanel = parentPanel;
         if (elements !== undefined)

@@ -2,7 +2,7 @@
 import { config } from "jassijs/remote/Config";
 import "reflect-metadata";
 
- 
+
 export function $Class(longclassname: string): Function {
     return function (pclass) {
         registry.register("$Class", pclass, longclassname);
@@ -180,19 +180,34 @@ export class Registry {
         var m = oclass;
         if (oclass.prototype !== undefined)
             m = oclass.prototype;
-        //the classname is not already known so we temporarly store the data in oclass.$$tempRegisterdMembers$$
-        //and register the member in register("$Class",....)
-        if (m.$$tempRegisterdMembers$$ === undefined) {
-            m.$$tempRegisterdMembers$$ = {};
-        }
-        if (m.$$tempRegisterdMembers$$[service] === undefined) {
-            m.$$tempRegisterdMembers$$[service] = {};
-        }
+        var clname = oclass.prototype?.constructor?._classname;
+        if (clname) {
 
-        if (m.$$tempRegisterdMembers$$[service][membername] === undefined) {
-            m.$$tempRegisterdMembers$$[service][membername] = [];
+            if (this.dataMembers[service] === undefined) {
+                this.dataMembers[service] = {};
+            }
+            if (this.dataMembers[service][clname] === undefined) {
+                this.dataMembers[service][clname] = {};
+            }
+            if (this.dataMembers[service][clname][membername] === undefined) {
+                this.dataMembers[service][clname][membername] = [];
+            }
+            this.dataMembers[service][clname][membername].push(params);
+        } else {
+            //the classname is not already known so we temporarly store the data in oclass.$$tempRegisterdMembers$$
+            //and register the member in register("$Class",....)
+            if (m.$$tempRegisterdMembers$$ === undefined) {
+                m.$$tempRegisterdMembers$$ = {};
+            }
+            if (m.$$tempRegisterdMembers$$[service] === undefined) {
+                m.$$tempRegisterdMembers$$[service] = {};
+            }
+
+            if (m.$$tempRegisterdMembers$$[service][membername] === undefined) {
+                m.$$tempRegisterdMembers$$[service][membername] = [];
+            }
+            m.$$tempRegisterdMembers$$[service][membername].push(params);
         }
-        m.$$tempRegisterdMembers$$[service][membername].push(params);
     }
     /**
     * with every call a new id is generated - used to create a free id for the dom
@@ -259,10 +274,10 @@ export class Registry {
         var modultext = "";
         //@ts-ignore
         if (window?.document === undefined) { //on server
-  
+
             //@ts-ignore 
             var fs = await import('fs');
-            var Filesystem=await import("jassijs/server/Filesystem");
+            var Filesystem = await import("jassijs/server/Filesystem");
             var modules = config.server.modules;
             for (let modul in modules) {
                 try {
@@ -290,19 +305,19 @@ export class Registry {
             }
 
         } else { //on client
-           // var config=(await import("./Config")).config;
-         //   this.isServer=config.isServer;
+            // var config=(await import("./Config")).config;
+            //   this.isServer=config.isServer;
             var all = {};
-            var modules=config.modules;
+            var modules = config.modules;
             var myrequire;
-            if(config.isServer){
-            //if(require.defined("jassijs/server/Installserver")){
-                myrequire=<any>config.serverrequire;
-                modules=config.server.modules;
-            }else{
-                myrequire=<any>config.clientrequire;
+            if (config.isServer) {
+                //if(require.defined("jassijs/server/Installserver")){
+                myrequire = <any>config.serverrequire;
+                modules = config.server.modules;
+            } else {
+                myrequire = <any>config.clientrequire;
             }
-            (<any>this).isServer=config.isServer;//is this needed?
+            (<any>this).isServer = config.isServer;//is this needed?
             for (let modul in modules) {
                 if (!modules[modul].endsWith(".js") && modules[modul].indexOf(".js?") === -1)
                     myrequire.undef(modul + "/registry");
@@ -361,17 +376,17 @@ export class Registry {
                 var theclass = vfiles[classname];
                 for (var service in theclass) {
                     if (service === "@members") {
-                         //public jsondataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
-                        var mems=theclass[service];
-                        for(let mem in mems){
-                            let scs=mems[mem];
-                            for(let sc in scs){
-                                if(!this.jsondataMembers[sc])
-                                    this.jsondataMembers[sc]={};
-                                if(!this.jsondataMembers[sc][classname])
-                                    this.jsondataMembers[sc][classname]={};
-                                if(this.jsondataMembers[sc][classname][mem]===undefined)
-                                this.jsondataMembers[sc][classname][mem]=[];
+                        //public jsondataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
+                        var mems = theclass[service];
+                        for (let mem in mems) {
+                            let scs = mems[mem];
+                            for (let sc in scs) {
+                                if (!this.jsondataMembers[sc])
+                                    this.jsondataMembers[sc] = {};
+                                if (!this.jsondataMembers[sc][classname])
+                                    this.jsondataMembers[sc][classname] = {};
+                                if (this.jsondataMembers[sc][classname][mem] === undefined)
+                                    this.jsondataMembers[sc][classname][mem] = [];
                                 this.jsondataMembers[sc][classname][mem].push(scs[sc]);
                             }
                         }
@@ -380,7 +395,7 @@ export class Registry {
                             this.jsondata[service] = {};
                         var entr = new JSONDataEntry();
                         entr.params = theclass[service];
-                       
+
                         entr.classname = classname;//vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
                         entr.filename = file;
                         this.jsondata[service][entr.classname] = entr;
@@ -395,13 +410,13 @@ export class Registry {
      * @param service - the service for which we want informations
      */
     async getJSONData(service: string, classname: string = undefined): Promise<JSONDataEntry[]> {
-       // if (this.isLoading)
-            await this.isLoading;
-       /* if (this.jsondata === undefined) {
-            this.isLoading = this.reload();
-            await this.isLoading;
-        }
-        this.isLoading = undefined;*/
+        // if (this.isLoading)
+        await this.isLoading;
+        /* if (this.jsondata === undefined) {
+             this.isLoading = this.reload();
+             await this.isLoading;
+         }
+         this.isLoading = undefined;*/
         var ret = [];
         var odata = this.jsondata[service];
         if (odata === undefined)
@@ -458,6 +473,8 @@ export class Registry {
                 var name = files[x];
                 if (name.endsWith(".ts"))
                     name = name.substring(0, name.length - 3);
+                else if (name.endsWith(".tsx"))
+                    name = name.substring(0, name.length - 4);
                 dependency.push(name);
             }
             var req: any = require;
@@ -471,7 +488,7 @@ export class Registry {
 var registry = new Registry();
 export default registry;
 export function migrateModul(oldModul, newModul) {
-    if(newModul.registry){
+    if (newModul.registry) {
         newModul.registry._nextID = oldModul.registry._nextID;
         newModul.registry.entries = oldModul.registry.entries;
     }

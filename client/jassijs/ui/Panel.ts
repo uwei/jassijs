@@ -2,8 +2,7 @@ import { $Class } from "jassijs/remote/Registry";
 import { Container, ContainerProperties } from "jassijs/ui/Container";
 import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
-import { Image } from "jassijs/ui/Image";
-import { DesignDummy } from "jassijs/ui/DesignDummy";
+
 
 export interface PanelProperties extends ContainerProperties {
     /**
@@ -21,7 +20,7 @@ export interface PanelProperties extends ContainerProperties {
 @$Class("jassijs.ui.Panel")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
 @$Property({ name: "new/useSpan", type: "boolean", default: false })
-export class Panel<T extends PanelProperties=PanelProperties > extends Container<T> implements PanelProperties {
+export class Panel<T extends PanelProperties=PanelProperties> extends Container<T> implements PanelProperties {
     _isAbsolute: boolean;
     private _activeComponentDesigner: any;
     /**
@@ -31,7 +30,7 @@ export class Panel<T extends PanelProperties=PanelProperties > extends Container
     * @param {boolean} [properties.useSpan] -  use span not div
     * 
     */
-    constructor(properties: PanelProperties = <any>{}) {//id connect to existing(not reqired)
+    constructor(properties: T = <any>{}) {//id connect to existing(not reqired)
         super(properties); 
         this._designMode = false;
         this.isAbsolute = properties?.isAbsolute === true;
@@ -95,49 +94,12 @@ export class Panel<T extends PanelProperties=PanelProperties > extends Container
      * @param {boolean} enable - true if activate designMode
      */
     protected _setDesignMode(enable) {
-        return;
-        this._designMode = enable;
-        if (enable) {//dummy in containers at the end
-            if (this.isAbsolute === false) {
-                DesignDummy.createIfNeeded(this, "atEnd", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
-
-            } else {
-                DesignDummy.destroyIfNeeded(this, "atEnd");
-                /* if (this._designDummy !== undefined) {
-                     this.remove(this._designDummy);
-                     this._designDummy = undefined;
-                 }*/
-            }
-        } else {
-            DesignDummy.destroyIfNeeded(this, "atEnd");
-        }
-        if (enable) {//dummy in containers at the end
-
-            if (this.isAbsolute === false&&this._components) {
-                for (var x = 0; x < this._components.length; x++) {
-                    var comp = this._components[x];
-                    if (comp instanceof Container && !comp.dom.classList.contains("jdisableaddcomponents")) {
-                        DesignDummy.createIfNeeded(comp, "beforeComponent", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
-                    }
-                }
-            }
-        } else {
-            if (this._components) {
-                for (var x = 0; x < this._components.length; x++) {
-                    var comp = this._components[x];
-                    DesignDummy.destroyIfNeeded(comp, "beforeComponent");
-
-                }
-            }
-        }
-
+      
 
     }
     destroy() {
         
         super.destroy();
-        if (this._designDummy)
-            this._designDummy.destroy();
         this._activeComponentDesigner = undefined;
     }
 }

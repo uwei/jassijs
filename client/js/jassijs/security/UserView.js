@@ -4,48 +4,31 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "jassijs/remote/security/User", "jassijs/ui/DBObjectView", "jassijs/ui/Notify", "jassijs/remote/security/Group"], function (require, exports, Select_1, Checkbox_1, NumberConverter_1, Textbox_1, Registry_1, Panel_1, Property_1, User_1, DBObjectView_1, Notify_1, Group_1) {
+define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/security/User", "jassijs/ui/DBObjectView", "jassijs/ui/Notify", "jassijs/remote/security/Group", "jassijs/ui/Component"], function (require, exports, Select_1, Checkbox_1, NumberConverter_1, Textbox_1, Registry_1, Panel_1, User_1, DBObjectView_1, Notify_1, Group_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.UserView = void 0;
     let UserView = class UserView extends DBObjectView_1.DBObjectView {
-        constructor() {
-            super();
-            //this.me = {}; this is called in objectdialog
-            this.layout(this.me);
-        }
         get title() {
             return this.value === undefined ? "User" : "User " + this.value.email;
         }
-        layout(me) {
-            me.IDID = new Textbox_1.Textbox();
-            me.IDEmail = new Textbox_1.Textbox();
-            me.checkbox = new Checkbox_1.Checkbox();
-            me.panel = new Panel_1.Panel();
-            me.IDGroups = new Select_1.Select({ multiple: true });
-            me.IDID.bind = [me.databinder, "id"];
-            me.IDID.width = 40;
-            me.IDID.converter = new NumberConverter_1.NumberConverter();
-            me.IDID.label = "ID";
-            me.IDEmail.bind = [me.databinder, "email"];
-            me.IDEmail.label = "E-Mail";
-            this.me.main.height = "100";
-            me.panel.add(me.IDID);
-            this.me.main.add(me.panel);
-            this.me.main.add(me.IDGroups);
-            me.panel.add(me.IDEmail);
-            me.panel.add(me.checkbox);
-            me.checkbox.bind = [this.me.databinder, "isAdmin"];
-            me.checkbox.width = 15;
-            me.checkbox.label = "IsAdmin";
-            me.IDGroups.width = "400";
-            me.IDGroups.display = "name";
-            me.IDGroups.bind = [this.me.databinder, "groups"];
+        render() {
             Group_1.Group.find().then((data) => {
-                me.IDGroups.items = data;
+                this.states.items.current = data;
+            });
+            return (0, Component_1.jc)(Panel_1.Panel, {
+                children: [
+                    (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { converter: new NumberConverter_1.NumberConverter(), bind: this.states.value.bind.id, label: "Id" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.email, label: "E-Mail" }),
+                    (0, Component_1.jc)(Checkbox_1.Checkbox, { bind: this.states.value.bind.isAdmin, label: "IsAdmin" }),
+                    (0, Component_1.jc)("br", {}),
+                    (0, Component_1.jc)(Select_1.Select, {
+                        bind: this.states.value.bind.groups, width: 200,
+                        multiple: true,
+                        items: this.states.items, label: "Groups", display: "name"
+                    })
+                ]
             });
         }
         createObject() {
@@ -55,19 +38,16 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/Checkbox", "jassi
             console.log("random password set: " + this.value.password);
         }
     };
-    __decorate([
-        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", User_1.User)
-    ], UserView.prototype, "value", void 0);
     UserView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "jassijs.security.User", actionname: "Administration/Security/Users", icon: "mdi mdi-account-key-outline", queryname: "findWithRelations" }),
-        (0, Registry_1.$Class)("jassijs/security/UserView"),
-        __metadata("design:paramtypes", [])
+        (0, Registry_1.$Class)("jassijs/security/UserView")
     ], UserView);
     exports.UserView = UserView;
     async function test() {
-        var ret = new UserView();
-        ret["value"] = (await User_1.User.findWithRelations())[0];
+        var u = (await User_1.User.findWithRelations())[0];
+        var ret = new UserView({
+            value: u
+        });
         return ret;
     }
     exports.test = test;

@@ -9,76 +9,54 @@ import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { Categories } from "northwind/remote/Categories";
 import { Databinder } from "jassijs/ui/Databinder";
-import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
+import { DBObjectView,$DBObjectView,DBObjectViewMe,DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
-type Me = {
-    boxpanel1?: BoxPanel;
-    Id?: Textbox;
-    name?: Textbox;
-    description?: Textarea;
-    panel1?: Panel;
-    table1?: Table;
-} & DBObjectViewMe;
-@$DBObjectView({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" })
+import { jc } from "jassijs/ui/Component";
+@$DBObjectView({ classname: "northwind.Categories",actionname: "Northwind/Categories",icon: "mdi mdi-cube" })
 @$Class("northwind.CategoriesView")
-export class CategoriesView extends DBObjectView {
-    declare me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    declare value: Categories;
-    constructor() {
-        super();
-        // this.me = {}; //this is called in objectdialog
-        this.layout(this.me);
-
-    }
+//@$Property({name:"value",componentType:"northwind.Categories", type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
+@$Property({ name: "aa",type: "string" })
+@$Property({ name: "ab",type: "string" })
+export class CategoriesView extends DBObjectView<Categories> {
     get title() {
-        return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
+        return this.value===undefined? "CategoriesView":"CategoriesView "+this.value.id;
     }
-    layout(me: Me) {
-        me.boxpanel1 = new BoxPanel();
-        me.Id = new Textbox();
-        me.name = new Textbox();
-        me.description = new Textarea();
-        me.panel1 = new Panel();
-        me.table1 = new Table({ options:{data:<any>this.value}});
-        this.me.main.config({ children: [
-                me.boxpanel1.config({
-                    children: [
-                        me.Id.config({
-                            label: "Id",
-                            bind: [me.databinder, "id"],
-                            width: 40,
-                            converter: new NumberConverter()
-                        }),
-                        me.name.config({
-                            bind: [me.databinder, "CategoryName"],
-                            label: "Name",
-                            width: 225
-                        })
-                    ],
-                    width: 80,
-                    horizontal: true
+    render() {
+        return jc(Panel,{
+            children: [
+                jc(DBObjectViewToolbar,{ view: this }),
+                jc(Textbox,{
+                    label: "Id",
+                    bind: this.states.value.bind.id,
+                    width: 40,
+                    converter: new NumberConverter()
                 }),
-                me.description.config({
-                    height: 70,
+                jc(Textbox,{
+                    label: "Name",
+                    bind: this.states.value.bind.CategoryName,
+                    width: 235,
+                    converter: new NumberConverter()
+                }),
+                jc("br"),
+                jc(Textarea,{
+                    label: "Description",
+                    bind: this.states.value.bind.Description,
                     width: 280,
-                    bind: [me.databinder, "Description"],
-                    label: "Description"
+                    converter: new NumberConverter()
                 }),
-                me.panel1.config({}),
-                me.table1.config({
+                jc(Table,{
                     height: "100%",
-                    bindItems: [me.databinder, "Products"],
-                    width: "100%",
-                    tooltip: "e"
-                })
-            ] });
+                    bindItems: this.states.value.bind.Products,
+                    width: "100%"
+                }),
+            ]
+        });
     }
 }
 export async function test() {
-    var ret = new CategoriesView();
-    var data = <Categories>await Categories.findOne({ relations: ["*"] });
-    ret.config({ value: data });
-    //    ret["value"] = 
-    return ret;
+    var ret=new CategoriesView();
+    var data=<Categories>await Categories.findOne({relations: ["*"] });
+        ret.config({value: data });
+        //    ret["value"] = 
+        return ret;
 }

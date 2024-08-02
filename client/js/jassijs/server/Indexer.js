@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_1, Config_1, Serverservice_1, NativeAdapter_1) {
+define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "typescript"], function (require, exports, Classes_1, Config_1, Serverservice_1, NativeAdapter_1, typescript_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -31,7 +31,7 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config",
                     delete index[key];
                 }
             }
-            var jsFiles = await this.dirFiles(modul, path, [".ts"], ["node_modules"]);
+            var jsFiles = await this.dirFiles(modul, path, [".ts", ".tsx"], ["node_modules"]);
             for (let x = 0; x < jsFiles.length; x++) {
                 var jsFile = jsFiles[x];
                 var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
@@ -47,7 +47,8 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config",
                     var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
                     if (dat !== entry.date) {
                         var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
-                        var sourceFile = NativeAdapter_1.ts.createSourceFile('hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true);
+                        var isTsx = jsFile.toLowerCase().endsWith(".tsx");
+                        var sourceFile = NativeAdapter_1.ts.createSourceFile(isTsx ? 'hallo.tsx' : 'hallo.ts', text, NativeAdapter_1.ts.ScriptTarget.ES5, true, isTsx ? typescript_1.ScriptKind.TSX : undefined);
                         var outDecorations = [];
                         entry = {};
                         entry.date = undefined;
@@ -144,13 +145,13 @@ define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config",
             if (node.kind === NativeAdapter_1.ts.SyntaxKind.ClassDeclaration) {
                 if (node["modifiers"] !== undefined) {
                     var dec;
+                    var sclass = undefined;
                     for (var m = 0; m < node["modifiers"].length; m++) {
                         var decnode = node["modifiers"][m];
                         if (decnode.kind === NativeAdapter_1.ts.SyntaxKind.Decorator) {
                             //if (node.decorators !== undefined) {
                             if (dec === undefined)
                                 dec = {};
-                            var sclass = undefined;
                             //for (let x = 0; x < node.decorators.length; x++) {
                             // var decnode = node.decorators[x];
                             var ex = decnode.expression;

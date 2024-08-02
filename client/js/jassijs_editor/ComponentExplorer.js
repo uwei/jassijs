@@ -89,8 +89,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             if (item === this.value && item._components) {
                 var all = [];
                 item._components.forEach((e) => {
-                    if (!e["designDummyFor"])
-                        all.push(e);
+                    all.push(e);
                 });
                 return all;
             }
@@ -130,8 +129,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 var ret = [];
                 var parent = data[0]._parent;
                 if (parent !== undefined && parent._components !== undefined) {
-                    var hasDummy = (parent._components[parent._components.length - 1]["designDummyFor"] !== undefined ? 1 : 0);
-                    if ((parent._components.length > 1 + hasDummy) && parent._components.indexOf(data[0]) !== 0) {
+                    if ((parent._components.length > 1) && parent._components.indexOf(data[0]) !== 0) {
                         var ac = {
                             call: function () {
                                 _this.propertyEditor.swapComponents(parent._components[parent._components.indexOf(data[0]) + -1], data[0]);

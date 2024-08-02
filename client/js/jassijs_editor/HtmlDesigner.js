@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Button", "jassijs/util/Tools"], function (require, exports, ComponentDesigner_1, Registry_1, Component_1, Classes_1, Button_1, Tools_1) {
+define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Button", "jassijs/util/Tools", "jassijs/ui/Textbox", "jassijs/ui/ComponentDescriptor", "jassijs/ext/spectrum"], function (require, exports, ComponentDesigner_1, Registry_1, Component_1, Classes_1, Button_1, Tools_1, Textbox_1, ComponentDescriptor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HtmlDesigner = void 0;
@@ -18,6 +18,15 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             this._designPlaceholder.dom.addEventListener("keydown", (ev => _this.keydown(ev)));
             this._designPlaceholder.dom.contentEditable = "true";
             this._designPlaceholder.dom.addEventListener("drop", (ev) => _this.ondrop(ev));
+            this.onDesignedComponentChanged((component) => _this.updateContentEditable(component));
+            this.dom.onclick = ((ev) => _this.onclick(ev));
+        }
+        onclick(ev) {
+            if (!ev.target.classList.contains("_dummy_")) {
+                this.lastSelectedDummy.component = undefined;
+                this.lastSelectedDummy.pre = false;
+            }
+            return undefined;
         }
         getParentList(node, list) {
             list.push(node);
@@ -54,6 +63,16 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             }
             return clip;
         }
+        select(nodeStart, posStart, nodeEnd = undefined, posEnd = undefined) {
+            var newSel = getSelection();
+            var range = document.createRange();
+            range.setStart(nodeStart, posStart);
+            if (nodeEnd !== undefined)
+                range.setEnd(nodeEnd, posEnd);
+            newSel.removeAllRanges();
+            newSel.addRange(range);
+            return range;
+        }
         ondrop(ev) {
             var _this = this;
             ev.preventDefault();
@@ -71,11 +90,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             else {
                 // firefox
                 //@ts-ignore
-                range = document.createRange();
-                //@ts-ignore
-                range.setStart(ev.rangeParent, ev.rangeOffse);
-                //@ts-ignore
-                range.setEnd(ev.rangeParent, ev.rangeOffse);
+                range = this.select(ev.rangeParent, ev.rangeOffse, ev.rangeParent, ev.rangeOffse);
             }
             selection.removeAllRanges();
             selection.addRange(range);
@@ -116,19 +131,13 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 if (anchorNode === anchorNodeToDel && anchorOffsetToDel < anchorOffset) {
                     anchorOffset -= nodes.childNodes[0].innerText.length; //removing the selection changes the insertposition
                 }
+                this.select(anchorNodeToDel, anchorOffsetToDel, focusNodeToDel, focusOffsetToDel);
                 var newSel = getSelection();
-                range = document.createRange();
-                range.setStart(anchorNodeToDel, anchorOffsetToDel);
-                range.setEnd(focusNodeToDel, focusOffsetToDel);
-                newSel.addRange(range);
-                ;
                 this.removeNodes(newSel);
-                range = document.createRange();
-                var selection = getSelection();
-                range.setStart(anchorNode, anchorOffset);
+                range = this.select(anchorNode, anchorOffset);
                 selection.removeAllRanges();
                 selection.addRange(range);
-                ;
+                var selection = getSelection();
                 var last = _this.splitText(selection)[1];
                 this.pasteComponents(JSON.stringify(clip), last._parent, last).then(() => {
                     _this._propertyEditor.updateParser();
@@ -175,43 +184,62 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             document.execCommand("copy");
             return await navigator.clipboard.readText();
         }
-        /*set designedComponent(component) {
-            alert(8);
-            super.designedComponent=component;
-            
-        }*/
+        updateContentEditable(component) {
+            var _a;
+            var allComponents = [component.dom._this];
+            if (component.dom._thisOther)
+                allComponents.push(...component.dom._thisOther);
+            var varname = undefined;
+            for (var curComponent = 0; curComponent < allComponents.length; curComponent++) {
+                var comp = allComponents[curComponent];
+                varname = this._codeEditor.getVariableFromObject(comp);
+                if (varname !== undefined)
+                    break;
+                //        var desc = ComponentDescriptor.describe(comp.constructor);
+                //      var fnew = desc.findField("children");
+                for (var x = 0; x < ((_a = comp._components) === null || _a === void 0 ? void 0 : _a.length); x++) {
+                    this.updateContentEditable(comp._components[x]);
+                }
+            }
+            if (varname === undefined) {
+                component.dom.contentEditable = "false";
+            }
+            else {
+                component.dom.contentEditable = "true";
+            }
+        }
         registerKeys() {
             //in keydown(...)
         }
         /* private deleteNodeBetween(node1: Node, node2: Node) {
              var list1 = [];
-             var list2 = [];
-             this.getParentList(node1, list1);
-             this.getParentList(node2, list2);
-             var pos = 0;
-             var test = list1[pos];
-             while (list2.indexOf(list1[pos]) === -1) {
-                 pos++;
+                                            var list2 = [];
+                                            this.getParentList(node1, list1);
+                                            this.getParentList(node2, list2);
+                                            var pos = 0;
+                                            var test = list1[pos];
+                                            while (list2.indexOf(list1[pos]) === -1) {
+                                                pos++;
              }
-            
-             var par1 = list1[pos];
-             var par2 = list2[list2.indexOf(list1[pos]) ];
-             var components = [];
-             if(node1===node2){
-                 components.push(node1._this);
+    
+                                            var par1 = list1[pos];
+                                            var par2 = list2[list2.indexOf(list1[pos]) ];
+                                            var components = [];
+                                            if(node1===node2){
+                                                components.push(node1._this);
              }else{
                  var todel = par1.nextSibling;
-     
-                 var components = [];
-                 while (todel !== par2) {
+    
+                                            var components = [];
+                                            while (todel !== par2) {
                      var del = todel;
-                     todel = todel.nextSibling;
-                     components.push(del._this);
+                                            todel = todel.nextSibling;
+                                            components.push(del._this);
                      // del.remove();
                  }
              }
-             var s = this.componentsToString(components);
-             this.deleteComponents(s);
+                                            var s = this.componentsToString(components);
+                                            this.deleteComponents(s);
          }*/
         deleteNodeBetween(selection) {
             var range = selection.getRangeAt(0);
@@ -236,12 +264,9 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             var a = getSelection().anchorNode;
             var apos = getSelection().anchorOffset;
             setTimeout(() => {
-                var range = document.createRange();
-                var selection = getSelection();
-                console.log(range);
-                range.setStart(a, apos); //removed position
-                selection.removeAllRanges();
-                selection.addRange(range);
+                if (a.parentNode == null)
+                    return;
+                this.select(a, apos); //removed position
             }, 10);
             //@ts-ignore
             if (components.length > 0 && components[0].dom.nodeType === components[0].dom.TEXT_NODE)
@@ -270,7 +295,16 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
         bold() {
             this.setStyle("bold");
         }
-        setStyle(style, value = undefined) {
+        italic() {
+            this.setStyle("italic");
+        }
+        underline() {
+            this.setStyle("underline");
+        }
+        /**
+         * if user select lastnode to firstnode
+         */
+        reverseSelectionIfNeeded() {
             var sel = getSelection();
             var anchorNode = sel.anchorNode;
             var anchorOffset = sel.anchorOffset;
@@ -279,11 +313,31 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             var position = anchorNode.compareDocumentPosition(focusNode);
             if (!position && anchorOffset > focusOffset || position === Node.DOCUMENT_POSITION_PRECEDING) {
                 var k = focusNode;
-                focusNode = focusNode;
+                anchorNode = focusNode;
                 focusNode = k;
                 var k1 = anchorOffset;
                 anchorOffset = focusOffset;
                 focusOffset = k1;
+                this.select(anchorNode, anchorOffset, focusNode, focusOffset);
+            }
+        }
+        setStyle(style, value = undefined) {
+            this.reverseSelectionIfNeeded();
+            var sel = getSelection();
+            var anchorNode = sel.anchorNode;
+            var anchorOffset = sel.anchorOffset;
+            var focusNode = sel.focusNode;
+            var focusOffset = sel.focusOffset;
+            var position = anchorNode.compareDocumentPosition(focusNode);
+            if (!position && anchorOffset > focusOffset || position === Node.DOCUMENT_POSITION_PRECEDING) {
+                var k = focusNode;
+                anchorNode = focusNode;
+                focusNode = k;
+                var k1 = anchorOffset;
+                anchorOffset = focusOffset;
+                focusOffset = k1;
+                this.select(anchorNode, anchorOffset, focusNode, focusOffset);
+                var sel = document.getSelection();
             }
             var container = sel.getRangeAt(0).commonAncestorContainer;
             if (container.nodeType === container.TEXT_NODE)
@@ -322,16 +376,12 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 if (child.contains(focusNode) || child === focusNode) {
                     if (focusOffset !== child.length) {
                         //  var samenode = anchorNode === focusNode;
-                        range = document.createRange();
-                        range.setStart(focusNode, focusOffset);
-                        range.setEnd(focusNode, focusNode.length);
-                        sel.removeAllRanges();
-                        sel.addRange(range);
+                        this.select(focusNode, focusOffset, focusNode, focusNode.length);
+                        sel = document.getSelection();
                         if (child === focusNode)
                             x++;
                         var texts = this.splitText(sel);
                         var pos = allModified.indexOf(texts[1]);
-                        debugger;
                         if (pos !== -1)
                             allModified.splice(pos, 0, texts[0]);
                         else
@@ -356,24 +406,43 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                     var compParent = parent._this;
                     if (allModified.indexOf(compParent) === -1)
                         allModified.push(compParent);
-                    this.applyStyle(compParent, style);
+                    this.applyStyle(compParent, style, value);
                 }
             }
-            var range = document.createRange();
-            range.setStart(anchorNode, anchorOffset);
-            range.setEnd(focusNode, focusOffset);
-            sel.removeAllRanges();
-            sel.addRange(range);
+            this.select(anchorNode, anchorOffset, focusNode, focusOffset);
             return allModified;
         }
         applyStyle(comp, stylename, value = undefined) {
             var varParent = this.codeEditor.getVariableFromObject(comp);
             var style = this._propertyEditor.parser.getPropertyValue(varParent, "style");
             var st = Tools_1.Tools.jsonToObject(style === undefined ? "{}" : style);
-            if (st.fontWeight === "bold")
-                delete st.fontWeight; //="normal";
-            else
-                st.fontWeight = "bold";
+            if (stylename === "bold") {
+                if (st.fontWeight === "bold")
+                    delete st.fontWeight; //="normal";
+                else
+                    st.fontWeight = "bold";
+            }
+            else if (stylename === "italic") {
+                if (st.fontStyle === "italic")
+                    delete st.fontStyle; //="normal";
+                else
+                    st.fontStyle = "italic";
+            }
+            else if (stylename === "underline") {
+                if (st.textDecorationLine === "underline")
+                    delete st.textDecorationLine; //="normal";
+                else
+                    st.textDecorationLine = "underline";
+            }
+            else if (stylename === "color") {
+                st.color = value;
+            }
+            else if (stylename === "backgroundColor") {
+                st.backgroundColor = value;
+            }
+            else if (stylename === "fontSize") {
+                st.fontSize = value;
+            }
             if (this._propertyEditor.codeEditor)
                 this._propertyEditor.setPropertyInCode("style", JSON.stringify(st), true, varParent, undefined, undefined);
             comp.style = st;
@@ -388,6 +457,112 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 _this.bold();
             });
             this._designToolbar.add(this.boldButton);
+            this.italicButton = new Button_1.Button();
+            this.italicButton.icon = "mdi mdi-format-italic mdi-18px";
+            this.italicButton.tooltip = "italic";
+            this.italicButton.onclick(function () {
+                _this.italic();
+            });
+            this._designToolbar.add(this.italicButton);
+            this.underlineButton = new Button_1.Button();
+            this.underlineButton.icon = "mdi mdi-format-underline mdi-18px";
+            this.underlineButton.tooltip = "italic";
+            this.underlineButton.onclick(function () {
+                _this.underline();
+            });
+            this._designToolbar.add(this.underlineButton);
+            this._createColorIcon();
+            this._createBGColorIcon();
+            this._createFontSizeIcon();
+        }
+        _createFontSizeIcon() {
+            var _this = this;
+            this.fontSizeButton = (0, Component_1.createComponent)((0, Component_1.jc)("select", {
+                style: {
+                    fontSize: "8pt", "height": "24px", "verticalAlign": "2px"
+                },
+                onChange: (e) => {
+                    var val = e.target.value;
+                    _this.setStyle("fontSize", val);
+                },
+                children: [
+                    (0, Component_1.jc)("option", { children: ["8px"], value: "8px" }),
+                    (0, Component_1.jc)("option", { children: ["10px"], value: "10px" }),
+                    (0, Component_1.jc)("option", { children: ["12px"], value: "12px" }),
+                    (0, Component_1.jc)("option", { children: ["14px"], value: "14px" }),
+                    (0, Component_1.jc)("option", { children: ["18px"], value: "18px" }),
+                    (0, Component_1.jc)("option", { children: ["24px"], value: "24px" }),
+                    (0, Component_1.jc)("option", { children: ["36px"], value: "36px" }),
+                ]
+            }));
+            this._designToolbar.add(this.fontSizeButton);
+        }
+        _createColorIcon() {
+            var _this = this;
+            this.colorIcon = new Textbox_1.Textbox();
+            var spec = $(this.colorIcon.dom)["spectrum"]({
+                color: "#f00",
+                showPalette: true,
+                palette: [
+                    ['black'], ["brown"], ["blue"], ["green"], ["red"], ["orange"], ["yellow"], ['white']
+                ],
+                change: function (color) {
+                    var scolor = color.toHexString();
+                    if (color.toName())
+                        scolor = color.toName();
+                    _this.setStyle("color", scolor);
+                    // debugger;
+                    //		    _this.paletteChanged(color.toHexString()); // #ff0000
+                }
+            });
+            //correct height
+            var bt = this.colorIcon.domWrapper.querySelector(".sp-preview");
+            bt.style.width = "14px";
+            bt.style.height = "14px";
+            var bx = this.colorIcon.domWrapper.querySelector(".sp-replacer");
+            bx.style.verticalAlign = "-7px";
+            bx.style.height = "16px";
+            bx.style.width = "16px";
+            var bp = this.colorIcon.domWrapper.querySelector(".sp-dd");
+            bp.innerHTML = "<bolder>T</bolder>";
+            bp.style.zIndex = "100";
+            bp.style.position = "relative";
+            bp.style.top = "-19px";
+            bp.style.height = "12px";
+            bp.style.fontSize = "25px";
+            // spec.width="10px";
+            //	spec.height="10px";
+            this._designToolbar.add(this.colorIcon);
+        }
+        _createBGColorIcon() {
+            var _this = this;
+            this.bgcolorIcon = new Textbox_1.Textbox();
+            var spec = $(this.bgcolorIcon.dom)["spectrum"]({
+                color: "#f00",
+                showPalette: true,
+                palette: [
+                    ['black'], ["brown"], ["blue"], ["green"], ["red"], ["orange"], ["yellow"], ['white']
+                ],
+                change: function (color) {
+                    var scolor = color.toHexString();
+                    if (color.toName())
+                        scolor = color.toName();
+                    _this.setStyle("backgroundColor", scolor);
+                    // debugger;
+                    //		    _this.paletteChanged(color.toHexString()); // #ff0000
+                }
+            });
+            //correct height
+            var bt = this.bgcolorIcon.domWrapper.querySelector(".sp-preview");
+            bt.style.width = "14px";
+            bt.style.height = "14px";
+            var bx = this.bgcolorIcon.domWrapper.querySelector(".sp-replacer");
+            bx.style.verticalAlign = "-7px";
+            bx.style.height = "16px";
+            bx.style.width = "16px";
+            // spec.width="10px";
+            //	spec.height="10px";
+            this._designToolbar.add(this.bgcolorIcon);
         }
         editDialog(enable) {
             super.editDialog(enable);
@@ -428,19 +603,19 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             }
             /*else {
                 var end = to.childNodes[topos];
-                if (end === undefined)
-                    end = to.childNodes[to.childNodes.length - 1];
-                this.deleteNodeBetween(from.childNodes[frompos], end);
+                                                                                        if (end === undefined)
+                                                                                        end = to.childNodes[to.childNodes.length - 1];
+                                                                                        this.deleteNodeBetween(from.childNodes[frompos], end);
             }*/
             /*} else {
                 if (from.nodeType === from.TEXT_NODE){
-                    this.deleteNodeBetween(from, to);
-                    this.changeText(from, from.textContent.substring(0, frompos));
-                    this.changeText(to, to.textContent.substring(topos));
+                                                                                            this.deleteNodeBetween(from,to);
+                                                                                        this.changeText(from, from.textContent.substring(0, frompos));
+                                                                                        this.changeText(to, to.textContent.substring(topos));
                 }else{
-                     this.deleteNodeBetween(from.childNodes[frompos], to);
-                    
-                    this.changeText(to, to.textContent.substring(topos));
+                                                                                            this.deleteNodeBetween(from.childNodes[frompos],to);
+    
+                                                                                        this.changeText(to, to.textContent.substring(topos));
                 }
             }*/
         }
@@ -481,9 +656,9 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             var text2 = this.createTextComponent(v1, comp._parent, comp);
             /*        var nd = document.createTextNode(v1);
                     var comp2 = new TextComponent();
-                    comp2.init(<any>nd, { noWrapper: true });
-                    var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
-            */
+                    comp2.init(<any>nd, {noWrapper: true });
+                                                                                                            var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
+                                                                                                            */
             this.changeText(text2.dom, v1);
             //this.updateDummies();
             return [text2, comp];
@@ -506,20 +681,44 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
         }
         createTextComponent(text, par, before) {
             /*        var comp2 = new TextComponent();
-                    var newone = document.createTextNode(text);
-                    comp2.init(<any>newone, { noWrapper: true });*/
+                                                                                                            var newone = document.createTextNode(text);
+                                                                                                            comp2.init(<any>newone, {noWrapper: true });*/
             var comp2 = new Component_1.TextComponent({ noWrapper: true });
             var newone = comp2.dom;
             return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
             ;
         }
-        insertLineBreak(sel) {
+        insertLineBreak(sel, atEndOfContainer = undefined) {
             var enter = (0, Component_1.createComponent)(React.createElement("br"));
-            var comp = this.splitText(sel)[1];
-            var center = this.createComponent(Classes_1.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
+            var center, comp;
+            if (sel.anchorNode.nodeType !== sel.anchorNode.TEXT_NODE) {
+                if (atEndOfContainer !== undefined) {
+                    center = this.createComponent(Classes_1.classes.getClassName(enter), enter, undefined, undefined, atEndOfContainer, undefined, true, "br");
+                }
+                else {
+                    comp = sel.anchorNode._this;
+                    center = this.createComponent(Classes_1.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
+                }
+            }
+            else {
+                comp = this.splitText(sel)[1];
+                center = this.createComponent(Classes_1.classes.getClassName(enter), enter, undefined, undefined, comp._parent, comp, true, "br");
+            }
             this._propertyEditor.setPropertyInCode("tag", "\"br\"", true, this.codeEditor.getVariableFromObject(center));
         }
         keydown(e) {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+            var dummyPre = undefined;
+            //predeummy is selected
+            if (((_a = this.lastSelectedDummy) === null || _a === void 0 ? void 0 : _a.pre) && this.lastSelectedDummy.component !== undefined) {
+                this.select(this.lastSelectedDummy.component.dom, 0);
+                dummyPre = true;
+            }
+            if (!((_b = this.lastSelectedDummy) === null || _b === void 0 ? void 0 : _b.pre) && this.lastSelectedDummy.component !== undefined) {
+                var con = this.lastSelectedDummy.component;
+                this.select(con.dom, 0);
+                dummyPre = false;
+            }
             var _this = this;
             if (e.keyCode === 115 && e.shiftKey) { //F4
                 return false;
@@ -554,22 +753,20 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             if (e.ctrlKey)
                 return;
             var sel = document.getSelection();
+            if (sel.anchorNode === null && sel.focusNode == null)
+                return;
             if (sel.anchorNode === null) {
                 /*  var nd = document.createTextNode("");
-                  var comp2 = new TextComponent();
-                  comp2.init(<any>nd, { noWrapper: true });*/
+                                                                                                                var comp2 = new TextComponent();
+                                                                                                                comp2.init(<any>nd, {noWrapper: true });*/
                 var comp2 = new Component_1.TextComponent({ noWrapper: true });
                 var nd = comp2.dom;
                 if (this.lastSelectedDummy.pre)
                     var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value._parent, this._propertyEditor.value, true, "text");
                 else
                     var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value, undefined, true, "text");
+                this.select(comp2.dom, 0, comp2.dom, 0);
                 var selection = getSelection();
-                var range = document.createRange();
-                range.setStart(comp2.dom, 0);
-                range.setEnd(comp2.dom, 0);
-                selection.removeAllRanges();
-                selection.addRange(range);
             }
             var position = sel.anchorNode.compareDocumentPosition(sel.focusNode);
             var anchorNode = sel.anchorNode;
@@ -583,9 +780,55 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 focusNode = sel.anchorNode;
                 focusOffset = sel.anchorOffset;
             }
+            //Table up =up in same column
+            if (e.keyCode === 38 && (((_c = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode) === null || _c === void 0 ? void 0 : _c.tagName) == "TR" || ((_d = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode.parentNode) === null || _d === void 0 ? void 0 : _d.tagName) == "TR")) {
+                var tr = ((_e = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode) === null || _e === void 0 ? void 0 : _e.tagName) == "TR" ? focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode : focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode.parentNode;
+                var td = focusNode;
+                if (((_f = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode) === null || _f === void 0 ? void 0 : _f.tagName) == "TD")
+                    td = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode;
+                var poscol = -1;
+                for (var x = 0; x < tr.children.length; x++) {
+                    if (tr.children[x] === td)
+                        poscol = x;
+                }
+                var posrow = -1;
+                for (var x = 0; x < tr.parentNode.children.length; x++) {
+                    if (tr.parentNode.children[x] === tr)
+                        posrow = x;
+                }
+                if (posrow !== -1 && posrow > 0 && poscol !== -1 && tr.parentNode.children[posrow - 1].children.length > poscol) {
+                    e.preventDefault();
+                    const cell = tr.parentNode.children[posrow - 1].children[poscol];
+                    this.select(cell, 0);
+                    return;
+                }
+            }
+            //Table down =down in same column
+            if (e.keyCode === 40 && (((_g = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode) === null || _g === void 0 ? void 0 : _g.tagName) == "TR" || ((_h = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode.parentNode) === null || _h === void 0 ? void 0 : _h.tagName) == "TR")) {
+                var tr = ((_j = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode) === null || _j === void 0 ? void 0 : _j.tagName) == "TR" ? focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode : focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode.parentNode;
+                var td = focusNode;
+                if (((_k = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode) === null || _k === void 0 ? void 0 : _k.tagName) == "TD")
+                    td = focusNode === null || focusNode === void 0 ? void 0 : focusNode.parentNode;
+                var poscol = -1;
+                for (var x = 0; x < tr.children.length; x++) {
+                    if (tr.children[x] === td)
+                        poscol = x;
+                }
+                var posrow = -1;
+                for (var x = 0; x < tr.parentNode.children.length; x++) {
+                    if (tr.parentNode.children[x] === tr)
+                        posrow = x;
+                }
+                if (posrow !== -1 && posrow < (tr.parentNode.children.length - 1) && poscol !== -1 && tr.parentNode.children[posrow + 1].children.length > poscol) {
+                    e.preventDefault();
+                    const cell = tr.parentNode.children[posrow + 1].children[poscol];
+                    this.select(cell, 0);
+                    return;
+                }
+            }
             if (e.keyCode === 13) {
                 e.preventDefault();
-                this.insertLineBreak(sel);
+                this.insertLineBreak(sel, dummyPre === false ? this.lastSelectedDummy.component : undefined);
                 //     this.insertComponent(enter, sel, "br");
                 //var enter = node.parentNode.insertBefore(document.createElement("br"), node);
                 // var textnode = enter.parentNode.insertBefore(document.createTextNode(v1), enter);
@@ -606,6 +849,10 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             else if (e.code === "Backspace") {
                 e.preventDefault();
                 if (anchorNode === focusNode && anchorOffset === focusOffset) { //no selection
+                    if (sel.anchorNode === sel.focusNode && sel.anchorNode.nodeName === "TD") {
+                        console.log("return");
+                        return;
+                    }
                     sel.modify("extend", "left", "character");
                     var newsel = document.getSelection();
                     this.removeNodes(newsel);
@@ -628,20 +875,39 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 }
                 var neu = anchorNode.textContent.substring(0, anchorOffset) + e.key + anchorNode.textContent.substring(end);
                 if (anchorNode.nodeType !== anchorNode.TEXT_NODE) { //there is no Textnode here we create one
-                    var before = undefined;
-                    if (anchorNode.childNodes.length > anchorOffset) {
-                        before = anchorNode.childNodes[anchorOffset]._this;
+                    if (dummyPre === true) {
+                        var before = undefined;
+                        // if (anchorNode.childNodes.length > anchorOffset) {
+                        before = anchorNode._this;
+                        //}
+                        anchorOffset = 0;
+                        anchorNode = this.createTextComponent(e.key, anchorNode._this._parent, before).dom;
+                        neu = e.key;
                     }
-                    anchorOffset = 0;
-                    anchorNode = this.createTextComponent(e.key, anchorNode._this, before).dom;
-                    neu = e.key;
+                    else if (dummyPre === false) {
+                        var container = this.lastSelectedDummy.component;
+                        //}
+                        anchorOffset = 0;
+                        anchorNode = this.createTextComponent(e.key, container, undefined).dom;
+                        neu = e.key;
+                    }
+                    else { //insert in Container
+                        var desc = ComponentDescriptor_1.ComponentDescriptor.describe(anchorNode._this.constructor);
+                        var fnew = desc.findField("children");
+                        if (fnew === undefined)
+                            return;
+                        var before = undefined;
+                        if (anchorNode.childNodes.length > anchorOffset) {
+                            before = anchorNode.childNodes[anchorOffset]._this;
+                        }
+                        anchorOffset = 0;
+                        anchorNode = this.createTextComponent(e.key, anchorNode._this, before).dom;
+                        neu = e.key;
+                    }
                 }
                 this.changeText(anchorNode, neu);
                 e.preventDefault();
-                var range = document.createRange();
-                range.setStart(anchorNode, anchorOffset + 1);
-                sel.removeAllRanges();
-                sel.addRange(range);
+                this.select(anchorNode, anchorOffset + 1);
             }
             this.updateDummies();
         }

@@ -4,7 +4,7 @@ import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { CSSProperties } from "jassijs/ui/CSSProperties";
-import { States, createStates, resolveState } from "jassijs/ui/State";
+import { State, States, createStates, resolveState } from "jassijs/ui/State";
 
 
 
@@ -107,22 +107,11 @@ export interface ComponentProperties {
     */
     noWrapper?: boolean;
     replaceNode?: any;
-    /*    //React things - we don't need it
-      context: any;
-      state;
-      refs;
-      setState() {
-          throw new Error("not implemented");
-      }
-      forceUpdate() {
-          throw new Error("not implemented");
-      }*/
-    calculateState?: (any) => void
+   
 }
 
 
 var React = {
-
     createElement(type: any, props, ...children) {
 
         if (props === undefined || props === null)//TODO is this right?
@@ -240,7 +229,7 @@ export function createComponent(node: React.ReactNode): any {//node: { key: stri
                
 
                 //child.dom = nd;
-            } else if (child?._observe_) {
+            } else if (child?._$isState$_) {
                 cchild = new TextComponent();
                 cchild.tag = "";
                 child?._observe_(cchild, "text", "property");
@@ -263,11 +252,45 @@ export function createComponent(node: React.ReactNode): any {//node: { key: stri
 
 }
 
+export function createRef<T>(val: T = undefined):Ref<T> {
+    var ret;
+    ret.current = val;
+    return ret;
+}
+export type Ref<T>={current:T};
+export function createRefs<T>():  T  {
+    var me={};
+    var data={};
+    var ret=new Proxy(me, {
+        get(target, key: string) {
+            if (target[key] === undefined) {
+                target[key] = {
+                    _current: undefined,
+                    set current(value) {
+                        data[key] = value;
+                         me[key]=value;
+                        this._current = value;
+                    },
+                    get current() {
+                        return this._current;
+                    }
+                }
+            }
+            return target[key];
+        }
+    });
+  
+    return<any> ret;
+}
+
 //class TC <Prop>extends React.Component<Prop,{}>{
 @$Class("jassijs.ui.Component")
 @$Property({ name: "testuw", type: "string" })
-export class Component<T extends ComponentProperties = {}> implements React.Component<T, {}> {
-    props: T;
+ //@ts-ignore
+export class Component<T extends ComponentProperties = {}> implements React.Component<T> {
+    
+    refs;
+    props: T; 
     states: States<T>;
     private static _componentHook = [];
     _eventHandler;
@@ -280,7 +303,6 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     _designMode;
     _styles?: any[];
     calculateState: (any) => any;
-    protected designDummies: Component<{}>[];
     /*  get domWrapper():Element{
           return this._domWrapper;
       }
@@ -301,13 +323,15 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         // super(properties, undefined);
         // if(properties===undefined)
         // properties={};
-        this.states = createStates(this.props);
+        this.refs=createRefs();
+        this.states = <any>createStates(properties);
         this.props = <any>properties;
+        resolveState(this, this.props);
         this._rerenderMe(true);
         this.config(this.props);
     }
     private _rerenderMe(firstTime = false) {
-
+        //@ts-ignore
         var rend = this.render(this.states);
         if (rend) {
             if (rend instanceof Node) {
@@ -345,14 +369,14 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         delete con.replaceNode;
         // this.lastconfig = config;
         var notfound = <any>{}
-        resolveState(this, config);
+       
         for (var key in con) {
             if (key in this) {
                 var me = <any>this;
 
 
                 var val = con[key];
-                if (val?._observe_) {
+                if (val?._$isState$_) {
                     val?._observe_(this, key, "property");
                     con[key] = val.current;
                     config[key] = con[key];
@@ -362,7 +386,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
                 if (typeof me[key] === 'function') {
                     me[key](config[key]);
                 } else {
-                    if (me[key]?._observe_ !== undefined) {
+                    if (me[key]?._$isState$_ !== undefined) {
                         me[key].current = config[key];
                     } else
                         me[key] = config[key];
@@ -814,20 +838,35 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             this.domWrapper._this = undefined;
             this.domWrapper = undefined;
         }
-        if (this.designDummies) {
-            this.designDummies.forEach((dummy) => { dummy.destroy() });
-        }
         this.events = [];
     }
+    /**
+     * @deprecated React-things not use it.
+     */
+    current:any;//allow ref=Component
+    /**
+     * @deprecated React-things not use it.
+     */
+      state;
+    
     extensionCalled(action: ExtensionAction) {
     }
-    //React things - we don't need it
+     /**
+     * @deprecated React things-not implemented
+     */
     context: any;
-    state;
-    refs;
+    /**
+     * @deprecated React things-not implemented
+     */
+     /**
+     * @deprecated React things-not implemented
+     */
     setState() {
         throw new Error("not implemented");
     }
+    /**
+     * @deprecated React things-not implemented
+     */
     forceUpdate() {
         throw new Error("not implemented");
     }
@@ -840,7 +879,6 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
 }*/
 export class FunctionComponent<T> extends Component<T> {
     _components: Component[] = [];
-    _designDummy: any;
     constructor(properties: T) {
         super(properties);
     }
@@ -869,10 +907,7 @@ export class FunctionComponent<T> extends Component<T> {
         }
         component._parent = this;
         component.domWrapper._parent = this;
-        if (this["designDummyFor"])
-            this.designDummies.push(component);
-        else
-            this._components.push(component);
+        this._components.push(component);
         this.dom.appendChild(component.domWrapper);
     }
     /**
@@ -890,10 +925,7 @@ export class FunctionComponent<T> extends Component<T> {
         if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
             component.domWrapper.parentNode.removeChild(component.domWrapper);
         }
-        if (component["designDummyFor"])
-            this.designDummies.push(component);
-        else
-            this._components.splice(index, 0, component);
+        this._components.splice(index, 0, component);
 
         before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
     }
@@ -913,9 +945,6 @@ export class FunctionComponent<T> extends Component<T> {
             if (pos >= 0)
                 this._components.splice(pos, 1);
         }
-        let posd = this.designDummies?.indexOf(component);
-        if (posd >= 0)
-            this.designDummies.splice(posd, 1);
         try {
             this.dom.removeChild(component.domWrapper);
         } catch (ex) {
@@ -949,14 +978,31 @@ interface HTMLComponentProperties extends ComponentProperties, Omit<React.HTMLPr
     children?;
 }
 
+function doCreateDummyForHTMLComponent(component:any,isPreDummy:boolean){
+    var disabledBoth=["tr","td","th"];
+    var enabledPost=["div"];
+    var disabledPre=[];
+    var tag=component?.tag;
+    if(tag===undefined)
+        return false;
+    if( disabledBoth.indexOf(tag.toLowerCase())!==-1){
+        return false;
+    }else if(isPreDummy&&disabledPre.indexOf(tag.toLowerCase())!==-1){
+        return false;
+   }else if(!isPreDummy&&enabledPost.indexOf(tag.toLowerCase())!==-1){
+        return true;
+   }
+    return isPreDummy;//prodummy is enabled at default / postdummy is disabled 
+        
+
+}
 
 // ret.tag = atype;
 //        var newdom = document.createElement(atype);
 @$Class("jassijs.ui.HTMLComponent")
+@$Property({name:"children",type:"jassijs.ui.Component",createDummyInDesigner:doCreateDummyForHTMLComponent})
 export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Component<HTMLComponentProperties> implements HTMLComponentProperties {
     _components: Component[] = [];
-    _designDummy: any;
-
 
     constructor(prop: HTMLComponentProperties = {}) {
         super(Object.assign(prop, { noWrapper: true }));
@@ -992,35 +1038,16 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
             if (prop === "style") {
                 for (var key in (<any>props).style) {
                     val = (<any>props).style[key];
-
-                    /*   if (val?._observe_) {
-                           val?._observe_(this, key, "style");
-                           val = val.current;
-                       }*/
                     this.dom.style[key] = val;
                 }
             } else if (prop in this.dom) {
-
-                /*  if (val?._observe_) {
-                      val?._observe_(this, prop, "dom");
-                      val = val.current;
-                  }*/
                 Reflect.set(this.dom, prop, val);
                 //Reflect.set(this.dom, prop, [val])
             } else if (prop.toLocaleLowerCase() in this.dom) {
-
-                /* if (val?._observe_) {
-                     val?._observe_(this, prop.toLocaleLowerCase(), "dom");
-                     val = val.current;
-                 }
-                 if (val?._observe_) {
-                     val?._observe_(this, prop.toLocaleLowerCase(), "dom");
-                     val = val.current;
-                 }*/
                 Reflect.set(this.dom, prop.toLocaleLowerCase(), val);
 
             } else if (prop in this.dom) {
-                if (val?._observe_) {
+                if (val?._$isState$_) {
                     val?._observe_(this, prop, "attribute");
                     val = val.current;
                 }
@@ -1041,7 +1068,7 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
     }
     set tag(value: string) {
         var tag = value == undefined ? "span" : value;
-        if (tag !== this.tag.toLowerCase()) {
+        if (tag.toLowerCase() !== this.tag.toLowerCase()) {
             this.props.tag = value;
             this.config(this.props);
             /*
@@ -1075,10 +1102,7 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
          if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
               component.domWrapper.parentNode.removeChild(component.domWrapper);
          }*/
-        if (this["designDummyFor"])
-            this.designDummies.push(component);
-        else
-            this._components.push(component);
+        this._components.push(component);
         this.dom.appendChild(component.domWrapper);
     }
     /**
@@ -1096,10 +1120,7 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
         if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
             component.domWrapper.parentNode.removeChild(component.domWrapper);
         }
-        if (component["designDummyFor"])
-            this.designDummies.push(component);
-        else
-            this._components.splice(index, 0, component);
+        this._components.splice(index, 0, component);
 
         before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
     }
@@ -1119,9 +1140,6 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
             if (pos >= 0)
                 this._components.splice(pos, 1);
         }
-        let posd = this.designDummies?.indexOf(component);
-        if (posd >= 0)
-            this.designDummies.splice(posd, 1);
         try {
             this.dom.removeChild(component.domWrapper);
         } catch (ex) {

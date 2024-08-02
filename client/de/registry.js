@@ -5,22 +5,18 @@ define("de/registry",["require"], function(require) {
 	"de/aa.ts": {
 		"date": 1682369482000
 	},
-	"de/Dialog.ts": {
-		"date": 1695394581342.2014,
-		"de/Dialog": {}
-	},
 	"de/Dialog2.ts": {
 		"date": 1697206950609.826,
 		"de/Dialog2": {}
 	},
 	"de/DialogKunde.ts": {
-		"date": 1697206940949.708,
+		"date": 1722607496323.203,
 		"de.DialogKunde": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
 			],
 			"@members": {
-				"dummy": {
+				"render": {
 					"$Action": [
 						{
 							"name": "Demo",
@@ -40,33 +36,17 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/KundeView.ts": {
-		"date": 1698508046886.8955,
+		"date": 1722607533813.3318,
 		"de.KundeView": {
 			"$DBObjectView": [
 				{
 					"classname": "de.Kunde"
 				}
-			],
-			"@members": {}
+			]
 		}
 	},
 	"de/modul.ts": {
 		"date": 1655740312000
-	},
-	"de/MyDialog.ts": {
-		"date": 1655556796000,
-		"de/MyDialog": {}
-	},
-	"de/myview2.ts": {
-		"date": 1656067924000,
-		"de.myview2": {
-			"$DBObjectView": [
-				{
-					"classname": "de.Kunde"
-				}
-			],
-			"@members": {}
-		}
 	},
 	"de/remote/AR.ts": {
 		"date": 1681557288000,
@@ -317,14 +297,6 @@ define("de/registry",["require"], function(require) {
 	},
 	"de/test.ts": {
 		"date": 1681301006000
-	},
-	"de/TestDialogBinder.ts": {
-		"date": 1655556796000,
-		"de/TestDialogBinder": {}
-	},
-	"de/TestDialogBinder2.ts": {
-		"date": 1655556796000,
-		"de/TestDialogBinder": {}
 	},
 	"de/TestEmployees.ts": {
 		"date": 1697199351525.1855

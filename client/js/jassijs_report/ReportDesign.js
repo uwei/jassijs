@@ -449,44 +449,54 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
             if (this.styleContainer._components.length > 0) {
                 r.styles = {};
                 for (var x = 0; x < this.styleContainer._components.length; x++) {
-                    if (!this.styleContainer._components[0].designDummyFor)
-                        r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
+                    r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
                 }
+                //var _this = this;
+                if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
+                    r.background = this.backgroundPanel.toJSON();
+                }
+                if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
+                    r.header = this.headerPanel.toJSON();
+                }
+                if (!(this.footerPanel._components.length === 0 || (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
+                    r.footer = this.footerPanel.toJSON();
+                }
+                r.content = this.contentPanel.toJSON();
+                if (this.pageOrientation) {
+                    r.pageOrientation = this.pageOrientation;
+                }
+                if (this.pageMargins)
+                    r.pageMargins = this.pageMargins;
+                if (this.pageSize)
+                    r.pageSize = this.pageSize;
+                if (this.info)
+                    r.info = this.info;
+                if (this.compress)
+                    r.compress = this.compress;
+                if (this.userPassword)
+                    r.userPassword = this.userPassword;
+                if (this.ownerPassword)
+                    r.ownerPassword = this.ownerPassword;
+                if (this.permissions)
+                    r.permissions = this.permissions;
+                if (this.images) {
+                    r.images = this.images;
+                }
+                Object.assign(r, this["otherProperties"]);
+                //delete r.data;
+                return r;
             }
-            //var _this = this;
-            if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
-                r.background = this.backgroundPanel.toJSON();
-            }
-            if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
-                r.header = this.headerPanel.toJSON();
-            }
-            if (!(this.footerPanel._components.length === 0 || (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
-                r.footer = this.footerPanel.toJSON();
-            }
-            r.content = this.contentPanel.toJSON();
-            if (this.pageOrientation) {
-                r.pageOrientation = this.pageOrientation;
-            }
-            if (this.pageMargins)
-                r.pageMargins = this.pageMargins;
-            if (this.pageSize)
-                r.pageSize = this.pageSize;
-            if (this.info)
-                r.info = this.info;
-            if (this.compress)
-                r.compress = this.compress;
-            if (this.userPassword)
-                r.userPassword = this.userPassword;
-            if (this.ownerPassword)
-                r.ownerPassword = this.ownerPassword;
-            if (this.permissions)
-                r.permissions = this.permissions;
-            if (this.images) {
-                r.images = this.images;
-            }
-            Object.assign(r, this["otherProperties"]);
-            //delete r.data;
-            return r;
+            /**
+           * adds a component to the container
+           * @param {jassijs.ui.Component} component - the component to add
+           */
+            /* add(component) {
+                 if (component["designPanel"])
+                     super.add(component);
+                 else
+                     super.addBefore(component, this.footerPanel);
+         
+             }*/
         }
     };
     __decorate([

@@ -62,8 +62,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
             var ret = super.toJSON();
             ret.columns = [];
             for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
                 //@ts-ignore
                 ret.columns.push(this._components[x].toJSON());
             }

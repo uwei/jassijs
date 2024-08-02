@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DesignDummy"], function (require, exports, Registry_1, Container_1, Component_1, Property_1, DesignDummy_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_1, Container_1, Component_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Panel = void 0;
@@ -82,46 +82,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
          * @param {boolean} enable - true if activate designMode
          */
         _setDesignMode(enable) {
-            return;
-            this._designMode = enable;
-            if (enable) { //dummy in containers at the end
-                if (this.isAbsolute === false) {
-                    DesignDummy_1.DesignDummy.createIfNeeded(this, "atEnd", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
-                }
-                else {
-                    DesignDummy_1.DesignDummy.destroyIfNeeded(this, "atEnd");
-                    /* if (this._designDummy !== undefined) {
-                         this.remove(this._designDummy);
-                         this._designDummy = undefined;
-                     }*/
-                }
-            }
-            else {
-                DesignDummy_1.DesignDummy.destroyIfNeeded(this, "atEnd");
-            }
-            if (enable) { //dummy in containers at the end
-                if (this.isAbsolute === false && this._components) {
-                    for (var x = 0; x < this._components.length; x++) {
-                        var comp = this._components[x];
-                        if (comp instanceof Container_1.Container && !comp.dom.classList.contains("jdisableaddcomponents")) {
-                            DesignDummy_1.DesignDummy.createIfNeeded(comp, "beforeComponent", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
-                        }
-                    }
-                }
-            }
-            else {
-                if (this._components) {
-                    for (var x = 0; x < this._components.length; x++) {
-                        var comp = this._components[x];
-                        DesignDummy_1.DesignDummy.destroyIfNeeded(comp, "beforeComponent");
-                    }
-                }
-            }
         }
         destroy() {
             super.destroy();
-            if (this._designDummy)
-                this._designDummy.destroy();
             this._activeComponentDesigner = undefined;
         }
     };

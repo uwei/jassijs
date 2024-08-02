@@ -26,7 +26,7 @@ export class ComponentPalette extends Panel {
             this.remove(this._components[0]);
         }
         registry.getJSONData(this._service).then((jdata) => {
-            for (var x = 0; x < jdata.length; x++) {
+         /*   for (var x = 0; x < jdata.length; x++) {
                 var mdata = jdata[x];
                 var data: UIComponentProperties = mdata.params[0];
                 if (data.fullPath === undefined || data.fullPath === "undefined")
@@ -43,7 +43,7 @@ export class ComponentPalette extends Panel {
                 img["createFromParam"] = data.initialize;
                 _this._makeDraggable(img);
                 _this.add(img);
-            }
+            }*/
             for (var x = 0; x < jdata.length; x++) {
                 var mdata = jdata[x];
                 var data: UIComponentProperties = mdata.params[0];
@@ -53,7 +53,6 @@ export class ComponentPalette extends Panel {
                 var name = data.fullPath.split("/");
                 var sname = name[name.length - 1];
                 img.tooltip = sname;
-                img.dom.style.color = "blue";
                 img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
                 //img.height = 24;
                 //img.width = 24;
@@ -66,7 +65,7 @@ export class ComponentPalette extends Panel {
 
 
 
-        registry.loadAllFilesForService(this._service).then(function(){
+       /* registry.loadAllFilesForService(this._service).then(function(){
             registry.getData(_this._service).forEach(function(mdata){
                 var data:UIComponentProperties=mdata.params[0];
                 var img=new Image();
@@ -83,7 +82,7 @@ export class ComponentPalette extends Panel {
                 _this._makeDraggable(img);
                 _this.add(img);
             });
-       });
+       });*/
     }
     get service() {
         return this._service;

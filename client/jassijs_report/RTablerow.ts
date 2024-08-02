@@ -107,14 +107,14 @@ export class RTablerow extends RComponent {
         this.callEvent("componentAdded", component, this);
         if (this._parent)
             this._parent.addEmptyCellsIfNeeded(this);
-        if (component.designDummyFor) {
+        /*if (component.designDummyFor) {
             component.domWrapper.setAttribute("colspan", "100");
            // if ($(this.dom).width() < 140) {
             //    component.width = 140 - $(this.dom).width();
              if (this.dom.clientWidth < 140) {
                 component.width = 140 - this.dom.clientWidth;
             }
-        }
+        }*/
         if (this.parent?.updateLayout)
             this.parent?.updateLayout(true);
         /*  var test=component.height;
@@ -162,8 +162,6 @@ export class RTablerow extends RComponent {
         if (this.forEachDummy)
             return this.forEachDummy;
         for (let x = 0; x < this._components.length; x++) {
-            if (this._components[x]["designDummyFor"])
-                continue;
             //@ts-ignore
             columns.push(this._components[x].toJSON());
         }

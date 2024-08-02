@@ -18,10 +18,10 @@ export function MyComp(props:MyCompProp,states:States<MyCompProp>=undefined){
       //<Panel {{calculateState}}>
        // <Panel {...{calculateState}}>
     return <Panel>
-        <input value={states.mytext.self} />
-        <input value={states.mytext.self} />
+        <input value={states.mytext} />
+        <input value={states.mytext} />
         <span>Hallo</span>
-        <button style={{ color: states.mycolor.self }} onClick={() => {
+        <button style={{ color: states.mycolor }} onClick={() => {
             //  alert(8);
             states.mycolor.current="blue";
             states.mytext.current="oo";

@@ -30,7 +30,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Registry_1, Panel_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_1, DragAndDropper_1, ComponentDescriptor_1, Classes_1, BoxPanel_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Registry_1, Panel_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Button_1, DragAndDropper_1, ComponentDescriptor_1, Classes_1, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = exports.ClipboardData = void 0;
@@ -523,7 +523,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             var component = this._designPlaceholder._components[0];
             //switch designmode
             var comps = component.dom.querySelectorAll(".jcomponent");
-            comps.forEach((c) => c.classList.add("jdesignmode"));
+            if (enable)
+                comps.forEach((c) => c.classList.add("jdesignmode"));
+            else
+                comps.forEach((c) => c.classList.remove("jdesignmode"));
             for (var c = 0; c < comps.length; c++) {
                 if (comps[c]._this["extensionCalled"] !== undefined) {
                     comps[c]._this["extensionCalled"]({
@@ -598,8 +601,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         return _this._resizer.componentUnderCursor !== undefined;
                     };
                 }
+                this.dummyHolder.hidden = false;
             }
             else {
+                this.dummyHolder.hidden = true;
             }
             this._componentExplorer.update();
         }
@@ -613,9 +618,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          **/
         moveComponent(component, top, left, oldParent, newParent, beforeComponent) {
             var _this = this;
-            /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor!==undefined){
-                beforeComponent=undefined;
-            }*/
             var oldName = _this._codeEditor.getVariableFromObject(oldParent);
             var newName = _this._codeEditor.getVariableFromObject(newParent);
             var compName = _this._codeEditor.getVariableFromObject(component);
@@ -642,14 +644,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
                 _this._propertyEditor.setPropertyInCode("add", /*compName*/ oldVal, false, newName, before);
             }
-            /* if(newParent._components.length>1){//correct dummy
-                 var dummy=	newParent._components[newParent._components.length-2];
-                 if(dummy.designDummyFor!==undefined){
-                     //var tmp=newParent._components[newParent._components.length-1];
-                     newParent.remove(dummy);//._components[newParent._components.length-1]=newParent._components[newParent._components.length-2];
-                     newParent.add(dummy);//._components[newParent._components.length-1]=tmp;
-                 }
-             }*/
             _this.variables.updateCache();
             _this._propertyEditor.value = _this._propertyEditor.value;
             _this._componentExplorer.value = _this._componentExplorer.value;
@@ -674,33 +668,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 var filename = data[0].filename;
                 _this._propertyEditor.addImportIfNeeded(stype, filename.substring(0, filename.lastIndexOf(".")));
             });
-            var repeater = _this._hasRepeatingContainer(newParent);
             var scope = undefined;
-            if (repeater !== undefined) {
-                var repeatername = _this._codeEditor.getVariableFromObject(repeater);
-                var test = _this._propertyEditor.parser.getPropertyValue(repeatername, "createRepeatingComponent");
-                scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
-                if (test === undefined) {
-                    var sfunc = "function(me:Me){\n\t" + repeatername + ".design.config({});\n}";
-                    var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassijs.ui.Databinder");
-                    if (!_this._propertyEditor.parser.getPropertyValue(repeatername, "config")) {
-                        sfunc = "function(me:Me){\n\t\n}";
-                    }
-                    _this._propertyEditor.setPropertyInCode("createRepeatingComponent", sfunc, true, repeatername);
-                    _this._propertyEditor.updateParser();
-                    repeater.createRepeatingComponent(function (me) {
-                        if (this._designMode !== true)
-                            return;
-                        //_this.variables.addVariable(vardatabinder,databinder);
-                        _this.variables.updateCache();
-                    });
-                    /*var db=new jassijs.ui.Databinder();
-                    if(repeater.value!==undefined&&repeater.value.length>0)
-                        db.value=repeater.value[0];
-                    _this.variables.add(vardatabinder,db);
-                    _this.variables.updateCache();*/
-                }
-            }
             var varvalue;
             if (Classes_1.classes.getClassName(component) === type)
                 varvalue = component;
@@ -725,13 +693,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             else {
                 newParent.add(varvalue);
             }
-            /* if(newParent._components.length>1){//correct dummy
-                 if(newParent._designDummy){
-                     //var tmp=newParent._components[newParent._components.length-1];
-                     newParent.dom.removeChild(newParent._designDummy.domWrapper)
-                     newParent.dom.append(newParent._designDummy.domWrapper)
-                 }
-             }*/
             if (refresh)
                 _this.variables.updateCache();
             //set initial properties for the new component
@@ -782,21 +743,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                  var th = this._codeEditor.getObjectFromVariable("this");
                  th[varname.substring(5)] = varvalue;
              } else*/
-            this.variables.addVariable(varname, varvalue, refresh);
+            this.variables.addVariable(varname, varvalue, refresh, true);
             return varname;
-        }
-        /**
-         * is there a parent that acts a repeating container?
-         **/
-        _hasRepeatingContainer(component) {
-            if (component === undefined)
-                return undefined;
-            if (this._codeEditor.getVariableFromObject(component) === undefined)
-                return undefined;
-            if (component instanceof Repeater_1.Repeater) {
-                return component;
-            }
-            return this._hasRepeatingContainer(component._parent);
         }
         fillVariables(root, component, cache) {
             var _a;
@@ -842,9 +790,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             dummy.draggable = true;
             dummy.classList.add("_dummy_");
             dummy.onkeydown = (e) => {
-                if (this.keydown) {
+                if (_this.keydown) {
                     e.preventDefault();
-                    this.keydown(e);
+                    _this.keydown(e);
                 }
             };
             dummy.ondrop = (ev) => {
@@ -855,12 +803,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         var toCreate = JSON.parse(data);
                         var cl = Classes_1.classes.getClass(toCreate.createFromType);
                         var newComponent = new cl();
-                        var beforeComponent = ev.target.nd._this;
+                        var beforeComponent = ev.target._this;
                         var newParent = beforeComponent._parent;
                         _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent); // beforeComponent);
                     }
                     else if (data.indexOf('"varNamesToCopy":') > -1) {
-                        var beforeComponent = ev.target.nd._this;
+                        var beforeComponent = ev.target._this;
                         var newParent = beforeComponent._parent;
                         await _this.pasteComponents(data, newParent, beforeComponent);
                         _this.deleteComponents(data);
@@ -874,7 +822,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             };
             dummy.onclick = (ev) => {
                 var _a;
-                var all = [ev.target.nd._this];
+                ev.preventDefault();
+                var all = [ev.target._this];
                 if (node._thisOther) {
                     for (var x = 0; x < node._thisOther.length; x++) {
                         var varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
@@ -884,17 +833,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         }
                     }
                 }
-                var comp = ev.target.nd._this;
-                if (all.length > 1) { //there are more nodes under cursor so we switch the components
-                    var pos = all.indexOf(_this._propertyEditor.value);
-                    if (pos == -1)
-                        pos = 0;
-                    else
-                        pos++;
-                    if (pos >= all.length)
-                        pos = 0;
-                    comp = all[pos];
-                }
+                var comp = ev.target._this;
+                /* if (all.length > 1) {//there are more nodes under cursor so we switch the components
+                     var pos = all.indexOf(_this._propertyEditor.value);
+                     if (pos == -1)
+                         pos = 0;
+                     else
+                         pos++;
+                     if (pos >= all.length)
+                         pos = 0;
+                     comp = all[pos];
+                 }*/
                 _this._propertyEditor.value = comp;
                 _this.lastSelectedDummy.component = comp;
                 this.lastSelectedDummy.pre = true;
@@ -903,6 +852,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     //dummy.focus();//with this the keydown event will work
                     console.log("focus");
                 }
+                console.log("setcomp");
+                /*  var newSel = getSelection();
+                  var range = document.createRange();
+                  range.setStart(_this.lastSelectedDummy.component.dom, 0);
+                  newSel.removeAllRanges();
+                  newSel.addRange(range);*/
+                // (<any>newSel).modify("move", "left", "character");
                 getSelection().removeAllRanges(); //the next paste is before the component
             };
             dummy.ondragover = (ev) => {
@@ -910,7 +866,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             };
             dummy.ondragstart = ev => {
                 ev.dataTransfer.setDragImage(event.target.nd, 20, 20);
-                ev.dataTransfer.setData("text", _this.componentsToString([event.target.nd._this]));
+                ev.dataTransfer.setData("text", _this.componentsToString([event.target._this]));
             };
             dummy.style.zIndex = "10000";
             dummy.style.backgroundColor = "rgba(245,234,39,0.6)";
@@ -918,9 +874,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             dummy.style.fontSize = "10px";
             dummy.style.position = "absolute";
             dummy.ondragenter = dummy.onmouseenter = (e) => {
-                e.target.nd._this.dom.classList.add("dummyselected");
+                e.target._this.dom.classList.add("dummyselected");
             };
-            dummy.ondragleave = dummy.onmouseleave = (e) => e.target.nd._this.dom.classList.remove("dummyselected");
+            dummy.ondragleave = dummy.onmouseleave = (e) => e.target._this.dom.classList.remove("dummyselected");
             //  ComponentDesigner.beforeDummy = dummy;
             // }
             // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
@@ -931,15 +887,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             var dummy;
             //  if (ComponentDesigner.beforeDummy === undefined) {
             dummy = document.createElement("span");
-            dummy.contentEditable = "false";
+            dummy.contentEditable = "true";
             dummy.draggable = true;
             dummy.classList.add("_dummy_");
             dummy.classList.add("ui-droppable");
             dummy.onclick = (ev) => {
-                _this._propertyEditor.value = ev.target.nd._this;
-                getSelection().removeAllRanges(); //the next paste is before the component
-                _this.lastSelectedDummy.component = ev.target.nd._this;
+                _this._propertyEditor.value = ev.target._this;
+                //getSelection().removeAllRanges();//the next paste is before the component
+                _this.lastSelectedDummy.component = ev.target._this;
                 this.lastSelectedDummy.pre = false;
+                this.select(this.designedComponent.__dom, 0);
+                //setTimeout(()=>getSelection().removeAllRanges(),3000);
             };
             //dummy.onclick = (ev) => console.log(ev);
             dummy.ondrop = (ev) => {
@@ -950,11 +908,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         var toCreate = JSON.parse(data);
                         var cl = Classes_1.classes.getClass(toCreate.createFromType);
                         var newComponent = new cl();
-                        let newParent = ev.target.nd._this;
+                        let newParent = ev.target._this;
                         _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined); // beforeComponent);
                     }
                     else if (data.indexOf('"varNamesToCopy":') > -1) {
-                        let newParent = ev.target.nd._this;
+                        let newParent = ev.target._this;
                         await _this.pasteComponents(data, newParent, undefined);
                         _this.deleteComponents(data);
                     }
@@ -965,6 +923,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 ;
                 doit();
             };
+            /* dummy.onkeydown = (e) => {
+                
+                if ((<any>_this).keydown) {
+                    e.preventDefault();
+                    (<any>_this).keydown(e);
+                }
+            }*/
             dummy.ondragover = (ev) => {
                 ev.preventDefault();
                 //  ev.dataTransfer.dropEffect = "move";
@@ -979,9 +944,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             dummy.style.fontSize = "10px";
             dummy.style.position = "absolute";
             dummy.ondragenter = dummy.onmouseenter = (e) => {
-                e.target.nd._this.dom.classList.add("dummyselected");
+                e.target._this.dom.classList.add("dummyselected");
+                var name = this._codeEditor.getVariableFromObject(e.target._this);
+                if (e.target._this.dom._backgroundsic === undefined)
+                    e.target._this.dom._backgroundsic = e.target._this.dom.style["background-image"];
+                e.target._this.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='12'>" + name + "</text></svg>" + '")';
             };
-            dummy.ondragleave = dummy.onmouseleave = (e) => e.target.nd._this.dom.classList.remove("dummyselected");
+            dummy.ondragleave = dummy.onmouseleave = (e) => {
+                e.target._this.dom.classList.remove("dummyselected");
+                e.target._this.dom.style["background-image"] = e.target._this.dom._backgroundsic;
+                delete e.target._this.dom._backgroundsic;
+            };
             //   ComponentDesigner.beforeDummy = dummy;
             // }
             // dummy = ComponentDesigner.beforeDummy.cloneNode(true);
@@ -996,97 +969,161 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             if (root === undefined)
                 root = node;
             //only elements with varaiables can have dummies
+            var allComponents = [];
             var varname = this._codeEditor.getVariableFromObject(node._this);
-            var comp = node._this;
-            if (!varname && node._thisOther) {
+            if (varname)
+                allComponents.push(node._this);
+            if (node._thisOther) {
                 for (var x = 0; x < node._thisOther.length; x++) {
-                    varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
-                    if (varname) {
-                        comp = node._thisOther[x];
-                        break;
+                    var varname2 = this._codeEditor.getVariableFromObject(node._thisOther[x]);
+                    if (varname2)
+                        allComponents.push(node._thisOther[x]);
+                }
+            }
+            for (var curComponent = 0; curComponent < allComponents.length; curComponent++) {
+                varname = this._codeEditor.getVariableFromObject(allComponents[curComponent]);
+                var comp = allComponents[curComponent];
+                /* if (!varname && node._thisOther) {
+                     for (var x = 0; x < node._thisOther.length; x++) {
+                         varname = this._codeEditor.getVariableFromObject(node._thisOther[x]);
+                         if (varname) {
+                             comp = node._thisOther[x];
+                             break;
+                         }
+                     }
+                 }*/
+                var hasChildren = false;
+                var desc = ComponentDescriptor_1.ComponentDescriptor.describe(comp.constructor);
+                var fnew = desc.findField("children");
+                if (fnew) {
+                    if ((fnew === null || fnew === void 0 ? void 0 : fnew.createDummyInDesigner) !== undefined) {
+                        if (typeof (fnew.createDummyInDesigner) == "boolean") {
+                            hasChildren = fnew.createDummyInDesigner;
+                        }
+                        else {
+                            hasChildren = fnew.createDummyInDesigner(comp, false);
+                        }
+                    }
+                    else {
+                        hasChildren = true;
+                    }
+                    if (hasChildren) {
+                        if (!node.classList.contains("jeditablecontainer")) {
+                            node.classList.add("jeditablecontainer");
+                        }
                     }
                 }
-            }
-            if (!varname) {
-                if (node.contentEditable !== "false")
-                    node.contentEditable = "false";
-                return;
-            }
-            var hasChildren = false;
-            var desc = ComponentDescriptor_1.ComponentDescriptor.describe(comp.constructor);
-            var fnew = desc.findField("children");
-            if (fnew) {
-                hasChildren = true;
-                if (!node.classList.contains("jeditablecontainer")) {
-                    node.classList.add("jeditablecontainer");
+                if (!varname) {
+                    if (node.contentEditable !== "false")
+                        node.contentEditable = "false";
                 }
-            }
-            if (node.getClientRects === undefined)
-                return;
-            var rect = node.getClientRects()[0];
-            if (rect === undefined)
-                return;
-            rect = {
-                left: rect.left - rootRect.left + window.scrollX,
-                top: rect.top - rootRect.top + window.scrollY,
-                right: rect.right - rootRect.left + window.scrollX,
-                bottom: rect.bottom - rootRect.top + window.scrollY
-            };
-            if (node === null || node === void 0 ? void 0 : node.nd)
-                return;
-            var preDummy = node._preDummy_;
-            if (!node._preDummy_) {
-                preDummy = this.createPreDummy(node);
-                preDummy.nd = node;
-                preDummy.title = node.outerHTML;
-                node._preDummy_ = preDummy;
-                arr.push(preDummy);
-            }
-            var newTop = rect.top;
-            var newLeft = rect.left;
-            node.myTop = rect.top;
-            node.myLeft = rect.left;
-            if (node.parentNode._preDummy_) {
-                const rp = {
-                    top: node.parentNode.myTop,
-                    left: node.parentNode.myLeft,
+                if ((fnew === null || fnew === void 0 ? void 0 : fnew.createDummyInDesigner) !== undefined) {
+                    if (typeof (fnew.createDummyInDesigner) === "boolean") {
+                        if (fnew.createDummyInDesigner === false)
+                            varname = undefined;
+                    }
+                    else {
+                        if (fnew.createDummyInDesigner(comp, true) === false)
+                            varname = undefined;
+                    }
+                }
+                if (node.getClientRects === undefined)
+                    return;
+                var rect = node.getClientRects()[0];
+                if (rect === undefined)
+                    return;
+                rect = {
+                    left: rect.left - rootRect.left + window.scrollX,
+                    top: rect.top - rootRect.top + window.scrollY,
+                    right: rect.right - rootRect.left + window.scrollX,
+                    bottom: rect.bottom - rootRect.top + window.scrollY
                 };
-                if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.left + 5) {
-                    newLeft = parseInt(node.parentNode._preDummy_.style.left.replace("px", "")) + 8;
-                }
-            }
-            preDummy.style.top = newTop + "px";
-            preDummy.style.left = newLeft + "px";
-            if (hasChildren) {
-                var postDummy = node._postDummy_;
-                if (!node._postDummy_) {
-                    postDummy = this.createPostDummy();
-                    postDummy.nd = node;
-                    postDummy.title = node.outerHTML;
-                    node._postDummy_ = postDummy;
-                    arr.push(postDummy);
-                }
-                var newBottom = rect.bottom;
-                var newRight = rect.right;
-                node.myBottom = rect.bottom;
-                node.myRight = rect.right;
-                var par = node._this._parent;
-                if (par.dom._postDummy_) {
-                    const rp = {
-                        bottom: par.dom.myBottom,
-                        right: par.dom.myRight,
-                    };
-                    if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
-                        newRight = par.dom._postDummy_.style.left.replace("px", "");
+                if (node === null || node === void 0 ? void 0 : node.nd)
+                    return;
+                if (varname) {
+                    var preDummy = undefined;
+                    if (node._preDummies_)
+                        preDummy = node._preDummies_[curComponent];
+                    if (!preDummy) {
+                        if (node._preDummies_ === undefined)
+                            node._preDummies_ = [];
+                        preDummy = this.createPreDummy(node);
+                        preDummy.nd = node;
+                        preDummy._this = comp;
+                        preDummy.title = varname;
+                        arr.push(preDummy);
+                        node._preDummies_.push(preDummy);
                     }
+                    var newTop = rect.top;
+                    var newLeft = rect.left + curComponent * 8;
+                    node.myTop = rect.top;
+                    node.myLeft = rect.left;
+                    var parentNode = node.parentNode;
+                    //wrapper
+                    if (node._this === node.parentNode._this)
+                        parentNode = node.parentNode.parentNode;
+                    if (parentNode._preDummies_) {
+                        const rp = {
+                            top: parentNode.myTop,
+                            left: parentNode.myLeft,
+                            right: parentNode.myLeft + parentNode._preDummies_.length * 8
+                        };
+                        if (rect.top > rp.top - 5 && rect.top < rp.top + 5 && rect.left > rp.left - 5 && rect.left < rp.right + 5) {
+                            var pr = parentNode._preDummies_[parentNode._preDummies_.length - 1];
+                            newLeft = parseInt(pr.style.left.replace("px", "")) + 8;
+                        }
+                    }
+                    preDummy.style.top = newTop + "px";
+                    preDummy.style.left = newLeft + "px";
                 }
-                postDummy.style.top = (newBottom - 14) + "px";
-                postDummy.style.left = (newRight - 14) + "px";
+                if (hasChildren) {
+                    var postDummy = undefined;
+                    if (node._postDummies_)
+                        postDummy = node._postDummies_[curComponent];
+                    if (!(postDummy)) {
+                        if (node._postDummies_ === undefined)
+                            node._postDummies_ = [];
+                        postDummy = this.createPostDummy();
+                        postDummy.nd = node;
+                        postDummy._this = comp;
+                        postDummy.title = varname;
+                        arr.push(postDummy);
+                        node._postDummies_.push(postDummy);
+                    }
+                    var newBottom = rect.bottom;
+                    var newRight = rect.right - curComponent * 8;
+                    node.myBottom = rect.bottom;
+                    node.myRight = rect.right;
+                    //var par = (<any>node)._this._parent;
+                    if (parentNode._postDummies_) {
+                        const rp = {
+                            bottom: parentNode.myBottom,
+                            right: parentNode.myRight,
+                            left: parentNode.myRight - parentNode._postDummies_.length * 8
+                        };
+                        if (rect.bottom > rp.bottom - 5 && rect.bottom < rp.bottom + 5 && rect.right > rp.right - 5 && rect.right < rp.right + 5) {
+                            var pr = parentNode._postDummies_[parentNode._postDummies_.length - 1];
+                            newRight = pr.style.left.replace("px", "");
+                        }
+                    }
+                    postDummy.style.top = (newBottom - 8) + "px";
+                    postDummy.style.left = (newRight - 8) + "px";
+                }
             }
             for (var x = 0; x < node.childNodes.length; x++) {
                 if (node._this !== node.childNodes[x]._this) //Wrapper
                     this.insertDummies(node.childNodes[x], root, arr, rootRect);
             }
+        }
+        select(nodeStart, posStart, nodeEnd = undefined, posEnd = undefined) {
+            var newSel = getSelection();
+            var range = document.createRange();
+            range.setStart(nodeStart, posStart);
+            if (nodeEnd !== undefined)
+                range.setEnd(nodeEnd, posEnd);
+            newSel.removeAllRanges();
+            newSel.addRange(range);
+            return range;
         }
         /**
          * @member {jassijs.ui.Component} - the designed component
@@ -1101,7 +1138,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             if (this._codeEditor.__evalToCursorReached !== true) {
                 this._codeEditor._main.show("design");
             }
-            if (this._designPlaceholder._components.length > 0)
+            while (this._designPlaceholder._components.length > 0)
                 this._designPlaceholder.remove(this._designPlaceholder._components[0], true);
             this._designPlaceholder.add(component);
             // 
@@ -1114,8 +1151,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 this.inlineEditorPanel.dom.firstChild.remove();
             }
             this.updateDummies();
+            this.callEvent("onDesignedComponentChanged", component);
             //var parser=new jassijs.ui.PropertyEditor.Parser();
             //parser.parse(_this.value);
+        }
+        onDesignedComponentChanged(handler) {
+            this.addEvent("onDesignedComponentChanged", handler);
         }
         updateDummies() {
             var arr = [];
@@ -1138,7 +1179,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this._designPlaceholder.dom.contentEditable = "false";
             //delete removed dummies
             for (var x = 0; x < this.dummyHolder.childNodes.length; x++) {
-                if (this.dummyHolder.childNodes[x].nd._this._parent === undefined) {
+                if (this.dummyHolder.childNodes[x]._this.dom._this._parent === undefined) {
+                    //if ((<any>this.dummyHolder.childNodes[x])._this._parent === undefined) {
                     this.dummyHolder.removeChild(this.dummyHolder.childNodes[x]);
                 }
             }

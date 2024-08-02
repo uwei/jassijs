@@ -168,8 +168,8 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
     ], DBObjectDialog);
     exports.DBObjectDialog = DBObjectDialog;
     async function test() {
-        var ret = await DBObjectDialog.createFor("jassijs.security.User");
-        // var ret = await DBObjectDialog.createFor("northwind.Customer");
+        // var ret = await DBObjectDialog.createFor("jassijs.security.User");
+        var ret = await DBObjectDialog.createFor("northwind.Employees");
         return ret;
     }
     exports.test = test;

@@ -1,3 +1,6 @@
+import { Ref } from "jassijs/ui/Component";
+import { TextComponent } from "jassijs/ui/Component";
+import { HTMLComponent } from "jassijs/ui/Component";
 import { DateTimeConverter } from "jassijs/ui/converters/DateTimeConverter";
 import { Style } from "jassijs/ui/Style";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
@@ -12,267 +15,151 @@ import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { Orders } from "northwind/remote/Orders";
 import { Databinder } from "jassijs/ui/Databinder";
-import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
+import { DBObjectView, $DBObjectView, DBObjectViewMe, DBObjectViewProperties, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
 import { Customer } from "northwind/remote/Customer";
+import { jc } from "jassijs/ui/Component";
+import { Repeater2 } from "jassijs/ui/Repeater2";
+import { OrderDetails } from "northwind/remote/OrderDetails";
+import { Button } from "jassijs/ui/Button";
+import { States, foreach } from "jassijs/ui/State";
 type Me = {
-    boxpanel1?: BoxPanel;
-    panel1?: Panel;
     shipName?: Textbox;
     shipAddress?: Textbox;
     shipPostalCode?: Textbox;
     shipCity?: Textbox;
     shipCountry?: Textbox;
     shipRegion?: Textbox;
-    panel2?: Panel;
-    id?: Textbox;
-    freight?: Textbox;
-    panel3?: Panel;
-    customername?: HTMLPanel;
-    choosecustomer?: ObjectChooser;
-    shipVia?: HTMLPanel;
-    shipviaChooser?: ObjectChooser;
-    employeename?: HTMLPanel;
-    chooseEmployee?: ObjectChooser;
-    orderDate?: Textbox;
-    requiredDate?: Textbox;
-    shippedDate?: Textbox;
-    boxpanel2?: BoxPanel;
-    htmlpanel1?: HTMLPanel;
-    htmlpanel2?: HTMLPanel;
-    repeater1?: Repeater;
-    detailsQuantity?: Textbox;
-    detailsProduct?: HTMLPanel;
-    objectchooser1?: ObjectChooser;
-    style1?: Style;
 } & DBObjectViewMe;
-@$DBObjectView({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text" })
+function ProductDetails(props: {
+    product: OrderDetails;
+}, states: States<{
+    product: OrderDetails;
+}>) {
+    var hh = states.product;
+    return jc(Panel, {
+        children: [
+            jc(Textbox, { bind: states.product.bind.Quantity, width: 80 }),
+            jc(HTMLPanel, { bind: states.product.bind.Product.ProductName, width: 365 }),
+            jc(ObjectChooser, {
+                bind: states.product.bind,
+                items: "northwind.Products"
+            }),
+            jc("br"),
+        ]
+    });
+}
+interface OrdersViewProperties extends DBObjectViewProperties<Orders> {
+    activeDetail: OrderDetails;
+}
+@$DBObjectView({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text",queryname:"findAllWithDetails" })
 @$Class("northwind.OrdersView")
-export class OrdersView extends DBObjectView {
-    declare me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    declare value: Orders;
-    constructor() {
-        super();
-        //this.me = {}; this is called in objectdialog
-        this.layout(this.me);
+export class OrdersView extends DBObjectView<Orders, OrdersViewProperties> {
+    declare refs: Me;
+    render() {
+        return jc(Panel, {
+            children: [
+                jc(DBObjectViewToolbar,{ view: this }),
+                jc(BoxPanel, {
+                    horizontal: true,
+                    children: [
+                        jc(Panel, {
+                            children: [
+                                jc(Textbox, { label: "Ship Name", bind: this.states.value.bind.ShipName, width: 260, ref: this.refs.shipName }),
+                                jc(Textbox, {
+                                    label: "Order ID", bind: this.states.value.bind.id, converter: new NumberConverter(), style: {
+                                        textAlign: "right",
+                                        width: 60
+                                    }
+                                }),
+                                jc("br", { tag: "br" }),
+                                jc(Textbox, { label: "Ship Address", bind: this.states.value.bind.ShipAddress, width: 260, ref: this.refs.shipAddress }),
+                                jc(Textbox, {
+                                    label: "Freight", bind: this.states.value.bind.Freight, width: 60, converter: new NumberConverter({ format: "#.##0,00" }), style: {
+                                        textAlign: "right"
+                                    }
+                                }),
+                                jc("br", { tag: "br" }),
+                                jc(Textbox, { label: "Postal Code", bind: this.states.value.bind.ShipPostalCode, width: 60, hidden: false, ref: this.refs.shipPostalCode }),
+                                jc(Textbox, { bind: this.states.value.bind.ShipCity, label: "Ship City", width: 195, value: "shipCity" }),
+                                jc("br", { tag: "br" }),
+                                jc(Textbox, { label: "Ship Region", bind: this.states.value.bind.ShipRegion, width: 150, ref: this.refs.shipRegion }),
+                                "",
+                                jc(Textbox, { label: " Ship Country", bind: this.states.value.bind.ShipCountry, width: 105, ref: this.refs.shipCountry })
+                            ],
+                            width: 485
+                        }),
+                        jc(Panel, {
+                            children: [
+                                jc(HTMLPanel, { bind: this.states.value.bind.Customer.CompanyName, label: "Customer", width: 260 }),
+                                jc(ObjectChooser, {
+                                    autocommit: false, items: "northwind.Customer", bind: this.states.value.bind.Customer, height: 25,
+                                    onchange: (data) => {
+                                        var cust = this.states.value.Customer.current;
+                                        this.refs.shipName.value = cust.CompanyName;
+                                        this.refs.shipAddress.value = cust.Address;
+                                        this.refs.shipPostalCode.value = cust.PostalCode;
+                                        this.refs.shipCity.value = cust.City;
+                                        this.refs.shipCountry.value = cust.Country;
+                                        this.refs.shipRegion.value = cust.Region;
+                                    }
+                                }),
+                                jc("br", {}),
+                                jc(HTMLPanel, { bind: this.states.value.bind.ShipVia, template: "{{id}} {{CompanyName}}", width: 260, label: "Ship Via" }),
+                                jc(ObjectChooser, { items: "northwind.Shippers", bind: this.states.value.bind.ShipVia }),
+                                jc("br", {}),
+                                jc(HTMLPanel, { bind: this.states.value.bind.Employee, template: "{{id}} {{FirstName}} {{LastName}}", width: 260, label: "Employee", height: 20 }),
+                                jc(ObjectChooser, { items: "northwind.Employees", bind: this.states.value.bind.Employee }),
+                                jc("br", {}),
+                                jc(Textbox, { bind: this.states.value.bind.OrderDate, converter: new DateTimeConverter(), label: "Oder Date", width: 95, text: "Oder Date" }),
+                                jc(Textbox, { bind: this.states.value.bind.RequiredDate, converter: new DateTimeConverter(), label: "Required Date", width: 95 }),
+                                jc(Textbox, { bind: this.states.value.bind.ShippedDate, converter: new DateTimeConverter(), label: "Shipped Date", width: 95 })
+                            ]
+                        })
+                    ]
+                }),
+                jc("br", {}),
+                jc("br", {}),
+                jc(HTMLPanel, { value: "Quantity", width: 90 }),
+                jc(HTMLPanel, { value: "Text" }),
+                jc("br", {}),
+                jc(BoxPanel, {
+                    children: foreach(this.states.value.Details, (ob) => jc(ProductDetails, {
+                        product: <any>ob
+                    }))
+                })
+                /* jc(Repeater2,{
+                                items: this.states.value.Details,
+                            bind: this.states.activeDetail.bind,
+                            children: [
+                            jc(Panel,{
+                                children: [
+                            jc(Button,{text: "hh" }),
+                            jc(Textbox,{bind: this.states.activeDetail.bind.Quantity })
+                            ]
+                         })
+                            ],
+                            width: 105
+                 })*/
+                // this.states.value?.Details===undefined? jc("br", {}):this.props.value.Details.map((detail) => jc(ProductDetails, {product: detail }))
+            ]
+        });
     }
     get title() {
         return this.value === undefined ? "OrdersView" : "OrdersView " + this.value.id;
     }
-    layout(me: Me) {
-        me.boxpanel1 = new BoxPanel();
-        me.panel1 = new Panel();
-        me.shipName = new Textbox();
-        me.shipAddress = new Textbox();
-        me.shipPostalCode = new Textbox();
-        me.shipCity = new Textbox();
-        me.shipCountry = new Textbox();
-        me.shipRegion = new Textbox();
-        me.panel2 = new Panel();
-        me.id = new Textbox();
-        me.freight = new Textbox();
-        me.panel3 = new Panel();
-        me.customername = new HTMLPanel();
-        me.choosecustomer = new ObjectChooser();
-        me.shipVia = new HTMLPanel();
-        me.shipviaChooser = new ObjectChooser();
-        me.employeename = new HTMLPanel();
-        me.chooseEmployee = new ObjectChooser();
-        me.orderDate = new Textbox();
-        me.requiredDate = new Textbox();
-        me.shippedDate = new Textbox();
-        me.boxpanel2 = new BoxPanel();
-        me.htmlpanel1 = new HTMLPanel();
-        me.htmlpanel2 = new HTMLPanel();
-        me.repeater1 = new Repeater();
-        me.style1 = new Style();
-        this.me.main.add(me.boxpanel1);
-        this.me.main.add(me.boxpanel2);
-        this.me.main.add(me.repeater1);
-        this.me.main.add(me.style1);
-        me.boxpanel1.add(me.panel1);
-        me.boxpanel1.add(me.panel2);
-        me.boxpanel1.add(me.panel3);
-        me.boxpanel1.height = 230;
-        me.boxpanel1.horizontal = true;
-        me.panel1.add(me.shipName);
-        me.panel1.add(me.shipAddress);
-        me.panel1.add(me.shipPostalCode);
-        me.panel1.add(me.shipCity);
-        me.panel1.add(me.shipRegion);
-        me.panel1.add(me.shipCountry);
-        me.panel1.width = 250;
-        me.panel1.height = 185;
-        me.panel1.isAbsolute = true;
-        me.panel2.add(me.id);
-        me.panel2.add(me.freight);
-        me.panel2.isAbsolute = true;
-        me.panel2.height = 185;
-        me.panel2.width = 105;
-        me.panel3.add(me.customername);
-        me.panel3.add(me.choosecustomer);
-        me.panel3.add(me.shipVia);
-        me.panel3.add(me.shipviaChooser);
-        me.panel3.add(me.employeename);
-        me.panel3.add(me.chooseEmployee);
-        me.panel3.add(me.orderDate);
-        me.panel3.add(me.requiredDate);
-        me.panel3.add(me.shippedDate);
-        me.panel3.isAbsolute = true;
-        me.panel3.height = 185;
-        me.panel3.width = 320;
-        me.boxpanel2.add(me.htmlpanel1);
-        me.boxpanel2.add(me.htmlpanel2);
-        me.boxpanel2.horizontal = true;
-        me.repeater1.createRepeatingComponent(function (me: Me) {
-            me.detailsQuantity = new Textbox();
-            me.detailsProduct = new HTMLPanel();
-            me.objectchooser1 = new ObjectChooser();
-            me.repeater1.design.add(me.detailsQuantity);
-            me.repeater1.design.add(me.detailsProduct);
-            me.repeater1.design.add(me.objectchooser1);
-            me.detailsQuantity.bind = [me.repeater1.design.databinder, "Quantity"];
-            me.detailsQuantity.width = 60;
-            me.detailsProduct.width = 530;
-            me.detailsProduct.bind = [me.repeater1.design.databinder, "Product"];
-            me.detailsProduct.template = "{{ProductName}}";
-            me.detailsProduct.style = {
-                overflow: "hidden",
-                marginTop: "5px"
-            };
-            me.detailsProduct.styles = [me.style1];
-            me.objectchooser1.bind = [me.repeater1.design.databinder, "Product"];
-            me.objectchooser1.items = "northwind.Products";
-        });
-        me.repeater1.width = 675;
-        me.repeater1.bind = [me.databinder, "Details"];
-        me.shipName.x = 5;
-        me.shipName.y = 5;
-        me.shipName.bind = [me.databinder, "ShipName"];
-        me.shipName.width = 220;
-        me.shipName.label = "Ship Name";
-        me.shipAddress.x = 5;
-        me.shipAddress.y = 50;
-        me.shipAddress.bind = [me.databinder, "ShipAddress"];
-        me.shipAddress.width = 220;
-        me.shipAddress.label = "Ship Address";
-        me.shipPostalCode.x = 5;
-        me.shipPostalCode.y = 95;
-        me.shipPostalCode.bind = [me.databinder, "ShipPostalCode"];
-        me.shipPostalCode.width = 55;
-        me.shipPostalCode.label = "Postal Code";
-        me.shipCity.x = 75;
-        me.shipCity.y = 95;
-        me.shipCity.bind = [me.databinder, "ShipCity"];
-        me.shipCity.label = "Ship City";
-        me.shipCity.width = 150;
-        me.shipCountry.x = 135;
-        me.shipCountry.y = 140;
-        me.shipCountry.bind = [me.databinder, "ShipCountry"];
-        me.shipCountry.label = "Ship Country";
-        me.shipCountry.width = 90;
-        me.shipRegion.x = 5;
-        me.shipRegion.y = 140;
-        me.shipRegion.bind = [me.databinder, "ShipRegion"];
-        me.shipRegion.label = "Ship Region";
-        me.shipRegion.width = 120;
-        me.id.x = 5;
-        me.id.y = 5;
-        me.id.converter = new NumberConverter();
-        me.id.bind = [me.databinder, "id"];
-        me.id.label = "Order ID";
-        me.id.width = 70;
-        me.id.style = {
-            textAlign: "right"
-        };
-        me.freight.x = 5;
-        me.freight.y = 50;
-        me.freight.bind = [me.databinder, "Freight"];
-        me.freight.width = 70;
-        me.freight.label = "Freight";
-        me.freight.converter = new NumberConverter({ format: "#.##0,00" });
-        me.freight.style = {
-            textAlign: "right"
-        };
-        me.customername.x = 10;
-        me.customername.y = 5;
-        me.customername.width = 265;
-        me.customername.template = "{{id}} {{CompanyName}}";
-        me.customername.bind = [me.databinder, "Customer"];
-        me.customername.value = "VINET Vins et alcools Chevalier";
-        me.customername.label = "Customer";
-        me.customername.height = 15;
-        me.customername.styles = [me.style1];
-        me.choosecustomer.x = 275;
-        me.choosecustomer.y = 15;
-        me.choosecustomer.items = "northwind.Customer";
-        me.choosecustomer.bind = [me.databinder, "Customer"];
-        me.choosecustomer.onchange(function (event) {
-            let cust = <Customer>me.choosecustomer.value;
-            me.shipName.value = cust.CompanyName;
-            me.shipAddress.value = cust.Address;
-            me.shipPostalCode.value = cust.PostalCode;
-            me.shipCity.value = cust.City;
-            me.shipCountry.value = cust.Country;
-            me.shipRegion.value = cust.Region;
-        });
-        me.shipVia.x = 10;
-        me.shipVia.y = 45;
-        me.shipVia.bind = [me.databinder, "ShipVia"];
-        me.shipVia.template = "{{id}} {{CompanyName}}";
-        me.shipVia.label = "Ship via";
-        me.shipVia.value = "3 Federal Shipping";
-        me.shipVia.width = 260;
-        me.shipVia.height = 20;
-        me.shipVia.styles = [me.style1];
-        me.shipviaChooser.x = 275;
-        me.shipviaChooser.y = 60;
-        me.shipviaChooser.bind = [me.databinder, "ShipVia"];
-        me.shipviaChooser.items = "northwind.Shippers";
-        me.shipviaChooser.width = 30;
-        me.employeename.x = 10;
-        me.employeename.y = 90;
-        me.employeename.bind = [me.databinder, "Employee"];
-        me.employeename.label = "Employee";
-        me.employeename.width = 265;
-        me.employeename.value = "6 Michael Suyama";
-        me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
-        me.employeename.styles = [me.style1];
-        me.chooseEmployee.x = 275;
-        me.chooseEmployee.y = 105;
-        me.chooseEmployee.bind = [me.databinder, "Employee"];
-        me.chooseEmployee.items = "northwind.Employees";
-        me.chooseEmployee.height = 20;
-        me.orderDate.x = 10;
-        me.orderDate.y = 130;
-        me.orderDate.bind = [me.databinder, "OrderDate"];
-        me.orderDate.label = "Order Date";
-        me.orderDate.width = 95;
-        me.orderDate.readOnly = false;
-        me.orderDate.converter = new DateTimeConverter();
-        me.requiredDate.x = 110;
-        me.requiredDate.y = 130;
-        me.requiredDate.bind = [me.databinder, "RequiredDate"];
-        me.requiredDate.label = "Required Date";
-        me.requiredDate.width = 95;
-        me.requiredDate.converter = new DateTimeConverter();
-        me.shippedDate.x = 210;
-        me.shippedDate.y = 130;
-        me.shippedDate.bind = [me.databinder, "ShippedDate"];
-        me.shippedDate.width = "95";
-        me.shippedDate.label = "Shipped Date";
-        me.shippedDate.converter = new DateTimeConverter();
-        me.htmlpanel1.value = "Quantity<br>";
-        me.htmlpanel1.width = 65;
-        me.htmlpanel1.styles = [];
-        me.htmlpanel2.value = "Text<br>";
-        me.htmlpanel2.width = 100;
-        me.style1.style = {};
-    }
 }
 export async function test() {
-    var ret = new OrdersView;
-    ret["value"] = <Orders>await Orders.findOne({ id: 10249, relations: ["*"] });
+    var order = <Orders>await Orders.findOne({ id: 10266, relations: ["*"] });
+    //  var order=await Orders.find({relations: ["*"] });
+    var ret = new OrdersView();/*{
+        value: order
+    });*/
+
+    setTimeout(async ()=>{
+        ret.value=order = <Orders>await Orders.findOne({ id: 10252, relations: ["*"] });
+    //  var order=await Orders.find({relations: ["*"] });
+    },3000)
+
     return ret;
 }

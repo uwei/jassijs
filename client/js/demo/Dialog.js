@@ -1,38 +1,59 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Button_1, BoxPanel_1, Registry_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Panel", "jassijs/ui/Component"], function (require, exports, Checkbox_1, Panel_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog = void 0;
-    let Dialog = class Dialog extends Panel_1.Panel {
-        constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
+    class Dialog extends Panel_1.Panel {
+        render() {
+            return (0, Component_1.jc)(Panel_1.Panel, {
+                children: [
+                    (0, Component_1.jc)(Checkbox_1.Checkbox, {
+                        text: "456456", style: {
+                            color: "maroon"
+                        }
+                    }),
+                    (0, Component_1.jc)(Checkbox_1.Checkbox, {
+                        text: "456456", style: {
+                            color: "maroon"
+                        }
+                    }),
+                    (0, Component_1.jc)(Checkbox_1.Checkbox, {
+                        text: "456456", style: {
+                            color: "green"
+                        }
+                    }),
+                    "Das",
+                    (0, Component_1.jc)("br", { tag: "br" }),
+                    "Hallo",
+                    "Das",
+                    (0, Component_1.jc)("br", {}),
+                    "Hallo",
+                    (0, Component_1.jc)(Checkbox_1.Checkbox, {
+                        text: "456456", style: {
+                            color: "maroon"
+                        }
+                    }),
+                    (0, Component_1.jc)(Checkbox_1.Checkbox, {
+                        text: "456456", style: {
+                            color: "maroon"
+                        }
+                    }),
+                    (0, Component_1.jc)(Checkbox_1.Checkbox, {
+                        text: "456456", style: {
+                            color: "green"
+                        }
+                    }),
+                    "Das",
+                    (0, Component_1.jc)("br", {}),
+                    "Hallo",
+                    "Das",
+                    (0, Component_1.jc)("br", {}),
+                    "Hallo",
+                    "",
+                    ""
+                ]
+            });
         }
-        layout(me) {
-            me.boxpanel1 = new BoxPanel_1.BoxPanel();
-            me.button1 = new Button_1.Button();
-            me.button2 = new Button_1.Button();
-            me.boxpanel1.add(me.button1);
-            me.boxpanel1.add(me.button2);
-            me.boxpanel1.spliter = [60, 40];
-            me.button1.text = "buttond1";
-            me.button2.text = "button";
-            this.add(me.boxpanel1);
-        }
-    };
-    Dialog = __decorate([
-        (0, Registry_1.$Class)("demo/Dialog"),
-        __metadata("design:paramtypes", [])
-    ], Dialog);
+    }
     exports.Dialog = Dialog;
     function test() {
         var ret = new Dialog();

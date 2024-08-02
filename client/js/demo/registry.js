@@ -5,10 +5,6 @@ define("demo/registry",["require"], function(require) {
 	"demo/DelTest.ts": {
 		"date": 1681563014000
 	},
-	"demo/Dialog.ts": {
-		"date": 1720278404563.0688,
-		"demo/Dialog": {}
-	},
 	"demo/Dialog3.ts": {
 		"date": 1697378966403.906,
 		"demo/Dialog3": {}
@@ -21,10 +17,6 @@ define("demo/registry",["require"], function(require) {
 		"date": 1699110372945.5725,
 		"demo/Dialog5": {}
 	},
-	"demo/EmptyDialog.ts": {
-		"date": 1655556796000,
-		"demo.EmptyDialog": {}
-	},
 	"demo/LargeReport.ts": {
 		"date": 1634240084000
 	},
@@ -33,9 +25,6 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/modul.ts": {
 		"date": 1612818334000
-	},
-	"demo/MyTest.ts": {
-		"date": 1655757462000
 	},
 	"demo/Report1.ts": {
 		"date": 1699287691047.1409
@@ -134,8 +123,48 @@ define("demo/registry",["require"], function(require) {
 		"demo/Dialog6": {}
 	},
 	"demo/Dialog7.ts": {
-		"date": 1721408545719.8557,
+		"date": 1722278374616.3135,
+		"demo/M1": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/M1"
+				}
+			],
+			"$Property": [
+				{
+					"name": "text",
+					"type": "string"
+				}
+			]
+		},
 		"demo/Dialog7": {}
+	},
+	"demo/Dialog8.ts": {
+		"date": 1721932941226.1138
+	},
+	"demo/TestStatebinder.ts": {
+		"date": 1722193064669.4893
+	},
+	"demo/hallo.tsx": {
+		"date": 1722278385501.2415
+	},
+	"demo/hallo2.tsx": {
+		"date": 1720092336379.0627
+	},
+	"demo/hallo3.tsx": {
+		"date": 1722278571388.752
+	},
+	"demo/hallo4.tsx": {
+		"date": 1722278638345.3696
+	},
+	"demo/hallo5.tsx": {
+		"date": 1722278722961.9177
+	},
+	"demo/hallo6.tsx": {
+		"date": 1722108445957.1736
+	},
+	"demo/TestJSX.tsx": {
+		"date": 1719778647927.916
 	}
 }
  }

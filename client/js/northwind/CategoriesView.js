@@ -4,71 +4,53 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Categories", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Table_1, BoxPanel_1, Textarea_1, Textbox_1, Registry_1, Panel_1, Property_1, Categories_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Table", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Categories", "jassijs/ui/DBObjectView", "jassijs/ui/Component"], function (require, exports, NumberConverter_1, Table_1, Textarea_1, Textbox_1, Registry_1, Panel_1, Property_1, Categories_1, DBObjectView_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CategoriesView = void 0;
     let CategoriesView = class CategoriesView extends DBObjectView_1.DBObjectView {
-        constructor() {
-            super();
-            // this.me = {}; //this is called in objectdialog
-            this.layout(this.me);
-        }
         get title() {
             return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
         }
-        layout(me) {
-            me.boxpanel1 = new BoxPanel_1.BoxPanel();
-            me.Id = new Textbox_1.Textbox();
-            me.name = new Textbox_1.Textbox();
-            me.description = new Textarea_1.Textarea();
-            me.panel1 = new Panel_1.Panel();
-            me.table1 = new Table_1.Table({ options: { data: this.value } });
-            this.me.main.config({ children: [
-                    me.boxpanel1.config({
-                        children: [
-                            me.Id.config({
-                                label: "Id",
-                                bind: [me.databinder, "id"],
-                                width: 40,
-                                converter: new NumberConverter_1.NumberConverter()
-                            }),
-                            me.name.config({
-                                bind: [me.databinder, "CategoryName"],
-                                label: "Name",
-                                width: 225
-                            })
-                        ],
-                        width: 80,
-                        horizontal: true
+        render() {
+            return (0, Component_1.jc)(Panel_1.Panel, {
+                children: [
+                    (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, {
+                        label: "Id",
+                        bind: this.states.value.bind.id,
+                        width: 40,
+                        converter: new NumberConverter_1.NumberConverter()
                     }),
-                    me.description.config({
-                        height: 70,
+                    (0, Component_1.jc)(Textbox_1.Textbox, {
+                        label: "Name",
+                        bind: this.states.value.bind.CategoryName,
+                        width: 235,
+                        converter: new NumberConverter_1.NumberConverter()
+                    }),
+                    (0, Component_1.jc)("br"),
+                    (0, Component_1.jc)(Textarea_1.Textarea, {
+                        label: "Description",
+                        bind: this.states.value.bind.Description,
                         width: 280,
-                        bind: [me.databinder, "Description"],
-                        label: "Description"
+                        converter: new NumberConverter_1.NumberConverter()
                     }),
-                    me.panel1.config({}),
-                    me.table1.config({
+                    (0, Component_1.jc)(Table_1.Table, {
                         height: "100%",
-                        bindItems: [me.databinder, "Products"],
-                        width: "100%",
-                        tooltip: "e"
-                    })
-                ] });
+                        bindItems: this.states.value.bind.Products,
+                        width: "100%"
+                    }),
+                ]
+            });
         }
     };
-    __decorate([
-        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", Categories_1.Categories)
-    ], CategoriesView.prototype, "value", void 0);
     CategoriesView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
-        (0, Registry_1.$Class)("northwind.CategoriesView"),
-        __metadata("design:paramtypes", [])
+        (0, Registry_1.$Class)("northwind.CategoriesView")
+        //@$Property({name:"value",componentType:"northwind.Categories", type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
+        ,
+        (0, Property_1.$Property)({ name: "aa", type: "string" }),
+        (0, Property_1.$Property)({ name: "ab", type: "string" })
     ], CategoriesView);
     exports.CategoriesView = CategoriesView;
     async function test() {

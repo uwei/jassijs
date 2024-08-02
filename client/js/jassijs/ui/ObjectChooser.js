@@ -40,8 +40,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
     class Me {
     }
     let ObjectChooser = class ObjectChooser extends Button_1.Button {
-        constructor() {
-            super();
+        constructor(props = {}) {
+            super(props);
             /**
             * @member {number} - the height of the dialog
             */
@@ -140,10 +140,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
             $(me.IDPanel.dom).dialog("destroy");
         }
         set value(value) {
-            this._value = value;
+            this.states.value.current = value;
         }
         get value() {
-            return this._value;
+            return this.states.value.current;
         }
         async loadObjects(classname) {
             var cl = await Classes_1.classes.loadClass(classname);
@@ -179,12 +179,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
          * @param {string} property - the property to bind
          */
         set bind(databinder) {
-            this._databinder = databinder[0];
-            this._databinder.add(databinder[1], this, "onchange");
+            if (Array.isArray(databinder)) {
+                this._databinder = databinder[0];
+                this._databinder.add(databinder[1], this, "onchange");
+            }
+            else {
+                this._databinder = databinder._databinder;
+                this._databinder.add(databinder._propertyname, this, "onchange");
+            }
             //databinder.checkAutocommit(this);
         }
         destroy() {
-            this._value = undefined;
+            this.states.value.current = undefined;
             this.me.IDPanel.destroy();
             super.destroy();
         }
@@ -215,13 +221,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
     ], ObjectChooser.prototype, "autocommit", null);
     __decorate([
         (0, Property_1.$Property)({ type: "databinder" }),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [Array])
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
     ], ObjectChooser.prototype, "bind", null);
     ObjectChooser = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
         (0, Registry_1.$Class)("jassijs.ui.ObjectChooser"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], ObjectChooser);
     exports.ObjectChooser = ObjectChooser;
     async function test() {

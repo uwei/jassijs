@@ -147,6 +147,9 @@ define("tests/registry",["require"], function(require) {
 	"tests/TestDialog.ts": {
 		"date": 1656079688000,
 		"tests/TestDialog": {}
+	},
+	"tests/TestRepeating.ts": {
+		"date": 1722193753694.9727
 	}
 }
  }

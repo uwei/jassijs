@@ -65,7 +65,7 @@ exports.default={
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1697206758182.0095
+		"date": 1721754483315.839
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1655556866000,
@@ -85,50 +85,24 @@ exports.default={
 			],
 			"@members": {
 				"id": {
-					"ValidateIsInt": [
-						{
-							"optional": true
-						}
-					],
 					"PrimaryColumn": []
 				},
 				"name": {
-					"ValidateIsString": [],
 					"Column": []
 				},
 				"parentRights": {
-					"ValidateIsArray": [
-						{
-							"optional": true,
-							"type": "function"
-						}
-					],
-					"JoinTable": [],
 					"ManyToMany": [
 						"function",
 						"function"
 					]
 				},
 				"rights": {
-					"ValidateIsArray": [
-						{
-							"optional": true,
-							"type": "function"
-						}
-					],
-					"JoinTable": [],
 					"ManyToMany": [
 						"function",
 						"function"
 					]
 				},
 				"users": {
-					"ValidateIsArray": [
-						{
-							"optional": true,
-							"type": "function"
-						}
-					],
 					"ManyToMany": [
 						"function",
 						"function"
@@ -147,27 +121,15 @@ exports.default={
 			],
 			"@members": {
 				"id": {
-					"ValidateIsInt": [
-						{
-							"optional": true
-						}
-					],
 					"PrimaryGeneratedColumn": []
 				},
 				"name": {
-					"ValidateIsString": [],
 					"Column": []
 				},
 				"classname": {
-					"ValidateIsString": [],
 					"Column": []
 				},
 				"i1": {
-					"ValidateIsNumber": [
-						{
-							"optional": true
-						}
-					],
 					"Column": [
 						{
 							"nullable": true
@@ -175,11 +137,6 @@ exports.default={
 					]
 				},
 				"i2": {
-					"ValidateIsNumber": [
-						{
-							"optional": true
-						}
-					],
 					"Column": [
 						{
 							"nullable": true
@@ -187,11 +144,6 @@ exports.default={
 					]
 				},
 				"s1": {
-					"ValidateIsString": [
-						{
-							"optional": true
-						}
-					],
 					"Column": [
 						{
 							"nullable": true
@@ -199,11 +151,6 @@ exports.default={
 					]
 				},
 				"s2": {
-					"ValidateIsString": [
-						{
-							"optional": true
-						}
-					],
 					"Column": [
 						{
 							"nullable": true
@@ -211,12 +158,6 @@ exports.default={
 					]
 				},
 				"groups": {
-					"ValidateIsArray": [
-						{
-							"optional": true,
-							"type": "function"
-						}
-					],
 					"ManyToMany": [
 						"function",
 						"function"
@@ -235,24 +176,12 @@ exports.default={
 			],
 			"@members": {
 				"id": {
-					"ValidateIsInt": [
-						{
-							"optional": true
-						}
-					],
 					"PrimaryColumn": []
 				},
 				"name": {
-					"ValidateIsString": [],
 					"Column": []
 				},
 				"groups": {
-					"ValidateIsArray": [
-						{
-							"optional": true,
-							"type": "function"
-						}
-					],
 					"ManyToMany": [
 						"function",
 						"function"
@@ -275,19 +204,9 @@ exports.default={
 			],
 			"@members": {
 				"id": {
-					"ValidateIsInt": [
-						{
-							"optional": true
-						}
-					],
 					"PrimaryColumn": []
 				},
 				"data": {
-					"ValidateIsString": [
-						{
-							"optional": true
-						}
-					],
 					"Column": [
 						{
 							"nullable": true
@@ -307,23 +226,12 @@ exports.default={
 			],
 			"@members": {
 				"id": {
-					"ValidateIsNumber": [
-						{
-							"optional": true
-						}
-					],
 					"PrimaryGeneratedColumn": []
 				},
 				"email": {
-					"ValidateIsString": [],
 					"Column": []
 				},
 				"password": {
-					"ValidateIsString": [
-						{
-							"optional": true
-						}
-					],
 					"Column": [
 						{
 							"select": false
@@ -331,24 +239,12 @@ exports.default={
 					]
 				},
 				"groups": {
-					"ValidateIsArray": [
-						{
-							"optional": true,
-							"type": "function"
-						}
-					],
-					"JoinTable": [],
 					"ManyToMany": [
 						"function",
 						"function"
 					]
 				},
 				"isAdmin": {
-					"ValidateIsBoolean": [
-						{
-							"optional": true
-						}
-					],
 					"Column": [
 						{
 							"nullable": true
@@ -484,7 +380,7 @@ exports.default={
 		"date": 1697209029986.565
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1720189282241.5964
+		"date": 1721754067220.996
 	},
 	"jassijs/server/JassiServer.ts": {
 		"date": 1697208017035.5112

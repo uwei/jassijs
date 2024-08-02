@@ -99,14 +99,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             this.callEvent("componentAdded", component, this);
             if (this._parent)
                 this._parent.addEmptyCellsIfNeeded(this);
-            if (component.designDummyFor) {
+            /*if (component.designDummyFor) {
                 component.domWrapper.setAttribute("colspan", "100");
-                // if ($(this.dom).width() < 140) {
+               // if ($(this.dom).width() < 140) {
                 //    component.width = 140 - $(this.dom).width();
-                if (this.dom.clientWidth < 140) {
+                 if (this.dom.clientWidth < 140) {
                     component.width = 140 - this.dom.clientWidth;
                 }
-            }
+            }*/
             if ((_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout)
                 (_b = this.parent) === null || _b === void 0 ? void 0 : _b.updateLayout(true);
             /*  var test=component.height;
@@ -154,8 +154,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             if (this.forEachDummy)
                 return this.forEachDummy;
             for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
                 //@ts-ignore
                 columns.push(this._components[x].toJSON());
             }

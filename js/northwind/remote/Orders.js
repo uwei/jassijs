@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var Orders_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.Orders = void 0;
 const OrderDetails_1 = require("northwind/remote/OrderDetails");
@@ -18,9 +19,12 @@ const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Shippers_1 = require("northwind/remote/Shippers");
 const Validator_1 = require("jassijs/remote/Validator");
-let Orders = class Orders extends DBObject_1.DBObject {
+let Orders = Orders_1 = class Orders extends DBObject_1.DBObject {
     constructor() {
         super();
+    }
+    static async findAllWithDetails() {
+        return await Orders_1.find({ relations: ["*"] });
     }
 };
 __decorate([
@@ -98,7 +102,7 @@ __decorate([
     (0, DatabaseSchema_1.OneToMany)(type => OrderDetails_1.OrderDetails, e => e.Order),
     __metadata("design:type", Array)
 ], Orders.prototype, "Details", void 0);
-Orders = __decorate([
+Orders = Orders_1 = __decorate([
     (0, DBObject_1.$DBObject)(),
     (0, Registry_1.$Class)("northwind.Orders"),
     __metadata("design:paramtypes", [])

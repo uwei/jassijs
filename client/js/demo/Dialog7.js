@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Checkbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/Button", "jassijs/ui/State", "jassijs/ui/Property"], function (require, exports, Component_1, Checkbox_1, Registry_1, Panel_1, Component_2, Button_1, State_1, Property_1) {
+define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Menu", "jassijs/ui/Component", "jassijs/ui/Checkbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/Button", "jassijs/ui/Property"], function (require, exports, MenuItem_1, Menu_1, Component_1, Checkbox_1, Registry_1, Panel_1, Component_2, Button_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog7 = void 0;
@@ -30,7 +30,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Checkbox", "ja
             super(props);
         }
         render() {
-            return (0, Component_2.jc)(M2, { text: this.states.text.self });
+            return (0, Component_2.jc)(M2, { text: this.states.text });
         }
     };
     M1 = __decorate([
@@ -46,8 +46,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Checkbox", "ja
             // this.layout(this.me);
         }
         render() {
-            this.me = {};
-            var refs = (0, State_1.createRefs)(this.me);
             //var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
             //
             return (0, Component_2.jc)(Panel_1.Panel, {
@@ -73,10 +71,14 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Checkbox", "ja
                                 },
                                 tooltip: "dfgdfg",
                                 onfocus: function (event) {
-                                }
+                                },
+                                hidden: false
                             })
                         ],
                         label: "fg"
+                    }),
+                    (0, Component_2.jc)(Menu_1.Menu, {
+                        children: [(0, Component_2.jc)(MenuItem_1.MenuItem, {})]
                     })
                 ]
             });

@@ -5,7 +5,6 @@ import { Property, $Property } from "jassijs/ui/Property";
 import { MenuItem } from "jassijs/ui/MenuItem";
 import { $Class } from "jassijs/remote/Registry";
 import { $UIComponent } from "jassijs/ui/Component";
-import { DesignDummy } from "jassijs/ui/DesignDummy";
 /*declare global {
     interface JQuery {
             //menu: any;
@@ -100,10 +99,7 @@ export class Menu<T extends MenuProperties=MenuProperties> extends Container<T> 
       * @param {jassijs.ui.Menu} component - the component to add
       */
     add(component) {//add a component to the container
-        if (this._designDummy !== undefined && this._components[this._components.length - 1] === this._designDummy)
-            super.addBefore(component, this._designDummy);
-        else
-            super.add(component);
+        super.add(component);
         this._menueChanged();
     }
 
@@ -125,26 +121,7 @@ export class Menu<T extends MenuProperties=MenuProperties> extends Container<T> 
     * @param {boolean} enable - true if activate designMode
     */
     protected _setDesignMode(enable) {
-        this._designMode = enable;
-        if (enable) {//dummy at the end
-            DesignDummy.createIfNeeded(this, "atEnd", undefined, MenuItem);
-            /*            if(this._designDummy===undefined){
-                            this._designDummy=new MenuItem();
-                            this._designDummy.icon="res/add-component.ico";
-                            $(this._designDummy.domWrapper).removeClass("jcomponent");
-                            this._designDummy.designDummyFor="atEnd";
-                            this.add(this._designDummy);
-                        }else if(this._designDummy!==undefined&& this["isAbsolute"]===true){//TODO isAbsolute relevant?
-                            this.remove(this._designDummy);
-                            this._designDummy=undefined;
-                        }*/
-        } else {
-            DesignDummy.destroyIfNeeded(this, "atEnd");
-            /* if(this._designDummy!==undefined){
-                this.remove(this._designDummy);
-                this._designDummy=undefined;
-            }*/
-        }
+      
     }
     destroy() {
         $(this.dom).menu();

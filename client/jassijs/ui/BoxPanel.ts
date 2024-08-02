@@ -101,8 +101,6 @@ export class BoxPanel<T extends BoxPanelProperties=BoxPanelProperties> extends P
             return;
         var comp = [];
         for (var x = 0; x < this._components.length; x++) {
-            if (this._components[x]["designDummyFor"])
-                continue;
             //test
             this._components[x].__dom.style.overflow="scroll";
             this._components[x].__dom.style.width=( this.horizontal ? "calc(100% - 5px)" : "100%");

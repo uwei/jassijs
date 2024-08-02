@@ -1,7 +1,7 @@
 import {Checkbox} from "jassijs/ui/Checkbox";
 import {Editor,  $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
 import {Databinder} from "jassijs/ui/Databinder";
-import { $Class } from "jassijs/remote/Registry";
+import registry, { $Class } from "jassijs/remote/Registry";
 import {Panel} from "jassijs/ui/Panel";
 import {Textbox} from "jassijs/ui/Textbox";
 import {ObjectChooser} from "jassijs/ui/ObjectChooser";
@@ -25,9 +25,10 @@ export  class DBObjectEditor extends Editor {
         this.component = new Panel(/*{useSpan:true}*/);
         this._textbox = new Textbox();
         this._objectchooser = new ObjectChooser();
-        this._objectchooser.width = 24;
+        this._objectchooser.width = 16;
+        this._objectchooser.height = 16;
         this._textbox.width = "calc(100% - 34px)";
-        this.component.height = 24;
+        this.component.height = 16;
         this.component.add(this._textbox);
         this.component.add(this._objectchooser);
 
@@ -50,6 +51,7 @@ export  class DBObjectEditor extends Editor {
     set ob(ob) {
         super.ob = ob;
         //databinder,"prop"
+        var h=registry;
         var value = this.propertyEditor.getPropertyValue(this.property);
         if (value !== undefined) {
             //jassijs.db.load("de.Kunde",9);

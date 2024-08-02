@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Button", "jassijs/ui/State"], function (require, exports, Component_1, Button_1, State_1) {
+define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Component", "jassijs/ui/Panel", "jassijs/ui/Button"], function (require, exports, Checkbox_1, Component_1, Panel_1, Button_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -8,21 +8,57 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Button", "jass
             super(p);
         }
         render() {
-            this.me = {};
-            var me = (0, State_1.createRefs)(this.me);
             //        var color: State|any = new State("red");
             //var ret = <div calculateState={calculateState}> 
             if (this.props.color === undefined)
                 this.states.color.current = "yellow";
             //{me.states.colorState}  
             var ret = Component_1.React.createElement("div", null,
-                Component_1.React.createElement(Button_1.Button, { ref: me.refs.button, text: "kk", style: { color: this.states.color.self }, onclick: () => {
+                Component_1.React.createElement(Button_1.Button, { text: "kk", style: { color: this.states.color }, onclick: () => {
                         this.states.color.current = "blue";
-                        me.button.text = "oo";
                         // _this.config({ text: "neu"+x++ });
                     } }),
                 "Haello ggg",
-                Component_1.React.createElement("span", null, "kkkk"));
+                Component_1.React.createElement(Checkbox_1.Checkbox, { text: "456456", style: {
+                        color: "green"
+                    } }),
+                "Hallo Das",
+                Component_1.React.createElement("span", null,
+                    "kkk g",
+                    Component_1.React.createElement(Checkbox_1.Checkbox, { text: "456456", style: {
+                            color: "green"
+                        } }),
+                    "Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement(Panel_1.Panel, null),
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo Du ; Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du Hallo",
+                    Component_1.React.createElement("br", null),
+                    "Du",
+                    Component_1.React.createElement(Button_1.Button, { text: "kk", style: { color: this.states.color.self }, onclick: () => {
+                            this.states.color.current = "blue";
+                            // _this.config({ text: "neu"+x++ });
+                        } }),
+                    "Ha"));
             return ret;
         }
     }

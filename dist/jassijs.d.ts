@@ -1196,42 +1196,24 @@ declare module "jassijs/remote/Validator" {
     export function test(test: Test): any;
 }
 declare module "jassijs/security/GroupView" {
-    import { Textbox } from "jassijs/ui/Textbox";
     import { Group } from "jassijs/remote/security/Group";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        textbox?: Textbox;
-        textbox2?: Textbox;
-    } & DBObjectViewMe;
-    export class GroupView extends DBObjectView {
-        me: Me;
-        value: Group;
-        constructor();
+    import { DBObjectView } from "jassijs/ui/DBObjectView";
+    export class GroupView extends DBObjectView<Group> {
         get title(): string;
-        layout(me: Me): void;
+        render(): any;
     }
     export function test(): unknown;
 }
 declare module "jassijs/security/UserView" {
-    import { Select } from "jassijs/ui/Select";
-    import { Checkbox } from "jassijs/ui/Checkbox";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Panel } from "jassijs/ui/Panel";
     import { User } from "jassijs/remote/security/User";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    type Me = {
-        IDID?: Textbox;
-        IDEmail?: Textbox;
-        checkbox?: Checkbox;
-        panel?: Panel;
-        IDGroups?: Select;
-    } & DBObjectViewMe;
-    export class UserView extends DBObjectView {
-        me: Me;
-        value: User;
-        constructor();
+    import { DBObjectView, DBObjectViewProperties } from "jassijs/ui/DBObjectView";
+    import { Group } from "jassijs/remote/security/Group";
+    interface UserViewProperties extends DBObjectViewProperties<User> {
+        items?: Group[];
+    }
+    export class UserView extends DBObjectView<User, UserViewProperties> {
         get title(): string;
-        layout(me: Me): void;
+        render(): any;
         createObject(): any;
     }
     export function test(): unknown;
@@ -1463,7 +1445,6 @@ declare module "jassijs/ui/Component" {
         contextMenu?: any;
         noWrapper?: boolean;
         replaceNode?: any;
-        calculateState?: (any: any) => void;
     }
     var React: {
         createElement(type: any, props: any, ...children: {}): {
@@ -1495,7 +1476,13 @@ declare module "jassijs/ui/Component" {
     export function jc<P extends {}>(type: React.FunctionComponent<P> | React.ComponentClass<P> | string, props?: React.Attributes & P | null, ...children: React.ReactNode[]): React.ReactElement<P>;
     export function createComponent<T>(node: React.FunctionComponentElement<T>): FunctionComponent<T>;
     export function createComponent<T>(node: React.ReactElement<T>): T;
-    export class Component<T extends ComponentProperties = {}> implements React.Component<T, {}> {
+    export function createRef<T>(val?: T): Ref<T>;
+    export type Ref<T> = {
+        current: T;
+    };
+    export function createRefs<T>(): T;
+    export class Component<T extends ComponentProperties = {}> implements React.Component<T> {
+        refs: any;
         props: T;
         states: States<T>;
         private static _componentHook;
@@ -1509,7 +1496,6 @@ declare module "jassijs/ui/Component" {
         _designMode: any;
         _styles?: any[];
         calculateState: (any: any) => any;
-        protected designDummies: Component<{}>[];
         /**
          * base class for each Component
          * @class jassijs.ui.Component
@@ -1592,16 +1578,33 @@ declare module "jassijs/ui/Component" {
         get contextMenu(): any;
         set contextMenu(value: any);
         destroy(): void;
-        extensionCalled(action: ExtensionAction): void;
-        context: any;
+        /**
+         * @deprecated React-things not use it.
+         */
+        current: any;
+        /**
+         * @deprecated React-things not use it.
+         */
         state: any;
-        refs: any;
+        extensionCalled(action: ExtensionAction): void;
+        /**
+        * @deprecated React things-not implemented
+        */
+        context: any;
+        /**
+         * @deprecated React things-not implemented
+         */
+        /**
+        * @deprecated React things-not implemented
+        */
         setState(): void;
+        /**
+         * @deprecated React things-not implemented
+         */
         forceUpdate(): void;
     }
     export class FunctionComponent<T> extends Component<T> {
         _components: Component[];
-        _designDummy: any;
         constructor(properties: T);
         config(config: T, forceRender?: boolean): FunctionComponent<T>;
         render(): any;
@@ -1635,7 +1638,6 @@ declare module "jassijs/ui/Component" {
     }
     export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Component<HTMLComponentProperties> implements HTMLComponentProperties {
         _components: Component[];
-        _designDummy: any;
         constructor(prop?: HTMLComponentProperties);
         render(): React.ReactNode;
         config(props: HTMLComponentProperties): this;
@@ -1732,7 +1734,6 @@ declare module "jassijs/ui/Container" {
     }
     export class Container<T extends ContainerProperties = ComponentProperties> extends Component<T> implements Omit<ContainerProperties, "children"> {
         _components: Component[];
-        _designDummy: any;
         /**
          *
          * @param {object} properties - properties to init
@@ -2013,78 +2014,16 @@ declare module "jassijs/ui/CSSProperties" {
         static applyTo(properties: React.CSSProperties, component: Component): React.CSSProperties;
     }
 }
-declare module "jassijs/ui/Databinder" {
-    import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
-    import { Component } from "jassijs/ui/Component";
-    interface DatabinderProperties extends InvisibleComponentProperties {
-    }
-    export class Databinder<T extends DatabinderProperties = {}> extends InvisibleComponent<DatabinderProperties> implements DatabinderProperties {
-        components: Component[];
-        private _properties;
-        private _getter;
-        private _setter;
-        private _onChange;
-        private _autocommit;
-        userObject: any;
-        rollbackObject: any;
-        constructor(props?: DatabinderProperties);
-        render(): any;
-        /**
-        * binds the component to the property of the userObject
-        * @param {string} property - the name of the property to bind
-        * @param {jassijs.ui.Component} component - the component to bind
-        * @param {string} [onChange] - functionname to register the  changehandler - if missing no autocommit is possible
-        * @param {function} [getter] - function to get the value of the component - if missing .value is used
-        * @param {function} [setter] - function to put the value of the component - if missing .value is used
-        */
-        add(property: any, component: any, onChange?: any, getter?: any, setter?: any): void;
-        componentChanged(component: any, property: any, event: any): void;
-        remove(component: any): void;
-        /**
-         * defines getter and setter and connect this to the databinder
-         * @param {object} object - the object where we define the property
-         * @param {string} propertyname - the name of the property
-         **/
-        definePropertyFor(object: any, propertyname: any): void;
-        /**
-         * @member {object} value - the binded userobject - call toForm on set
-         */
-        get value(): any;
-        set value(obj: any);
-        doValidation(ob: any): unknown;
-        /**
-         * binds the object to all added components
-         * @param {object} obj - the object to bind
-         */
-        toForm(obj: any): void;
-        validateObject(): any;
-        /**
-         * gets the objectproperties from all added components
-         * @return {object}
-         */
-        fromForm(): Promise<object>;
-        /**
-         * get objectproperty
-         * @param {number} x - the numer of the component
-         */
-        _fromForm(x: any): void;
-        /**
-         * register the autocommit handler if needed
-         * @param {jassijs.ui.DataComponent} component
-         */
-        destroy(): void;
-    }
-}
 declare module "jassijs/ui/DataComponent" {
     import { Component, ComponentProperties } from "jassijs/ui/Component";
-    import { Databinder } from "jassijs/ui/Databinder";
+    import { BoundProperty } from "jassijs/ui/State";
     export interface DataComponentProperties extends ComponentProperties {
         /**
             * binds a component to a databinder
             * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
             *         {string} property - the property to bind]
             */
-        bind?: any[];
+        bind?: any[] | BoundProperty;
         /**
        * @member {bool} autocommit -  if true the databinder will update the value on every change
        *                              if false the databinder will update the value on databinder.toForm
@@ -2094,7 +2033,7 @@ declare module "jassijs/ui/DataComponent" {
     }
     export class DataComponent<T extends DataComponentProperties = DataComponentProperties> extends Component<T> implements DataComponentProperties {
         _autocommit: boolean;
-        _databinder: Databinder;
+        private _boundProperty;
         /**
         * base class for each Component
         * @class jassijs.ui.Component
@@ -2105,10 +2044,11 @@ declare module "jassijs/ui/DataComponent" {
         constructor(properties?: DataComponentProperties);
         get autocommit(): boolean;
         set autocommit(value: boolean);
+        get bind(): BoundProperty;
         /**
          * @param [databinder:jassijs.ui.Databinder,"propertyToBind"]
          */
-        set bind(databinder: any[]);
+        set bind(boundProperty: BoundProperty);
         destroy(): void;
     }
 }
@@ -2175,21 +2115,9 @@ declare module "jassijs/ui/DBObjectExplorer" {
     export function test(): unknown;
 }
 declare module "jassijs/ui/DBObjectView" {
-    import { Button } from "jassijs/ui/Button";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
     import { Panel, PanelProperties } from "jassijs/ui/Panel";
-    import { Databinder } from "jassijs/ui/Databinder";
     import { DBObject } from "jassijs/remote/DBObject";
-    export type DBObjectViewMe = {
-        databinder?: Databinder;
-        create?: Button;
-        main?: Panel;
-        toolbar?: BoxPanel;
-        save?: Button;
-        remove?: Button;
-        refresh?: Button;
-    };
-    export class DBObjectViewProperties {
+    export class $DBObjectViewProperties {
         /**
          * full path to classifiy the UIComponent e.g common/TopComponent
          */
@@ -2198,9 +2126,8 @@ declare module "jassijs/ui/DBObjectView" {
         icon?: string;
         queryname?: string;
     }
-    export function $DBObjectView(properties: DBObjectViewProperties): Function;
-    type Me = DBObjectViewMe;
-    export interface DBObjectViewConfig extends PanelProperties {
+    export function $DBObjectView(properties: $DBObjectViewProperties): Function;
+    export interface DBObjectViewProperties<T> extends PanelProperties {
         /**
            * register an event if the object is created
            * @param {function} handler - the function that is called
@@ -2221,14 +2148,14 @@ declare module "jassijs/ui/DBObjectView" {
         * @param {function} handler - the function that is called
         */
         ondeleted?(handler: (obj: DBObject) => void): any;
-        value: any;
+        value?: T;
     }
-    export class DBObjectView extends Panel implements Omit<DBObjectViewConfig, "isAbsolute"> {
-        me: any;
-        value: any;
-        constructor();
-        config(config: DBObjectViewConfig): DBObjectView;
+    export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewProperties<P> = DBObjectViewProperties<P>> extends Panel<T> implements Omit<Panel, "isAbsolute"> {
+        constructor(props?: T);
+        config(config: T): DBObjectView;
         protected _setDesignMode(enable: any): void;
+        set value(value: P);
+        get value(): P;
         /**
          * create a new object
          */
@@ -2250,20 +2177,14 @@ declare module "jassijs/ui/DBObjectView" {
          **/
         deleteObject(): void;
         ondeleted(handler: (obj: DBObject) => void): void;
-        layout(me: Me): void;
     }
     export function test(): unknown;
-}
-declare module "jassijs/ui/DesignDummy" {
-    import { Component } from "jassijs/ui/Component";
-    import { Image } from "jassijs/ui/Image";
-    export class DesignDummy extends Image {
-        type: "beforeComponent" | "atEnd";
-        editorselectthis: Component;
-        designDummyFor: Component;
-        constructor();
-        static createIfNeeded(designDummyFor: Component, type: "beforeComponent" | "atEnd", editorselectthis?: Component, oclass?: any): DesignDummy;
-        static destroyIfNeeded(designDummyFor: Component, type: "beforeComponent" | "atEnd"): void;
+    export interface DBObjectViewToolbarProperties extends PanelProperties {
+        view: DBObjectView;
+    }
+    export class DBObjectViewToolbar extends Panel<DBObjectViewToolbarProperties> {
+        constructor(props: DBObjectViewToolbarProperties);
+        render(): any;
     }
 }
 declare module "jassijs/ui/DockingContainer" {
@@ -2362,19 +2283,8 @@ declare module "jassijs/ui/HTMLPanel" {
         value?: string;
     }
     export class HTMLPanel<T extends HTMLPanelProperties = HTMLPanelProperties> extends DataComponent<T> implements HTMLPanelProperties {
-        static oldeditor: any;
-        private _tcm;
         toolbar: {};
         private _template;
-        private _value;
-        private inited;
-        editor: any;
-        customToolbarButtons: {
-            [name: string]: {
-                title: string;
-                action: any;
-            };
-        };
         constructor(properties?: HTMLPanelProperties);
         render(): any;
         config(config: T): HTMLPanel;
@@ -2388,16 +2298,6 @@ declare module "jassijs/ui/HTMLPanel" {
          **/
         set value(code: string);
         get value(): string;
-        extensionCalled(action: ExtensionAction): void;
-        initIfNeeded(tinymce: any, config: any): void;
-        focusLost(): void;
-        private _initTinymce;
-        /**
-         * activates or deactivates designmode
-         * @param {boolean} enable - true if activate designMode
-         * @param {jassijs.ui.ComponentDesigner} editor - editor instance
-         */
-        _setDesignMode(enable: any, editor: any): void;
         destroy(): void;
     }
     export function test(): HTMLPanel<HTMLPanelProperties>;
@@ -2541,6 +2441,7 @@ declare module "jassijs/ui/ObjectChooser" {
     import { Textbox } from "jassijs/ui/Textbox";
     import { Databinder } from "jassijs/ui/Databinder";
     import { DataComponentProperties } from "jassijs/ui/DataComponent";
+    import { BoundProperty } from "jassijs/ui/State";
     class Me {
         IDTable?: Table;
         IDPanel?: Panel;
@@ -2574,18 +2475,17 @@ declare module "jassijs/ui/ObjectChooser" {
            * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
            *         {string} property - the property to bind]
            */
-        bind?: any[];
+        bind?: any[] | BoundProperty;
     }
     export class ObjectChooser<T extends ObjectChooserProperties = ObjectChooserProperties> extends Button<T> implements ObjectChooserProperties, DataComponentProperties {
         dialogHeight: number;
         dialogWidth: number;
         _items: any;
         me: Me;
-        _value: any;
         _autocommit: boolean;
         _databinder: Databinder;
-        constructor();
-        config(config: T): ObjectChooser;
+        constructor(props?: ObjectChooserProperties);
+        config(config: T): ObjectChooser<T>;
         get title(): string;
         layout(): void;
         ok(): void;
@@ -2603,7 +2503,7 @@ declare module "jassijs/ui/ObjectChooser" {
          * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
-        set bind(databinder: any[]);
+        set bind(databinder: any[] | BoundProperty);
         destroy(): void;
     }
     export function test(): unknown;
@@ -2686,7 +2586,7 @@ declare module "jassijs/ui/Panel" {
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties?: PanelProperties);
+        constructor(properties?: T);
         render(): React.ReactElement;
         set isAbsolute(value: boolean);
         get isAbsolute(): boolean;
@@ -2733,6 +2633,7 @@ declare module "jassijs/ui/Property" {
         isVisible?: (component: any, propertyeditor?: any) => boolean;
         /** @member - jassijs.base.Action -   the actions in the PropertyEditor  */
         editoractions?: any[];
+        createDummyInDesigner?: (component: any, isPreDummy: boolean) => boolean | boolean;
         /**
          * Property for PropertyEditor
          * @class jassijs.ui.EditorProperty
@@ -2874,6 +2775,7 @@ declare module "jassijs/ui/PropertyEditor" {
             methodname: any;
         }, suggestedName?: any, codeHasChanged?: any): string;
         getPropertyValue(variable: any, property: any): any;
+        renameVariable(oldName: string, newName: string): any;
     }
     export class PropertyEditor extends Panel {
         readPropertyValueFromDesign: boolean;
@@ -2969,6 +2871,7 @@ declare module "jassijs/ui/PropertyEditor" {
          *  @returns {string}
          */
         getObjectFromVariable(ob: any): any;
+        isVariableAutoGenerated(varname: any): any;
         /**
          * @member {object}  - the rendered object
          */
@@ -3049,11 +2952,11 @@ declare module "jassijs/ui/PropertyEditor" {
         /**
          * renames a variable in code
          */
-        renameVariableInCode(oldName: string, newName: string): void;
+        renameVariableInCode(oldName: string, newName: string): any;
         /**
          * renames a variable in design
          */
-        renameVariableInDesign(oldName: string, newName: string): void;
+        renameVariableInDesign(oldName: string, newName: string, autogenerated?: boolean): void;
         /**
         * removes the variable from design
         * @param  varname - the variable to remove
@@ -3225,8 +3128,21 @@ declare module "jassijs/ui/PropertyEditors/ComponentSelectorEditor" {
 }
 declare module "jassijs/ui/PropertyEditors/DatabinderEditor" {
     import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    import { BoundProperty } from "jassijs/ui/State";
     export class DatabinderEditor extends Editor {
+        foundBounds: {
+            [key: string]: BoundProperty;
+        };
+        foundFunctionComponents: {
+            [key: string]: boolean;
+        };
+        /**
+         * Checkbox Editor for boolean values
+         * used by PropertyEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
+         */
         constructor(property: any, propertyEditor: any);
+        private collectStates;
         /**
          * @member {object} ob - the object which is edited
          */
@@ -3545,78 +3461,45 @@ declare module "jassijs/ui/PropertyEditors/TableColumnImport" {
     }
     export function test(): unknown;
 }
-declare module "jassijs/ui/Repeater" {
-    import { Panel, PanelProperties } from "jassijs/ui/Panel";
-    import { Databinder } from "jassijs/ui/Databinder";
+declare module "jassijs/ui/Repeater2" {
+    import "jassijs/ext/jquerylib";
+    import "jquery.choosen";
     import { Component } from "jassijs/ui/Component";
-    import { DataComponentProperties } from "jassijs/ui/DataComponent";
-    class RepeaterDesignPanel extends Panel {
-        databinder: Databinder;
-        me: any;
-    }
-    export interface RepeaterProperties extends PanelProperties {
-        /**
-        *  @member {array} value - the array which objects used to create the repeating components
-        */
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    import { BoundProperty } from "jassijs/ui/State";
+    export interface RepeaterProperties extends DataComponentProperties {
+        items?: any[];
         value?: any;
-        /**
-           * binds a component to a databinder
-           * @param {jassijs.ui.Databinder} databinder - the databinder to bind
-           * @param {string} property - the property to bind
-           */
-        bind?: any[];
-        createRepeatingComponent?(func: any): any;
+        children?: any;
     }
-    export class Repeater<T extends RepeaterProperties = RepeaterProperties> extends Panel<T> implements DataComponentProperties, RepeaterProperties {
-        _componentDesigner: any;
-        _autocommit: boolean;
-        _createRepeatingComponent: any;
-        _value: any;
-        _isCreated: boolean;
-        _designer: Component;
-        _databinder: Databinder;
-        design: RepeaterDesignPanel;
-        me: any;
-        /**
-         * can be used for controls in repeating group
-         */
-        binder: Databinder;
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
+    export class Repeater2<T extends RepeaterProperties = RepeaterProperties> extends DataComponent<T> {
+        _components: {};
+        _items: any;
+        _bindItems?: BoundProperty;
         constructor(properties?: RepeaterProperties);
-        config(config: T): Repeater;
-        createRepeatingComponent(func: any): void;
-        _copyMeFromParent(me: any, parent: any, override?: boolean): void;
-        update(): void;
-        /**
-         * adds a component to the container
-         * @param {jassijs.ui.Component} component - the component to add
-         */
-        add(component: any): void;
-        _dummy(func: any): void;
-        set value(val: any);
+        render(): any;
+        onchange(handler: any): void;
+        set value(value: any);
         get value(): any;
-        extensionCalled(action: ExtensionAction): void;
-        /**
-         * activates or deactivates designmode
-         * @param {boolean} enable - true if activate designMode
-         */
-        _setDesignMode(enable: any, designer?: any): void;
-        set bind(databinder: any[]);
+        set items(value: any);
+        get items(): any;
+        private duplicateChildren;
+        private createRepeatingItem;
+        config(config: T, forceRender?: boolean): Repeater2;
+        add(component: any): void;
+        addBefore(component: Component, before: Component): void;
+        remove(component: any, destroy?: boolean): void;
+        removeAll(destroy?: any): void;
         destroy(): void;
     }
+    export function test(): unknown;
 }
 declare module "jassijs/ui/Select" {
     import "jassijs/ext/jquerylib";
-    import { ComponentProperties } from "jassijs/ui/Component";
-    import { DataComponent } from "jassijs/ui/DataComponent";
     import "jquery.choosen";
-    export interface SelectProperities extends ComponentProperties {
+    import { HTMLComponent } from "jassijs/ui/Component";
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    export interface SelectProperties extends DataComponentProperties {
         domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
         /**
           * called if value has changed
@@ -3645,15 +3528,18 @@ declare module "jassijs/ui/Select" {
         allowDeselect?: boolean;
         placeholder?: string;
     }
-    export class Select<T extends SelectProperities = SelectProperities> extends DataComponent<T> {
-        domSelect: HTMLElement;
+    type Refs = {
+        select: HTMLComponent;
+    };
+    export class Select<T extends SelectProperties = SelectProperties> extends DataComponent<T> {
+        refs: Refs;
         _select: {
             value: number;
         };
         options: any;
         _display: any;
         _items: any;
-        constructor(properties?: SelectProperities);
+        constructor(properties?: SelectProperties);
         render(): any;
         config(config: T): this;
         refresh(): void;
@@ -3668,21 +3554,22 @@ declare module "jassijs/ui/Select" {
         get display(): string | Function;
         set items(value: any);
         get items(): any;
+        set width(value: number);
         set value(sel: any);
         get value(): any;
         /**
          * @member {string|number} - the width of the component
-         * e.g. 50 or "100%"
-         */
+                            * e.g. 50 or "100%"
+                            */
         /**
          * binds a component to a databinder
          * @param {Databinder} databinder - the databinder to bind
-         * @param {string} property - the property to bind
-        
-        bind(databinder,property){
-            this._databinder=databinder;
-            databinder.add(property,this,"onselect");
-            databinder.checkAutocommit(this);
+                            * @param {string} property - the property to bind
+    
+                            bind(databinder,property){
+                                this._databinder=databinder;
+                            databinder.add(property,this,"onselect");
+                            databinder.checkAutocommit(this);
         } */
         destroy(): void;
     }
@@ -3729,18 +3616,25 @@ declare module "jassijs/ui/SettingsDialog" {
     export function test(): unknown;
 }
 declare module "jassijs/ui/State" {
+    import { StateDatabinder } from "jassijs/ui/StateBinder";
     class StateProp {
         ob: any;
         proppath: string[];
     }
     export function resolveState(ob: any, config: any): void;
+    export function foreach(stateWithArray: {
+        current: any[];
+    }, func: (ob: any) => any): State<React.ReactElement>;
     export type States<T> = {
-        [Property in keyof T]: State<T[Property]>;
+        [Property in keyof T]: States<T[Property]> & {
+            bind?: BoundProperty<T[Property]>;
+        };
     } & {
-        _used: string[];
+        current: T;
+        _used?: string[];
         _onconfig?: (props: any) => void;
     };
-    export function createStates<T>(initialValues?: T): States<T>;
+    export function createStates<T>(initialValues?: T, propertyname?: string): States<T>;
     export type OnlyType<T, D> = {
         [K in keyof T as T[K] extends D ? K : never]: T[K];
     };
@@ -3756,25 +3650,108 @@ declare module "jassijs/ui/State" {
             readonly [Property in keyof OnlyType<T, State>]-?: T[Property];
         };
     };
-    export function createRefs<T>(data?: T): {
-        readonly [Property in keyof T]-?: {
-            current: T[Property];
-        };
-    };
     export class State<T = {}> {
         private data;
-        self: any;
         _comps_: StateProp[];
+        _used: string[];
+        _$isState$_: boolean;
         constructor(data?: any);
-        _observe_(control: any, property: any, atype: any): void;
+        _observe_(control: any, property: any, atype?: any): void;
+        bind?: BoundProperty<T>;
         get current(): T;
         set current(data: T);
     }
     export function createState<T>(val?: T): State<T>;
-    export function createRef<T>(val?: T): {
-        current: T;
+    export type BoundProperty<T = {}> = {
+        $fromForm: () => T;
+    } & {
+        $toForm: () => any;
+    } & {
+        [Property in keyof T]: BoundProperty<T[Property]>;
+    } & {
+        _databinder: StateDatabinder;
+    } & {
+        _propertyname: string;
     };
     export function test(): void;
+}
+declare module "jassijs/ui/StateBinder" {
+    import { State } from "jassijs/ui/State";
+    type Component = {
+        __dom?: HTMLElement;
+    };
+    export class StateDatabinder {
+        connectedState: State;
+        components: Component[];
+        private _properties;
+        private _getter;
+        private _setter;
+        private _onChange;
+        private _autocommit;
+        rollbackObject: any;
+        constructor();
+        /**
+        * binds the component to the property of the userObject
+        * @param {string} property - the name of the property to bind
+        * @param {jassijs.ui.Component} component - the component to bind
+        * @param {string} [onChange] - functionname to register the  changehandler - if missing no autocommit is possible
+        * @param {function} [getter] - function to get the value of the component - if missing .value is used
+        * @param {function} [setter] - function to put the value of the component - if missing .value is used
+        */
+        add(property: any, component: any, onChange?: any, getter?: any, setter?: any): void;
+        componentChanged(component: any, property: any, event: any): void;
+        remove(component: any): void;
+        /**
+         * defines getter and setter and connect this to the databinder
+         * @param {object} object - the object where we define the property
+         * @param {string} propertyname - the name of the property
+         **/
+        definePropertyFor(object: any, propertyname: any): void;
+        /**
+         * @member {object} value - the binded userobject - call toForm on set
+         */
+        get value(): any;
+        set value(obj: any);
+        doValidation(ob: any): unknown;
+        private _toForm;
+        /**
+         * binds the object to all added components
+         * @param {object} obj - the object to bind
+         */
+        toForm(obj: any): void;
+        validateObject(): any;
+        /**
+         * gets the objectproperties from all added components
+         * @return {object}
+         */
+        fromForm(): Promise<object>;
+        /**
+         * get objectproperty
+         * @param {number} x - the numer of the component
+         */
+        private _fromForm;
+        /**
+         * register the autocommit handler if needed
+         * @param {jassijs.ui.DataComponent} component
+         */
+        destroy(): void;
+    }
+    export class PropertyAccessor {
+        relationsToResolve: string[];
+        userObject: any;
+        todo: any[];
+        getNestedProperty(obj: any, property: string): any;
+        setNestedProperty(obj: any, property: string, value: any): void;
+        /**
+         * check if relation must be resolved and queue it
+         */
+        private testRelation;
+        /**
+         * set a nested property and load the db relation if needed
+         */
+        setProperty(setter: any, comp: Component, property: string, oldValue: any): void;
+        finalizeSetProperty(): any;
+    }
 }
 declare module "jassijs/ui/Style" {
     import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
@@ -3810,6 +3787,7 @@ declare module "jassijs/ui/Table" {
     import { Databinder } from "jassijs/ui/Databinder";
     import { Tabulator } from "tabulator-tables";
     import { DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
+    import { BoundProperty } from "jassijs/ui/State";
     export interface LazyLoadOption {
         classname: string;
         loadFunc: string;
@@ -3852,7 +3830,7 @@ declare module "jassijs/ui/Table" {
          */
         items?: any[];
         columns?: Tabulator.ColumnDefinition[];
-        bindItems?: any[];
+        bindItems?: any[] | BoundProperty;
     }
     export class Table<T extends TableProperties = TableProperties> extends DataComponent<T> implements TableProperties {
         table: Tabulator;
@@ -3860,6 +3838,7 @@ declare module "jassijs/ui/Table" {
         _select: {
             value: any;
         };
+        _bindItems: BoundProperty;
         private _lazyLoadOption;
         private _lastLazySort;
         private _lastLazySearch;
@@ -3927,7 +3906,9 @@ declare module "jassijs/ui/Table" {
         destroy(): void;
         set columns(value: Tabulator.ColumnDefinition[]);
         get columns(): Tabulator.ColumnDefinition[];
-        set bindItems(databinder: any[]);
+        get bindItems(): any[] | BoundProperty;
+        set bindItems(databinder: any[] | BoundProperty);
+        set bindItems2(bound: BoundProperty);
     }
     export function test(): unknown;
 }
@@ -4004,10 +3985,10 @@ declare module "jassijs/ui/Textbox" {
         set converter(value: DefaultConverter);
         get readOnly(): boolean;
         private focuscalled;
-        private updateValue;
         private blurcalled;
         set value(value: any);
         get value(): any;
+        private updateValue;
         onclick(handler: any): any;
         onchange(handler: any): any;
         onkeydown(handler: any): any;
@@ -4026,6 +4007,62 @@ declare module "jassijs/ui/Textbox" {
         destroy(): void;
     }
     export function test(): Textbox<TextboxProperties>;
+}
+declare module "jassijs/ui/TinymcePanel" {
+    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+    global {
+        interface JQuery {
+            doubletap: any;
+        }
+    }
+    export interface HTMLPanelProperties extends DataComponentProperties {
+        newlineafter?: boolean;
+        /**
+         * template string  component.value=new Person();component.template:"{{name}}"}
+         */
+        template?: string;
+        value?: string;
+    }
+    export class TinymcePanel<T extends HTMLPanelProperties = HTMLPanelProperties> extends DataComponent<T> implements HTMLPanelProperties {
+        static oldeditor: any;
+        private _tcm;
+        toolbar: {};
+        private _template;
+        private _value;
+        private inited;
+        editor: any;
+        customToolbarButtons: {
+            [name: string]: {
+                title: string;
+                action: any;
+            };
+        };
+        constructor(properties?: HTMLPanelProperties);
+        render(): any;
+        config(config: T): TinymcePanel;
+        get newlineafter(): boolean;
+        set newlineafter(value: boolean);
+        compileTemplate(template: any): any;
+        get template(): string;
+        set template(value: string);
+        /**
+         * @member {string} code - htmlcode of the component
+         **/
+        set value(code: string);
+        get value(): string;
+        extensionCalled(action: ExtensionAction): void;
+        initIfNeeded(tinymce: any, config: any): void;
+        focusLost(): void;
+        private _initTinymce;
+        /**
+         * activates or deactivates designmode
+         * @param {boolean} enable - true if activate designMode
+         * @param {jassijs.ui.ComponentDesigner} editor - editor instance
+         */
+        _setDesignMode(enable: any, editor: any): void;
+        destroy(): void;
+    }
+    export function test(): TinymcePanel<HTMLPanelProperties>;
 }
 declare module "jassijs/ui/Tree" {
     import "jassijs/ext/jquerylib";
@@ -4253,7 +4290,11 @@ declare module "jassijs/ui/VariablePanel" {
             [n: number]: boolean;
         };
         [_cache: string]: any;
-        _items: any[];
+        _items: {
+            name?: string;
+            value?: any;
+            autoGenerated?: boolean;
+        }[];
         constructor();
         createTable(): any;
         /**
@@ -4275,7 +4316,7 @@ declare module "jassijs/ui/VariablePanel" {
          * @param {object} value - the value of the variable
          * @param {boolean} [refresh] - refresh the dialog
          */
-        addVariable(name: any, value: any, refresh?: any): void;
+        addVariable(name: any, value: any, refresh?: any, autoGenerated?: boolean): void;
         /**
          * analyze describeComponent(desc) -> desc.editableComponents and publish this
          **/
@@ -4303,12 +4344,13 @@ declare module "jassijs/ui/VariablePanel" {
          * @param {string} ob - the name of the variable
          */
         getObjectFromVariable(varname: any): any;
+        isVariableAutogenerated(varname: any): any;
         /**
           * renames a variable in design
           * @param {string} oldName
           * @param {string} newName
           */
-        renameVariable(oldName: any, newName: any): void;
+        renameVariable(oldName: any, newName: any, autoGenerated?: boolean): void;
         /**
          * refreshes Table
          */

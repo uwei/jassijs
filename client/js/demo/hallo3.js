@@ -1,12 +1,12 @@
-define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/State"], function (require, exports, Component_1, State_1) {
+define(["require", "exports", "jassijs/ui/Component"], function (require, exports, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     var x = 1;
     class MyComp extends Component_1.Component {
         makeGreen() {
-            this.mycolor.current = "green";
-            this.mytext.current = "green";
+            this.states.mycolor.current = "green";
+            this.states.mytext.current = "green";
         }
         constructor(p) {
             super(p);
@@ -14,13 +14,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/State"], funct
         render() {
             //        var color: State|any = new State("red");
             var _this = this;
-            _this.mycolor = (0, State_1.createState)("red");
-            _this.mytext = (0, State_1.createState)("Hallo");
             var ret = React.createElement("div", null,
-                this.mytext,
-                React.createElement("button", { style: { color: _this.mycolor.self }, onClick: () => {
-                        this.mytext.current = "ooo";
-                        _this.mycolor.current = "blue";
+                this.states.mytext,
+                React.createElement("button", { style: { color: _this.states.mycolor }, onClick: () => {
+                        this.states.mytext.current = "ooo";
+                        _this.states.mycolor.current = "blue";
                         // _this.config({ text: "neu"+x++ });
                     } }, "Click"),
                 "Haello",

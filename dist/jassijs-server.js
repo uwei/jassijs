@@ -103,7 +103,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985414000
             },
             "jassijs/remote/Registry.ts": {
-                "date": 1697206758182.0095
+                "date": 1721754483315.839
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1655556866000,
@@ -123,50 +123,24 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "name": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "parentRights": {
-                            "ValidateIsArray": [
-                                {
-                                    "optional": true,
-                                    "type": "function"
-                                }
-                            ],
-                            "JoinTable": [],
                             "ManyToMany": [
                                 "function",
                                 "function"
                             ]
                         },
                         "rights": {
-                            "ValidateIsArray": [
-                                {
-                                    "optional": true,
-                                    "type": "function"
-                                }
-                            ],
-                            "JoinTable": [],
                             "ManyToMany": [
                                 "function",
                                 "function"
                             ]
                         },
                         "users": {
-                            "ValidateIsArray": [
-                                {
-                                    "optional": true,
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToMany": [
                                 "function",
                                 "function"
@@ -185,27 +159,15 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryGeneratedColumn": []
                         },
                         "name": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "classname": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "i1": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -213,11 +175,6 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "i2": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -225,11 +182,6 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "s1": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -237,11 +189,6 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "s2": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -249,12 +196,6 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "groups": {
-                            "ValidateIsArray": [
-                                {
-                                    "optional": true,
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToMany": [
                                 "function",
                                 "function"
@@ -273,24 +214,12 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "name": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "groups": {
-                            "ValidateIsArray": [
-                                {
-                                    "optional": true,
-                                    "type": "function"
-                                }
-                            ],
                             "ManyToMany": [
                                 "function",
                                 "function"
@@ -313,19 +242,9 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "data": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -345,23 +264,12 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
-                            "ValidateIsNumber": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryGeneratedColumn": []
                         },
                         "email": {
-                            "ValidateIsString": [],
                             "Column": []
                         },
                         "password": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "select": false
@@ -369,24 +277,12 @@ define("jassijs/registry", ["require"], function (require) {
                             ]
                         },
                         "groups": {
-                            "ValidateIsArray": [
-                                {
-                                    "optional": true,
-                                    "type": "function"
-                                }
-                            ],
-                            "JoinTable": [],
                             "ManyToMany": [
                                 "function",
                                 "function"
                             ]
                         },
                         "isAdmin": {
-                            "ValidateIsBoolean": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -519,7 +415,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/Indexer.ts": {
-                "date": 1720189282241.5964
+                "date": 1721754067220.996
             },
             "jassijs/server/LocalProtocol.ts": {
                 "date": 1697207752396.3682
@@ -1710,21 +1606,37 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
          * Important: this function should only used from an annotation
          **/
         registerMember(service, oclass /*new (...args: any[]) => any*/, membername, ...params) {
+            var _a, _b;
             var m = oclass;
             if (oclass.prototype !== undefined)
                 m = oclass.prototype;
-            //the classname is not already known so we temporarly store the data in oclass.$$tempRegisterdMembers$$
-            //and register the member in register("$Class",....)
-            if (m.$$tempRegisterdMembers$$ === undefined) {
-                m.$$tempRegisterdMembers$$ = {};
+            var clname = (_b = (_a = oclass.prototype) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b._classname;
+            if (clname) {
+                if (this.dataMembers[service] === undefined) {
+                    this.dataMembers[service] = {};
+                }
+                if (this.dataMembers[service][clname] === undefined) {
+                    this.dataMembers[service][clname] = {};
+                }
+                if (this.dataMembers[service][clname][membername] === undefined) {
+                    this.dataMembers[service][clname][membername] = [];
+                }
+                this.dataMembers[service][clname][membername].push(params);
             }
-            if (m.$$tempRegisterdMembers$$[service] === undefined) {
-                m.$$tempRegisterdMembers$$[service] = {};
+            else {
+                //the classname is not already known so we temporarly store the data in oclass.$$tempRegisterdMembers$$
+                //and register the member in register("$Class",....)
+                if (m.$$tempRegisterdMembers$$ === undefined) {
+                    m.$$tempRegisterdMembers$$ = {};
+                }
+                if (m.$$tempRegisterdMembers$$[service] === undefined) {
+                    m.$$tempRegisterdMembers$$[service] = {};
+                }
+                if (m.$$tempRegisterdMembers$$[service][membername] === undefined) {
+                    m.$$tempRegisterdMembers$$[service][membername] = [];
+                }
+                m.$$tempRegisterdMembers$$[service][membername].push(params);
             }
-            if (m.$$tempRegisterdMembers$$[service][membername] === undefined) {
-                m.$$tempRegisterdMembers$$[service][membername] = [];
-            }
-            m.$$tempRegisterdMembers$$[service][membername].push(params);
         }
         /**
         * with every call a new id is generated - used to create a free id for the dom
@@ -1979,6 +1891,8 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
                     var name = files[x];
                     if (name.endsWith(".ts"))
                         name = name.substring(0, name.length - 3);
+                    else if (name.endsWith(".tsx"))
+                        name = name.substring(0, name.length - 4);
                     dependency.push(name);
                 }
                 var req = require;
@@ -6097,7 +6011,7 @@ define("jassijs/server/FS", ["require", "exports", "jassijs/remote/Classes", "ja
         debugger;
     }
 });
-define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter"], function (require, exports, Classes_17, Config_7, Serverservice_8, NativeAdapter_4) {
+define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Config", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "typescript"], function (require, exports, Classes_17, Config_7, Serverservice_8, NativeAdapter_4, typescript_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -6130,7 +6044,7 @@ define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes"
                     delete index[key];
                 }
             }
-            var jsFiles = await this.dirFiles(modul, path, [".ts"], ["node_modules"]);
+            var jsFiles = await this.dirFiles(modul, path, [".ts", ".tsx"], ["node_modules"]);
             for (let x = 0; x < jsFiles.length; x++) {
                 var jsFile = jsFiles[x];
                 var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
@@ -6146,7 +6060,8 @@ define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes"
                     var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
                     if (dat !== entry.date) {
                         var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
-                        var sourceFile = NativeAdapter_4.ts.createSourceFile('hallo.ts', text, NativeAdapter_4.ts.ScriptTarget.ES5, true);
+                        var isTsx = jsFile.toLowerCase().endsWith(".tsx");
+                        var sourceFile = NativeAdapter_4.ts.createSourceFile(isTsx ? 'hallo.tsx' : 'hallo.ts', text, NativeAdapter_4.ts.ScriptTarget.ES5, true, isTsx ? typescript_1.ScriptKind.TSX : undefined);
                         var outDecorations = [];
                         entry = {};
                         entry.date = undefined;
@@ -6243,13 +6158,13 @@ define("jassijs/server/Indexer", ["require", "exports", "jassijs/remote/Classes"
             if (node.kind === NativeAdapter_4.ts.SyntaxKind.ClassDeclaration) {
                 if (node["modifiers"] !== undefined) {
                     var dec;
+                    var sclass = undefined;
                     for (var m = 0; m < node["modifiers"].length; m++) {
                         var decnode = node["modifiers"][m];
                         if (decnode.kind === NativeAdapter_4.ts.SyntaxKind.Decorator) {
                             //if (node.decorators !== undefined) {
                             if (dec === undefined)
                                 dec = {};
-                            var sclass = undefined;
                             //for (let x = 0; x < node.decorators.length; x++) {
                             // var decnode = node.decorators[x];
                             var ex = decnode.expression;

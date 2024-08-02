@@ -221,11 +221,10 @@ export class RTable extends RComponent {
 
             for (var x = 0; x < _this._components.length; x++) {
                 var tr = (<RTablerow>_this._components[x]);
-                //@ts-ignore
-                if (tr._components[info.column]?.designDummyFor === undefined){
+ 
                     if(tr._components.length>1)
                         tr.remove(tr._components[info.column], true);
-                }
+              
             }
             _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
 
@@ -736,9 +735,6 @@ export class RTable extends RComponent {
         if (this.widths && this.widths.length > 0) {
             r.widths = this.widths;
             var len = (<RTablerow>this._components[0])._components.length;
-            //@ts-ignore
-            if((<RTablerow>this._components[0])._components[len-1].designDummyFor!==undefined)
-                len--;
             for (var t = r.widths.length; t < len; t++) {
                 r.widths.push("auto");
             }

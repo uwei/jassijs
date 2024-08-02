@@ -31,7 +31,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.PDFViewer": {}
 	},
 	"jassijs_report/RColumns.ts": {
-		"date": 1655929934000,
+		"date": 1721763160019.909,
 		"jassijs_report.RColumns": {
 			"$ReportComponent": [
 				{
@@ -103,7 +103,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ReportDesign.ts": {
-		"date": 1697200270448.8713,
+		"date": 1721763173671.8528,
 		"jassijs_report.InfoProperties": {
 			"@members": {}
 		},
@@ -193,7 +193,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ROList.ts": {
-		"date": 1719588965636.7617,
+		"date": 1721763181480.2773,
 		"jassijs_report.ROList": {
 			"$ReportComponent": [
 				{
@@ -208,7 +208,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RStack.ts": {
-		"date": 1699115329566.395,
+		"date": 1721763186807.8606,
 		"jassijs_report.RStack": {
 			"$ReportComponent": [
 				{
@@ -243,7 +243,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTable.ts": {
-		"date": 1719588905687.799,
+		"date": 1721763274507.0127,
 		"jassijs_report.RTable": {
 			"$ReportComponent": [
 				{
@@ -264,7 +264,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1633113320000
 	},
 	"jassijs_report/RTablerow.ts": {
-		"date": 1719757536098.1802,
+		"date": 1721763287323.4111,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{
@@ -295,7 +295,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTextGroup.ts": {
-		"date": 1656016376000,
+		"date": 1721763243509.179,
 		"jassijs_report.RTextGroup": {
 			"$ReportComponent": [
 				{
@@ -309,7 +309,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RUList.ts": {
-		"date": 1719588330055.1697,
+		"date": 1721763248473.9978,
 		"jassijs_report.RUList": {
 			"$ReportComponent": [
 				{

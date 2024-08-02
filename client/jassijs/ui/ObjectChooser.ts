@@ -2,7 +2,7 @@ import "jassijs/ext/jquerylib";
 import { $Class } from "jassijs/remote/Registry";
 import { Table } from "jassijs/ui/Table";
 import { Panel } from "jassijs/ui/Panel";
-import { Button,  ButtonProperties } from "jassijs/ui/Button";
+import { Button, ButtonProperties } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
@@ -12,6 +12,7 @@ import { $UIComponent } from "jassijs/ui/Component";
 import { DBObject } from "jassijs/remote/DBObject";
 import { classes } from "jassijs/remote/Classes";
 import { DataComponentProperties } from "jassijs/ui/DataComponent";
+import { BoundProperty } from "jassijs/ui/State";
 /*
 https://blog.openshift.com/using-filezilla-and-sftp-on-windows-with-openshift/
 */
@@ -48,22 +49,21 @@ export interface ObjectChooserProperties extends ButtonProperties {
        * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
        *         {string} property - the property to bind]
        */
-    bind?: any[];
+    bind?: any[] | BoundProperty;
 }
 @$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" })
 @$Class("jassijs.ui.ObjectChooser")
-export class ObjectChooser<T extends ObjectChooserProperties=ObjectChooserProperties> extends Button<T> implements ObjectChooserProperties, DataComponentProperties {
+export class ObjectChooser<T extends ObjectChooserProperties = ObjectChooserProperties> extends Button<T> implements ObjectChooserProperties, DataComponentProperties {
     @$Property({ default: 450 })
     dialogHeight: number;
     @$Property({ default: 300 })
     dialogWidth: number;
     _items;
     me: Me;
-    _value;
     _autocommit: boolean;
     _databinder: Databinder;
-    constructor() {
-        super();
+    constructor(props: ObjectChooserProperties = {}) {
+        super(props);
         /**
         * @member {number} - the height of the dialog
         */
@@ -74,7 +74,7 @@ export class ObjectChooser<T extends ObjectChooserProperties=ObjectChooserProper
         this.dialogWidth = 450;
         this.layout();
     }
-    config(config: T): ObjectChooser {
+    config(config: T): ObjectChooser<T> {
         super.config(config);
         return this;
     }
@@ -117,7 +117,7 @@ export class ObjectChooser<T extends ObjectChooserProperties=ObjectChooserProper
         me.IDPanel.add(me.IDTable);
         me.IDOK.width = 65;
         me.IDOK.text = "OK";
-        me.IDSearch.width="calc(100% - 132px)";
+        me.IDSearch.width = "calc(100% - 132px)";
         me.IDOK.onclick(function (event) {
             _this.ok();
         });
@@ -126,7 +126,7 @@ export class ObjectChooser<T extends ObjectChooserProperties=ObjectChooserProper
             me.IDTable.search("all", me.IDSearch.value, true);
         });
         me.IDTable.dom.addEventListener("dblclick", function (data) {
-            setTimeout(()=>{_this.ok();},200); 
+            setTimeout(() => { _this.ok(); }, 200);
         });
         me.IDSearch.onkeydown(function (event) {
             if (event.keyCode == 13) {
@@ -146,7 +146,7 @@ export class ObjectChooser<T extends ObjectChooserProperties=ObjectChooserProper
         me.IDCancel.onclick(function (event) {
             _this.cancel();
         });
-        me.IDCancel.width=65;
+        me.IDCancel.width = 65;
         me.IDCancel.text = "Cancel";
         me.IDPanel.height = "100%";
         me.IDPanel.width = "100%";
@@ -162,10 +162,10 @@ export class ObjectChooser<T extends ObjectChooserProperties=ObjectChooserProper
         $(me.IDPanel.dom).dialog("destroy");
     }
     set value(value) {
-        this._value = value;
+        this.states.value.current = value;
     }
     get value() {
-        return this._value;
+        return this.states.value.current;
     }
     async loadObjects(classname: string) {
         var cl: any = await classes.loadClass(classname);
@@ -204,13 +204,18 @@ export class ObjectChooser<T extends ObjectChooserProperties=ObjectChooserProper
      * @param {string} property - the property to bind
      */
     @$Property({ type: "databinder" })
-    set bind(databinder: any[]) {
-        this._databinder = databinder[0];
-        this._databinder.add(<string>databinder[1], this, "onchange");
+    set bind(databinder: any[] | BoundProperty) {
+        if (Array.isArray(databinder)) {
+            this._databinder = databinder[0];
+            this._databinder.add(<string>databinder[1], this, "onchange");
+        } else {
+            this._databinder = <any>databinder._databinder;
+            this._databinder.add(databinder._propertyname, this, "onchange");
+        }
         //databinder.checkAutocommit(this);
     }
     destroy() {
-        this._value = undefined;
+        this.states.value.current = undefined;
         this.me.IDPanel.destroy();
         super.destroy();
     }
@@ -228,12 +233,12 @@ export async function test() {
 }
 export async function test2() {
     // kk.o=0;
-   /* var Kunde = (await import("de/remote/Kunde")).Kunde;
-    var dlg = new ObjectChooser();
-    dlg.items = "de.Kunde";
-    dlg.value = (await Kunde.find({ id: 1 }))[0];
-    //	var kunden=await jassijs.db.load("de.Kunde");
-    //	dlg.value=kunden[4];
-    //	dlg.me.IDTable.items=kunden;
-    return dlg;*/
+    /* var Kunde = (await import("de/remote/Kunde")).Kunde;
+     var dlg = new ObjectChooser();
+     dlg.items = "de.Kunde";
+     dlg.value = (await Kunde.find({ id: 1 }))[0];
+     //	var kunden=await jassijs.db.load("de.Kunde");
+     //	dlg.value=kunden[4];
+     //	dlg.me.IDTable.items=kunden;
+     return dlg;*/
 }
