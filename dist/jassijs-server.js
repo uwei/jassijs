@@ -415,7 +415,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/Indexer.ts": {
-                "date": 1721754067220.996
+                "date": 1722612829860.7268
             },
             "jassijs/server/LocalProtocol.ts": {
                 "date": 1697207752396.3682
