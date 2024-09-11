@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties", "jassijs/ui/State"], function (require, exports, Registry_1, Property_1, Registry_2, Classes_1, CSSProperties_1, State_1) {
     "use strict";
     var Component_1;
+    var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.createRefs = exports.createRef = exports.createComponent = exports.jc = exports.React = exports.$UIComponent = exports.UIComponentProperties = void 0;
     Registry_2 = __importDefault(Registry_2);
@@ -669,6 +670,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             throw new Error("not implemented");
         }
     };
+    exports.Component = Component;
     Component._componentHook = [];
     __decorate([
         (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
@@ -719,8 +721,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     ], Component.prototype, "height", null);
     __decorate([
         (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:type", typeof (_a = typeof React !== "undefined" && React.CSSProperties) === "function" ? _a : Object),
+        __metadata("design:paramtypes", [typeof (_b = typeof React !== "undefined" && React.CSSProperties) === "function" ? _b : Object])
     ], Component.prototype, "style", null);
     __decorate([
         (0, Property_1.$Property)({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
@@ -732,14 +734,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "contextMenu", null);
-    Component = Component_1 = __decorate([
+    exports.Component = Component = Component_1 = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.Component"),
         (0, Property_1.$Property)({ name: "testuw", type: "string" })
         //@ts-ignore
         ,
         __metadata("design:paramtypes", [Object])
     ], Component);
-    exports.Component = Component;
     /*interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
         tag?: string;
         children?;
@@ -1022,17 +1023,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             super.destroy();
         }
     };
+    exports.HTMLComponent = HTMLComponent;
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], HTMLComponent.prototype, "tag", null);
-    HTMLComponent = __decorate([
+    exports.HTMLComponent = HTMLComponent = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.HTMLComponent"),
         (0, Property_1.$Property)({ name: "children", type: "jassijs.ui.Component", createDummyInDesigner: doCreateDummyForHTMLComponent }),
         __metadata("design:paramtypes", [Object])
     ], HTMLComponent);
-    exports.HTMLComponent = HTMLComponent;
     let TextComponent = class TextComponent extends Component {
         constructor(props = {}) {
             super(Object.assign(props, { noWrapper: true }));
@@ -1083,15 +1084,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         ;
     };
+    exports.TextComponent = TextComponent;
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], TextComponent.prototype, "text", null);
-    TextComponent = __decorate([
+    exports.TextComponent = TextComponent = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.TextComponent"),
         __metadata("design:paramtypes", [Object])
     ], TextComponent);
-    exports.TextComponent = TextComponent;
 });
 //# sourceMappingURL=Component.js.map

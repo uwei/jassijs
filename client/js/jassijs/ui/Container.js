@@ -129,11 +129,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.destroy();
         }
     };
-    Container = __decorate([
+    exports.Container = Container;
+    exports.Container = Container = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.Container"),
         (0, Property_1.$Property)({ name: "children", type: "jassijs.ui.Component" }),
         __metadata("design:paramtypes", [Object])
     ], Container);
-    exports.Container = Container;
 });
 //# sourceMappingURL=Container.js.map

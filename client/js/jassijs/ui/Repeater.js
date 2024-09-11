@@ -7,169 +7,262 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Panel_1, Databinder_1, Component_1, Property_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/State", "jassijs/ui/Button", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_1, Component_1, DataComponent_1, Property_1, Textbox_1, State_1, Button_1, Panel_1, Table_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Repeater = void 0;
-    let RepeaterDesignPanel = class RepeaterDesignPanel extends Panel_1.Panel {
-    };
-    RepeaterDesignPanel = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.RepeaterDesignPanel")
-    ], RepeaterDesignPanel);
-    let Repeater = class Repeater extends Panel_1.Panel {
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties = {}) {
-            super();
-            this._autocommit = false;
-            this.design = new RepeaterDesignPanel();
-            this.add(this.design);
-            this.design.width = "100%";
-            this.design.height = "100%";
-            this.design.domWrapper.classList.add("designerNoDraggable");
-            this.design.dom.classList.add("designerNoSelectable");
-            this.design.dom.classList.add("designerNoResizable");
+    exports.test = exports.Repeater = void 0;
+    ///@$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" })
+    let Repeater = class Repeater extends DataComponent_1.DataComponent {
+        constructor(properties = undefined) {
+            super(properties);
+            this._components = [];
+            // super.init('<select class="Select"><option value=""></option></select>');
         }
-        config(config) {
+        render() {
+            //  super.init('<select class="Select"><option value=""></option></select>');
+            return React.createElement("span", {});
+        }
+        onchange(handler) {
+        }
+        set value(value) {
+            this.states.value.current = value;
+        }
+        get value() {
+            return this.states.value.current;
+        }
+        set items(value) {
+            this.states.items.current = value;
+        }
+        get items() {
+            return this.states.items.current;
+        }
+        /* get bindItems() {
+             return this._bindItems;
+         }
+     
+         @$Property({ type: "databinder" })
+         set bindItems(bound: BoundProperty) {
+             this._bindItems = bound;
+             var _this = this;
+             this._bindItems._databinder.add(bound._propertyname, this,(tab) => {
+                 return _this.items;
+             }, (tab, val) => {
+                 _this.items = val;
+             });
+             //databinderItems.add(property, this, "onchange");
+             //databinder.checkAutocommit(this);
+         }*/
+        duplicateChildren(children, state) {
+            var _a, _b, _c, _d, _e;
+            var ret = [];
+            for (var x = 0; x < children.length; x++) {
+                var n = Object.assign({}, children[x]);
+                if (n.props) {
+                    n.props = {};
+                    Object.assign(n.props, children[x].props);
+                }
+                if ((_a = n.props) === null || _a === void 0 ? void 0 : _a.children) {
+                    n.props.children = this.duplicateChildren(n.props.children, state);
+                }
+                if (((_c = (_b = n.props) === null || _b === void 0 ? void 0 : _b.bind) === null || _c === void 0 ? void 0 : _c._databinder) === ((_d = this.bind) === null || _d === void 0 ? void 0 : _d._databinder) && ((_e = this.bind) === null || _e === void 0 ? void 0 : _e._databinder) !== undefined) {
+                    var path = n.props.bind._propertyname.split(".");
+                    var pp = state.bind;
+                    for (var y = 0; y < path.length; y++) {
+                        if (path[y] !== this) {
+                            pp = pp[path[y]];
+                        }
+                    }
+                    n.props.bind = pp;
+                }
+                ret.push(n);
+            }
+            return ret;
+        }
+        createRepeatingItem(ob, children) {
+            //this._boundProperty._databinder.value=ob;
+            var jchilds = [];
+            var stat = (0, State_1.createState)();
+            stat.current = ob;
+            var dup = this.duplicateChildren(children, stat);
+            jchilds.push(...dup);
+            var comp = (0, Component_1.createComponent)((0, Component_1.jc)(Component_1.HTMLComponent, {
+                tag: "span",
+                children: jchilds,
+                onMouseEnter: () => {
+                    var _a;
+                    console.log(JSON.stringify(ob));
+                    if (((_a = this.bind._databinder.connectedState) === null || _a === void 0 ? void 0 : _a.current) !== ob)
+                        this.bind._databinder.connectedState.current = ob;
+                }
+            }));
+            comp.repeatingObject = stat;
+            this.add(comp);
+        }
+        config(config, forceRender = false) {
+            var _a, _b, _c, _d, _e;
+            Object.assign(this.props, config);
+            if (((_a = this.props) === null || _a === void 0 ? void 0 : _a.children) && ((_b = this.props) === null || _b === void 0 ? void 0 : _b.items)) {
+                if (((_c = this.props) === null || _c === void 0 ? void 0 : _c.children.length) > 0 && ((_d = this.props) === null || _d === void 0 ? void 0 : _d.bind)) {
+                    this.bind = this.props.bind; //setup databinder
+                    delete config.bind;
+                    if (this._components === undefined)
+                        this._components = [];
+                    this.removeAll(false);
+                    if ((_e = this.props) === null || _e === void 0 ? void 0 : _e.items) {
+                        for (var i = 0; i < this.props.items.length; i++) {
+                            var ob = this.props.items[i];
+                            this.createRepeatingItem(ob, this.props.children);
+                        }
+                    }
+                    delete config.children;
+                }
+            }
             super.config(config);
             return this;
         }
-        createRepeatingComponent(func) {
-            this._createRepeatingComponent = func;
-            func.bind(this);
-            if (this._value !== undefined)
-                this.update();
-        }
-        _copyMeFromParent(me, parent, override = true) {
-            if (parent === undefined)
-                return;
-            if (parent.me !== undefined) {
-                for (var key in parent.me) {
-                    if (override === true || me[key] === undefined) {
-                        me[key] = parent.me[key];
-                    }
-                }
-                return;
-            }
-            this._copyMeFromParent(me, parent._parent);
-        }
-        update() {
-            if (this._createRepeatingComponent === undefined)
-                return;
-            if (this._designMode === true) {
-                if (this.design._parent !== this) {
-                    this.removeAll();
-                    this.add(this.design);
-                }
-                if (this._isCreated !== true) {
-                    this.design.databinder = new Databinder_1.Databinder();
-                    // var code:string=this._createRepeatingComponent.toString();
-                    // var varname=code.substring(code.indexOf("(")+1,code.indexOf(")"));
-                    // this._componentDesigner._codeEditor.variables.addVariable(varname,this.design.databinder);
-                    this.me = {};
-                    this._copyMeFromParent(this.me, this._parent);
-                    this._createRepeatingComponent(this.me);
-                    var comp = this._componentDesigner.designedComponent;
-                    if (comp["me"] !== undefined) {
-                        this._copyMeFromParent(comp["me"], this, false); //me from Dialog
-                        this._componentDesigner._codeEditor.variables.addVariable("me", comp["me"]);
-                        this._componentDesigner._codeEditor.variables.updateCache();
-                    }
-                    this._isCreated = true;
-                }
-                if (this.value === undefined || this.value === null || this.value.length < 0)
-                    this.design.databinder.value = undefined;
-                else
-                    this.design.databinder.value = this.value[0];
-                this.design.extensionCalled({
-                    componentDesignerSetDesignMode: {
-                        enable: this._designMode,
-                        componentDesigner: undefined
-                    }
-                });
-                //this.design._setDesignMode(this._designMode);
-            }
-            else {
-                this.remove(this.design); //no destroy the design
-                this.removeAll(true);
-                if (this.value === undefined)
-                    return;
-                var sic = this.design;
-                for (var x = 0; x < this.value.length; x++) {
-                    this.design = new RepeaterDesignPanel();
-                    var ob = this.value[x];
-                    this.design.databinder = new Databinder_1.Databinder();
-                    this.design.databinder.value = ob;
-                    this.design.me = {};
-                    this._copyMeFromParent(this.design.me, this._parent);
-                    this._createRepeatingComponent(this.design.me);
-                    this.add(this.design);
-                    this.design.add(this.design.databinder);
-                }
-                this.design = sic;
-            }
-        }
-        /**
-         * adds a component to the container
-         * @param {jassijs.ui.Component} component - the component to add
-         */
         add(component) {
-            super.add(component);
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper._parent = this;
+            this._components.push(component);
+            this.dom.appendChild(component.domWrapper);
         }
-        _dummy(func) {
-            //dummy
+        addBefore(component, before) {
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper["_parent"] = this;
+            var index = this._components.indexOf(before);
+            if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
+                component.domWrapper.parentNode.removeChild(component.domWrapper);
+            }
+            this._components.splice(index, 0, component);
+            this.dom.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+            //before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
         }
-        set value(val) {
-            this._value = val;
-            this.update();
-        }
-        get value() {
-            return this._value;
-        }
-        extensionCalled(action) {
-            if (action.componentDesignerSetDesignMode) {
-                this._setDesignMode(action.componentDesignerSetDesignMode.enable, action.componentDesignerSetDesignMode.componentDesigner);
+        remove(component, destroy = false) {
+            if (destroy)
+                component.destroy();
+            component._parent = undefined;
+            if (component.domWrapper !== undefined)
+                component.domWrapper._parent = undefined;
+            if (this._components) {
+                var pos = this._components.indexOf(component);
+                if (pos >= 0)
+                    this._components.splice(pos, 1);
+            }
+            try {
+                this.dom.removeChild(component.domWrapper);
+            }
+            catch (ex) {
             }
         }
-        /**
-         * activates or deactivates designmode
-         * @param {boolean} enable - true if activate designMode
-         */
-        _setDesignMode(enable, designer = undefined) {
-            this._componentDesigner = designer;
-            if (this._designMode !== enable) {
-                this._designMode = enable;
-                this.update();
+        removeAll(destroy = undefined) {
+            while (this._components.length > 0) {
+                this.remove(this._components[0], destroy);
             }
-            else
-                this._designMode = enable;
-            //	super.setDesignMode(enable);
-        }
-        set bind(databinder) {
-            this._databinder = databinder[0];
-            this._databinder.add(databinder[1], this, "_dummy");
         }
         destroy() {
-            this._value = undefined;
-            this.design.destroy();
+            if (this._components !== undefined) {
+                var tmp = [].concat(this._components);
+                for (var k = 0; k < tmp.length; k++) {
+                    tmp[k].destroy();
+                }
+                this._components = [];
+            }
             super.destroy();
         }
     };
+    exports.Repeater = Repeater;
     __decorate([
-        (0, Property_1.$Property)({ type: "databinder" }),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [Array])
-    ], Repeater.prototype, "bind", null);
-    Repeater = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
-        (0, Registry_1.$Class)("jassijs.ui.Repeater"),
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], Repeater.prototype, "onchange", null);
+    exports.Repeater = Repeater = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.Repeater")
+        //@$Property({ name: "new", type: "json", componentType: "jassijs.ui.SelectProperties" })
+        ,
         __metadata("design:paramtypes", [Object])
     ], Repeater);
-    exports.Repeater = Repeater;
+    class TestComp extends Component_1.Component {
+        render() {
+            return (0, Component_1.jc)(Repeater, {
+                items: data,
+                bind: this.states.customer.bind,
+                children: [
+                    (0, Component_1.jc)(Panel_1.Panel, {
+                        children: [
+                            (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.customer.bind.id }),
+                            (0, Component_1.jc)(Textbox_1.Textbox, {
+                                bind: this.states.customer.bind.name
+                            }),
+                            (0, Component_1.jc)(Button_1.Button, {
+                                text: "go",
+                                onclick: () => {
+                                    alert(this.states.customer.current.name);
+                                }
+                            }),
+                            (0, Component_1.jc)(Table_1.Table, {
+                                height: 100,
+                                width: 100,
+                                bind: this.states.activeChild.bind,
+                                bindItems: this.states.customer.bind.childs
+                            }),
+                            (0, Component_1.jc)(Textbox_1.Textbox, {
+                                bind: this.states.activeChild.bind.name
+                            }),
+                        ]
+                    })
+                ]
+            });
+        }
+    }
+    var data = [
+        { id: 1, name: "Max", childs: [{ name: "Anna" }, { name: "Aria" }] },
+        { id: 2, name: "Moritz", childs: [{ name: "Clara" }, { name: "Heidi" }] },
+        { id: 3, name: "Heinz", childs: [{ name: "Rosa" }, { name: "Luise" }] },
+    ];
+    function DetailComponent(props, states = {}) {
+        var ret = (0, Component_1.jc)("div", {
+            children: [
+                (0, Component_1.jc)(Textbox_1.Textbox, {
+                    bind: states.value.bind.id
+                }),
+                (0, Component_1.jc)(Textbox_1.Textbox, {
+                    bind: states.value.bind.name
+                }),
+                (0, Component_1.jc)(Table_1.Table, {
+                    height: 100,
+                    width: 100,
+                    bind: states.activeChild.bind,
+                    bindItems: states.value.bind.childs
+                }),
+                (0, Component_1.jc)(Textbox_1.Textbox, {
+                    bind: states.activeChild.bind.name
+                }),
+                (0, Component_1.jc)(Button_1.Button, { text: "erter" }),
+                (0, Component_1.jc)("br")
+            ]
+        });
+        return ret;
+    }
+    function MainComponent(props, states) {
+        var ch = props.items.map(item => (0, Component_1.jc)(DetailComponent, { value: item }));
+        var ret = (0, Component_1.jc)("span", {
+            children: ch
+        });
+        return ret;
+    }
+    async function test() {
+        var j = (0, Component_1.jc)(MainComponent, { items: data });
+        var pan = (0, Component_1.createComponent)(j);
+        return pan;
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=Repeater.js.map

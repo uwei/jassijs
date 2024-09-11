@@ -12,10 +12,10 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
         var hh = states.product;
         return (0, Component_1.jc)(Panel_1.Panel, {
             children: [
-                (0, Component_1.jc)(Textbox_1.Textbox, { bind: states.product.bind.Quantity, width: 80 }),
+                (0, Component_1.jc)(Textbox_1.Textbox, { bind: states.product.bind.Quantity, width: 85 }),
                 (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { bind: states.product.bind.Product.ProductName, width: 365 }),
                 (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, {
-                    bind: states.product.bind,
+                    bind: states.product.bind.Product,
                     items: "northwind.Products"
                 }),
                 (0, Component_1.jc)("br"),
@@ -95,19 +95,19 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                             product: ob
                         }))
                     })
-                    /* jc(Repeater2,{
-                                    items: this.states.value.Details,
-                                bind: this.states.activeDetail.bind,
+                    /*jc(Repeater2,{
+                        items: this.states.value.Details,
+                        bind: this.states.activeDetail.bind,
+                        children: [
+                            jc(Panel,{
                                 children: [
-                                jc(Panel,{
-                                    children: [
-                                jc(Button,{text: "hh" }),
-                                jc(Textbox,{bind: this.states.activeDetail.bind.Quantity })
+                                    jc(Textbox,{ bind: this.states.activeDetail.bind.Quantity,width: 85 }),
+                                    jc(Textbox,{ bind: this.states.activeDetail.bind.Product.ProductName }),
+                                    jc(ObjectChooser,{ bind: this.states.activeDetail.bind.Product,items: "northwind.Products" })
                                 ]
-                             })
-                                ],
-                                width: 105
-                     })*/
+                            })
+                        ]
+                    })*/
                     // this.states.value?.Details===undefined? jc("br", {}):this.props.value.Details.map((detail) => jc(ProductDetails, {product: detail }))
                 ]
             });
@@ -116,17 +116,17 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
             return this.value === undefined ? "OrdersView" : "OrdersView " + this.value.id;
         }
     };
-    OrdersView = __decorate([
+    exports.OrdersView = OrdersView;
+    exports.OrdersView = OrdersView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text", queryname: "findAllWithDetails" }),
         (0, Registry_1.$Class)("northwind.OrdersView")
     ], OrdersView);
-    exports.OrdersView = OrdersView;
     async function test() {
         var order = await Orders_1.Orders.findOne({ id: 10266, relations: ["*"] });
         //  var order=await Orders.find({relations: ["*"] });
-        var ret = new OrdersView(); /*{
+        var ret = new OrdersView({
             value: order
-        });*/
+        });
         setTimeout(async () => {
             ret.value = order = await Orders_1.Orders.findOne({ id: 10252, relations: ["*"] });
             //  var order=await Orders.find({relations: ["*"] });

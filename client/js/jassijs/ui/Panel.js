@@ -88,18 +88,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
             this._activeComponentDesigner = undefined;
         }
     };
+    exports.Panel = Panel;
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Panel.prototype, "isAbsolute", null);
-    Panel = __decorate([
+    exports.Panel = Panel = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
         (0, Registry_1.$Class)("jassijs.ui.Panel"),
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" }),
         (0, Property_1.$Property)({ name: "new/useSpan", type: "boolean", default: false }),
         __metadata("design:paramtypes", [Object])
     ], Panel);
-    exports.Panel = Panel;
 });
 //# sourceMappingURL=Panel.js.map

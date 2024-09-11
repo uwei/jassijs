@@ -21,9 +21,9 @@ export interface RepeaterProperties extends DataComponentProperties {
     children?;
 }
 ///@$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" })
-@$Class("jassijs.ui.Repeater2")
+@$Class("jassijs.ui.Repeater")
 //@$Property({ name: "new", type: "json", componentType: "jassijs.ui.SelectProperties" })
-export class Repeater2<T extends RepeaterProperties = RepeaterProperties> extends DataComponent<T> {
+export class Repeater<T extends RepeaterProperties = RepeaterProperties> extends DataComponent<T> {
     _components=[];
     _items;
     _bindItems?: BoundProperty;
@@ -112,7 +112,7 @@ export class Repeater2<T extends RepeaterProperties = RepeaterProperties> extend
         comp.repeatingObject = stat;
         this.add(comp);
     }
-    config(config: T, forceRender = false): Repeater2 {
+    config(config: T, forceRender = false): Repeater {
         Object.assign(this.props,config);
         if (this.props?.children && this.props?.items) {
             if (this.props?.children.length > 0 && (this.props?.bind)) {
@@ -197,7 +197,7 @@ interface TestCompProperties extends ComponentProperties {
 }
 class TestComp extends Component<TestCompProperties> {
     render() {
-        return jc(Repeater2, {
+        return jc(Repeater, {
             items: data,
             bind: this.states.customer.bind,
             children: [

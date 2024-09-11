@@ -72,17 +72,6 @@ define("northwind/registry",["require"], function(require) {
 			]
 		}
 	},
-	"northwind/DetailTest.ts": {
-		"date": 1656073048000,
-		"northwind.DetailTest": {
-			"$DBObjectView": [
-				{
-					"classname": "northwind.OrderDetails"
-				}
-			],
-			"@members": {}
-		}
-	},
 	"northwind/EmployeesView.ts": {
 		"date": 1722605088492.314,
 		"northwind.EmployeesView": {
@@ -125,7 +114,7 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1613551044000
 	},
 	"northwind/OrdersView.ts": {
-		"date": 1722605111019.898,
+		"date": 1722616287707.8923,
 		"northwind.OrdersView": {
 			"$DBObjectView": [
 				{

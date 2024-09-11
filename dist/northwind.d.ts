@@ -49,22 +49,6 @@ declare module "northwind/CustomerView" {
     }
     export function test(): unknown;
 }
-declare module "northwind/DetailTest" {
-    import { OrderDetails } from "northwind/remote/OrderDetails";
-    import { DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-    import { Textbox } from "jassijs/ui/Textbox";
-    type Me = {
-        textbox1?: Textbox;
-    } & DBObjectViewMe;
-    export class DetailTest extends DBObjectView {
-        me: Me;
-        value: OrderDetails;
-        constructor();
-        get title(): string;
-        layout(me: Me): void;
-    }
-    export function test(): unknown;
-}
 declare module "northwind/EmployeesView" {
     import { Employees } from "northwind/remote/Employees";
     import { DBObjectView } from "jassijs/ui/DBObjectView";
@@ -103,7 +87,7 @@ declare module "northwind/modul" {
 declare module "northwind/OrdersView" {
     import { Textbox } from "jassijs/ui/Textbox";
     import { Orders } from "northwind/remote/Orders";
-    import { DBObjectView, DBObjectViewMe, DBObjectViewProperties } from "jassijs/ui/DBObjectView";
+    import { DBObjectView, DBObjectViewProperties } from "jassijs/ui/DBObjectView";
     import { OrderDetails } from "northwind/remote/OrderDetails";
     type Me = {
         shipName?: Textbox;
@@ -112,7 +96,7 @@ declare module "northwind/OrdersView" {
         shipCity?: Textbox;
         shipCountry?: Textbox;
         shipRegion?: Textbox;
-    } & DBObjectViewMe;
+    };
     interface OrdersViewProperties extends DBObjectViewProperties<Orders> {
         activeDetail: OrderDetails;
     }
