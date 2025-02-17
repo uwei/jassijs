@@ -30,10 +30,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         }
         set isAbsolute(value) {
             this._isAbsolute = value;
-            if (value)
-                this.dom.classList.add("jabsolutelayout");
-            else
-                this.dom.classList.remove("jabsolutelayout");
+            if (this.dom.classList) {
+                if (value)
+                    this.dom.classList.add("jabsolutelayout");
+                else
+                    this.dom.classList.remove("jabsolutelayout");
+            }
             if (this._designMode !== undefined)
                 this._setDesignMode(this._designMode);
             if (this._designMode && this._activeComponentDesigner) {
@@ -88,18 +90,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
             this._activeComponentDesigner = undefined;
         }
     };
-    exports.Panel = Panel;
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Panel.prototype, "isAbsolute", null);
-    exports.Panel = Panel = __decorate([
+    Panel = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
         (0, Registry_1.$Class)("jassijs.ui.Panel"),
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" }),
         (0, Property_1.$Property)({ name: "new/useSpan", type: "boolean", default: false }),
         __metadata("design:paramtypes", [Object])
     ], Panel);
+    exports.Panel = Panel;
 });
 //# sourceMappingURL=Panel.js.map

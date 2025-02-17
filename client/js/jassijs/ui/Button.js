@@ -116,7 +116,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.destroy();
         }
     };
-    exports.Button = Button;
     __decorate([
         (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
@@ -133,11 +132,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Button.prototype, "text", null);
-    exports.Button = Button = __decorate([
+    Button = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
         (0, Registry_1.$Class)("jassijs.ui.Button"),
         __metadata("design:paramtypes", [Object])
     ], Button);
+    exports.Button = Button;
     async function test() {
         var Panel = (await (new Promise((resolve_1, reject_1) => { require(["jassijs/ui/Panel"], resolve_1, reject_1); }).then(__importStar))).Panel;
         var pan = new Panel();

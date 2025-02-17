@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties", "jassijs/ui/State"], function (require, exports, Registry_1, Property_1, Registry_2, Classes_1, CSSProperties_1, State_1) {
     "use strict";
     var Component_1;
-    var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.createRefs = exports.createRef = exports.createComponent = exports.jc = exports.React = exports.$UIComponent = exports.UIComponentProperties = void 0;
     Registry_2 = __importDefault(Registry_2);
@@ -70,10 +69,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     }
     window.React = React;
     function createComponent(node) {
-        var _a, _b;
         var atype = node.type;
         var props = node.props;
         var ret;
+        if (atype === undefined)
+            debugger;
         if (typeof atype === "string") {
             if (props === undefined)
                 props = {};
@@ -90,38 +90,28 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 ret = new atype(props);
             }
         }
-        if (((_a = node === null || node === void 0 ? void 0 : node.props) === null || _a === void 0 ? void 0 : _a.children) !== undefined) {
+        /*if ((<any>node)?.props?.children !== undefined) {
             if (props === null || props === undefined)
                 props = {};
-            props.children = (_b = node === null || node === void 0 ? void 0 : node.props) === null || _b === void 0 ? void 0 : _b.children;
+            props.children = (<any>node)?.props?.children;
             for (var x = 0; x < props.children.length; x++) {
-                //delegate renderFunc
                 var child = props.children[x];
-                /*if(child?.props?.calculateState){
-                    props.calculateState=child?.props?.renderFunc;
-                    delete child?.props?.calculateState;
-                    
-    
-                }*/
                 var cchild;
                 if (typeof child === "string") {
                     cchild = new TextComponent();
                     cchild.tag = "";
                     cchild.text = child;
-                    //child.dom = nd;
-                }
-                else if (child === null || child === void 0 ? void 0 : child._$isState$_) {
+                } else if (child?._$isState$_) {
                     cchild = new TextComponent();
                     cchild.tag = "";
-                    child === null || child === void 0 ? void 0 : child._observe_(cchild, "text", "property");
+                    child?._observe_(cchild, "text", "property");
                     cchild.text = child.current;
-                }
-                else {
+                } else {
                     cchild = createComponent(child);
                 }
                 ret.add(cchild);
             }
-        }
+        }*/
         if (props === null || props === void 0 ? void 0 : props.ref) {
             props.ref.current = ret;
             props === null || props === void 0 ? true : delete props.ref;
@@ -189,7 +179,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.config(this.props);
         }
         _rerenderMe(firstTime = false) {
-            var _a;
+            var _a, _b, _c;
+            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.states) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
+                var node = document.createComment(this.constructor.name + " with exists=false");
+                var save = this.props;
+                this.props = { noWrapper: true };
+                this._initComponent(node);
+                this.props = save;
+                return;
+            }
             //@ts-ignore
             var rend = this.render(this.states);
             if (rend) {
@@ -197,7 +195,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                     this._initComponent(rend);
                 }
                 else {
-                    if ((_a = rend === null || rend === void 0 ? void 0 : rend.props) === null || _a === void 0 ? void 0 : _a.calculateState) {
+                    if ((_c = rend === null || rend === void 0 ? void 0 : rend.props) === null || _c === void 0 ? void 0 : _c.calculateState) {
                         this.calculateState = rend.props.calculateState;
                         delete rend.props.calculateState;
                     }
@@ -219,7 +217,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
               this.config(this.lastconfig);
           }*/
         config(config) {
-            var _a, _b;
+            var _a, _b, _c, _d;
+            if ((config === null || config === void 0 ? void 0 : config.exists) === false || ((config === null || config === void 0 ? void 0 : config.exists) === undefined && ((_b = (_a = this.states) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false)) {
+                if ((config === null || config === void 0 ? void 0 : config.exists) === false)
+                    this.exists = false;
+                return undefined;
+            }
             var con = Object.assign({}, config);
             delete con.noWrapper;
             delete con.replaceNode;
@@ -238,7 +241,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                         me[key](config[key]);
                     }
                     else {
-                        if (((_a = me[key]) === null || _a === void 0 ? void 0 : _a._$isState$_) !== undefined) {
+                        if (((_c = me[key]) === null || _c === void 0 ? void 0 : _c._$isState$_) !== undefined) {
                             me[key].current = config[key];
                         }
                         else
@@ -251,7 +254,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 else
                     notfound[key] = con;
             }
-            if ((_b = this.states) === null || _b === void 0 ? void 0 : _b._onconfig)
+            if ((_d = this.states) === null || _d === void 0 ? void 0 : _d._onconfig)
                 this.states._onconfig(config);
             Object.assign(this.props === undefined ? {} : this.props, config);
             if (Object.keys(notfound).length > 0) {
@@ -310,6 +313,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             }
             return ret;
         }
+        get exists() {
+            return this.states.exists.current;
+        }
+        set exists(value) {
+            var old = this.states.exists.current;
+            this.states.exists.current = value;
+            if (old !== value) {
+                this._rerenderMe(false);
+                var props = Object.assign({}, this.props);
+                var keys = this.states._used;
+                keys.forEach((k) => props[k] = this.states[k].current);
+                this.config(props);
+            }
+        }
         /**
          * @member {dom} - the dom element
          */
@@ -324,7 +341,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (this.dom.classList) { //Textnode!
                 this.dom.classList.add("jinlinecomponent");
                 this.dom.classList.add("jresizeable");
-                if (domalt !== undefined) {
+                if (domalt !== undefined && domalt.classList) {
                     domalt.classList.remove("jinlinecomponent");
                     domalt.classList.remove("jresizeable");
                 }
@@ -362,13 +379,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             //   jassijs.componentSpy.unwatch(this);
             // }
             this.dom = dom;
-            this._id = olddom ? olddom.id : ("j" + Registry_2.default.nextID());
+            this._id = (olddom === null || olddom === void 0 ? void 0 : olddom.id) ? olddom.id : ("j" + Registry_2.default.nextID());
             if (this.dom.setAttribute !== undefined) //Textnode
                 this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
-            var lid = oldwrapper ? oldwrapper.id : ("j" + Registry_2.default.nextID());
+            var lid = (oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.id) ? oldwrapper.id : ("j" + Registry_2.default.nextID());
             var st = 'style="display: inline-block"';
             if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
                 st = "";
@@ -467,7 +484,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.dom = dom;
             if (oldwrapper === olddom)
                 this.domWrapper = dom;
-            this.dom.setAttribute("id", olddom.getAttribute("id"));
+            if (this.dom.setAttribute && olddom.getAttribute)
+                this.dom.setAttribute("id", olddom.getAttribute("id"));
         }
         set label(value) {
             if (value === undefined) {
@@ -500,6 +518,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         set x(value) {
             this.domWrapper.style.left = value.toString().replace("px", "") + "px";
             this.domWrapper.style.position = "absolute";
+            this.states.x.current = value;
         }
         get y() {
             return Number(this.domWrapper.style.top.replace("px", ""));
@@ -507,6 +526,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         set y(value) {
             this.domWrapper.style.top = value.toString().replace("px", "") + "px";
             this.domWrapper.style.position = "absolute";
+            this.states.y.current = value;
         }
         get hidden() {
             return (this.dom.getAttribute("hidden") === "");
@@ -532,6 +552,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.dom.style.width = value.toString();
                 this.domWrapper.style.width = "";
             }
+            this.states.width.current = value;
             //  
         }
         get width() {
@@ -554,6 +575,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.dom.style.height = value.toString();
                 this.domWrapper.style.height = "";
             }
+            this.states.height.current = value;
         }
         get height() {
             if (this.domWrapper.style.height !== undefined)
@@ -670,7 +692,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             throw new Error("not implemented");
         }
     };
-    exports.Component = Component;
     Component._componentHook = [];
     __decorate([
         (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
@@ -721,8 +742,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     ], Component.prototype, "height", null);
     __decorate([
         (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", typeof (_a = typeof React !== "undefined" && React.CSSProperties) === "function" ? _a : Object),
-        __metadata("design:paramtypes", [typeof (_b = typeof React !== "undefined" && React.CSSProperties) === "function" ? _b : Object])
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
     ], Component.prototype, "style", null);
     __decorate([
         (0, Property_1.$Property)({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
@@ -734,13 +755,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "contextMenu", null);
-    exports.Component = Component = Component_1 = __decorate([
+    Component = Component_1 = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.Component"),
         (0, Property_1.$Property)({ name: "testuw", type: "string" })
         //@ts-ignore
         ,
         __metadata("design:paramtypes", [Object])
     ], Component);
+    exports.Component = Component;
     /*interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
         tag?: string;
         children?;
@@ -879,8 +901,37 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             }
             return ret;
         }
+        createChildren(props) {
+            if (props === null || props === void 0 ? void 0 : props.children) {
+                this.removeAll(false);
+                this._components = [];
+                for (var x = 0; x < props.children.length; x++) {
+                    var child = props.children[x];
+                    var cchild;
+                    if (typeof child === "string") {
+                        cchild = new TextComponent();
+                        cchild.tag = "";
+                        cchild.text = child;
+                    }
+                    else if (child === null || child === void 0 ? void 0 : child._$isState$_) {
+                        cchild = new TextComponent();
+                        cchild.tag = "";
+                        child === null || child === void 0 ? void 0 : child._observe_(cchild, "text", "property");
+                        cchild.text = child.current;
+                    }
+                    else {
+                        cchild = createComponent(child);
+                    }
+                    this.add(cchild);
+                }
+                delete props.children;
+            }
+        }
         config(props) {
             var _a;
+            if (!super.config(props))
+                return;
+            this.createChildren(props);
             var tag = (props === null || props === void 0 ? void 0 : props.tag) === undefined ? "span" : props === null || props === void 0 ? void 0 : props.tag;
             if ((props === null || props === void 0 ? void 0 : props.tag) !== undefined && (props === null || props === void 0 ? void 0 : props.tag) !== this.tag.toLowerCase()) {
                 var childs = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.childNodes;
@@ -889,7 +940,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
                     this.dom.append(...childs);
             }
-            super.config(props);
             for (var prop in props) {
                 var val = props[prop];
                 if (prop === "style") {
@@ -950,6 +1000,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
+            var _a, _b;
+            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.states) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
+                return;
+            }
             if (component._parent !== undefined) {
                 component._parent.remove(component);
             }
@@ -1008,7 +1062,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         * @param {boolean} destroy - if true the component would be destroyed
         */
         removeAll(destroy = undefined) {
-            while (this._components.length > 0) {
+            var _a;
+            while (((_a = this._components) === null || _a === void 0 ? void 0 : _a.length) > 0) {
                 this.remove(this._components[0], destroy);
             }
         }
@@ -1023,17 +1078,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             super.destroy();
         }
     };
-    exports.HTMLComponent = HTMLComponent;
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], HTMLComponent.prototype, "tag", null);
-    exports.HTMLComponent = HTMLComponent = __decorate([
+    HTMLComponent = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.HTMLComponent"),
         (0, Property_1.$Property)({ name: "children", type: "jassijs.ui.Component", createDummyInDesigner: doCreateDummyForHTMLComponent }),
         __metadata("design:paramtypes", [Object])
     ], HTMLComponent);
+    exports.HTMLComponent = HTMLComponent;
     let TextComponent = class TextComponent extends Component {
         constructor(props = {}) {
             super(Object.assign(props, { noWrapper: true }));
@@ -1084,15 +1139,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         ;
     };
-    exports.TextComponent = TextComponent;
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], TextComponent.prototype, "text", null);
-    exports.TextComponent = TextComponent = __decorate([
+    TextComponent = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.TextComponent"),
         __metadata("design:paramtypes", [Object])
     ], TextComponent);
+    exports.TextComponent = TextComponent;
 });
 //# sourceMappingURL=Component.js.map

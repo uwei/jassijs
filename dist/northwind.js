@@ -566,7 +566,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
         var hh = states.product;
         return (0, Component_6.jc)(Panel_6.Panel, {
             children: [
-                (0, Component_6.jc)(Textbox_4.Textbox, { bind: states.product.bind.Quantity, width: 80 }),
+                (0, Component_6.jc)(Textbox_4.Textbox, { bind: states.product.bind.Quantity, width: 85 }),
                 (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: states.product.bind.Product.ProductName, width: 365 }),
                 (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, {
                     bind: states.product.bind.Product,
@@ -649,20 +649,19 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
                             product: ob
                         }))
                     })
-                    /*  jc(Repeater2,{
-                          items: this.states.value.Details,
-                          bind: this.states.activeDetail.bind,
-                          children: [
-                              jc(Panel,{
-                                  children: [
-                                      jc(Textbox,{ bind: this.states.activeDetail.bind.Quantity,width: 50 }),
-                                      jc(Textbox,{ bind: this.states.activeDetail.bind.Product.ProductName }),
-                                      jc(ObjectChooser,{ bind: this.states.activeDetail.bind,items: "northwind.Products" })
-                                  ]
-                              })
-                          ],
-                          width: 50
-                      })*/
+                    /*jc(Repeater2,{
+                        items: this.states.value.Details,
+                        bind: this.states.activeDetail.bind,
+                        children: [
+                            jc(Panel,{
+                                children: [
+                                    jc(Textbox,{ bind: this.states.activeDetail.bind.Quantity,width: 85 }),
+                                    jc(Textbox,{ bind: this.states.activeDetail.bind.Product.ProductName }),
+                                    jc(ObjectChooser,{ bind: this.states.activeDetail.bind.Product,items: "northwind.Products" })
+                                ]
+                            })
+                        ]
+                    })*/
                     // this.states.value?.Details===undefined? jc("br", {}):this.props.value.Details.map((detail) => jc(ProductDetails, {product: detail }))
                 ]
             });
@@ -679,9 +678,9 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
     async function test() {
         var order = await Orders_2.Orders.findOne({ id: 10266, relations: ["*"] });
         //  var order=await Orders.find({relations: ["*"] });
-        var ret = new OrdersView(); /*{
+        var ret = new OrdersView({
             value: order
-});*/
+        });
         setTimeout(async () => {
             ret.value = order = await Orders_2.Orders.findOne({ id: 10252, relations: ["*"] });
             //  var order=await Orders.find({relations: ["*"] });
@@ -943,7 +942,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1722615517307.8716,
+                "date": 1722616287707.8923,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -2514,7 +2513,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1722615517307.8716,
+                "date": 1722616287707.8923,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {

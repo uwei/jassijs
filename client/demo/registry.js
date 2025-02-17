@@ -165,6 +165,15 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/TestJSX.tsx": {
 		"date": 1719778647927.916
+	},
+	"demo/TestComputedState.tsx": {
+		"date": 1739823504128.3713
+	},
+	"demo/ExistsIfTest.ts": {
+		"date": 1739741602828.4731
+	},
+	"demo/ExistsIfTest2.tsx": {
+		"date": 1739817432005.1152
 	}
 }
  }

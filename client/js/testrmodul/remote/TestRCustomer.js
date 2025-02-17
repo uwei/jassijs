@@ -16,6 +16,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
             super();
         }
     };
+    exports.TestRCustomer = TestRCustomer;
     __decorate([
         (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
@@ -24,12 +25,11 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
         (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], TestRCustomer.prototype, "name", void 0);
-    TestRCustomer = __decorate([
+    exports.TestRCustomer = TestRCustomer = __decorate([
         (0, DBObject_1.$DBObject)(),
         (0, Registry_1.$Class)("testrmodul.TestRCustomer"),
         __metadata("design:paramtypes", [])
     ], TestRCustomer);
-    exports.TestRCustomer = TestRCustomer;
     async function test() {
     }
     exports.test = test;

@@ -176,19 +176,19 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.destroy();
         }
     };
-    exports.Repeater = Repeater;
     __decorate([
         (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Repeater.prototype, "onchange", null);
-    exports.Repeater = Repeater = __decorate([
+    Repeater = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.Repeater")
         //@$Property({ name: "new", type: "json", componentType: "jassijs.ui.SelectProperties" })
         ,
         __metadata("design:paramtypes", [Object])
     ], Repeater);
+    exports.Repeater = Repeater;
     class TestComp extends Component_1.Component {
         render() {
             return (0, Component_1.jc)(Repeater, {

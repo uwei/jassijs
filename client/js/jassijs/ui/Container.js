@@ -25,17 +25,53 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             if ((_a = this.domWrapper) === null || _a === void 0 ? void 0 : _a.classList)
                 (_b = this.domWrapper) === null || _b === void 0 ? void 0 : _b.classList.add("jcontainer");
         }
+        createChildren(props) {
+            if (props === null || props === void 0 ? void 0 : props.children) {
+                this.removeAll(false);
+                this._components = [];
+                for (var x = 0; x < props.children.length; x++) {
+                    var child = props.children[x];
+                    var cchild;
+                    if (typeof child === "string") {
+                        cchild = new Component_1.TextComponent();
+                        cchild.tag = "";
+                        cchild.text = child;
+                    }
+                    else if (child === null || child === void 0 ? void 0 : child._$isState$_) {
+                        cchild = new Component_1.TextComponent();
+                        cchild.tag = "";
+                        child === null || child === void 0 ? void 0 : child._observe_(cchild, "text", "property");
+                        cchild.text = child.current;
+                    }
+                    else {
+                        cchild = (0, Component_1.createComponent)(child);
+                    }
+                    this.add(cchild);
+                }
+                delete props.children;
+            }
+        }
+        /*   if (config?.children) {
+                       if (config?.children.length > 0 && config?.children[0] instanceof Component) {
+                           this.removeAll(false);
+                           for (var x = 0; x < config.children.length; x++) {
+                               this.add(config.children[x]);
+                           }
+                           delete config.children;
+                       }
+           }*/
         config(config, forceRender = false) {
-            if (config === null || config === void 0 ? void 0 : config.children) {
-                if ((config === null || config === void 0 ? void 0 : config.children.length) > 0 && (config === null || config === void 0 ? void 0 : config.children[0]) instanceof Component_1.Component) {
+            if (super.config(config))
+                this.createChildren(config);
+            /*if (config?.children) {
+                if (config?.children.length > 0 && config?.children[0] instanceof Component) {
                     this.removeAll(false);
                     for (var x = 0; x < config.children.length; x++) {
                         this.add(config.children[x]);
                     }
                     delete config.children;
                 }
-            }
-            super.config(config);
+            }*/
             return this;
         }
         /**
@@ -114,7 +150,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
        * @param {boolean} destroy - if true the component would be destroyed
        */
         removeAll(destroy = undefined) {
-            while (this._components.length > 0) {
+            var _a;
+            while (((_a = this._components) === null || _a === void 0 ? void 0 : _a.length) > 0) {
                 this.remove(this._components[0], destroy);
             }
         }
@@ -129,11 +166,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.destroy();
         }
     };
-    exports.Container = Container;
-    exports.Container = Container = __decorate([
+    Container = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.Container"),
         (0, Property_1.$Property)({ name: "children", type: "jassijs.ui.Component" }),
         __metadata("design:paramtypes", [Object])
     ], Container);
+    exports.Container = Container;
 });
 //# sourceMappingURL=Container.js.map

@@ -116,11 +116,11 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
             return this.value === undefined ? "OrdersView" : "OrdersView " + this.value.id;
         }
     };
-    exports.OrdersView = OrdersView;
-    exports.OrdersView = OrdersView = __decorate([
+    OrdersView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text", queryname: "findAllWithDetails" }),
         (0, Registry_1.$Class)("northwind.OrdersView")
     ], OrdersView);
+    exports.OrdersView = OrdersView;
     async function test() {
         var order = await Orders_1.Orders.findOne({ id: 10266, relations: ["*"] });
         //  var order=await Orders.find({relations: ["*"] });

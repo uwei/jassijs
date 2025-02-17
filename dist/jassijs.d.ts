@@ -3461,7 +3461,7 @@ declare module "jassijs/ui/PropertyEditors/TableColumnImport" {
     }
     export function test(): unknown;
 }
-declare module "jassijs/ui/Repeater2" {
+declare module "jassijs/ui/Repeater" {
     import "jassijs/ext/jquerylib";
     import "jquery.choosen";
     import { Component } from "jassijs/ui/Component";
@@ -3472,7 +3472,7 @@ declare module "jassijs/ui/Repeater2" {
         value?: any;
         children?: any;
     }
-    export class Repeater2<T extends RepeaterProperties = RepeaterProperties> extends DataComponent<T> {
+    export class Repeater<T extends RepeaterProperties = RepeaterProperties> extends DataComponent<T> {
         _components: {};
         _items: any;
         _bindItems?: BoundProperty;
@@ -3485,7 +3485,7 @@ declare module "jassijs/ui/Repeater2" {
         get items(): any;
         private duplicateChildren;
         private createRepeatingItem;
-        config(config: T, forceRender?: boolean): Repeater2;
+        config(config: T, forceRender?: boolean): Repeater;
         add(component: any): void;
         addBefore(component: Component, before: Component): void;
         remove(component: any, destroy?: boolean): void;

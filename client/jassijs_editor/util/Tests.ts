@@ -15,6 +15,7 @@ import { Test } from "jassijs/remote/Test";
 
 
 class MyContainer extends BoxPanel {
+    startDate:number;
     statustext: HTMLPanel;
     alltests = 0;
     failedtests = 0;
@@ -26,7 +27,8 @@ class MyContainer extends BoxPanel {
         this.statustext.style={
             color: (this.failedtests === 0 ? "green" : "red")
         };
-        this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed."
+
+        this.statustext.value = (this.finished ? ("Finished "+(new Date().getTime()-this.startDate).toString()+"ms " ): "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed."
     }
 }
 @$ActionProvider("jassijs.remote.FileNode")
@@ -57,7 +59,9 @@ export class TestAction {
                 }
             }, container._id);
         }
-
+        if(isRoot){
+            container.startDate=new Date().getTime();
+        }
         for (var x = 0; x < all.length; x++) {
             var file = all[x];
             if (file.isDirectory()) {

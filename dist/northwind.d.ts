@@ -98,7 +98,7 @@ declare module "northwind/OrdersView" {
         shipRegion?: Textbox;
     };
     interface OrdersViewProperties extends DBObjectViewProperties<Orders> {
-        activeDetail: OrderDetails;
+        activeDetail?: OrderDetails;
     }
     export class OrdersView extends DBObjectView<Orders, OrdersViewProperties> {
         refs: Me;

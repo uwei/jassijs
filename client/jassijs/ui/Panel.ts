@@ -8,10 +8,10 @@ export interface PanelProperties extends ContainerProperties {
     /**
       * @param {boolean} the elements are ordered absolute
       **/
-   
+
     isAbsolute?: boolean;
     useSpan?: boolean;
-    domProperties?:React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+    domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 }
 
 
@@ -20,7 +20,7 @@ export interface PanelProperties extends ContainerProperties {
 @$Class("jassijs.ui.Panel")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
 @$Property({ name: "new/useSpan", type: "boolean", default: false })
-export class Panel<T extends PanelProperties=PanelProperties> extends Container<T> implements PanelProperties {
+export class Panel<T extends PanelProperties = PanelProperties> extends Container<T> implements PanelProperties {
     _isAbsolute: boolean;
     private _activeComponentDesigner: any;
     /**
@@ -31,21 +31,23 @@ export class Panel<T extends PanelProperties=PanelProperties> extends Container<
     * 
     */
     constructor(properties: T = <any>{}) {//id connect to existing(not reqired)
-        super(properties); 
+        super(properties);
         this._designMode = false;
         this.isAbsolute = properties?.isAbsolute === true;
     }
-    render():React.ReactElement{ 
+    render(): React.ReactElement {
         var tag = this.props !== undefined && this.props.useSpan === true ? "span" : "div";
-        return React.createElement(tag, { ...this.props.domProperties,className: "Panel" });
+        return React.createElement(tag, { ...this.props.domProperties, className: "Panel" });
     }
     @$Property()
     set isAbsolute(value: boolean) {
         this._isAbsolute = value;
-        if (value)
-            this.dom.classList.add("jabsolutelayout");
-        else
-            this.dom.classList.remove("jabsolutelayout");
+        if (this.dom.classList) {
+            if (value)
+                this.dom.classList.add("jabsolutelayout");
+            else
+                this.dom.classList.remove("jabsolutelayout");
+        }
         if (this._designMode !== undefined)
             this._setDesignMode(this._designMode);
         if (this._designMode && this._activeComponentDesigner) {
@@ -94,11 +96,11 @@ export class Panel<T extends PanelProperties=PanelProperties> extends Container<
      * @param {boolean} enable - true if activate designMode
      */
     protected _setDesignMode(enable) {
-      
+
 
     }
     destroy() {
-        
+
         super.destroy();
         this._activeComponentDesigner = undefined;
     }

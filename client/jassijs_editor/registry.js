@@ -349,7 +349,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.Resizer": {}
 	},
 	"jassijs_editor/util/Tests.ts": {
-		"date": 1720185108125.2275,
+		"date": 1739727794640.8933,
 		"jassijs_editor.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"

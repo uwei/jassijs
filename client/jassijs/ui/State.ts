@@ -35,7 +35,7 @@ interface P {
     st1: State<any>;
 }
 
-export function foreach(stateWithArray: {current:any[]}, func: (ob) => any): State<React.ReactElement> {
+export function foreach(stateWithArray: { current: any[] }, func: (ob) => any): State<React.ReactElement> {
 
     var retState = createState();
 
@@ -49,9 +49,9 @@ export function foreach(stateWithArray: {current:any[]}, func: (ob) => any): Sta
                     // if (ret === undefined)
                     //   ret = [];
                     var comp = func(arr[x]);
-                    if (ob?.initial !== true) {
+                    /*if (ob?.initial !== true) {
                         comp = createComponent(comp);
-                    }
+                    }*/
                     ret.push(comp);
                 }
             }
@@ -64,26 +64,31 @@ export function foreach(stateWithArray: {current:any[]}, func: (ob) => any): Sta
     return <any>retState;
 }
 
-export type States<T> = { [Property in keyof T]: States<T[Property]> & { bind?: BoundProperty<T[Property]> } } & { current: T, _used?: string[], _onconfig?: (props) => void };
+
+export type States<T> = { [Property in keyof T]: States<T[Property]> & { bind?: BoundProperty<T[Property]> } } & { current: T, _used?: string[], _onconfig?: (props) => void, _onStateChanged?: (handler: (value) => void) => void };
 export function createStates<T>(initialValues: T = undefined, propertyname: string = undefined): States<T> {
-    var data: any = new State(initialValues);// { _used: [], _data: initialValues };
+    var data: any = new StateGroup(initialValues);// { _used: [], _data: initialValues };
     data._$propertyname_ = propertyname;
+    
     return new Proxy(data as any, {
         get(target: State, key: string) {
 
             if (key === "_onconfig")
                 return target._onconfig;
-            if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current") {
+            if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current" && key !== "statechanged") {
                 var newstate: State = <any>createStates(data.current !== undefined ? data.current[key] : undefined, key);
 
                 target[key] = newstate;
                 target._observe_(newstate, "_$setparentobject");
+                newstate._observe_(target, "statechanged");
                 if (target._used.indexOf(key) === -1)
                     target._used.push(key);
             }
             return target[key];
         },
         set(target, key: string, value) {
+            var all = Object.getOwnPropertyNames(target);
+
             if (key === "_$setparentobject") {
                 var propname: string = data._$propertyname_;
                 target.current = value[propname];
@@ -92,6 +97,8 @@ export function createStates<T>(initialValues: T = undefined, propertyname: stri
                 target._onconfig = value;
             else if (key === "current") {
                 target.current = value;
+            } else if (key === "statechanged") {
+                target.statechanged = value;
             } else
                 throw "not implemented " + key;
             return true;
@@ -105,21 +112,25 @@ export type GroupState<T> = DropType<T, State> & { readonly refs: { readonly [Pr
 
 type ClientState<T> = { [K in keyof T]: ClientState<T[K]> & { current: State<T> } };
 export class State<T = {}> {
-    private data;
+    protected data?;
+    self:any=this;
+    _listener_ = [];
     //self: any = this;
-    _comps_: StateProp[] = [];
-    _used: string[] = [];
-    _$isState$_ = true;
+    _comps_?: StateProp[] = [];
+    _used?: string[] = [];
+    _$isState$_? = true;
     constructor(data = undefined) {
         this.data = data;
     }
-    _observe_(control, property, atype = undefined) {
+
+    _observe_?(control, property, atype = undefined) {
         this._comps_.push({ ob: control, proppath: [property] });
     }
     bind?: BoundProperty<T> = createBoundProperty(this);
     get current(): T {
         return this.data;
     }
+
     set current(data: T) {
         if (this.data === data)
             return;
@@ -146,9 +157,61 @@ export class State<T = {}> {
 
     }
 }
-export function createState<T>(val: T = undefined) {
-    var ret = new State<T>();
+export function createState<T>(val: T = undefined):State<T> {
+    var ret: (T & State<T>) = <any>new State<T>();//use <>{ret}<> is possible
     ret.current = val;
+    return ret;
+}
+class ComputedState<T> extends State<T> {
+    func: () => T;
+
+    get current(): T {
+        return this.func();
+    }
+    set current(data: T) {
+        super.current = data;
+    }
+    private set valueChanged(val) {
+
+        this.current = this.current;
+    }
+}
+class StateGroup<T> extends State<T> {
+    _stateChangedHandler = [];
+    _onStateChanged(handler: (value) => void) {
+        this._stateChangedHandler.push(handler);
+    }
+
+    set statechanged(value) {
+        this._stateChangedHandler.forEach((e) => e(value));
+        //this.stateHasChanged();
+    }
+}
+/**
+ * shortcut for createComputedState
+ */
+export function ccs<T>(func: () => T, ...consumedStates: (States<{}> | State)[]) {
+    return createComputedState(func,...consumedStates);
+}
+/**
+ * creates a state which is computed with func if one of the consumedStates are changed
+ */
+export function createComputedState<T>(func: () => T, ...consumedStates: (States<{}> | State)[]) {
+    var ret: T & ComputedState<T> = <any>new ComputedState<T>();//use <>{ret}<> is possible
+    ret.func = func;
+    consumedStates.forEach((st) => {
+        if (st instanceof StateGroup) {
+
+            st._onStateChanged((value) => {
+                //@ts-ignore
+                ret.valueChanged = undefined;
+            });
+             (<State>st)._observe_(ret, "valueChanged");
+        } else {
+            (<State>st)._observe_(ret, "valueChanged");
+           
+        }
+    });
     return ret;
 }
 
@@ -208,6 +271,7 @@ interface Position {
     text?: string;
 }
 interface Props2 {
+    text?: string;
     invoice?: Invoice;
     invoices?: Invoice[];
     currentPosition?: Position;
@@ -240,11 +304,14 @@ var invoices = [
     },
 ];
 var inv: Props2 = {
+    text: "Hallo",
     invoice: invoices[1],
     invoices: invoices
 };
 export function test() {
-    var k = createStates(undefined);
+    var k = createStates(inv);
+
+    k.text.current = "OO";
     var ll: any = k.invoice.customer.current;
 
     var vname: string = k.invoice.customer.name;

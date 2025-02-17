@@ -1,7 +1,7 @@
-define(["require", "exports", "jassijs/ui/StateBinder", "jassijs/ui/Component"], function (require, exports, StateBinder_1, Component_1) {
+define(["require", "exports", "jassijs/ui/StateBinder"], function (require, exports, StateBinder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.createState = exports.State = exports.createStates = exports.foreach = exports.resolveState = void 0;
+    exports.test = exports.createComputedState = exports.ccs = exports.createState = exports.State = exports.createStates = exports.foreach = exports.resolveState = void 0;
     var teset = new StateBinder_1.StateDatabinder();
     class StateProp {
     }
@@ -39,9 +39,9 @@ define(["require", "exports", "jassijs/ui/StateBinder", "jassijs/ui/Component"],
                         // if (ret === undefined)
                         //   ret = [];
                         var comp = func(arr[x]);
-                        if ((ob === null || ob === void 0 ? void 0 : ob.initial) !== true) {
-                            comp = (0, Component_1.createComponent)(comp);
-                        }
+                        /*if (ob?.initial !== true) {
+                            comp = createComponent(comp);
+                        }*/
                         ret.push(comp);
                     }
                 }
@@ -54,22 +54,24 @@ define(["require", "exports", "jassijs/ui/StateBinder", "jassijs/ui/Component"],
     }
     exports.foreach = foreach;
     function createStates(initialValues = undefined, propertyname = undefined) {
-        var data = new State(initialValues); // { _used: [], _data: initialValues };
+        var data = new StateGroup(initialValues); // { _used: [], _data: initialValues };
         data._$propertyname_ = propertyname;
         return new Proxy(data, {
             get(target, key) {
                 if (key === "_onconfig")
                     return target._onconfig;
-                if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current") {
+                if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current" && key !== "statechanged") {
                     var newstate = createStates(data.current !== undefined ? data.current[key] : undefined, key);
                     target[key] = newstate;
                     target._observe_(newstate, "_$setparentobject");
+                    newstate._observe_(target, "statechanged");
                     if (target._used.indexOf(key) === -1)
                         target._used.push(key);
                 }
                 return target[key];
             },
             set(target, key, value) {
+                var all = Object.getOwnPropertyNames(target);
                 if (key === "_$setparentobject") {
                     var propname = data._$propertyname_;
                     target.current = value[propname];
@@ -78,6 +80,9 @@ define(["require", "exports", "jassijs/ui/StateBinder", "jassijs/ui/Component"],
                     target._onconfig = value;
                 else if (key === "current") {
                     target.current = value;
+                }
+                else if (key === "statechanged") {
+                    target.statechanged = value;
                 }
                 else
                     throw "not implemented " + key;
@@ -88,6 +93,8 @@ define(["require", "exports", "jassijs/ui/StateBinder", "jassijs/ui/Component"],
     exports.createStates = createStates;
     class State {
         constructor(data = undefined) {
+            this.self = this;
+            this._listener_ = [];
             //self: any = this;
             this._comps_ = [];
             this._used = [];
@@ -128,11 +135,63 @@ define(["require", "exports", "jassijs/ui/StateBinder", "jassijs/ui/Component"],
     }
     exports.State = State;
     function createState(val = undefined) {
-        var ret = new State();
+        var ret = new State(); //use <>{ret}<> is possible
         ret.current = val;
         return ret;
     }
     exports.createState = createState;
+    class ComputedState extends State {
+        get current() {
+            return this.func();
+        }
+        set current(data) {
+            super.current = data;
+        }
+        set valueChanged(val) {
+            this.current = this.current;
+        }
+    }
+    class StateGroup extends State {
+        constructor() {
+            super(...arguments);
+            this._stateChangedHandler = [];
+        }
+        _onStateChanged(handler) {
+            this._stateChangedHandler.push(handler);
+        }
+        set statechanged(value) {
+            this._stateChangedHandler.forEach((e) => e(value));
+            //this.stateHasChanged();
+        }
+    }
+    /**
+     * shortcut for createComputedState
+     */
+    function ccs(func, ...consumedStates) {
+        return createComputedState(func, ...consumedStates);
+    }
+    exports.ccs = ccs;
+    /**
+     * creates a state which is computed with func if one of the consumedStates are changed
+     */
+    function createComputedState(func, ...consumedStates) {
+        var ret = new ComputedState(); //use <>{ret}<> is possible
+        ret.func = func;
+        consumedStates.forEach((st) => {
+            if (st instanceof StateGroup) {
+                st._onStateChanged((value) => {
+                    //@ts-ignore
+                    ret.valueChanged = undefined;
+                });
+                st._observe_(ret, "valueChanged");
+            }
+            else {
+                st._observe_(ret, "valueChanged");
+            }
+        });
+        return ret;
+    }
+    exports.createComputedState = createComputedState;
     function createBoundProperty(state = undefined, parent = undefined, propertyname = "this") {
         var data = {
             _databinder: (parent === undefined ? new StateBinder_1.StateDatabinder() : parent._databinder),
@@ -196,11 +255,13 @@ define(["require", "exports", "jassijs/ui/StateBinder", "jassijs/ui/Component"],
         },
     ];
     var inv = {
+        text: "Hallo",
         invoice: invoices[1],
         invoices: invoices
     };
     function test() {
-        var k = createStates(undefined);
+        var k = createStates(inv);
+        k.text.current = "OO";
         var ll = k.invoice.customer.current;
         var vname = k.invoice.customer.name;
         var ll2 = k.invoice.customer.name.current;

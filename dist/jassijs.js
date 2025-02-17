@@ -2512,12 +2512,6 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/ui/StateBinder.ts": {
                 "date": 1722607242193.9792
             },
-            "jassijs/ui/Repeater2.ts": {
-                "date": 1722280627736.2734,
-                "jassijs.ui.Repeater2": {
-                    "@members": {}
-                }
-            },
             "jassijs/ui/HTMLPanel.tsx": {
                 "date": 1722193753694.9727,
                 "jassijs.ui.HTMLPanel": {
@@ -2573,6 +2567,12 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/ui/TinymcePanel.ts": {
                 "date": 1721805715426.5576,
                 "jassijs.ui.TinymcePanel": {
+                    "@members": {}
+                }
+            },
+            "jassijs/ui/Repeater.ts": {
+                "date": 1722615783695.5576,
+                "jassijs.ui.Repeater": {
                     "@members": {}
                 }
             }
@@ -13511,13 +13511,13 @@ define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "j
         return ret;
     }
 });
-define("jassijs/ui/Repeater2", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/State", "jassijs/ui/Button", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_93, Component_24, DataComponent_4, Property_27, Textbox_18, State_3, Button_11, Panel_18, Table_4) {
+define("jassijs/ui/Repeater", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/State", "jassijs/ui/Button", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_93, Component_24, DataComponent_4, Property_27, Textbox_18, State_3, Button_11, Panel_18, Table_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Repeater2 = void 0;
+    exports.Repeater = void 0;
     exports.test = test;
     ///@$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" })
-    let Repeater2 = class Repeater2 extends DataComponent_4.DataComponent {
+    let Repeater = class Repeater extends DataComponent_4.DataComponent {
         constructor(properties = undefined) {
             super(properties);
             this._components = [];
@@ -13681,22 +13681,22 @@ define("jassijs/ui/Repeater2", ["require", "exports", "jassijs/remote/Registry",
             super.destroy();
         }
     };
-    exports.Repeater2 = Repeater2;
+    exports.Repeater = Repeater;
     __decorate([
         (0, Property_27.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
-    ], Repeater2.prototype, "onchange", null);
-    exports.Repeater2 = Repeater2 = __decorate([
-        (0, Registry_93.$Class)("jassijs.ui.Repeater2")
+    ], Repeater.prototype, "onchange", null);
+    exports.Repeater = Repeater = __decorate([
+        (0, Registry_93.$Class)("jassijs.ui.Repeater")
         //@$Property({ name: "new", type: "json", componentType: "jassijs.ui.SelectProperties" })
         ,
         __metadata("design:paramtypes", [Object])
-    ], Repeater2);
+    ], Repeater);
     class TestComp extends Component_24.Component {
         render() {
-            return (0, Component_24.jc)(Repeater2, {
+            return (0, Component_24.jc)(Repeater, {
                 items: data,
                 bind: this.states.customer.bind,
                 children: [
@@ -19898,12 +19898,6 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/ui/StateBinder.ts": {
                 "date": 1722607242193.9792
             },
-            "jassijs/ui/Repeater2.ts": {
-                "date": 1722280627736.2734,
-                "jassijs.ui.Repeater2": {
-                    "@members": {}
-                }
-            },
             "jassijs/ui/HTMLPanel.tsx": {
                 "date": 1722193753694.9727,
                 "jassijs.ui.HTMLPanel": {
@@ -19959,6 +19953,12 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/ui/TinymcePanel.ts": {
                 "date": 1721805715426.5576,
                 "jassijs.ui.TinymcePanel": {
+                    "@members": {}
+                }
+            },
+            "jassijs/ui/Repeater.ts": {
+                "date": 1722615783695.5576,
+                "jassijs.ui.Repeater": {
                     "@members": {}
                 }
             }

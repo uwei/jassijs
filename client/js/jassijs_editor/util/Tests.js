@@ -52,7 +52,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
             this.statustext.style = {
                 color: (this.failedtests === 0 ? "green" : "red")
             };
-            this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
+            this.statustext.value = (this.finished ? ("Finished " + (new Date().getTime() - this.startDate).toString() + "ms ") : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
         }
     }
     let TestAction = TestAction_1 = class TestAction {
@@ -76,6 +76,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
                     catch (_a) {
                     }
                 }, container._id);
+            }
+            if (isRoot) {
+                container.startDate = new Date().getTime();
             }
             for (var x = 0; x < all.length; x++) {
                 var file = all[x];

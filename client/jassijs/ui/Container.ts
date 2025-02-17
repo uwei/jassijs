@@ -1,5 +1,5 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Component, ComponentProperties } from "jassijs/ui/Component";
+import { Component, ComponentProperties, TextComponent, createComponent } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 
 
@@ -26,8 +26,44 @@ export class Container<T extends ContainerProperties=ComponentProperties> extend
         if(this.domWrapper?.classList)
             this.domWrapper?.classList.add("jcontainer");
     }
-     config(config: T,forceRender=false): Container {
-        if (config?.children) {
+    private createChildren(props){
+        if(props?.children){
+            this.removeAll(false);
+            this._components=[];
+            for (var x = 0; x < props.children.length; x++) {
+                var child = props.children[x];
+                var cchild;
+                if (typeof child === "string") {
+                    cchild = new TextComponent();
+                    cchild.tag = "";
+                    cchild.text = child;
+                } else if (child?._$isState$_) {
+                    cchild = new TextComponent();
+                    cchild.tag = "";
+                    child?._observe_(cchild, "text", "property");
+                    cchild.text = child.current;
+                } else {
+                    cchild = createComponent(child);
+                }
+                this.add(cchild);
+            }
+            delete props.children;
+         }
+    }
+     /*   if (config?.children) {
+                    if (config?.children.length > 0 && config?.children[0] instanceof Component) {
+                        this.removeAll(false);
+                        for (var x = 0; x < config.children.length; x++) {
+                            this.add(config.children[x]);
+                        }
+                        delete config.children;
+                    }
+        }*/
+
+    config(config: T,forceRender=false): Container {
+        if(super.config(config))
+            this.createChildren(config);
+        /*if (config?.children) {
             if (config?.children.length > 0 && config?.children[0] instanceof Component) {
                 this.removeAll(false);
                 for (var x = 0; x < config.children.length; x++) {
@@ -35,8 +71,8 @@ export class Container<T extends ContainerProperties=ComponentProperties> extend
                 }
                 delete config.children;
             }
-        }
-        super.config(config);
+        }*/
+        
         return this;
     }
     /**
@@ -118,7 +154,7 @@ export class Container<T extends ContainerProperties=ComponentProperties> extend
    * @param {boolean} destroy - if true the component would be destroyed
    */
     removeAll(destroy = undefined) {
-        while (this._components.length > 0) {
+        while (this._components?.length > 0) {
             this.remove(this._components[0], destroy);
         }
 

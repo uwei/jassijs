@@ -56,7 +56,7 @@ export class Textbox<T extends TextboxProperties = TextboxProperties> extends Da
     /* get dom(){
          return this.dom;
      }*/
-
+   
     _converter: DefaultConverter;
     _autocompleterDisplay;
     _autocompleter;
@@ -82,8 +82,10 @@ export class Textbox<T extends TextboxProperties = TextboxProperties> extends Da
     }
 
 
-    set disabled(value) {
-        this.dom.disabled = true;
+    set disabled(value:boolean) {
+        
+        this.dom.disabled = value;
+        this.states.disabled.current=value;
     }
     get disabled() {
         return this.dom.disabled;
@@ -127,6 +129,7 @@ export class Textbox<T extends TextboxProperties = TextboxProperties> extends Da
             v = this.converter.objectToFormatedString(v);
         if(this.dom)
             this.dom.value = v === undefined ? "" : v;
+        this.states.value.current=value;
     }
     @$Property({ type: "string" })
 
@@ -256,6 +259,7 @@ export class Textbox<T extends TextboxProperties = TextboxProperties> extends Da
 export function test() {
 
     var ret = new Textbox();
+   
     ret.autocompleter = ["Hallo", "Du"];
     ret.value = 10.1;
 

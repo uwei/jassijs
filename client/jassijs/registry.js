@@ -668,7 +668,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1722614797822.4724,
+		"date": 1739817753838.6826,
 		"jassijs.ui.Component": {
 			"$Property": [
 				{
@@ -697,7 +697,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1722614801616.8228,
+		"date": 1739817201305.9158,
 		"jassijs.ui.Container": {
 			"$Property": [
 				{
@@ -963,7 +963,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1722614809261.022,
+		"date": 1739817310835.981,
 		"jassijs.ui.Panel": {
 			"$UIComponent": [
 				{
@@ -1277,7 +1277,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1722607447334.1543,
+		"date": 1739730368273.6821,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -1370,7 +1370,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/ui/State.ts": {
-		"date": 1722584965641.039
+		"date": 1739823487697.359
 	},
 	"jassijs/ui/StateBinder.ts": {
 		"date": 1722607242193.9792

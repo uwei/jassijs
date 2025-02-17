@@ -5,6 +5,7 @@ import { Test } from "jassijs/remote/Test";
 
 
 export async function test(t: Test) {
+   
     var tests = new FileNode("tests");
     tests.files = [];
     try {
@@ -47,4 +48,5 @@ export async function test(t: Test) {
 
         }
     }
+  
 }
