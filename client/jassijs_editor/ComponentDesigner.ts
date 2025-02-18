@@ -8,7 +8,7 @@ import { Resizer } from "jassijs_editor/util/Resizer";
 //import DragAndDropper from "jassijs/ui/helper/DragAndDropper";
 import { ErrorPanel } from "jassijs_editor/ErrorPanel";
 import { CodeEditorInvisibleComponents } from "jassijs_editor/CodeEditorInvisibleComponents";
-import "jassijs/ui/Databinder";
+import "jassijs/ui/StateBinder";
 import { Button } from "jassijs/ui/Button";
 import { Component } from "jassijs/ui/Component";
 import { DragAndDropper } from "jassijs_editor/util/DragAndDropper";
@@ -16,7 +16,7 @@ import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import { classes } from "jassijs/remote/Classes";
 import { Container } from "jassijs/ui/Container";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
-
+ 
 //import { Parser } from "./util/Parser";
 
 
@@ -59,8 +59,8 @@ export class ComponentDesigner extends Panel {
         pre: false
     }
     private _lastComponent;
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this._codeEditor = undefined;
         this._initDesign();
         this.editMode = true;

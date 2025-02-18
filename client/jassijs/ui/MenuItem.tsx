@@ -30,7 +30,7 @@ export class MenuItem<T extends MenuItemProperties=MenuItemProperties> extends C
     _mainMenu: Menu;
     //_components: Component[];
     constructor(props:MenuItemProperties={}) {
-        super(Object.assign(props,{noWrapper:true}));
+        super(Object.assign(props));
 
         //super.init('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>');
         this.dom.classList.add("designerNoResizable");

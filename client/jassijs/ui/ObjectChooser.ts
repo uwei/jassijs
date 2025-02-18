@@ -4,15 +4,12 @@ import { Table } from "jassijs/ui/Table";
 import { Panel } from "jassijs/ui/Panel";
 import { Button, ButtonProperties } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
-import { Checkbox } from "jassijs/ui/Checkbox";
-import { VariablePanel } from "jassijs/ui/VariablePanel";
-import { Databinder } from "jassijs/ui/Databinder";
-import { Property, $Property } from "jassijs/ui/Property";
+import {  $Property } from "jassijs/ui/Property";
 import { $UIComponent } from "jassijs/ui/Component";
-import { DBObject } from "jassijs/remote/DBObject";
 import { classes } from "jassijs/remote/Classes";
 import { DataComponentProperties } from "jassijs/ui/DataComponent";
 import { BoundProperty } from "jassijs/ui/State";
+import { StateDatabinder } from "jassijs/ui/StateBinder";
 /*
 https://blog.openshift.com/using-filezilla-and-sftp-on-windows-with-openshift/
 */
@@ -61,7 +58,7 @@ export class ObjectChooser<T extends ObjectChooserProperties = ObjectChooserProp
     _items;
     me: Me;
     _autocommit: boolean;
-    _databinder: Databinder;
+    _databinder: StateDatabinder;
     constructor(props: ObjectChooserProperties = {}) {
         super(props);
         /**
@@ -204,14 +201,11 @@ export class ObjectChooser<T extends ObjectChooserProperties = ObjectChooserProp
      * @param {string} property - the property to bind
      */
     @$Property({ type: "databinder" })
-    set bind(databinder: any[] | BoundProperty) {
-        if (Array.isArray(databinder)) {
-            this._databinder = databinder[0];
-            this._databinder.add(<string>databinder[1], this, "onchange");
-        } else {
+    set bind(databinder: BoundProperty) {
+        
             this._databinder = <any>databinder._databinder;
             this._databinder.add(databinder._propertyname, this, "onchange");
-        }
+       
         //databinder.checkAutocommit(this);
     }
     destroy() {

@@ -183,7 +183,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (((_b = (_a = this === null || this === void 0 ? void 0 : this.states) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
                 var node = document.createComment(this.constructor.name + " with exists=false");
                 var save = this.props;
-                this.props = { noWrapper: true };
+                this.props = {};
                 this._initComponent(node);
                 this.props = save;
                 return;
@@ -224,7 +224,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 return undefined;
             }
             var con = Object.assign({}, config);
-            delete con.noWrapper;
+            // delete con.useWrapper; why?
             delete con.replaceNode;
             // this.lastconfig = config;
             var notfound = {};
@@ -390,19 +390,19 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
                 st = "";
             }
-            if (this.props !== undefined && this.props.noWrapper === true) {
-                this.domWrapper = this.dom;
-                this.domWrapper._id = this._id;
-                if (this.domWrapper.classList !== undefined)
-                    this.domWrapper.classList.add("jcomponent");
-            }
-            else {
+            if (this.props !== undefined && this.props.useWrapper === true) {
                 /** @member {dom} - the dom element for label*/
                 let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
                 this.domWrapper = Component_1.createHTMLElement(strdom);
                 this.domWrapper._this = this;
                 this.domWrapper._id = lid;
                 this.domWrapper.appendChild(dom);
+            }
+            else {
+                this.domWrapper = this.dom;
+                this.domWrapper._id = this._id;
+                if (this.domWrapper.classList !== undefined)
+                    this.domWrapper.classList.add("jcomponent");
             }
             if ((oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.parentNode) !== undefined) {
                 oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper); //removeChild(this.domWrapper);
@@ -422,6 +422,31 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             //  }
             if (!oldwrapper)
                 document.getElementById("jassitemp").appendChild(this.domWrapper);
+        }
+        set useWrapper(value) {
+            if (value === true && this.dom === this.domWrapper) { //wrap
+                var lid = "j" + Registry_2.default.nextID();
+                var st = 'style="display: inline-block"';
+                if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
+                    st = "";
+                }
+                /** @member {dom} - the dom element for label*/
+                let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
+                this.domWrapper = Component_1.createHTMLElement(strdom);
+                this.domWrapper._this = this;
+                this.domWrapper._id = lid;
+                if (this.dom.parentNode)
+                    this.dom.parentNode.replaceChild(this.domWrapper, this.dom); //removeChild(this.domWrapper);
+                this.domWrapper.appendChild(this.dom);
+            }
+            if (value === false && this.dom !== this.domWrapper) { //unwrap
+                if (this.domWrapper.parentNode)
+                    this.domWrapper.parentNode.replaceChild(this.dom, this.domWrapper); //removeChild(this.domWrapper);
+                this.domWrapper = this.dom;
+                this.domWrapper._id = this._id;
+                if (this.domWrapper.classList !== undefined)
+                    this.domWrapper.classList.add("jcomponent");
+            }
         }
         onfocus(handler) {
             return this.on("focus", handler);
@@ -488,6 +513,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.dom.setAttribute("id", olddom.getAttribute("id"));
         }
         set label(value) {
+            this.states.label.current = value;
+            if (value !== undefined)
+                this.useWrapper = true;
             if (value === undefined) {
                 var lab = this.domWrapper.querySelector(".jlabel"); //this.domWrapper.getElementsByClassName("jlabel");
                 if (lab)
@@ -503,8 +531,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             }
         }
         get label() {
-            var _a;
-            return (_a = this.domWrapper.querySelector(".jlabel")) === null || _a === void 0 ? void 0 : _a.innerHTML;
+            return this.states.label.current; //this.domWrapper.querySelector(".jlabel")?.innerHTML;
         }
         get tooltip() {
             return this.dom.getAttribute("title");
@@ -693,6 +720,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
     };
     Component._componentHook = [];
+    __decorate([
+        (0, Property_1.$Property)({ description: "wraps the component with div" }),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], Component.prototype, "useWrapper", null);
     __decorate([
         (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
@@ -884,7 +916,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     //        var newdom = document.createElement(atype);
     let HTMLComponent = class HTMLComponent extends Component {
         constructor(prop = {}) {
-            super(Object.assign(prop, { noWrapper: true }));
+            super(prop);
             this._components = [];
             //this.init(document.createElement(tag), { noWrapper: true });
         }
@@ -1091,7 +1123,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     exports.HTMLComponent = HTMLComponent;
     let TextComponent = class TextComponent extends Component {
         constructor(props = {}) {
-            super(Object.assign(props, { noWrapper: true }));
+            super(props);
         }
         get label() {
             return "";

@@ -208,7 +208,8 @@ define(["require", "exports", "jassijs/remote/Database", "jassijs/ui/Notify"], f
          * @param {object} obj - the object to bind
          */
         toForm(obj) {
-            this.connectedState.current = obj;
+            if (this.connectedState.current !== obj)
+                this.connectedState.current = obj;
             var setter = new PropertyAccessor();
             setter.userObject = this.connectedState.current;
             for (var x = 0; x < this.components.length; x++) {

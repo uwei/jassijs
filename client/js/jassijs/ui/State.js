@@ -110,7 +110,7 @@ define(["require", "exports", "jassijs/ui/StateBinder"], function (require, expo
         }
         set current(data) {
             var _a;
-            if (this.data === data)
+            if (this.data === data || (Number.isNaN(data) && Number.isNaN(this.data)))
                 return;
             this.data = data;
             for (var x = 0; x < this._comps_.length; x++) {

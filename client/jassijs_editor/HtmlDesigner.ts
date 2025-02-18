@@ -18,7 +18,7 @@ export class HtmlDesigner extends ComponentDesigner {
     bgcolorIcon: Textbox;
     fontSizeButton: HTMLComponent;
     constructor() {
-        super();
+        super({});
         var _this = this;
         this._designPlaceholder.dom.addEventListener("keydown", (ev => _this.keydown(ev)));
         this._designPlaceholder.dom.contentEditable = "true";
@@ -507,7 +507,7 @@ export class HtmlDesigner extends ComponentDesigner {
     }
     private _createColorIcon() {
         var _this = this;
-        this.colorIcon = new Textbox();
+        this.colorIcon = new Textbox({useWrapper:true});
         var spec = $(this.colorIcon.dom)["spectrum"]({
             color: "#f00",
             showPalette: true,
@@ -544,7 +544,7 @@ export class HtmlDesigner extends ComponentDesigner {
     }
     private _createBGColorIcon() {
         var _this = this;
-        this.bgcolorIcon = new Textbox();
+        this.bgcolorIcon = new Textbox({useWrapper:true});
         var spec = $(this.bgcolorIcon.dom)["spectrum"]({
             color: "#f00",
             showPalette: true,
@@ -664,10 +664,10 @@ export class HtmlDesigner extends ComponentDesigner {
         var text2 = this.createTextComponent(v1, comp._parent, comp);
         /*        var nd = document.createTextNode(v1);
                 var comp2 = new TextComponent();
-                comp2.init(<any>nd, {noWrapper: true });
+                comp2.init(<any>nd, {});
                                                                                                         var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
                                                                                                         */
-        this.changeText(text2.dom, v1);
+         this.changeText(text2.dom, v1);
         //this.updateDummies();
         return [text2, comp];
     }
@@ -691,7 +691,7 @@ export class HtmlDesigner extends ComponentDesigner {
         /*        var comp2 = new TextComponent();
                                                                                                         var newone = document.createTextNode(text);
                                                                                                         comp2.init(<any>newone, {noWrapper: true });*/
-        var comp2 = new TextComponent({ noWrapper: true });
+        var comp2 = new TextComponent();
         var newone = comp2.dom;
         return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
         ;
@@ -766,7 +766,7 @@ export class HtmlDesigner extends ComponentDesigner {
             /*  var nd = document.createTextNode("");
                                                                                                             var comp2 = new TextComponent();
                                                                                                             comp2.init(<any>nd, {noWrapper: true });*/
-            var comp2 = new TextComponent({ noWrapper: true });
+            var comp2 = new TextComponent();
             var nd = comp2.dom;
             if (this.lastSelectedDummy.pre)
                 var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value._parent, this._propertyEditor.value, true, "text");

@@ -183,7 +183,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RImageEditor.ts": {
-		"date": 1656017314000,
+		"date": 1739905991130.4978,
 		"jassi_report/RImagePropertyEditor": {
 			"$PropertyEditor": [
 				[
@@ -264,7 +264,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1633113320000
 	},
 	"jassijs_report/RTablerow.ts": {
-		"date": 1721763287323.4111,
+		"date": 1739908805636.1025,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{

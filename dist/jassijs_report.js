@@ -2065,7 +2065,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImageEditor.ts": {
-                "date": 1656017314000,
+                "date": 1739905991130.4978,
                 "jassi_report/RImagePropertyEditor": {
                     "$PropertyEditor": [
                         [
@@ -2146,7 +2146,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1721763287323.4111,
+                "date": 1739908805636.1025,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -3995,7 +3995,7 @@ define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:paramtypes", [Object])
     ], RImage);
 });
-define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databinder", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Databinder_1, Upload_1, Textbox_1, Image_1, Button_2, Repeater_1, Registry_16, Panel_6, Editor_1, RComponent_6) {
+define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Upload_1, Textbox_1, Image_1, Button_2, Repeater_1, Registry_16, Panel_6, Editor_1, RComponent_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RImageChooser = exports.RImageEditor = void 0;
@@ -4121,7 +4121,7 @@ define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databin
         layout(me) {
             var _this = this;
             me.repeater1 = new Repeater_1.Repeater();
-            me.databinder1 = new Databinder_1.Databinder();
+            me.databinder1 = new Databinder();
             me.databinder1.value = this;
             me.repeater1.value = this._items;
             me.upload1 = new Upload_1.Upload();
@@ -5316,7 +5316,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
         *
         */
         constructor(properties = {}) {
-            super(Object.assign(properties, { noWrapper: true }));
+            super(properties);
             this.reporttype = "tablerow";
             this.dom.classList.add("designerNoResizable");
         }
@@ -6672,7 +6672,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImageEditor.ts": {
-                "date": 1656017314000,
+                "date": 1739905991130.4978,
                 "jassi_report/RImagePropertyEditor": {
                     "$PropertyEditor": [
                         [
@@ -6753,7 +6753,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1721763287323.4111,
+                "date": 1739908805636.1025,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {

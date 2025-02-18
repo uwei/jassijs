@@ -1,6 +1,5 @@
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { Button } from "jassijs/ui/Button";
-import { Databinder } from "jassijs/ui/Databinder";
 import { Select } from "jassijs/ui/Select";
 import { Table } from "jassijs/ui/Table";
 import { $Class } from "jassijs/remote/Registry";
@@ -11,10 +10,11 @@ import { router } from "jassijs/base/Router";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import windows from "jassijs/base/Windows";
 import { DatabaseClass, DatabaseField, DatabaseSchema } from "jassijs_editor/util/DatabaseSchema";
+import { StateDatabinder } from "jassijs/ui/StateBinder";
 type Me = {
     table?: Table;
     select?: Select;
-    databinder?: Databinder;
+    databinder?: StateDatabinder;
     newclass?: Button;
     boxpanel1?: BoxPanel;
     save?: Button;

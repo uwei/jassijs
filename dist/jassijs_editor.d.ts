@@ -490,7 +490,7 @@ declare module "jassijs_editor/ComponentDesigner" {
     import { Resizer } from "jassijs_editor/util/Resizer";
     import { ErrorPanel } from "jassijs_editor/ErrorPanel";
     import { CodeEditorInvisibleComponents } from "jassijs_editor/CodeEditorInvisibleComponents";
-    import "jassijs/ui/Databinder";
+    import "jassijs/ui/StateBinder";
     import { Button } from "jassijs/ui/Button";
     import { Component } from "jassijs/ui/Component";
     import { DragAndDropper } from "jassijs_editor/util/DragAndDropper";
@@ -539,7 +539,7 @@ declare module "jassijs_editor/ComponentDesigner" {
             pre: boolean;
         };
         private _lastComponent;
-        constructor();
+        constructor(props: any);
         connectParser(parser: any): void;
         set codeEditor(value: any);
         get codeEditor(): any;
@@ -717,15 +717,15 @@ declare module "jassijs_editor/ComponentSpy" {
 declare module "jassijs_editor/DatabaseDesigner" {
     import { BoxPanel } from "jassijs/ui/BoxPanel";
     import { Button } from "jassijs/ui/Button";
-    import { Databinder } from "jassijs/ui/Databinder";
     import { Select } from "jassijs/ui/Select";
     import { Table } from "jassijs/ui/Table";
     import { Panel } from "jassijs/ui/Panel";
     import { DatabaseClass, DatabaseSchema } from "jassijs_editor/util/DatabaseSchema";
+    import { StateDatabinder } from "jassijs/ui/StateBinder";
     type Me = {
         table?: Table;
         select?: Select;
-        databinder?: Databinder;
+        databinder?: StateDatabinder;
         newclass?: Button;
         boxpanel1?: BoxPanel;
         save?: Button;
@@ -1465,6 +1465,7 @@ declare module "jassijs_editor/util/Tests" {
     import { HTMLPanel } from "jassijs/ui/HTMLPanel";
     import { Test } from "jassijs/remote/Test";
     class MyContainer extends BoxPanel {
+        startDate: number;
         statustext: HTMLPanel;
         alltests: number;
         failedtests: number;

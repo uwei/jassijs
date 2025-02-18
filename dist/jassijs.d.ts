@@ -1394,6 +1394,7 @@ declare module "jassijs/ui/Component" {
     }
     export function $UIComponent(properties: UIComponentProperties): Function;
     export interface ComponentProperties {
+        exists?: boolean;
         /**
         * called if the component get the focus
         * @param {function} handler - the function which is executed
@@ -1443,7 +1444,7 @@ declare module "jassijs/ui/Component" {
          * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
          **/
         contextMenu?: any;
-        noWrapper?: boolean;
+        useWrapper?: boolean;
         replaceNode?: any;
     }
     var React: {
@@ -1452,6 +1453,13 @@ declare module "jassijs/ui/Component" {
             type: any;
         };
     };
+    global {
+        namespace React {
+            interface ClassAttributes<T> extends React.RefAttributes<T> {
+                exists?: boolean;
+            }
+        }
+    }
     export { React };
     global {
         interface Window {
@@ -1528,6 +1536,8 @@ declare module "jassijs/ui/Component" {
          * @param {object} param 4- parameter for the event
          */
         callEvent(name: any, param1: any, param2?: any, param3?: any, param4?: any): {};
+        get exists(): boolean;
+        set exists(value: boolean);
         /**
          * @member {dom} - the dom element
          */
@@ -1539,6 +1549,7 @@ declare module "jassijs/ui/Component" {
        * @paran {object} properties - properties to init
       */
         private _initComponent;
+        set useWrapper(value: boolean);
         onfocus(handler: any): EventListenerOrEventListenerObject;
         onblur(handler: any): EventListenerOrEventListenerObject;
         /**
@@ -1640,6 +1651,7 @@ declare module "jassijs/ui/Component" {
         _components: Component[];
         constructor(prop?: HTMLComponentProperties);
         render(): React.ReactNode;
+        private createChildren;
         config(props: HTMLComponentProperties): this;
         set tag(value: string);
         get tag(): string;
@@ -1741,6 +1753,7 @@ declare module "jassijs/ui/Container" {
          *
          */
         constructor(properties: ContainerProperties);
+        private createChildren;
         config(config: T, forceRender?: boolean): Container;
         /**
         * inits the component
@@ -2362,7 +2375,7 @@ declare module "jassijs/ui/Menu" {
         _icon: string;
         _noUpdate: boolean;
         _mainMenu: any;
-        constructor(options?: any);
+        constructor(options?: MenuProperties);
         componentDidMount(): void;
         render(): any;
         config(config: T): Menu;
@@ -2439,9 +2452,9 @@ declare module "jassijs/ui/ObjectChooser" {
     import { Panel } from "jassijs/ui/Panel";
     import { Button, ButtonProperties } from "jassijs/ui/Button";
     import { Textbox } from "jassijs/ui/Textbox";
-    import { Databinder } from "jassijs/ui/Databinder";
     import { DataComponentProperties } from "jassijs/ui/DataComponent";
     import { BoundProperty } from "jassijs/ui/State";
+    import { StateDatabinder } from "jassijs/ui/StateBinder";
     class Me {
         IDTable?: Table;
         IDPanel?: Panel;
@@ -2483,7 +2496,7 @@ declare module "jassijs/ui/ObjectChooser" {
         _items: any;
         me: Me;
         _autocommit: boolean;
-        _databinder: Databinder;
+        _databinder: StateDatabinder;
         constructor(props?: ObjectChooserProperties);
         config(config: T): ObjectChooser<T>;
         get title(): string;
@@ -2503,7 +2516,7 @@ declare module "jassijs/ui/ObjectChooser" {
          * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
-        set bind(databinder: any[] | BoundProperty);
+        set bind(databinder: BoundProperty);
         destroy(): void;
     }
     export function test(): unknown;
@@ -3355,7 +3368,7 @@ declare module "jassijs/ui/PropertyEditors/ImageEditor" {
         static show(): any;
         showDialog(onlytest?: any): any;
     }
-    export function test2(): Panel;
+    export function test(): Panel;
 }
 declare module "jassijs/ui/PropertyEditors/JsonArrayEditor" {
     import { Editor } from "jassijs/ui/PropertyEditors/Editor";
@@ -3633,6 +3646,7 @@ declare module "jassijs/ui/State" {
         current: T;
         _used?: string[];
         _onconfig?: (props: any) => void;
+        _onStateChanged?: (handler: (value: any) => void) => void;
     };
     export function createStates<T>(initialValues?: T, propertyname?: string): States<T>;
     export type OnlyType<T, D> = {
@@ -3651,17 +3665,33 @@ declare module "jassijs/ui/State" {
         };
     };
     export class State<T = {}> {
-        private data;
-        _comps_: StateProp[];
-        _used: string[];
-        _$isState$_: boolean;
+        protected data?: any;
+        self: any;
+        _listener_: {};
+        _comps_?: StateProp[];
+        _used?: string[];
+        _$isState$_?: boolean;
         constructor(data?: any);
-        _observe_(control: any, property: any, atype?: any): void;
+        _observe_?(control: any, property: any, atype?: any): void;
         bind?: BoundProperty<T>;
         get current(): T;
         set current(data: T);
     }
     export function createState<T>(val?: T): State<T>;
+    class ComputedState<T> extends State<T> {
+        func: () => T;
+        get current(): T;
+        set current(data: T);
+        private set valueChanged(value);
+    }
+    /**
+     * shortcut for createComputedState
+     */
+    export function ccs<T>(func: () => T, ...consumedStates: (States<{}> | State)[]): T & ComputedState<T>;
+    /**
+     * creates a state which is computed with func if one of the consumedStates are changed
+     */
+    export function createComputedState<T>(func: () => T, ...consumedStates: (States<{}> | State)[]): T & ComputedState<T>;
     export type BoundProperty<T = {}> = {
         $fromForm: () => T;
     } & {
@@ -3784,10 +3814,10 @@ declare module "jassijs/ui/Style" {
 declare module "jassijs/ui/Table" {
     import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
     import { Textbox } from "jassijs/ui/Textbox";
-    import { Databinder } from "jassijs/ui/Databinder";
     import { Tabulator } from "tabulator-tables";
     import { DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
     import { BoundProperty } from "jassijs/ui/State";
+    import { StateDatabinder } from "jassijs/ui/StateBinder";
     export interface LazyLoadOption {
         classname: string;
         loadFunc: string;
@@ -3846,7 +3876,7 @@ declare module "jassijs/ui/Table" {
         _tree: any;
         _items: any[];
         _searchbox: Textbox;
-        _databinderItems: Databinder;
+        _databinderItems: StateDatabinder;
         _lastOptions: TableOptions;
         private dataTreeChildFunction;
         constructor(properties?: TableProperties);
@@ -3919,6 +3949,7 @@ declare module "jassijs/ui/Textarea" {
         render(): any;
         componentDidMount(): void;
     }
+    export function test(): Textarea<TextboxProperties>;
 }
 declare module "jassijs/ui/Textbox" {
     import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
@@ -3978,8 +4009,8 @@ declare module "jassijs/ui/Textbox" {
         render(): any;
         get dom(): HTMLInputElement;
         set dom(value: HTMLInputElement);
-        set disabled(value: any);
-        get disabled(): any;
+        set disabled(value: boolean);
+        get disabled(): boolean;
         set readOnly(value: boolean);
         get converter(): DefaultConverter;
         set converter(value: DefaultConverter);

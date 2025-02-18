@@ -1,11 +1,7 @@
-import { Ref } from "jassijs/ui/Component";
-import { TextComponent } from "jassijs/ui/Component";
-import { HTMLComponent } from "jassijs/ui/Component";
 import { DateTimeConverter } from "jassijs/ui/converters/DateTimeConverter";
-import { Style } from "jassijs/ui/Style";
+
 import { BoxPanel } from "jassijs/ui/BoxPanel";
-import { Checkbox } from "jassijs/ui/Checkbox";
-import { Repeater } from "jassijs/ui/Repeater";
+
 import { ObjectChooser } from "jassijs/ui/ObjectChooser";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
@@ -17,7 +13,6 @@ import { DBObjectView,$DBObjectView,DBObjectViewProperties,DBObjectViewToolbar }
 import { jc } from "jassijs/ui/Component";
 import { OrderDetails } from "northwind/remote/OrderDetails";
 import { States,foreach } from "jassijs/ui/State";
-import { Repeater2 } from "jassijs/ui/Repeater2";
 type Me={
     shipName?: Textbox;
     shipAddress?: Textbox;

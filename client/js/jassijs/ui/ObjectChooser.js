@@ -179,14 +179,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
          * @param {string} property - the property to bind
          */
         set bind(databinder) {
-            if (Array.isArray(databinder)) {
-                this._databinder = databinder[0];
-                this._databinder.add(databinder[1], this, "onchange");
-            }
-            else {
-                this._databinder = databinder._databinder;
-                this._databinder.add(databinder._propertyname, this, "onchange");
-            }
+            this._databinder = databinder._databinder;
+            this._databinder.add(databinder._propertyname, this, "onchange");
             //databinder.checkAutocommit(this);
         }
         destroy() {

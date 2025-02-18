@@ -1,6 +1,4 @@
-import {Checkbox} from "jassijs/ui/Checkbox";
 import {Editor,  $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
-import {Databinder} from "jassijs/ui/Databinder";
 import { $Class } from "jassijs/remote/Registry";
 import {Textbox} from "jassijs/ui/Textbox";
 import {ObjectChooser} from "jassijs/ui/ObjectChooser";

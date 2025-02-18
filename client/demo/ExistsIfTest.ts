@@ -12,7 +12,7 @@ import { createState } from "jassijs/ui/State";
 export class PlaceholderComponentNotExists extends Component  {
     inactiveNode: React.ReactNode;
     constructor(properties){
-        super({noWrapper:true});
+        super();
         this.dom=<any>document.createComment("ExistsIfTest");
         this.domWrapper=this.dom;
     } 

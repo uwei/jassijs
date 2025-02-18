@@ -3,7 +3,7 @@ define("northwind/registry",["require"], function(require) {
  return {
   default: {
 	"northwind/CategoriesView.ts": {
-		"date": 1722605033849.076,
+		"date": 1739910424645.7217,
 		"northwind.CategoriesView": {
 			"$DBObjectView": [
 				{
@@ -25,7 +25,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerOrders.ts": {
-		"date": 1722605062499.3147,
+		"date": 1739906011055.871,
 		"northwind/CustomerOrders": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -114,7 +114,7 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1613551044000
 	},
 	"northwind/OrdersView.ts": {
-		"date": 1722616287707.8923,
+		"date": 1739905568268.335,
 		"northwind.OrdersView": {
 			"$DBObjectView": [
 				{
@@ -145,7 +145,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ProductView.ts": {
-		"date": 1722605123673.773,
+		"date": 1739905190562.9397,
 		"northwind.ProductView": {
 			"$DBObjectView": [
 				{
@@ -746,7 +746,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/SuppliersView.ts": {
-		"date": 1722605148088.2056,
+		"date": 1739906027356.1384,
 		"northwind.SuppliersView": {
 			"$DBObjectView": [
 				{

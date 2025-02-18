@@ -902,7 +902,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         editor.height = "100%";
         editor.width = "100%";
         //await editor.openFile(url);
-        editor.file = "$serverside/jassijs_report/TestServerreport.ts"; //"tests/TestDialog.ts";
+        editor.file = "tests/TestDialog.ts"; //"$serverside/jassijs_report/TestServerreport.ts";//
         setTimeout(() => {
             editor.evalCode();
         }, 500);

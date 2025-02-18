@@ -1795,7 +1795,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
         editor.height = "100%";
         editor.width = "100%";
         //await editor.openFile(url);
-        editor.file = "$serverside/jassijs_report/TestServerreport.ts"; //"tests/TestDialog.ts";
+        editor.file = "tests/TestDialog.ts"; //"$serverside/jassijs_report/TestServerreport.ts";//
         setTimeout(() => {
             editor.evalCode();
         }, 500);
@@ -2045,7 +2045,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
         (0, Registry_9.$Class)("jassijs_editor.CodePanel")
     ], CodePanel);
 });
-define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Registry_10, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Button_3, DragAndDropper_1, ComponentDescriptor_1, Classes_3, BoxPanel_1) {
+define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/StateBinder"], function (require, exports, Registry_10, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Button_3, DragAndDropper_1, ComponentDescriptor_1, Classes_3, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentDesigner = exports.ClipboardData = void 0;
@@ -2063,8 +2063,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
     }
     exports.ClipboardData = ClipboardData;
     let ComponentDesigner = class ComponentDesigner extends Panel_4.Panel {
-        constructor() {
-            super();
+        constructor(props) {
+            super(props);
             this.lastSelectedDummy = {
                 component: undefined,
                 pre: false
@@ -3223,7 +3223,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
     exports.ComponentDesigner = ComponentDesigner;
     exports.ComponentDesigner = ComponentDesigner = __decorate([
         (0, Registry_10.$Class)("jassijs_editor.ComponentDesigner"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], ComponentDesigner);
     async function test() {
         return new ComponentDesigner();
@@ -3768,7 +3768,7 @@ define("jassijs_editor/ComponentSpy", ["require", "exports", "jassijs/remote/Reg
     }
     jassijs.componentSpy = new ComponentSpy();
 });
-define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Databinder", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows", "jassijs_editor/util/DatabaseSchema"], function (require, exports, BoxPanel_3, Button_5, Databinder_1, Select_1, Table_2, Registry_15, Panel_8, OptionDialog_2, Router_3, Actions_2, Windows_3, DatabaseSchema_1) {
+define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows", "jassijs_editor/util/DatabaseSchema"], function (require, exports, BoxPanel_3, Button_5, Select_1, Table_2, Registry_15, Panel_8, OptionDialog_2, Router_3, Actions_2, Windows_3, DatabaseSchema_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabaseDesigner = void 0;
@@ -3819,7 +3819,7 @@ define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/Box
                 }
             });
             me.select = new Select_1.Select();
-            me.databinder = new Databinder_1.Databinder();
+            me.databinder = new Databinder();
             this.add(me.databinder);
             me.table.width = 565;
             me.table.height = "300";
@@ -4850,7 +4850,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
     exports.test = test;
     let HtmlDesigner = class HtmlDesigner extends ComponentDesigner_1.ComponentDesigner {
         constructor() {
-            super();
+            super({});
             var _this = this;
             this._designPlaceholder.dom.addEventListener("keydown", (ev => _this.keydown(ev)));
             this._designPlaceholder.dom.contentEditable = "true";
@@ -5336,7 +5336,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
         }
         _createColorIcon() {
             var _this = this;
-            this.colorIcon = new Textbox_2.Textbox();
+            this.colorIcon = new Textbox_2.Textbox({ useWrapper: true });
             var spec = $(this.colorIcon.dom)["spectrum"]({
                 color: "#f00",
                 showPalette: true,
@@ -5373,7 +5373,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
         }
         _createBGColorIcon() {
             var _this = this;
-            this.bgcolorIcon = new Textbox_2.Textbox();
+            this.bgcolorIcon = new Textbox_2.Textbox({ useWrapper: true });
             var spec = $(this.bgcolorIcon.dom)["spectrum"]({
                 color: "#f00",
                 showPalette: true,
@@ -5493,7 +5493,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             var text2 = this.createTextComponent(v1, comp._parent, comp);
             /*        var nd = document.createTextNode(v1);
                     var comp2 = new TextComponent();
-                    comp2.init(<any>nd, {noWrapper: true });
+                    comp2.init(<any>nd, {});
                                                                                                             var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
                                                                                                             */
             this.changeText(text2.dom, v1);
@@ -5520,7 +5520,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
             /*        var comp2 = new TextComponent();
                                                                                                             var newone = document.createTextNode(text);
                                                                                                             comp2.init(<any>newone, {noWrapper: true });*/
-            var comp2 = new Component_5.TextComponent({ noWrapper: true });
+            var comp2 = new Component_5.TextComponent();
             var newone = comp2.dom;
             return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
             ;
@@ -5596,7 +5596,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                 /*  var nd = document.createTextNode("");
                                                                                                                 var comp2 = new TextComponent();
                                                                                                                 comp2.init(<any>nd, {noWrapper: true });*/
-                var comp2 = new Component_5.TextComponent({ noWrapper: true });
+                var comp2 = new Component_5.TextComponent();
                 var nd = comp2.dom;
                 if (this.lastSelectedDummy.pre)
                     var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value._parent, this._propertyEditor.value, true, "text");
@@ -6141,7 +6141,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1721763750903.6765,
+                "date": 1739909138880.0374,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -6159,7 +6159,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1722610308085.8442,
+                "date": 1739909281179.2625,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -6197,7 +6197,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-                "date": 1698507857253.23,
+                "date": 1739905972951.1553,
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -6349,7 +6349,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1722603189586.473,
+                "date": 1739909679697.9824,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -6475,7 +6475,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
-                "date": 1720185108125.2275,
+                "date": 1739727794640.8933,
                 "jassijs_editor.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -9790,7 +9790,7 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
             this.statustext.style = {
                 color: (this.failedtests === 0 ? "green" : "red")
             };
-            this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
+            this.statustext.value = (this.finished ? ("Finished " + (new Date().getTime() - this.startDate).toString() + "ms ") : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
         }
     }
     let TestAction = TestAction_1 = class TestAction {
@@ -9814,6 +9814,9 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
                     catch (_a) {
                     }
                 }, container._id);
+            }
+            if (isRoot) {
+                container.startDate = new Date().getTime();
             }
             for (var x = 0; x < all.length; x++) {
                 var file = all[x];
@@ -10475,7 +10478,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1721763750903.6765,
+                "date": 1739909138880.0374,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -10493,7 +10496,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1722610308085.8442,
+                "date": 1739909281179.2625,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -10531,7 +10534,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-                "date": 1698507857253.23,
+                "date": 1739905972951.1553,
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -10683,7 +10686,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-                "date": 1722603189586.473,
+                "date": 1739909679697.9824,
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -10809,7 +10812,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
-                "date": 1720185108125.2275,
+                "date": 1739727794640.8933,
                 "jassijs_editor.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"

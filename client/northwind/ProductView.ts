@@ -1,5 +1,3 @@
-import { HTMLComponent } from "jassijs/ui/Component";
-import { Style } from "jassijs/ui/Style";
 import { ObjectChooser } from "jassijs/ui/ObjectChooser";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Checkbox } from "jassijs/ui/Checkbox";
@@ -7,11 +5,8 @@ import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 import { Textbox } from "jassijs/ui/Textbox";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
-import { $Property } from "jassijs/ui/Property";
 import { Products } from "northwind/remote/Products";
-import { Databinder } from "jassijs/ui/Databinder";
-import { DBObjectView,$DBObjectView,DBObjectViewMe, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
-import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
+import { DBObjectView,$DBObjectView, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
 import { jc } from "jassijs/ui/Component";
 @$DBObjectView({ classname: "northwind.Products",actionname: "Northwind/Products",icon: "mdi mdi-reproduction" })
 @$Class("northwind.ProductView")

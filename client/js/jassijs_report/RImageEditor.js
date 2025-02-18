@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Databinder", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Databinder_1, Upload_1, Textbox_1, Image_1, Button_1, Repeater_1, Registry_1, Panel_1, Editor_1, RComponent_1) {
+define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Upload_1, Textbox_1, Image_1, Button_1, Repeater_1, Registry_1, Panel_1, Editor_1, RComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RImageChooser = exports.RImageEditor = void 0;
@@ -132,7 +132,7 @@ define(["require", "exports", "jassijs/ui/Databinder", "jassijs/ui/Upload", "jas
         layout(me) {
             var _this = this;
             me.repeater1 = new Repeater_1.Repeater();
-            me.databinder1 = new Databinder_1.Databinder();
+            me.databinder1 = new Databinder();
             me.databinder1.value = this;
             me.repeater1.value = this._items;
             me.upload1 = new Upload_1.Upload();

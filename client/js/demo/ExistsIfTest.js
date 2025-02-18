@@ -4,7 +4,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel", "jassi
     exports.test = exports.PlaceholderComponentNotExists = void 0;
     class PlaceholderComponentNotExists extends Component_1.Component {
         constructor(properties) {
-            super({ noWrapper: true });
+            super();
             this.dom = document.createComment("ExistsIfTest");
             this.domWrapper = this.dom;
         }

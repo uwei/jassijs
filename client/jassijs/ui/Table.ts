@@ -4,13 +4,13 @@ import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent
 import { $Property } from "jassijs/ui/Property";
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Textbox } from "jassijs/ui/Textbox";
-import { Calendar } from "jassijs/ui/Calendar";
-import { Databinder } from "jassijs/ui/Databinder";
+
 import { classes } from "jassijs/remote/Classes";
 import { Tabulator } from "tabulator-tables";
 import { DateTimeConverter, DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
 import { Numberformatter } from "jassijs/util/Numberformatter";
 import { BoundProperty } from "jassijs/ui/State";
+import { StateDatabinder } from "jassijs/ui/StateBinder";
 export interface LazyLoadOption {
     classname: string;
     loadFunc: string;
@@ -88,7 +88,7 @@ export class Table<T extends TableProperties = TableProperties> extends DataComp
     _tree;
     _items: any[];
     _searchbox: Textbox;
-    _databinderItems: Databinder;
+    _databinderItems: StateDatabinder;
     _lastOptions: TableOptions;
     private dataTreeChildFunction: string | ((obj: any) => any);
     constructor(properties?: TableProperties) {

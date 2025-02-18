@@ -1,16 +1,11 @@
 import "jassijs/ext/jquerylib";
-import { Checkbox } from "jassijs/ui/Checkbox";
 import { Editor, $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
-import { Databinder } from "jassijs/ui/Databinder";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { Textbox } from "jassijs/ui/Textbox";
-import { ObjectChooser } from "jassijs/ui/ObjectChooser";
-import { DBObject } from "jassijs/remote/DBObject";
-import { classes } from "jassijs/remote/Classes";
 import { Button } from "jassijs/ui/Button";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
-import { Component } from "../Component";
+import { Component } from "jassijs/ui/Component";
 @$ActionProvider("jassijs.base.ActionNode")
 @$PropertyEditor(["image"])
 @$Class("jassijs.ui.PropertyEditors.ImageEditor")
@@ -141,7 +136,7 @@ export class ImageEditor extends Editor {
 
     }
 }
-export function test2() {
+export function test() {
     var ed = new ImageEditor(undefined, undefined);
     ed.showDialog(true);
     return ed.dialog;

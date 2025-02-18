@@ -105,6 +105,18 @@ declare module "demo/Dialog8" {
     }
     export function test(): unknown;
 }
+declare module "demo/ExistsIfTest" {
+    import { Component } from "jassijs/ui/Component";
+    export class PlaceholderComponentNotExists extends Component {
+        inactiveNode: React.ReactNode;
+        constructor(properties: any);
+        render(): any;
+    }
+    export function test(): unknown;
+}
+declare module "demo/ExistsIfTest2" {
+    export function test(): any;
+}
 declare module "demo/hallo" {
     import { States } from "jassijs/ui/State";
     export interface MyCompProp {
@@ -246,6 +258,9 @@ declare module "demo/TestComponent" {
         layout(me: any): void;
     }
     export function test(): unknown;
+}
+declare module "demo/TestComputedState" {
+    export function test(): any;
 }
 declare module "demo/Testcontextmenu" {
     import { Panel } from "jassijs/ui/Panel";

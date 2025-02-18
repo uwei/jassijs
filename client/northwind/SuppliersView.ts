@@ -3,11 +3,8 @@ import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 import { Textbox } from "jassijs/ui/Textbox";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
-import { $Property } from "jassijs/ui/Property";
 import { Suppliers } from "northwind/remote/Suppliers";
-import { Databinder } from "jassijs/ui/Databinder";
-import { DBObjectView,$DBObjectView,DBObjectViewMe, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
-import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
+import { DBObjectView,$DBObjectView, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
 import { jc } from "jassijs/ui/Component";
 
 @$DBObjectView({ classname: "northwind.Suppliers",actionname: "Northwind/Suppliers",icon: "mdi mdi-office-building-outline" })

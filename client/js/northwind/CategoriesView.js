@@ -25,15 +25,13 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Name",
                         bind: this.states.value.bind.CategoryName,
-                        width: 235,
-                        converter: new NumberConverter_1.NumberConverter()
+                        width: 235
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textarea_1.Textarea, {
                         label: "Description",
                         bind: this.states.value.bind.Description,
-                        width: 280,
-                        converter: new NumberConverter_1.NumberConverter()
+                        width: 280
                     }),
                     (0, Component_1.jc)(Table_1.Table, {
                         height: "100%",

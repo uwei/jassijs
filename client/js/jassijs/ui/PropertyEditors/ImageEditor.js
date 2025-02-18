@@ -30,11 +30,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions", "../Component", "jassijs/ext/jquerylib"], function (require, exports, Editor_1, Registry_1, Panel_1, Textbox_1, Button_1, Actions_1, Component_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions", "jassijs/ui/Component", "jassijs/ext/jquerylib"], function (require, exports, Editor_1, Registry_1, Panel_1, Textbox_1, Button_1, Actions_1, Component_1) {
     "use strict";
     var ImageEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.ImageEditor = void 0;
+    exports.test = exports.ImageEditor = void 0;
     let ImageEditor = ImageEditor_1 = class ImageEditor extends Editor_1.Editor {
         /**
          * Checkbox Editor for boolean values
@@ -169,11 +169,11 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         __metadata("design:paramtypes", [Object, Object])
     ], ImageEditor);
     exports.ImageEditor = ImageEditor;
-    function test2() {
+    function test() {
         var ed = new ImageEditor(undefined, undefined);
         ed.showDialog(true);
         return ed.dialog;
     }
-    exports.test2 = test2;
+    exports.test = test;
 });
 //# sourceMappingURL=ImageEditor.js.map

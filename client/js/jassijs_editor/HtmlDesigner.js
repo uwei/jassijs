@@ -13,7 +13,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
     exports.test = exports.HtmlDesigner = void 0;
     let HtmlDesigner = class HtmlDesigner extends ComponentDesigner_1.ComponentDesigner {
         constructor() {
-            super();
+            super({});
             var _this = this;
             this._designPlaceholder.dom.addEventListener("keydown", (ev => _this.keydown(ev)));
             this._designPlaceholder.dom.contentEditable = "true";
@@ -499,7 +499,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
         }
         _createColorIcon() {
             var _this = this;
-            this.colorIcon = new Textbox_1.Textbox();
+            this.colorIcon = new Textbox_1.Textbox({ useWrapper: true });
             var spec = $(this.colorIcon.dom)["spectrum"]({
                 color: "#f00",
                 showPalette: true,
@@ -536,7 +536,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
         }
         _createBGColorIcon() {
             var _this = this;
-            this.bgcolorIcon = new Textbox_1.Textbox();
+            this.bgcolorIcon = new Textbox_1.Textbox({ useWrapper: true });
             var spec = $(this.bgcolorIcon.dom)["spectrum"]({
                 color: "#f00",
                 showPalette: true,
@@ -656,7 +656,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             var text2 = this.createTextComponent(v1, comp._parent, comp);
             /*        var nd = document.createTextNode(v1);
                     var comp2 = new TextComponent();
-                    comp2.init(<any>nd, {noWrapper: true });
+                    comp2.init(<any>nd, {});
                                                                                                             var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
                                                                                                             */
             this.changeText(text2.dom, v1);
@@ -683,7 +683,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             /*        var comp2 = new TextComponent();
                                                                                                             var newone = document.createTextNode(text);
                                                                                                             comp2.init(<any>newone, {noWrapper: true });*/
-            var comp2 = new Component_1.TextComponent({ noWrapper: true });
+            var comp2 = new Component_1.TextComponent();
             var newone = comp2.dom;
             return this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, par, before, true, "text");
             ;
@@ -759,7 +759,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                 /*  var nd = document.createTextNode("");
                                                                                                                 var comp2 = new TextComponent();
                                                                                                                 comp2.init(<any>nd, {noWrapper: true });*/
-                var comp2 = new Component_1.TextComponent({ noWrapper: true });
+                var comp2 = new Component_1.TextComponent();
                 var nd = comp2.dom;
                 if (this.lastSelectedDummy.pre)
                     var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, this._propertyEditor.value._parent, this._propertyEditor.value, true, "text");

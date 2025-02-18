@@ -1,5 +1,4 @@
 import "jassijs/ext/jquerylib";
-import { Databinder } from "jassijs/ui/Databinder";
 import { Upload } from "jassijs/ui/Upload";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Image } from "jassijs/ui/Image";
@@ -12,6 +11,7 @@ import { $PropertyEditor, Editor } from "jassijs/ui/PropertyEditors/Editor";
 import { $Action } from "jassijs/base/Actions";
 import { RImage } from "jassijs_report/RImage";
 import { RComponent } from "jassijs_report/RComponent";
+import { StateDatabinder } from "jassijs/ui/StateBinder";
 type Me = {
     repeater1?: Repeater;
     panel1?: Panel;
@@ -19,7 +19,7 @@ type Me = {
     itile?: Textbox;
     remove?: Button;
     upload1?: Upload;
-    databinder1?: Databinder;
+    databinder1?: StateDatabinder;
 };
 @$PropertyEditor(["rimage"])
 @$Class("jassi_report/RImagePropertyEditor")

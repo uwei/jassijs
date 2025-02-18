@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Component_1, Registry_1, Property_1, Textbox_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Textarea = void 0;
+    exports.test = exports.Textarea = void 0;
     let Textarea = class Textarea extends Textbox_1.Textbox {
         constructor(props = {}) {
             super(props);
@@ -29,5 +29,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [Object])
     ], Textarea);
     exports.Textarea = Textarea;
+    function test() {
+        debugger;
+        var t = new Textarea();
+        return t;
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=Textarea.js.map

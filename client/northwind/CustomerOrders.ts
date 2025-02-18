@@ -1,7 +1,6 @@
 import { Table } from "jassijs/ui/Table";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-import { Databinder } from "jassijs/ui/Databinder";
 import { ObjectChooser } from "jassijs/ui/ObjectChooser";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
@@ -10,7 +9,7 @@ import { Orders } from "northwind/remote/Orders";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import windows from "jassijs/base/Windows";
 import { jc } from "jassijs/ui/Component";
-import { DBObjectView, DBObjectViewProperties, DBObjectViewToolbar, ObjectViewToolbar } from "jassijs/ui/DBObjectView";
+import { DBObjectView, DBObjectViewProperties, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
 
 export interface CustomerOrdersProperties extends DBObjectViewProperties<Customer> {
     orders?: Orders[];

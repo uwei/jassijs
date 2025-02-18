@@ -27,7 +27,7 @@ export class RTablerow extends RComponent {
     * 
     */
     constructor(properties = {}) {//id connect to existing(not reqired)
-        super(Object.assign(properties,{noWrapper:true}));
+        super(properties);
 
         this.dom.classList.add("designerNoResizable");
     }

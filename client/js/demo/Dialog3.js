@@ -45,8 +45,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             me.p3 = new Panel();
             me.p3.domWrapper.style.borderWidth = "5px;";
             me.p3.domWrapper.style.borderStyle = "ridge";
-            me.p4 = new H({ nowrapper: true });
-            me.p5 = new H({ nowrapper: true });
+    
             this.add(me.p1);
             me.p1.add(me.p2);
             me.p1.add(me.p3);

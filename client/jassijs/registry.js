@@ -668,7 +668,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1739817753838.6826,
+		"date": 1739911085306.7983,
 		"jassijs.ui.Component": {
 			"$Property": [
 				{
@@ -924,7 +924,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Menu.ts": {
-		"date": 1721762942678.6074,
+		"date": 1739911310515.9465,
 		"jassijs.ui.Menu": {
 			"$UIComponent": [
 				{
@@ -942,7 +942,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655585212000
 	},
 	"jassijs/ui/ObjectChooser.ts": {
-		"date": 1722193753659.7104,
+		"date": 1739905517935.2231,
 		"jassijs.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -1044,7 +1044,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-		"date": 1722589839416.9033,
+		"date": 1739905402898.42,
 		"jassijs.ui.PropertyEditors.DatabinderEditor": {
 			"$PropertyEditor": [
 				[
@@ -1054,7 +1054,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DBObjectEditor.ts": {
-		"date": 1721680313435.5005,
+		"date": 1739905650080.829,
 		"jassijs.ui.PropertyEditors.DBObjectEditor": {
 			"$PropertyEditor": [
 				[
@@ -1101,7 +1101,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/HTMLEditor.ts": {
-		"date": 1655556866000,
+		"date": 1739905664496.0012,
 		"jassijs.ui.PropertyEditors.HTMLEditor": {
 			"$PropertyEditor": [
 				[
@@ -1111,7 +1111,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ImageEditor.ts": {
-		"date": 1656189492000,
+		"date": 1739905797676.0605,
 		"jassijs.ui.PropertyEditors.ImageEditor": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -1238,7 +1238,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1721754550199.457,
+		"date": 1739905912879.3584,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},
@@ -1260,7 +1260,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textarea.ts": {
-		"date": 1719770473688.5388,
+		"date": 1739907112385.5366,
 		"jassijs.ui.Textarea": {
 			"$UIComponent": [
 				{
@@ -1370,10 +1370,10 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/ui/State.ts": {
-		"date": 1739823487697.359
+		"date": 1739905028818.2034
 	},
 	"jassijs/ui/StateBinder.ts": {
-		"date": 1722607242193.9792
+		"date": 1739904613929.6313
 	},
 	"jassijs/ui/HTMLPanel.tsx": {
 		"date": 1722193753694.9727,
@@ -1400,7 +1400,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/MenuItem.tsx": {
-		"date": 1721754305868.5278,
+		"date": 1739911325437.023,
 		"jassijs.ui.MenuItem": {
 			"$UIComponent": [
 				{

@@ -14,7 +14,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
     let MenuItem = class MenuItem extends Container_1.Container {
         //_components: Component[];
         constructor(props = {}) {
-            super(Object.assign(props, { noWrapper: true }));
+            super(Object.assign(props));
             //super.init('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>');
             this.dom.classList.add("designerNoResizable");
             this._text = "";

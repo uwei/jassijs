@@ -290,7 +290,7 @@ define("tests/registry", ["require"], function (require) {
                 "date": 1624296652000
             },
             "tests/FileActionsTests.ts": {
-                "date": 1681570100000
+                "date": 1739726995653.6265
             },
             "tests/modul.ts": {
                 "date": 1684511830000
@@ -767,7 +767,7 @@ define("tests/registry", ["require"], function (require) {
                 "date": 1624296652000
             },
             "tests/FileActionsTests.ts": {
-                "date": 1681570100000
+                "date": 1739726995653.6265
             },
             "tests/modul.ts": {
                 "date": 1684511830000

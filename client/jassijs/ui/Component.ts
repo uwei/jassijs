@@ -52,7 +52,7 @@ export function $UIComponent(properties: UIComponentProperties): Function {
 
 
 export interface ComponentProperties {
-    exists?:boolean;
+    exists?: boolean;
     /**
     * called if the component get the focus
     * @param {function} handler - the function which is executed
@@ -106,9 +106,9 @@ export interface ComponentProperties {
     /*
     ** Component has no Wrapper around the dom-Element dom=domWrapper
     */
-    noWrapper?: boolean;
+    useWrapper?: boolean;
     replaceNode?: any;
-   
+
 }
 
 
@@ -117,7 +117,7 @@ var React = {
 
         if (props === undefined || props === null)//TODO is this right?
             props = {};
-        if (children?.length>0) {
+        if (children?.length > 0) {
             props.children = children;
         }
 
@@ -135,10 +135,10 @@ var React = {
 
     }
 }
-declare global{
-    namespace React{
-        interface ClassAttributes<T> extends React.RefAttributes<T>{
-            exists?:boolean;
+declare global {
+    namespace React {
+        interface ClassAttributes<T> extends React.RefAttributes<T> {
+            exists?: boolean;
         }
     }
 }
@@ -195,7 +195,7 @@ export function createComponent(node: React.ReactNode): any {//node: { key: stri
     var atype = (<any>node).type;
     var props = (<any>node).props;
     var ret;
-    if(atype===undefined)
+    if (atype === undefined)
         debugger;
     if (typeof atype === "string") {
         if (props === undefined)
@@ -244,23 +244,23 @@ export function createComponent(node: React.ReactNode): any {//node: { key: stri
 
 }
 
-export function createRef<T>(val: T = undefined):Ref<T> {
+export function createRef<T>(val: T = undefined): Ref<T> {
     var ret;
     ret.current = val;
     return ret;
 }
-export type Ref<T>={current:T};
-export function createRefs<T>():  T  {
-    var me={};
-    var data={};
-    var ret=new Proxy(me, {
+export type Ref<T> = { current: T };
+export function createRefs<T>(): T {
+    var me = {};
+    var data = {};
+    var ret = new Proxy(me, {
         get(target, key: string) {
             if (target[key] === undefined) {
                 target[key] = {
                     _current: undefined,
                     set current(value) {
                         data[key] = value;
-                         me[key]=value;
+                        me[key] = value;
                         this._current = value;
                     },
                     get current() {
@@ -271,18 +271,18 @@ export function createRefs<T>():  T  {
             return target[key];
         }
     });
-  
-    return<any> ret;
+
+    return <any>ret;
 }
 
 //class TC <Prop>extends React.Component<Prop,{}>{
 @$Class("jassijs.ui.Component")
 @$Property({ name: "testuw", type: "string" })
- //@ts-ignore
+//@ts-ignore
 export class Component<T extends ComponentProperties = {}> implements React.Component<T> {
-    
+
     refs;
-    props: T; 
+    props: T;
     states: States<T>;
     private static _componentHook = [];
     _eventHandler;
@@ -315,7 +315,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         // super(properties, undefined);
         // if(properties===undefined)
         // properties={};
-        this.refs=createRefs();
+        this.refs = createRefs();
         this.states = <any>createStates(properties);
         this.props = <any>properties;
         resolveState(this, this.props);
@@ -323,12 +323,12 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         this.config(this.props);
     }
     private _rerenderMe(firstTime = false) {
-        if(this?.states?.exists?.current===false){
-            var node=document.createComment(this.constructor.name+" with exists=false");
-            var save=this.props;
-            this.props=<any>{noWrapper:true};
+        if (this?.states?.exists?.current === false) {
+            var node = document.createComment(this.constructor.name + " with exists=false");
+            var save = this.props;
+            this.props = <any>{};
             this._initComponent(<any>node);
-            this.props=save;
+            this.props = save;
             return;
         }
         //@ts-ignore
@@ -363,17 +363,17 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
           this.config(this.lastconfig);
       }*/
     config(config: T): Component {
-        if(config?.exists===false||(config?.exists===undefined&&this.states?.exists?.current===false)){
-            if(config?.exists===false)
-                this.exists=false;
+        if (config?.exists === false || (config?.exists === undefined && this.states?.exists?.current === false)) {
+            if (config?.exists === false)
+                this.exists = false;
             return undefined;
         }
         var con: any = Object.assign({}, config);
-        delete con.noWrapper;
+       // delete con.useWrapper; why?
         delete con.replaceNode;
         // this.lastconfig = config;
         var notfound = <any>{}
-       
+
         for (var key in con) {
             if (key in this) {
                 var me = <any>this;
@@ -468,13 +468,13 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     }
 
     set exists(value: boolean) {
-        var old=this.states.exists.current;
-        this.states.exists.current=value;
-        if(old!==value){
+        var old = this.states.exists.current;
+        this.states.exists.current = value;
+        if (old !== value) {
             this._rerenderMe(false);
-            var props=Object.assign({},this.props);
-            var keys=this.states._used;
-            keys.forEach((k)=>props[k]=this.states[k].current);
+            var props = Object.assign({}, this.props);
+            var keys = this.states._used;
+            keys.forEach((k) => props[k] = this.states[k].current);
             this.config(props);
         }
     }
@@ -493,7 +493,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         if (this.dom.classList) {//Textnode!
             this.dom.classList.add("jinlinecomponent");
             this.dom.classList.add("jresizeable");
-            if (domalt !== undefined&&domalt.classList) {
+            if (domalt !== undefined && domalt.classList) {
                 domalt.classList.remove("jinlinecomponent");
                 domalt.classList.remove("jresizeable");
             }
@@ -501,7 +501,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         if (this.dom._this && this.dom._this !== this) {
             if (this.dom._thisOther === undefined)
                 this.dom._thisOther = [];
-            this.dom._thisOther.splice(0,0,this.dom._this);
+            this.dom._thisOther.splice(0, 0, this.dom._this);
         }
         this.dom._this = this;
 
@@ -548,19 +548,18 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             st = "";
         }
 
-        if (this.props !== undefined && (<any>this.props).noWrapper === true) {
-
-            this.domWrapper = this.dom;
-            this.domWrapper._id = this._id;
-            if (this.domWrapper.classList !== undefined)
-                this.domWrapper.classList.add("jcomponent");
-        } else {
+        if (this.props !== undefined && (<any>this.props).useWrapper === true) {
             /** @member {dom} - the dom element for label*/
             let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
             this.domWrapper = Component.createHTMLElement(strdom);
             this.domWrapper._this = this;
             this.domWrapper._id = lid;
             this.domWrapper.appendChild(dom);
+        } else {
+            this.domWrapper = this.dom;
+            this.domWrapper._id = this._id;
+            if (this.domWrapper.classList !== undefined)
+                this.domWrapper.classList.add("jcomponent");
         }
         if (oldwrapper?.parentNode !== undefined) {
             oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper);//removeChild(this.domWrapper);
@@ -581,6 +580,33 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         if (!oldwrapper)
             document.getElementById("jassitemp").appendChild(this.domWrapper);
 
+    }
+      @$Property({ description: "wraps the component with div" })
+  
+    set useWrapper(value: boolean) {
+        if (value === true && this.dom === this.domWrapper) {//wrap
+            var lid = "j" + registry.nextID();
+            var st = 'style="display: inline-block"';
+            if (this instanceof classes.getClass("jassijs.ui.Container")) {
+                st = "";
+            }
+            /** @member {dom} - the dom element for label*/
+            let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
+            this.domWrapper = Component.createHTMLElement(strdom);
+            this.domWrapper._this = this;
+            this.domWrapper._id = lid;
+            if(this.dom.parentNode)
+                this.dom.parentNode.replaceChild(this.domWrapper,this.dom);//removeChild(this.domWrapper);
+            this.domWrapper.appendChild(this.dom);
+        }
+        if (value === false && this.dom !== this.domWrapper) {//unwrap
+            if(this.domWrapper.parentNode)
+                this.domWrapper.parentNode.replaceChild(this.dom,this.domWrapper);//removeChild(this.domWrapper);
+            this.domWrapper = this.dom;
+            this.domWrapper._id = this._id;
+            if (this.domWrapper.classList !== undefined)
+                this.domWrapper.classList.add("jcomponent");
+        }
     }
     @$Property({ default: "function(event){\n\t\n}" })
     onfocus(handler) {
@@ -646,7 +672,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         this.dom = dom;
         if (oldwrapper === olddom)
             this.domWrapper = dom;
-        if(this.dom.setAttribute&&olddom.getAttribute)
+        if (this.dom.setAttribute && olddom.getAttribute)
             this.dom.setAttribute("id", olddom.getAttribute("id"));
     }
 
@@ -654,6 +680,9 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
 
     @$Property({ description: "adds a label above the component" })
     set label(value: string) { //the Code
+        this.states.label.current=value;
+        if(value!==undefined)
+            this.useWrapper=true;
         if (value === undefined) {
             var lab = this.domWrapper.querySelector(".jlabel"); //this.domWrapper.getElementsByClassName("jlabel");
             if (lab)
@@ -670,7 +699,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
 
 
     get label(): string {
-        return this.domWrapper.querySelector(".jlabel")?.innerHTML;
+        return this.states.label.current; //this.domWrapper.querySelector(".jlabel")?.innerHTML;
     }
 
     @$Property({ description: "tooltip are displayed on mouse over" })
@@ -690,7 +719,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     set x(value: number) { //the Code
         this.domWrapper.style.left = value.toString().replace("px", "") + "px";
         this.domWrapper.style.position = "absolute";
-        this.states.x.current=value;
+        this.states.x.current = value;
     }
 
     @$Property()
@@ -701,7 +730,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     set y(value: number) { //the Code
         this.domWrapper.style.top = value.toString().replace("px", "") + "px";
         this.domWrapper.style.position = "absolute";
-        this.states.y.current=value;
+        this.states.y.current = value;
     }
 
     @$Property()
@@ -729,7 +758,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             this.dom.style.width = value.toString();
             this.domWrapper.style.width = "";
         }
-        this.states.width.current=value;
+        this.states.width.current = value;
         //  
     }
     @$Property({ type: "number" })
@@ -753,7 +782,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             this.dom.style.height = value.toString();
             this.domWrapper.style.height = "";
         }
-        this.states.height.current=value;
+        this.states.height.current = value;
     }
     @$Property({ type: "number" })
     get height() {
@@ -867,24 +896,24 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     /**
      * @deprecated React-things not use it.
      */
-    current:any;//allow ref=Component
+    current: any;//allow ref=Component
     /**
      * @deprecated React-things not use it.
      */
-      state;
-    
+    state;
+
     extensionCalled(action: ExtensionAction) {
     }
-     /**
-     * @deprecated React things-not implemented
-     */
+    /**
+    * @deprecated React things-not implemented
+    */
     context: any;
     /**
      * @deprecated React things-not implemented
      */
-     /**
-     * @deprecated React things-not implemented
-     */
+    /**
+    * @deprecated React things-not implemented
+    */
     setState() {
         throw new Error("not implemented");
     }
@@ -1002,34 +1031,34 @@ interface HTMLComponentProperties extends ComponentProperties, Omit<React.HTMLPr
     children?;
 }
 
-function doCreateDummyForHTMLComponent(component:any,isPreDummy:boolean){
-    var disabledBoth=["tr","td","th"];
-    var enabledPost=["div"];
-    var disabledPre=[];
-    var tag=component?.tag;
-    if(tag===undefined)
+function doCreateDummyForHTMLComponent(component: any, isPreDummy: boolean) {
+    var disabledBoth = ["tr", "td", "th"];
+    var enabledPost = ["div"];
+    var disabledPre = [];
+    var tag = component?.tag;
+    if (tag === undefined)
         return false;
-    if( disabledBoth.indexOf(tag.toLowerCase())!==-1){
+    if (disabledBoth.indexOf(tag.toLowerCase()) !== -1) {
         return false;
-    }else if(isPreDummy&&disabledPre.indexOf(tag.toLowerCase())!==-1){
+    } else if (isPreDummy && disabledPre.indexOf(tag.toLowerCase()) !== -1) {
         return false;
-   }else if(!isPreDummy&&enabledPost.indexOf(tag.toLowerCase())!==-1){
+    } else if (!isPreDummy && enabledPost.indexOf(tag.toLowerCase()) !== -1) {
         return true;
-   }
+    }
     return isPreDummy;//prodummy is enabled at default / postdummy is disabled 
-        
+
 
 }
 
 // ret.tag = atype;
 //        var newdom = document.createElement(atype);
 @$Class("jassijs.ui.HTMLComponent")
-@$Property({name:"children",type:"jassijs.ui.Component",createDummyInDesigner:doCreateDummyForHTMLComponent})
+@$Property({ name: "children", type: "jassijs.ui.Component", createDummyInDesigner: doCreateDummyForHTMLComponent })
 export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Component<HTMLComponentProperties> implements HTMLComponentProperties {
     _components: Component[] = [];
 
     constructor(prop: HTMLComponentProperties = {}) {
-        super(Object.assign(prop, { noWrapper: true }));
+        super(prop);
 
         //this.init(document.createElement(tag), { noWrapper: true });
     }
@@ -1045,10 +1074,10 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
         }
         return ret;
     }
-    private createChildren(props){
-        if(props?.children){
+    private createChildren(props) {
+        if (props?.children) {
             this.removeAll(false);
-            this._components=[];
+            this._components = [];
             for (var x = 0; x < props.children.length; x++) {
                 var child = props.children[x];
                 var cchild;
@@ -1067,12 +1096,12 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
                 this.add(cchild);
             }
             delete props.children;
-         }
+        }
     }
     config(props: HTMLComponentProperties,) {
-        if(!super.config(props))
+        if (!super.config(props))
             return;
-       
+
         this.createChildren(props);
         var tag = props?.tag === undefined ? "span" : props?.tag;
         if (props?.tag !== undefined && props?.tag !== this.tag.toLowerCase()) {
@@ -1082,7 +1111,7 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
             if (childs?.length > 0)
                 this.dom.append(...<any>childs);
         }
-        
+
         for (var prop in props) {
 
 
@@ -1143,7 +1172,7 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
     * @param {jassijs.ui.Component} component - the component to add
     */
     add(component) {//add a component to the container
-        if(this?.states?.exists?.current===false){
+        if (this?.states?.exists?.current === false) {
             return;
         }
         if (component._parent !== undefined) {
@@ -1160,7 +1189,7 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
         this._components.push(component);
         this.dom.appendChild(component.domWrapper);
     }
-   
+
     /**
      * adds a component to the container before an other component
      * @param {jassijs.ui.Component} component - the component to add
@@ -1233,7 +1262,7 @@ export interface TextComponentProperties extends ComponentProperties {
 @$Class("jassijs.ui.TextComponent")
 export class TextComponent<T extends TextComponentProperties = {}> extends Component<TextComponentProperties> implements TextComponentProperties {
     constructor(props: TextComponentProperties = {}) {
-        super(Object.assign(props, { noWrapper: true }));
+        super(props);
 
     }
     get label() {
@@ -1258,9 +1287,9 @@ export class TextComponent<T extends TextComponentProperties = {}> extends Compo
         return false;
     }
     render(): React.ReactNode {
-        var text=this.props?.text;
-        if(text===undefined)
-            text="";
+        var text = this.props?.text;
+        if (text === undefined)
+            text = "";
         return <any>document.createTextNode(text);
     }
     config(props: TextComponentProperties) {

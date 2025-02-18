@@ -21,3 +21,9 @@ export  class Textarea<T extends TextboxProperties=TextboxProperties> extends Te
            
         }
 }
+
+export function test(){
+    debugger;
+    var t=new Textarea();
+    return t;
+}

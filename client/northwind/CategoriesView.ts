@@ -8,9 +8,7 @@ import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { Categories } from "northwind/remote/Categories";
-import { Databinder } from "jassijs/ui/Databinder";
-import { DBObjectView,$DBObjectView,DBObjectViewMe,DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
-import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
+import { DBObjectView,$DBObjectView,DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
 import { jc } from "jassijs/ui/Component";
 @$DBObjectView({ classname: "northwind.Categories",actionname: "Northwind/Categories",icon: "mdi mdi-cube" })
 @$Class("northwind.CategoriesView")
@@ -34,15 +32,13 @@ export class CategoriesView extends DBObjectView<Categories> {
                 jc(Textbox,{
                     label: "Name",
                     bind: this.states.value.bind.CategoryName,
-                    width: 235,
-                    converter: new NumberConverter()
+                    width: 235
                 }),
                 jc("br"),
                 jc(Textarea,{
                     label: "Description",
                     bind: this.states.value.bind.Description,
-                    width: 280,
-                    converter: new NumberConverter()
+                    width: 280
                 }),
                 jc(Table,{
                     height: "100%",

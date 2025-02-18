@@ -950,7 +950,6 @@ declare module "jassijs_report/RImage" {
 }
 declare module "jassijs_report/RImageEditor" {
     import "jassijs/ext/jquerylib";
-    import { Databinder } from "jassijs/ui/Databinder";
     import { Upload } from "jassijs/ui/Upload";
     import { Textbox } from "jassijs/ui/Textbox";
     import { Image } from "jassijs/ui/Image";
@@ -958,6 +957,7 @@ declare module "jassijs_report/RImageEditor" {
     import { Repeater } from "jassijs/ui/Repeater";
     import { Panel } from "jassijs/ui/Panel";
     import { Editor } from "jassijs/ui/PropertyEditors/Editor";
+    import { StateDatabinder } from "jassijs/ui/StateBinder";
     type Me = {
         repeater1?: Repeater;
         panel1?: Panel;
@@ -965,7 +965,7 @@ declare module "jassijs_report/RImageEditor" {
         itile?: Textbox;
         remove?: Button;
         upload1?: Upload;
-        databinder1?: Databinder;
+        databinder1?: StateDatabinder;
     };
     export class RImageEditor extends Editor {
         _textbox: Textbox;

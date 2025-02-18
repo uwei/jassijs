@@ -12,8 +12,9 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Menu = void 0;
     let Menu = class Menu extends Container_1.Container {
-        constructor(options = undefined) {
+        constructor(options = {}) {
             var _a;
+            options.useWrapper = true;
             super(options);
             this._isRoot = true;
             if (((_a = this.props) === null || _a === void 0 ? void 0 : _a.noUpdate) === true) {

@@ -6,7 +6,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1681563014000
 	},
 	"demo/Dialog3.ts": {
-		"date": 1697378966403.906,
+		"date": 1739908670418.73,
 		"demo/Dialog3": {}
 	},
 	"demo/Dialog4.ts": {
@@ -170,7 +170,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1739823504128.3713
 	},
 	"demo/ExistsIfTest.ts": {
-		"date": 1739741602828.4731
+		"date": 1739908679720.574
 	},
 	"demo/ExistsIfTest2.tsx": {
 		"date": 1739817432005.1152

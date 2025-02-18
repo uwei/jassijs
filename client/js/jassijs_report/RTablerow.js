@@ -21,7 +21,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         *
         */
         constructor(properties = {}) {
-            super(Object.assign(properties, { noWrapper: true }));
+            super(properties);
             this.reporttype = "tablerow";
             this.dom.classList.add("designerNoResizable");
         }

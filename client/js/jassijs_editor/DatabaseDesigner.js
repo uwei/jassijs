@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Databinder", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows", "jassijs_editor/util/DatabaseSchema"], function (require, exports, BoxPanel_1, Button_1, Databinder_1, Select_1, Table_1, Registry_1, Panel_1, OptionDialog_1, Router_1, Actions_1, Windows_1, DatabaseSchema_1) {
+define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows", "jassijs_editor/util/DatabaseSchema"], function (require, exports, BoxPanel_1, Button_1, Select_1, Table_1, Registry_1, Panel_1, OptionDialog_1, Router_1, Actions_1, Windows_1, DatabaseSchema_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DatabaseDesigner = void 0;
@@ -60,7 +60,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
                 }
             });
             me.select = new Select_1.Select();
-            me.databinder = new Databinder_1.Databinder();
+            me.databinder = new Databinder();
             this.add(me.databinder);
             me.table.width = 565;
             me.table.height = "300";

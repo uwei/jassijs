@@ -132,7 +132,7 @@ export class State<T = {}> {
     }
 
     set current(data: T) {
-        if (this.data === data)
+        if (this.data === data||(Number.isNaN(data)&&Number.isNaN(this.data)))
             return;
         this.data = data;
         for (var x = 0; x < this._comps_.length; x++) {

@@ -27,7 +27,8 @@ export class Menu<T extends MenuProperties=MenuProperties> extends Container<T> 
     _icon: string;
     _noUpdate: boolean;
     _mainMenu;
-    constructor(options = undefined) {
+    constructor(options:MenuProperties = {}) {
+        options.useWrapper=true;
         super(options);
         this._isRoot = true;
         if (this.props?.noUpdate === true) {
