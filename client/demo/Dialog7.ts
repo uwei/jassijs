@@ -25,7 +25,9 @@ class M2 extends Component<M1Props> {
         return jc("span",{
             children: [
                 this.states.text,
-                jc(Checkbox,{}),
+                jc(Checkbox,{ text: "ert" }),
+                "M2",
+                jc(Button,{ text: "fghfghfgh",width: 125 }),
                 "M2"
             ]
         });
@@ -55,11 +57,11 @@ export class Dialog7 extends Panel {
         return jc(Panel,{
             label: "hh",
             children: [
-                jc(M1,{ text: "ttsadfasdf",style: { color: "red" } }),
+                jc(M1,{ text: "",style: { color: "red" } }),
                 jc(Panel,{
                     children: [
                         "tessdf",
-                        jc(Checkbox),
+                        jc(Checkbox,{ text: "dfgdfgdfg" }),
                         jc("br",{ tag: "br" }),
                         jc(Panel,{
                             children: [
@@ -76,8 +78,33 @@ export class Dialog7 extends Panel {
                             tooltip: "dfgdfg",
                             onfocus: function(event) {
                             },
-                            hidden: false
-                        })
+                            hidden: false,
+                            width: 95,
+                            height: 35
+                        }),
+                        jc(Button,{
+                            text: "Hadfffds",
+                            onclick: () => {
+                            },
+                            tooltip: "dfgdfg",
+                            onfocus: function(event) {
+                            },
+                            hidden: false,
+                            width: 90,
+                            height: 35
+                        }),
+                        jc(Button,{
+                            text: "Hadfffds",
+                            onclick: () => {
+                            },
+                            tooltip: "dfgdfg",
+                            onfocus: function(event) {
+                            },
+                            hidden: false,
+                            width: 90,
+                            height: 35
+                        }),
+                        jc(Checkbox,{})
                     ],
                     label: "fg"
                 }),

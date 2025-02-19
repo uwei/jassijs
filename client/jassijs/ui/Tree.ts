@@ -31,7 +31,7 @@ class TreeEditorProperties {
     multi?: TreeEditorPropertiesMulti;
 }
 export interface TreeProperties extends ComponentProperties {
-    domProperties?:React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+    domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLDivElement>, HTMLDivElement>;
     options?: Fancytree.FancytreeOptions;
     /**
     * @member - get the property for the display of the item or an function to get the display from an item
@@ -87,7 +87,7 @@ export interface TreeProperties extends ComponentProperties {
 @$Property({ name: "new/multi", type: "json" })
 @$Property({ name: "new/multi/mode", type: "string", default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" })
 */
-export class Tree<T extends TreeProperties=TreeProperties > extends Component<TreeProperties> implements TreeProperties {
+export class Tree<T extends TreeProperties = TreeProperties> extends Component<TreeProperties> implements TreeProperties {
     _propDisplay: string | { (item: any): string };
     _propIcon: string | { (item: any): string };
     _propChilds: string | { (item: any): any[] };
@@ -100,19 +100,19 @@ export class Tree<T extends TreeProperties=TreeProperties > extends Component<Tr
     private _allKeysReaded: boolean;
     private _allNodesReaded: boolean;
     _lastOptions: Fancytree.FancytreeOptions;
-    constructor(props: TreeProperties={}) {
+    constructor(props: TreeProperties = {}) {
         super(props);
         this._itemToKey = new Map();
-        if(props?.options===undefined)
+        if (props?.options === undefined)
             this.options = props?.options;
-        
+
     }
     render() {
         var _this = this;
-        return React.createElement("div", { ...this.props.domProperties, className: "Tree"       });
+        return React.createElement("div", { ...this.props.domProperties, className: "Tree" });
     }
     componentDidMount(): void {
-       
+
     }
     config(config: T): Tree {
         super.config(config);
@@ -171,7 +171,7 @@ export class Tree<T extends TreeProperties=TreeProperties > extends Component<Tr
                 return click(event, data);
             return true;
         }
-        
+
         $("#" + this._id).fancytree(options);
         //@ts-ignore
         this.tree = $.ui.fancytree.getTree("#" + this._id);
@@ -220,13 +220,23 @@ export class Tree<T extends TreeProperties=TreeProperties > extends Component<Tr
     get propChilds() {
         return this._propChilds;
     }
-    
+
     onselect(handler) {
         this.addEvent("select", handler);
     }
     @$Property({ default: "function(event?: JQueryEventObject/*, data?:Fancytree.EventData*/){\n\t\n}" })
     onclick(handler: (event?: JQueryEventObject, data?: Fancytree.EventData) => void) {
         this.addEvent("click", handler);
+    }
+
+    scrollToSelection() {
+        //$.ui.fancytree.getNode(evt.target);
+        //var node = $.ui.fancytree("getActiveNode");
+        //node.makeVisible({ scrollIntoView: true });
+        var h=this.tree.getSelectedNodes();
+        if(h===undefined||h.length<1)
+            return;
+        h[0].makeVisible({ scrollIntoView: true });
     }
 
     filter(text: string) {
@@ -257,7 +267,7 @@ export class Tree<T extends TreeProperties=TreeProperties > extends Component<Tr
    */
     getStyleFromItem(item): CSSProperties {
         var ret;
-        if(item===undefined)
+        if (item === undefined)
             return undefined;
         if (typeof (this.propStyle) === "function") {
             ret = this.propStyle(item);
@@ -269,7 +279,7 @@ export class Tree<T extends TreeProperties=TreeProperties > extends Component<Tr
     * get icon from node
     */
     getIconFromItem(item) {
-         if(item===undefined)
+        if (item === undefined)
             return undefined;
         if (this.propIcon !== undefined) {
             if (typeof (this.propIcon) === "function") {
@@ -284,7 +294,7 @@ export class Tree<T extends TreeProperties=TreeProperties > extends Component<Tr
     */
     getChildsFromItem(item) {
         var cs = undefined;
-         if(item===undefined)
+        if (item === undefined)
             return undefined;
         if (typeof (this.propChilds) === "function") {
             cs = this.propChilds(item);
@@ -321,7 +331,7 @@ export class Tree<T extends TreeProperties=TreeProperties > extends Component<Tr
         this.callEvent("click", event, data);
     }
     set selection(values: any[]) {
-
+       
         this.tree.getSelectedNodes().forEach((item) => {
             item.setSelected(false);
         });
@@ -647,7 +657,7 @@ class TreeNode {
     constructor(tree, item, parent: TreeNode = undefined) {
         this.tree = tree;
         this.parent = parent;
-        this._id = "j"+registry.nextID();
+        this._id = "j" + registry.nextID();
         this.item = item;
         var title = this.tree.getTitleFromItem(this.item);
         this.key = (parent !== undefined ? parent.key + "|" : "") + (title === undefined ? "" : title).replaceAll("|", "!");
@@ -729,7 +739,7 @@ class TreeNode {
 
 export async function test() {
     var tree = new Tree();
-    
+
     var s: any = { name: "Sansa", id: 1, style: { color: "blue" } };
     var p = { name: "Peter", id: 2 };
     var u = { name: "Uwe", id: 3, childs: [p, s] };
@@ -739,7 +749,7 @@ export async function test() {
     tree.config({
 
         options: {
-           // checkbox: true
+            // checkbox: true
         },
         propDisplay: "name",
         propChilds: "childs",
@@ -747,13 +757,13 @@ export async function test() {
         items: [c],
         width: "100%",
         height: "100px",
-        onclick:function (data) {
+        onclick: function (data) {
             console.log("select " + data["data"].name);
         },
-        selection : [p, s],
-        value : p
+        selection: [p, s],
+        value: p
     });
-    tree.onselect(()=>{
+    tree.onselect(() => {
         console.log(tree.selection);
     });
     /*tree.propIcon = function(data) {
@@ -764,7 +774,7 @@ export async function test() {
 
     //  tree._readAllKeysIfNeeded();
 
-   
+
     //	await tree.tree.loadKeyPath(["/Christoph/Christoph|Uwe/Christoph|Uwe|Peter"],undefined);
     //		var h=tree.tree.getNodeByKey("Christoph|Uwe|Peter");
     //		tree.tree.activateKey("Christoph|Uwe|Peter");
@@ -774,8 +784,8 @@ export async function test() {
     //	node.setActive(true);
     // var j = tree.value;
     window.setTimeout(async () => {
-        u.childs=[p]
-        tree.items=[c];
+        u.childs = [p]
+        tree.items = [c];
         var k = tree.selection;
 
         //		var nod=tree.tree.getNodeByKey("Christoph/Uwe/Tom1");

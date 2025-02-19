@@ -115,7 +115,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1670673960000
 	},
 	"demo/Dialog2.ts": {
-		"date": 1720184677292.364,
+		"date": 1739985436239.5957,
 		"demo/Dialog2": {}
 	},
 	"demo/Dialog6.ts": {
@@ -123,7 +123,7 @@ define("demo/registry",["require"], function(require) {
 		"demo/Dialog6": {}
 	},
 	"demo/Dialog7.ts": {
-		"date": 1722278374616.3135,
+		"date": 1739993298490.5342,
 		"demo/M1": {
 			"$UIComponent": [
 				{

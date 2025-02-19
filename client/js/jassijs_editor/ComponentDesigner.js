@@ -507,6 +507,24 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         createDragAndDropper() {
             return new DragAndDropper_1.DragAndDropper();
         }
+        selectComponents(components) {
+            var component = this._designPlaceholder._components[0];
+            component.dom.querySelectorAll(".jselected").forEach((c) => { c.classList.remove("jselected"); });
+            //                   $(".jselected").removeClass("jselected");
+            for (var x = 0; x < components.length; x++) {
+                if (components[x]["editorselectthis"])
+                    components[x] = components[x]["editorselectthis"];
+                components[x].domWrapper.classList.add("jselected");
+            }
+            if (components.length === 1) {
+                this._propertyEditor.value = components[0];
+                this._componentExplorer.select(components[0]);
+            }
+            else if (components.length > 0) {
+                this._propertyEditor.value = components;
+                this._componentExplorer.select(components[0]);
+            }
+        }
         /**
          * dialog edit mode
          * @param {boolean} enable - if true allow resizing and drag and drop
@@ -568,21 +586,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     var ret = [];
                     for (var x = 0; x < elementIDs.length; x++) {
                         var ob = document.getElementById(elementIDs[x])._this;
-                        if (ob["editorselectthis"])
-                            ob = ob["editorselectthis"];
                         ret.push(ob);
                     }
-                    if (ret.length === 1)
-                        _this._propertyEditor.value = ret[0];
-                    else if (ret.length > 0) {
-                        _this._propertyEditor.value = ret;
-                    }
+                    _this.selectComponents(ret);
                 };
                 this._resizer.onpropertychanged = function (comp, prop, value) {
                     if (_this._propertyEditor.value !== comp)
                         _this._propertyEditor.value = comp;
                     _this._propertyEditor.setPropertyInCode(prop, value + "", true);
                     _this._propertyEditor.value = _this._propertyEditor.value;
+                    // _this._propertyEditor.setPropertyInDesign(prop, value);
+                    console.log(value);
                     _this.updateDummies();
                 };
                 this._resizer.install(component, allcomponents);

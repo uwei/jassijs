@@ -37,8 +37,15 @@ export class NameEditor extends Editor
                     if(value!==undefined&&value.startsWith("\"")&&value.endsWith("\"")&&this.property.type==="string"){
                         value=value.substring(1,value.length-1);
                     }*/
+        if(auto){
+            this.component.value = "";
+           (<HTMLInputElement>this.component.dom).setAttribute("placeholder",value);
+        }else{
+            this.component.value= value;
+            (<HTMLInputElement>this.component.dom).setAttribute("placeholder","");
+        }
        
-        this.component.value = auto?"":value;
+        this.component
     }
     get ob() {
         return this._ob;

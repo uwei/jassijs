@@ -576,8 +576,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.domWrapper.style.width = value;
             }
             else {
-                this.dom.style.width = value.toString();
                 this.domWrapper.style.width = "";
+                this.dom.style.width = value.toString();
             }
             this.states.width.current = value;
             //  
@@ -599,8 +599,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.domWrapper.style.height = value;
             }
             else {
-                this.dom.style.height = value.toString();
                 this.domWrapper.style.height = "";
+                this.dom.style.height = value.toString();
             }
             this.states.height.current = value;
         }

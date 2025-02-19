@@ -115,6 +115,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             }
             return ret;
         }
+        select(component) {
+            this.tree.selection = [component];
+            //this.tree.scrollToSelection();
+            setTimeout(() => this.tree.scrollToSelection(), 200);
+        }
         layout() {
             var _this = this;
             this.tree.width = "100%";

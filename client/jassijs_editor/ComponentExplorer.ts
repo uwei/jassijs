@@ -124,6 +124,11 @@ export class ComponentExplorer extends Panel {
         }
         return ret;
     }
+    select(component:Component){
+        this.tree.selection=[component];
+        //this.tree.scrollToSelection();
+        setTimeout(()=>this.tree.scrollToSelection(),200);
+    }
     layout() {
         var _this = this;
         this.tree.width = "100%";

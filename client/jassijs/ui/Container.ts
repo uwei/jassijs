@@ -22,11 +22,12 @@ export class Container<T extends ContainerProperties=ComponentProperties> extend
      */
     constructor(properties:ContainerProperties) {//id connect to existing(not reqired)
         super(properties);
-        this._components = [];
         if(this.domWrapper?.classList)
             this.domWrapper?.classList.add("jcontainer");
     }
     private createChildren(props){
+        if(this._components===undefined)
+            this._components=[];
         if(props?.children){
             this.removeAll(false);
             this._components=[];
@@ -157,6 +158,7 @@ export class Container<T extends ContainerProperties=ComponentProperties> extend
         while (this._components?.length > 0) {
             this.remove(this._components[0], destroy);
         }
+       
 
     }
     destroy() {

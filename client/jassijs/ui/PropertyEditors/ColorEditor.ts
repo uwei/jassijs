@@ -25,7 +25,7 @@ export class ColorEditor extends Editor{
         /** @member - the renedering component **/
         this.component = new BoxPanel();
 		this.component.horizontal=true;
-		this.icon=new Textbox();
+		this.icon=new Textbox({useWrapper:true});
 		this.icon.width="10px";
 		this.select=new Select();
 		this.select.width="85px";

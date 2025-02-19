@@ -50,12 +50,11 @@ export class Resizer {
         this.draganddropper = undefined;
 
     }
-   
-    private mouseDown(event) {
+    private mouseDownOld(event) {
         event.data._resizeComponent(event);
         let elementID = (<any>this).getAttribute('id');
-        var _this:Resizer = event?.data;
-        
+        var _this: Resizer = event?.data;
+
         if (_this.onelementselected !== undefined) {
 
             //select with click
@@ -67,8 +66,8 @@ export class Resizer {
                 _this.topElement = elementID;
 
                 setTimeout(function () {
-                    _this.parentPanel.dom.querySelectorAll(".jselected").forEach((c)=>{c.classList.remove("jselected")});
- //                   $(".jselected").removeClass("jselected");
+                    _this.parentPanel.dom.querySelectorAll(".jselected").forEach((c) => { c.classList.remove("jselected") });
+                    //                   $(".jselected").removeClass("jselected");
                     document.getElementById(_this.topElement).classList.add("jselected");
                     _this.lastSelected = [_this.topElement];
                     if (!_this.onelementselected)
@@ -87,12 +86,48 @@ export class Resizer {
             _this.isMouseDown = true;
         }
     }
+    private mouseDown(event) {
+
+        event.data._resizeComponent(event);
+        let elementID = (<any>this).getAttribute('id');
+        var _this: Resizer = event?.data;
+        var target = event.target;
+        if (_this.onelementselected !== undefined) {
+            
+            _this.topElement = undefined
+            //event.preventDefault();
+            while (_this.topElement === undefined) {
+                if (target._this && _this.elements.indexOf(target._this._id) !== -1)
+                    _this.topElement = target._this._id;
+                else if (target._this && _this.elements.indexOf(target._this.domWrapper?._id) !== -1)
+                    _this.topElement = target._this.domWrapper?._id;
+                target = target.parentNode;
+            }
+
+            
+            _this.lastSelected = [_this.topElement];
+            if (!_this.onelementselected)
+                console.log("onselected undefined");
+            _this.onelementselected(_this.lastSelected, event);
+            _this.topElement = undefined;
+
+        }
+
+        var lastTime = new Date().getTime();
+        //select with lasso
+
+
+        if (_this.resizedElement === "" || _this.resizedElement === undefined) {//if also parentcontainer will be fired->ignore
+            _this.resizedElement = elementID.toString();
+            _this.isMouseDown = true;
+        }
+    }
     private mouseMove(event) {
         event.data._resizeComponent(event);
     };
     private mouseUp(event) {
         if (event.data !== undefined) {
-            var _this:Resizer = event?.data;
+            var _this: Resizer = event?.data;
             _this.isMouseDown = false;
             _this.isCursorOnBorder = false;
             _this.cursorType = "default";
@@ -132,18 +167,19 @@ export class Resizer {
             //coordiantes of the event position
             var x = curevent.clientX;
             var y = curevent.clientY;
-            //var element = document.getElementById(this.resizedElement);
-            var element: HTMLElement = <HTMLElement>this.componentUnderCursor;
+            var element = this.lastSelected.length===0?undefined:document.getElementById(this.lastSelected[0]);
+
+            //var element: HTMLElement = <HTMLElement>this.componentUnderCursor;
 
             if (element === undefined) {
                 var cursor = this.cursorType.substring(0, this.cursorType.indexOf('-'));
                 this._changeCursor(e);
                 return;
             }
-            if(this.lastSelected&&this.lastSelected.length>0){
-                if(document.getElementById(this.lastSelected[0])._this!==element._this)
+            /*if (this.lastSelected && this.lastSelected.length > 0) {
+                if (document.getElementById(this.lastSelected[0])._this !== element._this)
                     return;
-            }
+            }*/
             //top left positions of the div element
             var topLeftX = $(element._this.dom).offset().left;//element.offsetLeft;
             var topLeftY = $(element._this.dom).offset().top;//element.offsetTop;
@@ -191,25 +227,25 @@ export class Resizer {
     _changeCursor(e) {
         var borderSize = 4;
         this.cursorType = "default";
-         //slow
+        //slow
         //var els = $(this.parentPanel.dom).find(this.elements);
-        var dcs=[];
-        this.elements.split(",").forEach((str)=>{
-            let el=document.getElementById(str.substring(1));
-            if(el){
-                var classes=el.classList;
-                if(!classes.contains("designerNoResizable"))
-                dcs.push(document.getElementById(str.substring(1)));
+        var dcs = [];
+        this.elements.split(",").forEach((str) => {
+            let el = document.getElementById(str.substring(1));
+            if (el) {
+                var classes = el.classList;
+                if (!classes.contains("designerNoResizable"))
+                    dcs.push(document.getElementById(str.substring(1)));
             }
         });
-       
-        var els=$(dcs);
+
+        var els = $(dcs);
         for (var i = 0; i < els.length; i++) {
             var element: HTMLElement = <HTMLElement>els[i];
-            if(element===null)
+            if (element === null)
                 continue;
-            var noresizex=element.classList.contains("designerNoResizableX");
-            var noresizey=element.classList.contains("designerNoResizableY");
+            var noresizex = element.classList.contains("designerNoResizableX");
+            var noresizey = element.classList.contains("designerNoResizableY");
             if (element.classList.contains("designerNoResizable")) {
                 continue;
             }
@@ -222,7 +258,7 @@ export class Resizer {
             var curevent = e;
             var x = curevent.clientX;
             var y = curevent.clientY;
-           // console.log(noresizex+":"+noresizey);
+            // console.log(noresizex+":"+noresizey);
             //window.status = topLeftX +"--"+topLeftY+"--"+bottomRightX+"--"+bottomRightY+"--"+x+"--"+y+"--"+isMouseDown;
 
             //change the cursor style when it is on the border or even at a distance of 8 pixels around the border
@@ -231,16 +267,16 @@ export class Resizer {
                           this.isCursorOnBorder = true;
                           this.cursorType = "se-resize";
                   }*/
-                if (( y > topLeftY - borderSize && y < bottomRightY + borderSize)) {
-                    if(!noresizex){
+                if ((y > topLeftY - borderSize && y < bottomRightY + borderSize)) {
+                    if (!noresizex) {
                         this.isCursorOnBorder = true;
                         this.cursorType = "e-resize";
                     }
                 }
             }
-            else if (( x > topLeftX - borderSize && x < bottomRightX + borderSize)) {
-                if (!noresizey&&(y >= bottomRightY - borderSize && y <= bottomRightY + borderSize)) {
-                    if(!noresizey){
+            else if ((x > topLeftX - borderSize && x < bottomRightX + borderSize)) {
+                if (!noresizey && (y >= bottomRightY - borderSize && y <= bottomRightY + borderSize)) {
+                    if (!noresizey) {
                         this.isCursorOnBorder = true;
                         this.cursorType = "s-resize";
                     }
@@ -271,7 +307,7 @@ export class Resizer {
      * enable or disable the lasso
      * with lasso some components can be selected with dragging
      */
-    public setLassoMode(enable:boolean) {
+    public setLassoMode(enable: boolean) {
         this.lassoMode = enable;
         this.lastSelected = [];
         this.resizedElement = "";
@@ -285,8 +321,8 @@ export class Resizer {
                 selected: function (event, ui) {
                     if (new Date().getTime() - lastTime > 500) {//new selection
                         _this.lastSelected = [];
-                        _this.parentPanel.dom.querySelectorAll(".jselected").forEach((c)=>{c.classList.remove("jselected")});
- //                 
+                        _this.parentPanel.dom.querySelectorAll(".jselected").forEach((c) => { c.classList.remove("jselected") });
+                        //                 
                         //$(".jselected").removeClass("jselected");
                         setTimeout(function () {
                             _this.onelementselected(_this.lastSelected, event);
@@ -296,7 +332,7 @@ export class Resizer {
                     lastTime = new Date().getTime();
                     var a = 9;
                     if (ui.selected._this && ui.selected.classList.contains("jcomponent") &&
-                         !ui.selected.classList.contains("designerNoSelectable")) {
+                        !ui.selected.classList.contains("designerNoSelectable")) {
                         var ids = _this.elements + ",";
                         if (ids.indexOf("#" + ui.selected._this._id + ",") > -1) {
                             _this.lastSelected.push(ui.selected._this._id);
@@ -316,7 +352,7 @@ export class Resizer {
      * @param parentPanel - the parent component
      * @param elements - the search pattern for the components to resize e.q. ".jresizeable"
      */
-    install(parentPanel:Component, elements:string) {
+    install(parentPanel: Component, elements: string) {
         var _this = this;
         /*if (!parentPanel.dom.classList.contains("designerNoResizable")) {
             $(parentPanel.domWrapper).resizable({
@@ -338,12 +374,13 @@ export class Resizer {
             this.parentPanel = parentPanel;
         if (elements !== undefined)
             this.elements = elements;
+        // this.parentPanel.dom.addEventListener("mousedown",(ev)=>this.mouseDown(ev));  
         $(this.parentPanel.dom).on("mousedown", this, this.mouseDown);
         this.mousedownElements = $(this.parentPanel.dom).find(this.elements);
         for (let x = 0; x < this.mousedownElements.length; x++) {
             this.mousedownElements[x] = this.mousedownElements[x].parentNode;
         }
-        this.mousedownElements.on("mousedown", this, this.mouseDown);
+        // this.mousedownElements.on("mousedown", this, this.mouseDown);
         $(this.parentPanel.dom).on("mousemove", this, this.mouseMove);
         $(this.parentPanel.dom).on("mouseup", this, this.mouseUp);
 

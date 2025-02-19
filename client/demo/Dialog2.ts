@@ -71,8 +71,7 @@ function kk() {
     return "kko";
 }
 export async function test() {
-   
-    //var data = await Kunde.find();
-    //var ret = new Dialog2(data);
-   // return ret;
+    var data=[{name:"Hans", id:1},{name:"Heinz", id:2}];
+    var ret = new Dialog2(data);
+    return ret;
 }

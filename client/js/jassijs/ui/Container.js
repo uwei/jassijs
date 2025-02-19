@@ -21,11 +21,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         constructor(properties) {
             var _a, _b;
             super(properties);
-            this._components = [];
             if ((_a = this.domWrapper) === null || _a === void 0 ? void 0 : _a.classList)
                 (_b = this.domWrapper) === null || _b === void 0 ? void 0 : _b.classList.add("jcontainer");
         }
         createChildren(props) {
+            if (this._components === undefined)
+                this._components = [];
             if (props === null || props === void 0 ? void 0 : props.children) {
                 this.removeAll(false);
                 this._components = [];

@@ -37,7 +37,15 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/T
                         if(value!==undefined&&value.startsWith("\"")&&value.endsWith("\"")&&this.property.type==="string"){
                             value=value.substring(1,value.length-1);
                         }*/
-            this.component.value = auto ? "" : value;
+            if (auto) {
+                this.component.value = "";
+                this.component.dom.setAttribute("placeholder", value);
+            }
+            else {
+                this.component.value = value;
+                this.component.dom.setAttribute("placeholder", "");
+            }
+            this.component;
         }
         get ob() {
             return this._ob;

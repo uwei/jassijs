@@ -16,7 +16,7 @@ import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import { classes } from "jassijs/remote/Classes";
 import { Container } from "jassijs/ui/Container";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
- 
+
 //import { Parser } from "./util/Parser";
 
 
@@ -557,6 +557,25 @@ export class ComponentDesigner extends Panel {
     createDragAndDropper(): DragAndDropper {
         return new DragAndDropper();
     }
+    selectComponents(components: Component[]) {
+        var component = this._designPlaceholder._components[0];
+        component.dom.querySelectorAll(".jselected").forEach((c) => { c.classList.remove("jselected") });
+            //                   $(".jselected").removeClass("jselected");
+            
+        for (var x = 0; x < components.length; x++) {
+            if (components[x]["editorselectthis"])
+                components[x] = components[x]["editorselectthis"];
+            components[x].domWrapper.classList.add("jselected");
+        }
+        if (components.length === 1){
+            this._propertyEditor.value = components[0];
+            this._componentExplorer.select( components[0]);
+        }else if(components.length > 0) {
+            this._propertyEditor.value = components;
+            this._componentExplorer.select(components[0]);
+        }
+
+    }
     /**
      * dialog edit mode
      * @param {boolean} enable - if true allow resizing and drag and drop 
@@ -622,15 +641,10 @@ export class ComponentDesigner extends Panel {
                 var ret = [];
                 for (var x = 0; x < elementIDs.length; x++) {
                     var ob = document.getElementById(elementIDs[x])._this;
-                    if (ob["editorselectthis"])
-                        ob = ob["editorselectthis"];
+
                     ret.push(ob);
                 }
-                if (ret.length === 1)
-                    _this._propertyEditor.value = ret[0];
-                else if (ret.length > 0) {
-                    _this._propertyEditor.value = ret;
-                }
+                _this.selectComponents(ret);
             };
 
             this._resizer.onpropertychanged = function (comp: Component, prop: string, value: any) {
@@ -638,6 +652,8 @@ export class ComponentDesigner extends Panel {
                     _this._propertyEditor.value = comp;
                 _this._propertyEditor.setPropertyInCode(prop, value + "", true);
                 _this._propertyEditor.value = _this._propertyEditor.value;
+                // _this._propertyEditor.setPropertyInDesign(prop, value);
+                console.log(value);
                 _this.updateDummies();
             };
             this._resizer.install(component, allcomponents);
@@ -811,7 +827,7 @@ export class ComponentDesigner extends Panel {
         this.variables.addVariable(varname, varvalue, refresh, true);
         return varname;
     }
-   
+
 
     private fillVariables(root: Component, component: Component, cache: { [componentid: string]: { line: number, column: number } }) {
         if (cache[component._id] === undefined && component["__stack"] !== undefined) {
@@ -855,11 +871,11 @@ export class ComponentDesigner extends Panel {
         var dummy: HTMLSpanElement;
         //  if (ComponentDesigner.beforeDummy === undefined) {
         dummy = <HTMLSpanElement>document.createElement("span");
-        dummy.contentEditable =node.tagName.toUpperCase() === "BR" ? "true" : "false";
+        dummy.contentEditable = node.tagName.toUpperCase() === "BR" ? "true" : "false";
         dummy.draggable = true;
         dummy.classList.add("_dummy_");
         dummy.onkeydown = (e) => {
-            
+
             if ((<any>_this).keydown) {
                 e.preventDefault();
                 (<any>_this).keydown(e);
@@ -924,11 +940,11 @@ export class ComponentDesigner extends Panel {
                 console.log("focus");
             }
             console.log("setcomp");
-          /*  var newSel = getSelection();
-            var range = document.createRange();
-            range.setStart(_this.lastSelectedDummy.component.dom, 0);
-            newSel.removeAllRanges();
-            newSel.addRange(range);*/
+            /*  var newSel = getSelection();
+              var range = document.createRange();
+              range.setStart(_this.lastSelectedDummy.component.dom, 0);
+              newSel.removeAllRanges();
+              newSel.addRange(range);*/
 
             // (<any>newSel).modify("move", "left", "character");
             getSelection().removeAllRanges();//the next paste is before the component
@@ -969,7 +985,7 @@ export class ComponentDesigner extends Panel {
             //getSelection().removeAllRanges();//the next paste is before the component
             _this.lastSelectedDummy.component = (<any>ev.target)._this;
             this.lastSelectedDummy.pre = false;
-            this.select(this.designedComponent.__dom,0);
+            this.select(this.designedComponent.__dom, 0);
             //setTimeout(()=>getSelection().removeAllRanges(),3000);
         }
         //dummy.onclick = (ev) => console.log(ev);

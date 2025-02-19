@@ -65,9 +65,9 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/
         return "kko";
     }
     async function test() {
-        //var data = await Kunde.find();
-        //var ret = new Dialog2(data);
-        // return ret;
+        var data = [{ name: "Hans", id: 1 }, { name: "Heinz", id: 2 }];
+        var ret = new Dialog2(data);
+        return ret;
     }
     exports.test = test;
 });

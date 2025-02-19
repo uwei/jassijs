@@ -19,7 +19,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyE
             /** @member - the renedering component **/
             this.component = new BoxPanel_1.BoxPanel();
             this.component.horizontal = true;
-            this.icon = new Textbox_1.Textbox();
+            this.icon = new Textbox_1.Textbox({ useWrapper: true });
             this.icon.width = "10px";
             this.select = new Select_1.Select();
             this.select.width = "85px";

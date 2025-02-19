@@ -26,7 +26,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"
             this.lassoMode = false;
             this.draganddropper = undefined;
         }
-        mouseDown(event) {
+        mouseDownOld(event) {
             event.data._resizeComponent(event);
             let elementID = this.getAttribute('id');
             var _this = event === null || event === void 0 ? void 0 : event.data;
@@ -52,6 +52,35 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"
                 var lastTime = new Date().getTime();
                 //select with lasso
             }
+            if (_this.resizedElement === "" || _this.resizedElement === undefined) { //if also parentcontainer will be fired->ignore
+                _this.resizedElement = elementID.toString();
+                _this.isMouseDown = true;
+            }
+        }
+        mouseDown(event) {
+            var _a, _b;
+            event.data._resizeComponent(event);
+            let elementID = this.getAttribute('id');
+            var _this = event === null || event === void 0 ? void 0 : event.data;
+            var target = event.target;
+            if (_this.onelementselected !== undefined) {
+                _this.topElement = undefined;
+                //event.preventDefault();
+                while (_this.topElement === undefined) {
+                    if (target._this && _this.elements.indexOf(target._this._id) !== -1)
+                        _this.topElement = target._this._id;
+                    else if (target._this && _this.elements.indexOf((_a = target._this.domWrapper) === null || _a === void 0 ? void 0 : _a._id) !== -1)
+                        _this.topElement = (_b = target._this.domWrapper) === null || _b === void 0 ? void 0 : _b._id;
+                    target = target.parentNode;
+                }
+                _this.lastSelected = [_this.topElement];
+                if (!_this.onelementselected)
+                    console.log("onselected undefined");
+                _this.onelementselected(_this.lastSelected, event);
+                _this.topElement = undefined;
+            }
+            var lastTime = new Date().getTime();
+            //select with lasso
             if (_this.resizedElement === "" || _this.resizedElement === undefined) { //if also parentcontainer will be fired->ignore
                 _this.resizedElement = elementID.toString();
                 _this.isMouseDown = true;
@@ -100,17 +129,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"
                 //coordiantes of the event position
                 var x = curevent.clientX;
                 var y = curevent.clientY;
-                //var element = document.getElementById(this.resizedElement);
-                var element = this.componentUnderCursor;
+                var element = this.lastSelected.length === 0 ? undefined : document.getElementById(this.lastSelected[0]);
+                //var element: HTMLElement = <HTMLElement>this.componentUnderCursor;
                 if (element === undefined) {
                     var cursor = this.cursorType.substring(0, this.cursorType.indexOf('-'));
                     this._changeCursor(e);
                     return;
                 }
-                if (this.lastSelected && this.lastSelected.length > 0) {
+                /*if (this.lastSelected && this.lastSelected.length > 0) {
                     if (document.getElementById(this.lastSelected[0])._this !== element._this)
                         return;
-                }
+                }*/
                 //top left positions of the div element
                 var topLeftX = $(element._this.dom).offset().left; //element.offsetLeft;
                 var topLeftY = $(element._this.dom).offset().top; //element.offsetTop;
@@ -297,12 +326,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"
                 this.parentPanel = parentPanel;
             if (elements !== undefined)
                 this.elements = elements;
+            // this.parentPanel.dom.addEventListener("mousedown",(ev)=>this.mouseDown(ev));  
             $(this.parentPanel.dom).on("mousedown", this, this.mouseDown);
             this.mousedownElements = $(this.parentPanel.dom).find(this.elements);
             for (let x = 0; x < this.mousedownElements.length; x++) {
                 this.mousedownElements[x] = this.mousedownElements[x].parentNode;
             }
-            this.mousedownElements.on("mousedown", this, this.mouseDown);
+            // this.mousedownElements.on("mousedown", this, this.mouseDown);
             $(this.parentPanel.dom).on("mousemove", this, this.mouseMove);
             $(this.parentPanel.dom).on("mouseup", this, this.mouseUp);
             //this.setLassoMode(true);

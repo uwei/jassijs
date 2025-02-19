@@ -19,7 +19,9 @@ define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Menu", "jassijs
             return (0, Component_2.jc)("span", {
                 children: [
                     this.states.text,
-                    (0, Component_2.jc)(Checkbox_1.Checkbox, {}),
+                    (0, Component_2.jc)(Checkbox_1.Checkbox, { text: "ert" }),
+                    "M2",
+                    (0, Component_2.jc)(Button_1.Button, { text: "fghfghfgh", width: 125 }),
                     "M2"
                 ]
             });
@@ -51,11 +53,11 @@ define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Menu", "jassijs
             return (0, Component_2.jc)(Panel_1.Panel, {
                 label: "hh",
                 children: [
-                    (0, Component_2.jc)(M1, { text: "ttsadfasdf", style: { color: "red" } }),
+                    (0, Component_2.jc)(M1, { text: "", style: { color: "red" } }),
                     (0, Component_2.jc)(Panel_1.Panel, {
                         children: [
                             "tessdf",
-                            (0, Component_2.jc)(Checkbox_1.Checkbox),
+                            (0, Component_2.jc)(Checkbox_1.Checkbox, { text: "dfgdfgdfg" }),
                             (0, Component_2.jc)("br", { tag: "br" }),
                             (0, Component_2.jc)(Panel_1.Panel, {
                                 children: [
@@ -72,8 +74,33 @@ define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Menu", "jassijs
                                 tooltip: "dfgdfg",
                                 onfocus: function (event) {
                                 },
-                                hidden: false
-                            })
+                                hidden: false,
+                                width: 95,
+                                height: 35
+                            }),
+                            (0, Component_2.jc)(Button_1.Button, {
+                                text: "Hadfffds",
+                                onclick: () => {
+                                },
+                                tooltip: "dfgdfg",
+                                onfocus: function (event) {
+                                },
+                                hidden: false,
+                                width: 90,
+                                height: 35
+                            }),
+                            (0, Component_2.jc)(Button_1.Button, {
+                                text: "Hadfffds",
+                                onclick: () => {
+                                },
+                                tooltip: "dfgdfg",
+                                onfocus: function (event) {
+                                },
+                                hidden: false,
+                                width: 90,
+                                height: 35
+                            }),
+                            (0, Component_2.jc)(Checkbox_1.Checkbox, {})
                         ],
                         label: "fg"
                     }),

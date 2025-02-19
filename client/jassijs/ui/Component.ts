@@ -752,11 +752,13 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         if (!isNaN(<any>value))
             value = value + "px";
         if (typeof (value) === "string" && value.indexOf("%") > -1 && this.domWrapper.style.display !== "inline") {
+            
             this.dom.style.width = "100%";
             this.domWrapper.style.width = value;
         } else {
+            this.domWrapper.style.width = ""
             this.dom.style.width = value.toString();
-            this.domWrapper.style.width = "";
+           
         }
         this.states.width.current = value;
         //  
@@ -779,8 +781,9 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             this.dom.style.height = "100%";
             this.domWrapper.style.height = value;
         } else {
+             this.domWrapper.style.height = "";
             this.dom.style.height = value.toString();
-            this.domWrapper.style.height = "";
+           
         }
         this.states.height.current = value;
     }

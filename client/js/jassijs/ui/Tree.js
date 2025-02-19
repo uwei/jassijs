@@ -160,6 +160,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         onclick(handler) {
             this.addEvent("click", handler);
         }
+        scrollToSelection() {
+            //$.ui.fancytree.getNode(evt.target);
+            //var node = $.ui.fancytree("getActiveNode");
+            //node.makeVisible({ scrollIntoView: true });
+            var h = this.tree.getSelectedNodes();
+            if (h === undefined || h.length < 1)
+                return;
+            h[0].makeVisible({ scrollIntoView: true });
+        }
         filter(text) {
             // this.expandAll();
             this._readAllNodesIfNeeded().then(() => {
