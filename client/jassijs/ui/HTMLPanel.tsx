@@ -68,9 +68,9 @@ export class HTMLPanel<T extends HTMLPanelProperties=HTMLPanelProperties> extend
     @$Property()
     set value(code: string) {
         var scode = code;
-        this.states.value.current = code;
+        this.state.value.current = code;
         if (this.template) {
-            if (this.states.value.current === undefined)
+            if (this.state.value.current === undefined)
                 scode = "";
             else {
                 try {
@@ -91,7 +91,7 @@ export class HTMLPanel<T extends HTMLPanelProperties=HTMLPanelProperties> extend
     }
     get value(): string {
 
-        return this.states.value.current;
+        return this.state.value.current;
     }
     
     destroy() {

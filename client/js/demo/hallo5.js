@@ -8,14 +8,12 @@ define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Component", "ja
             super(p);
         }
         render() {
-            //        var color: State|any = new State("red");
-            //var ret = <div calculateState={calculateState}> 
             if (this.props.color === undefined)
-                this.states.color.current = "yellow";
+                this.state.color.current = "yellow";
             //{me.states.colorState}  
             var ret = Component_1.React.createElement("div", null,
-                Component_1.React.createElement(Button_1.Button, { text: "kk", style: { color: this.states.color }, onclick: () => {
-                        this.states.color.current = "blue";
+                Component_1.React.createElement(Button_1.Button, { text: "kk", style: { color: this.state.color }, onclick: () => {
+                        this.state.color.current = "blue";
                         // _this.config({ text: "neu"+x++ });
                     } }),
                 "Haello ggg",
@@ -54,8 +52,8 @@ define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Component", "ja
                     "Du Hallo",
                     Component_1.React.createElement("br", null),
                     "Du",
-                    Component_1.React.createElement(Button_1.Button, { text: "kk", style: { color: this.states.color.self }, onclick: () => {
-                            this.states.color.current = "blue";
+                    Component_1.React.createElement(Button_1.Button, { text: "kk", style: { color: this.state.color.self }, onclick: () => {
+                            this.state.color.current = "blue";
                             // _this.config({ text: "neu"+x++ });
                         } }),
                     "Ha"));

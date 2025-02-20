@@ -159,10 +159,10 @@ export class ObjectChooser<T extends ObjectChooserProperties = ObjectChooserProp
         $(me.IDPanel.dom).dialog("destroy");
     }
     set value(value) {
-        this.states.value.current = value;
+        this.state.value.current = value;
     }
     get value() {
-        return this.states.value.current;
+        return this.state.value.current;
     }
     async loadObjects(classname: string) {
         var cl: any = await classes.loadClass(classname);
@@ -209,7 +209,7 @@ export class ObjectChooser<T extends ObjectChooserProperties = ObjectChooserProp
         //databinder.checkAutocommit(this);
     }
     destroy() {
-        this.states.value.current = undefined;
+        this.state.value.current = undefined;
         this.me.IDPanel.destroy();
         super.destroy();
     }

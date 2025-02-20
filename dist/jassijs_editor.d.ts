@@ -579,6 +579,7 @@ declare module "jassijs_editor/ComponentDesigner" {
         undo(): void;
         private getComponentIDsInDesign;
         createDragAndDropper(): DragAndDropper;
+        selectComponents(components: Component[]): void;
         /**
          * dialog edit mode
          * @param {boolean} enable - if true allow resizing and drag and drop
@@ -625,6 +626,7 @@ declare module "jassijs_editor/ComponentExplorer" {
     import { Panel } from "jassijs/ui/Panel";
     import { Tree } from "jassijs/ui/Tree";
     import { PropertyEditor } from "jassijs/ui/PropertyEditor";
+    import { Component } from "jassijs/ui/Component";
     export class ComponentExplorer extends Panel {
         codeEditor: any;
         propertyEditor: PropertyEditor;
@@ -652,6 +654,7 @@ declare module "jassijs_editor/ComponentExplorer" {
          */
         getComponentChilds(item: any): {};
         getComponentChildsOld(item: any): {};
+        select(component: Component): void;
         layout(): void;
         update(): void;
         onselect(handler: any): void;
@@ -1427,6 +1430,7 @@ declare module "jassijs_editor/util/Resizer" {
         private topElement;
         private propertyChangetimer;
         constructor();
+        private mouseDownOld;
         private mouseDown;
         private mouseMove;
         private mouseUp;

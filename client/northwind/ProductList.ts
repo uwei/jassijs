@@ -55,7 +55,7 @@ export class ProductList extends Panel<ProductListProperties> {
                 }),
                 jc("br",{}),
                 jc(Panel,{
-                    children: foreach(this.states.values,(ob) => jc(ProductPanel,{ value: ob }))
+                    children: foreach(this.state.values,(ob) => jc(ProductPanel,{ value: ob }))
                 })
             ]
         });
@@ -67,13 +67,12 @@ export class ProductList extends Panel<ProductListProperties> {
     async setData() {
         var all: Products[]=<any>await Products.find({});
         all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName); });
-            this.states.values.current = all;
+            this.state.values.current = all;
     }
 }
             export async function test() {
     var all: Products[] = <any>await Products.find({});
     all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName); });
-                //this.states.values.current = [all[0]];
                 var ret = new ProductList({values: all });
                 return ret;
 }

@@ -24,19 +24,19 @@ export class UserView extends DBObjectView<User, UserViewProperties> {
     }
     render() {
         Group.find().then((data) => {
-            this.states.items.current = <any>data;
+            this.state.items.current = <any>data;
         });
         return jc(Panel, {
             children: [
                 jc(DBObjectViewToolbar, { view: this }),
-                jc(Textbox, { converter: new NumberConverter(), bind: this.states.value.bind.id, label: "Id" }),
-                jc(Textbox, { bind: this.states.value.bind.email, label: "E-Mail" }),
-                jc(Checkbox, { bind: this.states.value.bind.isAdmin, label: "IsAdmin" }),
+                jc(Textbox, { converter: new NumberConverter(), bind: this.state.value.bind.id, label: "Id" }),
+                jc(Textbox, { bind: this.state.value.bind.email, label: "E-Mail" }),
+                jc(Checkbox, { bind: this.state.value.bind.isAdmin, label: "IsAdmin" }),
                 jc("br", {}),
                 jc(Select, {
-                    bind: this.states.value.bind.groups, width: 200,
+                    bind: this.state.value.bind.groups, width: 200,
                     multiple: true,
-                    items: this.states.items, label: "Groups", display: "name"
+                    items: this.state.items, label: "Groups", display: "name"
                 })
             ]
         });

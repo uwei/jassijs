@@ -25,17 +25,17 @@ export class KundeView extends DBObjectView<Kunde> {
         return (jc(Panel,{
             children: [
                 jc(DBObjectViewToolbar,{ view: this }),
-                jc(Textbox,{ label: "Id",bind: this.states.value.bind.id,converter: new NumberConverter() }),
+                jc(Textbox,{ label: "Id",bind: this.state.value.bind.id,converter: new NumberConverter() }),
                 jc("br",{}),
-                jc(Textbox,{ bind: this.states.value.bind.vorname,label: "Vorname" }),
-                jc(Textbox,{ label: "Nachname",bind: this.states.value.bind.nachname }),
+                jc(Textbox,{ bind: this.state.value.bind.vorname,label: "Vorname" }),
+                jc(Textbox,{ label: "Nachname",bind: this.state.value.bind.nachname }),
                 jc("br",{}),
-                jc(Textbox,{ bind: this.states.value.bind.strasse,label: "Straße" }),
+                jc(Textbox,{ bind: this.state.value.bind.strasse,label: "Straße" }),
                 jc("br",{}),
-                jc(Textbox,{ bind: this.states.value.bind.PLZ,label: "PLZ" }),
-                jc(Textbox,{ bind: this.states.value.bind.ort,label: "Ort" }),
+                jc(Textbox,{ bind: this.state.value.bind.PLZ,label: "PLZ" }),
+                jc(Textbox,{ bind: this.state.value.bind.ort,label: "Ort" }),
                 jc("br",{ label: "" }),
-                jc(Textbox,{ label: "Land",bind: this.states.value.bind.land })
+                jc(Textbox,{ label: "Land",bind: this.state.value.bind.land })
             ]
         }));
     }

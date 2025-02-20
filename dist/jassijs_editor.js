@@ -2523,6 +2523,24 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
         createDragAndDropper() {
             return new DragAndDropper_1.DragAndDropper();
         }
+        selectComponents(components) {
+            var component = this._designPlaceholder._components[0];
+            component.dom.querySelectorAll(".jselected").forEach((c) => { c.classList.remove("jselected"); });
+            //                   $(".jselected").removeClass("jselected");
+            for (var x = 0; x < components.length; x++) {
+                if (components[x]["editorselectthis"])
+                    components[x] = components[x]["editorselectthis"];
+                components[x].domWrapper.classList.add("jselected");
+            }
+            if (components.length === 1) {
+                this._propertyEditor.value = components[0];
+                this._componentExplorer.select(components[0]);
+            }
+            else if (components.length > 0) {
+                this._propertyEditor.value = components;
+                this._componentExplorer.select(components[0]);
+            }
+        }
         /**
          * dialog edit mode
          * @param {boolean} enable - if true allow resizing and drag and drop
@@ -2548,7 +2566,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     comps[c]._this["extensionCalled"]({
                         componentDesignerSetDesignMode: { enable, componentDesigner: this }
                     });
-                    //comps[c]._this["setDesignMode"](enable,this);
                 }
             }
             if (component["extensionCalled"] !== undefined) {
@@ -2556,9 +2573,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     componentDesignerSetDesignMode: { enable, componentDesigner: this }
                 });
             }
-            //if(component["setDesignMode"]!==undefined){
-            //        component["setDesignMode"](enable,this);
-            //    }
             this.variables.updateCache(); //variables can be added with Repeater.setDesignMode
             if (this._resizer !== undefined) {
                 this._resizer.uninstall();
@@ -2584,21 +2598,17 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     var ret = [];
                     for (var x = 0; x < elementIDs.length; x++) {
                         var ob = document.getElementById(elementIDs[x])._this;
-                        if (ob["editorselectthis"])
-                            ob = ob["editorselectthis"];
                         ret.push(ob);
                     }
-                    if (ret.length === 1)
-                        _this._propertyEditor.value = ret[0];
-                    else if (ret.length > 0) {
-                        _this._propertyEditor.value = ret;
-                    }
+                    _this.selectComponents(ret);
                 };
                 this._resizer.onpropertychanged = function (comp, prop, value) {
                     if (_this._propertyEditor.value !== comp)
                         _this._propertyEditor.value = comp;
                     _this._propertyEditor.setPropertyInCode(prop, value + "", true);
                     _this._propertyEditor.value = _this._propertyEditor.value;
+                    // _this._propertyEditor.setPropertyInDesign(prop, value);
+                    console.log(value);
                     _this.updateDummies();
                 };
                 this._resizer.install(component, allcomponents);
@@ -3339,6 +3349,11 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
                 }
             }
             return ret;
+        }
+        select(component) {
+            this.tree.selection = [component];
+            //this.tree.scrollToSelection();
+            setTimeout(() => this.tree.scrollToSelection(), 200);
         }
         layout() {
             var _this = this;
@@ -6159,11 +6174,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1739909281179.2625,
+                "date": 1740075940067.0588,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1721763138779.0403,
+                "date": 1739999267632.0261,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
@@ -6471,7 +6486,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1721761536007.891,
+                "date": 1739999435244.1797,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
@@ -9457,7 +9472,7 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
             this.lassoMode = false;
             this.draganddropper = undefined;
         }
-        mouseDown(event) {
+        mouseDownOld(event) {
             event.data._resizeComponent(event);
             let elementID = this.getAttribute('id');
             var _this = event === null || event === void 0 ? void 0 : event.data;
@@ -9483,6 +9498,35 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
                 var lastTime = new Date().getTime();
                 //select with lasso
             }
+            if (_this.resizedElement === "" || _this.resizedElement === undefined) { //if also parentcontainer will be fired->ignore
+                _this.resizedElement = elementID.toString();
+                _this.isMouseDown = true;
+            }
+        }
+        mouseDown(event) {
+            var _a, _b;
+            event.data._resizeComponent(event);
+            let elementID = this.getAttribute('id');
+            var _this = event === null || event === void 0 ? void 0 : event.data;
+            var target = event.target;
+            if (_this.onelementselected !== undefined) {
+                _this.topElement = undefined;
+                //event.preventDefault();
+                while (_this.topElement === undefined) {
+                    if (target._this && _this.elements.indexOf(target._this._id) !== -1)
+                        _this.topElement = target._this._id;
+                    else if (target._this && _this.elements.indexOf((_a = target._this.domWrapper) === null || _a === void 0 ? void 0 : _a._id) !== -1)
+                        _this.topElement = (_b = target._this.domWrapper) === null || _b === void 0 ? void 0 : _b._id;
+                    target = target.parentNode;
+                }
+                _this.lastSelected = [_this.topElement];
+                if (!_this.onelementselected)
+                    console.log("onselected undefined");
+                _this.onelementselected(_this.lastSelected, event);
+                _this.topElement = undefined;
+            }
+            var lastTime = new Date().getTime();
+            //select with lasso
             if (_this.resizedElement === "" || _this.resizedElement === undefined) { //if also parentcontainer will be fired->ignore
                 _this.resizedElement = elementID.toString();
                 _this.isMouseDown = true;
@@ -9531,17 +9575,17 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
                 //coordiantes of the event position
                 var x = curevent.clientX;
                 var y = curevent.clientY;
-                //var element = document.getElementById(this.resizedElement);
-                var element = this.componentUnderCursor;
+                var element = this.lastSelected.length === 0 ? undefined : document.getElementById(this.lastSelected[0]);
+                //var element: HTMLElement = <HTMLElement>this.componentUnderCursor;
                 if (element === undefined) {
                     var cursor = this.cursorType.substring(0, this.cursorType.indexOf('-'));
                     this._changeCursor(e);
                     return;
                 }
-                if (this.lastSelected && this.lastSelected.length > 0) {
+                /*if (this.lastSelected && this.lastSelected.length > 0) {
                     if (document.getElementById(this.lastSelected[0])._this !== element._this)
                         return;
-                }
+                }*/
                 //top left positions of the div element
                 var topLeftX = $(element._this.dom).offset().left; //element.offsetLeft;
                 var topLeftY = $(element._this.dom).offset().top; //element.offsetTop;
@@ -9728,12 +9772,13 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
                 this.parentPanel = parentPanel;
             if (elements !== undefined)
                 this.elements = elements;
+            // this.parentPanel.dom.addEventListener("mousedown",(ev)=>this.mouseDown(ev));  
             $(this.parentPanel.dom).on("mousedown", this, this.mouseDown);
             this.mousedownElements = $(this.parentPanel.dom).find(this.elements);
             for (let x = 0; x < this.mousedownElements.length; x++) {
                 this.mousedownElements[x] = this.mousedownElements[x].parentNode;
             }
-            this.mousedownElements.on("mousedown", this, this.mouseDown);
+            // this.mousedownElements.on("mousedown", this, this.mouseDown);
             $(this.parentPanel.dom).on("mousemove", this, this.mouseMove);
             $(this.parentPanel.dom).on("mouseup", this, this.mouseUp);
             //this.setLassoMode(true);
@@ -10496,11 +10541,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1739909281179.2625,
+                "date": 1740075940067.0588,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1721763138779.0403,
+                "date": 1739999267632.0261,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
@@ -10808,7 +10853,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1721761536007.891,
+                "date": 1739999435244.1797,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {

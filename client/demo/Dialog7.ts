@@ -24,7 +24,7 @@ class M2 extends Component<M1Props> {
     render() {
         return jc("span",{
             children: [
-                this.states.text,
+                this.state.text,
                 jc(Checkbox,{ text: "ert" }),
                 "M2",
                 jc(Button,{ text: "fghfghfgh",width: 125 }),
@@ -41,7 +41,7 @@ class M1 extends Component<M1Props> {
         super(props);
     }
     render() {
-        return jc(M2,{ text: this.states.text });
+        return jc(M2,{ text: this.state.text });
     }
 }
 @$Class("demo/Dialog7")

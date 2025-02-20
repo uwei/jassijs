@@ -18,24 +18,24 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
                     (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Id",
-                        bind: this.states.value.bind.id,
+                        bind: this.state.value.bind.id,
                         width: 40,
                         converter: new NumberConverter_1.NumberConverter()
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Name",
-                        bind: this.states.value.bind.CategoryName,
+                        bind: this.state.value.bind.CategoryName,
                         width: 235
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textarea_1.Textarea, {
                         label: "Description",
-                        bind: this.states.value.bind.Description,
+                        bind: this.state.value.bind.Description,
                         width: 280
                     }),
                     (0, Component_1.jc)(Table_1.Table, {
                         height: "100%",
-                        bindItems: this.states.value.bind.Products,
+                        bindItems: this.state.value.bind.Products,
                         width: "100%"
                     }),
                 ]

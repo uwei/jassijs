@@ -31,13 +31,13 @@ export class CustomerOrders extends DBObjectView<Customer, CustomerOrdersPropert
                  jc(HTMLPanel, {
                     width: 300,
                     value: "Blauer See Delikatessen",
-                    bind: this.states.value.bind.CompanyName,
+                    bind: this.state.value.bind.CompanyName,
                     label: "Company Name",
                     height: 20
                 }),
                 jc(ObjectChooser, {
                     width: 25,
-                    bind: this.states.value.bind,
+                    bind: this.state.value.bind,
                     items: "northwind.Customer",
                     onchange: function (event) {
                         _this.customerChanged();
@@ -46,18 +46,18 @@ export class CustomerOrders extends DBObjectView<Customer, CustomerOrdersPropert
                 jc(HTMLPanel, {
                     width: 110,
                     value: " ",
-                    bind: this.states.value.bind.Country,
+                    bind: this.state.value.bind.Country,
                     label: "Country"
                 }),
                 jc(Table, {
-                    bind: this.states.order.bind,
-                    bindItems: this.states.orders.bind,
+                    bind: this.state.order.bind,
+                    bindItems: this.state.orders.bind,
                     width: "100%",
                     label: "Click an order...",
                     height: "180"
                 }),
                 jc(Table, {
-                    bindItems: this.states.order.bind.Details,
+                    bindItems: this.state.order.bind.Details,
                     width: "100%",
                     height: "140",
                     label: "...to see order details"
@@ -72,12 +72,12 @@ export class CustomerOrders extends DBObjectView<Customer, CustomerOrdersPropert
         windows.add(new CustomerOrders(), "Customer Orders");
     }
     async customerChanged() {
-        var cust: Customer = this.states.value.current;
-        this.states.orders.current = <Orders[]>await Orders.find({
+        var cust: Customer = this.state.value.current;
+        this.state.orders.current = <Orders[]>await Orders.find({
             where: "Customer.id=:param",
             whereParams: { param: cust.id }
         });
-        this.states.order.current=this.states.orders.current.length===0?undefined:this.states.orders.current[0];
+        this.state.order.current=this.state.orders.current.length===0?undefined:this.state.orders.current[0];
         //    this.me.IDOrders.items = orders;
         //   this.me.databinderOrder.value = orders[0];
     }

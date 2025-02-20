@@ -18,27 +18,27 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                     (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Id",
-                        bind: this.states.value.bind.id,
+                        bind: this.state.value.bind.id,
                         width: 60,
                         converter: new NumberConverter_1.NumberConverter()
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "First name",
-                        bind: this.states.value.bind.FirstName,
+                        bind: this.state.value.bind.FirstName,
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Last Name",
-                        bind: this.states.value.bind.LastName,
+                        bind: this.state.value.bind.LastName,
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.value.bind.Title,
+                        bind: this.state.value.bind.Title,
                         label: "Title",
                         width: 90
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Title of C.",
                         width: 85,
-                        bind: this.states.value.bind.TitleOfCourtesy
+                        bind: this.state.value.bind.TitleOfCourtesy
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(BoxPanel_1.BoxPanel, {
@@ -48,47 +48,47 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                                 children: [
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
                                         label: "Address",
-                                        bind: this.states.value.bind.Address,
+                                        bind: this.state.value.bind.Address,
                                         width: 345
                                     }),
                                     (0, Component_1.jc)("br"),
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
                                         label: "Postal Code",
-                                        bind: this.states.value.bind.PostalCode,
+                                        bind: this.state.value.bind.PostalCode,
                                         width: 90
                                     }),
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                                        bind: this.states.value.bind.City,
+                                        bind: this.state.value.bind.City,
                                         label: "City",
                                         width: 240
                                     }),
                                     (0, Component_1.jc)("br"),
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                                        bind: this.states.value.bind.Region,
+                                        bind: this.state.value.bind.Region,
                                         label: "Region",
                                         width: 90
                                     }),
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                                        bind: this.states.value.bind.Country,
+                                        bind: this.state.value.bind.Country,
                                         label: "country",
                                         width: 240
                                     }),
                                     (0, Component_1.jc)("br"),
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
                                         width: 100,
-                                        bind: this.states.value.bind.BirthDate,
+                                        bind: this.state.value.bind.BirthDate,
                                         label: "Birth Date",
                                         converter: new DateTimeConverter_1.DateTimeConverter()
                                     }),
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                                        bind: this.states.value.bind.HireDate,
+                                        bind: this.state.value.bind.HireDate,
                                         label: "Hire Date",
                                         width: 95,
                                         converter: new DateTimeConverter_1.DateTimeConverter()
                                     }),
                                     (0, Component_1.jc)("br"),
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                                        bind: this.states.value.bind.HomePhone,
+                                        bind: this.state.value.bind.HomePhone,
                                         label: "Home Phone",
                                         width: 130
                                     })
@@ -97,7 +97,7 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                             (0, Component_1.jc)(Textarea_1.Textarea, {
                                 width: 240,
                                 height: 155,
-                                bind: this.states.value.bind.Notes,
+                                bind: this.state.value.bind.Notes,
                                 label: "Notes"
                             }),
                             (0, Component_1.jc)(Image_1.Image, {
@@ -106,12 +106,12 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                                     backgroundColor: "black",
                                     borderStyle: "solid"
                                 },
-                                width: 125, bind: this.states.value.bind.PhotoPath
+                                width: 125, bind: this.state.value.bind.PhotoPath
                             }),
                         ]
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.value.bind.PhotoPath,
+                        bind: this.state.value.bind.PhotoPath,
                         label: "Photo Path",
                         width: 460
                     }),
@@ -120,16 +120,16 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                         label: "Reports To",
                         children: [
                             (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, {
-                                bind: this.states.value.bind.ReportsTo.FirstName
+                                bind: this.state.value.bind.ReportsTo.FirstName
                             }),
                             " ",
                             (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, {
-                                bind: this.states.value.bind.ReportsTo.LastName
+                                bind: this.state.value.bind.ReportsTo.LastName
                             }),
                             (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, {
                                 width: 25,
                                 height: 25,
-                                bind: this.states.value.bind.ReportsTo,
+                                bind: this.state.value.bind.ReportsTo,
                                 items: "northwind.Employees"
                             })
                         ]

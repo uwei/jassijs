@@ -15,8 +15,8 @@ var x = 1;
 class MyComp extends Component<Prop> {
 
     makeGreen(){
-        this.states.mycolor.current="green";
-        this.states.mytext.current="green";
+        this.state.mycolor.current="green";
+        this.state.mytext.current="green";
     }
     constructor(p:Prop){
         super(p);
@@ -26,10 +26,10 @@ class MyComp extends Component<Prop> {
         var _this=this;
       
         var ret=<div>
-            {this.states.mytext}
-            <button style={{color:_this.states.mycolor}}  onClick={() => {
-              this.states.mytext.current="ooo";
-                _this.states.mycolor.current="blue";
+            {this.state.mytext}
+            <button style={{color:_this.state.mycolor}}  onClick={() => {
+              this.state.mytext.current="ooo";
+                _this.state.mycolor.current="blue";
                // _this.config({ text: "neu"+x++ });
             }}>Click
             </button>

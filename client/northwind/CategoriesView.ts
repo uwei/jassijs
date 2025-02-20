@@ -25,24 +25,24 @@ export class CategoriesView extends DBObjectView<Categories> {
                 jc(DBObjectViewToolbar,{ view: this }),
                 jc(Textbox,{
                     label: "Id",
-                    bind: this.states.value.bind.id,
+                    bind: this.state.value.bind.id,
                     width: 40,
                     converter: new NumberConverter()
                 }),
                 jc(Textbox,{
                     label: "Name",
-                    bind: this.states.value.bind.CategoryName,
+                    bind: this.state.value.bind.CategoryName,
                     width: 235
                 }),
                 jc("br"),
                 jc(Textarea,{
                     label: "Description",
-                    bind: this.states.value.bind.Description,
+                    bind: this.state.value.bind.Description,
                     width: 280
                 }),
                 jc(Table,{
                     height: "100%",
-                    bindItems: this.states.value.bind.Products,
+                    bindItems: this.state.value.bind.Products,
                     width: "100%"
                 }),
             ]

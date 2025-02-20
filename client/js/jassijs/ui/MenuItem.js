@@ -101,7 +101,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
         }
         extensionCalled(action) {
             if (action.componentDesignerSetDesignMode) {
-                this._designMode = action.componentDesignerSetDesignMode.enable;
                 return this.items.extensionCalled(action); //setDesignMode(enable);
             }
             if (action.componentDesignerComponentCreated) {

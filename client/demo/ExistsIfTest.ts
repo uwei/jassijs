@@ -1,5 +1,5 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentProperties, jc } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { Container } from "jassijs/ui/Container";
 import { Panel } from "jassijs/ui/Panel";
@@ -9,34 +9,44 @@ import { createState } from "jassijs/ui/State";
 
 
 
-export class PlaceholderComponentNotExists extends Component  {
+export class PlaceholderComponentNotExists extends Component {
     inactiveNode: React.ReactNode;
-    constructor(properties){
+    constructor(properties) {
         super();
-        this.dom=<any>document.createComment("ExistsIfTest");
-        this.domWrapper=this.dom;
-    } 
-    render(){
-    
+        this.dom = <any>document.createComment("ExistsIfTest");
+        this.domWrapper = this.dom;
+    }
+    render() {
+
         return undefined;
     }
 }
 
 export async function test() {
-    var stateExists=createState<boolean>(false);
-    var stateText=createState<string>("Haa");
-    var ret=new Panel();
-    var e=new Button({text:stateText,onclick:()=>{
-        stateExists.current=true}
+    var stateExists = createState<boolean>(false);
+    var stateText = createState<string>("Haa");
+    var ret = new Panel();
+    var e = new Button({
+        text: stateText.self, onclick: () => {
+            stateExists.current = true
+        }
     });
     ret.add(e);
-    var e2=new Button({text:stateText,exists:stateExists});
+    var e2 = new Button({
+        text: stateText.self, exists: stateExists.self,
+        onclick: () => { 
+            stateText.current="kkk";
+            e2.forceUpdate();
+        }
+    }
+    );
     ret.add(e2);
-     var e3=new Button({text:"hide",onclick:()=>{
-        debugger;
-        stateExists.current=false;
+    var e3 = new Button({
+        text: "hide", onclick: () => {
+            debugger;
+            stateExists.current = false;
 
-        stateText.current="textneu";
+            stateText.current = "textneu";
         }
     });
     ret.add(e3);

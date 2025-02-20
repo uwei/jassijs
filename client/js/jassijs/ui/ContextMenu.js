@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_1, Menu_1, InvisibleComponent_1, Component_1, Classes_1, Property_1, Actions_1, MenuItem_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ui/Container", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_1, Menu_1, InvisibleComponent_1, Component_1, Classes_1, Property_1, Actions_1, MenuItem_1, Container_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;
@@ -26,6 +26,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
         add(menu) {
             if (menu instanceof MenuItem_1.MenuItem)
                 this.menu.add(menu);
+        }
+        /**
+      * remove all component
+      * @param {boolean} destroy - if true the component would be destroyed
+      */
+        removeAll(destroy = undefined) {
+            var _a;
+            while (((_a = this.menu._components) === null || _a === void 0 ? void 0 : _a.length) > 0) {
+                this.remove(this._components[0]);
+            }
         }
         addBefore(menu, before) {
             this.menu.addBefore(menu, before);
@@ -65,7 +75,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
             });
         }
         config(config) {
-            super.config(config);
+            if (super.config(config))
+                Container_1.Container.prototype.createChildren.bind(this)(config);
             return this;
         }
         /**
@@ -94,9 +105,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
                     this._removeClassActions(test);
                 }
             }
-        }
-        _setDesignMode(enable) {
-            var h = 9;
         }
         async _updateClassActions() {
             //remove classActions

@@ -65,7 +65,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1695418663423.5051
 	},
 	"demo/Testcontextmenu.ts": {
-		"date": 1655843288000,
+		"date": 1740079362172.345,
 		"demo.Testcontextmenu": {}
 	},
 	"demo/Testdatatable.ts": {
@@ -123,7 +123,7 @@ define("demo/registry",["require"], function(require) {
 		"demo/Dialog6": {}
 	},
 	"demo/Dialog7.ts": {
-		"date": 1739993298490.5342,
+		"date": 1740069816818.0576,
 		"demo/M1": {
 			"$UIComponent": [
 				{
@@ -143,22 +143,22 @@ define("demo/registry",["require"], function(require) {
 		"date": 1721932941226.1138
 	},
 	"demo/TestStatebinder.ts": {
-		"date": 1722193064669.4893
+		"date": 1740069816818.0576
 	},
 	"demo/hallo.tsx": {
-		"date": 1722278385501.2415
+		"date": 1740077775964.6782
 	},
 	"demo/hallo2.tsx": {
 		"date": 1720092336379.0627
 	},
 	"demo/hallo3.tsx": {
-		"date": 1722278571388.752
+		"date": 1740069816821.0498
 	},
 	"demo/hallo4.tsx": {
-		"date": 1722278638345.3696
+		"date": 1740070434822.886
 	},
 	"demo/hallo5.tsx": {
-		"date": 1722278722961.9177
+		"date": 1740076199636.462
 	},
 	"demo/hallo6.tsx": {
 		"date": 1722108445957.1736
@@ -170,10 +170,17 @@ define("demo/registry",["require"], function(require) {
 		"date": 1739823504128.3713
 	},
 	"demo/ExistsIfTest.ts": {
-		"date": 1739908679720.574
+		"date": 1740073967066.1682
 	},
 	"demo/ExistsIfTest2.tsx": {
 		"date": 1739817432005.1152
+	},
+	"demo/Dialog9.ts": {
+		"date": 1740000579986.1294,
+		"demo/Dialog9": {}
+	},
+	"demo/TestContextmenu2.tsx": {
+		"date": 1740083917542.9377
 	}
 }
  }

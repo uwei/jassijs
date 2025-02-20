@@ -40,16 +40,16 @@ export class Repeater<T extends RepeaterProperties = RepeaterProperties> extends
     onchange(handler) {
     }
     set value(value) {
-        this.states.value.current = value;
+        this.state.value.current = value;
     }
     get value() {
-        return this.states.value.current;
+        return this.state.value.current;
     }
     set items(value) {
-        this.states.items.current = value;
+        this.state.items.current = value;
     }
     get items() {
-        return this.states.items.current;
+        return this.state.items.current;
     }
    /* get bindItems() {
         return this._bindItems;
@@ -199,28 +199,28 @@ class TestComp extends Component<TestCompProperties> {
     render() {
         return jc(Repeater, {
             items: data,
-            bind: this.states.customer.bind,
+            bind: this.state.customer.bind,
             children: [
                 jc(Panel, {
                     children: [
-                        jc(Textbox, { bind: this.states.customer.bind.id }),
+                        jc(Textbox, { bind: this.state.customer.bind.id }),
                         jc(Textbox, {
-                            bind: this.states.customer.bind.name
+                            bind: this.state.customer.bind.name
                         }),
                         jc(Button, {
                             text: "go",
                             onclick: () => {
-                                alert(this.states.customer.current.name);
+                                alert(this.state.customer.current.name);
                             }
                         }),
                         jc(Table, {
                             height: 100,
                             width: 100,
-                            bind: this.states.activeChild.bind,
-                            bindItems: this.states.customer.bind.childs
+                            bind: this.state.activeChild.bind,
+                            bindItems: this.state.customer.bind.childs
                         }),
                         jc(Textbox, {
-                            bind: this.states.activeChild.bind.name
+                            bind: this.state.activeChild.bind.name
                         }),
                     ]
                 })

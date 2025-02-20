@@ -118,7 +118,11 @@ var React = {
         if (props === undefined || props === null)//TODO is this right?
             props = {};
         if (children?.length > 0) {
-            props.children = children;
+            if (props.children === undefined)
+                props.children = children;
+            else {
+                children.forEach((c) => props.children.push(c));
+            }
         }
 
         var ret = {
@@ -139,6 +143,14 @@ declare global {
     namespace React {
         interface ClassAttributes<T> extends React.RefAttributes<T> {
             exists?: boolean;
+        }
+        interface Component<P = {}, S = {}, SS = any> {
+            //@ts-ignore
+            context?: never;
+            //@ts-ignore
+            setState?: never;
+            //@ts-ignore
+            //forceUpdate?: never;
         }
     }
 }
@@ -174,8 +186,8 @@ export function jc<P extends {}>(type: React.ClassType<P, React.ClassicComponent
 export function jc<P extends {}, T extends React.Component<P, React.ComponentState>, C extends React.ComponentClass<P>>(type: React.ClassType<P, T, C>, props?: React.ClassAttributes<T> & P | null, ...children: React.ReactNode[]): React.CElement<P, T>;
 export function jc<P extends {}>(type: React.FunctionComponent<P> | React.ComponentClass<P> | string, props?: React.Attributes & P | null, ...children: React.ReactNode[]): React.ReactElement<P>;
 
-export function jc(type: any, props: any): any {
-    return React.createElement(type, props);
+export function jc(type: any, props: any, ...children): any {
+    return React.createElement(type, props, ...children);
 }
 function createFunctionComponent<P extends {}>(
     type: React.FunctionComponent<P>,
@@ -194,6 +206,7 @@ export function createComponent<T>(node: React.ReactElement<T>): T;//node: { key
 export function createComponent(node: React.ReactNode): any {//node: { key: string, props: any, type: any }):Component {
     var atype = (<any>node).type;
     var props = (<any>node).props;
+    var aref= (<any>node).props?.ref;
     var ret;
     if (atype === undefined)
         debugger;
@@ -204,7 +217,7 @@ export function createComponent(node: React.ReactNode): any {//node: { key: stri
         ret = new HTMLComponent(props);
     } else if (atype.constructor !== undefined) {
 
-        if (atype.prototype._rerenderMe === undefined) {//Functioncompoment
+        if (atype.prototype.forceUpdate === undefined) {//Functioncompoment
             var p = props || {};
             p.renderFunc = atype;
             ret = new FunctionComponent(p);
@@ -214,39 +227,16 @@ export function createComponent(node: React.ReactNode): any {//node: { key: stri
 
         }
     }
-    /*if ((<any>node)?.props?.children !== undefined) {
-        if (props === null || props === undefined)
-            props = {};
-        props.children = (<any>node)?.props?.children;
-        for (var x = 0; x < props.children.length; x++) {
-            var child = props.children[x];
-            var cchild;
-            if (typeof child === "string") {
-                cchild = new TextComponent();
-                cchild.tag = "";
-                cchild.text = child;
-            } else if (child?._$isState$_) {
-                cchild = new TextComponent();
-                cchild.tag = "";
-                child?._observe_(cchild, "text", "property");
-                cchild.text = child.current;
-            } else {
-                cchild = createComponent(child);
-            }
-            ret.add(cchild);
-        }
-    }*/
-    if (props?.ref) {
-        props.ref.current = ret;
-        delete props?.ref;
+   if (aref) { 
+        aref.current = ret;
+      //  delete props?.ref;
     }
     return ret;
 
 }
 
 export function createRef<T>(val: T = undefined): Ref<T> {
-    var ret;
-    ret.current = val;
+    var ret:Ref<T>={current:val};
     return ret;
 }
 export type Ref<T> = { current: T };
@@ -283,7 +273,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
 
     refs;
     props: T;
-    states: States<T>;
+    state: States<T>;
     private static _componentHook = [];
     _eventHandler;
     __dom: HTMLElement;
@@ -292,9 +282,10 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     _contextMenu?;
     _parent;
     events;
-    _designMode;
+
+   
     _styles?: any[];
-    calculateState: (any) => any;
+
     /*  get domWrapper():Element{
           return this._domWrapper;
       }
@@ -316,14 +307,17 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         // if(properties===undefined)
         // properties={};
         this.refs = createRefs();
-        this.states = <any>createStates(properties);
+        this.state = <any>createStates(properties);
         this.props = <any>properties;
         resolveState(this, this.props);
-        this._rerenderMe(true);
+        this.forceUpdate(<any>true);//first Time
         this.config(this.props);
     }
-    private _rerenderMe(firstTime = false) {
-        if (this?.states?.exists?.current === false) {
+    /**
+     * force rerender the component with initial props and changed states
+     */
+    public forceUpdate(callback:()=>void=undefined) {
+        if (this?.state?.exists?.current === false) {
             var node = document.createComment(this.constructor.name + " with exists=false");
             var save = this.props;
             this.props = <any>{};
@@ -331,25 +325,32 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             this.props = save;
             return;
         }
+        var domOld=this.domWrapper;
         //@ts-ignore
-        var rend = this.render(this.states);
+        var rend = this.render(this.state);
         if (rend) {
             if (rend instanceof Node) {
                 this._initComponent(<any>rend);
             } else {
-                if ((<any>rend)?.props?.calculateState) {
-                    this.calculateState = (<any>rend).props.calculateState;
-                    delete (<any>rend).props.calculateState;
-                }
+               
                 var comp = createComponent(rend);
-
                 this._initComponent((<any>comp).dom);
             }
-
-
         }
-        if (firstTime)
+        if(domOld?.parentNode){
+            domOld.parentNode.replaceChild(this.dom,domOld);
+        }
+        //@ts-ignore
+        if (callback===true)
             this.componentDidMount();
+        else{
+            var props = Object.assign({}, this.props);
+            var keys = this.state._used;
+            keys.forEach((k) => props[k] = this.state[k].current);
+            this.config(props);
+            if(callback!==undefined)
+                callback();
+        }
     }
     componentDidMount() {
 
@@ -363,13 +364,13 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
           this.config(this.lastconfig);
       }*/
     config(config: T): Component {
-        if (config?.exists === false || (config?.exists === undefined && this.states?.exists?.current === false)) {
+        if (config?.exists === false || (config?.exists === undefined && this.state?.exists?.current === false)) {
             if (config?.exists === false)
                 this.exists = false;
             return undefined;
         }
         var con: any = Object.assign({}, config);
-       // delete con.useWrapper; why?
+        // delete con.useWrapper; why?
         delete con.replaceNode;
         // this.lastconfig = config;
         var notfound = <any>{}
@@ -396,26 +397,13 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
                         me[key] = config[key];
 
                 }
-            } else if (this.states && this.states._used.indexOf(key) !== -1) {
-                this.states[key].current = config[key];
+            } else if (this.state && this.state._used.indexOf(key) !== -1) {
+                this.state[key].current = config[key];
             } else
                 notfound[key] = con;
         }
-        if (this.states?._onconfig)
-            this.states._onconfig(config);
         Object.assign(this.props === undefined ? {} : this.props, config);
-        if (Object.keys(notfound).length > 0) {
-            if (this.calculateState) {
-                this.calculateState(config);
-                return <any>this;
-            }
-
-            /* var rerender = this.render();
-             if (rerender) {
-                 this.init(createComponent(rerender).dom);
-                 
-             }*/
-        }
+       
         return this;
         //    return new c();
     }
@@ -464,18 +452,15 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     }
     get exists(): boolean {
 
-        return this.states.exists.current;
+        return this.state.exists.current;
     }
 
     set exists(value: boolean) {
-        var old = this.states.exists.current;
-        this.states.exists.current = value;
+        var old = this.state.exists.current;
+        this.state.exists.current = value;
         if (old !== value) {
-            this._rerenderMe(false);
-            var props = Object.assign({}, this.props);
-            var keys = this.states._used;
-            keys.forEach((k) => props[k] = this.states[k].current);
-            this.config(props);
+            this.forceUpdate();
+         
         }
     }
     /**
@@ -581,8 +566,8 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             document.getElementById("jassitemp").appendChild(this.domWrapper);
 
     }
-      @$Property({ description: "wraps the component with div" })
-  
+    @$Property({ description: "wraps the component with div" })
+
     set useWrapper(value: boolean) {
         if (value === true && this.dom === this.domWrapper) {//wrap
             var lid = "j" + registry.nextID();
@@ -595,13 +580,13 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             this.domWrapper = Component.createHTMLElement(strdom);
             this.domWrapper._this = this;
             this.domWrapper._id = lid;
-            if(this.dom.parentNode)
-                this.dom.parentNode.replaceChild(this.domWrapper,this.dom);//removeChild(this.domWrapper);
+            if (this.dom.parentNode)
+                this.dom.parentNode.replaceChild(this.domWrapper, this.dom);//removeChild(this.domWrapper);
             this.domWrapper.appendChild(this.dom);
         }
         if (value === false && this.dom !== this.domWrapper) {//unwrap
-            if(this.domWrapper.parentNode)
-                this.domWrapper.parentNode.replaceChild(this.dom,this.domWrapper);//removeChild(this.domWrapper);
+            if (this.domWrapper.parentNode)
+                this.domWrapper.parentNode.replaceChild(this.dom, this.domWrapper);//removeChild(this.domWrapper);
             this.domWrapper = this.dom;
             this.domWrapper._id = this._id;
             if (this.domWrapper.classList !== undefined)
@@ -680,9 +665,9 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
 
     @$Property({ description: "adds a label above the component" })
     set label(value: string) { //the Code
-        this.states.label.current=value;
-        if(value!==undefined)
-            this.useWrapper=true;
+        this.state.label.current = value;
+        if (value !== undefined)
+            this.useWrapper = true;
         if (value === undefined) {
             var lab = this.domWrapper.querySelector(".jlabel"); //this.domWrapper.getElementsByClassName("jlabel");
             if (lab)
@@ -699,7 +684,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
 
 
     get label(): string {
-        return this.states.label.current; //this.domWrapper.querySelector(".jlabel")?.innerHTML;
+        return this.state.label.current; //this.domWrapper.querySelector(".jlabel")?.innerHTML;
     }
 
     @$Property({ description: "tooltip are displayed on mouse over" })
@@ -719,7 +704,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     set x(value: number) { //the Code
         this.domWrapper.style.left = value.toString().replace("px", "") + "px";
         this.domWrapper.style.position = "absolute";
-        this.states.x.current = value;
+        this.state.x.current = value;
     }
 
     @$Property()
@@ -730,7 +715,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     set y(value: number) { //the Code
         this.domWrapper.style.top = value.toString().replace("px", "") + "px";
         this.domWrapper.style.position = "absolute";
-        this.states.y.current = value;
+        this.state.y.current = value;
     }
 
     @$Property()
@@ -752,15 +737,15 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         if (!isNaN(<any>value))
             value = value + "px";
         if (typeof (value) === "string" && value.indexOf("%") > -1 && this.domWrapper.style.display !== "inline") {
-            
+
             this.dom.style.width = "100%";
             this.domWrapper.style.width = value;
         } else {
             this.domWrapper.style.width = ""
             this.dom.style.width = value.toString();
-           
+
         }
-        this.states.width.current = value;
+        this.state.width.current = value;
         //  
     }
     @$Property({ type: "number" })
@@ -781,11 +766,11 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             this.dom.style.height = "100%";
             this.domWrapper.style.height = value;
         } else {
-             this.domWrapper.style.height = "";
+            this.domWrapper.style.height = "";
             this.dom.style.height = value.toString();
-           
+
         }
-        this.states.height.current = value;
+        this.state.height.current = value;
     }
     @$Property({ type: "number" })
     get height() {
@@ -900,38 +885,16 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
      * @deprecated React-things not use it.
      */
     current: any;//allow ref=Component
-    /**
-     * @deprecated React-things not use it.
-     */
-    state;
+
 
     extensionCalled(action: ExtensionAction) {
     }
-    /**
-    * @deprecated React things-not implemented
-    */
-    context: any;
-    /**
-     * @deprecated React things-not implemented
-     */
-    /**
-    * @deprecated React things-not implemented
-    */
-    setState() {
-        throw new Error("not implemented");
-    }
-    /**
-     * @deprecated React things-not implemented
-     */
-    forceUpdate() {
-        throw new Error("not implemented");
-    }
+
 }
 /*interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
     tag?: string;
     children?;
     renderFunc;
-    calculateState?: (prop) => void;
 }*/
 export class FunctionComponent<T> extends Component<T> {
     _components: Component[] = [];
@@ -944,12 +907,7 @@ export class FunctionComponent<T> extends Component<T> {
     }
     render() {
         var Rend = (<any>this.props).renderFunc;
-        var ret: any = <React.ReactNode>new Rend(this.props, this.states);
-        if (ret.props.calculateState) {
-            //@ts-ignore
-            this.calculateState = ret.props.calculateState;
-            //this.calculateState(this.props);
-        }
+        var ret: any = <React.ReactNode>new Rend(this.props, this.state);
         return ret;
     }
 
@@ -1175,7 +1133,7 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
     * @param {jassijs.ui.Component} component - the component to add
     */
     add(component) {//add a component to the container
-        if (this?.states?.exists?.current === false) {
+        if (this?.state?.exists?.current === false) {
             return;
         }
         if (component._parent !== undefined) {

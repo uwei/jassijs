@@ -20,7 +20,7 @@ function _resolve(ob, props, path: string[], recurseCount) {
             val._comps_.push({ ob: ob, proppath: [...path, key] });
             continue;
         }
-        if (typeof val === "object" && Array.isArray(val) === false && (val?._rerenderMe === undefined)) {
+        if (typeof val === "object" && Array.isArray(val) === false && (val?.forceUpdate === undefined)) {
             _resolve(ob, val, [...path, key], recurseCount++)
         }
     }
@@ -65,16 +65,13 @@ export function foreach(stateWithArray: { current: any[] }, func: (ob) => any): 
 }
 
 
-export type States<T> = { [Property in keyof T]: States<T[Property]> & { bind?: BoundProperty<T[Property]> } } & { current: T, _used?: string[], _onconfig?: (props) => void, _onStateChanged?: (handler: (value) => void) => void };
+export type States<T> = { [Property in keyof T]: States<T[Property]> & { bind?: BoundProperty<T[Property]> } } & { current: T, _used?: string[], _onStateChanged?: (handler: (value) => void) => void };
 export function createStates<T>(initialValues: T = undefined, propertyname: string = undefined): States<T> {
     var data: any = new StateGroup(initialValues);// { _used: [], _data: initialValues };
     data._$propertyname_ = propertyname;
     
     return new Proxy(data as any, {
         get(target: State, key: string) {
-
-            if (key === "_onconfig")
-                return target._onconfig;
             if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current" && key !== "statechanged") {
                 var newstate: State = <any>createStates(data.current !== undefined ? data.current[key] : undefined, key);
 
@@ -93,9 +90,7 @@ export function createStates<T>(initialValues: T = undefined, propertyname: stri
                 var propname: string = data._$propertyname_;
                 target.current = value[propname];
             }
-            else if (key === "_onconfig")
-                target._onconfig = value;
-            else if (key === "current") {
+            if (key === "current") {
                 target.current = value;
             } else if (key === "statechanged") {
                 target.statechanged = value;

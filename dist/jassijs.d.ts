@@ -1458,6 +1458,10 @@ declare module "jassijs/ui/Component" {
             interface ClassAttributes<T> extends React.RefAttributes<T> {
                 exists?: boolean;
             }
+            interface Component<P = {}, S = {}, SS = any> {
+                context?: never;
+                setState?: never;
+            }
         }
     }
     export { React };
@@ -1492,7 +1496,7 @@ declare module "jassijs/ui/Component" {
     export class Component<T extends ComponentProperties = {}> implements React.Component<T> {
         refs: any;
         props: T;
-        states: States<T>;
+        state: States<T>;
         private static _componentHook;
         _eventHandler: any;
         __dom: HTMLElement;
@@ -1501,9 +1505,7 @@ declare module "jassijs/ui/Component" {
         _contextMenu?: any;
         _parent: any;
         events: any;
-        _designMode: any;
         _styles?: any[];
-        calculateState: (any: any) => any;
         /**
          * base class for each Component
          * @class jassijs.ui.Component
@@ -1512,7 +1514,10 @@ declare module "jassijs/ui/Component" {
          *
          */
         constructor(properties?: ComponentProperties);
-        private _rerenderMe;
+        /**
+         * force rerender the component with initial props and changed states
+         */
+        forceUpdate(callback?: () => void): void;
         componentDidMount(): void;
         render(): any;
         config(config: T): Component;
@@ -1593,26 +1598,7 @@ declare module "jassijs/ui/Component" {
          * @deprecated React-things not use it.
          */
         current: any;
-        /**
-         * @deprecated React-things not use it.
-         */
-        state: any;
         extensionCalled(action: ExtensionAction): void;
-        /**
-        * @deprecated React things-not implemented
-        */
-        context: any;
-        /**
-         * @deprecated React things-not implemented
-         */
-        /**
-        * @deprecated React things-not implemented
-        */
-        setState(): void;
-        /**
-         * @deprecated React things-not implemented
-         */
-        forceUpdate(): void;
     }
     export class FunctionComponent<T> extends Component<T> {
         _components: Component[];
@@ -1822,6 +1808,11 @@ declare module "jassijs/ui/ContextMenu" {
         set menu(val: Menu);
         get menu(): Menu;
         add(menu: MenuItem): void;
+        /**
+      * remove all component
+      * @param {boolean} destroy - if true the component would be destroyed
+      */
+        removeAll(destroy?: any): void;
         addBefore(menu: MenuItem, before: any): void;
         remove(item: any): void;
         /**
@@ -1841,7 +1832,6 @@ declare module "jassijs/ui/ContextMenu" {
          **/
         getActions(data: any[]): Promise<Action[]>;
         private _removeClassActions;
-        protected _setDesignMode(enable: any): void;
         private _updateClassActions;
         _menueChanged(): void;
         getMainMenu(): this;
@@ -2166,7 +2156,6 @@ declare module "jassijs/ui/DBObjectView" {
     export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewProperties<P> = DBObjectViewProperties<P>> extends Panel<T> implements Omit<Panel, "isAbsolute"> {
         constructor(props?: T);
         config(config: T): DBObjectView;
-        protected _setDesignMode(enable: any): void;
         set value(value: P);
         get value(): P;
         /**
@@ -2394,15 +2383,9 @@ declare module "jassijs/ui/Menu" {
           */
         add(component: any): void;
         onclick(handler: any): void;
-        extensionCalled(action: ExtensionAction): void;
-        /**
-        * activates or deactivates designmode
-        * @param {boolean} enable - true if activate designMode
-        */
-        protected _setDesignMode(enable: any): void;
         destroy(): void;
     }
-    export function test(): Menu<MenuProperties>;
+    export function test(): any;
 }
 declare module "jassijs/ui/MenuItem" {
     import "jassijs/ext/jquerylib";
@@ -2590,8 +2573,6 @@ declare module "jassijs/ui/Panel" {
         domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
     }
     export class Panel<T extends PanelProperties = PanelProperties> extends Container<T> implements PanelProperties {
-        _isAbsolute: boolean;
-        private _activeComponentDesigner;
         /**
         *
         * @param {object} properties - properties to init
@@ -2604,7 +2585,6 @@ declare module "jassijs/ui/Panel" {
         set isAbsolute(value: boolean);
         get isAbsolute(): boolean;
         max(): void;
-        extensionCalled(action: ExtensionAction): void;
         /**
         * adds a component to the container
         * @param {jassijs.ui.Component} component - the component to add
@@ -2616,11 +2596,6 @@ declare module "jassijs/ui/Panel" {
          * @param {jassijs.ui.Component} before - the component before then component to add
          */
         addBefore(component: Component, before: Component): any;
-        /**
-         * activates or deactivates designmode
-         * @param {boolean} enable - true if activate designMode
-         */
-        protected _setDesignMode(enable: any): void;
         destroy(): void;
     }
 }
@@ -3645,7 +3620,6 @@ declare module "jassijs/ui/State" {
     } & {
         current: T;
         _used?: string[];
-        _onconfig?: (props: any) => void;
         _onStateChanged?: (handler: (value: any) => void) => void;
     };
     export function createStates<T>(initialValues?: T, propertyname?: string): States<T>;
@@ -4062,6 +4036,8 @@ declare module "jassijs/ui/TinymcePanel" {
         private _value;
         private inited;
         editor: any;
+        _designMode: any;
+        _activeComponentDesigner: boolean;
         customToolbarButtons: {
             [name: string]: {
                 title: string;
@@ -4214,6 +4190,7 @@ declare module "jassijs/ui/Tree" {
         };
         onselect(handler: any): void;
         onclick(handler: (event?: JQueryEventObject, data?: Fancytree.EventData) => void): void;
+        scrollToSelection(): void;
         filter(text: string): void;
         /**
         * get title from node

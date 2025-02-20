@@ -66,7 +66,7 @@ class StyleContainer extends Panel {
         this.dom.classList.remove("jinlinecomponent");
         this.domWrapper.classList.remove("jcomponent");
         this.domWrapper.classList.remove("jcontainer");
-        this.dom.hidden=true;
+        this.dom.hidden = true;
     }
 }
 //@$UIComponent({editableChildComponents:["this"]})
@@ -108,9 +108,9 @@ export class ReportDesign extends BoxPanel {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        this.backgroundPanel.dom.style["background-image"]= 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")';
-        this.footerPanel.dom.style["background-image"]= 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")';
-        this.headerPanel.dom.style["background-image"]= 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Header</text></svg>" + '")';
+        this.backgroundPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")';
+        this.footerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")';
+        this.headerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Header</text></svg>" + '")';
         //select the Report if the user click the Panel
         this.backgroundPanel["_editorselectthis"] = this;
         this.headerPanel["_editorselectthis"] = this;
@@ -138,8 +138,8 @@ export class ReportDesign extends BoxPanel {
         if (value === undefined)
             value = [40, 40, 40, 40];
         this.updateWidth();
-        this.contentPanel.dom.style["margin-left"]= value[1] + "px";
-        this.contentPanel.dom.style["margin-right"]= value[3] + "px";
+        this.contentPanel.dom.style["margin-left"] = value[1] + "px";
+        this.contentPanel.dom.style["margin-right"] = value[3] + "px";
 
     }
     @$Property({ description: "the size of the page", default: "A4", chooseFrom: ['4A0', '2A0', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'RA0', 'RA1', 'RA2', 'RA3', 'RA4', 'SRA0', 'SRA1', 'SRA2', 'SRA3', 'SRA4', 'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'] })
@@ -164,9 +164,6 @@ export class ReportDesign extends BoxPanel {
         var po = this.pageOrientation === 'landscape' ? 1 : 0;
         var pm = this.pageMargins == undefined ? [40, 40, 40, 40] : this.pageMargins;
         this.width = this.pageSized[ps][po];//-pm[0]-pm[2];
-    }
-    protected _setDesignMode(enable) {
-        //do nothing - no add button
     }
 
 
@@ -350,8 +347,8 @@ export class ReportDesign extends BoxPanel {
             this.permissions = ob.permissions;
             delete ob.permissions;
         }
-        if(ob.images){
-            this.images=ob.images;
+        if (ob.images) {
+            this.images = ob.images;
             delete ob.images;
         }
 
@@ -385,55 +382,47 @@ export class ReportDesign extends BoxPanel {
             for (var x = 0; x < this.styleContainer._components.length; x++) {
                 r.styles[this.styleContainer._components[x]["name"]] = (<RStyle>this.styleContainer._components[x]).toJSON();
 
-        }
-        //var _this = this;
-        if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
-            r.background = this.backgroundPanel.toJSON();
-        }
-        if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
-            r.header = this.headerPanel.toJSON();
-        }
-        if (!(this.footerPanel._components.length === 0 || (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
-            r.footer = this.footerPanel.toJSON();
-        }
-        r.content = this.contentPanel.toJSON();
-        if (this.pageOrientation) {
-            r.pageOrientation = this.pageOrientation;
+            }
+            //var _this = this;
+            if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
+                r.background = this.backgroundPanel.toJSON();
+            }
+            if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
+                r.header = this.headerPanel.toJSON();
+            }
+            if (!(this.footerPanel._components.length === 0 || (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
+                r.footer = this.footerPanel.toJSON();
+            }
+            r.content = this.contentPanel.toJSON();
+            if (this.pageOrientation) {
+                r.pageOrientation = this.pageOrientation;
 
+            }
+            if (this.pageMargins)
+                r.pageMargins = this.pageMargins;
+            if (this.pageSize)
+                r.pageSize = this.pageSize;
+            if (this.info)
+                r.info = this.info;
+            if (this.compress)
+                r.compress = this.compress;
+            if (this.userPassword)
+                r.userPassword = this.userPassword;
+            if (this.ownerPassword)
+                r.ownerPassword = this.ownerPassword;
+            if (this.permissions)
+                r.permissions = this.permissions;
+            if (this.images) {
+                r.images = this.images;
+            }
+            Object.assign(r, this["otherProperties"]);
+            //delete r.data;
+            return r;
         }
-        if (this.pageMargins)
-            r.pageMargins = this.pageMargins;
-        if (this.pageSize)
-            r.pageSize = this.pageSize;
-        if (this.info)
-            r.info = this.info;
-        if (this.compress)
-            r.compress = this.compress;
-        if (this.userPassword)
-            r.userPassword = this.userPassword;
-        if (this.ownerPassword)
-            r.ownerPassword = this.ownerPassword;
-        if (this.permissions)
-            r.permissions = this.permissions;
-        if(this.images){
-            r.images=this.images;
-        }
-        Object.assign(r, this["otherProperties"]);
-        //delete r.data;
-        return r;
+
+
     }
-    /**
-   * adds a component to the container
-   * @param {jassijs.ui.Component} component - the component to add
-   */
-    /* add(component) {
-         if (component["designPanel"])
-             super.add(component);
-         else
-             super.addBefore(component, this.footerPanel);
- 
-     }*/
-    private pageSized = { //https://github.com/bpampuch/pdfmake/blob/master/src/standardPageSizes.js
+    private pageSized:any = { //https://github.com/bpampuch/pdfmake/blob/master/src/standardPageSizes.js
         '4A0': [4767.87, 6740.79],
         '2A0': [3370.39, 4767.87],
         A0: [2383.94, 3370.39],

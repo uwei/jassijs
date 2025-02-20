@@ -19,7 +19,7 @@ declare module "demo/Dialog2" {
         constructor(data: any);
         layout(me: Me): void;
     }
-    export function test(): any;
+    export function test(): unknown;
 }
 declare module "demo/Dialog3" {
     import { Checkbox } from "jassijs/ui/Checkbox";
@@ -102,6 +102,17 @@ declare module "demo/Dialog8" {
     import { Panel } from "jassijs/ui/Panel";
     export class Dialog7 extends Panel {
         render(): any;
+    }
+    export function test(): unknown;
+}
+declare module "demo/Dialog9" {
+    import { Panel } from "jassijs/ui/Panel";
+    type Me = {};
+    export class Dialog9 extends Panel {
+        me: Me;
+        constructor();
+        render(): any;
+        layout(me: Me): void;
     }
     export function test(): unknown;
 }
@@ -269,6 +280,9 @@ declare module "demo/Testcontextmenu" {
         constructor();
         layout(me: any): void;
     }
+    export function test(): unknown;
+}
+declare module "demo/TestContextmenu2" {
     export function test(): unknown;
 }
 declare module "demo/Testdatatable" {

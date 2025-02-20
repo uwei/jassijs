@@ -16,24 +16,24 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
             return (0, Component_1.jc)(Panel_1.Panel, {
                 children: [
                     (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.id, converter: new NumberConverter_1.NumberConverter(), label: "Id" }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.CompanyName, label: "Company Name" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.id, converter: new NumberConverter_1.NumberConverter(), label: "Id" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.CompanyName, label: "Company Name" }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.ContactName, label: "Contact Name" }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Contact Title", bind: this.states.value.bind.ContactTitle }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.ContactName, label: "Contact Name" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Contact Title", bind: this.state.value.bind.ContactTitle }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.Address, label: "Address", width: 330 }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.Address, label: "Address", width: 330 }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.PostalCode, label: "Postal Code" }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.City, label: "City" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.PostalCode, label: "Postal Code" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.City, label: "City" }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.Region, label: "Region" }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.Country, label: "Country" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.Region, label: "Region" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.Country, label: "Country" }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Phone", bind: this.states.value.bind.Phone }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Fax", bind: this.states.value.bind.Fax }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Phone", bind: this.state.value.bind.Phone }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Fax", bind: this.state.value.bind.Fax }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Homepage", bind: this.states.value.bind.HomePage, width: 330 })
+                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Homepage", bind: this.state.value.bind.HomePage, width: 330 })
                 ]
             });
         }

@@ -14,6 +14,7 @@ import { Panel } from "jassijs/ui/Panel";
 @$Property({name:"children",type:"jassijs_report.RComponent"})
 export class RStack extends RComponent {
     reporttype: string = "stack";
+    _designMode:boolean;
     /**
     * 
     * @param {object} properties - properties to init
@@ -44,6 +45,13 @@ export class RStack extends RComponent {
         if (component.addToParent)
             return component.addToParent(this);
         super.add(component);
+    }
+    extensionCalled(action: ExtensionAction) {
+        if (action.componentDesignerSetDesignMode) {
+            this._designMode=action.componentDesignerSetDesignMode.enable;
+        }
+        super.extensionCalled(action);
+        return undefined;
     }
     toJSON() {
     	 var ret = super.toJSON();

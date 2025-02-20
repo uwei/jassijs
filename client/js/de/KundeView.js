@@ -21,17 +21,17 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
             return ((0, Component_1.jc)(Panel_1.Panel, {
                 children: [
                     (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Id", bind: this.states.value.bind.id, converter: new NumberConverter_1.NumberConverter() }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Id", bind: this.state.value.bind.id, converter: new NumberConverter_1.NumberConverter() }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.vorname, label: "Vorname" }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Nachname", bind: this.states.value.bind.nachname }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.vorname, label: "Vorname" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Nachname", bind: this.state.value.bind.nachname }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.strasse, label: "Straße" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.strasse, label: "Straße" }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.PLZ, label: "PLZ" }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.ort, label: "Ort" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.PLZ, label: "PLZ" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.ort, label: "Ort" }),
                     (0, Component_1.jc)("br", { label: "" }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Land", bind: this.states.value.bind.land })
+                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Land", bind: this.state.value.bind.land })
                 ]
             }));
         }

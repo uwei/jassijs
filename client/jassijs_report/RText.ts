@@ -100,12 +100,6 @@ export class RText extends RComponent {
         var el = this.dom.children[0];
         this._designMode = false;
         this.dom.style["display"]= "block";
-     //   this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
-      //  this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
-      //  this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
-      //  this.focusLost = HTMLPanel.prototype.focusLost.bind(this);
-        //@ts-ignore
-        //this._initTinymce = HTMLPanel.prototype._initTinymce.bind(this);
     }
     render(){
         return <any>React.createElement(HTMLComponent,{

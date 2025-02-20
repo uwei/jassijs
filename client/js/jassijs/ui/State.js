@@ -16,7 +16,7 @@ define(["require", "exports", "jassijs/ui/StateBinder"], function (require, expo
                 val._comps_.push({ ob: ob, proppath: [...path, key] });
                 continue;
             }
-            if (typeof val === "object" && Array.isArray(val) === false && ((val === null || val === void 0 ? void 0 : val._rerenderMe) === undefined)) {
+            if (typeof val === "object" && Array.isArray(val) === false && ((val === null || val === void 0 ? void 0 : val.forceUpdate) === undefined)) {
                 _resolve(ob, val, [...path, key], recurseCount++);
             }
         }
@@ -58,8 +58,6 @@ define(["require", "exports", "jassijs/ui/StateBinder"], function (require, expo
         data._$propertyname_ = propertyname;
         return new Proxy(data, {
             get(target, key) {
-                if (key === "_onconfig")
-                    return target._onconfig;
                 if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current" && key !== "statechanged") {
                     var newstate = createStates(data.current !== undefined ? data.current[key] : undefined, key);
                     target[key] = newstate;
@@ -76,9 +74,7 @@ define(["require", "exports", "jassijs/ui/StateBinder"], function (require, expo
                     var propname = data._$propertyname_;
                     target.current = value[propname];
                 }
-                else if (key === "_onconfig")
-                    target._onconfig = value;
-                else if (key === "current") {
+                if (key === "current") {
                     target.current = value;
                 }
                 else if (key === "statechanged") {

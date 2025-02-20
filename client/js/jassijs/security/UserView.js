@@ -14,19 +14,19 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/Checkbox", "jassi
         }
         render() {
             Group_1.Group.find().then((data) => {
-                this.states.items.current = data;
+                this.state.items.current = data;
             });
             return (0, Component_1.jc)(Panel_1.Panel, {
                 children: [
                     (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { converter: new NumberConverter_1.NumberConverter(), bind: this.states.value.bind.id, label: "Id" }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.email, label: "E-Mail" }),
-                    (0, Component_1.jc)(Checkbox_1.Checkbox, { bind: this.states.value.bind.isAdmin, label: "IsAdmin" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { converter: new NumberConverter_1.NumberConverter(), bind: this.state.value.bind.id, label: "Id" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.email, label: "E-Mail" }),
+                    (0, Component_1.jc)(Checkbox_1.Checkbox, { bind: this.state.value.bind.isAdmin, label: "IsAdmin" }),
                     (0, Component_1.jc)("br", {}),
                     (0, Component_1.jc)(Select_1.Select, {
-                        bind: this.states.value.bind.groups, width: 200,
+                        bind: this.state.value.bind.groups, width: 200,
                         multiple: true,
-                        items: this.states.items, label: "Groups", display: "name"
+                        items: this.state.items, label: "Groups", display: "name"
                     })
                 ]
             });

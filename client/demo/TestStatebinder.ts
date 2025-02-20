@@ -73,7 +73,7 @@ class TestStatebinder extends Component<Props2> {
             children: [
                
                 jc(Select,{
-                    bind: this.states.invoice.bind, 
+                    bind: this.state.invoice.bind, 
                     items: this.props.invoices,
                     placeholder:"Hallo",
                     display:"title",
@@ -81,26 +81,26 @@ class TestStatebinder extends Component<Props2> {
                 }),
                 jc("br"),
                 jc(Textbox,{
-                    bind: this.states.invoice.bind.customer.name
+                    bind: this.state.invoice.bind.customer.name
                 }),
                 jc(Button,{
                     text: "Save",
                     onclick: () => {
                         console.log(JSON.stringify(inv));
                         debugger;
-                        var h=this.states.invoice.bind.$fromForm();
+                        var h=this.state.invoice.bind.$fromForm();
                         console.log(JSON.stringify(inv));
                     }
                 }),
                 jc("br"),
                 jc(Table,{
                     autocommit: true,
-                    bindItems: this.states.invoice.bind.positions,
-                    bind:this.states.currentPosition.bind
+                    bindItems: this.state.invoice.bind.positions,
+                    bind:this.state.currentPosition.bind
                 }),
                 jc("br"),
                  jc(Textbox,{
-                    bind: this.states.currentPosition.bind.text
+                    bind: this.state.currentPosition.bind.text
                 }),
             ]
         });

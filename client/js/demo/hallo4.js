@@ -11,8 +11,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/State"], funct
             //        var color: State|any = new State("red");
             var mycolor = (0, State_1.createState)("red");
             var ret = Component_1.React.createElement("div", null,
-                this.states.mycolor,
-                Component_1.React.createElement("button", { style: { color: this.states.mycolor }, onClick: () => {
+                this.state.mycolor,
+                Component_1.React.createElement("button", { style: { color: this.state.mycolor }, onClick: () => {
                         mycolor.current = "blue";
                         // _this.config({ text: "neu"+x++ });
                     } }, "Click"),

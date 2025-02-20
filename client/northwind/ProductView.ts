@@ -20,33 +20,33 @@ export class ProductView extends DBObjectView<Products> {
         return jc(Panel,{
             children: [
                 jc(DBObjectViewToolbar,{ view: this }),
-                jc(Textbox,{ label: "Id",bind: this.states.value.bind.id,converter: new NumberConverter() }),
-                jc(Textbox,{ bind: this.states.value.bind.ProductName,label: "Product Name",width: 375,height: 25 }),
-                jc(Checkbox,{ label: "Discounted",bind: this.states.value.bind.Discontinued }),
+                jc(Textbox,{ label: "Id",bind: this.state.value.bind.id,converter: new NumberConverter() }),
+                jc(Textbox,{ bind: this.state.value.bind.ProductName,label: "Product Name",width: 375,height: 25 }),
+                jc(Checkbox,{ label: "Discounted",bind: this.state.value.bind.Discontinued }),
                 jc("br",{}),
-                jc(Textbox,{ label: "Quantity per Unit",bind: this.states.value.bind.QuantityPerUnit }),
+                jc(Textbox,{ label: "Quantity per Unit",bind: this.state.value.bind.QuantityPerUnit }),
                 jc(Textbox,{
-                    bind: this.states.value.bind.UnitPrice,converter: new NumberConverter({
+                    bind: this.state.value.bind.UnitPrice,converter: new NumberConverter({
                         format: "#.##0,00"
                     }),label: "Unit Price",
                     width: 70
                 }),
                 jc(Textbox,{
-                    label: "Units in Stock",bind: this.states.value.bind.UnitsInStock,converter: new NumberConverter({
+                    label: "Units in Stock",bind: this.state.value.bind.UnitsInStock,converter: new NumberConverter({
                         format: "#.##0,00"
                     }),width: 80
                 }),
                 jc(Textbox,{
-                    bind: this.states.value.bind.UnitsOnOrder,converter: new NumberConverter({
+                    bind: this.state.value.bind.UnitsOnOrder,converter: new NumberConverter({
                         format: "#.##0,00"
                     }),label: "Units on Order",width: 80
                 }),
-                jc(Textbox,{ bind: this.states.value.bind.ReorderLevel,label: "Reorder Level",width: 185 }),
+                jc(Textbox,{ bind: this.state.value.bind.ReorderLevel,label: "Reorder Level",width: 185 }),
                 jc("br",{}),
-                jc(HTMLPanel,{ label: "Category",bind: this.states.value.bind.Category.CategoryName,width: 245 }),
-                jc(ObjectChooser,{ bind: this.states.value.bind.Category,items: "northwind.Categories" }),
-                jc(HTMLPanel,{ label: "Supplier",bind: this.states.value.bind.Supplier.CompanyName,width: 310 }),
-                jc(ObjectChooser,{ bind: this.states.value.bind.Supplier,items: "northwind.Suppliers" })
+                jc(HTMLPanel,{ label: "Category",bind: this.state.value.bind.Category.CategoryName,width: 245 }),
+                jc(ObjectChooser,{ bind: this.state.value.bind.Category,items: "northwind.Categories" }),
+                jc(HTMLPanel,{ label: "Supplier",bind: this.state.value.bind.Supplier.CompanyName,width: 310 }),
+                jc(ObjectChooser,{ bind: this.state.value.bind.Supplier,items: "northwind.Suppliers" })
             ]
         });
     }

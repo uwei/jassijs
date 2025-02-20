@@ -10,7 +10,7 @@ export class BooleanEditor extends Editor
      * used by PropertyEditor
      * @class jassijs.ui.PropertyEditors.BooleanEditor
      */ {
-    constructor( property, propertyEditor) {
+    constructor( property, propertyEditor) { 
         super( property, propertyEditor);
         /** @member - the renedering component **/
         this.component = new Checkbox();

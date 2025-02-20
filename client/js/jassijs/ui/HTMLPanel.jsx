@@ -121,7 +121,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             editor._draganddropper.enableDraggable(true);
         }
         _initTinymce(editor) {
-            var _this = this;
+            var _this = this; 
             var tinymce = window["tinymce"]; //oder tinymcelib.default
             console.log("run config");
             var config = {

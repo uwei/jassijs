@@ -68,17 +68,14 @@ export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewP
         super.config(config);
         return this;
     }
-    protected _setDesignMode(enable) {
-        //no Icons to add Components in designer
-    }
-
+ 
     
     set value(value: P) {
 
-        this.states.value.current = value;
+        this.state.value.current = value;
     }
     get value(): P {
-        return this.states.value.current;
+        return this.state.value.current;
     }
     /**
      * create a new object
@@ -105,7 +102,7 @@ export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewP
      * saves the object
      */
     async saveObject() {
-        var ob = await this.states.value.bind.$fromForm();
+        var ob = await this.state.value.bind.$fromForm();
         if (ob !== undefined) {
             await this.doSave(ob);
             notify("saved", "info");
@@ -119,7 +116,7 @@ export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewP
      * refresh the object
      */
     refreshObject() {
-        this.states.value.bind.$toForm();//this["value"]);
+        this.state.value.bind.$toForm();//this["value"]);
         this.callEvent("refreshed", this["value"]);
     }
     @$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" })
@@ -130,7 +127,7 @@ export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewP
      * deletes Object
      **/
     deleteObject() {
-        var ob: DBObject = <DBObject>this.states.value.bind.$fromForm();
+        var ob: DBObject = <DBObject>this.state.value.bind.$fromForm();
         if (ob === undefined)
             return;
         ob.remove();

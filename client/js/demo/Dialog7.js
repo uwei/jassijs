@@ -18,7 +18,7 @@ define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Menu", "jassijs
         render() {
             return (0, Component_2.jc)("span", {
                 children: [
-                    this.states.text,
+                    this.state.text,
                     (0, Component_2.jc)(Checkbox_1.Checkbox, { text: "ert" }),
                     "M2",
                     (0, Component_2.jc)(Button_1.Button, { text: "fghfghfgh", width: 125 }),
@@ -32,7 +32,7 @@ define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Menu", "jassijs
             super(props);
         }
         render() {
-            return (0, Component_2.jc)(M2, { text: this.states.text });
+            return (0, Component_2.jc)(M2, { text: this.state.text });
         }
     };
     M1 = __decorate([

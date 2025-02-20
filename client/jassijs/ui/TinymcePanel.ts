@@ -25,7 +25,9 @@ export class TinymcePanel<T extends HTMLPanelProperties=HTMLPanelProperties> ext
     private _template: string;
     private _value;
     private inited=false;
-    editor;
+    editor; 
+    _designMode;
+    _activeComponentDesigner:boolean;
     customToolbarButtons: {
         [name: string]: {
             title: string;

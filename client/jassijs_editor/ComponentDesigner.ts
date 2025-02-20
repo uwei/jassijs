@@ -602,7 +602,6 @@ export class ComponentDesigner extends Panel {
                 comps[c]._this["extensionCalled"]({
                     componentDesignerSetDesignMode: { enable, componentDesigner: this }
                 });
-                //comps[c]._this["setDesignMode"](enable,this);
             }
         }
         if (component["extensionCalled"] !== undefined) {
@@ -611,9 +610,7 @@ export class ComponentDesigner extends Panel {
             });
 
         }
-        //if(component["setDesignMode"]!==undefined){
-        //        component["setDesignMode"](enable,this);
-        //    }
+
         this.variables.updateCache();//variables can be added with Repeater.setDesignMode
         if (this._resizer !== undefined) {
             this._resizer.uninstall();

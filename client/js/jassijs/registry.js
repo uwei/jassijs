@@ -485,7 +485,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1681322648000
 	},
 	"jassijs/security/GroupView.ts": {
-		"date": 1722608022347.401,
+		"date": 1740069816803.1128,
 		"jassijs/security/GroupView": {
 			"$DBObjectView": [
 				{
@@ -497,7 +497,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/security/UserView.ts": {
-		"date": 1722610068691.7795,
+		"date": 1740069816806.107,
 		"jassijs/security/UserView": {
 			"$DBObjectView": [
 				{
@@ -668,7 +668,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1739992759550.5674,
+		"date": 1740083076560.7507,
 		"jassijs.ui.Component": {
 			"$Property": [
 				{
@@ -697,7 +697,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1739986455897.8906,
+		"date": 1740077690613.9016,
 		"jassijs.ui.Container": {
 			"$Property": [
 				{
@@ -708,7 +708,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/ContextMenu.ts": {
-		"date": 1719778747000.2986,
+		"date": 1740083898079.5303,
 		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{
@@ -900,7 +900,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1722610210933.4746,
+		"date": 1740075040179.8916,
 		"jassijs/ui/DBObjectView": {
 			"@members": {}
 		}
@@ -924,7 +924,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Menu.ts": {
-		"date": 1739911310515.9465,
+		"date": 1740075713854.7053,
 		"jassijs.ui.Menu": {
 			"$UIComponent": [
 				{
@@ -942,7 +942,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655585212000
 	},
 	"jassijs/ui/ObjectChooser.ts": {
-		"date": 1739905517935.2231,
+		"date": 1740069816807.102,
 		"jassijs.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -963,7 +963,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1739817310835.981,
+		"date": 1740077265195.8843,
 		"jassijs.ui.Panel": {
 			"$UIComponent": [
 				{
@@ -994,7 +994,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditors/BooleanEditor.ts": {
-		"date": 1655556866000,
+		"date": 1740076239318.7693,
 		"jassijs.ui.PropertyEditors.BooleanEditor": {
 			"$PropertyEditor": [
 				[
@@ -1044,7 +1044,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-		"date": 1739905402898.42,
+		"date": 1740069905665.7407,
 		"jassijs.ui.PropertyEditors.DatabinderEditor": {
 			"$PropertyEditor": [
 				[
@@ -1277,7 +1277,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1739730368273.6821,
+		"date": 1740069816797.109,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -1370,13 +1370,13 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/ui/State.ts": {
-		"date": 1739905028818.2034
+		"date": 1740077833527.527
 	},
 	"jassijs/ui/StateBinder.ts": {
 		"date": 1739904613929.6313
 	},
 	"jassijs/ui/HTMLPanel.tsx": {
-		"date": 1722193753694.9727,
+		"date": 1740069816801.1152,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
@@ -1400,7 +1400,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/MenuItem.tsx": {
-		"date": 1739911325437.023,
+		"date": 1740075824893.565,
 		"jassijs.ui.MenuItem": {
 			"$UIComponent": [
 				{
@@ -1428,13 +1428,13 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/TinymcePanel.ts": {
-		"date": 1721805715426.5576,
+		"date": 1740077295896.0708,
 		"jassijs.ui.TinymcePanel": {
 			"@members": {}
 		}
 	},
 	"jassijs/ui/Repeater.ts": {
-		"date": 1722615783695.5576,
+		"date": 1740069816810.0945,
 		"jassijs.ui.Repeater": {
 			"@members": {}
 		}

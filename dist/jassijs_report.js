@@ -1669,28 +1669,11 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Regis
             this.footerPanel.parent = this;
             this.bodyPanel.parent = this;
         }
-        _setDesignMode(enable) {
-            //do nothing - no add button
-        }
-        /*private fillTableRow(row: RTablerow, count: number) {
-            if (!row._designMode || count - row._components.length !== 1)
-                return;
-            for (var x = row._components.length; x < count; x++) {
-                var rr = new RText();
-                row.addBefore(rr, row._components[row._components.length - 1]);//after addbutton
-            }
-        }*/
         addEmptyCellsIfNeeded(row) {
             var count = row._components.length;
             this.fillTableRow(this.headerPanel, count);
             this.fillTableRow(this.bodyPanel, count);
             this.fillTableRow(this.footerPanel, count);
-        }
-        extensionCalled(action) {
-            if (action.componentDesignerSetDesignMode) {
-                this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
-            }
-            super.extensionCalled(action);
         }
         set groupCount(value) {
             var _a;
@@ -1819,20 +1802,6 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Regis
             //TODO hack
             r.groups = ret.groups;
             delete ret.groups;
-            //var _this = this;
-            /*if (this.widths && this.widths.length > 0) {
-                r.widths = this.widths;
-                var len = this.headerPanel._components.length;
-                if (this.headerPanel._designMode)
-                    len--;
-                for (var t = r.widths.length; t < len; t++) {
-                    r.widths.push("auto");
-                }
-                //remove width
-                while (r.widths.length > len) {
-                    r.widths.pop();
-                }
-            }*/
             if (this.groupHeaderPanel.length > 0) {
                 r.groups = [];
                 for (var x = 0; x < this.groupHeaderPanel.length; x++) {
@@ -1938,7 +1907,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RDatatable.ts": {
-                "date": 1655930956000,
+                "date": 1740077551782.498,
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -1985,7 +1954,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1721763173671.8528,
+                "date": 1740076933424.2107,
                 "jassijs_report.InfoProperties": {
                     "@members": {}
                 },
@@ -2090,7 +2059,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-                "date": 1721763186807.8606,
+                "date": 1740076986120.5095,
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -2146,7 +2115,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1739908805636.1025,
+                "date": 1740077542230.021,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -2158,7 +2127,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1719757546458.8499,
+                "date": 1740076167764.8438,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -3201,17 +3170,6 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             this.contentPanel = new RStack_1.RStack();
             this.footerPanel = new RStack_1.RStack();
             this._pageSize = undefined;
-            /**
-           * adds a component to the container
-           * @param {jassijs.ui.Component} component - the component to add
-           */
-            /* add(component) {
-                 if (component["designPanel"])
-                     super.add(component);
-                 else
-                     super.addBefore(component, this.footerPanel);
-         
-             }*/
             this.pageSized = {
                 '4A0': [4767.87, 6740.79],
                 '2A0': [3370.39, 4767.87],
@@ -3314,9 +3272,6 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             var po = this.pageOrientation === 'landscape' ? 1 : 0;
             var pm = this.pageMargins == undefined ? [40, 40, 40, 40] : this.pageMargins;
             this.width = this.pageSized[ps][po]; //-pm[0]-pm[2];
-        }
-        _setDesignMode(enable) {
-            //do nothing - no add button
         }
         static collectForEach(component, allforeach) {
             if (component.foreach)
@@ -3570,17 +3525,6 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
                 //delete r.data;
                 return r;
             }
-            /**
-           * adds a component to the container
-           * @param {jassijs.ui.Component} component - the component to add
-           */
-            /* add(component) {
-                 if (component["designPanel"])
-                     super.add(component);
-                 else
-                     super.addBefore(component, this.footerPanel);
-         
-             }*/
         }
     };
     exports.ReportDesign = ReportDesign;
@@ -4345,6 +4289,13 @@ define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Registry"
             if (component.addToParent)
                 return component.addToParent(this);
             super.add(component);
+        }
+        extensionCalled(action) {
+            if (action.componentDesignerSetDesignMode) {
+                this._designMode = action.componentDesignerSetDesignMode.enable;
+            }
+            super.extensionCalled(action);
+            return undefined;
         }
         toJSON() {
             var ret = super.toJSON();
@@ -5323,6 +5274,13 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
         render() {
             return React.createElement("tr", { className: "RTablerow" });
         }
+        extensionCalled(action) {
+            if (action.componentDesignerSetDesignMode) {
+                //    this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
+                this._designMode = action.componentDesignerSetDesignMode.enable;
+            }
+            super.extensionCalled(action);
+        }
         oncomponentAdded(callback) {
             this.addEvent("componentAdded", callback);
         }
@@ -5538,12 +5496,6 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             var el = this.dom.children[0];
             this._designMode = false;
             this.dom.style["display"] = "block";
-            //   this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
-            //  this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
-            //  this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
-            //  this.focusLost = HTMLPanel.prototype.focusLost.bind(this);
-            //@ts-ignore
-            //this._initTinymce = HTMLPanel.prototype._initTinymce.bind(this);
         }
         render() {
             return React.createElement(Component_5.HTMLComponent, {
@@ -6545,7 +6497,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RDatatable.ts": {
-                "date": 1655930956000,
+                "date": 1740077551782.498,
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -6592,7 +6544,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1721763173671.8528,
+                "date": 1740076933424.2107,
                 "jassijs_report.InfoProperties": {
                     "@members": {}
                 },
@@ -6697,7 +6649,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-                "date": 1721763186807.8606,
+                "date": 1740076986120.5095,
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -6753,7 +6705,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1739908805636.1025,
+                "date": 1740077542230.021,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -6765,7 +6717,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1719757546458.8499,
+                "date": 1740076167764.8438,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {

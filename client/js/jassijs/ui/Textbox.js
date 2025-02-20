@@ -36,7 +36,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         }
         set disabled(value) {
             this.dom.disabled = value;
-            this.states.disabled.current = value;
+            this.state.disabled.current = value;
         }
         get disabled() {
             return this.dom.disabled;
@@ -76,7 +76,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 v = this.converter.objectToFormatedString(v);
             if (this.dom)
                 this.dom.value = v === undefined ? "" : v;
-            this.states.value.current = value;
+            this.state.value.current = value;
         }
         get value() {
             //  if (this._isFocused)

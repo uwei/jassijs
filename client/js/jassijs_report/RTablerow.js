@@ -28,6 +28,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         render() {
             return React.createElement("tr", { className: "RTablerow" });
         }
+        extensionCalled(action) {
+            if (action.componentDesignerSetDesignMode) {
+                //    this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
+                this._designMode = action.componentDesignerSetDesignMode.enable;
+            }
+            super.extensionCalled(action);
+        }
         oncomponentAdded(callback) {
             this.addEvent("componentAdded", callback);
         }

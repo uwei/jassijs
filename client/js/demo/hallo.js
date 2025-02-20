@@ -3,12 +3,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel"], funct
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MyComp = void 0;
     function MyComp(props, states = undefined) {
-        states._onconfig = (props) => {
-            if ((props === null || props === void 0 ? void 0 : props.mycolor) === "red")
-                states.mycolor.current = "brown";
-        };
-        //<Panel {{calculateState}}>
-        // <Panel {...{calculateState}}>
         return Component_1.React.createElement(Panel_1.Panel, null,
             Component_1.React.createElement("input", { value: states.mytext }),
             Component_1.React.createElement("input", { value: states.mytext }),

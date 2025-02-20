@@ -128,7 +128,6 @@ export class MenuItem<T extends MenuItemProperties=MenuItemProperties> extends C
     }
     extensionCalled(action: ExtensionAction) {
         if (action.componentDesignerSetDesignMode) {
-            this._designMode = action.componentDesignerSetDesignMode.enable;
             return this.items.extensionCalled(action); //setDesignMode(enable);
         }
         if (action.componentDesignerComponentCreated) {

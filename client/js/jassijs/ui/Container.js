@@ -49,8 +49,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                     }
                     this.add(cchild);
                 }
-                delete props.children;
+                //delete props.children;
             }
+            // this.state.children=props?.children;
         }
         /*   if (config?.children) {
                        if (config?.children.length > 0 && config?.children[0] instanceof Component) {
@@ -137,9 +138,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 if (pos >= 0)
                     this._components.splice(pos, 1);
             }
+            //@ts-ignore
             let posd = (_a = this.designDummies) === null || _a === void 0 ? void 0 : _a.indexOf(component);
-            if (posd >= 0)
+            if (posd >= 0) {
+                //@ts-ignore
                 this.designDummies.splice(posd, 1);
+            }
             try {
                 this.dom.removeChild(component.domWrapper);
             }

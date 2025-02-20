@@ -17,6 +17,7 @@ import { RTable } from "jassijs_report/RTable";
 export class RTablerow extends RComponent {
     reporttype: string = "tablerow";
     parent: RTable;
+    _designMode;
     //foreach is defined
     forEachDummy;
     /**
@@ -34,8 +35,13 @@ export class RTablerow extends RComponent {
     render(){
         return <any>React.createElement("tr", { className: "RTablerow"});
     }
-  
-    
+    extensionCalled(action: ExtensionAction) {
+        if (action.componentDesignerSetDesignMode) {
+        //    this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
+            this._designMode= action.componentDesignerSetDesignMode.enable
+        }
+        super.extensionCalled(action);
+    }
     oncomponentAdded(callback) {
         this.addEvent("componentAdded", callback);
     }

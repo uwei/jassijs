@@ -41,28 +41,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             this.footerPanel.parent = this;
             this.bodyPanel.parent = this;
         }
-        _setDesignMode(enable) {
-            //do nothing - no add button
-        }
-        /*private fillTableRow(row: RTablerow, count: number) {
-            if (!row._designMode || count - row._components.length !== 1)
-                return;
-            for (var x = row._components.length; x < count; x++) {
-                var rr = new RText();
-                row.addBefore(rr, row._components[row._components.length - 1]);//after addbutton
-            }
-        }*/
         addEmptyCellsIfNeeded(row) {
             var count = row._components.length;
             this.fillTableRow(this.headerPanel, count);
             this.fillTableRow(this.bodyPanel, count);
             this.fillTableRow(this.footerPanel, count);
-        }
-        extensionCalled(action) {
-            if (action.componentDesignerSetDesignMode) {
-                this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
-            }
-            super.extensionCalled(action);
         }
         set groupCount(value) {
             var _a;
@@ -191,20 +174,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             //TODO hack
             r.groups = ret.groups;
             delete ret.groups;
-            //var _this = this;
-            /*if (this.widths && this.widths.length > 0) {
-                r.widths = this.widths;
-                var len = this.headerPanel._components.length;
-                if (this.headerPanel._designMode)
-                    len--;
-                for (var t = r.widths.length; t < len; t++) {
-                    r.widths.push("auto");
-                }
-                //remove width
-                while (r.widths.length > len) {
-                    r.widths.pop();
-                }
-            }*/
             if (this.groupHeaderPanel.length > 0) {
                 r.groups = [];
                 for (var x = 0; x < this.groupHeaderPanel.length; x++) {

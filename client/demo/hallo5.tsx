@@ -19,16 +19,14 @@ class MyComp<Prop> extends Component<MProp> {
     constructor(p: MProp) {
         super(p);
     }
-    render() {
-        //        var color: State|any = new State("red");
-        //var ret = <div calculateState={calculateState}> 
+    render() { 
         if(this.props.color===undefined)
-            this.states.color.current="yellow";
+            this.state.color.current="yellow";
         //{me.states.colorState}  
         var ret=<div>
 
-            <Button text="kk" style={{ color: this.states.color }} onclick={() => {
-                this.states.color.current="blue";
+            <Button text="kk" style={{ color: this.state.color }} onclick={() => {
+                this.state.color.current="blue";
                 // _this.config({ text: "neu"+x++ });
             }}>
             </Button>
@@ -81,8 +79,8 @@ class MyComp<Prop> extends Component<MProp> {
                 Hallo
                 <br />
                 Du
-                <Button text="kk" style={{ color: this.states.color.self }} onclick={() => {
-                    this.states.color.current="blue";
+                <Button text="kk" style={{ color: this.state.color.self }} onclick={() => {
+                    this.state.color.current="blue";
                     // _this.config({ text: "neu"+x++ });
                 }}></Button>
                 Ha

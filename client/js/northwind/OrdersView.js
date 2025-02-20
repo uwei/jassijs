@@ -32,37 +32,37 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                         children: [
                             (0, Component_1.jc)(Panel_1.Panel, {
                                 children: [
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Ship Name", bind: this.states.value.bind.ShipName, width: 260, ref: this.refs.shipName }),
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Ship Name", bind: this.state.value.bind.ShipName, width: 260, ref: this.refs.shipName }),
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                                        label: "Order ID", bind: this.states.value.bind.id, converter: new NumberConverter_1.NumberConverter(), style: {
+                                        label: "Order ID", bind: this.state.value.bind.id, converter: new NumberConverter_1.NumberConverter(), style: {
                                             textAlign: "right",
                                             width: 60
                                         }
                                     }),
                                     (0, Component_1.jc)("br", { tag: "br" }),
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Ship Address", bind: this.states.value.bind.ShipAddress, width: 260, ref: this.refs.shipAddress }),
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Ship Address", bind: this.state.value.bind.ShipAddress, width: 260, ref: this.refs.shipAddress }),
                                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                                        label: "Freight", bind: this.states.value.bind.Freight, width: 60, converter: new NumberConverter_1.NumberConverter({ format: "#.##0,00" }), style: {
+                                        label: "Freight", bind: this.state.value.bind.Freight, width: 60, converter: new NumberConverter_1.NumberConverter({ format: "#.##0,00" }), style: {
                                             textAlign: "right"
                                         }
                                     }),
                                     (0, Component_1.jc)("br", { tag: "br" }),
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Postal Code", bind: this.states.value.bind.ShipPostalCode, width: 60, hidden: false, ref: this.refs.shipPostalCode }),
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.ShipCity, label: "Ship City", width: 195, value: "shipCity" }),
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Postal Code", bind: this.state.value.bind.ShipPostalCode, width: 60, hidden: false, ref: this.refs.shipPostalCode }),
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.ShipCity, label: "Ship City", width: 195, value: "shipCity" }),
                                     (0, Component_1.jc)("br", { tag: "br" }),
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Ship Region", bind: this.states.value.bind.ShipRegion, width: 150, ref: this.refs.shipRegion }),
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Ship Region", bind: this.state.value.bind.ShipRegion, width: 150, ref: this.refs.shipRegion }),
                                     "",
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: " Ship Country", bind: this.states.value.bind.ShipCountry, width: 105, ref: this.refs.shipCountry })
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { label: " Ship Country", bind: this.state.value.bind.ShipCountry, width: 105, ref: this.refs.shipCountry })
                                 ],
                                 width: 485
                             }),
                             (0, Component_1.jc)(Panel_1.Panel, {
                                 children: [
-                                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { bind: this.states.value.bind.Customer.CompanyName, label: "Customer", width: 260 }),
+                                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { bind: this.state.value.bind.Customer.CompanyName, label: "Customer", width: 260 }),
                                     (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, {
-                                        autocommit: false, items: "northwind.Customer", bind: this.states.value.bind.Customer, height: 25,
+                                        autocommit: false, items: "northwind.Customer", bind: this.state.value.bind.Customer, height: 25,
                                         onchange: (data) => {
-                                            var cust = this.states.value.Customer.current;
+                                            var cust = this.state.value.Customer.current;
                                             this.refs.shipName.value = cust.CompanyName;
                                             this.refs.shipAddress.value = cust.Address;
                                             this.refs.shipPostalCode.value = cust.PostalCode;
@@ -72,15 +72,15 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                                         }
                                     }),
                                     (0, Component_1.jc)("br", {}),
-                                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { bind: this.states.value.bind.ShipVia, template: "{{id}} {{CompanyName}}", width: 260, label: "Ship Via" }),
-                                    (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, { items: "northwind.Shippers", bind: this.states.value.bind.ShipVia }),
+                                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { bind: this.state.value.bind.ShipVia, template: "{{id}} {{CompanyName}}", width: 260, label: "Ship Via" }),
+                                    (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, { items: "northwind.Shippers", bind: this.state.value.bind.ShipVia }),
                                     (0, Component_1.jc)("br", {}),
-                                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { bind: this.states.value.bind.Employee, template: "{{id}} {{FirstName}} {{LastName}}", width: 260, label: "Employee", height: 20 }),
-                                    (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, { items: "northwind.Employees", bind: this.states.value.bind.Employee }),
+                                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { bind: this.state.value.bind.Employee, template: "{{id}} {{FirstName}} {{LastName}}", width: 260, label: "Employee", height: 20 }),
+                                    (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, { items: "northwind.Employees", bind: this.state.value.bind.Employee }),
                                     (0, Component_1.jc)("br", {}),
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.OrderDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Oder Date", width: 95, text: "Oder Date" }),
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.RequiredDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Required Date", width: 95 }),
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.ShippedDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Shipped Date", width: 95 })
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.OrderDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Oder Date", width: 95, text: "Oder Date" }),
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.RequiredDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Required Date", width: 95 }),
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.ShippedDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Shipped Date", width: 95 })
                                 ]
                             })
                         ]
@@ -91,24 +91,10 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                     (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { value: "Text" }),
                     (0, Component_1.jc)("br", {}),
                     (0, Component_1.jc)(BoxPanel_1.BoxPanel, {
-                        children: (0, State_1.foreach)(this.states.value.Details, (ob) => (0, Component_1.jc)(ProductDetails, {
+                        children: (0, State_1.foreach)(this.state.value.Details, (ob) => (0, Component_1.jc)(ProductDetails, {
                             product: ob
                         }))
                     })
-                    /*jc(Repeater2,{
-                        items: this.states.value.Details,
-                        bind: this.states.activeDetail.bind,
-                        children: [
-                            jc(Panel,{
-                                children: [
-                                    jc(Textbox,{ bind: this.states.activeDetail.bind.Quantity,width: 85 }),
-                                    jc(Textbox,{ bind: this.states.activeDetail.bind.Product.ProductName }),
-                                    jc(ObjectChooser,{ bind: this.states.activeDetail.bind.Product,items: "northwind.Products" })
-                                ]
-                            })
-                        ]
-                    })*/
-                    // this.states.value?.Details===undefined? jc("br", {}):this.props.value.Details.map((detail) => jc(ProductDetails, {product: detail }))
                 ]
             });
         }

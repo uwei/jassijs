@@ -16,8 +16,8 @@ export class GroupView extends DBObjectView<Group> {
         return jc(Panel,{
             children: [
                 jc(DBObjectViewToolbar,{ view: this }),
-                jc(Textbox,{ converter: new NumberConverter(),bind: this.states.value.bind.id,label: "Id" }),
-                jc(Textbox,{ bind: this.states.value.bind.name,label: "Name" })
+                jc(Textbox,{ converter: new NumberConverter(),bind: this.state.value.bind.id,label: "Id" }),
+                jc(Textbox,{ bind: this.state.value.bind.name,label: "Name" })
             ]
         });
     }

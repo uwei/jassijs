@@ -10,7 +10,7 @@ define("de/registry",["require"], function(require) {
 		"de/Dialog2": {}
 	},
 	"de/DialogKunde.ts": {
-		"date": 1722607496323.203,
+		"date": 1740069816811.559,
 		"de.DialogKunde": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -36,7 +36,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/KundeView.ts": {
-		"date": 1722607533813.3318,
+		"date": 1740069816812.5593,
 		"de.KundeView": {
 			"$DBObjectView": [
 				{

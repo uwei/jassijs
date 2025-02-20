@@ -9,6 +9,7 @@ import { classes } from "jassijs/remote/Classes";
 import { $Property } from "jassijs/ui/Property";
 import { Actions, Action } from "jassijs/base/Actions";
 import { MenuItem } from "jassijs/ui/MenuItem";
+import { Container } from "jassijs/ui/Container";
 
 jassijs.includeCSSFile("contextMenu.css");
 declare global {
@@ -54,6 +55,17 @@ export class ContextMenu<T extends ContextMenuProperties=ContextMenuProperties> 
         if(menu instanceof MenuItem)
            this.menu.add(menu); 
     }
+     /**
+   * remove all component
+   * @param {boolean} destroy - if true the component would be destroyed
+   */
+    removeAll(destroy = undefined) {
+        while (this.menu._components?.length > 0) {
+            this.remove(this._components[0]);
+        }
+       
+
+    }
     addBefore(menu:MenuItem,before){
         this.menu.addBefore(menu,before); 
     }
@@ -97,7 +109,8 @@ export class ContextMenu<T extends ContextMenuProperties=ContextMenuProperties> 
 
 
     config(config: T): ContextMenu {
-        super.config(config);
+        if(super.config(config))
+            Container.prototype.createChildren.bind(this)(config);
         return this;
     }
     /**
@@ -127,10 +140,7 @@ export class ContextMenu<T extends ContextMenuProperties=ContextMenuProperties> 
             }
         }
     }
-    protected _setDesignMode(enable) {
-        var h = 9;
-
-    }
+ 
     private async _updateClassActions() {
 
 

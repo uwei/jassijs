@@ -24,13 +24,13 @@ interface KundeProperties extends PanelProperties {
 export class DialogKunde extends Panel<KundeProperties> {
     @$Property({ isUrlTag: true,id: true,editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
     get value(): Kunde {
-        return this.states.value.current;
+        return this.state.value.current;
     }
     set value(val: Kunde) {
-        this.states.value.current=val;
+        this.state.value.current=val;
     }
     set items(val: Kunde[]) {
-        this.states.items.current=val;
+        this.state.items.current=val;
     }
     @$Action({
         name: "Demo",
@@ -40,20 +40,20 @@ export class DialogKunde extends Panel<KundeProperties> {
         this.setdata();
         return jc(Panel,{
             children: [
-                jc(Select,{ bind: this.states.value.bind,width: 500,items: this.states.items,display: "nachname" }),
+                jc(Select,{ bind: this.state.value.bind,width: 500,items: this.state.items,display: "nachname" }),
                 jc("br",{}),
                 jc(Textbox,{
-                    converter: new NumberConverter(),bind: this.states.value.bind.id,label: "Id"
+                    converter: new NumberConverter(),bind: this.state.value.bind.id,label: "Id"
                     
                 }),
-                jc(Textbox,{ bind: this.states.value.bind.vorname,label: "Vorname" }),
+                jc(Textbox,{ bind: this.state.value.bind.vorname,label: "Vorname" }),
                 jc(Textbox,{
-                    bind: this.states.value.bind.nachname,label: "Nachname",
+                    bind: this.state.value.bind.nachname,label: "Nachname",
                 }),
                 jc(Button,{
                     text: "Save",onclick: async (event) => {
-                        this.states.value.bind.$fromForm();
-                        this.states.value.current.save();
+                        this.state.value.bind.$fromForm();
+                        this.state.value.current.save();
                     }
                 })
             ]
@@ -68,7 +68,7 @@ export class DialogKunde extends Panel<KundeProperties> {
     }
     async setdata() {
         var kunden=await Kunde.find();
-        this.states.items.current=kunden;
+        this.state.items.current=kunden;
     }
     get title() {
         return this.value===undefined? "Kunde":"Kunde "+this.value.id;

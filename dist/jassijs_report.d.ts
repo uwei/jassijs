@@ -714,9 +714,7 @@ declare module "jassijs_report/RDatatable" {
     *
     */
         constructor(properties?: any);
-        protected _setDesignMode(enable: any): void;
         addEmptyCellsIfNeeded(row: RTablerow): void;
-        extensionCalled(action: ExtensionAction): void;
         set groupCount(value: number);
         get groupCount(): number;
         fromJSON(obj: any, target?: ReportDesign): any;
@@ -847,7 +845,6 @@ declare module "jassijs_report/ReportDesign" {
         get pageOrientation(): string;
         set pageOrientation(value: string);
         private updateWidth;
-        protected _setDesignMode(enable: any): void;
         private static collectForEach;
         private static getVariable;
         private static addVariablenames;
@@ -856,10 +853,6 @@ declare module "jassijs_report/ReportDesign" {
         private create;
         private static linkStyles;
         toJSON(): any;
-        /**
-       * adds a component to the container
-       * @param {jassijs.ui.Component} component - the component to add
-       */
         private pageSized;
     }
     export function test(): any;
@@ -1050,6 +1043,7 @@ declare module "jassijs_report/RStack" {
     import { RComponent } from "jassijs_report/RComponent";
     export class RStack extends RComponent {
         reporttype: string;
+        _designMode: boolean;
         /**
         *
         * @param {object} properties - properties to init
@@ -1069,6 +1063,7 @@ declare module "jassijs_report/RStack" {
       * @param {jassijs.ui.Component} component - the component to add
       */
         add(component: any): any;
+        extensionCalled(action: ExtensionAction): any;
         toJSON(): any;
         fromJSON(ob: any): RStack;
     }
@@ -1229,6 +1224,7 @@ declare module "jassijs_report/RTablerow" {
     export class RTablerow extends RComponent {
         reporttype: string;
         parent: RTable;
+        _designMode: any;
         forEachDummy: any;
         /**
         *
@@ -1239,6 +1235,7 @@ declare module "jassijs_report/RTablerow" {
         */
         constructor(properties?: {});
         render(): any;
+        extensionCalled(action: ExtensionAction): void;
         oncomponentAdded(callback: any): void;
         get _editorselectthis(): any;
         setChildWidth(component: Component, value: any): void;

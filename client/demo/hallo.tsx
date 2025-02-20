@@ -11,12 +11,8 @@ export interface MyCompProp{
 
 export function MyComp(props:MyCompProp,states:States<MyCompProp>=undefined){
     
-    states._onconfig=(props:MyCompProp)=>{
-        if(props?.mycolor==="red")
-            states.mycolor.current="brown";
-    }
-      //<Panel {{calculateState}}>
-       // <Panel {...{calculateState}}>
+   
+
     return <Panel>
         <input value={states.mytext} />
         <input value={states.mytext} />

@@ -140,10 +140,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
             $(me.IDPanel.dom).dialog("destroy");
         }
         set value(value) {
-            this.states.value.current = value;
+            this.state.value.current = value;
         }
         get value() {
-            return this.states.value.current;
+            return this.state.value.current;
         }
         async loadObjects(classname) {
             var cl = await Classes_1.classes.loadClass(classname);
@@ -184,7 +184,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
             //databinder.checkAutocommit(this);
         }
         destroy() {
-            this.states.value.current = undefined;
+            this.state.value.current = undefined;
             this.me.IDPanel.destroy();
             super.destroy();
         }

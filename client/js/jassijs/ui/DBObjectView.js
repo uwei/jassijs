@@ -39,14 +39,11 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
             super.config(config);
             return this;
         }
-        _setDesignMode(enable) {
-            //no Icons to add Components in designer
-        }
         set value(value) {
-            this.states.value.current = value;
+            this.state.value.current = value;
         }
         get value() {
-            return this.states.value.current;
+            return this.state.value.current;
         }
         /**
          * create a new object
@@ -70,7 +67,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
          * saves the object
          */
         async saveObject() {
-            var ob = await this.states.value.bind.$fromForm();
+            var ob = await this.state.value.bind.$fromForm();
             if (ob !== undefined) {
                 await this.doSave(ob);
                 (0, Notify_1.notify)("saved", "info");
@@ -83,7 +80,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
          * refresh the object
          */
         refreshObject() {
-            this.states.value.bind.$toForm(); //this["value"]);
+            this.state.value.bind.$toForm(); //this["value"]);
             this.callEvent("refreshed", this["value"]);
         }
         onrefreshed(handler) {
@@ -93,7 +90,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
          * deletes Object
          **/
         deleteObject() {
-            var ob = this.states.value.bind.$fromForm();
+            var ob = this.state.value.bind.$fromForm();
             if (ob === undefined)
                 return;
             ob.remove();

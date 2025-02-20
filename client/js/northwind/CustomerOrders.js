@@ -30,13 +30,13 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/HTMLPanel", "jassi
                     (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, {
                         width: 300,
                         value: "Blauer See Delikatessen",
-                        bind: this.states.value.bind.CompanyName,
+                        bind: this.state.value.bind.CompanyName,
                         label: "Company Name",
                         height: 20
                     }),
                     (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, {
                         width: 25,
-                        bind: this.states.value.bind,
+                        bind: this.state.value.bind,
                         items: "northwind.Customer",
                         onchange: function (event) {
                             _this.customerChanged();
@@ -45,18 +45,18 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/HTMLPanel", "jassi
                     (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, {
                         width: 110,
                         value: " ",
-                        bind: this.states.value.bind.Country,
+                        bind: this.state.value.bind.Country,
                         label: "Country"
                     }),
                     (0, Component_1.jc)(Table_1.Table, {
-                        bind: this.states.order.bind,
-                        bindItems: this.states.orders.bind,
+                        bind: this.state.order.bind,
+                        bindItems: this.state.orders.bind,
                         width: "100%",
                         label: "Click an order...",
                         height: "180"
                     }),
                     (0, Component_1.jc)(Table_1.Table, {
-                        bindItems: this.states.order.bind.Details,
+                        bindItems: this.state.order.bind.Details,
                         width: "100%",
                         height: "140",
                         label: "...to see order details"
@@ -68,12 +68,12 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/HTMLPanel", "jassi
             Windows_1.default.add(new CustomerOrders_1(), "Customer Orders");
         }
         async customerChanged() {
-            var cust = this.states.value.current;
-            this.states.orders.current = await Orders_1.Orders.find({
+            var cust = this.state.value.current;
+            this.state.orders.current = await Orders_1.Orders.find({
                 where: "Customer.id=:param",
                 whereParams: { param: cust.id }
             });
-            this.states.order.current = this.states.orders.current.length === 0 ? undefined : this.states.orders.current[0];
+            this.state.order.current = this.state.orders.current.length === 0 ? undefined : this.state.orders.current[0];
             //    this.me.IDOrders.items = orders;
             //   this.me.databinderOrder.value = orders[0];
         }

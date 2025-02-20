@@ -16,8 +16,8 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
             return (0, Component_1.jc)(Panel_1.Panel, {
                 children: [
                     (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { converter: new NumberConverter_1.NumberConverter(), bind: this.states.value.bind.id, label: "Id" }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.name, label: "Name" })
+                    (0, Component_1.jc)(Textbox_1.Textbox, { converter: new NumberConverter_1.NumberConverter(), bind: this.state.value.bind.id, label: "Id" }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.name, label: "Name" })
                 ]
             });
         }

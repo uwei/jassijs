@@ -17,60 +17,60 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "
                 children: [
                     (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.value.bind.id,
+                        bind: this.state.value.bind.id,
                         width: 65,
                         label: "id"
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Contact Name",
-                        bind: this.states.value.bind.ContactName,
+                        bind: this.state.value.bind.ContactName,
                         width: 255
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Contact Title",
-                        bind: this.states.value.bind.ContactTitle,
+                        bind: this.state.value.bind.ContactTitle,
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.value.bind.ContactName,
+                        bind: this.state.value.bind.ContactName,
                         label: "Company Name",
                         width: 155
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.value.bind.Address,
+                        bind: this.state.value.bind.Address,
                         label: "Address",
                         width: 325
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Postal Code",
-                        bind: this.states.value.bind.PostalCode,
+                        bind: this.state.value.bind.PostalCode,
                         width: 90
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "City",
                         width: 230,
-                        bind: this.states.value.bind.City,
+                        bind: this.state.value.bind.City,
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.value.bind.Region,
+                        bind: this.state.value.bind.Region,
                         label: "Region"
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Country",
-                        bind: this.states.value.bind.Country,
+                        bind: this.state.value.bind.Country,
                         width: 155,
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Phone",
-                        bind: this.states.value.bind.Phone,
+                        bind: this.state.value.bind.Phone,
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Fax",
-                        bind: this.states.value.bind.Fax,
+                        bind: this.state.value.bind.Fax,
                         width: 155,
                     })
                 ]

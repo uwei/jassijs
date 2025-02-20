@@ -89,18 +89,6 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
                 handler(ob);
             });
         }
-        extensionCalled(action) {
-            if (action.componentDesignerSetDesignMode) {
-                return this._setDesignMode(action.componentDesignerSetDesignMode.enable);
-            }
-            super.extensionCalled(action);
-        }
-        /**
-        * activates or deactivates designmode
-        * @param {boolean} enable - true if activate designMode
-        */
-        _setDesignMode(enable) {
-        }
         destroy() {
             $(this.dom).menu();
             $(this.dom).menu("destroy");
@@ -120,12 +108,16 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
     ], Menu);
     exports.Menu = Menu;
     function test() {
-        var men = new Menu();
-        var it = new MenuItem_1.MenuItem();
-        it.text = "Hallo";
-        //it.onclick(() => alert("ok"));
-        men.add(it);
-        return men;
+        var men = (0, Component_1.jc)(Menu, {
+            children: [
+                (0, Component_1.jc)(MenuItem_1.MenuItem, {
+                    text: "Hallodd",
+                    children: []
+                }),
+                (0, Component_1.jc)(MenuItem_1.MenuItem, { text: "sdfsdf" })
+            ]
+        });
+        return (0, Component_1.createComponent)(men);
     }
     exports.test = test;
 });

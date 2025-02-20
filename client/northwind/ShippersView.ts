@@ -20,19 +20,19 @@ export class ShippersView extends DBObjectView<Shippers> {
                 jc(DBObjectViewToolbar, { view: this }),
                 jc(Textbox, {
                     converter: new NumberConverter(),
-                    bind: this.states.value.bind.id, //[me.databinder, "id"],
+                    bind: this.state.value.bind.id, //[me.databinder, "id"],
                     label: "Id",
                     width: 40,
                 }),
                 jc(Textbox, {
-                    bind: this.states.value.bind.CompanyName,// [me.databinder, "CompanyName"],
+                    bind: this.state.value.bind.CompanyName,// [me.databinder, "CompanyName"],
                     label: "Company name",
                     width: 160
                 }),
                 jc("br"),
                 jc(Textbox, {
                     width: 215,
-                    bind: this.states.value.bind.Phone,//[me.databinder, "Phone"],
+                    bind: this.state.value.bind.Phone,//[me.databinder, "Phone"],
                     label: "Phone"
                 })
             ]

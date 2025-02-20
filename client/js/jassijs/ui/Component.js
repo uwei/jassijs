@@ -36,7 +36,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (props === undefined || props === null) //TODO is this right?
                 props = {};
             if ((children === null || children === void 0 ? void 0 : children.length) > 0) {
-                props.children = children;
+                if (props.children === undefined)
+                    props.children = children;
+                else {
+                    children.forEach((c) => props.children.push(c));
+                }
             }
             var ret = {
                 props: props,
@@ -57,8 +61,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.props = props;
         }
     };
-    function jc(type, props) {
-        return React.createElement(type, props);
+    function jc(type, props, ...children) {
+        return React.createElement(type, props, ...children);
     }
     exports.jc = jc;
     function createFunctionComponent(type, props, ...children) {
@@ -69,8 +73,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     }
     window.React = React;
     function createComponent(node) {
+        var _a;
         var atype = node.type;
         var props = node.props;
+        var aref = (_a = node.props) === null || _a === void 0 ? void 0 : _a.ref;
         var ret;
         if (atype === undefined)
             debugger;
@@ -81,7 +87,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             ret = new HTMLComponent(props);
         }
         else if (atype.constructor !== undefined) {
-            if (atype.prototype._rerenderMe === undefined) { //Functioncompoment
+            if (atype.prototype.forceUpdate === undefined) { //Functioncompoment
                 var p = props || {};
                 p.renderFunc = atype;
                 ret = new FunctionComponent(p);
@@ -90,38 +96,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 ret = new atype(props);
             }
         }
-        /*if ((<any>node)?.props?.children !== undefined) {
-            if (props === null || props === undefined)
-                props = {};
-            props.children = (<any>node)?.props?.children;
-            for (var x = 0; x < props.children.length; x++) {
-                var child = props.children[x];
-                var cchild;
-                if (typeof child === "string") {
-                    cchild = new TextComponent();
-                    cchild.tag = "";
-                    cchild.text = child;
-                } else if (child?._$isState$_) {
-                    cchild = new TextComponent();
-                    cchild.tag = "";
-                    child?._observe_(cchild, "text", "property");
-                    cchild.text = child.current;
-                } else {
-                    cchild = createComponent(child);
-                }
-                ret.add(cchild);
-            }
-        }*/
-        if (props === null || props === void 0 ? void 0 : props.ref) {
-            props.ref.current = ret;
-            props === null || props === void 0 ? true : delete props.ref;
+        if (aref) {
+            aref.current = ret;
+            //  delete props?.ref;
         }
         return ret;
     }
     exports.createComponent = createComponent;
     function createRef(val = undefined) {
-        var ret;
-        ret.current = val;
+        var ret = { current: val };
         return ret;
     }
     exports.createRef = createRef;
@@ -172,15 +155,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             // if(properties===undefined)
             // properties={};
             this.refs = createRefs();
-            this.states = (0, State_1.createStates)(properties);
+            this.state = (0, State_1.createStates)(properties);
             this.props = properties;
             (0, State_1.resolveState)(this, this.props);
-            this._rerenderMe(true);
+            this.forceUpdate(true); //first Time
             this.config(this.props);
         }
-        _rerenderMe(firstTime = false) {
-            var _a, _b, _c;
-            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.states) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
+        /**
+         * force rerender the component with initial props and changed states
+         */
+        forceUpdate(callback = undefined) {
+            var _a, _b;
+            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.state) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
                 var node = document.createComment(this.constructor.name + " with exists=false");
                 var save = this.props;
                 this.props = {};
@@ -188,23 +174,32 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.props = save;
                 return;
             }
+            var domOld = this.domWrapper;
             //@ts-ignore
-            var rend = this.render(this.states);
+            var rend = this.render(this.state);
             if (rend) {
                 if (rend instanceof Node) {
                     this._initComponent(rend);
                 }
                 else {
-                    if ((_c = rend === null || rend === void 0 ? void 0 : rend.props) === null || _c === void 0 ? void 0 : _c.calculateState) {
-                        this.calculateState = rend.props.calculateState;
-                        delete rend.props.calculateState;
-                    }
                     var comp = createComponent(rend);
                     this._initComponent(comp.dom);
                 }
             }
-            if (firstTime)
+            if (domOld === null || domOld === void 0 ? void 0 : domOld.parentNode) {
+                domOld.parentNode.replaceChild(this.dom, domOld);
+            }
+            //@ts-ignore
+            if (callback === true)
                 this.componentDidMount();
+            else {
+                var props = Object.assign({}, this.props);
+                var keys = this.state._used;
+                keys.forEach((k) => props[k] = this.state[k].current);
+                this.config(props);
+                if (callback !== undefined)
+                    callback();
+            }
         }
         componentDidMount() {
         }
@@ -217,8 +212,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
               this.config(this.lastconfig);
           }*/
         config(config) {
-            var _a, _b, _c, _d;
-            if ((config === null || config === void 0 ? void 0 : config.exists) === false || ((config === null || config === void 0 ? void 0 : config.exists) === undefined && ((_b = (_a = this.states) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false)) {
+            var _a, _b, _c;
+            if ((config === null || config === void 0 ? void 0 : config.exists) === false || ((config === null || config === void 0 ? void 0 : config.exists) === undefined && ((_b = (_a = this.state) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false)) {
                 if ((config === null || config === void 0 ? void 0 : config.exists) === false)
                     this.exists = false;
                 return undefined;
@@ -248,26 +243,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                             me[key] = config[key];
                     }
                 }
-                else if (this.states && this.states._used.indexOf(key) !== -1) {
-                    this.states[key].current = config[key];
+                else if (this.state && this.state._used.indexOf(key) !== -1) {
+                    this.state[key].current = config[key];
                 }
                 else
                     notfound[key] = con;
             }
-            if ((_d = this.states) === null || _d === void 0 ? void 0 : _d._onconfig)
-                this.states._onconfig(config);
             Object.assign(this.props === undefined ? {} : this.props, config);
-            if (Object.keys(notfound).length > 0) {
-                if (this.calculateState) {
-                    this.calculateState(config);
-                    return this;
-                }
-                /* var rerender = this.render();
-                 if (rerender) {
-                     this.init(createComponent(rerender).dom);
-                     
-                 }*/
-            }
             return this;
             //    return new c();
         }
@@ -314,17 +296,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             return ret;
         }
         get exists() {
-            return this.states.exists.current;
+            return this.state.exists.current;
         }
         set exists(value) {
-            var old = this.states.exists.current;
-            this.states.exists.current = value;
+            var old = this.state.exists.current;
+            this.state.exists.current = value;
             if (old !== value) {
-                this._rerenderMe(false);
-                var props = Object.assign({}, this.props);
-                var keys = this.states._used;
-                keys.forEach((k) => props[k] = this.states[k].current);
-                this.config(props);
+                this.forceUpdate();
             }
         }
         /**
@@ -513,7 +491,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.dom.setAttribute("id", olddom.getAttribute("id"));
         }
         set label(value) {
-            this.states.label.current = value;
+            this.state.label.current = value;
             if (value !== undefined)
                 this.useWrapper = true;
             if (value === undefined) {
@@ -531,7 +509,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             }
         }
         get label() {
-            return this.states.label.current; //this.domWrapper.querySelector(".jlabel")?.innerHTML;
+            return this.state.label.current; //this.domWrapper.querySelector(".jlabel")?.innerHTML;
         }
         get tooltip() {
             return this.dom.getAttribute("title");
@@ -545,7 +523,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         set x(value) {
             this.domWrapper.style.left = value.toString().replace("px", "") + "px";
             this.domWrapper.style.position = "absolute";
-            this.states.x.current = value;
+            this.state.x.current = value;
         }
         get y() {
             return Number(this.domWrapper.style.top.replace("px", ""));
@@ -553,7 +531,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         set y(value) {
             this.domWrapper.style.top = value.toString().replace("px", "") + "px";
             this.domWrapper.style.position = "absolute";
-            this.states.y.current = value;
+            this.state.y.current = value;
         }
         get hidden() {
             return (this.dom.getAttribute("hidden") === "");
@@ -579,7 +557,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.domWrapper.style.width = "";
                 this.dom.style.width = value.toString();
             }
-            this.states.width.current = value;
+            this.state.width.current = value;
             //  
         }
         get width() {
@@ -602,7 +580,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.domWrapper.style.height = "";
                 this.dom.style.height = value.toString();
             }
-            this.states.height.current = value;
+            this.state.height.current = value;
         }
         get height() {
             if (this.domWrapper.style.height !== undefined)
@@ -703,21 +681,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         extensionCalled(action) {
         }
-        /**
-         * @deprecated React things-not implemented
-         */
-        /**
-        * @deprecated React things-not implemented
-        */
-        setState() {
-            throw new Error("not implemented");
-        }
-        /**
-         * @deprecated React things-not implemented
-         */
-        forceUpdate() {
-            throw new Error("not implemented");
-        }
     };
     Component._componentHook = [];
     __decorate([
@@ -799,7 +762,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         tag?: string;
         children?;
         renderFunc;
-        calculateState?: (prop) => void;
     }*/
     class FunctionComponent extends Component {
         constructor(properties) {
@@ -812,12 +774,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         render() {
             var Rend = this.props.renderFunc;
-            var ret = new Rend(this.props, this.states);
-            if (ret.props.calculateState) {
-                //@ts-ignore
-                this.calculateState = ret.props.calculateState;
-                //this.calculateState(this.props);
-            }
+            var ret = new Rend(this.props, this.state);
             return ret;
         }
         /**
@@ -1033,7 +990,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         */
         add(component) {
             var _a, _b;
-            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.states) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
+            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.state) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
                 return;
             }
             if (component._parent !== undefined) {

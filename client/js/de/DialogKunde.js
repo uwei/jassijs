@@ -13,31 +13,31 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel", "de/re
     exports.test = exports.DialogKunde = void 0;
     let DialogKunde = class DialogKunde extends Panel_1.Panel {
         get value() {
-            return this.states.value.current;
+            return this.state.value.current;
         }
         set value(val) {
-            this.states.value.current = val;
+            this.state.value.current = val;
         }
         set items(val) {
-            this.states.items.current = val;
+            this.state.items.current = val;
         }
         render() {
             this.setdata();
             return (0, Component_2.jc)(Panel_1.Panel, {
                 children: [
-                    (0, Component_2.jc)(Select_1.Select, { bind: this.states.value.bind, width: 500, items: this.states.items, display: "nachname" }),
+                    (0, Component_2.jc)(Select_1.Select, { bind: this.state.value.bind, width: 500, items: this.state.items, display: "nachname" }),
                     (0, Component_2.jc)("br", {}),
                     (0, Component_2.jc)(Textbox_1.Textbox, {
-                        converter: new NumberConverter_1.NumberConverter(), bind: this.states.value.bind.id, label: "Id"
+                        converter: new NumberConverter_1.NumberConverter(), bind: this.state.value.bind.id, label: "Id"
                     }),
-                    (0, Component_2.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.vorname, label: "Vorname" }),
+                    (0, Component_2.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.vorname, label: "Vorname" }),
                     (0, Component_2.jc)(Textbox_1.Textbox, {
-                        bind: this.states.value.bind.nachname, label: "Nachname",
+                        bind: this.state.value.bind.nachname, label: "Nachname",
                     }),
                     (0, Component_2.jc)(Button_1.Button, {
                         text: "Save", onclick: async (event) => {
-                            this.states.value.bind.$fromForm();
-                            this.states.value.current.save();
+                            this.state.value.bind.$fromForm();
+                            this.state.value.current.save();
                         }
                     })
                 ]
@@ -48,7 +48,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel", "de/re
         }
         async setdata() {
             var kunden = await Kunde_1.Kunde.find();
-            this.states.items.current = kunden;
+            this.state.items.current = kunden;
         }
         get title() {
             return this.value === undefined ? "Kunde" : "Kunde " + this.value.id;

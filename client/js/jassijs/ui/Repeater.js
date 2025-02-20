@@ -25,16 +25,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         onchange(handler) {
         }
         set value(value) {
-            this.states.value.current = value;
+            this.state.value.current = value;
         }
         get value() {
-            return this.states.value.current;
+            return this.state.value.current;
         }
         set items(value) {
-            this.states.items.current = value;
+            this.state.items.current = value;
         }
         get items() {
-            return this.states.items.current;
+            return this.state.items.current;
         }
         /* get bindItems() {
              return this._bindItems;
@@ -193,28 +193,28 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         render() {
             return (0, Component_1.jc)(Repeater, {
                 items: data,
-                bind: this.states.customer.bind,
+                bind: this.state.customer.bind,
                 children: [
                     (0, Component_1.jc)(Panel_1.Panel, {
                         children: [
-                            (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.customer.bind.id }),
+                            (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.customer.bind.id }),
                             (0, Component_1.jc)(Textbox_1.Textbox, {
-                                bind: this.states.customer.bind.name
+                                bind: this.state.customer.bind.name
                             }),
                             (0, Component_1.jc)(Button_1.Button, {
                                 text: "go",
                                 onclick: () => {
-                                    alert(this.states.customer.current.name);
+                                    alert(this.state.customer.current.name);
                                 }
                             }),
                             (0, Component_1.jc)(Table_1.Table, {
                                 height: 100,
                                 width: 100,
-                                bind: this.states.activeChild.bind,
-                                bindItems: this.states.customer.bind.childs
+                                bind: this.state.activeChild.bind,
+                                bindItems: this.state.customer.bind.childs
                             }),
                             (0, Component_1.jc)(Textbox_1.Textbox, {
-                                bind: this.states.activeChild.bind.name
+                                bind: this.state.activeChild.bind.name
                             }),
                         ]
                     })

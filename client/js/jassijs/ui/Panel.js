@@ -21,7 +21,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         */
         constructor(properties = {}) {
             super(properties);
-            this._designMode = false;
             this.isAbsolute = (properties === null || properties === void 0 ? void 0 : properties.isAbsolute) === true;
         }
         render() {
@@ -29,21 +28,21 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
             return React.createElement(tag, Object.assign(Object.assign({}, this.props.domProperties), { className: "Panel" }));
         }
         set isAbsolute(value) {
-            this._isAbsolute = value;
+            this.state.isAbsolute.current = value;
             if (this.dom.classList) {
                 if (value)
                     this.dom.classList.add("jabsolutelayout");
                 else
                     this.dom.classList.remove("jabsolutelayout");
             }
-            if (this._designMode !== undefined)
-                this._setDesignMode(this._designMode);
-            if (this._designMode && this._activeComponentDesigner) {
-                this._activeComponentDesigner.editDialog(true);
-            }
+            // if (this._designMode !== undefined)
+            //    this._setDesignMode(this._designMode);
+            //if (this._designMode && this._activeComponentDesigner) {
+            //    this._activeComponentDesigner.editDialog(true);
+            // }
         }
         get isAbsolute() {
-            return this._isAbsolute;
+            return this.state.isAbsolute.current;
         }
         max() {
             if (this._id == "body") {
@@ -55,13 +54,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
                 this.domWrapper.style.height = "100%";
             }
         }
-        extensionCalled(action) {
+        /*extensionCalled(action: ExtensionAction) {
             if (action.componentDesignerSetDesignMode) {
                 this._activeComponentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
-                return this._setDesignMode(action.componentDesignerSetDesignMode.enable);
+                return action.componentDesignerSetDesignMode.enable;
             }
             super.extensionCalled(action);
-        }
+        }*/
         /**
         * adds a component to the container
         * @param {jassijs.ui.Component} component - the component to add
@@ -79,15 +78,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
             //   $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
             return super.addBefore(component, before);
         }
-        /**
-         * activates or deactivates designmode
-         * @param {boolean} enable - true if activate designMode
-         */
-        _setDesignMode(enable) {
-        }
         destroy() {
             super.destroy();
-            this._activeComponentDesigner = undefined;
         }
     };
     __decorate([

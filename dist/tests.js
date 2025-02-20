@@ -430,7 +430,7 @@ define("tests/registry", ["require"], function (require) {
                 "tests/TestDialog": {}
             },
             "tests/TestRepeating.ts": {
-                "date": 1722193753694.9727
+                "date": 1740069952455.7803
             }
         }
     };
@@ -717,33 +717,33 @@ define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "ja
         { id: 2, name: "Moritz", childs: [{ name: "Clara" }, { name: "Heidi" }] },
         { id: 3, name: "Heinz", childs: [{ name: "Rosa" }, { name: "Luise" }] },
     ];
-    function DetailComponent(props, states = {}) {
+    function DetailComponent(props, state = {}) {
         var ret = (0, Component_1.jc)("div", {
             children: [
                 (0, Component_1.jc)(Textbox_1.Textbox, {
-                    bind: states.value.bind.id
+                    bind: state.value.bind.id
                 }),
                 (0, Component_1.jc)(Textbox_1.Textbox, {
-                    bind: states.value.bind.name
+                    bind: state.value.bind.name
                 }),
                 (0, Component_1.jc)(Table_1.Table, {
                     height: 100,
                     width: 100,
-                    bind: states.activeChild.bind,
-                    bindItems: states.value.bind.childs
+                    bind: state.activeChild.bind,
+                    bindItems: state.value.bind.childs
                 }),
                 (0, Component_1.jc)(Textbox_1.Textbox, {
-                    bind: states.activeChild.bind.name
+                    bind: state.activeChild.bind.name
                 }),
                 (0, Component_1.jc)(Button_2.Button, { text: "erter", onclick: () => {
-                        alert(states.activeChild.current.name);
+                        alert(state.activeChild.current.name);
                     } }),
                 (0, Component_1.jc)("br")
             ]
         });
         return ret;
     }
-    function MainComponent(props, states) {
+    function MainComponent(props, state) {
         var ch = props.items.map(item => (0, Component_1.jc)(DetailComponent, { value: item }));
         var ret = (0, Component_1.jc)("span", {
             children: ch
@@ -907,7 +907,7 @@ define("tests/registry", ["require"], function (require) {
                 "tests/TestDialog": {}
             },
             "tests/TestRepeating.ts": {
-                "date": 1722193753694.9727
+                "date": 1740069952455.7803
             }
         }
     };

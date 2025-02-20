@@ -45,6 +45,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 return component.addToParent(this);
             super.add(component);
         }
+        extensionCalled(action) {
+            if (action.componentDesignerSetDesignMode) {
+                this._designMode = action.componentDesignerSetDesignMode.enable;
+            }
+            super.extensionCalled(action);
+            return undefined;
+        }
         toJSON() {
             var ret = super.toJSON();
             ret.stack = [];

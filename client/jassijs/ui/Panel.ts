@@ -21,8 +21,6 @@ export interface PanelProperties extends ContainerProperties {
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" })
 @$Property({ name: "new/useSpan", type: "boolean", default: false })
 export class Panel<T extends PanelProperties = PanelProperties> extends Container<T> implements PanelProperties {
-    _isAbsolute: boolean;
-    private _activeComponentDesigner: any;
     /**
     * 
     * @param {object} properties - properties to init
@@ -32,7 +30,6 @@ export class Panel<T extends PanelProperties = PanelProperties> extends Containe
     */
     constructor(properties: T = <any>{}) {//id connect to existing(not reqired)
         super(properties);
-        this._designMode = false;
         this.isAbsolute = properties?.isAbsolute === true;
     }
     render(): React.ReactElement {
@@ -41,21 +38,21 @@ export class Panel<T extends PanelProperties = PanelProperties> extends Containe
     }
     @$Property()
     set isAbsolute(value: boolean) {
-        this._isAbsolute = value;
+        this.state.isAbsolute.current = value;
         if (this.dom.classList) {
             if (value)
                 this.dom.classList.add("jabsolutelayout");
             else
                 this.dom.classList.remove("jabsolutelayout");
         }
-        if (this._designMode !== undefined)
-            this._setDesignMode(this._designMode);
-        if (this._designMode && this._activeComponentDesigner) {
-            this._activeComponentDesigner.editDialog(true);
-        }
+       // if (this._designMode !== undefined)
+        //    this._setDesignMode(this._designMode);
+        //if (this._designMode && this._activeComponentDesigner) {
+        //    this._activeComponentDesigner.editDialog(true);
+       // }
     }
     get isAbsolute(): boolean {
-        return this._isAbsolute;
+        return this.state.isAbsolute.current;
     }
     max() {
         if (this._id == "body") {
@@ -66,13 +63,13 @@ export class Panel<T extends PanelProperties = PanelProperties> extends Containe
             this.domWrapper.style.height = "100%";
         }
     }
-    extensionCalled(action: ExtensionAction) {
+    /*extensionCalled(action: ExtensionAction) {
         if (action.componentDesignerSetDesignMode) {
             this._activeComponentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
-            return this._setDesignMode(action.componentDesignerSetDesignMode.enable);
+            return action.componentDesignerSetDesignMode.enable;
         }
         super.extensionCalled(action);
-    }
+    }*/
     /**
     * adds a component to the container
     * @param {jassijs.ui.Component} component - the component to add
@@ -91,18 +88,11 @@ export class Panel<T extends PanelProperties = PanelProperties> extends Containe
         //   $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
         return super.addBefore(component, before);
     }
-    /**
-     * activates or deactivates designmode
-     * @param {boolean} enable - true if activate designMode
-     */
-    protected _setDesignMode(enable) {
-
-
-    }
+   
     destroy() {
 
         super.destroy();
-        this._activeComponentDesigner = undefined;
+   
     }
 }
 

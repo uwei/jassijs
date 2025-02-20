@@ -27,27 +27,27 @@ export class EmployeesView extends DBObjectView<Employees> {
                 jc(DBObjectViewToolbar, { view: this }),
                 jc(Textbox, {
                     label: "Id",
-                    bind: this.states.value.bind.id,
+                    bind: this.state.value.bind.id,
                     width: 60,
                     converter: new NumberConverter()
                 }),
                 jc(Textbox, {
                     label: "First name",
-                    bind: this.states.value.bind.FirstName,
+                    bind: this.state.value.bind.FirstName,
                 }),
                 jc(Textbox, {
                     label: "Last Name",
-                    bind: this.states.value.bind.LastName,
+                    bind: this.state.value.bind.LastName,
                 }),
                 jc(Textbox, {
-                    bind: this.states.value.bind.Title,
+                    bind: this.state.value.bind.Title,
                     label: "Title",
                     width: 90
                 }),
                 jc(Textbox, {
                     label: "Title of C.",
                     width: 85,
-                    bind: this.states.value.bind.TitleOfCourtesy
+                    bind: this.state.value.bind.TitleOfCourtesy
                 }),
                 jc("br"),
                 jc(BoxPanel, {
@@ -57,47 +57,47 @@ export class EmployeesView extends DBObjectView<Employees> {
                             children: [
                                 jc(Textbox, {
                                     label: "Address",
-                                    bind: this.states.value.bind.Address,
+                                    bind: this.state.value.bind.Address,
                                     width: 345
                                 }),
                                 jc("br"),
                                 jc(Textbox, {
                                     label: "Postal Code",
-                                    bind: this.states.value.bind.PostalCode,
+                                    bind: this.state.value.bind.PostalCode,
                                     width: 90
                                 }),
                                 jc(Textbox, {
-                                    bind: this.states.value.bind.City,
+                                    bind: this.state.value.bind.City,
                                     label: "City",
                                     width: 240
                                 }),
                                 jc("br"),
                                 jc(Textbox, {
-                                    bind: this.states.value.bind.Region,
+                                    bind: this.state.value.bind.Region,
                                     label: "Region",
                                     width: 90
                                 }),
                                 jc(Textbox, {
-                                    bind: this.states.value.bind.Country,
+                                    bind: this.state.value.bind.Country,
                                     label: "country",
                                     width: 240
                                 }),
                                 jc("br"),
                                 jc(Textbox, {
                                     width: 100,
-                                    bind: this.states.value.bind.BirthDate,
+                                    bind: this.state.value.bind.BirthDate,
                                     label: "Birth Date",
                                     converter: new DateTimeConverter()
                                 }),
                                 jc(Textbox, {
-                                    bind: this.states.value.bind.HireDate,
+                                    bind: this.state.value.bind.HireDate,
                                     label: "Hire Date",
                                     width: 95,
                                     converter: new DateTimeConverter()
                                 }),
                                 jc("br"),
                                 jc(Textbox, {
-                                    bind: this.states.value.bind.HomePhone,
+                                    bind: this.state.value.bind.HomePhone,
                                     label: "Home Phone",
                                     width: 130
                                 })
@@ -106,7 +106,7 @@ export class EmployeesView extends DBObjectView<Employees> {
                         jc(Textarea, {
                             width: 240,
                             height: 155,
-                            bind: this.states.value.bind.Notes,
+                            bind: this.state.value.bind.Notes,
                             label: "Notes"
                         }),
                         jc(Image, {
@@ -115,12 +115,12 @@ export class EmployeesView extends DBObjectView<Employees> {
                                 backgroundColor: "black",
                                 borderStyle: "solid"
                             }
-                            , width: 125, bind: this.states.value.bind.PhotoPath
+                            , width: 125, bind: this.state.value.bind.PhotoPath
                         }),
                     ]
                 }),
                 jc(Textbox, {
-                    bind: this.states.value.bind.PhotoPath,
+                    bind: this.state.value.bind.PhotoPath,
                     label: "Photo Path",
                     width: 460
                 }),
@@ -130,16 +130,16 @@ export class EmployeesView extends DBObjectView<Employees> {
                     label: "Reports To",
                     children: [
                         jc(HTMLPanel, {
-                            bind: this.states.value.bind.ReportsTo.FirstName
+                            bind: this.state.value.bind.ReportsTo.FirstName
                         }),
                         " ",
                         jc(HTMLPanel, {
-                            bind: this.states.value.bind.ReportsTo.LastName
+                            bind: this.state.value.bind.ReportsTo.LastName
                         }),
                         jc(ObjectChooser, {
                             width: 25,
                             height: 25,
-                            bind: this.states.value.bind.ReportsTo,
+                            bind: this.state.value.bind.ReportsTo,
                             items: "northwind.Employees"
                         })
                     ]
@@ -150,7 +150,7 @@ export class EmployeesView extends DBObjectView<Employees> {
     /*
      jc(HTMLPanel, {
                         label: "Reports To",
-                        bind: this.states.value.bind.ReportsTo,
+                        bind: this.state.value.bind.ReportsTo,
                         template: "{{FirstName}} {{LastName}}",
                         width: 160
                     }),*/

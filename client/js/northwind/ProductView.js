@@ -18,33 +18,33 @@ define(["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel"
             return (0, Component_1.jc)(Panel_1.Panel, {
                 children: [
                     (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Id", bind: this.states.value.bind.id, converter: new NumberConverter_1.NumberConverter() }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.ProductName, label: "Product Name", width: 375, height: 25 }),
-                    (0, Component_1.jc)(Checkbox_1.Checkbox, { label: "Discounted", bind: this.states.value.bind.Discontinued }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Id", bind: this.state.value.bind.id, converter: new NumberConverter_1.NumberConverter() }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.ProductName, label: "Product Name", width: 375, height: 25 }),
+                    (0, Component_1.jc)(Checkbox_1.Checkbox, { label: "Discounted", bind: this.state.value.bind.Discontinued }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Quantity per Unit", bind: this.states.value.bind.QuantityPerUnit }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { label: "Quantity per Unit", bind: this.state.value.bind.QuantityPerUnit }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.value.bind.UnitPrice, converter: new NumberConverter_1.NumberConverter({
+                        bind: this.state.value.bind.UnitPrice, converter: new NumberConverter_1.NumberConverter({
                             format: "#.##0,00"
                         }), label: "Unit Price",
                         width: 70
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        label: "Units in Stock", bind: this.states.value.bind.UnitsInStock, converter: new NumberConverter_1.NumberConverter({
+                        label: "Units in Stock", bind: this.state.value.bind.UnitsInStock, converter: new NumberConverter_1.NumberConverter({
                             format: "#.##0,00"
                         }), width: 80
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.value.bind.UnitsOnOrder, converter: new NumberConverter_1.NumberConverter({
+                        bind: this.state.value.bind.UnitsOnOrder, converter: new NumberConverter_1.NumberConverter({
                             format: "#.##0,00"
                         }), label: "Units on Order", width: 80
                     }),
-                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.states.value.bind.ReorderLevel, label: "Reorder Level", width: 185 }),
+                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.ReorderLevel, label: "Reorder Level", width: 185 }),
                     (0, Component_1.jc)("br", {}),
-                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { label: "Category", bind: this.states.value.bind.Category.CategoryName, width: 245 }),
-                    (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, { bind: this.states.value.bind.Category, items: "northwind.Categories" }),
-                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { label: "Supplier", bind: this.states.value.bind.Supplier.CompanyName, width: 310 }),
-                    (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, { bind: this.states.value.bind.Supplier, items: "northwind.Suppliers" })
+                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { label: "Category", bind: this.state.value.bind.Category.CategoryName, width: 245 }),
+                    (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, { bind: this.state.value.bind.Category, items: "northwind.Categories" }),
+                    (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { label: "Supplier", bind: this.state.value.bind.Supplier.CompanyName, width: 310 }),
+                    (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, { bind: this.state.value.bind.Supplier, items: "northwind.Suppliers" })
                 ]
             });
         }

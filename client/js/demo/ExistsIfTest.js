@@ -17,14 +17,22 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Panel", "jassi
         var stateExists = (0, State_1.createState)(false);
         var stateText = (0, State_1.createState)("Haa");
         var ret = new Panel_1.Panel();
-        var e = new Button_1.Button({ text: stateText, onclick: () => {
+        var e = new Button_1.Button({
+            text: stateText.self, onclick: () => {
                 stateExists.current = true;
             }
         });
         ret.add(e);
-        var e2 = new Button_1.Button({ text: stateText, exists: stateExists });
+        var e2 = new Button_1.Button({
+            text: stateText.self, exists: stateExists.self,
+            onclick: () => {
+                stateText.current = "kkk";
+                e2.forceUpdate();
+            }
+        });
         ret.add(e2);
-        var e3 = new Button_1.Button({ text: "hide", onclick: () => {
+        var e3 = new Button_1.Button({
+            text: "hide", onclick: () => {
                 debugger;
                 stateExists.current = false;
                 stateText.current = "textneu";

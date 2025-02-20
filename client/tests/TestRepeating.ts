@@ -38,16 +38,16 @@ export class Repeater2<T extends RepeaterProperties = RepeaterProperties> extend
     onchange(handler) {
     }
     set value(value) {
-        this.states.value.current = value;
+        this.state.value.current = value;
     }
     get value() {
-        return this.states.value.current;
+        return this.state.value.current;
     }
     set items(value) {
-        this.states.items.current = value;
+        this.state.items.current = value;
     }
     get items() {
-        return this.states.items.current;
+        return this.state.items.current;
     }
     private duplicateChildren(children: any[], state: State) {
         var ret = [];
@@ -188,28 +188,28 @@ class TestComp extends Component<TestCompProperties> {
     render() {
         return jc(Repeater2, {
             items: data,
-            bind: this.states.customer.bind,
+            bind: this.state.customer.bind,
             children: [
                 jc(Panel, {
                     children: [
-                        jc(Textbox, { bind: this.states.customer.bind.id }),
+                        jc(Textbox, { bind: this.state.customer.bind.id }),
                         jc(Textbox, {
-                            bind: this.states.customer.bind.name
+                            bind: this.state.customer.bind.name
                         }),
                         jc(Button, {
                             text: "go",
                             onclick: () => {
-                                alert(this.states.customer.current.name);
+                                alert(this.state.customer.current.name);
                             }
                         }),
                         jc(Table, {
                             height: 100,
                             width: 100,
-                            bind: this.states.activeChild.bind,
-                            bindItems: this.states.customer.bind.childs
+                            bind: this.state.activeChild.bind,
+                            bindItems: this.state.customer.bind.childs
                         }),
                         jc(Textbox, {
-                            bind: this.states.activeChild.bind.name
+                            bind: this.state.activeChild.bind.name
                         }),
                     ]
                 })
@@ -231,26 +231,26 @@ interface DetailComponentProperties {
     value?: Customer;
     activeChild?: Customer;
 }
-function DetailComponent(props: DetailComponentProperties, states: States<DetailComponentProperties> = {}) {
+function DetailComponent(props: DetailComponentProperties, state: States<DetailComponentProperties> = {}) {
     var ret = jc("div", {
         children: [
             jc(Textbox, {
-                bind: states.value.bind.id
+                bind: state.value.bind.id
             }),
             jc(Textbox, {
-                bind: states.value.bind.name
+                bind: state.value.bind.name
             }),
             jc(Table, {
                 height: 100,
                 width: 100,
-                bind: states.activeChild.bind,
-                bindItems: states.value.bind.childs
+                bind: state.activeChild.bind,
+                bindItems: state.value.bind.childs
             }),
             jc(Textbox, {
-                bind: states.activeChild.bind.name
+                bind: state.activeChild.bind.name
             }),
             jc(Button, { text: "erter",onclick:()=>{
-                alert(states.activeChild.current.name);
+                alert(state.activeChild.current.name);
             } }),
             jc("br")
         ]
@@ -260,7 +260,7 @@ function DetailComponent(props: DetailComponentProperties, states: States<Detail
 interface MainComponentProperties {
     items?: Customer[];
 }
-function MainComponent(props: MainComponentProperties, states: States<MainComponentProperties>) {
+function MainComponent(props: MainComponentProperties, state: States<MainComponentProperties>) {
     var ch = props.items.map(item => jc(DetailComponent, { value: item }));
     var ret = jc("span", {
         children: ch

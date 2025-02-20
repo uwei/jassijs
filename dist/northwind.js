@@ -25,24 +25,24 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
                     (0, Component_1.jc)(DBObjectView_1.DBObjectViewToolbar, { view: this }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Id",
-                        bind: this.states.value.bind.id,
+                        bind: this.state.value.bind.id,
                         width: 40,
                         converter: new NumberConverter_1.NumberConverter()
                     }),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
                         label: "Name",
-                        bind: this.states.value.bind.CategoryName,
+                        bind: this.state.value.bind.CategoryName,
                         width: 235
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textarea_1.Textarea, {
                         label: "Description",
-                        bind: this.states.value.bind.Description,
+                        bind: this.state.value.bind.Description,
                         width: 280
                     }),
                     (0, Component_1.jc)(Table_1.Table, {
                         height: "100%",
-                        bindItems: this.states.value.bind.Products,
+                        bindItems: this.state.value.bind.Products,
                         width: "100%"
                     }),
                 ]
@@ -87,13 +87,13 @@ define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "j
                     (0, Component_2.jc)(HTMLPanel_1.HTMLPanel, {
                         width: 300,
                         value: "Blauer See Delikatessen",
-                        bind: this.states.value.bind.CompanyName,
+                        bind: this.state.value.bind.CompanyName,
                         label: "Company Name",
                         height: 20
                     }),
                     (0, Component_2.jc)(ObjectChooser_1.ObjectChooser, {
                         width: 25,
-                        bind: this.states.value.bind,
+                        bind: this.state.value.bind,
                         items: "northwind.Customer",
                         onchange: function (event) {
                             _this.customerChanged();
@@ -102,18 +102,18 @@ define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "j
                     (0, Component_2.jc)(HTMLPanel_1.HTMLPanel, {
                         width: 110,
                         value: " ",
-                        bind: this.states.value.bind.Country,
+                        bind: this.state.value.bind.Country,
                         label: "Country"
                     }),
                     (0, Component_2.jc)(Table_2.Table, {
-                        bind: this.states.order.bind,
-                        bindItems: this.states.orders.bind,
+                        bind: this.state.order.bind,
+                        bindItems: this.state.orders.bind,
                         width: "100%",
                         label: "Click an order...",
                         height: "180"
                     }),
                     (0, Component_2.jc)(Table_2.Table, {
-                        bindItems: this.states.order.bind.Details,
+                        bindItems: this.state.order.bind.Details,
                         width: "100%",
                         height: "140",
                         label: "...to see order details"
@@ -125,12 +125,12 @@ define("northwind/CustomerOrders", ["require", "exports", "jassijs/ui/Table", "j
             Windows_1.default.add(new CustomerOrders_1(), "Customer Orders");
         }
         async customerChanged() {
-            var cust = this.states.value.current;
-            this.states.orders.current = await Orders_1.Orders.find({
+            var cust = this.state.value.current;
+            this.state.orders.current = await Orders_1.Orders.find({
                 where: "Customer.id=:param",
                 whereParams: { param: cust.id }
             });
-            this.states.order.current = this.states.orders.current.length === 0 ? undefined : this.states.orders.current[0];
+            this.state.order.current = this.state.orders.current.length === 0 ? undefined : this.state.orders.current[0];
             //    this.me.IDOrders.items = orders;
             //   this.me.databinderOrder.value = orders[0];
         }
@@ -229,60 +229,60 @@ define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "j
                 children: [
                     (0, Component_4.jc)(DBObjectView_3.DBObjectViewToolbar, { view: this }),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
-                        bind: this.states.value.bind.id,
+                        bind: this.state.value.bind.id,
                         width: 65,
                         label: "id"
                     }),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Contact Name",
-                        bind: this.states.value.bind.ContactName,
+                        bind: this.state.value.bind.ContactName,
                         width: 255
                     }),
                     (0, Component_4.jc)("br"),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Contact Title",
-                        bind: this.states.value.bind.ContactTitle,
+                        bind: this.state.value.bind.ContactTitle,
                     }),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
-                        bind: this.states.value.bind.ContactName,
+                        bind: this.state.value.bind.ContactName,
                         label: "Company Name",
                         width: 155
                     }),
                     (0, Component_4.jc)("br"),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
-                        bind: this.states.value.bind.Address,
+                        bind: this.state.value.bind.Address,
                         label: "Address",
                         width: 325
                     }),
                     (0, Component_4.jc)("br"),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Postal Code",
-                        bind: this.states.value.bind.PostalCode,
+                        bind: this.state.value.bind.PostalCode,
                         width: 90
                     }),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "City",
                         width: 230,
-                        bind: this.states.value.bind.City,
+                        bind: this.state.value.bind.City,
                     }),
                     (0, Component_4.jc)("br"),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
-                        bind: this.states.value.bind.Region,
+                        bind: this.state.value.bind.Region,
                         label: "Region"
                     }),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Country",
-                        bind: this.states.value.bind.Country,
+                        bind: this.state.value.bind.Country,
                         width: 155,
                     }),
                     (0, Component_4.jc)("br"),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Phone",
-                        bind: this.states.value.bind.Phone,
+                        bind: this.state.value.bind.Phone,
                     }),
                     (0, Component_4.jc)(Textbox_2.Textbox, {
                         label: "Fax",
-                        bind: this.states.value.bind.Fax,
+                        bind: this.state.value.bind.Fax,
                         width: 155,
                     })
                 ]
@@ -319,27 +319,27 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/
                     (0, Component_5.jc)(DBObjectView_4.DBObjectViewToolbar, { view: this }),
                     (0, Component_5.jc)(Textbox_3.Textbox, {
                         label: "Id",
-                        bind: this.states.value.bind.id,
+                        bind: this.state.value.bind.id,
                         width: 60,
                         converter: new NumberConverter_2.NumberConverter()
                     }),
                     (0, Component_5.jc)(Textbox_3.Textbox, {
                         label: "First name",
-                        bind: this.states.value.bind.FirstName,
+                        bind: this.state.value.bind.FirstName,
                     }),
                     (0, Component_5.jc)(Textbox_3.Textbox, {
                         label: "Last Name",
-                        bind: this.states.value.bind.LastName,
+                        bind: this.state.value.bind.LastName,
                     }),
                     (0, Component_5.jc)(Textbox_3.Textbox, {
-                        bind: this.states.value.bind.Title,
+                        bind: this.state.value.bind.Title,
                         label: "Title",
                         width: 90
                     }),
                     (0, Component_5.jc)(Textbox_3.Textbox, {
                         label: "Title of C.",
                         width: 85,
-                        bind: this.states.value.bind.TitleOfCourtesy
+                        bind: this.state.value.bind.TitleOfCourtesy
                     }),
                     (0, Component_5.jc)("br"),
                     (0, Component_5.jc)(BoxPanel_1.BoxPanel, {
@@ -349,47 +349,47 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/
                                 children: [
                                     (0, Component_5.jc)(Textbox_3.Textbox, {
                                         label: "Address",
-                                        bind: this.states.value.bind.Address,
+                                        bind: this.state.value.bind.Address,
                                         width: 345
                                     }),
                                     (0, Component_5.jc)("br"),
                                     (0, Component_5.jc)(Textbox_3.Textbox, {
                                         label: "Postal Code",
-                                        bind: this.states.value.bind.PostalCode,
+                                        bind: this.state.value.bind.PostalCode,
                                         width: 90
                                     }),
                                     (0, Component_5.jc)(Textbox_3.Textbox, {
-                                        bind: this.states.value.bind.City,
+                                        bind: this.state.value.bind.City,
                                         label: "City",
                                         width: 240
                                     }),
                                     (0, Component_5.jc)("br"),
                                     (0, Component_5.jc)(Textbox_3.Textbox, {
-                                        bind: this.states.value.bind.Region,
+                                        bind: this.state.value.bind.Region,
                                         label: "Region",
                                         width: 90
                                     }),
                                     (0, Component_5.jc)(Textbox_3.Textbox, {
-                                        bind: this.states.value.bind.Country,
+                                        bind: this.state.value.bind.Country,
                                         label: "country",
                                         width: 240
                                     }),
                                     (0, Component_5.jc)("br"),
                                     (0, Component_5.jc)(Textbox_3.Textbox, {
                                         width: 100,
-                                        bind: this.states.value.bind.BirthDate,
+                                        bind: this.state.value.bind.BirthDate,
                                         label: "Birth Date",
                                         converter: new DateTimeConverter_1.DateTimeConverter()
                                     }),
                                     (0, Component_5.jc)(Textbox_3.Textbox, {
-                                        bind: this.states.value.bind.HireDate,
+                                        bind: this.state.value.bind.HireDate,
                                         label: "Hire Date",
                                         width: 95,
                                         converter: new DateTimeConverter_1.DateTimeConverter()
                                     }),
                                     (0, Component_5.jc)("br"),
                                     (0, Component_5.jc)(Textbox_3.Textbox, {
-                                        bind: this.states.value.bind.HomePhone,
+                                        bind: this.state.value.bind.HomePhone,
                                         label: "Home Phone",
                                         width: 130
                                     })
@@ -398,7 +398,7 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/
                             (0, Component_5.jc)(Textarea_2.Textarea, {
                                 width: 240,
                                 height: 155,
-                                bind: this.states.value.bind.Notes,
+                                bind: this.state.value.bind.Notes,
                                 label: "Notes"
                             }),
                             (0, Component_5.jc)(Image_1.Image, {
@@ -407,12 +407,12 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/
                                     backgroundColor: "black",
                                     borderStyle: "solid"
                                 },
-                                width: 125, bind: this.states.value.bind.PhotoPath
+                                width: 125, bind: this.state.value.bind.PhotoPath
                             }),
                         ]
                     }),
                     (0, Component_5.jc)(Textbox_3.Textbox, {
-                        bind: this.states.value.bind.PhotoPath,
+                        bind: this.state.value.bind.PhotoPath,
                         label: "Photo Path",
                         width: 460
                     }),
@@ -421,16 +421,16 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/
                         label: "Reports To",
                         children: [
                             (0, Component_5.jc)(HTMLPanel_2.HTMLPanel, {
-                                bind: this.states.value.bind.ReportsTo.FirstName
+                                bind: this.state.value.bind.ReportsTo.FirstName
                             }),
                             " ",
                             (0, Component_5.jc)(HTMLPanel_2.HTMLPanel, {
-                                bind: this.states.value.bind.ReportsTo.LastName
+                                bind: this.state.value.bind.ReportsTo.LastName
                             }),
                             (0, Component_5.jc)(ObjectChooser_2.ObjectChooser, {
                                 width: 25,
                                 height: 25,
-                                bind: this.states.value.bind.ReportsTo,
+                                bind: this.state.value.bind.ReportsTo,
                                 items: "northwind.Employees"
                             })
                         ]
@@ -584,37 +584,37 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
                         children: [
                             (0, Component_6.jc)(Panel_6.Panel, {
                                 children: [
-                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: "Ship Name", bind: this.states.value.bind.ShipName, width: 260, ref: this.refs.shipName }),
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: "Ship Name", bind: this.state.value.bind.ShipName, width: 260, ref: this.refs.shipName }),
                                     (0, Component_6.jc)(Textbox_4.Textbox, {
-                                        label: "Order ID", bind: this.states.value.bind.id, converter: new NumberConverter_3.NumberConverter(), style: {
+                                        label: "Order ID", bind: this.state.value.bind.id, converter: new NumberConverter_3.NumberConverter(), style: {
                                             textAlign: "right",
                                             width: 60
                                         }
                                     }),
                                     (0, Component_6.jc)("br", { tag: "br" }),
-                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: "Ship Address", bind: this.states.value.bind.ShipAddress, width: 260, ref: this.refs.shipAddress }),
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: "Ship Address", bind: this.state.value.bind.ShipAddress, width: 260, ref: this.refs.shipAddress }),
                                     (0, Component_6.jc)(Textbox_4.Textbox, {
-                                        label: "Freight", bind: this.states.value.bind.Freight, width: 60, converter: new NumberConverter_3.NumberConverter({ format: "#.##0,00" }), style: {
+                                        label: "Freight", bind: this.state.value.bind.Freight, width: 60, converter: new NumberConverter_3.NumberConverter({ format: "#.##0,00" }), style: {
                                             textAlign: "right"
                                         }
                                     }),
                                     (0, Component_6.jc)("br", { tag: "br" }),
-                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: "Postal Code", bind: this.states.value.bind.ShipPostalCode, width: 60, hidden: false, ref: this.refs.shipPostalCode }),
-                                    (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.states.value.bind.ShipCity, label: "Ship City", width: 195, value: "shipCity" }),
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: "Postal Code", bind: this.state.value.bind.ShipPostalCode, width: 60, hidden: false, ref: this.refs.shipPostalCode }),
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.state.value.bind.ShipCity, label: "Ship City", width: 195, value: "shipCity" }),
                                     (0, Component_6.jc)("br", { tag: "br" }),
-                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: "Ship Region", bind: this.states.value.bind.ShipRegion, width: 150, ref: this.refs.shipRegion }),
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: "Ship Region", bind: this.state.value.bind.ShipRegion, width: 150, ref: this.refs.shipRegion }),
                                     "",
-                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: " Ship Country", bind: this.states.value.bind.ShipCountry, width: 105, ref: this.refs.shipCountry })
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { label: " Ship Country", bind: this.state.value.bind.ShipCountry, width: 105, ref: this.refs.shipCountry })
                                 ],
                                 width: 485
                             }),
                             (0, Component_6.jc)(Panel_6.Panel, {
                                 children: [
-                                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.states.value.bind.Customer.CompanyName, label: "Customer", width: 260 }),
+                                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.state.value.bind.Customer.CompanyName, label: "Customer", width: 260 }),
                                     (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, {
-                                        autocommit: false, items: "northwind.Customer", bind: this.states.value.bind.Customer, height: 25,
+                                        autocommit: false, items: "northwind.Customer", bind: this.state.value.bind.Customer, height: 25,
                                         onchange: (data) => {
-                                            var cust = this.states.value.Customer.current;
+                                            var cust = this.state.value.Customer.current;
                                             this.refs.shipName.value = cust.CompanyName;
                                             this.refs.shipAddress.value = cust.Address;
                                             this.refs.shipPostalCode.value = cust.PostalCode;
@@ -624,15 +624,15 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
                                         }
                                     }),
                                     (0, Component_6.jc)("br", {}),
-                                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.states.value.bind.ShipVia, template: "{{id}} {{CompanyName}}", width: 260, label: "Ship Via" }),
-                                    (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, { items: "northwind.Shippers", bind: this.states.value.bind.ShipVia }),
+                                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.state.value.bind.ShipVia, template: "{{id}} {{CompanyName}}", width: 260, label: "Ship Via" }),
+                                    (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, { items: "northwind.Shippers", bind: this.state.value.bind.ShipVia }),
                                     (0, Component_6.jc)("br", {}),
-                                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.states.value.bind.Employee, template: "{{id}} {{FirstName}} {{LastName}}", width: 260, label: "Employee", height: 20 }),
-                                    (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, { items: "northwind.Employees", bind: this.states.value.bind.Employee }),
+                                    (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.state.value.bind.Employee, template: "{{id}} {{FirstName}} {{LastName}}", width: 260, label: "Employee", height: 20 }),
+                                    (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, { items: "northwind.Employees", bind: this.state.value.bind.Employee }),
                                     (0, Component_6.jc)("br", {}),
-                                    (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.states.value.bind.OrderDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Oder Date", width: 95, text: "Oder Date" }),
-                                    (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.states.value.bind.RequiredDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Required Date", width: 95 }),
-                                    (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.states.value.bind.ShippedDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Shipped Date", width: 95 })
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.state.value.bind.OrderDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Oder Date", width: 95, text: "Oder Date" }),
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.state.value.bind.RequiredDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Required Date", width: 95 }),
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.state.value.bind.ShippedDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Shipped Date", width: 95 })
                                 ]
                             })
                         ]
@@ -643,24 +643,10 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
                     (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { value: "Text" }),
                     (0, Component_6.jc)("br", {}),
                     (0, Component_6.jc)(BoxPanel_2.BoxPanel, {
-                        children: (0, State_1.foreach)(this.states.value.Details, (ob) => (0, Component_6.jc)(ProductDetails, {
+                        children: (0, State_1.foreach)(this.state.value.Details, (ob) => (0, Component_6.jc)(ProductDetails, {
                             product: ob
                         }))
                     })
-                    /*jc(Repeater2,{
-                        items: this.states.value.Details,
-                        bind: this.states.activeDetail.bind,
-                        children: [
-                            jc(Panel,{
-                                children: [
-                                    jc(Textbox,{ bind: this.states.activeDetail.bind.Quantity,width: 85 }),
-                                    jc(Textbox,{ bind: this.states.activeDetail.bind.Product.ProductName }),
-                                    jc(ObjectChooser,{ bind: this.states.activeDetail.bind.Product,items: "northwind.Products" })
-                                ]
-                            })
-                        ]
-                    })*/
-                    // this.states.value?.Details===undefined? jc("br", {}):this.props.value.Details.map((detail) => jc(ProductDetails, {product: detail }))
                 ]
             });
         }
@@ -730,7 +716,7 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
                     }),
                     (0, Component_7.jc)("br", {}),
                     (0, Component_7.jc)(Panel_7.Panel, {
-                        children: (0, State_2.foreach)(this.states.values, (ob) => (0, Component_7.jc)(ProductPanel, { value: ob }))
+                        children: (0, State_2.foreach)(this.state.values, (ob) => (0, Component_7.jc)(ProductPanel, { value: ob }))
                     })
                 ]
             });
@@ -741,7 +727,7 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
         async setData() {
             var all = await Products_1.Products.find({});
             all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName); });
-            this.states.values.current = all;
+            this.state.values.current = all;
         }
     };
     exports.ProductList = ProductList;
@@ -759,7 +745,6 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
     async function test() {
         var all = await Products_1.Products.find({});
         all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName); });
-        //this.states.values.current = [all[0]];
         var ret = new ProductList({ values: all });
         return ret;
     }
@@ -779,33 +764,33 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/ObjectChooser
             return (0, Component_8.jc)(Panel_8.Panel, {
                 children: [
                     (0, Component_8.jc)(DBObjectView_6.DBObjectViewToolbar, { view: this }),
-                    (0, Component_8.jc)(Textbox_6.Textbox, { label: "Id", bind: this.states.value.bind.id, converter: new NumberConverter_5.NumberConverter() }),
-                    (0, Component_8.jc)(Textbox_6.Textbox, { bind: this.states.value.bind.ProductName, label: "Product Name", width: 375, height: 25 }),
-                    (0, Component_8.jc)(Checkbox_2.Checkbox, { label: "Discounted", bind: this.states.value.bind.Discontinued }),
+                    (0, Component_8.jc)(Textbox_6.Textbox, { label: "Id", bind: this.state.value.bind.id, converter: new NumberConverter_5.NumberConverter() }),
+                    (0, Component_8.jc)(Textbox_6.Textbox, { bind: this.state.value.bind.ProductName, label: "Product Name", width: 375, height: 25 }),
+                    (0, Component_8.jc)(Checkbox_2.Checkbox, { label: "Discounted", bind: this.state.value.bind.Discontinued }),
                     (0, Component_8.jc)("br", {}),
-                    (0, Component_8.jc)(Textbox_6.Textbox, { label: "Quantity per Unit", bind: this.states.value.bind.QuantityPerUnit }),
+                    (0, Component_8.jc)(Textbox_6.Textbox, { label: "Quantity per Unit", bind: this.state.value.bind.QuantityPerUnit }),
                     (0, Component_8.jc)(Textbox_6.Textbox, {
-                        bind: this.states.value.bind.UnitPrice, converter: new NumberConverter_5.NumberConverter({
+                        bind: this.state.value.bind.UnitPrice, converter: new NumberConverter_5.NumberConverter({
                             format: "#.##0,00"
                         }), label: "Unit Price",
                         width: 70
                     }),
                     (0, Component_8.jc)(Textbox_6.Textbox, {
-                        label: "Units in Stock", bind: this.states.value.bind.UnitsInStock, converter: new NumberConverter_5.NumberConverter({
+                        label: "Units in Stock", bind: this.state.value.bind.UnitsInStock, converter: new NumberConverter_5.NumberConverter({
                             format: "#.##0,00"
                         }), width: 80
                     }),
                     (0, Component_8.jc)(Textbox_6.Textbox, {
-                        bind: this.states.value.bind.UnitsOnOrder, converter: new NumberConverter_5.NumberConverter({
+                        bind: this.state.value.bind.UnitsOnOrder, converter: new NumberConverter_5.NumberConverter({
                             format: "#.##0,00"
                         }), label: "Units on Order", width: 80
                     }),
-                    (0, Component_8.jc)(Textbox_6.Textbox, { bind: this.states.value.bind.ReorderLevel, label: "Reorder Level", width: 185 }),
+                    (0, Component_8.jc)(Textbox_6.Textbox, { bind: this.state.value.bind.ReorderLevel, label: "Reorder Level", width: 185 }),
                     (0, Component_8.jc)("br", {}),
-                    (0, Component_8.jc)(HTMLPanel_6.HTMLPanel, { label: "Category", bind: this.states.value.bind.Category.CategoryName, width: 245 }),
-                    (0, Component_8.jc)(ObjectChooser_4.ObjectChooser, { bind: this.states.value.bind.Category, items: "northwind.Categories" }),
-                    (0, Component_8.jc)(HTMLPanel_6.HTMLPanel, { label: "Supplier", bind: this.states.value.bind.Supplier.CompanyName, width: 310 }),
-                    (0, Component_8.jc)(ObjectChooser_4.ObjectChooser, { bind: this.states.value.bind.Supplier, items: "northwind.Suppliers" })
+                    (0, Component_8.jc)(HTMLPanel_6.HTMLPanel, { label: "Category", bind: this.state.value.bind.Category.CategoryName, width: 245 }),
+                    (0, Component_8.jc)(ObjectChooser_4.ObjectChooser, { bind: this.state.value.bind.Category, items: "northwind.Categories" }),
+                    (0, Component_8.jc)(HTMLPanel_6.HTMLPanel, { label: "Supplier", bind: this.state.value.bind.Supplier.CompanyName, width: 310 }),
+                    (0, Component_8.jc)(ObjectChooser_4.ObjectChooser, { bind: this.state.value.bind.Supplier, items: "northwind.Suppliers" })
                 ]
             });
         }
@@ -829,7 +814,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1739910424645.7217,
+                "date": 1740069816828.1345,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -851,7 +836,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerOrders.ts": {
-                "date": 1739906011055.871,
+                "date": 1740069816828.1345,
                 "northwind/CustomerOrders": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -887,7 +872,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1722605075950.047,
+                "date": 1740069816828.1345,
                 "northwind.CustomerView": {
                     "$DBObjectView": [
                         {
@@ -899,7 +884,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1722605088492.314,
+                "date": 1740069921944.0195,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -940,7 +925,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1739905568268.335,
+                "date": 1740069931533.627,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -953,7 +938,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductList.ts": {
-                "date": 1722600004856.538,
+                "date": 1740069937097.2405,
                 "northwind/ProductList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -971,7 +956,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1739905190562.9397,
+                "date": 1740069816828.1345,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -1560,7 +1545,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ShippersView.ts": {
-                "date": 1722605134497.6565,
+                "date": 1740069816845.413,
                 "northwind.ShippersView": {
                     "$DBObjectView": [
                         {
@@ -1572,7 +1557,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/SuppliersView.ts": {
-                "date": 1739906027356.1384,
+                "date": 1740069816846.4102,
                 "northwind.SuppliersView": {
                     "$DBObjectView": [
                         {
@@ -2317,19 +2302,19 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
                     (0, Component_9.jc)(DBObjectView_7.DBObjectViewToolbar, { view: this }),
                     (0, Component_9.jc)(Textbox_7.Textbox, {
                         converter: new NumberConverter_6.NumberConverter(),
-                        bind: this.states.value.bind.id, //[me.databinder, "id"],
+                        bind: this.state.value.bind.id, //[me.databinder, "id"],
                         label: "Id",
                         width: 40,
                     }),
                     (0, Component_9.jc)(Textbox_7.Textbox, {
-                        bind: this.states.value.bind.CompanyName, // [me.databinder, "CompanyName"],
+                        bind: this.state.value.bind.CompanyName, // [me.databinder, "CompanyName"],
                         label: "Company name",
                         width: 160
                     }),
                     (0, Component_9.jc)("br"),
                     (0, Component_9.jc)(Textbox_7.Textbox, {
                         width: 215,
-                        bind: this.states.value.bind.Phone, //[me.databinder, "Phone"],
+                        bind: this.state.value.bind.Phone, //[me.databinder, "Phone"],
                         label: "Phone"
                     })
                 ]
@@ -2360,24 +2345,24 @@ define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/
             return (0, Component_10.jc)(Panel_10.Panel, {
                 children: [
                     (0, Component_10.jc)(DBObjectView_8.DBObjectViewToolbar, { view: this }),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.states.value.bind.id, converter: new NumberConverter_7.NumberConverter(), label: "Id" }),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.states.value.bind.CompanyName, label: "Company Name" }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.state.value.bind.id, converter: new NumberConverter_7.NumberConverter(), label: "Id" }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.state.value.bind.CompanyName, label: "Company Name" }),
                     (0, Component_10.jc)("br", {}),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.states.value.bind.ContactName, label: "Contact Name" }),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { label: "Contact Title", bind: this.states.value.bind.ContactTitle }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.state.value.bind.ContactName, label: "Contact Name" }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { label: "Contact Title", bind: this.state.value.bind.ContactTitle }),
                     (0, Component_10.jc)("br", {}),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.states.value.bind.Address, label: "Address", width: 330 }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.state.value.bind.Address, label: "Address", width: 330 }),
                     (0, Component_10.jc)("br", {}),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.states.value.bind.PostalCode, label: "Postal Code" }),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.states.value.bind.City, label: "City" }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.state.value.bind.PostalCode, label: "Postal Code" }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.state.value.bind.City, label: "City" }),
                     (0, Component_10.jc)("br", {}),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.states.value.bind.Region, label: "Region" }),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.states.value.bind.Country, label: "Country" }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.state.value.bind.Region, label: "Region" }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { bind: this.state.value.bind.Country, label: "Country" }),
                     (0, Component_10.jc)("br", {}),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { label: "Phone", bind: this.states.value.bind.Phone }),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { label: "Fax", bind: this.states.value.bind.Fax }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { label: "Phone", bind: this.state.value.bind.Phone }),
+                    (0, Component_10.jc)(Textbox_8.Textbox, { label: "Fax", bind: this.state.value.bind.Fax }),
                     (0, Component_10.jc)("br", {}),
-                    (0, Component_10.jc)(Textbox_8.Textbox, { label: "Homepage", bind: this.states.value.bind.HomePage, width: 330 })
+                    (0, Component_10.jc)(Textbox_8.Textbox, { label: "Homepage", bind: this.state.value.bind.HomePage, width: 330 })
                 ]
             });
         }
@@ -2400,7 +2385,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1739910424645.7217,
+                "date": 1740069816828.1345,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -2422,7 +2407,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerOrders.ts": {
-                "date": 1739906011055.871,
+                "date": 1740069816828.1345,
                 "northwind/CustomerOrders": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2458,7 +2443,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1722605075950.047,
+                "date": 1740069816828.1345,
                 "northwind.CustomerView": {
                     "$DBObjectView": [
                         {
@@ -2470,7 +2455,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1722605088492.314,
+                "date": 1740069921944.0195,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -2511,7 +2496,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1739905568268.335,
+                "date": 1740069931533.627,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -2524,7 +2509,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductList.ts": {
-                "date": 1722600004856.538,
+                "date": 1740069937097.2405,
                 "northwind/ProductList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2542,7 +2527,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1739905190562.9397,
+                "date": 1740069816828.1345,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -3131,7 +3116,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ShippersView.ts": {
-                "date": 1722605134497.6565,
+                "date": 1740069816845.413,
                 "northwind.ShippersView": {
                     "$DBObjectView": [
                         {
@@ -3143,7 +3128,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/SuppliersView.ts": {
-                "date": 1739906027356.1384,
+                "date": 1740069816846.4102,
                 "northwind.SuppliersView": {
                     "$DBObjectView": [
                         {

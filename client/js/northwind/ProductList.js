@@ -53,7 +53,7 @@ define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jass
                     }),
                     (0, Component_1.jc)("br", {}),
                     (0, Component_1.jc)(Panel_1.Panel, {
-                        children: (0, State_1.foreach)(this.states.values, (ob) => (0, Component_1.jc)(ProductPanel, { value: ob }))
+                        children: (0, State_1.foreach)(this.state.values, (ob) => (0, Component_1.jc)(ProductPanel, { value: ob }))
                     })
                 ]
             });
@@ -64,7 +64,7 @@ define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jass
         async setData() {
             var all = await Products_1.Products.find({});
             all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName); });
-            this.states.values.current = all;
+            this.state.values.current = all;
         }
     };
     __decorate([
@@ -82,7 +82,6 @@ define(["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jass
     async function test() {
         var all = await Products_1.Products.find({});
         all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName); });
-        //this.states.values.current = [all[0]];
         var ret = new ProductList({ values: all });
         return ret;
     }

@@ -53,9 +53,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
          **/
         set value(code) {
             var scode = code;
-            this.states.value.current = code;
+            this.state.value.current = code;
             if (this.template) {
-                if (this.states.value.current === undefined)
+                if (this.state.value.current === undefined)
                     scode = "";
                 else {
                     try {
@@ -75,7 +75,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 el.innerHTML = scode;
         }
         get value() {
-            return this.states.value.current;
+            return this.state.value.current;
         }
         destroy() {
             super.destroy();

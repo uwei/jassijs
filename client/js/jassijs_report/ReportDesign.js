@@ -117,17 +117,6 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
             this.contentPanel = new RStack_1.RStack();
             this.footerPanel = new RStack_1.RStack();
             this._pageSize = undefined;
-            /**
-           * adds a component to the container
-           * @param {jassijs.ui.Component} component - the component to add
-           */
-            /* add(component) {
-                 if (component["designPanel"])
-                     super.add(component);
-                 else
-                     super.addBefore(component, this.footerPanel);
-         
-             }*/
             this.pageSized = {
                 '4A0': [4767.87, 6740.79],
                 '2A0': [3370.39, 4767.87],
@@ -230,9 +219,6 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
             var po = this.pageOrientation === 'landscape' ? 1 : 0;
             var pm = this.pageMargins == undefined ? [40, 40, 40, 40] : this.pageMargins;
             this.width = this.pageSized[ps][po]; //-pm[0]-pm[2];
-        }
-        _setDesignMode(enable) {
-            //do nothing - no add button
         }
         static collectForEach(component, allforeach) {
             if (component.foreach)
@@ -486,17 +472,6 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
                 //delete r.data;
                 return r;
             }
-            /**
-           * adds a component to the container
-           * @param {jassijs.ui.Component} component - the component to add
-           */
-            /* add(component) {
-                 if (component["designPanel"])
-                     super.add(component);
-                 else
-                     super.addBefore(component, this.footerPanel);
-         
-             }*/
         }
     };
     __decorate([

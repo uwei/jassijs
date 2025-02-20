@@ -42,7 +42,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/Component", "jassi
             return (0, Component_1.jc)("div", {
                 children: [
                     (0, Component_1.jc)(Select_1.Select, {
-                        bind: this.states.invoice.bind,
+                        bind: this.state.invoice.bind,
                         items: this.props.invoices,
                         placeholder: "Hallo",
                         display: "title",
@@ -50,26 +50,26 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/Component", "jassi
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.invoice.bind.customer.name
+                        bind: this.state.invoice.bind.customer.name
                     }),
                     (0, Component_1.jc)(Button_1.Button, {
                         text: "Save",
                         onclick: () => {
                             console.log(JSON.stringify(inv));
                             debugger;
-                            var h = this.states.invoice.bind.$fromForm();
+                            var h = this.state.invoice.bind.$fromForm();
                             console.log(JSON.stringify(inv));
                         }
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Table_1.Table, {
                         autocommit: true,
-                        bindItems: this.states.invoice.bind.positions,
-                        bind: this.states.currentPosition.bind
+                        bindItems: this.state.invoice.bind.positions,
+                        bind: this.state.currentPosition.bind
                     }),
                     (0, Component_1.jc)("br"),
                     (0, Component_1.jc)(Textbox_1.Textbox, {
-                        bind: this.states.currentPosition.bind.text
+                        bind: this.state.currentPosition.bind.text
                     }),
                 ]
             });

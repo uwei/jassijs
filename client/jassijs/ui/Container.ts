@@ -48,8 +48,9 @@ export class Container<T extends ContainerProperties=ComponentProperties> extend
                 }
                 this.add(cchild);
             }
-            delete props.children;
+            //delete props.children;
          }
+        // this.state.children=props?.children;
     }
      /*   if (config?.children) {
                     if (config?.children.length > 0 && config?.children[0] instanceof Component) {
@@ -141,9 +142,12 @@ export class Container<T extends ContainerProperties=ComponentProperties> extend
             if (pos >= 0)
                 this._components.splice(pos, 1);
         }
+        //@ts-ignore
         let posd = this.designDummies?.indexOf(component);
-        if (posd >= 0)
+        if (posd >= 0){
+            //@ts-ignore
             this.designDummies.splice(posd, 1);
+        }
         try {
             this.dom.removeChild(component.domWrapper);
         } catch (ex) {
@@ -161,7 +165,7 @@ export class Container<T extends ContainerProperties=ComponentProperties> extend
        
 
     }
-    destroy() {
+    destroy() { 
         if (this._components !== undefined) {
             var tmp = [].concat(this._components);
             for (var k = 0; k < tmp.length; k++) {

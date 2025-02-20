@@ -30,16 +30,16 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
             });
         }
         collectStates(comp, found) {
-            var keys = [...comp.dom._this.states._used];
+            var keys = [...comp.dom._this.state._used];
             for (var k in comp.dom._this.props) {
                 keys.push(k);
             }
             for (var x = 0; x < keys.length; x++) {
                 var prop = keys[x];
-                var ob = comp.dom._this.states[prop].current;
+                var ob = comp.dom._this.state[prop].current;
                 if (found.indexOf(prop) === -1) {
                     found.push(prop);
-                    this.foundBounds[prop] = comp.dom._this.states[prop].bind;
+                    this.foundBounds[prop] = comp.dom._this.state[prop].bind;
                     if (comp.dom._this instanceof Component_1.FunctionComponent)
                         this.foundFunctionComponents[prop] = true;
                 }
@@ -49,7 +49,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
                             found.push(prop + "." + key);
                             if (comp.dom._this instanceof Component_1.FunctionComponent)
                                 this.foundFunctionComponents[prop + "." + key] = true;
-                            this.foundBounds[prop + "." + key] = comp.dom._this.states[prop].bind[key];
+                            this.foundBounds[prop + "." + key] = comp.dom._this.state[prop].bind[key];
                         }
                     }
                 }
@@ -113,9 +113,9 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         */
         _onchange(param) {
             var val = this.component.value;
-            var sp = "this.states." + val.split(".")[0] + ".bind."; //funcioncomponents doesnt have this
+            var sp = "this.state." + val.split(".")[0] + ".bind."; //funcioncomponents doesnt have this
             if (this.foundFunctionComponents[val])
-                sp = "states." + val.split(".")[0] + ".bind.";
+                sp = "state." + val.split(".")[0] + ".bind.";
             if (val.split(".").length > 1)
                 sp = sp + val.substring(val.indexOf(".") + 1);
             this.propertyEditor.setPropertyInCode(this.property.name, sp);
