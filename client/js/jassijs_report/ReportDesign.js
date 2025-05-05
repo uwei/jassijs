@@ -86,9 +86,9 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
         constructor(props) {
             super(props);
             this.dom.classList.remove("Panel");
-            this.dom.classList.remove("jinlinecomponent");
-            this.domWrapper.classList.remove("jcomponent");
-            this.domWrapper.classList.remove("jcontainer");
+            // this.dom.classList.remove("jinlinecomponent");
+            // this.domWrapper.classList.remove("jcomponent");
+            // this.domWrapper.classList.remove("jcontainer");
             this.dom.hidden = true;
         }
     };
@@ -427,6 +427,11 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
                 }
             }
         }
+        removeEmpty(value) {
+            if ((value === null || value === void 0 ? void 0 : value.length) === 1 && value[0] === "")
+                return undefined;
+            return value;
+        }
         toJSON() {
             var r = {};
             if (JSON.stringify(this.defaultStyle) !== "{}") {
@@ -437,41 +442,41 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
                 for (var x = 0; x < this.styleContainer._components.length; x++) {
                     r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
                 }
-                //var _this = this;
-                if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
-                    r.background = this.backgroundPanel.toJSON();
-                }
-                if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
-                    r.header = this.headerPanel.toJSON();
-                }
-                if (!(this.footerPanel._components.length === 0 || (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
-                    r.footer = this.footerPanel.toJSON();
-                }
-                r.content = this.contentPanel.toJSON();
-                if (this.pageOrientation) {
-                    r.pageOrientation = this.pageOrientation;
-                }
-                if (this.pageMargins)
-                    r.pageMargins = this.pageMargins;
-                if (this.pageSize)
-                    r.pageSize = this.pageSize;
-                if (this.info)
-                    r.info = this.info;
-                if (this.compress)
-                    r.compress = this.compress;
-                if (this.userPassword)
-                    r.userPassword = this.userPassword;
-                if (this.ownerPassword)
-                    r.ownerPassword = this.ownerPassword;
-                if (this.permissions)
-                    r.permissions = this.permissions;
-                if (this.images) {
-                    r.images = this.images;
-                }
-                Object.assign(r, this["otherProperties"]);
-                //delete r.data;
-                return r;
             }
+            //var _this = this;
+            if (!(this.backgroundPanel._components.length === 0)) { // || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
+                r.background = this.removeEmpty(this.backgroundPanel.toJSON());
+            }
+            if (!(this.headerPanel._components.length === 0)) { //|| (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
+                r.header = this.removeEmpty(this.headerPanel.toJSON());
+            }
+            if (!(this.footerPanel._components.length === 0)) { //|| (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
+                r.footer = this.removeEmpty(this.footerPanel.toJSON());
+            }
+            r.content = this.removeEmpty(this.contentPanel.toJSON());
+            if (this.pageOrientation) {
+                r.pageOrientation = this.pageOrientation;
+            }
+            if (this.pageMargins)
+                r.pageMargins = this.pageMargins;
+            if (this.pageSize)
+                r.pageSize = this.pageSize;
+            if (this.info)
+                r.info = this.info;
+            if (this.compress)
+                r.compress = this.compress;
+            if (this.userPassword)
+                r.userPassword = this.userPassword;
+            if (this.ownerPassword)
+                r.ownerPassword = this.ownerPassword;
+            if (this.permissions)
+                r.permissions = this.permissions;
+            if (this.images) {
+                r.images = this.images;
+            }
+            Object.assign(r, this["otherProperties"]);
+            //delete r.data;
+            return r;
         }
     };
     __decorate([

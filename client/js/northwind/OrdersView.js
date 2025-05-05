@@ -78,7 +78,7 @@ define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassij
                                     (0, Component_1.jc)(HTMLPanel_1.HTMLPanel, { bind: this.state.value.bind.Employee, template: "{{id}} {{FirstName}} {{LastName}}", width: 260, label: "Employee", height: 20 }),
                                     (0, Component_1.jc)(ObjectChooser_1.ObjectChooser, { items: "northwind.Employees", bind: this.state.value.bind.Employee }),
                                     (0, Component_1.jc)("br", {}),
-                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.OrderDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Oder Date", width: 95, text: "Oder Date" }),
+                                    (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.OrderDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Oder Date", width: 95 }),
                                     (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.RequiredDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Required Date", width: 95 }),
                                     (0, Component_1.jc)(Textbox_1.Textbox, { bind: this.state.value.bind.ShippedDate, converter: new DateTimeConverter_1.DateTimeConverter(), label: "Shipped Date", width: 95 })
                                 ]

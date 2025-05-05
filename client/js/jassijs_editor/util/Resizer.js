@@ -235,7 +235,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"
                     }
                 }
                 if (this.cursorType === "e-resize" || this.cursorType === "s-resize") {
-                    var test = $(element).closest(".jcomponent");
+                    var test = $(element).closest(".jeditablecomponent");
                     var isDragging = false;
                     if (this.draganddropper !== undefined) {
                         element == undefined;
@@ -284,7 +284,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"
                         }
                         lastTime = new Date().getTime();
                         var a = 9;
-                        if (ui.selected._this && ui.selected.classList.contains("jcomponent") &&
+                        if (ui.selected._this && ui.selected.classList.contains("jeditablecomponent") &&
                             !ui.selected.classList.contains("designerNoSelectable")) {
                             var ids = _this.elements + ",";
                             if (ids.indexOf("#" + ui.selected._this._id + ",") > -1) {

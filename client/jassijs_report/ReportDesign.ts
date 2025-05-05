@@ -63,9 +63,9 @@ class StyleContainer extends Panel {
     constructor(props) {
         super(props);
         this.dom.classList.remove("Panel");
-        this.dom.classList.remove("jinlinecomponent");
-        this.domWrapper.classList.remove("jcomponent");
-        this.domWrapper.classList.remove("jcontainer");
+       // this.dom.classList.remove("jinlinecomponent");
+       // this.domWrapper.classList.remove("jcomponent");
+       // this.domWrapper.classList.remove("jcontainer");
         this.dom.hidden = true;
     }
 }
@@ -280,7 +280,7 @@ export class ReportDesign extends BoxPanel {
             for (var st in ob.styles) {
                 var rs = new RStyle().fromJSON(ob.styles[st]);
                 rs.name = st;
-                this.styleContainer.add(rs);
+                this.styleContainer.add(<any>rs);
                 rs.update();
             }
             delete ob.styles;
@@ -369,6 +369,11 @@ export class ReportDesign extends BoxPanel {
             }
         }
     }
+    private removeEmpty(value){
+        if(value?.length===1&&value[0]==="")
+            return undefined;
+        return value;
+    }
     toJSON(): any {
 
         var r: any = {
@@ -383,17 +388,18 @@ export class ReportDesign extends BoxPanel {
                 r.styles[this.styleContainer._components[x]["name"]] = (<RStyle>this.styleContainer._components[x]).toJSON();
 
             }
+        }
             //var _this = this;
-            if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
-                r.background = this.backgroundPanel.toJSON();
+            if (!(this.backgroundPanel._components.length === 0)){// || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
+                r.background =this.removeEmpty( this.backgroundPanel.toJSON());
             }
-            if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
-                r.header = this.headerPanel.toJSON();
+            if (!(this.headerPanel._components.length === 0 )){//|| (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
+                r.header = this.removeEmpty(this.headerPanel.toJSON());
             }
-            if (!(this.footerPanel._components.length === 0 || (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
-                r.footer = this.footerPanel.toJSON();
+            if (!(this.footerPanel._components.length === 0 )){//|| (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
+                r.footer = this.removeEmpty(this.footerPanel.toJSON());
             }
-            r.content = this.contentPanel.toJSON();
+            r.content = this.removeEmpty(this.contentPanel.toJSON());
             if (this.pageOrientation) {
                 r.pageOrientation = this.pageOrientation;
 
@@ -418,7 +424,7 @@ export class ReportDesign extends BoxPanel {
             Object.assign(r, this["otherProperties"]);
             //delete r.data;
             return r;
-        }
+        
 
 
     }

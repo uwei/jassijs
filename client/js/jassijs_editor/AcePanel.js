@@ -7,15 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1, Component_1) {
+define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace, Typescript_1, Registry_1, CodePanel_1, Runlater_1, Component_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanel = void 0;
-    Registry_2 = __importDefault(Registry_2);
     /// <amd-dependency path="ace/ace" name="ace"/>
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
@@ -370,7 +366,7 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
         getDocTooltip(item) {
             if (item.file === undefined)
                 return "";
-            var _id = "j" + Registry_2.default.nextID();
+            var _id = "j" + (0, Component_1.nextID)();
             item.docHTML = "<span id='" + _id + "'> please try later ... loading in progress<span>";
             Typescript_1.mytypescript.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
                 if (ret === undefined)

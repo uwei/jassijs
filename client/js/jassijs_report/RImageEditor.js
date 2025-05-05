@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Upload_1, Textbox_1, Image_1, Button_1, Repeater_1, Registry_1, Panel_1, Editor_1, RComponent_1) {
+define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ui/Component", "jassijs/ui/State", "jassijs/ext/jquerylib"], function (require, exports, Upload_1, Textbox_1, Image_1, Button_1, Registry_1, Panel_1, Editor_1, RComponent_1, Component_1, State_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RImageChooser = exports.RImageEditor = void 0;
@@ -80,12 +80,14 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassij
                 var report = RComponent_1.RComponent.findReport(image);
                 if (report === null || report === void 0 ? void 0 : report.images)
                     this.dialog.items = report.images;
-                $(this.dialog.__dom).dialog({ height: "400", width: "400",
+                $(this.dialog.__dom).dialog({
+                    height: "400", width: "400",
                     close: () => {
                         if (report)
                             report.images = _this.dialog.items;
                         _this._onchange();
-                    } });
+                    }
+                });
                 this.dialog.onpictureselected((val) => {
                     _this._textbox.value = val;
                     if (report)
@@ -105,76 +107,82 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassij
         __metadata("design:paramtypes", [Object, Object])
     ], RImageEditor);
     exports.RImageEditor = RImageEditor;
+    function Details(props, stat) {
+        return (0, Component_1.jc)(Panel_1.Panel, {
+            children: [
+                (0, Component_1.jc)(Textbox_1.Textbox, { bind: stat.value.bind.name }),
+                (0, Component_1.jc)(Button_1.Button, {
+                    icon: "mdi mdi-delete-forever-outline",
+                    onclick: (event) => {
+                        var ob = stat.value.current;
+                        let pos = props.chooser.state.items.current.indexOf(ob);
+                        props.chooser.state.items.current.splice(pos, 1);
+                        props.chooser.state.items.current = [...props.chooser.state.items.current];
+                    }
+                }),
+                (0, Component_1.jc)("br"),
+                (0, Component_1.jc)(Image_1.Image, { height: 75, bind: stat.value.bind.data,
+                    onclick: (ev) => {
+                        props.chooser.value = stat.value.current.name;
+                        //                     var ob = me.itile._databinder.value;
+                        //                _this.value = ob.name;
+                        props.chooser.callEvent("pictureselected", stat.value.current.name);
+                    }
+                }),
+                (0, Component_1.jc)(Image_1.Image)
+            ]
+        });
+    }
     class RImageChooser extends Panel_1.Panel {
-        constructor() {
-            super();
-            this._items = [];
+        /* _items: {
+             name: string;
+             data: string;
+         }[] = [];*/
+        constructor(props = { items: [] }) {
+            super(props);
             this.me = {};
-            this.layout(this.me);
+            //this.layout(this.me);
         }
         set items(val) {
-            this._items.splice(0, this._items.length);
+            this.state.items.current.splice(0, this.state.items.current.length);
             for (var key in val) {
-                this._items.push({ name: key, data: val[key] });
+                this.state.items.current.push({ name: key, data: val[key] });
             }
-            this.me.repeater1.value = this._items;
+            // this.me.repeater1.value = this._items;
+            this.state.items.current = this.state.items.current;
         }
         get items() {
             var ret = {};
-            for (var x = 0; x < this._items.length; x++) {
-                ret[this._items[x].name] = this._items[x].data;
+            for (var x = 0; x < this.state.items.current.length; x++) {
+                ret[this.state.items.current[x].name] = this.state.items.current[x].data;
             }
             return ret;
         }
         onpictureselected(func) {
             this.addEvent("pictureselected", func);
         }
-        layout(me) {
+        render() {
             var _this = this;
-            me.repeater1 = new Repeater_1.Repeater();
-            me.databinder1 = new Databinder();
-            me.databinder1.value = this;
-            me.repeater1.value = this._items;
-            me.upload1 = new Upload_1.Upload();
-            me.upload1.onuploaded((data) => {
-                for (var key in data) {
-                    _this._items.push({ name: key.split(".")[0], data: data[key] });
-                }
-                _this.items = _this.items;
-            });
-            me.upload1.readAs = "DataUrl";
-            this.add(me.upload1);
-            this.add(me.repeater1);
-            me.repeater1.createRepeatingComponent(function (me) {
-                me.panel1 = new Panel_1.Panel();
-                me.image1 = new Image_1.Image();
-                me.itile = new Textbox_1.Textbox();
-                me.remove = new Button_1.Button();
-                me.repeater1.design.add(me.panel1);
-                me.panel1.add(me.itile);
-                me.panel1.add(me.remove);
-                me.panel1.add(me.image1);
-                me.image1.height = "75";
-                me.remove.text = "";
-                me.remove.icon = "mdi mdi-delete-forever-outline";
-                me.itile.bind = [me.repeater1.design.databinder, "name"];
-                me.itile.onchange(function (event) {
-                    var ob = me.itile._databinder.value;
-                    ob.name = me.itile.value;
-                    _this.items = _this.items;
-                });
-                me.image1.bind = [me.repeater1.design.databinder, "data"];
-                me.remove.onclick(function (event) {
-                    var ob = me.itile._databinder.value;
-                    let pos = _this._items.indexOf(ob);
-                    _this._items.splice(pos, 1);
-                    _this.items = _this.items;
-                });
-                me.image1.onclick(function (event) {
-                    var ob = me.itile._databinder.value;
-                    _this.value = ob.name;
-                    _this.callEvent("pictureselected", ob.name);
-                });
+            return (0, Component_1.jc)(Panel_1.Panel, {
+                children: [
+                    (0, Component_1.jc)(Upload_1.Upload, {
+                        multiple: true,
+                        onuploaded: (data) => {
+                            for (var key in data) {
+                                _this.state.items.current.push({ name: key.split(".")[0], data: data[key] });
+                            }
+                            this.state.items.current = [...this.state.items.current];
+                            //_this.items = _this.items;
+                        },
+                        readAs: "DataUrl"
+                    }),
+                    (0, Component_1.jc)("span", {
+                        children: (0, State_1.ccs)(() => this.state.items.current.map(item => (0, Component_1.jc)(Details, {
+                            value: item,
+                            chooser: this
+                        })), this.state.items)
+                    })
+                ]
             });
         }
     }

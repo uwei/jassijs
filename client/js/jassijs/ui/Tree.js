@@ -7,14 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ext/jquerylib", "jassijs/ext/fancytree"], function (require, exports, Registry_1, Component_1, Registry_2, Property_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/UIComponent", "jassijs/ext/jquerylib", "jassijs/ext/fancytree"], function (require, exports, Registry_1, Component_1, Property_1, UIComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Tree = void 0;
-    Registry_2 = __importDefault(Registry_2);
     /*declare global {
         interface JQuery {
             fancytree: any;
@@ -524,16 +520,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             //var node: TreeNode = undefined;
             var node = $.ui.fancytree.getNode(evt.target);
             //node = this._allNodes[evt.target.id];
-            if (this._contextMenu !== undefined) {
+            if (this.contextMenu !== undefined) {
                 if (node.data.item === undefined)
                     return;
                 var test = node.data.tree.selection;
                 //multiselect and the clicked is within the selection
                 if (test !== undefined && test.indexOf(node.data.item) !== -1) {
-                    this._contextMenu.value = test;
+                    this.contextMenu.value = test;
                 }
                 else
-                    this._contextMenu.value = [node === undefined ? undefined : node.data.item];
+                    this.contextMenu.value = [node === undefined ? undefined : node.data.item];
             }
         }
         set contextMenu(value) {
@@ -573,7 +569,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         __metadata("design:returntype", void 0)
     ], Tree.prototype, "onclick", null);
     Tree = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" }),
+        (0, UIComponent_1.$UIComponent)({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" }),
         (0, Registry_1.$Class)("jassijs.ui.Tree"),
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TreeEditorProperties" })
         /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
@@ -590,7 +586,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         constructor(tree, item, parent = undefined) {
             this.tree = tree;
             this.parent = parent;
-            this._id = "j" + Registry_2.default.nextID();
+            this._id = "j" + (0, Component_1.nextID)();
             this.item = item;
             var title = this.tree.getTitleFromItem(this.item);
             this.key = (parent !== undefined ? parent.key + "|" : "") + (title === undefined ? "" : title).replaceAll("|", "!");

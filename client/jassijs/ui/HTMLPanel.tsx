@@ -1,5 +1,4 @@
 var bugtinymce = undefined;
-import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
@@ -20,7 +19,7 @@ export interface HTMLPanelProperties extends DataComponentProperties {
 
 }
 
-@$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ })
+//@$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ })
 @$Class("jassijs.ui.HTMLPanel")
 export class HTMLPanel<T extends HTMLPanelProperties=HTMLPanelProperties> extends DataComponent<T> implements HTMLPanelProperties {
     toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];

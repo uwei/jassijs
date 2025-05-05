@@ -1,8 +1,9 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
+import { Component,  ComponentProperties } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 
-
+export interface SimpleButtonProperties extends Omit<ButtonProperties,"onclick"|"icon"|"domProperties"|"text">{
+}
 export interface ButtonProperties extends ComponentProperties{
     domProperties?:React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
       /**
@@ -22,8 +23,8 @@ export interface ButtonProperties extends ComponentProperties{
 }
 
 
-@$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
-@$Class("jassijs.ui.Button")
+//@$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
+//@$Class("jassijs.ui.Button")
 export class Button<T extends ButtonProperties=ButtonProperties> extends Component<T> implements ButtonProperties {
     constructor(properties:ButtonProperties={}){
         super(properties);
@@ -54,7 +55,7 @@ export class Button<T extends ButtonProperties=ButtonProperties> extends Compone
                 )
         );
     }
-    @$Property({ default: "function(event){\n\t\n}" })
+    //@$Property({ default: "function(event){\n\t\n}" })
     onclick(handler, removeOldHandler: boolean = true) {
        
         if(removeOldHandler){
@@ -82,7 +83,7 @@ export class Button<T extends ButtonProperties=ButtonProperties> extends Compone
         }
     }
     
-    @$Property({type:"image"})
+    //@$Property({type:"image"})
     get icon(): string { //the Code
         var ret=(<HTMLInputElement> this.dom.querySelector(".buttonimg")).getAttribute("src");
         if(ret===""){
@@ -93,7 +94,7 @@ export class Button<T extends ButtonProperties=ButtonProperties> extends Compone
     set text(value: string) { //the Code
         (<HTMLInputElement> this.dom.querySelector(".buttontext")).innerText=value===undefined?"":value;
     }
-    @$Property()
+    //@$Property()
     get text(): string {
         var ret=(<HTMLInputElement> this.dom.querySelector(".buttontext")).innerText;
         if(ret===undefined)

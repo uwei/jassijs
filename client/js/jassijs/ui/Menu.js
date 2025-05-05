@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ext/jquerylib"], function (require, exports, Container_1, Property_1, MenuItem_1, Registry_1, Component_1) {
+define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/UIComponents", "jassijs/ext/jquerylib"], function (require, exports, Container_1, Property_1, MenuItem_1, Registry_1, Component_1, UIComponents_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Menu = void 0;
@@ -102,7 +102,7 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
         __metadata("design:returntype", void 0)
     ], Menu.prototype, "onclick", null);
     Menu = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
         (0, Registry_1.$Class)("jassijs.ui.Menu"),
         __metadata("design:paramtypes", [Object])
     ], Menu);

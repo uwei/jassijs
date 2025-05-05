@@ -1,17 +1,19 @@
-import { $Class } from "jassijs/remote/Registry";
-import { Property, $Property } from "jassijs/ui/Property";
-import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
-import registry from "jassijs/remote/Registry";
-import { classes } from "jassijs/remote/Classes";
-import { CSSProperties } from "jassijs/ui/CSSProperties";
-import { State, States, createStates, resolveState } from "jassijs/ui/State";
+//import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
+//import { CSSProperties } from "jassijs/ui/CSSProperties";
+import { State, States, createRefs, createStates, resolveState } from "jassijs/ui/State";
 
 
+let _nextID: number = 10;
+/**
+* with every call a new id is generated - used to create a free id for the dom
+* @returns {number} - the id
+*/
+export function nextID() {
+    _nextID = _nextID + 1;
+    return _nextID.toString();
+}
 
-//import { CSSProperties } from "jassijs/ui/Style";
 
-jassijs.includeCSSFile("jassijs.css");
-jassijs.includeCSSFile("materialdesignicons.min.css");
 
 declare global {
     interface Element {
@@ -22,35 +24,10 @@ declare global {
 
 }
 
-//vergleichen
-//jeder bekommt componentid
-//gehe durch baum wenn dom_component fehlt, dann ist kopiert und muss mit id von componentid gerenderd werden
 
-export class UIComponentProperties {
-
-    /**
-     * full path to classifiy the UIComponent e.g common/TopComponent 
-     */
-    fullPath?: string;
-    icon?: string;
-    /**
-     * initproperties are automatically set on new created Components
-     * e.g. {text:"button"}
-     */
-    initialize?: { [initproperties: string]: any };
-    /**
-     * allcomponents 
-     */
-    editableChildComponents?: string[];
+export interface SimpleComponentProperties extends Omit<ComponentProperties, "height" | "hidden" | "label" | "replaceNode" | "style" | "styles" | "tooltip" | "contextMenu" | "useWrapper" | "width" | "x" | "y" | "onblur" | "onfocus"> {
 
 }
-export function $UIComponent(properties: UIComponentProperties): Function {
-    return function (pclass) {
-        registry.register("$UIComponent", pclass, properties);
-    }
-}
-
-
 export interface ComponentProperties {
     exists?: boolean;
     /**
@@ -143,6 +120,7 @@ declare global {
     namespace React {
         interface ClassAttributes<T> extends React.RefAttributes<T> {
             exists?: boolean;
+            label?: string;
         }
         interface Component<P = {}, S = {}, SS = any> {
             //@ts-ignore
@@ -206,7 +184,7 @@ export function createComponent<T>(node: React.ReactElement<T>): T;//node: { key
 export function createComponent(node: React.ReactNode): any {//node: { key: string, props: any, type: any }):Component {
     var atype = (<any>node).type;
     var props = (<any>node).props;
-    var aref= (<any>node).props?.ref;
+    var aref = (<any>node).props?.ref;
     var ret;
     if (atype === undefined)
         debugger;
@@ -227,48 +205,18 @@ export function createComponent(node: React.ReactNode): any {//node: { key: stri
 
         }
     }
-   if (aref) { 
+    if (aref) {
         aref.current = ret;
-      //  delete props?.ref;
+        //  delete props?.ref;
     }
     return ret;
 
 }
 
-export function createRef<T>(val: T = undefined): Ref<T> {
-    var ret:Ref<T>={current:val};
-    return ret;
-}
-export type Ref<T> = { current: T };
-export function createRefs<T>(): T {
-    var me = {};
-    var data = {};
-    var ret = new Proxy(me, {
-        get(target, key: string) {
-            if (target[key] === undefined) {
-                target[key] = {
-                    _current: undefined,
-                    set current(value) {
-                        data[key] = value;
-                        me[key] = value;
-                        this._current = value;
-                    },
-                    get current() {
-                        return this._current;
-                    }
-                }
-            }
-            return target[key];
-        }
-    });
-
-    return <any>ret;
-}
 
 //class TC <Prop>extends React.Component<Prop,{}>{
-@$Class("jassijs.ui.Component")
-@$Property({ name: "testuw", type: "string" })
-//@ts-ignore
+//@$Class("jassijs.ui.Component")
+
 export class Component<T extends ComponentProperties = {}> implements React.Component<T> {
 
     refs;
@@ -279,22 +227,12 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     __dom: HTMLElement;
     public domWrapper: HTMLElement;
     _id: string;
-    _contextMenu?;
     _parent;
     events;
 
-   
+
     _styles?: any[];
 
-    /*  get domWrapper():Element{
-          return this._domWrapper;
-      }
-      set domWrapper(element:Element){
-          if(element===undefined){
-              debugger;
-          }
-          this._domWrapper=element;
-      }*/
     /**
      * base class for each Component
      * @class jassijs.ui.Component
@@ -316,7 +254,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     /**
      * force rerender the component with initial props and changed states
      */
-    public forceUpdate(callback:()=>void=undefined) {
+    public forceUpdate(callback: () => void = undefined) {
         if (this?.state?.exists?.current === false) {
             var node = document.createComment(this.constructor.name + " with exists=false");
             var save = this.props;
@@ -325,30 +263,30 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             this.props = save;
             return;
         }
-        var domOld=this.domWrapper;
+        var domOld = this.domWrapper;
         //@ts-ignore
         var rend = this.render(this.state);
         if (rend) {
             if (rend instanceof Node) {
                 this._initComponent(<any>rend);
             } else {
-               
+
                 var comp = createComponent(rend);
                 this._initComponent((<any>comp).dom);
             }
         }
-        if(domOld?.parentNode){
-            domOld.parentNode.replaceChild(this.dom,domOld);
+        if (domOld?.parentNode) {
+            domOld.parentNode.replaceChild(this.dom, domOld);
         }
         //@ts-ignore
-        if (callback===true)
+        if (callback === true)
             this.componentDidMount();
-        else{
+        else {
             var props = Object.assign({}, this.props);
             var keys = this.state._used;
             keys.forEach((k) => props[k] = this.state[k].current);
             this.config(props);
-            if(callback!==undefined)
+            if (callback !== undefined)
                 callback();
         }
     }
@@ -403,7 +341,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
                 notfound[key] = con;
         }
         Object.assign(this.props === undefined ? {} : this.props, config);
-       
+
         return this;
         //    return new c();
     }
@@ -460,7 +398,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         this.state.exists.current = value;
         if (old !== value) {
             this.forceUpdate();
-         
+
         }
     }
     /**
@@ -476,10 +414,10 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         /** @member {dom} - the dom-element*/
         /** @member {numer}  - the id of the element */
         if (this.dom.classList) {//Textnode!
-            this.dom.classList.add("jinlinecomponent");
+//            this.dom.classList.add("jinlinecomponent");
             this.dom.classList.add("jresizeable");
             if (domalt !== undefined && domalt.classList) {
-                domalt.classList.remove("jinlinecomponent");
+            //    domalt.classList.remove("jinlinecomponent");
                 domalt.classList.remove("jresizeable");
             }
         }
@@ -521,30 +459,31 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         //   jassijs.componentSpy.unwatch(this);
         // }
         this.dom = dom;
-        this._id = olddom?.id ? olddom.id : ("j" + registry.nextID());
+        this._id = olddom?.id ? olddom.id : ("j" + nextID());
         if (this.dom.setAttribute !== undefined)//Textnode
             this.dom.setAttribute("id", this._id);
         /** @member {Object.<string,function>} - all event handlers*/
         this._eventHandler = {};
         //add _this to the dom element
-        var lid = oldwrapper?.id ? oldwrapper.id : ("j" + registry.nextID());
-        var st = 'style="display: inline-block"';
-        if (this instanceof classes.getClass("jassijs.ui.Container")) {
-            st = "";
-        }
+        var lid = oldwrapper?.id ? oldwrapper.id : ("j" + nextID());
+        /*  var st = 'style="display: inline-block"';
+          if (this instanceof classes.getClass("jassijs.ui.Container")) {
+              st = "";
+          }*/
 
         if (this.props !== undefined && (<any>this.props).useWrapper === true) {
             /** @member {dom} - the dom element for label*/
-            let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
+            let strdom = '<div class="jwrapper" id="' + lid  + /*st +*/ '"></div>';
+            //let strdom = '<div id="' + lid + '" class ="jcomponent"' + /*st +*/ '></div>';
             this.domWrapper = Component.createHTMLElement(strdom);
             this.domWrapper._this = this;
             this.domWrapper._id = lid;
             this.domWrapper.appendChild(dom);
         } else {
             this.domWrapper = this.dom;
-            this.domWrapper._id = this._id;
-            if (this.domWrapper.classList !== undefined)
-                this.domWrapper.classList.add("jcomponent");
+            this.domWrapper._id = this._id;  
+           // if (this.domWrapper.classList !== undefined)
+           //     this.domWrapper.classList.add("jcomponent");
         }
         if (oldwrapper?.parentNode !== undefined) {
             oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper);//removeChild(this.domWrapper);
@@ -566,17 +505,17 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             document.getElementById("jassitemp").appendChild(this.domWrapper);
 
     }
-    @$Property({ description: "wraps the component with div" })
+    //@$Property({ description: "wraps the component with div" })
 
     set useWrapper(value: boolean) {
         if (value === true && this.dom === this.domWrapper) {//wrap
-            var lid = "j" + registry.nextID();
-            var st = 'style="display: inline-block"';
+            var lid = "j" + nextID();
+            var st = "";/*'style="display: inline-block"';
             if (this instanceof classes.getClass("jassijs.ui.Container")) {
                 st = "";
-            }
+            }*/
             /** @member {dom} - the dom element for label*/
-            let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
+            let strdom = '<div class="jwrapper" id="' + lid + '"' + st + '></div>';
             this.domWrapper = Component.createHTMLElement(strdom);
             this.domWrapper._this = this;
             this.domWrapper._id = lid;
@@ -589,16 +528,16 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
                 this.domWrapper.parentNode.replaceChild(this.dom, this.domWrapper);//removeChild(this.domWrapper);
             this.domWrapper = this.dom;
             this.domWrapper._id = this._id;
-            if (this.domWrapper.classList !== undefined)
-                this.domWrapper.classList.add("jcomponent");
+            //if (this.domWrapper.classList !== undefined)
+                //this.domWrapper.classList.add("jcomponent");
         }
     }
-    @$Property({ default: "function(event){\n\t\n}" })
+    //@$Property({ default: "function(event){\n\t\n}" })
     onfocus(handler) {
         return this.on("focus", handler);
     }
 
-    @$Property({ default: "function(event){\n\t\n}" })
+    //@$Property({ default: "function(event){\n\t\n}" })
     onblur(handler) {
         return this.on("blur", handler);
     }
@@ -663,7 +602,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
 
 
 
-    @$Property({ description: "adds a label above the component" })
+    //@$Property({ description: "adds a label above the component" })
     set label(value: string) { //the Code
         this.state.label.current = value;
         if (value !== undefined)
@@ -687,7 +626,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         return this.state.label.current; //this.domWrapper.querySelector(".jlabel")?.innerHTML;
     }
 
-    @$Property({ description: "tooltip are displayed on mouse over" })
+    //@$Property({ description: "tooltip are displayed on mouse over" })
     get tooltip(): string {
         return this.dom.getAttribute("title");
     }
@@ -696,7 +635,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
 
     }
 
-    @$Property()
+    //@$Property()
     get x(): number {
         return Number(this.domWrapper.style.left.replace("px", ""));
     }
@@ -707,7 +646,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         this.state.x.current = value;
     }
 
-    @$Property()
+    //@$Property()
     get y(): number {
         return Number(this.domWrapper.style.top.replace("px", ""));
     }
@@ -718,7 +657,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         this.state.y.current = value;
     }
 
-    @$Property()
+    //@$Property()
     get hidden(): boolean {
         return (this.dom.getAttribute("hidden") === "");
     }
@@ -748,7 +687,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         this.state.width.current = value;
         //  
     }
-    @$Property({ type: "number" })
+    //@$Property({ type: "number" })
     get width() {
         if (this.domWrapper.style.width !== undefined)
             return this.domWrapper.style.width;
@@ -772,7 +711,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         }
         this.state.height.current = value;
     }
-    @$Property({ type: "number" })
+    //@$Property({ type: "number" })
     get height() {
         if (this.domWrapper.style.height !== undefined)
             return this.domWrapper.style.height;
@@ -780,9 +719,9 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
             return undefined;
         return this.dom.style.height.replace("px", "");
     }
-    @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
+    //@$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
     set style(properties: React.CSSProperties) {
-        var prop = CSSProperties.applyTo(properties, this);
+        var prop = properties;//CSSProperties.applyTo(properties, this);
         for (let key in prop) {
 
             this.dom.style[key] = prop[key];
@@ -805,7 +744,7 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         this.dom.style.width = "calc(100% - 2px)";
         this.dom.style.height = "calc(100% - 2px)";
     }
-    @$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" })
+    //@$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" })
     get styles(): any[] {
         return this._styles;
     }
@@ -828,31 +767,23 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
         });
     }
 
-    @$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" })
+    //@$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" })
     get contextMenu() {
-        return this._contextMenu;
+        return this.state.contextMenu.current;
     }
     set contextMenu(value) {
-
-        if (this._contextMenu !== undefined)
-            this._contextMenu.unregisterComponent(this);
-
-
+        if (this.contextMenu !== undefined)
+            this.contextMenu.unregisterComponent(this);
         if (value !== undefined) {
-            if (value.current)
-                value = value.current;
-            var ContextMenu = classes.getClass("jassijs.ui.ContextMenu");
-            if (value instanceof ContextMenu === false) {
-                throw new Error("value is not of type jassijs.ui.ContextMenu");
-            }
-            this._contextMenu = value;
+            // var ContextMenu = classes.getClass("jassijs.ui.ContextMenu");
+            // if ((<any>value) instanceof ContextMenu === false) {
+            //     throw new Error("value is not of type jassijs.ui.ContextMenu");
+            // }
+            this.state.contextMenu.current = value;
             value.registerComponent(this);
         } else
-            this._contextMenu = undefined;
-
+            this.state.contextMenu.current = undefined;
     }
-
-
     destroy() {
         if (this.contextMenu !== undefined) {
             this.contextMenu.destroy();
@@ -891,31 +822,44 @@ export class Component<T extends ComponentProperties = {}> implements React.Comp
     }
 
 }
-/*interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
-    tag?: string;
-    children?;
-    renderFunc;
-}*/
+
 export class FunctionComponent<T> extends Component<T> {
-    _components: Component[] = [];
+    _components: Component[];
     constructor(properties: T) {
         super(properties);
     }
+
     config(config: T, forceRender = false): FunctionComponent<T> {
         super.config(config);
         return this;
     }
+
     render() {
         var Rend = (<any>this.props).renderFunc;
-        var ret: any = <React.ReactNode>new Rend(this.props, this.state);
+        var p: any = this.props;
+        if (p === undefined)
+            p = <any>{};
+        p.connectComponents = 1;
+        var ret: any = <React.ReactNode>new Rend(p, this.state);
         return ret;
     }
+    //add dom children to _components
+    set connectComponents(value) {
 
+        this._components = [];
+        var nodes = this.dom.childNodes;
+        for (var x = 0; x < nodes.length; x++) {
+            //@ts-ignore
+            this._components.push(nodes[x]._this);
+        }
+    }
     /**
     * adds a component to the container
     * @param {jassijs.ui.Component} component - the component to add
     */
     add(component) {//add a component to the container
+        if (this._components === undefined)
+            this._components = [];
         if (component._parent !== undefined) {
             component._parent.remove(component);
         }
@@ -930,6 +874,8 @@ export class FunctionComponent<T> extends Component<T> {
      * @param {jassijs.ui.Component} before - the component before then component to add
      */
     addBefore(component: Component, before: Component) {//add a component to the container
+        if (this._components === undefined)
+            this._components = [];
         if (component._parent !== undefined) {
             component._parent.remove(component);
         }
@@ -970,10 +916,9 @@ export class FunctionComponent<T> extends Component<T> {
     * @param {boolean} destroy - if true the component would be destroyed
     */
     removeAll(destroy = undefined) {
-        while (this._components.length > 0) {
+        while (this._components?.length > 0) {
             this.remove(this._components[0], destroy);
         }
-
     }
     destroy() {
         if (this._components !== undefined) {
@@ -992,31 +937,15 @@ interface HTMLComponentProperties extends ComponentProperties, Omit<React.HTMLPr
     children?;
 }
 
-function doCreateDummyForHTMLComponent(component: any, isPreDummy: boolean) {
-    var disabledBoth = ["tr", "td", "th"];
-    var enabledPost = ["div"];
-    var disabledPre = [];
-    var tag = component?.tag;
-    if (tag === undefined)
-        return false;
-    if (disabledBoth.indexOf(tag.toLowerCase()) !== -1) {
-        return false;
-    } else if (isPreDummy && disabledPre.indexOf(tag.toLowerCase()) !== -1) {
-        return false;
-    } else if (!isPreDummy && enabledPost.indexOf(tag.toLowerCase()) !== -1) {
-        return true;
-    }
-    return isPreDummy;//prodummy is enabled at default / postdummy is disabled 
 
-
-}
 
 // ret.tag = atype;
 //        var newdom = document.createElement(atype);
-@$Class("jassijs.ui.HTMLComponent")
-@$Property({ name: "children", type: "jassijs.ui.Component", createDummyInDesigner: doCreateDummyForHTMLComponent })
+//@$UIComponent({ fullPath: "common/HTMLComponent", icon: "mdi mdi-cloud-tags" , initialize:{tag:"input"},} )
+//@$Class("jassijs.ui.HTMLComponent")
+//@$Property({ name: "children", type: "jassijs.ui.Component", createDummyInDesigner: doCreateDummyForHTMLComponent })
 export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Component<HTMLComponentProperties> implements HTMLComponentProperties {
-    _components: Component[] = [];
+    _components: Component[];
 
     constructor(prop: HTMLComponentProperties = {}) {
         super(prop);
@@ -1064,14 +993,6 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
             return;
 
         this.createChildren(props);
-        var tag = props?.tag === undefined ? "span" : props?.tag;
-        if (props?.tag !== undefined && props?.tag !== this.tag.toLowerCase()) {
-            var childs = this.dom?.childNodes;
-            this.replaceDom(document.createElement(tag));
-            //            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
-            if (childs?.length > 0)
-                this.dom.append(...<any>childs);
-        }
 
         for (var prop in props) {
 
@@ -1097,31 +1018,40 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
             }
             // }
         }
-        if (props?.children) {
-            if (props?.children.length > 0 && props?.children[0] instanceof Component) {
-                this.removeAll(false);
-                for (var x = 0; x < props.children.length; x++) {
-                    this.add(props.children[x]);
-                }
-                delete props.children;
-            }
-        }
+        /*  if (props?.children) {
+              if (props?.children.length > 0 && props?.children[0] instanceof Component) {
+                  this.removeAll(false);
+                  for (var x = 0; x < props.children.length; x++) {
+                      this.add(props.children[x]);
+                  }
+                  delete props.children;
+              }
+          }*/
         return this;
     }
     set tag(value: string) {
         var tag = value == undefined ? "span" : value;
-        if (tag.toLowerCase() !== this.tag.toLowerCase()) {
-            this.props.tag = value;
-            this.config(this.props);
-            /*
+        if (tag !== this.state.tag.current?.toLowerCase()) {
             var childs = this.dom?.childNodes;
-            this.init(document.createElement(value), { replaceNode: this.dom, noWrapper: true });
+            this.replaceDom(document.createElement(tag));
+            //            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
             if (childs?.length > 0)
                 this.dom.append(...<any>childs);
-            */
         }
+        this.state.tag.current = value;
     }
-    @$Property()
+    /* @$Property({
+         chooseFromStrict: true,
+         chooseFrom: (comp) => {
+             const allElements = <any>document.body.getElementsByTagName('*');
+             const uniqueTags = new Set();
+ 
+             for (let element of allElements) {
+                 uniqueTags.add(element.tagName.toLowerCase());
+             }
+             return Array.from(uniqueTags).sort();
+         }
+     })*/
     get tag(): string {
         var ret = this.dom?.tagName;
         if (ret === null || ret === undefined)
@@ -1133,6 +1063,9 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
     * @param {jassijs.ui.Component} component - the component to add
     */
     add(component) {//add a component to the container
+        if (this._components === undefined)
+            this._components = [];
+
         if (this?.state?.exists?.current === false) {
             return;
         }
@@ -1157,6 +1090,9 @@ export class HTMLComponent<T extends HTMLComponentProperties = {}> extends Compo
      * @param {jassijs.ui.Component} before - the component before then component to add
      */
     addBefore(component: Component, before: Component) {//add a component to the container
+        if (this._components === undefined)
+            this._components = [];
+
         if (component._parent !== undefined) {
             component._parent.remove(component);
         }
@@ -1220,7 +1156,7 @@ export interface TextComponentProperties extends ComponentProperties {
     text?;
 }
 
-@$Class("jassijs.ui.TextComponent")
+//@$Class("jassijs.ui.TextComponent")
 export class TextComponent<T extends TextComponentProperties = {}> extends Component<TextComponentProperties> implements TextComponentProperties {
     constructor(props: TextComponentProperties = {}) {
         super(props);
@@ -1260,7 +1196,7 @@ export class TextComponent<T extends TextComponentProperties = {}> extends Compo
         super.config(props);
         return this;
     }
-    @$Property()
+    //@$Property()
     get text() {
         return this.dom?.textContent;
     };
@@ -1269,4 +1205,9 @@ export class TextComponent<T extends TextComponentProperties = {}> extends Compo
         // var p = JSON.parse(value);//`{"a":"` + value + '"}').a;
         this.dom.textContent = value;
     };
+}
+export function migrateModul(oldModul, newModul) {
+    if (newModul) {
+        newModul._nextID = oldModul._nextID;
+    }
 }

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_1, Registry_1, Registry_2, Panel_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "jassijs/ui/UIComponents"], function (require, exports, Registry_1, Registry_2, Panel_1, Property_1, UIComponents_1) {
     "use strict";
     var RComponent_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18,7 +18,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     Registry_1 = __importDefault(Registry_1);
     //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
     jassijs.includeCSSFile("jassijs_report.css");
-    class ReportComponentProperties extends Component_1.UIComponentProperties {
+    class ReportComponentProperties extends UIComponents_1.UIComponentProperties {
     }
     exports.ReportComponentProperties = ReportComponentProperties;
     function $ReportComponent(properties) {
@@ -29,7 +29,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     exports.$ReportComponent = $ReportComponent;
     let RComponent = RComponent_1 = class RComponent extends Panel_1.Panel {
         constructor(properties = undefined) {
-            super(properties);
+            super(Object.assign({ useWrapper: true }, properties));
             this.reporttype = "nothing";
         }
         onstylechanged(func) {

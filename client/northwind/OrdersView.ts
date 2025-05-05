@@ -101,7 +101,7 @@ export class OrdersView extends DBObjectView<Orders,OrdersViewProperties> {
                                 jc(HTMLPanel,{ bind: this.state.value.bind.Employee,template: "{{id}} {{FirstName}} {{LastName}}",width: 260,label: "Employee",height: 20 }),
                                 jc(ObjectChooser,{ items: "northwind.Employees",bind: this.state.value.bind.Employee }),
                                 jc("br",{}),
-                                jc(Textbox,{ bind: this.state.value.bind.OrderDate,converter: new DateTimeConverter(),label: "Oder Date",width: 95,text: "Oder Date" }),
+                                jc(Textbox,{ bind: this.state.value.bind.OrderDate,converter: new DateTimeConverter(),label: "Oder Date",width: 95 }),
                                 jc(Textbox,{ bind: this.state.value.bind.RequiredDate,converter: new DateTimeConverter(),label: "Required Date",width: 95 }),
                                 jc(Textbox,{ bind: this.state.value.bind.ShippedDate,converter: new DateTimeConverter(),label: "Shipped Date",width: 95 })
                             ]

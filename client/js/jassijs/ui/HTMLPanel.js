@@ -7,11 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_1, Registry_1, Property_1, DataComponent_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Registry_1, Property_1, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HTMLPanel = void 0;
     var bugtinymce = undefined;
+    //@$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ })
     let HTMLPanel = class HTMLPanel extends DataComponent_1.DataComponent {
         constructor(properties = {}) {
             super(properties);
@@ -97,7 +98,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [String])
     ], HTMLPanel.prototype, "value", null);
     HTMLPanel = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
         (0, Registry_1.$Class)("jassijs.ui.HTMLPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel);

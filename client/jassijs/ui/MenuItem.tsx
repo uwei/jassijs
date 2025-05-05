@@ -1,10 +1,11 @@
 
 import "jassijs/ext/jquerylib";
-import { Component, $UIComponent } from "jassijs/ui/Component";
+import { Component } from "jassijs/ui/Component";
 import { Menu, MenuProperties } from "jassijs/ui/Menu";
 import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
 import { Container, ContainerProperties } from "jassijs/ui/Container";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 
 export interface MenuItemProperties extends ContainerProperties {
     domProperties?:React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLLIElement>, HTMLLIElement>;

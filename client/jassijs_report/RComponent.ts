@@ -1,8 +1,9 @@
-import { UIComponentProperties } from "jassijs/ui/Component";
+
 import registry from "jassijs/remote/Registry";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
+import { UIComponentProperties } from "jassijs/ui/UIComponents";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { RStyle } from "jassijs_report/RStyle";
 //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
@@ -47,7 +48,7 @@ export class RComponent extends Panel {
     reporttype: string = "nothing";
     otherProperties: any;
     constructor(properties = undefined) {
-        super(properties);
+        super( Object.assign({useWrapper:true},properties));
 
     }
     onstylechanged(func) {

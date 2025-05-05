@@ -11,28 +11,27 @@ define(["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry",
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateEmptyDialog = void 0;
-    const code = `import { $Class } from "jassijs/remote/Registry";
-import {Panel} from "jassijs/ui/Panel";
-
-type Me = {
+    const code = `import { HTMLComponent } from "jassijs/ui/Component";
+import { $Class } from "jassijs/remote/Registry";
+import { Component,ComponentProperties,SimpleComponentProperties,jc } from "jassijs/ui/Component";
+type Refs={};
+interface {{dialogname}}Properties extends SimpleComponentProperties {//or ComponentProperties to publish DefaultProperties
+    sampleProp?: string;
 }
 
 @$Class("{{fullclassname}}")
-export class {{dialogname}} extends Panel {
-    me: Me;
-    constructor() {
-        super();
-        this.me = {};
-        this.layout(this.me);
+export class {{dialogname}} extends Component<{{dialogname}}Properties> {
+    declare refs: Refs;
+    constructor(props: {{dialogname}}Properties={}) {
+        super(props);
     }
-    layout(me: Me) {
-        this.config({});
-	}
+    render() {
+        return jc("span",{ children: [this.state.sampleProp] });
+    }
 }
-
-export async function test(){
-	var ret=new {{dialogname}}();
-	return ret;
+export async function test() {
+    var ret=new  {{dialogname}}({ sampleProp: "jj" });
+    return ret;
 }`;
     let TemplateEmptyDialog = class TemplateEmptyDialog {
         static async newFile(all) {
@@ -47,7 +46,7 @@ export async function test(){
     TemplateEmptyDialog.code = code;
     __decorate([
         (0, Actions_1.$Action)({
-            name: "New/Dialog",
+            name: "New/Dialog.ts",
             isEnabled: function (all) {
                 return all[0].isDirectory();
             }

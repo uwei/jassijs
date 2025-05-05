@@ -8,10 +8,17 @@ import { Reloader } from "./Reloader";
 
 //@ts-ignore
 config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
+    //@ts-ignore
     require("jassijs/server/NativeAdapter").ts = window.ts;
 });
-var ts = window.ts;
-export { ts }
+
+//@ts-ignore
+//ts = window.ts;
+export { TypescriptNamespace as ts } //the namespace
+//@ts-ignore;
+const ts = window.ts;
+//@ts-ignore;
+export { ts } 
 var exists=fsexists;
 
 var myfs = new FS();

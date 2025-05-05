@@ -1,5 +1,5 @@
 var bugtinymce=undefined;
-import { Component,$UIComponent,ComponentProperties,jc } from "jassijs/ui/Component";
+import { Component,ComponentProperties,jc } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { Property,$Property } from "jassijs/ui/Property";
 import { DataComponent,DataComponentProperties } from "jassijs/ui/DataComponent";

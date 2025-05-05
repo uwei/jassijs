@@ -41,7 +41,7 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
             var textpositions = {};
             for (var x = 0; x < nodes.childNodes.length; x++) {
                 var nd = nodes.childNodes[x];
-                if (nd.classList.contains("jcomponent")) {
+                if (nd.classList.contains("jeditablecomponent")) {
                     toInsert.push(document.getElementById(nd.id)._this);
                 }
                 else {
@@ -879,17 +879,32 @@ define(["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remot
                         var before = undefined;
                         // if (anchorNode.childNodes.length > anchorOffset) {
                         before = anchorNode._this;
-                        //}
-                        anchorOffset = 0;
-                        anchorNode = this.createTextComponent(e.key, anchorNode._this._parent, before).dom;
-                        neu = e.key;
+                        var testpos = before._parent._components.indexOf(before);
+                        if (testpos > 1 && before._parent._components[testpos - 1] instanceof Component_1.TextComponent) {
+                            anchorOffset = 0;
+                            anchorNode = before._parent._components[testpos - 1].dom;
+                            neu = anchorNode.textContent + e.key;
+                        }
+                        else {
+                            //}
+                            anchorOffset = 0;
+                            anchorNode = this.createTextComponent(e.key, anchorNode._this._parent, before).dom;
+                            neu = e.key;
+                        }
                     }
                     else if (dummyPre === false) {
                         var container = this.lastSelectedDummy.component;
+                        if ((container === null || container === void 0 ? void 0 : container._components.length) > 1 && container._components[container._components.length - 1] instanceof Component_1.TextComponent) {
+                            anchorNode = container._components[container._components.length - 1].dom;
+                            anchorOffset = 0;
+                            neu = anchorNode.textContent + e.key;
+                        }
+                        else {
+                            anchorOffset = 0;
+                            anchorNode = this.createTextComponent(e.key, container, undefined).dom;
+                            neu = e.key;
+                        }
                         //}
-                        anchorOffset = 0;
-                        anchorNode = this.createTextComponent(e.key, container, undefined).dom;
-                        neu = e.key;
                     }
                     else { //insert in Container
                         var desc = ComponentDescriptor_1.ComponentDescriptor.describe(anchorNode._this.constructor);

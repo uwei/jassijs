@@ -2,7 +2,6 @@ import { $Class } from "jassijs/remote/Registry";
 import {Panel} from "jassijs/ui/Panel";
 import {Table} from "jassijs/ui/Table";
 import {HTMLPanel} from "jassijs/ui/HTMLPanel";
-import {Repeater} from "jassijs/ui/Repeater";
 import {Button} from "jassijs/ui/Button";
 import {BoxPanel} from "jassijs/ui/BoxPanel";
 import {Select} from "jassijs/ui/Select";

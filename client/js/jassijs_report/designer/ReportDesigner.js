@@ -73,6 +73,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
             this.editButton.tooltip = "pdf preview";
             this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
         }
+        changeText(node, text, deleteNodeIfEmpty = false) {
+            var ret = super.changeText(node, text, deleteNodeIfEmpty);
+            if (text === "") { //remove empty Node
+                var comp = node["_this"];
+                var par = comp._parent;
+                comp._parent.remove(comp, true);
+            }
+            return ret;
+        }
         createTextComponent(text, par, before) {
             var comp2 = new RText_1.RText();
             comp2.value = text;
@@ -144,7 +153,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
         propertyChanged() {
             this.propertyIsChanging = true;
             if (this._codeChanger.parser.sourceFile === undefined)
-                this._codeChanger.updateParser();
+                this._codeChanger.updateParser(); //is deactivated
+            this._codeChanger.parser.parse(this._codeEditor.value);
             //@ts-ignore
             let job = this.designedComponent.toJSON();
             delete job.parameter;

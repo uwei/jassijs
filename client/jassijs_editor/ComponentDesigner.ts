@@ -591,7 +591,7 @@ export class ComponentDesigner extends Panel {
         this.pasteButton.hidden = !enable;
         var component = this._designPlaceholder._components[0];
         //switch designmode
-        var comps = component.dom.querySelectorAll(".jcomponent");
+        var comps = component.dom.querySelectorAll(".jeditablecomponent");
         if (enable)
             comps.forEach((c) => c.classList.add("jdesignmode"));
         else
@@ -630,7 +630,7 @@ export class ComponentDesigner extends Panel {
             } else
                 allcomponents = this.variables.getEditableComponents(component);
             //this._installTinyEditor();
-            this._draganddropper = this.createDragAndDropper();
+           // this._draganddropper = this.createDragAndDropper();
             this._resizer = new Resizer();
             this._resizer.draganddropper = this._draganddropper;
 
@@ -886,6 +886,7 @@ export class ComponentDesigner extends Panel {
                     var toCreate: { createFromType: string, createFromParam: string } = <any>JSON.parse(data);
                     var cl = classes.getClass(toCreate.createFromType);
                     var newComponent = new cl();
+                    newComponent.createFromParam=toCreate.createFromParam;
                     var beforeComponent: Component = (<any>ev.target)._this;
                     var newParent = beforeComponent._parent;
                     _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent);// beforeComponent);
@@ -995,6 +996,7 @@ export class ComponentDesigner extends Panel {
                     var toCreate: { createFromType: string, createFromParam: string } = <any>JSON.parse(data);
                     var cl = classes.getClass(toCreate.createFromType);
                     var newComponent = new cl();
+                    newComponent.createFromParam=toCreate.createFromParam;
                     let newParent = (<any>ev.target)._this;
                     _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined);// beforeComponent);
                 } else if (data.indexOf('"varNamesToCopy":') > -1) {
@@ -1102,7 +1104,12 @@ export class ComponentDesigner extends Panel {
                     }
                 }
             }
-            if (!varname) {
+            if (varname&&node.classList) {
+                if (!node.classList.contains("jeditablecomponent")) {
+                        node.classList.add("jeditablecomponent");
+                    }
+            }else{
+                 
                 if (node.contentEditable !== "false")
                     node.contentEditable = "false";
             }
@@ -1280,7 +1287,7 @@ export class ComponentDesigner extends Panel {
         this._designPlaceholder.dom.contentEditable = "false";
         //delete removed dummies
         for (var x = 0; x < this.dummyHolder.childNodes.length; x++) {
-            if ((<any>this.dummyHolder.childNodes[x])._this.dom._this._parent === undefined) {
+            if ((<any>this.dummyHolder.childNodes[x])._this.dom?._this?._parent === undefined) {
                 //if ((<any>this.dummyHolder.childNodes[x])._this._parent === undefined) {
                 this.dummyHolder.removeChild(this.dummyHolder.childNodes[x]);
             }
@@ -1306,7 +1313,7 @@ export class ComponentDesigner extends Panel {
 
 }
 export async function test() {
-    return new ComponentDesigner();
+    return new ComponentDesigner({});
 
 };
 

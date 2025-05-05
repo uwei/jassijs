@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Split, Panel_1, Registry_1, Component_1, Property_1, Classes_1) {
+define(["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ui/UIComponent"], function (require, exports, Split, Panel_1, Registry_1, Property_1, Classes_1, UIComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.BoxPanel = void 0;
@@ -100,7 +100,7 @@ define(["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Re
         __metadata("design:paramtypes", [Array])
     ], BoxPanel.prototype, "spliter", null);
     BoxPanel = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        (0, UIComponent_1.$UIComponent)({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
         (0, Registry_1.$Class)("jassijs.ui.BoxPanel"),
         (0, Property_1.$Property)({ name: "isAbsolute", hide: true, type: "boolean" }),
         __metadata("design:paramtypes", [Object])

@@ -7,7 +7,7 @@ import { $Class } from "jassijs/remote/Registry";
 import registry from "jassijs/remote/Registry";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { Runlater } from "jassijs/util/Runlater";
-import { Component } from 'jassijs/ui/Component';
+import { Component, nextID } from 'jassijs/ui/Component';
 
 
 
@@ -392,7 +392,7 @@ export class AcePanel extends CodePanel {
     getDocTooltip(item) {
         if (item.file === undefined)
             return "";
-        var _id = "j" + registry.nextID();
+        var _id = "j" + nextID();
         item.docHTML = "<span id='" + _id + "'> please try later ... loading in progress<span>";
 
         mytypescript.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {

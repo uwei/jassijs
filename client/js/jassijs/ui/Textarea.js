@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Component_1, Registry_1, Property_1, Textbox_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/UIComponents"], function (require, exports, Registry_1, Property_1, Textbox_1, UIComponents_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textarea = void 0;
@@ -23,7 +23,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
     };
     Textarea = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
         (0, Registry_1.$Class)("jassijs.ui.Textarea"),
         (0, Property_1.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])

@@ -64,20 +64,39 @@ export function foreach(stateWithArray: { current: any[] }, func: (ob) => any): 
     return <any>retState;
 }
 
+export function createRef<T>(val: T = undefined): Ref<T> {
+    //var ret:Ref<T>={current:val};
+    var ret=createState(val);
+    return ret;
+}
+export type Ref<T> = { current: T };
+export function createRefs<T>(): T {
+    var ret=createStates<T>();
+    ret._onStateChanged((value,state:State)=>{
+        //here we replace the state with real value
+        //@ts-ignore
+        ret[state._$propertyname_]=value;
+    });
+    return <any>ret;
 
-export type States<T> = { [Property in keyof T]: States<T[Property]> & { bind?: BoundProperty<T[Property]> } } & { current: T, _used?: string[], _onStateChanged?: (handler: (value) => void) => void };
+}
+
+type NonFunctionPropertyNames<T>={[K in keyof T]:T[K] extends Function?never:K}[keyof T];
+type NonFunctionProperties<T>=Pick<T,NonFunctionPropertyNames<T>>;
+export type States<T> = { [Property in keyof T]: States<T[Property]> & { bind?: BoundProperty<T[Property]> } } & { current: T,self:any, _used?: string[], _onStateChanged?: (handler: (value,state:State) => void) => void };
 export function createStates<T>(initialValues: T = undefined, propertyname: string = undefined): States<T> {
     var data: any = new StateGroup(initialValues);// { _used: [], _data: initialValues };
     data._$propertyname_ = propertyname;
     
     return new Proxy(data as any, {
         get(target: State, key: string) {
-            if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current" && key !== "statechanged") {
+            if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current") {
                 var newstate: State = <any>createStates(data.current !== undefined ? data.current[key] : undefined, key);
 
                 target[key] = newstate;
                 target._observe_(newstate, "_$setparentobject");
-                newstate._observe_(target, "statechanged");
+                newstate._listener_=[...target._listener_]
+                //newstate._observe_(target, "statechanged");
                 if (target._used.indexOf(key) === -1)
                     target._used.push(key);
             }
@@ -89,17 +108,21 @@ export function createStates<T>(initialValues: T = undefined, propertyname: stri
             if (key === "_$setparentobject") {
                 var propname: string = data._$propertyname_;
                 target.current = value[propname];
-            }
-            if (key === "current") {
+            }else
+                 target[key]=value;
+/*            if (key === "current") {
                 target.current = value;
-            } else if (key === "statechanged") {
-                target.statechanged = value;
+            }else   if (key === "_listener_") {
+                target._listener_ = value;
             } else
-                throw "not implemented " + key;
+                throw "not implemented " + key;*/
             return true;
         }
     });
 }
+
+
+
 export type OnlyType<T, D> = { [K in keyof T as  T[K] extends D ? K : never]: T[K] };
 export type DropType<T, D> = { [K in keyof T as  T[K] extends D ? never : K]: T[K] };
 export type GroupState<T> = DropType<T, State> & { readonly refs: { readonly [Property in keyof DropType<T, State>]-?: any } } &
@@ -149,7 +172,11 @@ export class State<T = {}> {
             else
                 c.ob[c.proppath[0]] = data;
         }
-
+        var _this=this;
+        if(this._listener_.length>0){
+          
+            this._listener_.forEach((e)=>e(data,_this));
+        }
     }
 }
 export function createState<T>(val: T = undefined):State<T> {
@@ -172,15 +199,13 @@ class ComputedState<T> extends State<T> {
     }
 }
 class StateGroup<T> extends State<T> {
-    _stateChangedHandler = [];
+   // _stateChangedHandler = [];
     _onStateChanged(handler: (value) => void) {
-        this._stateChangedHandler.push(handler);
+        this._listener_.push(handler);
+        //this._stateChangedHandler.push(handler);
     }
 
-    set statechanged(value) {
-        this._stateChangedHandler.forEach((e) => e(value));
-        //this.stateHasChanged();
-    }
+
 }
 /**
  * shortcut for createComputedState
@@ -304,6 +329,7 @@ var inv: Props2 = {
     invoices: invoices
 };
 export function test() {
+   
     var k = createStates(inv);
 
     k.text.current = "OO";

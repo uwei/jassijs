@@ -2,7 +2,7 @@ import registry, { $Class } from "jassijs/remote/Registry";
 //import "jassijs/ext/tabulator";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 import { $Property } from "jassijs/ui/Property";
-import { Component, $UIComponent } from "jassijs/ui/Component";
+import { Component } from "jassijs/ui/Component";
 import { Textbox } from "jassijs/ui/Textbox";
 
 import { classes } from "jassijs/remote/Classes";
@@ -11,6 +11,7 @@ import { DateTimeConverter, DateTimeFormat } from "jassijs/ui/converters/DateTim
 import { Numberformatter } from "jassijs/util/Numberformatter";
 import { BoundProperty } from "jassijs/ui/State";
 import { StateDatabinder } from "jassijs/ui/StateBinder";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 export interface LazyLoadOption {
     classname: string;
     loadFunc: string;

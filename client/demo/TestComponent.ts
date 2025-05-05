@@ -2,7 +2,8 @@ import {Panel} from "jassijs/ui/Panel";
 import {Button} from "jassijs/ui/Button";
 import {HTMLPanel} from "jassijs/ui/HTMLPanel";
 import { $Class } from "jassijs/remote/Registry";
-import { $UIComponent } from "jassijs/ui/Component";
+import { $UIComponent } from "jassijs/ui/UIComponents";
+
 
 
 @$UIComponent({fullPath:"common/TestComponent",editableChildComponents:["this","me.button4"]})

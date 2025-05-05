@@ -10,7 +10,7 @@ import { Panel } from "jassijs/ui/Panel";
 
 import { Employees } from "northwind/remote/Employees";
 
-import { DBObjectView, $DBObjectView, DBObjectViewMe, DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
+import { DBObjectView, $DBObjectView,  DBObjectViewToolbar } from "jassijs/ui/DBObjectView";
 
 import { jc } from "jassijs/ui/Component";
 import { BoxPanel } from "jassijs/ui/BoxPanel";

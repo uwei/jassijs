@@ -5,28 +5,27 @@ import { OptionDialog } from "jassijs/ui/OptionDialog";
 import { FileExplorer, FileActions } from "jassijs_editor/FileExplorer";
 import { Server } from "jassijs/remote/Server";
 import { router } from "jassijs/base/Router";
-const code=`import { $Class } from "jassijs/remote/Registry";
-import {Panel} from "jassijs/ui/Panel";
-
-type Me = {
+const code=`import { HTMLComponent } from "jassijs/ui/Component";
+import { $Class } from "jassijs/remote/Registry";
+import { Component,ComponentProperties,SimpleComponentProperties,jc } from "jassijs/ui/Component";
+type Refs={};
+interface {{dialogname}}Properties extends SimpleComponentProperties {//or ComponentProperties to publish DefaultProperties
+    sampleProp?: string;
 }
 
 @$Class("{{fullclassname}}")
-export class {{dialogname}} extends Panel {
-    me: Me;
-    constructor() {
-        super();
-        this.me = {};
-        this.layout(this.me);
+export class {{dialogname}} extends Component<{{dialogname}}Properties> {
+    declare refs: Refs;
+    constructor(props: {{dialogname}}Properties={}) {
+        super(props);
     }
-    layout(me: Me) {
-        this.config({});
-	}
+    render() {
+        return jc("span",{ children: [this.state.sampleProp] });
+    }
 }
-
-export async function test(){
-	var ret=new {{dialogname}}();
-	return ret;
+export async function test() {
+    var ret=new  {{dialogname}}({ sampleProp: "jj" });
+    return ret;
 }`;
 
 @$ActionProvider("jassijs.remote.FileNode")
@@ -34,7 +33,7 @@ export async function test(){
 export class TemplateEmptyDialog {
 	static code:string=code;
     @$Action({
-        name: "New/Dialog",
+        name: "New/Dialog.ts",
         isEnabled: function(all: FileNode[]): boolean {
             return all[0].isDirectory();
         }

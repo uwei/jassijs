@@ -86,7 +86,7 @@ export class RStyle extends RComponent {
     extensionCalled(action: ExtensionAction) {
         if (action.componentDesignerSetDesignMode) {
             this.activeComponentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
-            return this._setDesignMode(action.componentDesignerSetDesignMode.enable);
+            return action.componentDesignerSetDesignMode.enable;
         }
         super.extensionCalled(action);
     }

@@ -36,7 +36,7 @@ define("demoreports/registry",["require"], function(require) {
 		"date": 1655641246000
 	},
 	"demoreports/pdfmake-playground/Basics.ts": {
-		"date": 1655408094000
+		"date": 1740918716269.6404
 	},
 	"demoreports/pdfmake-playground/Columns.ts": {
 		"date": 1655408108000

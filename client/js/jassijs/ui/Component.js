@@ -1,36 +1,17 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties", "jassijs/ui/State"], function (require, exports, Registry_1, Property_1, Registry_2, Classes_1, CSSProperties_1, State_1) {
+define(["require", "exports", "jassijs/ui/State"], function (require, exports, State_1) {
     "use strict";
-    var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.createRefs = exports.createRef = exports.createComponent = exports.jc = exports.React = exports.$UIComponent = exports.UIComponentProperties = void 0;
-    Registry_2 = __importDefault(Registry_2);
-    //import { CSSProperties } from "jassijs/ui/Style";
-    jassijs.includeCSSFile("jassijs.css");
-    jassijs.includeCSSFile("materialdesignicons.min.css");
-    //vergleichen
-    //jeder bekommt componentid
-    //gehe durch baum wenn dom_component fehlt, dann ist kopiert und muss mit id von componentid gerenderd werden
-    class UIComponentProperties {
+    exports.migrateModul = exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.createComponent = exports.jc = exports.React = exports.nextID = void 0;
+    let _nextID = 10;
+    /**
+    * with every call a new id is generated - used to create a free id for the dom
+    * @returns {number} - the id
+    */
+    function nextID() {
+        _nextID = _nextID + 1;
+        return _nextID.toString();
     }
-    exports.UIComponentProperties = UIComponentProperties;
-    function $UIComponent(properties) {
-        return function (pclass) {
-            Registry_2.default.register("$UIComponent", pclass, properties);
-        };
-    }
-    exports.$UIComponent = $UIComponent;
+    exports.nextID = nextID;
     var React = {
         createElement(type, props, ...children) {
             if (props === undefined || props === null) //TODO is this right?
@@ -103,46 +84,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         return ret;
     }
     exports.createComponent = createComponent;
-    function createRef(val = undefined) {
-        var ret = { current: val };
-        return ret;
-    }
-    exports.createRef = createRef;
-    function createRefs() {
-        var me = {};
-        var data = {};
-        var ret = new Proxy(me, {
-            get(target, key) {
-                if (target[key] === undefined) {
-                    target[key] = {
-                        _current: undefined,
-                        set current(value) {
-                            data[key] = value;
-                            me[key] = value;
-                            this._current = value;
-                        },
-                        get current() {
-                            return this._current;
-                        }
-                    };
-                }
-                return target[key];
-            }
-        });
-        return ret;
-    }
-    exports.createRefs = createRefs;
     //class TC <Prop>extends React.Component<Prop,{}>{
-    let Component = Component_1 = class Component {
-        /*  get domWrapper():Element{
-              return this._domWrapper;
-          }
-          set domWrapper(element:Element){
-              if(element===undefined){
-                  debugger;
-              }
-              this._domWrapper=element;
-          }*/
+    //@$Class("jassijs.ui.Component")
+    class Component {
         /**
          * base class for each Component
          * @class jassijs.ui.Component
@@ -154,7 +98,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             // super(properties, undefined);
             // if(properties===undefined)
             // properties={};
-            this.refs = createRefs();
+            this.refs = (0, State_1.createRefs)();
             this.state = (0, State_1.createStates)(properties);
             this.props = properties;
             (0, State_1.resolveState)(this, this.props);
@@ -317,10 +261,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             /** @member {dom} - the dom-element*/
             /** @member {numer}  - the id of the element */
             if (this.dom.classList) { //Textnode!
-                this.dom.classList.add("jinlinecomponent");
+                //            this.dom.classList.add("jinlinecomponent");
                 this.dom.classList.add("jresizeable");
                 if (domalt !== undefined && domalt.classList) {
-                    domalt.classList.remove("jinlinecomponent");
+                    //    domalt.classList.remove("jinlinecomponent");
                     domalt.classList.remove("jresizeable");
                 }
             }
@@ -349,29 +293,30 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.__dom._this = undefined;
             }
             //notify Hook
-            for (var x = 0; x < Component_1._componentHook.length; x++) {
-                Component_1._componentHook[x]("precreate", this);
+            for (var x = 0; x < Component._componentHook.length; x++) {
+                Component._componentHook[x]("precreate", this);
             }
             //allready watched?
             // if (jassijs.componentSpy !== undefined) {
             //   jassijs.componentSpy.unwatch(this);
             // }
             this.dom = dom;
-            this._id = (olddom === null || olddom === void 0 ? void 0 : olddom.id) ? olddom.id : ("j" + Registry_2.default.nextID());
+            this._id = (olddom === null || olddom === void 0 ? void 0 : olddom.id) ? olddom.id : ("j" + nextID());
             if (this.dom.setAttribute !== undefined) //Textnode
                 this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
-            var lid = (oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.id) ? oldwrapper.id : ("j" + Registry_2.default.nextID());
-            var st = 'style="display: inline-block"';
-            if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
-                st = "";
-            }
+            var lid = (oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.id) ? oldwrapper.id : ("j" + nextID());
+            /*  var st = 'style="display: inline-block"';
+              if (this instanceof classes.getClass("jassijs.ui.Container")) {
+                  st = "";
+              }*/
             if (this.props !== undefined && this.props.useWrapper === true) {
                 /** @member {dom} - the dom element for label*/
-                let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
-                this.domWrapper = Component_1.createHTMLElement(strdom);
+                let strdom = '<div class="jwrapper" id="' + lid + /*st +*/ '"></div>';
+                //let strdom = '<div id="' + lid + '" class ="jcomponent"' + /*st +*/ '></div>';
+                this.domWrapper = Component.createHTMLElement(strdom);
                 this.domWrapper._this = this;
                 this.domWrapper._id = lid;
                 this.domWrapper.appendChild(dom);
@@ -379,20 +324,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             else {
                 this.domWrapper = this.dom;
                 this.domWrapper._id = this._id;
-                if (this.domWrapper.classList !== undefined)
-                    this.domWrapper.classList.add("jcomponent");
+                // if (this.domWrapper.classList !== undefined)
+                //     this.domWrapper.classList.add("jcomponent");
             }
             if ((oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.parentNode) !== undefined) {
                 oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper); //removeChild(this.domWrapper);
             }
             //append temporary so new elements must not added immediately
             if (document.getElementById("jassitemp") === null) {
-                var temp = Component_1.createHTMLElement('<template id="jassitemp"></template>');
+                var temp = Component.createHTMLElement('<template id="jassitemp"></template>');
                 document.body.appendChild(temp);
             }
             //notify Hook
-            for (var x = 0; x < Component_1._componentHook.length; x++) {
-                Component_1._componentHook[x]("create", this);
+            for (var x = 0; x < Component._componentHook.length; x++) {
+                Component._componentHook[x]("create", this);
             }
             //for profilling save code pos
             //if (jassijs.componentSpy !== undefined) {
@@ -401,16 +346,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (!oldwrapper)
                 document.getElementById("jassitemp").appendChild(this.domWrapper);
         }
+        //@$Property({ description: "wraps the component with div" })
         set useWrapper(value) {
             if (value === true && this.dom === this.domWrapper) { //wrap
-                var lid = "j" + Registry_2.default.nextID();
-                var st = 'style="display: inline-block"';
-                if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
+                var lid = "j" + nextID();
+                var st = ""; /*'style="display: inline-block"';
+                if (this instanceof classes.getClass("jassijs.ui.Container")) {
                     st = "";
-                }
+                }*/
                 /** @member {dom} - the dom element for label*/
-                let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
-                this.domWrapper = Component_1.createHTMLElement(strdom);
+                let strdom = '<div class="jwrapper" id="' + lid + '"' + st + '></div>';
+                this.domWrapper = Component.createHTMLElement(strdom);
                 this.domWrapper._this = this;
                 this.domWrapper._id = lid;
                 if (this.dom.parentNode)
@@ -422,13 +368,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                     this.domWrapper.parentNode.replaceChild(this.dom, this.domWrapper); //removeChild(this.domWrapper);
                 this.domWrapper = this.dom;
                 this.domWrapper._id = this._id;
-                if (this.domWrapper.classList !== undefined)
-                    this.domWrapper.classList.add("jcomponent");
+                //if (this.domWrapper.classList !== undefined)
+                //this.domWrapper.classList.add("jcomponent");
             }
         }
+        //@$Property({ default: "function(event){\n\t\n}" })
         onfocus(handler) {
             return this.on("focus", handler);
         }
+        //@$Property({ default: "function(event){\n\t\n}" })
         onblur(handler) {
             return this.on("blur", handler);
         }
@@ -490,6 +438,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (this.dom.setAttribute && olddom.getAttribute)
                 this.dom.setAttribute("id", olddom.getAttribute("id"));
         }
+        //@$Property({ description: "adds a label above the component" })
         set label(value) {
             this.state.label.current = value;
             if (value !== undefined)
@@ -502,7 +451,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             else {
                 //CHECK children(0)-> first() 
                 if (!this.domWrapper.querySelector(".jlabel")) {
-                    let lab = Component_1.createHTMLElement('<label class="jlabel" for="' + this._id + '"></label>'); //
+                    let lab = Component.createHTMLElement('<label class="jlabel" for="' + this._id + '"></label>'); //
                     this.domWrapper.prepend(lab);
                 }
                 this.domWrapper.querySelector(".jlabel").innerHTML = value;
@@ -511,12 +460,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         get label() {
             return this.state.label.current; //this.domWrapper.querySelector(".jlabel")?.innerHTML;
         }
+        //@$Property({ description: "tooltip are displayed on mouse over" })
         get tooltip() {
             return this.dom.getAttribute("title");
         }
         set tooltip(value) {
             this.dom.setAttribute("title", value);
         }
+        //@$Property()
         get x() {
             return Number(this.domWrapper.style.left.replace("px", ""));
         }
@@ -525,6 +476,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.domWrapper.style.position = "absolute";
             this.state.x.current = value;
         }
+        //@$Property()
         get y() {
             return Number(this.domWrapper.style.top.replace("px", ""));
         }
@@ -533,6 +485,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.domWrapper.style.position = "absolute";
             this.state.y.current = value;
         }
+        //@$Property()
         get hidden() {
             return (this.dom.getAttribute("hidden") === "");
         }
@@ -560,6 +513,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.state.width.current = value;
             //  
         }
+        //@$Property({ type: "number" })
         get width() {
             if (this.domWrapper.style.width !== undefined)
                 return this.domWrapper.style.width;
@@ -582,6 +536,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             }
             this.state.height.current = value;
         }
+        //@$Property({ type: "number" })
         get height() {
             if (this.domWrapper.style.height !== undefined)
                 return this.domWrapper.style.height;
@@ -589,8 +544,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 return undefined;
             return this.dom.style.height.replace("px", "");
         }
+        //@$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
         set style(properties) {
-            var prop = CSSProperties_1.CSSProperties.applyTo(properties, this);
+            var prop = properties; //CSSProperties.applyTo(properties, this);
             for (let key in prop) {
                 this.dom.style[key] = prop[key];
             }
@@ -611,6 +567,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.dom.style.width = "calc(100% - 2px)";
             this.dom.style.height = "calc(100% - 2px)";
         }
+        //@$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" })
         get styles() {
             return this._styles;
         }
@@ -632,32 +589,31 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                     this.dom.classList.add(st);
             });
         }
+        //@$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" })
         get contextMenu() {
-            return this._contextMenu;
+            return this.state.contextMenu.current;
         }
         set contextMenu(value) {
-            if (this._contextMenu !== undefined)
-                this._contextMenu.unregisterComponent(this);
+            if (this.contextMenu !== undefined)
+                this.contextMenu.unregisterComponent(this);
             if (value !== undefined) {
-                if (value.current)
-                    value = value.current;
-                var ContextMenu = Classes_1.classes.getClass("jassijs.ui.ContextMenu");
-                if (value instanceof ContextMenu === false) {
-                    throw new Error("value is not of type jassijs.ui.ContextMenu");
-                }
-                this._contextMenu = value;
+                // var ContextMenu = classes.getClass("jassijs.ui.ContextMenu");
+                // if ((<any>value) instanceof ContextMenu === false) {
+                //     throw new Error("value is not of type jassijs.ui.ContextMenu");
+                // }
+                this.state.contextMenu.current = value;
                 value.registerComponent(this);
             }
             else
-                this._contextMenu = undefined;
+                this.state.contextMenu.current = undefined;
         }
         destroy() {
             if (this.contextMenu !== undefined) {
                 this.contextMenu.destroy();
             }
             //notify Hook
-            for (var x = 0; x < Component_1._componentHook.length; x++) {
-                Component_1._componentHook[x]("destroy", this);
+            for (var x = 0; x < Component._componentHook.length; x++) {
+                Component._componentHook[x]("destroy", this);
             }
             // if (jassijs.componentSpy !== undefined) {
             //    jassijs.componentSpy.unwatch(this);
@@ -681,92 +637,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         extensionCalled(action) {
         }
-    };
-    Component._componentHook = [];
-    __decorate([
-        (0, Property_1.$Property)({ description: "wraps the component with div" }),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], Component.prototype, "useWrapper", null);
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], Component.prototype, "onfocus", null);
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], Component.prototype, "onblur", null);
-    __decorate([
-        (0, Property_1.$Property)({ description: "adds a label above the component" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Component.prototype, "label", null);
-    __decorate([
-        (0, Property_1.$Property)({ description: "tooltip are displayed on mouse over" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Component.prototype, "tooltip", null);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], Component.prototype, "x", null);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], Component.prototype, "y", null);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], Component.prototype, "hidden", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "number" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Component.prototype, "width", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "number" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Component.prototype, "height", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Component.prototype, "style", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [Array])
-    ], Component.prototype, "styles", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Component.prototype, "contextMenu", null);
-    Component = Component_1 = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.Component"),
-        (0, Property_1.$Property)({ name: "testuw", type: "string" })
-        //@ts-ignore
-        ,
-        __metadata("design:paramtypes", [Object])
-    ], Component);
+    }
     exports.Component = Component;
-    /*interface FunctionComponentProperties extends ComponentProperties, Omit<React.HTMLProps<Element>, "contextMenu"> {
-        tag?: string;
-        children?;
-        renderFunc;
-    }*/
+    Component._componentHook = [];
     class FunctionComponent extends Component {
         constructor(properties) {
             super(properties);
-            this._components = [];
         }
         config(config, forceRender = false) {
             super.config(config);
@@ -774,235 +650,34 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         render() {
             var Rend = this.props.renderFunc;
-            var ret = new Rend(this.props, this.state);
+            var p = this.props;
+            if (p === undefined)
+                p = {};
+            p.connectComponents = 1;
+            var ret = new Rend(p, this.state);
             return ret;
         }
-        /**
-        * adds a component to the container
-        * @param {jassijs.ui.Component} component - the component to add
-        */
-        add(component) {
-            if (component._parent !== undefined) {
-                component._parent.remove(component);
-            }
-            component._parent = this;
-            component.domWrapper._parent = this;
-            this._components.push(component);
-            this.dom.appendChild(component.domWrapper);
-        }
-        /**
-         * adds a component to the container before an other component
-         * @param {jassijs.ui.Component} component - the component to add
-         * @param {jassijs.ui.Component} before - the component before then component to add
-         */
-        addBefore(component, before) {
-            if (component._parent !== undefined) {
-                component._parent.remove(component);
-            }
-            component._parent = this;
-            component.domWrapper["_parent"] = this;
-            var index = this._components.indexOf(before);
-            if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
-                component.domWrapper.parentNode.removeChild(component.domWrapper);
-            }
-            this._components.splice(index, 0, component);
-            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
-        }
-        /**
-        * remove the component
-        * @param {jassijs.ui.Component} component - the component to remove
-        * @param {boolean} destroy - if true the component would be destroyed
-        */
-        remove(component, destroy = false) {
-            if (destroy)
-                component.destroy();
-            component._parent = undefined;
-            if (component.domWrapper !== undefined)
-                component.domWrapper._parent = undefined;
-            if (this._components) {
-                var pos = this._components.indexOf(component);
-                if (pos >= 0)
-                    this._components.splice(pos, 1);
-            }
-            try {
-                this.dom.removeChild(component.domWrapper);
-            }
-            catch (ex) {
-            }
-        }
-        /**
-        * remove all component
-        * @param {boolean} destroy - if true the component would be destroyed
-        */
-        removeAll(destroy = undefined) {
-            while (this._components.length > 0) {
-                this.remove(this._components[0], destroy);
-            }
-        }
-        destroy() {
-            if (this._components !== undefined) {
-                var tmp = [].concat(this._components);
-                for (var k = 0; k < tmp.length; k++) {
-                    tmp[k].destroy();
-                }
-                this._components = [];
-            }
-            super.destroy();
-        }
-    }
-    exports.FunctionComponent = FunctionComponent;
-    function doCreateDummyForHTMLComponent(component, isPreDummy) {
-        var disabledBoth = ["tr", "td", "th"];
-        var enabledPost = ["div"];
-        var disabledPre = [];
-        var tag = component === null || component === void 0 ? void 0 : component.tag;
-        if (tag === undefined)
-            return false;
-        if (disabledBoth.indexOf(tag.toLowerCase()) !== -1) {
-            return false;
-        }
-        else if (isPreDummy && disabledPre.indexOf(tag.toLowerCase()) !== -1) {
-            return false;
-        }
-        else if (!isPreDummy && enabledPost.indexOf(tag.toLowerCase()) !== -1) {
-            return true;
-        }
-        return isPreDummy; //prodummy is enabled at default / postdummy is disabled 
-    }
-    // ret.tag = atype;
-    //        var newdom = document.createElement(atype);
-    let HTMLComponent = class HTMLComponent extends Component {
-        constructor(prop = {}) {
-            super(prop);
+        //add dom children to _components
+        set connectComponents(value) {
             this._components = [];
-            //this.init(document.createElement(tag), { noWrapper: true });
-        }
-        render() {
-            var _a, _b, _c, _d;
-            var ret;
-            var tag = ((_a = this.props) === null || _a === void 0 ? void 0 : _a.tag) === undefined ? "span" : (_b = this.props) === null || _b === void 0 ? void 0 : _b.tag;
-            if (((_c = this.props) === null || _c === void 0 ? void 0 : _c.tag) !== this.tag.toLowerCase()) {
-                var childs = (_d = this.dom) === null || _d === void 0 ? void 0 : _d.childNodes;
-                ret = document.createElement(tag);
-                //this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
-                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
-                    ret.append(...childs);
+            var nodes = this.dom.childNodes;
+            for (var x = 0; x < nodes.length; x++) {
+                //@ts-ignore
+                this._components.push(nodes[x]._this);
             }
-            return ret;
-        }
-        createChildren(props) {
-            if (props === null || props === void 0 ? void 0 : props.children) {
-                this.removeAll(false);
-                this._components = [];
-                for (var x = 0; x < props.children.length; x++) {
-                    var child = props.children[x];
-                    var cchild;
-                    if (typeof child === "string") {
-                        cchild = new TextComponent();
-                        cchild.tag = "";
-                        cchild.text = child;
-                    }
-                    else if (child === null || child === void 0 ? void 0 : child._$isState$_) {
-                        cchild = new TextComponent();
-                        cchild.tag = "";
-                        child === null || child === void 0 ? void 0 : child._observe_(cchild, "text", "property");
-                        cchild.text = child.current;
-                    }
-                    else {
-                        cchild = createComponent(child);
-                    }
-                    this.add(cchild);
-                }
-                delete props.children;
-            }
-        }
-        config(props) {
-            var _a;
-            if (!super.config(props))
-                return;
-            this.createChildren(props);
-            var tag = (props === null || props === void 0 ? void 0 : props.tag) === undefined ? "span" : props === null || props === void 0 ? void 0 : props.tag;
-            if ((props === null || props === void 0 ? void 0 : props.tag) !== undefined && (props === null || props === void 0 ? void 0 : props.tag) !== this.tag.toLowerCase()) {
-                var childs = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.childNodes;
-                this.replaceDom(document.createElement(tag));
-                //            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
-                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
-                    this.dom.append(...childs);
-            }
-            for (var prop in props) {
-                var val = props[prop];
-                if (prop === "style") {
-                    for (var key in props.style) {
-                        val = props.style[key];
-                        this.dom.style[key] = val;
-                    }
-                }
-                else if (prop in this.dom) {
-                    Reflect.set(this.dom, prop, val);
-                    //Reflect.set(this.dom, prop, [val])
-                }
-                else if (prop.toLocaleLowerCase() in this.dom) {
-                    Reflect.set(this.dom, prop.toLocaleLowerCase(), val);
-                }
-                else if (prop in this.dom) {
-                    if (val === null || val === void 0 ? void 0 : val._$isState$_) {
-                        val === null || val === void 0 ? void 0 : val._observe_(this, prop, "attribute");
-                        val = val.current;
-                    }
-                    this.dom.setAttribute(prop, val);
-                }
-                // }
-            }
-            if (props === null || props === void 0 ? void 0 : props.children) {
-                if ((props === null || props === void 0 ? void 0 : props.children.length) > 0 && (props === null || props === void 0 ? void 0 : props.children[0]) instanceof Component) {
-                    this.removeAll(false);
-                    for (var x = 0; x < props.children.length; x++) {
-                        this.add(props.children[x]);
-                    }
-                    delete props.children;
-                }
-            }
-            return this;
-        }
-        set tag(value) {
-            var tag = value == undefined ? "span" : value;
-            if (tag.toLowerCase() !== this.tag.toLowerCase()) {
-                this.props.tag = value;
-                this.config(this.props);
-                /*
-                var childs = this.dom?.childNodes;
-                this.init(document.createElement(value), { replaceNode: this.dom, noWrapper: true });
-                if (childs?.length > 0)
-                    this.dom.append(...<any>childs);
-                */
-            }
-        }
-        get tag() {
-            var _a;
-            var ret = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.tagName;
-            if (ret === null || ret === undefined)
-                return "";
-            return ret;
         }
         /**
         * adds a component to the container
         * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
-            var _a, _b;
-            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.state) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
-                return;
-            }
+            if (this._components === undefined)
+                this._components = [];
             if (component._parent !== undefined) {
                 component._parent.remove(component);
             }
             component._parent = this;
             component.domWrapper._parent = this;
-            /* component._parent=this;
-             component.domWrapper._parent=this;
-             if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
-                  component.domWrapper.parentNode.removeChild(component.domWrapper);
-             }*/
             this._components.push(component);
             this.dom.appendChild(component.domWrapper);
         }
@@ -1012,6 +687,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
          * @param {jassijs.ui.Component} before - the component before then component to add
          */
         addBefore(component, before) {
+            if (this._components === undefined)
+                this._components = [];
             if (component._parent !== undefined) {
                 component._parent.remove(component);
             }
@@ -1066,19 +743,217 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             }
             super.destroy();
         }
-    };
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], HTMLComponent.prototype, "tag", null);
-    HTMLComponent = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.HTMLComponent"),
-        (0, Property_1.$Property)({ name: "children", type: "jassijs.ui.Component", createDummyInDesigner: doCreateDummyForHTMLComponent }),
-        __metadata("design:paramtypes", [Object])
-    ], HTMLComponent);
+    }
+    exports.FunctionComponent = FunctionComponent;
+    // ret.tag = atype;
+    //        var newdom = document.createElement(atype);
+    //@$UIComponent({ fullPath: "common/HTMLComponent", icon: "mdi mdi-cloud-tags" , initialize:{tag:"input"},} )
+    //@$Class("jassijs.ui.HTMLComponent")
+    //@$Property({ name: "children", type: "jassijs.ui.Component", createDummyInDesigner: doCreateDummyForHTMLComponent })
+    class HTMLComponent extends Component {
+        constructor(prop = {}) {
+            super(prop);
+            //this.init(document.createElement(tag), { noWrapper: true });
+        }
+        render() {
+            var _a, _b, _c, _d;
+            var ret;
+            var tag = ((_a = this.props) === null || _a === void 0 ? void 0 : _a.tag) === undefined ? "span" : (_b = this.props) === null || _b === void 0 ? void 0 : _b.tag;
+            if (((_c = this.props) === null || _c === void 0 ? void 0 : _c.tag) !== this.tag.toLowerCase()) {
+                var childs = (_d = this.dom) === null || _d === void 0 ? void 0 : _d.childNodes;
+                ret = document.createElement(tag);
+                //this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
+                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
+                    ret.append(...childs);
+            }
+            return ret;
+        }
+        createChildren(props) {
+            if (props === null || props === void 0 ? void 0 : props.children) {
+                this.removeAll(false);
+                this._components = [];
+                for (var x = 0; x < props.children.length; x++) {
+                    var child = props.children[x];
+                    var cchild;
+                    if (typeof child === "string") {
+                        cchild = new TextComponent();
+                        cchild.tag = "";
+                        cchild.text = child;
+                    }
+                    else if (child === null || child === void 0 ? void 0 : child._$isState$_) {
+                        cchild = new TextComponent();
+                        cchild.tag = "";
+                        child === null || child === void 0 ? void 0 : child._observe_(cchild, "text", "property");
+                        cchild.text = child.current;
+                    }
+                    else {
+                        cchild = createComponent(child);
+                    }
+                    this.add(cchild);
+                }
+                delete props.children;
+            }
+        }
+        config(props) {
+            if (!super.config(props))
+                return;
+            this.createChildren(props);
+            for (var prop in props) {
+                var val = props[prop];
+                if (prop === "style") {
+                    for (var key in props.style) {
+                        val = props.style[key];
+                        this.dom.style[key] = val;
+                    }
+                }
+                else if (prop in this.dom) {
+                    Reflect.set(this.dom, prop, val);
+                    //Reflect.set(this.dom, prop, [val])
+                }
+                else if (prop.toLocaleLowerCase() in this.dom) {
+                    Reflect.set(this.dom, prop.toLocaleLowerCase(), val);
+                }
+                else if (prop in this.dom) {
+                    if (val === null || val === void 0 ? void 0 : val._$isState$_) {
+                        val === null || val === void 0 ? void 0 : val._observe_(this, prop, "attribute");
+                        val = val.current;
+                    }
+                    this.dom.setAttribute(prop, val);
+                }
+                // }
+            }
+            /*  if (props?.children) {
+                  if (props?.children.length > 0 && props?.children[0] instanceof Component) {
+                      this.removeAll(false);
+                      for (var x = 0; x < props.children.length; x++) {
+                          this.add(props.children[x]);
+                      }
+                      delete props.children;
+                  }
+              }*/
+            return this;
+        }
+        set tag(value) {
+            var _a, _b;
+            var tag = value == undefined ? "span" : value;
+            if (tag !== ((_a = this.state.tag.current) === null || _a === void 0 ? void 0 : _a.toLowerCase())) {
+                var childs = (_b = this.dom) === null || _b === void 0 ? void 0 : _b.childNodes;
+                this.replaceDom(document.createElement(tag));
+                //            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
+                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
+                    this.dom.append(...childs);
+            }
+            this.state.tag.current = value;
+        }
+        /* @$Property({
+             chooseFromStrict: true,
+             chooseFrom: (comp) => {
+                 const allElements = <any>document.body.getElementsByTagName('*');
+                 const uniqueTags = new Set();
+     
+                 for (let element of allElements) {
+                     uniqueTags.add(element.tagName.toLowerCase());
+                 }
+                 return Array.from(uniqueTags).sort();
+             }
+         })*/
+        get tag() {
+            var _a;
+            var ret = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.tagName;
+            if (ret === null || ret === undefined)
+                return "";
+            return ret;
+        }
+        /**
+        * adds a component to the container
+        * @param {jassijs.ui.Component} component - the component to add
+        */
+        add(component) {
+            var _a, _b;
+            if (this._components === undefined)
+                this._components = [];
+            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.state) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
+                return;
+            }
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper._parent = this;
+            /* component._parent=this;
+             component.domWrapper._parent=this;
+             if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
+                  component.domWrapper.parentNode.removeChild(component.domWrapper);
+             }*/
+            this._components.push(component);
+            this.dom.appendChild(component.domWrapper);
+        }
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component, before) {
+            if (this._components === undefined)
+                this._components = [];
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper["_parent"] = this;
+            var index = this._components.indexOf(before);
+            if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
+                component.domWrapper.parentNode.removeChild(component.domWrapper);
+            }
+            this._components.splice(index, 0, component);
+            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+        }
+        /**
+        * remove the component
+        * @param {jassijs.ui.Component} component - the component to remove
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        remove(component, destroy = false) {
+            if (destroy)
+                component.destroy();
+            component._parent = undefined;
+            if (component.domWrapper !== undefined)
+                component.domWrapper._parent = undefined;
+            if (this._components) {
+                var pos = this._components.indexOf(component);
+                if (pos >= 0)
+                    this._components.splice(pos, 1);
+            }
+            try {
+                this.dom.removeChild(component.domWrapper);
+            }
+            catch (ex) {
+            }
+        }
+        /**
+        * remove all component
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        removeAll(destroy = undefined) {
+            var _a;
+            while (((_a = this._components) === null || _a === void 0 ? void 0 : _a.length) > 0) {
+                this.remove(this._components[0], destroy);
+            }
+        }
+        destroy() {
+            if (this._components !== undefined) {
+                var tmp = [].concat(this._components);
+                for (var k = 0; k < tmp.length; k++) {
+                    tmp[k].destroy();
+                }
+                this._components = [];
+            }
+            super.destroy();
+        }
+    }
     exports.HTMLComponent = HTMLComponent;
-    let TextComponent = class TextComponent extends Component {
+    //@$Class("jassijs.ui.TextComponent")
+    class TextComponent extends Component {
         constructor(props = {}) {
             super(props);
         }
@@ -1117,6 +992,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             super.config(props);
             return this;
         }
+        //@$Property()
         get text() {
             var _a;
             return (_a = this.dom) === null || _a === void 0 ? void 0 : _a.textContent;
@@ -1127,16 +1003,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             this.dom.textContent = value;
         }
         ;
-    };
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], TextComponent.prototype, "text", null);
-    TextComponent = __decorate([
-        (0, Registry_1.$Class)("jassijs.ui.TextComponent"),
-        __metadata("design:paramtypes", [Object])
-    ], TextComponent);
+    }
     exports.TextComponent = TextComponent;
+    function migrateModul(oldModul, newModul) {
+        if (newModul) {
+            newModul._nextID = oldModul._nextID;
+        }
+    }
+    exports.migrateModul = migrateModul;
 });
 //# sourceMappingURL=Component.js.map

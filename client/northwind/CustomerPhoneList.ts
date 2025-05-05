@@ -7,6 +7,7 @@ import { Customer } from "northwind/remote/Customer";
 import { Button } from "jassijs/ui/Button";
 import { Tabulator } from "tabulator-tables";
 import { jc, Component, ComponentProperties } from "jassijs/ui/Component";
+import { States } from "jassijs/ui/State";
 
 type Me = {
     table?: Table;

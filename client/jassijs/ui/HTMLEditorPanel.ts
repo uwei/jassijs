@@ -6,6 +6,7 @@ import { $Class } from "jassijs/remote/Registry";
 //@ts-ignore
 import tinymce from "jassijs/ext/tinymce"
 import registry from "jassijs/remote/Registry";
+import { nextID } from "jassijs/ui/Component";
 
 class Me {
 	IDHtml?: HTMLPanel;
@@ -27,7 +28,7 @@ export class HTMLEditorPanel extends Panel {
 		this.add(me.IDHtml);
 		this.add(me.IDChange);
 		//me.IDHtml.text="Hallo";
-		var randclass = "ed" + registry.nextID();
+		var randclass = "ed" + nextID();
 		me.IDHtml.dom.classList.add(randclass);
 		me.IDChange.text = "OK";
 		me.IDChange.onclick(function (event) {

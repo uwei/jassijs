@@ -1,6 +1,6 @@
 import { TextComponent } from "jassijs/ui/Component";
 import { Checkbox } from "jassijs/ui/Checkbox";
-import { Component,ComponentProperties,createComponent,HTMLComponent,React,Ref } from "jassijs/ui/Component";
+import { Component,ComponentProperties,createComponent,HTMLComponent,React } from "jassijs/ui/Component";
 import { Panel } from "jassijs/ui/Panel";
 import { Button } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
@@ -22,10 +22,11 @@ class MyComp<Prop> extends Component<MProp> {
     render() { 
         if(this.props.color===undefined)
             this.state.color.current="yellow";
+        
         //{me.states.colorState}  
         var ret=<div>
 
-            <Button text="kk" style={{ color: this.state.color }} onclick={() => {
+            <Button text="kk" style={{ color:  this.state.color }} onclick={() => {
                 this.state.color.current="blue";
                 // _this.config({ text: "neu"+x++ });
             }}>

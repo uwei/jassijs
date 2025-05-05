@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Menu", "jassijs/ui/Component", "jassijs/ui/Checkbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/Button", "jassijs/ui/Property"], function (require, exports, MenuItem_1, Menu_1, Component_1, Checkbox_1, Registry_1, Panel_1, Component_2, Button_1, Property_1) {
+define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Menu", "jassijs/ui/Component", "jassijs/ui/Checkbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/Button", "jassijs/ui/Property", "jassijs/ui/UIComponents"], function (require, exports, MenuItem_1, Menu_1, Component_1, Checkbox_1, Registry_1, Panel_1, Component_2, Button_1, Property_1, UIComponents_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog7 = void 0;
@@ -36,7 +36,7 @@ define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Menu", "jassijs
         }
     };
     M1 = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/M1" }),
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/M1" }),
         (0, Registry_1.$Class)("demo/M1"),
         (0, Property_1.$Property)({ name: "text", type: "string" }),
         __metadata("design:paramtypes", [Object])

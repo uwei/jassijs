@@ -1,7 +1,7 @@
-import { $UIComponent } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
 import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 
 @$UIComponent({fullPath:"common/Textarea",icon:"mdi mdi-text-box-outline"})
 @$Class("jassijs.ui.Textarea")

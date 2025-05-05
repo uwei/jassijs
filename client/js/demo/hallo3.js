@@ -16,7 +16,7 @@ define(["require", "exports", "jassijs/ui/Component"], function (require, export
             var _this = this;
             var ret = React.createElement("div", null,
                 this.state.mytext,
-                React.createElement("button", { style: { color: _this.state.mycolor }, onClick: () => {
+                React.createElement("button", { style: { color: _this.state.mycolor.self }, onClick: () => {
                         this.state.mytext.current = "ooo";
                         _this.state.mycolor.current = "blue";
                         // _this.config({ text: "neu"+x++ });

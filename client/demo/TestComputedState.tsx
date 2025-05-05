@@ -24,8 +24,7 @@ function MyTest(prop:MyTestProp,states:States<MyTestProp>=undefined) {
     </Panel>
 }
 export function test() {
-    var ret = <MyTest text="Heinz">
-    </MyTest>
+    var ret = <MyTest text="Heinz"></MyTest>
  return createComponent(ret);
 
 }

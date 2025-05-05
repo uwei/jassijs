@@ -216,7 +216,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             copyMenu.dom.style["font-size"] = "12px";
             copyMenu.text = "copy";
             copyMenu.width = "100%";
-            copyMenu.dom.classList.remove("jinlinecomponent");
+            //        copyMenu.dom.classList.remove("jinlinecomponent");
             let func = function (evt) {
                 var info = _this.getInfoFromEvent(evt);
                 //@ts-ignore
@@ -231,7 +231,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             pasteMenu.dom.style["font-size"] = "12px";
             pasteMenu.text = "paste";
             pasteMenu.width = "100%";
-            pasteMenu.dom.classList.remove("jinlinecomponent");
+            // pasteMenu.dom.classList.remove("jinlinecomponent");
             let func2 = function (evt) {
                 var info = _this.getInfoFromEvent(evt);
                 //@ts-ignore

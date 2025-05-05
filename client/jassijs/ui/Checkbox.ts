@@ -1,7 +1,8 @@
 import { $Class } from "jassijs/remote/Registry";
-import { ComponentProperties, $UIComponent } from "jassijs/ui/Component";
+import { ComponentProperties } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 
 export interface CheckboxProperties extends DataComponentProperties {
     domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;

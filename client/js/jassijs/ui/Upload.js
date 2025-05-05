@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_1, Component_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/UIComponents"], function (require, exports, Registry_1, Component_1, Property_1, UIComponents_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Upload = void 0;
@@ -39,6 +39,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         set dom(value) {
             super.dom = value;
         }
+        get readAs() {
+            return this.state.readAs.current;
+        }
+        set readAs(value) {
+            this.state.readAs.current = value;
+        }
         get accept() {
             return this.dom.accept;
         }
@@ -57,21 +63,24 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         set multiple(value) {
             this.dom.multiple = value;
         }
+        handleDownload(parent, data, file, reader, files, evt) {
+            reader.addEventListener("load", function (e) {
+                data[file.name] = reader.result;
+                parent.downloaded++;
+                if (parent.downloaded == files.length) {
+                    parent.callEvent("uploaded", data, files, evt);
+                }
+            }, false);
+        }
         async readUpload(evt) {
             var files = evt.target["files"];
             var _this = this;
             var data = {};
-            var downloaded = 0;
+            this.downloaded = 0;
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 var reader = new FileReader();
-                reader.addEventListener("load", function () {
-                    data[file.name] = reader.result;
-                    downloaded++;
-                    if (downloaded == files.length) {
-                        _this.callEvent("uploaded", data, files, evt);
-                    }
-                }, false);
+                this.handleDownload(_this, data, file, reader, files, evt);
                 if (this.readAs === "DataUrl") {
                     reader.readAsDataURL(file);
                     // data[file.name]=reader.result;
@@ -98,8 +107,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     };
     __decorate([
         (0, Property_1.$Property)({ chooseFromStrict: true, chooseFrom: ["Text", "DataUrl", "ArrayBuffer", "BinaryString"] }),
-        __metadata("design:type", String)
-    ], Upload.prototype, "readAs", void 0);
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], Upload.prototype, "readAs", null);
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", String),
@@ -117,7 +127,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         __metadata("design:returntype", void 0)
     ], Upload.prototype, "onuploaded", null);
     Upload = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
         (0, Registry_1.$Class)("jassijs.ui.Upload"),
         __metadata("design:paramtypes", [Object])
     ], Upload);
@@ -130,11 +140,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             .addEventListener('change', dateiauswahl, false);
     });*/
     function test() {
-        var upload = new Upload();
-        upload.readAs = "DataUrl";
-        upload.multiple = true;
+        var upload = new Upload({
+            readAs: "DataUrl",
+            multiple: true
+        });
+        //    upload.readAs = "DataUrl";
+        //   upload.multiple = true;
         upload.onuploaded(function (data) {
             debugger;
+            console.log(data);
         });
         //	upload.accept=".txt,.csv";
         return upload;

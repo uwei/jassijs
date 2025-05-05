@@ -39,9 +39,8 @@ function MyTest2(prop:MyTestProp,states:States<MyTestProp>=undefined) {
     </Panel>
 }
 export function test() { 
-    var ret = <MyTest2 showexists={false}> 
-    </MyTest2>
-     return createComponent(ret);
+    var ret = <MyTest2 showexists={false}></MyTest2>
+     return createComponent(ret); 
  //      <Button text="show" onclick={()=>{ states.exists.current=true }}> </Button>
   //      <Button text="hide" onclick={()=>{ states.exists.current=true }}> </Button>
 //    //<Button text="hello" exists={states.exists} > </Button>

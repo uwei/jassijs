@@ -94,20 +94,23 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          * install the draggable
          * @param {jassijs.ui.Image} component
          */
-        _makeDraggable(component) {
+        /*_makeDraggable(component) {
             var helper = undefined;
+    
+    
             $(component.dom).draggable({
                 cancel: "false", revert: "invalid",
+    
                 appendTo: "body",
                 helper: function (event) {
                     if (helper === undefined) {
-                        var cl = Classes_1.classes.getClass(component.createFromType);
+                        var cl = classes.getClass(component.createFromType);
                         if (cl === undefined) {
-                            Classes_1.classes.loadClass(component.createFromType); //for later
-                            cl = Panel_1.Panel;
+                            classes.loadClass(component.createFromType);//for later
+                            cl = Panel;
                         }
                         helper = new cl();
-                        var img = new Image_1.Image();
+                        var img = new Image();
                         img.src = component.src;
                         img.height = "24";
                         img.width = "24";
@@ -124,7 +127,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     return helper._position.dom;
                 }
             });
-        }
+        }*/
         _makeDraggable2(component) {
             var helper = undefined;
             var cl = Classes_1.classes.getClass(component.createFromType);

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ui/Container", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_1, Menu_1, InvisibleComponent_1, Component_1, Classes_1, Property_1, Actions_1, MenuItem_1, Container_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ui/Container", "jassijs/ui/UIComponents", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_1, Menu_1, InvisibleComponent_1, Classes_1, Property_1, Actions_1, MenuItem_1, Container_1, UIComponents_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;
@@ -75,7 +75,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
             });
         }
         config(config) {
-            if (super.config(config))
+            if (super.config(config)) //@ts-ignore
                 Container_1.Container.prototype.createChildren.bind(this)(config);
             return this;
         }
@@ -264,7 +264,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
         __metadata("design:returntype", void 0)
     ], ContextMenu.prototype, "onbeforeshow", null);
     ContextMenu = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
         (0, Registry_1.$Class)("jassijs.ui.ContextMenu"),
         __metadata("design:paramtypes", [Object])
     ], ContextMenu);

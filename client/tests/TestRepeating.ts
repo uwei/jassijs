@@ -2,13 +2,13 @@ import { TextComponent } from "jassijs/ui/Component";
 import "jassijs/ext/jquerylib";
 import "jquery.choosen";
 import { $Class } from "jassijs/remote/Registry";
-import { Component, $UIComponent, ComponentProperties, jc, createComponent, HTMLComponent, Ref } from "jassijs/ui/Component";
+import { Component,  ComponentProperties, jc, createComponent, HTMLComponent } from "jassijs/ui/Component";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";
 import { Container, ContainerProperties } from "jassijs/ui/Container";
 import { Textbox } from "jassijs/ui/Textbox";
-import { State, States, createState } from "jassijs/ui/State";
+import { State, States, ccs, createComputedState, createRef, createState } from "jassijs/ui/State";
 import { Button } from "jassijs/ui/Button";
 import { Panel } from "jassijs/ui/Panel";
 import { ObjectChooser } from "jassijs/ui/ObjectChooser";
@@ -225,13 +225,13 @@ interface Customer {
 var data: Customer[] = [
     { id: 1, name: "Max", childs: [{ name: "Anna" }, { name: "Aria" }] },
     { id: 2, name: "Moritz", childs: [{ name: "Clara" }, { name: "Heidi" }] },
-    { id: 3, name: "Heinz", childs: [{ name: "Rosa" }, { name: "Luise" }] },
+    { id: 3, name: "Heinz", childs: [{ name: "Rosa" }, { name: "Luise" }] }
 ];
 interface DetailComponentProperties {
     value?: Customer;
     activeChild?: Customer;
 }
-function DetailComponent(props: DetailComponentProperties, state: States<DetailComponentProperties> = {}) {
+function DetailComponent(props: DetailComponentProperties, state: States<DetailComponentProperties>) {
     var ret = jc("div", {
         children: [
             jc(Textbox, {
@@ -249,7 +249,7 @@ function DetailComponent(props: DetailComponentProperties, state: States<DetailC
             jc(Textbox, {
                 bind: state.activeChild.bind.name
             }),
-            jc(Button, { text: "erter",onclick:()=>{
+            jc(Button, { text: "name of selected Child",onclick:()=>{
                 alert(state.activeChild.current.name);
             } }),
             jc("br")
@@ -260,15 +260,31 @@ function DetailComponent(props: DetailComponentProperties, state: States<DetailC
 interface MainComponentProperties {
     items?: Customer[];
 }
+
 function MainComponent(props: MainComponentProperties, state: States<MainComponentProperties>) {
-    var ch = props.items.map(item => jc(DetailComponent, { value: item }));
+    
+    //var ch = props.items.map(item => jc(DetailComponent, { value: item }));
     var ret = jc("span", {
-        children: ch
+            children: ccs(()=>state.items.current.map(item => jc(DetailComponent, { value: item })) ,state.items)
     });
     return ret;
 }
+function Ha(){
+    return jc("span",{children:["jd"]});
+}
+
 export async function test() {
     var j = jc(MainComponent, { items: data });
+    
     var pan = createComponent(j);
+
+    setTimeout(()=>{
+        var data2: Customer[] = [
+            { id: 4, name: "Axel", childs: [{ name: "Harm" }, { name: "Olaf" }] },
+            { id: 5, name: "Selter", childs: [{ name: "Oliver" }, { name: "Theo" }] }
+
+        ];
+        pan.config({items:data2});
+    },1000);
     return pan;
 }

@@ -26,8 +26,8 @@ class MyComp extends Component<Prop> {
         var _this=this;
       
         var ret=<div>
-            {this.state.mytext}
-            <button style={{color:_this.state.mycolor}}  onClick={() => {
+            {this.state.mytext} 
+            <button style={{color:_this.state.mycolor.self}}  onClick={() => {
               this.state.mytext.current="ooo";
                 _this.state.mycolor.current="blue";
                // _this.config({ text: "neu"+x++ });

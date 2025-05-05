@@ -540,7 +540,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.pasteButton.hidden = !enable;
             var component = this._designPlaceholder._components[0];
             //switch designmode
-            var comps = component.dom.querySelectorAll(".jcomponent");
+            var comps = component.dom.querySelectorAll(".jeditablecomponent");
             if (enable)
                 comps.forEach((c) => c.classList.add("jdesignmode"));
             else
@@ -575,7 +575,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 else
                     allcomponents = this.variables.getEditableComponents(component);
                 //this._installTinyEditor();
-                this._draganddropper = this.createDragAndDropper();
+                // this._draganddropper = this.createDragAndDropper();
                 this._resizer = new Resizer_1.Resizer();
                 this._resizer.draganddropper = this._draganddropper;
                 this._resizer.onelementselected = function (elementIDs, e) {
@@ -813,6 +813,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         var toCreate = JSON.parse(data);
                         var cl = Classes_1.classes.getClass(toCreate.createFromType);
                         var newComponent = new cl();
+                        newComponent.createFromParam = toCreate.createFromParam;
                         var beforeComponent = ev.target._this;
                         var newParent = beforeComponent._parent;
                         _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent); // beforeComponent);
@@ -918,6 +919,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         var toCreate = JSON.parse(data);
                         var cl = Classes_1.classes.getClass(toCreate.createFromType);
                         var newComponent = new cl();
+                        newComponent.createFromParam = toCreate.createFromParam;
                         let newParent = ev.target._this;
                         _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined); // beforeComponent);
                     }
@@ -1023,7 +1025,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         }
                     }
                 }
-                if (!varname) {
+                if (varname && node.classList) {
+                    if (!node.classList.contains("jeditablecomponent")) {
+                        node.classList.add("jeditablecomponent");
+                    }
+                }
+                else {
                     if (node.contentEditable !== "false")
                         node.contentEditable = "false";
                 }
@@ -1169,6 +1176,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.addEvent("onDesignedComponentChanged", handler);
         }
         updateDummies() {
+            var _a, _b;
             var arr = [];
             var component = this.designedComponent; //this._componentExplorer.value;
             if (this._lastComponent !== component) { //delete dummies if the designedComponent has changed
@@ -1189,7 +1197,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this._designPlaceholder.dom.contentEditable = "false";
             //delete removed dummies
             for (var x = 0; x < this.dummyHolder.childNodes.length; x++) {
-                if (this.dummyHolder.childNodes[x]._this.dom._this._parent === undefined) {
+                if (((_b = (_a = this.dummyHolder.childNodes[x]._this.dom) === null || _a === void 0 ? void 0 : _a._this) === null || _b === void 0 ? void 0 : _b._parent) === undefined) {
                     //if ((<any>this.dummyHolder.childNodes[x])._this._parent === undefined) {
                     this.dummyHolder.removeChild(this.dummyHolder.childNodes[x]);
                 }
@@ -1220,7 +1228,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
     ], ComponentDesigner);
     exports.ComponentDesigner = ComponentDesigner;
     async function test() {
-        return new ComponentDesigner();
+        return new ComponentDesigner({});
     }
     exports.test = test;
     ;

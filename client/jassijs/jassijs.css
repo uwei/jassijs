@@ -10,7 +10,9 @@ body .lm_content{
 }
 
 
-
+.jwrapper:not(.jcontainer):not(tr):not(li){
+  display: inline-block;
+}
 
 .jabsolutelayout{
   position:relative;

@@ -153,7 +153,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
         async getInitialPropertyValue(code) {
             var newvalue = undefined;
             if (this.property.componentType) {
-                let newclass = Classes_1.classes.getClass(this.property.componentType);
+                let newclass = await Classes_1.classes.loadClass(this.property.componentType);
                 newvalue = new newclass();
             }
             else {

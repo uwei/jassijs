@@ -3,7 +3,7 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1720101244987.3042,
+		"date": 1740653429301.0798,
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/AcePanelSimple.ts": {
@@ -15,7 +15,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1739909138880.0374,
+		"date": 1740761803088.7715,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {}
@@ -25,7 +25,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/CodeEditorInvisibleComponents.ts": {
-		"date": 1719757407652.6265,
+		"date": 1740651512713.9685,
 		"jassijs_editor.CodeEditorInvisibleComponents": {}
 	},
 	"jassijs_editor/CodePanel.ts": {
@@ -33,19 +33,19 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1740075940067.0588,
+		"date": 1740828811263.884,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
-		"date": 1739999267632.0261,
+		"date": 1740518126597.6243,
 		"jassijs_editor.ComponentExplorer": {}
 	},
 	"jassijs_editor/ComponentPalette.ts": {
-		"date": 1721754620068.305,
+		"date": 1740651439292.9773,
 		"jassijs_editor.ComponentPalette": {}
 	},
 	"jassijs_editor/ComponentSpy.ts": {
-		"date": 1719755727631.165,
+		"date": 1740510338564.4038,
 		"jassijs_editor.ui.ComponentSpy": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -71,7 +71,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/DatabaseDesigner.ts": {
-		"date": 1739905972951.1553,
+		"date": 1740518198514.8262,
 		"jassijs_editor/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -223,7 +223,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/HtmlDesigner.ts": {
-		"date": 1739909679697.9824,
+		"date": 1740742771963.561,
 		"jassijs_editor.HtmlDesigner": {}
 	},
 	"jassijs_editor/modul.ts": {
@@ -297,7 +297,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/template/TemplateEmptyDialog.ts": {
-		"date": 1681579996000,
+		"date": 1740567736806.9265,
 		"jassijs_editor.template.TemplateEmptyDialog": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -306,7 +306,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 				"newFile": {
 					"$Action": [
 						{
-							"name": "New/Dialog",
+							"name": "New/Dialog.ts",
 							"isEnabled": "function"
 						}
 					]
@@ -341,11 +341,11 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1722105568121.3489,
+		"date": 1740570775364.1863,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
-		"date": 1739999435244.1797,
+		"date": 1740742895352.4688,
 		"jassijs_editor.util.Resizer": {}
 	},
 	"jassijs_editor/util/Tests.ts": {
@@ -372,6 +372,24 @@ define("jassijs_editor/registry",["require"], function(require) {
 	"jassijs_editor/util/Typescript.ts": {
 		"date": 1720115012657.7117,
 		"jassijs_editor.util.Typescript": {}
+	},
+	"jassijs_editor/template/TemplateEmptyTSXDialog.ts": {
+		"date": 1740589015740.2244,
+		"jassijs_editor.template.TemplateEmptyTSXDialog": {
+			"$ActionProvider": [
+				"jassijs.remote.FileNode"
+			],
+			"@members": {
+				"newFile": {
+					"$Action": [
+						{
+							"name": "New/Dialog.tsx",
+							"isEnabled": "function"
+						}
+					]
+				}
+			}
+		}
 	}
 }
  }

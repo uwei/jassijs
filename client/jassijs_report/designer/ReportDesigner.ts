@@ -68,6 +68,15 @@ export class ReportDesigner extends HtmlDesigner {
         this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
 
     }
+     protected changeText(node: Node, text: string, deleteNodeIfEmpty = false): Node {
+        var ret=super.changeText(node,text,deleteNodeIfEmpty);
+        if(text===""){//remove empty Node
+            var comp:Component=node["_this"];
+            var par=comp._parent;
+            (<Container>comp._parent).remove(comp,true);
+        }
+        return ret;
+     }
     createTextComponent(text, par, before): Component {
         var comp2 = new RText();
         comp2.value = text;
@@ -139,7 +148,8 @@ export class ReportDesigner extends HtmlDesigner {
     propertyChanged() {
         this.propertyIsChanging = true;
         if (this._codeChanger.parser.sourceFile === undefined)
-            this._codeChanger.updateParser();
+            this._codeChanger.updateParser();//is deactivated
+        this._codeChanger.parser.parse(this._codeEditor.value);
         //@ts-ignore
         let job = this.designedComponent.toJSON();
         delete job.parameter;

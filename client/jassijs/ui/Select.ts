@@ -1,10 +1,13 @@
 import "jassijs/ext/jquerylib";
 import "jquery.choosen";
 import { $Class } from "jassijs/remote/Registry";
-import { Component, $UIComponent, ComponentProperties, jc, createComponent, HTMLComponent, Ref } from "jassijs/ui/Component";
+import { Component,  ComponentProperties, jc, createComponent, HTMLComponent } from "jassijs/ui/Component";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";
+import { States } from "jassijs/ui/State";
+import { $UIComponent } from "jassijs/ui/UIComponent";
+
 jassijs.includeCSSFile("chosen.css");
 export interface SelectProperties extends DataComponentProperties {
     domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
@@ -54,7 +57,7 @@ export class Select<T extends SelectProperties = SelectProperties> extends DataC
     _display;
     _items;
     constructor(properties: SelectProperties = undefined) {
-        super(properties);
+        super(Object.assign({useWrapper:true},properties));
         // super.init('<select class="Select"><option value=""></option></select>');
         var _this = this;
         if (properties !== undefined && properties.multiple === true)
@@ -139,28 +142,6 @@ export class Select<T extends SelectProperties = SelectProperties> extends DataC
         this.options = { undefined: undefined };
         if (this.refs.select.dom === undefined)
             return;
-        //TODO console.log("dekt.memoryleak");
-        /* slow
-        while (this.domSelect.firstChild) {
-                    $(this.domSelect.firstChild).remove();
-
-        }
-                this.domSelect.appendChild($('<option value=""></option>')[0]);
-                for (var x = 0;x < value.length;x++) {
-            var ob = value[x];
-                var val = undefined;
-                if (typeof (this.display) === "function")
-                val = this.display(ob);
-                else if (this.display !== undefined)
-                val = ob[this.display];
-                else
-                val = ob;
-                this.options[x.toString()] = ob;
-                var it = $('<option value="' + x + '">' + val + '</option>')[0];
-                this.domSelect.appendChild(it);
-        }
-                this.refresh();
-                */
         var html = '<option value=""></option>';
         if(value!==undefined){
             for (var x = 0; x < value.length; x++) {
@@ -183,7 +164,7 @@ export class Select<T extends SelectProperties = SelectProperties> extends DataC
     get items() {
         return this._items;
     }
-    set width(value: number) {
+    set width(value: string | number) {
         var s = value + "px";
         $(this.refs.select.dom).chosen({ width: s });//.trigger("chosen:updated");
         var _this = this;
@@ -302,7 +283,7 @@ export async function test() {
     { name: "Anne", nachname: "Meier" }];
     var c = jc(Select, {
         items: items,
-        display: "nachname",
+        display: "nachname", 
        
         value:items[0],
          width: 500

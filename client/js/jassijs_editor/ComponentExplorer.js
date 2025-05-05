@@ -145,8 +145,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         };
                         ret.push(ac);
                     }
-                    if (parent._components.length > 1 + hasDummy &&
-                        parent._components.indexOf(data[0]) + hasDummy + 1 < parent._components.length) {
+                    if (parent._components.length > 1 &&
+                        parent._components.indexOf(data[0]) + 1 < parent._components.length) {
                         var ac = {
                             call: function () {
                                 _this.propertyEditor.swapComponents(data[0], parent._components[parent._components.indexOf(data[0]) + 1]);

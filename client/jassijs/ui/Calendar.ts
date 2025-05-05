@@ -1,9 +1,10 @@
 import "jassijs/ext/jquerylib";
 import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
-import { $UIComponent, ComponentProperties } from "jassijs/ui/Component";
+import {  ComponentProperties } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 
 export interface CalendarProperties extends TextboxProperties {
 

@@ -7,14 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_1, Component_1, DataComponent_1, Property_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ui/UIComponent", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_1, Component_1, DataComponent_1, Property_1, Classes_1, UIComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Select = void 0;
     jassijs.includeCSSFile("chosen.css");
     let Select = class Select extends DataComponent_1.DataComponent {
         constructor(properties = undefined) {
-            super(properties);
+            super(Object.assign({ useWrapper: true }, properties));
             // super.init('<select class="Select"><option value=""></option></select>');
             var _this = this;
             if (properties !== undefined && properties.multiple === true)
@@ -88,28 +88,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             this.options = { undefined: undefined };
             if (this.refs.select.dom === undefined)
                 return;
-            //TODO console.log("dekt.memoryleak");
-            /* slow
-            while (this.domSelect.firstChild) {
-                        $(this.domSelect.firstChild).remove();
-    
-            }
-                    this.domSelect.appendChild($('<option value=""></option>')[0]);
-                    for (var x = 0;x < value.length;x++) {
-                var ob = value[x];
-                    var val = undefined;
-                    if (typeof (this.display) === "function")
-                    val = this.display(ob);
-                    else if (this.display !== undefined)
-                    val = ob[this.display];
-                    else
-                    val = ob;
-                    this.options[x.toString()] = ob;
-                    var it = $('<option value="' + x + '">' + val + '</option>')[0];
-                    this.domSelect.appendChild(it);
-            }
-                    this.refresh();
-                    */
             var html = '<option value=""></option>';
             if (value !== undefined) {
                 for (var x = 0; x < value.length; x++) {
@@ -228,7 +206,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         __metadata("design:paramtypes", [Object])
     ], Select.prototype, "display", null);
     Select = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
+        (0, UIComponent_1.$UIComponent)({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
         (0, Registry_1.$Class)("jassijs.ui.Select"),
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.SelectProperties" }),
         __metadata("design:paramtypes", [Object])

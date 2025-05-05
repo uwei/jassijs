@@ -118,6 +118,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             return ret;
         }
     };
+    exports.ROList = ROList;
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"] }),
         __metadata("design:type", String),
@@ -133,13 +134,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], ROList.prototype, "start", null);
-    ROList = __decorate([
+    exports.ROList = ROList = __decorate([
         (0, RComponent_1.$ReportComponent)({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] }),
         (0, Registry_1.$Class)("jassijs_report.ROList")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
     ], ROList);
-    exports.ROList = ROList;
 });
 //# sourceMappingURL=ROList.js.map

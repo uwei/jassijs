@@ -7,14 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/remote/Classes", "jassijs_editor/util/Typescript"], function (require, exports, Registry_1, typescript_1, Classes_1, Typescript_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs_editor/util/Typescript"], function (require, exports, Registry_1, Classes_1, Typescript_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.tests = exports.Parser = exports.ParsedClass = void 0;
-    typescript_1 = __importDefault(typescript_1);
     class ParsedDecorator {
         constructor() {
             this.parsedParameter = [];
@@ -50,9 +46,9 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             /** {[string]} - all code lines*/
         }
         getModifiedCode() {
-            const printer = typescript_1.default.createPrinter({ newLine: typescript_1.default.NewLineKind.LineFeed });
-            const resultFile = typescript_1.default.createSourceFile("dummy.ts", "", typescript_1.default.ScriptTarget.Latest, /*setParentNodes*/ false, this.isJSX ? typescript_1.default.ScriptKind.TSX : typescript_1.default.ScriptKind.TS);
-            var result = printer.printNode(typescript_1.default.EmitHint.Unspecified, this.sourceFile, resultFile);
+            const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
+            const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, /*setParentNodes*/ false, this.isJSX ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+            var result = printer.printNode(ts.EmitHint.Unspecified, this.sourceFile, resultFile);
             result = this.reformatCode(result);
             return result;
         }
@@ -64,17 +60,17 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 getScriptFileNames: () => [],
                 getScriptVersion: fileName => "1.0",
                 getScriptSnapshot: fileName => {
-                    return typescript_1.default.ScriptSnapshot.fromString(code);
+                    return ts.ScriptSnapshot.fromString(code);
                 },
                 getCurrentDirectory: () => "",
                 getCompilationSettings: () => ({}),
-                getDefaultLibFileName: options => typescript_1.default.getDefaultLibFilePath(options),
+                getDefaultLibFileName: options => ts.getDefaultLibFilePath(options),
                 fileExists: (a) => false,
                 readFile: (a) => code,
                 readDirectory: (a) => []
             };
             var file = this.variabelStack ? "tempdoc.tsx" : "tempdoc.ts";
-            const languageService = typescript_1.default.createLanguageService(serviceHost, typescript_1.default.createDocumentRegistry());
+            const languageService = ts.createLanguageService(serviceHost, ts.createDocumentRegistry());
             const textChanges = languageService.getFormattingEditsForDocument(file, {
                 convertTabsToSpaces: true,
                 //  indentMultiLineObjectLiteralBeginningOnBlankLine:true,
@@ -83,7 +79,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 //  insertSpaceAfterKeywordsInControlFlowStatements: true,
                 // insertSpaceBeforeAndAfterBinaryOperators: true,
                 newLineCharacter: "\n",
-                indentStyle: typescript_1.default.IndentStyle.Smart,
+                indentStyle: ts.IndentStyle.Smart,
                 indentSize: 4,
                 tabSize: 4
             });
@@ -153,8 +149,8 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
         addRef(name, type) {
             if (!this.refsNode)
                 return;
-            var tp = typescript_1.default.factory.createTypeReferenceNode(type, []);
-            var newnode = typescript_1.default.factory.createPropertySignature(undefined, name + "?", undefined, tp);
+            var tp = ts.factory.createTypeReferenceNode(type, []);
+            var newnode = ts.factory.createPropertySignature(undefined, name + "?", undefined, tp);
             //@ts-ignore
             newnode.parent = this.refsNode;
             this.refs[name] = { node: newnode, value: type, isFunction: false };
@@ -169,14 +165,14 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             if (this.imports[name] === undefined) {
                 //@ts-ignore
                 //            var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
-                const importNode = typescript_1.default.factory.createImportDeclaration(undefined, typescript_1.default.factory.createImportClause(false, typescript_1.default.factory.createIdentifier("{" + name + "}"), undefined), typescript_1.default.factory.createIdentifier("\"" + file + "\""));
-                this.sourceFile = typescript_1.default.factory.updateSourceFile(this.sourceFile, [importNode, ...this.sourceFile.statements]);
+                const importNode = ts.factory.createImportDeclaration(undefined, ts.factory.createImportClause(false, ts.factory.createIdentifier("{" + name + "}"), undefined), ts.factory.createIdentifier("\"" + file + "\""));
+                this.sourceFile = ts.factory.updateSourceFile(this.sourceFile, [importNode, ...this.sourceFile.statements]);
                 this.imports[name] = file;
             }
         }
         parseRefsNode(node) {
             var _this = this;
-            if (node.kind === typescript_1.default.SyntaxKind.TypeLiteral) {
+            if (node.kind === ts.SyntaxKind.TypeLiteral) {
                 if (node["members"])
                     this.refsNode = node;
                 node["members"].forEach(function (tnode) {
@@ -193,7 +189,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
         convertArgument(arg) {
             if (arg === undefined)
                 return undefined;
-            if (arg.kind === typescript_1.default.SyntaxKind.ObjectLiteralExpression) {
+            if (arg.kind === ts.SyntaxKind.ObjectLiteralExpression) {
                 var ret = {};
                 var props = arg.properties;
                 if (props !== undefined) {
@@ -203,29 +199,29 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 }
                 return ret;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.StringLiteral) {
+            else if (arg.kind === ts.SyntaxKind.StringLiteral) {
                 return arg.text;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.ArrayLiteralExpression) {
+            else if (arg.kind === ts.SyntaxKind.ArrayLiteralExpression) {
                 let ret = [];
                 for (var p = 0; p < arg.elements.length; p++) {
                     ret.push(this.convertArgument(arg.elements[p]));
                 }
                 return ret;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.Identifier) {
+            else if (arg.kind === ts.SyntaxKind.Identifier) {
                 return arg.text;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.TrueKeyword) {
+            else if (arg.kind === ts.SyntaxKind.TrueKeyword) {
                 return true;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.FalseKeyword) {
+            else if (arg.kind === ts.SyntaxKind.FalseKeyword) {
                 return false;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.NumericLiteral) {
+            else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
                 return Number(arg.text);
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.ArrowFunction || arg.kind === typescript_1.default.SyntaxKind.FunctionExpression) {
+            else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
                 return arg.getText();
             }
             throw new Classes_1.JassiError("Error type not found");
@@ -248,7 +244,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             return ret;
         }
         parseClass(node) {
-            if (node.kind === typescript_1.default.SyntaxKind.ClassDeclaration) {
+            if (node.kind === ts.SyntaxKind.ClassDeclaration) {
                 var parsedClass = new ParsedClass();
                 parsedClass.parent = this;
                 parsedClass.name = node.name.getText();
@@ -257,7 +253,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 if (node["modifiers"] !== undefined) {
                     for (var m = 0; m < node["modifiers"].length; m++) {
                         var nd = node["modifiers"][m];
-                        if (nd.kind === typescript_1.default.SyntaxKind.Decorator) {
+                        if (nd.kind === ts.SyntaxKind.Decorator) {
                             var parsedDec = this.parseDecorator(nd);
                             parsedClass.decorator[parsedDec.name] = parsedDec;
                             if (parsedClass.decorator["$Class"] && parsedDec.parameter.length > 0)
@@ -392,7 +388,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 if ((_c = children === null || children === void 0 ? void 0 : children.initializer) === null || _c === void 0 ? void 0 : _c.elements) {
                     for (var x = 0; x < children.initializer.elements.length; x++) {
                         var ch = children.initializer.elements[x];
-                        if (ch.kind === typescript_1.default.SyntaxKind.StringLiteral) {
+                        if (ch.kind === ts.SyntaxKind.StringLiteral) {
                             var varname = this.getNextVariableNameForType("text", "text");
                             this.variabelStack[varname] = {
                                 component: jsx.component.dom.childNodes[x]._this
@@ -476,7 +472,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 if (nd.children) {
                     for (var x = 0; x < nd.children.length; x++) {
                         var ch = nd.children[x];
-                        if (ch.kind === typescript_1.default.SyntaxKind.JsxText) {
+                        if (ch.kind === ts.SyntaxKind.JsxText) {
                             if (ch.containsOnlyTriviaWhiteSpaces) {
                                 counttrivial++;
                             }
@@ -516,21 +512,21 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
         }
         parseProperties(node) {
             var _this = this;
-            if (typescript_1.default.isVariableDeclaration(node)) {
+            if (ts.isVariableDeclaration(node)) {
                 var name = node.name.getText();
                 if (node.initializer !== undefined) {
                     var value = node.initializer.getText();
                     this.add(name, "_new_", value, node.parent.parent);
                 }
             }
-            if ((typescript_1.default.isBinaryExpression(node) && node.operatorToken.kind === typescript_1.default.SyntaxKind.EqualsToken) ||
-                typescript_1.default.isCallExpression(node)) {
+            if ((ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) ||
+                ts.isCallExpression(node)) {
                 var node1;
                 var node2;
                 var left;
                 var value;
                 var isFunction = false;
-                if (typescript_1.default.isBinaryExpression(node)) {
+                if (ts.isBinaryExpression(node)) {
                     node1 = node.left;
                     node2 = node.right;
                     left = node1.getText(); // this.code.substring(node1.pos, node1.end).trim();
@@ -538,7 +534,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     if (value.startsWith("new "))
                         this.add(left, "_new_", value, node.parent);
                 }
-                if (typescript_1.default.isCallExpression(node)) {
+                if (ts.isCallExpression(node)) {
                     node1 = node.expression;
                     node2 = node.arguments;
                     isFunction = true;
@@ -589,10 +585,10 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
         }
         visitNode(node, consumeProperties = undefined) {
             var _this = this;
-            if (node.kind === typescript_1.default.SyntaxKind.VariableDeclaration) {
+            if (node.kind === ts.SyntaxKind.VariableDeclaration) {
                 this.variables[node["name"].text] = node;
             }
-            if (node.kind === typescript_1.default.SyntaxKind.ImportDeclaration) {
+            if (node.kind === ts.SyntaxKind.ImportDeclaration) {
                 var nd = node;
                 var file = nd.moduleSpecifier.text;
                 if (nd.importClause && nd.importClause.namedBindings) {
@@ -603,15 +599,15 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 }
                 return;
             }
-            if (node.kind == typescript_1.default.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Refs") {
+            if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Refs") {
                 this.parseRefsNode(node);
                 return;
             }
-            else if (node.kind === typescript_1.default.SyntaxKind.ClassDeclaration) {
+            else if (node.kind === ts.SyntaxKind.ClassDeclaration) {
                 this.parseClass(node);
                 return;
             }
-            else if (node && node.kind === typescript_1.default.SyntaxKind.FunctionDeclaration) { //functions out of class
+            else if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
                 this.functions[node["name"].text] = node;
                 if (this.classScope) {
                     for (let x = 0; x < this.classScope.length; x++) {
@@ -623,7 +619,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 else if (this.variabelStack === undefined)
                     consumeProperties = true;
             }
-            if (node.kind === typescript_1.default.SyntaxKind.JsxElement) {
+            if (node.kind === ts.SyntaxKind.JsxElement) {
                 _this.parseJSX(_this, node);
                 return;
             }
@@ -638,7 +634,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
         }
         visitNodeJSX(node, consumeProperties = undefined) {
             var _this = this;
-            if (node.kind === typescript_1.default.SyntaxKind.ImportDeclaration) {
+            if (node.kind === ts.SyntaxKind.ImportDeclaration) {
                 var nd = node;
                 var file = nd.moduleSpecifier.text;
                 if (nd.importClause && nd.importClause.namedBindings) {
@@ -649,15 +645,15 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 }
                 return;
             }
-            if (node.kind == typescript_1.default.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Refs") {
+            if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Refs") {
                 this.parseRefsNode(node);
                 return;
             }
-            if (node.kind == typescript_1.default.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
+            if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
                 this.parseRefsNode(node);
                 return;
             }
-            if (node.kind === typescript_1.default.SyntaxKind.JsxElement || node.kind === typescript_1.default.SyntaxKind.JsxSelfClosingElement) {
+            if (node.kind === ts.SyntaxKind.JsxElement || node.kind === ts.SyntaxKind.JsxSelfClosingElement) {
                 _this.parseJSX(_this, node);
                 return;
             }
@@ -668,13 +664,13 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
               }*/
         }
         searchClassnode(node, pos) {
-            if (typescript_1.default.isMethodDeclaration(node)) {
+            if (ts.isMethodDeclaration(node)) {
                 return {
                     classname: node.parent["name"]["text"],
                     methodname: node.name["text"]
                 };
             }
-            if (node && node.kind === typescript_1.default.SyntaxKind.FunctionDeclaration) { //functions out of class
+            if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
                 var funcname = node["name"].text;
                 return {
                     classname: undefined,
@@ -696,18 +692,20 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
         getClassScopeFromPosition(code, pos) {
             this.data = {};
             this.code = code;
-            this.sourceFile = typescript_1.default.createSourceFile('dummy.ts', code, typescript_1.default.ScriptTarget.ES5, true, this.isJSX ? typescript_1.default.ScriptKind.TSX : typescript_1.default.ScriptKind.TS);
+            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, this.isJSX ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
             return this.searchClassnode(this.sourceFile, pos);
             //return this.parseold(code,onlyfunction);
         }
         removePos(node) {
             var _this = this;
+            //@ts-ignore
             node.pos = -1;
+            //@ts-ignore
             node.end = -1;
             node.forEachChild((ch) => _this.removePos(ch));
         }
         createNode(code, completeStatement = false) {
-            var ret = typescript_1.default.createSourceFile('dummytemp.ts', code, typescript_1.default.ScriptTarget.ES5, true, this.isJSX ? typescript_1.default.ScriptKind.TSX : undefined);
+            var ret = ts.createSourceFile('dummytemp.ts', code, ts.ScriptTarget.ES5, true, this.isJSX ? ts.ScriptKind.TSX : undefined);
             if (completeStatement)
                 return ret.statements[0];
             var node = ret.statements[0].expression;
@@ -743,7 +741,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 this.classScope = classScope;
             else
                 classScope = this.classScope;
-            this.sourceFile = typescript_1.default.createSourceFile('dummy.ts', code, typescript_1.default.ScriptTarget.ES5, true, isJSX ? typescript_1.default.ScriptKind.TSX : undefined);
+            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, isJSX ? ts.ScriptKind.TSX : undefined);
             if (variabelStack)
                 this.initvariabelStack(variabelStack);
             if (isJSX) {
@@ -785,7 +783,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 if (pos >= 0)
                     node.parent["elements"].splice(pos, 1);
             }
-            else if (node.parent.kind === typescript_1.default.SyntaxKind.ExpressionStatement) {
+            else if (node.parent.kind === ts.SyntaxKind.ExpressionStatement) {
                 var pos = node.parent.parent["statements"].indexOf(node.parent);
                 if (pos >= 0)
                     node.parent.parent["statements"].splice(pos, 1);
@@ -799,6 +797,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 throw Error(node.getFullText() + "could not be removed");
         }
         renameVariable(oldName, newName) {
+            debugger;
             var autoName = false;
             var className = this.data[oldName]["_new_"][0].className;
             if (newName === "") {
@@ -810,7 +809,8 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             this.data[newName] = this.data[oldName];
             delete this.data[oldName];
             var prefix = "this.refs.";
-            if (this.data.refs)
+            if (this.code.indexOf("var refs=") !== -1 || this.code.indexOf("var refs ") !== -1 || this.code.indexOf("var refs:") !== -1 ||
+                this.code.indexOf("let refs=") !== -1 || this.code.indexOf("let refs ") !== -1 || this.code.indexOf("let refs:") !== -1)
                 prefix = "refs.";
             if (autoName)
                 this.removePropertyInCode("ref", undefined, newName);
@@ -818,14 +818,14 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 this.setPropertyInCode(newName, "ref", prefix + newName, this.classScope);
             if (this.refs[oldName])
                 this.removeNode(this.refs[oldName].node);
-            this.addImportIfNeeded("Ref", "jassijs/ui/Component");
+            //   this.addImportIfNeeded("Ref", "jassijs/ui/Component");
             if (!autoName) {
-                if (className.startsWith("\"")) {
+                if (className.startsWith("\"") || this.data[newName].tag !== undefined) {
                     this.addImportIfNeeded("HTMLComponent", "jassijs/ui/Component");
-                    this.addRef(newName, "Ref<HTMLComponent>");
+                    this.addRef(newName, "HTMLComponent");
                 }
                 else
-                    this.addRef(newName, "Ref<" + className + ">");
+                    this.addRef(newName, className);
             }
             return newName;
         }
@@ -846,14 +846,14 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 if (dec.parameter) {
                     params = [];
                     for (var i = 0; i < dec.parameter.length; i++) {
-                        params.push(typescript_1.default.factory.createIdentifier(dec.parameter[i]));
+                        params.push(ts.factory.createIdentifier(dec.parameter[i]));
                     }
                 }
-                var call = typescript_1.default.factory.createCallExpression(typescript_1.default.factory.createIdentifier(dec.name), undefined, params);
-                newdec.push(typescript_1.default.factory.createDecorator(call));
+                var call = ts.factory.createCallExpression(ts.factory.createIdentifier(dec.name), undefined, params);
+                newdec.push(ts.factory.createDecorator(call));
             }
             //var type=ts.createTy
-            var newmember = typescript_1.default.factory.createPropertyDeclaration(newdec, member.name, undefined, typescript_1.default.factory.createTypeReferenceNode(member.type, []), undefined);
+            var newmember = ts.factory.createPropertyDeclaration(newdec, member.name, undefined, ts.factory.createTypeReferenceNode(member.type, []), undefined);
             var node = undefined;
             for (var key in pclass.members) {
                 if (key === member.name)
@@ -1054,7 +1054,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                             prop.pos = -1;
                             prop.len = -1;
                         }
-                        node.parent["arguments"][0] = typescript_1.default.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
+                        node.parent["arguments"][0] = ts.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
                     }
                 }
             }
@@ -1062,15 +1062,15 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             }
         }
         setPropertyInConfig(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
-            var svalue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value) : value;
+            var svalue = typeof value === "string" ? ts.factory.createIdentifier(value) : value;
             var config = this.data[variableName]["config"][0].node;
             config = config.arguments[0];
-            var newExpression = typescript_1.default.factory.createPropertyAssignment(property, svalue);
+            var newExpression = ts.factory.createPropertyAssignment(property, svalue);
             if (property === "add" && replace === false) {
                 property = "children";
-                svalue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value + ".config({})") : value;
+                svalue = typeof value === "string" ? ts.factory.createIdentifier(value + ".config({})") : value;
                 if (this.data[variableName]["children"] == undefined) { //
-                    newExpression = typescript_1.default.factory.createPropertyAssignment(property, typescript_1.default.factory.createArrayLiteralExpression([svalue], true));
+                    newExpression = ts.factory.createPropertyAssignment(property, ts.factory.createArrayLiteralExpression([svalue], true));
                     config.properties.push(newExpression);
                 }
                 else {
@@ -1115,8 +1115,8 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             //  node.parent["statements"].splice(pos, 1);
         }
         setPropertyInJC(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
-            var svalue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value) : value;
-            if (this.data[variableName]["_new_"][0].node.kind === typescript_1.default.SyntaxKind.StringLiteral && property === "text") {
+            var svalue = typeof value === "string" ? ts.factory.createIdentifier(value) : value;
+            if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.StringLiteral && property === "text") {
                 this.data[variableName]["_new_"][0].value = value;
                 //@ts-ignore
                 this.data[variableName]["_new_"][0].node.text = value.toString().substring(1, value.toString().length - 1);
@@ -1132,11 +1132,11 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 config = config.right;
                 this.data[variableName]["_new_"][0].node["arguments"].push(config);
             }
-            var newExpression = typescript_1.default.factory.createPropertyAssignment(property, svalue);
+            var newExpression = ts.factory.createPropertyAssignment(property, svalue);
             var jname;
             if (property === "add") { //transfer a child to another
                 if (this.data[variableName]["add"] === undefined) {
-                    newExpression = typescript_1.default.factory.createPropertyAssignment("children", typescript_1.default.factory.createArrayLiteralExpression([], true));
+                    newExpression = ts.factory.createPropertyAssignment("children", ts.factory.createArrayLiteralExpression([], true));
                     config.properties.push(newExpression);
                     this.data[variableName]["add"] = [{ node: newExpression, value: [], isFunction: false }];
                 }
@@ -1148,7 +1148,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                         classname = "\"" + prop.tag + "\"";
                     var node;
                     if (classname === "text") {
-                        node = typescript_1.default.factory.createStringLiteral("\"" + value + "\"");
+                        node = ts.factory.createStringLiteral("\"" + value + "\"");
                         //this.add(value, "text", <string>"", node);
                     }
                     else {
@@ -1230,7 +1230,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     if (property === "tag") { //jc("div" => jc("span"
                         //  this.data[variableName][property][0].value = value;
                         var sval = value.substring(1, value.length - 1);
-                        this.data[variableName]["_new_"][0].node["arguments"][0] = typescript_1.default.factory.createStringLiteral(sval);
+                        this.data[variableName]["_new_"][0].node["arguments"][0] = ts.factory.createStringLiteral(sval);
                     }
                     else {
                         let node = this.data[variableName][property][0].node;
@@ -1260,11 +1260,11 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             //    this.data[variableName] = {};
             var newValue;
             if (typeof value === "string")
-                newValue = value.startsWith('"') ? typescript_1.default.factory.createIdentifier(value) : typescript_1.default.factory.createIdentifier("{" + value + "}");
+                newValue = value.startsWith('"') ? ts.factory.createIdentifier(value) : ts.factory.createIdentifier("{" + value + "}");
             else
                 newValue = value;
             ;
-            var newExpression = newExpression = typescript_1.default.factory.createJsxAttribute(typescript_1.default.factory.createIdentifier(property), newValue);
+            var newExpression = newExpression = ts.factory.createJsxAttribute(ts.factory.createIdentifier(property), newValue);
             ;
             if (property === "new") { //me.panel1=new Panel({});
                 /*       let prop = this.data[variableName]["_new_"][0];//.substring(3)];
@@ -1295,7 +1295,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                         classname = prop.tag;
                     var node;
                     if (classname === "text") {
-                        node = typescript_1.default.factory.createJsxText("", false);
+                        node = ts.factory.createJsxText("", false);
                         this.add(value, "text", "", node);
                     }
                     else {
@@ -1336,7 +1336,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     }
                     var pos = parent["children"].indexOf(found);
                     parent["children"].splice(pos, 0, node);
-                    parent["children"].splice(pos + 1, 0, typescript_1.default.factory.createJsxText("\n", true));
+                    parent["children"].splice(pos + 1, 0, ts.factory.createJsxText("\n", true));
                     this.data[variableName]["add"].splice(ofound, 0, {
                         node: node,
                         value: jname,
@@ -1348,12 +1348,12 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                     if (parent["children"] === undefined)
                         debugger;
                     parent["children"].push(node);
-                    parent["children"].push(typescript_1.default.factory.createJsxText("\n", true));
+                    parent["children"].push(ts.factory.createJsxText("\n", true));
                     this.add(variableName, "add", value, node);
                 }
                 return;
             }
-            if (this.data[variableName]["_new_"][0].node.kind === typescript_1.default.SyntaxKind.JsxText) {
+            if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
                 if (property === "text") {
                     var svalue = value;
                     var old = this.data[variableName][property][0].node.text; //getText() throw error if created manuell
@@ -1370,8 +1370,8 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
             }
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined && typeof value === "string") { //edit existing
                 if (property === "tag") {
-                    this.data[variableName]["_new_"][0].node.openingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
-                    this.data[variableName]["_new_"][0].node.closingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
+                    this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.factory.createIdentifier(value.substring(1, value.length - 1));
+                    this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.factory.createIdentifier(value.substring(1, value.length - 1));
                     this.data[variableName][property][0].value = value;
                     this.data[variableName]["_new_"][0].node["jname"] = value.replaceAll('"', "");
                     return;
@@ -1414,7 +1414,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                         var tagname = value.substring(1, value.length - 1);
                         this.data[variableName]["_new_"][0].node["jname"] = value.replaceAll('"', "");
                         if (this.data[variableName]["_new_"][0].node.attributes) {
-                            this.data[variableName]["_new_"][0].node.tagName = typescript_1.default.factory.createIdentifier(tagname);
+                            this.data[variableName]["_new_"][0].node.tagName = ts.factory.createIdentifier(tagname);
                         }
                         else {
                             if (tagname.toLowerCase() === "br") { //br is created as <br></br> ==> correct
@@ -1425,8 +1425,8 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                                 this.data[variableName]["_new_"][0].node = newnode;
                             }
                             else {
-                                this.data[variableName]["_new_"][0].node.openingElement.tagName = typescript_1.default.factory.createIdentifier(tagname);
-                                this.data[variableName]["_new_"][0].node.closingElement.tagName = typescript_1.default.factory.createIdentifier(tagname);
+                                this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.factory.createIdentifier(tagname);
+                                this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.factory.createIdentifier(tagname);
                             }
                         }
                     }
@@ -1479,7 +1479,7 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
                 return;
             }
-            var newValue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value) : value;
+            var newValue = typeof value === "string" ? ts.factory.createIdentifier(value) : value;
             var statements = scope["body"] ? scope["body"].statements : scope["statements"];
             if (property === "new") { //me.panel1=new Panel({});
                 let prop = this.data[variableName]["_new_"][0]; //.substring(3)];
@@ -1489,14 +1489,14 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 var left = prop.node.getText();
                 left = left.substring(0, left.indexOf("=") - 1);
                 property = "_new_";
-                newExpression = typescript_1.default.factory.createExpressionStatement(typescript_1.default.factory.createAssignment(typescript_1.default.factory.createIdentifier(left), newValue));
+                newExpression = ts.factory.createExpressionStatement(ts.factory.createAssignment(ts.factory.createIdentifier(left), newValue));
             }
             else if (isFunction) {
                 //           newExpression=this.createNode(property === "" ? variableName : (variableName + "." + property)+"("+newValue.text+")",true);
-                newExpression = typescript_1.default.factory.createExpressionStatement(typescript_1.default.factory.createCallExpression(typescript_1.default.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
+                newExpression = ts.factory.createExpressionStatement(ts.factory.createCallExpression(ts.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
             }
             else
-                newExpression = typescript_1.default.factory.createExpressionStatement(typescript_1.default.factory.createAssignment(typescript_1.default.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
+                newExpression = ts.factory.createExpressionStatement(ts.factory.createAssignment(ts.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
                 let node = this.data[variableName][property][0].node;
                 var pos = node.parent["statements"].indexOf(node);
@@ -1637,8 +1637,8 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
                 var st = this.createNode(prefix + varname + "=new " + type + "();", true);
                 // var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
                 statements.splice(x, 0, st); //ts.factory.createStatement(ass));
-                if (useMe)
-                    this.addRef(varname, type);
+                // if (useMe)
+                this.addRef(varname, type);
             }
             return (useMe ? "me." : "") + varname;
         }
@@ -1683,13 +1683,15 @@ define(["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/
     }
     exports.tests = tests;
     async function test() {
-        var h = typescript_1.default;
+        var h = ts;
         //tests(new Test());
         await Typescript_1.mytypescript.waitForInited;
         var code = Typescript_1.mytypescript.getCode("demo/hallo.tsx");
         var parser = new Parser();
         var scope = undefined; // [{ classname: "Dialog2", methodname: "layout" }];
         parser.parse(code, scope, false);
+        debugger;
+        parser.addVariableInCode("Component", [{ classname: undefined, methodname: "test" }]);
         //parser.addImportIfNeeded("table2", "jassijs/ui/Table2");
         //parser.setPropertyInCode("me.button2","pp","hallo",scope);
         // var j=parser.addVariableInCode("jassijs.ui.Button",[{classname:"Dialog",methodname:"layout"  }]);

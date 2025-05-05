@@ -25,9 +25,14 @@ define(["require", "exports", "jassijs/remote/Config", "reflect-metadata"], func
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.migrateModul = exports.Registry = exports.$register = exports.$Class = void 0;
-    function $Class(longclassname) {
+    function $Class(longclassname, target = undefined) {
         return function (pclass) {
-            registry.register("$Class", pclass, longclassname);
+            if (target) {
+                pclass.target = target;
+                registry.register("$Class", target, longclassname);
+            }
+            else
+                registry.register("$Class", pclass, longclassname);
         };
     }
     exports.$Class = $Class;
@@ -72,7 +77,7 @@ define(["require", "exports", "jassijs/remote/Config", "reflect-metadata"], func
             this.dataMembers = {};
             this.jsondataMembers = {};
             this._eventHandler = {};
-            this._nextID = 10;
+            //this._nextID = 10;
             this.isLoading = this.reload();
         }
         getData(service, classname = undefined) {
@@ -118,7 +123,11 @@ define(["require", "exports", "jassijs/remote/Config", "reflect-metadata"], func
          * Important: this function should only used from an annotation, because the annotation is saved in
          *            index.json and could be read without loading the class
          **/
-        register(service, oclass, ...params) {
+        register(service, aclass, ...params) {
+            var oclass = aclass;
+            if (oclass["target"]) {
+                oclass = oclass["target"];
+            }
             var sclass = oclass.prototype.constructor._classname;
             if (sclass === undefined && service !== "$Class") {
                 throw new Error("@$Class member is missing or must be set at last");
@@ -171,12 +180,19 @@ define(["require", "exports", "jassijs/remote/Config", "reflect-metadata"], func
          * register an anotation
          * Important: this function should only used from an annotation
          **/
-        registerMember(service, oclass /*new (...args: any[]) => any*/, membername, ...params) {
-            var _a, _b;
+        registerMember(service, aclass /*new (...args: any[]) => any*/, membername, ...params) {
+            var _a, _b, _c;
+            var oclass = aclass;
+            if (oclass["target"]) {
+                oclass = oclass["target"];
+            }
+            if ((_a = oclass === null || oclass === void 0 ? void 0 : oclass.constructor) === null || _a === void 0 ? void 0 : _a.target) {
+                oclass = oclass.constructor.target;
+            }
             var m = oclass;
             if (oclass.prototype !== undefined)
                 m = oclass.prototype;
-            var clname = (_b = (_a = oclass.prototype) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b._classname;
+            var clname = (_c = (_b = oclass.prototype) === null || _b === void 0 ? void 0 : _b.constructor) === null || _c === void 0 ? void 0 : _c._classname;
             if (clname) {
                 if (this.dataMembers[service] === undefined) {
                     this.dataMembers[service] = {};
@@ -208,10 +224,10 @@ define(["require", "exports", "jassijs/remote/Config", "reflect-metadata"], func
         * with every call a new id is generated - used to create a free id for the dom
         * @returns {number} - the id
         */
-        nextID() {
+        /*nextID() {
             this._nextID = this._nextID + 1;
             return this._nextID.toString();
-        }
+        }*/
         /**
         * Load text with Ajax synchronously: takes path to file and optional MIME type
         * @param {string} filePath - the url
@@ -474,7 +490,7 @@ define(["require", "exports", "jassijs/remote/Config", "reflect-metadata"], func
     exports.default = registry;
     function migrateModul(oldModul, newModul) {
         if (newModul.registry) {
-            newModul.registry._nextID = oldModul.registry._nextID;
+            //newModul.registry._nextID = oldModul.registry._nextID;
             newModul.registry.entries = oldModul.registry.entries;
         }
     }

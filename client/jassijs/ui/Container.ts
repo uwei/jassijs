@@ -3,6 +3,8 @@ import { Component, ComponentProperties, TextComponent, createComponent } from "
 import { $Property } from "jassijs/ui/Property";
 
 
+export interface SimpleContainerProperties extends Omit<ComponentProperties,"children">{
+}
 export interface ContainerProperties extends ComponentProperties {
     /**
      * child components

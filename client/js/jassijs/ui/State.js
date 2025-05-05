@@ -1,7 +1,7 @@
 define(["require", "exports", "jassijs/ui/StateBinder"], function (require, exports, StateBinder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.createComputedState = exports.ccs = exports.createState = exports.State = exports.createStates = exports.foreach = exports.resolveState = void 0;
+    exports.test = exports.createComputedState = exports.ccs = exports.createState = exports.State = exports.createStates = exports.createRefs = exports.createRef = exports.foreach = exports.resolveState = void 0;
     var teset = new StateBinder_1.StateDatabinder();
     class StateProp {
     }
@@ -53,16 +53,33 @@ define(["require", "exports", "jassijs/ui/StateBinder"], function (require, expo
         return retState;
     }
     exports.foreach = foreach;
+    function createRef(val = undefined) {
+        //var ret:Ref<T>={current:val};
+        var ret = createState(val);
+        return ret;
+    }
+    exports.createRef = createRef;
+    function createRefs() {
+        var ret = createStates();
+        ret._onStateChanged((value, state) => {
+            //here we replace the state with real value
+            //@ts-ignore
+            ret[state._$propertyname_] = value;
+        });
+        return ret;
+    }
+    exports.createRefs = createRefs;
     function createStates(initialValues = undefined, propertyname = undefined) {
         var data = new StateGroup(initialValues); // { _used: [], _data: initialValues };
         data._$propertyname_ = propertyname;
         return new Proxy(data, {
             get(target, key) {
-                if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current" && key !== "statechanged") {
+                if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current") {
                     var newstate = createStates(data.current !== undefined ? data.current[key] : undefined, key);
                     target[key] = newstate;
                     target._observe_(newstate, "_$setparentobject");
-                    newstate._observe_(target, "statechanged");
+                    newstate._listener_ = [...target._listener_];
+                    //newstate._observe_(target, "statechanged");
                     if (target._used.indexOf(key) === -1)
                         target._used.push(key);
                 }
@@ -74,14 +91,14 @@ define(["require", "exports", "jassijs/ui/StateBinder"], function (require, expo
                     var propname = data._$propertyname_;
                     target.current = value[propname];
                 }
-                if (key === "current") {
-                    target.current = value;
-                }
-                else if (key === "statechanged") {
-                    target.statechanged = value;
-                }
                 else
-                    throw "not implemented " + key;
+                    target[key] = value;
+                /*            if (key === "current") {
+                                target.current = value;
+                            }else   if (key === "_listener_") {
+                                target._listener_ = value;
+                            } else
+                                throw "not implemented " + key;*/
                 return true;
             }
         });
@@ -127,6 +144,10 @@ define(["require", "exports", "jassijs/ui/StateBinder"], function (require, expo
                 else
                     c.ob[c.proppath[0]] = data;
             }
+            var _this = this;
+            if (this._listener_.length > 0) {
+                this._listener_.forEach((e) => e(data, _this));
+            }
         }
     }
     exports.State = State;
@@ -148,16 +169,10 @@ define(["require", "exports", "jassijs/ui/StateBinder"], function (require, expo
         }
     }
     class StateGroup extends State {
-        constructor() {
-            super(...arguments);
-            this._stateChangedHandler = [];
-        }
+        // _stateChangedHandler = [];
         _onStateChanged(handler) {
-            this._stateChangedHandler.push(handler);
-        }
-        set statechanged(value) {
-            this._stateChangedHandler.forEach((e) => e(value));
-            //this.stateHasChanged();
+            this._listener_.push(handler);
+            //this._stateChangedHandler.push(handler);
         }
     }
     /**

@@ -43,7 +43,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerPhoneList.ts": {
-		"date": 1721666518282.6287,
+		"date": 1740306592806.8901,
 		"northwind/CustomerPhoneList": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -61,7 +61,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerView.ts": {
-		"date": 1740069816828.1345,
+		"date": 1740518262796.011,
 		"northwind.CustomerView": {
 			"$DBObjectView": [
 				{
@@ -73,7 +73,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/EmployeesView.ts": {
-		"date": 1740069921944.0195,
+		"date": 1740518268456.369,
 		"northwind.EmployeesView": {
 			"$DBObjectView": [
 				{
@@ -114,7 +114,7 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1613551044000
 	},
 	"northwind/OrdersView.ts": {
-		"date": 1740069931533.627,
+		"date": 1740306641064.8445,
 		"northwind.OrdersView": {
 			"$DBObjectView": [
 				{

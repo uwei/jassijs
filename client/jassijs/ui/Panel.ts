@@ -1,9 +1,12 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Container, ContainerProperties } from "jassijs/ui/Container";
-import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
+import { Component, ComponentProperties } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
+import { $UIComponent } from "jassijs/ui/UIComponent";
 
 
+export interface SimplePanelProperties extends Omit<PanelProperties,"isAbsolute"|"useSpan"|"domProperties">{
+}
 export interface PanelProperties extends ContainerProperties {
     /**
       * @param {boolean} the elements are ordered absolute

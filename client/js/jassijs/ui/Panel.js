@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_1, Container_1, Component_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/UIComponent"], function (require, exports, Registry_1, Container_1, Property_1, UIComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Panel = void 0;
@@ -88,7 +88,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         __metadata("design:paramtypes", [Boolean])
     ], Panel.prototype, "isAbsolute", null);
     Panel = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
+        (0, UIComponent_1.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
         (0, Registry_1.$Class)("jassijs.ui.Panel"),
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" }),
         (0, Property_1.$Property)({ name: "new/useSpan", type: "boolean", default: false }),

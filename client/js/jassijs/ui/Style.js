@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, InvisibleComponent_1, Component_1, Registry_1, Property_1) {
+define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/UIComponents"], function (require, exports, InvisibleComponent_1, Component_1, Registry_1, Property_1, UIComponents_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.Style = void 0;
@@ -60,7 +60,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
         __metadata("design:paramtypes", [Object])
     ], Style.prototype, "style", null);
     Style = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
         (0, Registry_1.$Class)("jassijs.ui.Style")
         /**
          * on ore mors Style can be assigned to component
@@ -75,10 +75,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
             filter: "drop-shadow(16px 16px 20px blue)"
         };
         jassijs.includeCSS("mytest2id", {
-            ".Panel": css,
-            ".jinlinecomponent": {
-                color: "red"
-            }
+            ".Panel": css
         });
         setTimeout(() => {
             jassijs.includeCSS("mytest2id", undefined); //remove

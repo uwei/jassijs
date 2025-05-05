@@ -14,12 +14,6 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -27,14 +21,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_1, Component_1, Property_1) {
+define(["require", "exports", "jassijs/ui/Component"], function (require, exports, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Button = void 0;
-    let Button = class Button extends Component_1.Component {
+    //@$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
+    //@$Class("jassijs.ui.Button")
+    class Button extends Component_1.Component {
         constructor(properties = {}) {
             super(properties);
         }
@@ -58,6 +51,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 className: "buttontext"
             })));
         }
+        //@$Property({ default: "function(event){\n\t\n}" })
         onclick(handler, removeOldHandler = true) {
             if (removeOldHandler) {
                 this.off("click");
@@ -83,6 +77,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 this.dom.querySelector(".buttonimg").setAttribute("src", icon);
             }
         }
+        //@$Property({type:"image"})
         get icon() {
             var ret = this.dom.querySelector(".buttonimg").getAttribute("src");
             if (ret === "") {
@@ -93,6 +88,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         set text(value) {
             this.dom.querySelector(".buttontext").innerText = value === undefined ? "" : value;
         }
+        //@$Property()
         get text() {
             var ret = this.dom.querySelector(".buttontext").innerText;
             if (ret === undefined)
@@ -115,28 +111,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         destroy() {
             super.destroy();
         }
-    };
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Boolean]),
-        __metadata("design:returntype", void 0)
-    ], Button.prototype, "onclick", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "image" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Button.prototype, "icon", null);
-    __decorate([
-        (0, Property_1.$Property)(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Button.prototype, "text", null);
-    Button = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
-        (0, Registry_1.$Class)("jassijs.ui.Button"),
-        __metadata("design:paramtypes", [Object])
-    ], Button);
+    }
     exports.Button = Button;
     async function test() {
         var Panel = (await (new Promise((resolve_1, reject_1) => { require(["jassijs/ui/Panel"], resolve_1, reject_1); }).then(__importStar))).Panel;

@@ -5,11 +5,11 @@ import { Panel } from "jassijs/ui/Panel";
 import { Button, ButtonProperties } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
 import {  $Property } from "jassijs/ui/Property";
-import { $UIComponent } from "jassijs/ui/Component";
 import { classes } from "jassijs/remote/Classes";
 import { DataComponentProperties } from "jassijs/ui/DataComponent";
 import { BoundProperty } from "jassijs/ui/State";
 import { StateDatabinder } from "jassijs/ui/StateBinder";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 /*
 https://blog.openshift.com/using-filezilla-and-sftp-on-windows-with-openshift/
 */

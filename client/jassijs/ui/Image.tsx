@@ -1,7 +1,8 @@
-import { Component, $UIComponent } from "jassijs/ui/Component";
+import { Component } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 
 export interface ImageProperties extends DataComponentProperties {
     domProperties?:React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLImageElement>, HTMLImageElement>;

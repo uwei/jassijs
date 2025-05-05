@@ -1,7 +1,7 @@
 import { MenuItem } from "jassijs/ui/MenuItem";
 import { Menu } from "jassijs/ui/Menu";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
-import { $UIComponent,Component,ComponentProperties,HTMLComponent,createComponent } from "jassijs/ui/Component";
+import { Component,ComponentProperties,HTMLComponent,createComponent } from "jassijs/ui/Component";
 import { TextComponent } from "jassijs/ui/Component";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
@@ -11,6 +11,7 @@ import { jc } from "jassijs/ui/Component";
 import { Button } from "jassijs/ui/Button";
 import { Table } from "jassijs/ui/Table";
 import { $Property } from "jassijs/ui/Property";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 type Me={
     button1?: Button;
 };

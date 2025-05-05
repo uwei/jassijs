@@ -46,7 +46,7 @@ export class HtmlDesigner extends ComponentDesigner {
         var textpositions: any = {};
         for (var x = 0; x < nodes.childNodes.length; x++) {
             var nd: HTMLElement = <any>nodes.childNodes[x];
-            if (nd.classList.contains("jcomponent")) {
+            if (nd.classList.contains("jeditablecomponent")) {
                 toInsert.push(document.getElementById(nd.id)._this);
             }
             else {
@@ -507,7 +507,7 @@ export class HtmlDesigner extends ComponentDesigner {
     }
     private _createColorIcon() {
         var _this = this;
-        this.colorIcon = new Textbox({useWrapper:true});
+        this.colorIcon = new Textbox({ useWrapper: true });
         var spec = $(this.colorIcon.dom)["spectrum"]({
             color: "#f00",
             showPalette: true,
@@ -544,7 +544,7 @@ export class HtmlDesigner extends ComponentDesigner {
     }
     private _createBGColorIcon() {
         var _this = this;
-        this.bgcolorIcon = new Textbox({useWrapper:true});
+        this.bgcolorIcon = new Textbox({ useWrapper: true });
         var spec = $(this.bgcolorIcon.dom)["spectrum"]({
             color: "#f00",
             showPalette: true,
@@ -667,7 +667,7 @@ export class HtmlDesigner extends ComponentDesigner {
                 comp2.init(<any>nd, {});
                                                                                                         var text2 = this.createComponent("jassijs.ui.TextComponent", comp2, undefined, undefined, comp._parent, comp, true, "text");
                                                                                                         */
-         this.changeText(text2.dom, v1);
+        this.changeText(text2.dom, v1);
         //this.updateDummies();
         return [text2, comp];
     }
@@ -890,16 +890,30 @@ export class HtmlDesigner extends ComponentDesigner {
                     var before = undefined;
                     // if (anchorNode.childNodes.length > anchorOffset) {
                     before = (<any>anchorNode)._this;
+                    var testpos=before._parent._components.indexOf(before);
+                    if(testpos>1&&before._parent._components[testpos-1] instanceof TextComponent){
+                        anchorOffset = 0;
+                        anchorNode = before._parent._components[testpos-1].dom ;
+                        neu =anchorNode.textContent+ e.key;                     
+                    }else{
                     //}
-                    anchorOffset = 0;
-                    anchorNode = this.createTextComponent(e.key, (<any>anchorNode)._this._parent, before).dom;
-                    neu = e.key;
+                        anchorOffset = 0;
+                        anchorNode = this.createTextComponent(e.key, (<any>anchorNode)._this._parent, before).dom;
+                        neu = e.key;
+                    }
                 } else if (dummyPre === false) {
-                    var container = this.lastSelectedDummy.component;
+                    var container: Container = this.lastSelectedDummy.component;
+                    if (container?._components.length > 1 && container._components[container._components.length - 1] instanceof TextComponent) {
+                        anchorNode = container._components[container._components.length - 1].dom;
+                        anchorOffset = 0;
+                        neu =anchorNode.textContent+ e.key;
+                    } else {
+                        anchorOffset = 0;
+                        anchorNode = this.createTextComponent(e.key, container, undefined).dom;
+                        neu = e.key;
+                    }
                     //}
-                    anchorOffset = 0;
-                    anchorNode = this.createTextComponent(e.key, container, undefined).dom;
-                    neu = e.key;
+
                 } else {//insert in Container
                     var desc = ComponentDescriptor.describe((<any>anchorNode)._this.constructor);
                     var fnew = desc.findField("children");

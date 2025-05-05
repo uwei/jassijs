@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Registry_1, Component_1, Property_1, DataComponent_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/DataComponent", "jassijs/ui/UIComponents"], function (require, exports, Registry_1, Property_1, DataComponent_1, UIComponents_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Checkbox = void 0;
@@ -74,7 +74,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         __metadata("design:paramtypes", [String])
     ], Checkbox.prototype, "text", null);
     Checkbox = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
         (0, Registry_1.$Class)("jassijs.ui.Checkbox"),
         __metadata("design:paramtypes", [Object])
     ], Checkbox);

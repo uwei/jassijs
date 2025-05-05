@@ -5,18 +5,6 @@ define("demo/registry",["require"], function(require) {
 	"demo/DelTest.ts": {
 		"date": 1681563014000
 	},
-	"demo/Dialog3.ts": {
-		"date": 1739908670418.73,
-		"demo/Dialog3": {}
-	},
-	"demo/Dialog4.ts": {
-		"date": 1697233194352.7358,
-		"demo/Dialog4": {}
-	},
-	"demo/Dialog5.ts": {
-		"date": 1699110372945.5725,
-		"demo/Dialog5": {}
-	},
 	"demo/LargeReport.ts": {
 		"date": 1634240084000
 	},
@@ -48,7 +36,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1697199411562.5796
 	},
 	"demo/TestComponent.ts": {
-		"date": 1655843270000,
+		"date": 1740651071484.972,
 		"demo.TestComponent": {
 			"$UIComponent": [
 				{
@@ -114,16 +102,8 @@ define("demo/registry",["require"], function(require) {
 	"demo/_test1.ts": {
 		"date": 1670673960000
 	},
-	"demo/Dialog2.ts": {
-		"date": 1739985436239.5957,
-		"demo/Dialog2": {}
-	},
-	"demo/Dialog6.ts": {
-		"date": 1720246422569.9336,
-		"demo/Dialog6": {}
-	},
 	"demo/Dialog7.ts": {
-		"date": 1740069816818.0576,
+		"date": 1740651060516.4475,
 		"demo/M1": {
 			"$UIComponent": [
 				{
@@ -140,47 +120,53 @@ define("demo/registry",["require"], function(require) {
 		"demo/Dialog7": {}
 	},
 	"demo/Dialog8.ts": {
-		"date": 1721932941226.1138
+		"date": 1740651364663.8745
 	},
 	"demo/TestStatebinder.ts": {
 		"date": 1740069816818.0576
 	},
 	"demo/hallo.tsx": {
-		"date": 1740077775964.6782
+		"date": 1740575668495.1196
 	},
 	"demo/hallo2.tsx": {
 		"date": 1720092336379.0627
 	},
 	"demo/hallo3.tsx": {
-		"date": 1740069816821.0498
+		"date": 1740490301824.4006
 	},
 	"demo/hallo4.tsx": {
-		"date": 1740070434822.886
+		"date": 1740921953482.349
 	},
 	"demo/hallo5.tsx": {
-		"date": 1740076199636.462
+		"date": 1740490330935.17
 	},
 	"demo/hallo6.tsx": {
-		"date": 1722108445957.1736
+		"date": 1740744395569.9814
 	},
 	"demo/TestJSX.tsx": {
 		"date": 1719778647927.916
 	},
 	"demo/TestComputedState.tsx": {
-		"date": 1739823504128.3713
+		"date": 1740490457021.1514
 	},
 	"demo/ExistsIfTest.ts": {
-		"date": 1740073967066.1682
+		"date": 1740651376709.344
 	},
 	"demo/ExistsIfTest2.tsx": {
-		"date": 1739817432005.1152
-	},
-	"demo/Dialog9.ts": {
-		"date": 1740000579986.1294,
-		"demo/Dialog9": {}
+		"date": 1740490173291.3179
 	},
 	"demo/TestContextmenu2.tsx": {
-		"date": 1740083917542.9377
+		"date": 1740312744239.8494
+	},
+	"demo/Dialog1.ts": {
+		"date": 1740595660483.8047,
+		"demo/Dialog1": {}
+	},
+	"demo/Dialog2.tsx": {
+		"date": 1740732548116.1436
+	},
+	"demo/Testreport.ts": {
+		"date": 1740920946369.223
 	}
 }
  }

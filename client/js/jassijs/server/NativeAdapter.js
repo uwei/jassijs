@@ -27,10 +27,11 @@ define(["require", "exports", "jassijs/remote/Config", "./FS", "./LocalFS", "./R
     exports.doNotReloadModule = exports.transpile = exports.reloadJSAll = exports.dozip = exports.myfs = exports.exists = exports.ts = void 0;
     //@ts-ignore
     Config_1.config.clientrequire(["jassijs_editor/util/Typescript"], ts1 => {
+        //@ts-ignore
         require("jassijs/server/NativeAdapter").ts = window.ts;
     });
-    var ts = window.ts;
-    exports.ts = ts;
+    //@ts-ignore;
+    const ts = window.ts;
     var exists = FS_1.exists;
     exports.exists = exists;
     var myfs = new FS_1.FS();

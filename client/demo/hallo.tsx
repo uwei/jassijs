@@ -1,37 +1,16 @@
-import { createState, createStates, State, States } from "jassijs/ui/State";
-import { createComponent, React } from "jassijs/ui/Component";
-import { Panel } from "jassijs/ui/Panel";
-import { Button } from "jassijs/ui/Button";
-
-export interface MyCompProp{
-    mycolor?:string;
-    mytext?:string;
-    
+import { HTMLComponent,createComponent } from "jassijs/ui/Component";
+import { ComponentProperties,SimpleComponentProperties } from "jassijs/ui/Component";
+import { States,createRefs } from "jassijs/ui/State";
+type Refs={};
+interface DialogProperties extends SimpleComponentProperties {
+    sampleProp?: string;
 }
-
-export function MyComp(props:MyCompProp,states:States<MyCompProp>=undefined){
-    
-   
-
-    return <Panel>
-        <input value={states.mytext} />
-        <input value={states.mytext} />
-        <span>Hallo</span>
-        <button style={{ color: states.mycolor }} onClick={() => {
-            //  alert(8);
-            states.mycolor.current="blue";
-            states.mytext.current="oo";
-        }} >dfgdfg</button>
-
-    </Panel>;
+function Dialog1(props: DialogProperties,states: States<DialogProperties>) {
+    var refs: Refs=createRefs();
+    return <div>{states.sampleProp}</div>;
 }
 export function test() {
-
-           // calculateState
-    
-    var ret = <MyComp mycolor="yellow" mytext="Top"></MyComp>
-
-    var comp = createComponent(ret);
-    comp.config({mycolor:"red"});
+    var ret=<Dialog1 sampleProp="jj"></Dialog1>;
+    var comp=createComponent(ret);
     return comp;
 }

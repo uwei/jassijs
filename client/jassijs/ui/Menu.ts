@@ -4,7 +4,8 @@ import { Button } from "jassijs/ui/Button";
 import { Property,$Property } from "jassijs/ui/Property";
 import { MenuItem } from "jassijs/ui/MenuItem";
 import { $Class } from "jassijs/remote/Registry";
-import { $UIComponent,createComponent,jc } from "jassijs/ui/Component";
+import { createComponent,jc } from "jassijs/ui/Component";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 /*declare global {
     interface JQuery {
             //menu: any;

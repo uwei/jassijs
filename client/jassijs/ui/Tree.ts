@@ -1,7 +1,7 @@
 import "jassijs/ext/jquerylib";
 import "jassijs/ext/fancytree";
 import { $Class } from "jassijs/remote/Registry";
-import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
+import { Component, ComponentProperties, nextID } from "jassijs/ui/Component";
 import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import registry from "jassijs/remote/Registry";
 
@@ -10,6 +10,7 @@ import extensions from "jassijs/base/Extensions";
 import { $Property } from "jassijs/ui/Property";
 import { Style } from "jassijs/ui/Style";
 import { CSSProperties } from "jassijs/ui/CSSProperties";
+import { $UIComponent } from "jassijs/ui/UIComponent";
 /*declare global {
     interface JQuery {
         fancytree: any;
@@ -611,15 +612,15 @@ export class Tree<T extends TreeProperties = TreeProperties> extends Component<T
         //var node: TreeNode = undefined;
         var node = $.ui.fancytree.getNode(evt.target);
         //node = this._allNodes[evt.target.id];
-        if (this._contextMenu !== undefined) {
+        if (this.contextMenu !== undefined) {
             if (node.data.item === undefined)
                 return;
             var test = node.data.tree.selection;
             //multiselect and the clicked is within the selection
             if (test !== undefined && test.indexOf(node.data.item) !== -1) {
-                this._contextMenu.value = test;
+                this.contextMenu.value = test;
             } else
-                this._contextMenu.value = [node === undefined ? undefined : node.data.item];
+                this.contextMenu.value = [node === undefined ? undefined : node.data.item];
         }
     }
     set contextMenu(value) {
@@ -657,7 +658,7 @@ class TreeNode {
     constructor(tree, item, parent: TreeNode = undefined) {
         this.tree = tree;
         this.parent = parent;
-        this._id = "j" + registry.nextID();
+        this._id = "j" + nextID();
         this.item = item;
         var title = this.tree.getTitleFromItem(this.item);
         this.key = (parent !== undefined ? parent.key + "|" : "") + (title === undefined ? "" : title).replaceAll("|", "!");

@@ -30,7 +30,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Registry_1, Table_1, Panel_1, Button_1, Textbox_1, Property_1, Component_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ui/UIComponents", "jassijs/ext/jquerylib"], function (require, exports, Registry_1, Table_1, Panel_1, Button_1, Textbox_1, Property_1, Classes_1, UIComponents_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.ObjectChooser = void 0;
@@ -219,7 +219,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
         __metadata("design:paramtypes", [Object])
     ], ObjectChooser.prototype, "bind", null);
     ObjectChooser = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
         (0, Registry_1.$Class)("jassijs.ui.ObjectChooser"),
         __metadata("design:paramtypes", [Object])
     ], ObjectChooser);

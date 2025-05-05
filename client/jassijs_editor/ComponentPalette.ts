@@ -5,7 +5,8 @@ import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Image } from "jassijs/ui/Image";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
-import { $UIComponent, UIComponentProperties } from "jassijs/ui/Component";
+import { UIComponentProperties } from "jassijs/ui/UIComponents";
+
 
 @$Class("jassijs_editor.ComponentPalette")
 export class ComponentPalette extends Panel {
@@ -91,7 +92,7 @@ export class ComponentPalette extends Panel {
      * install the draggable
      * @param {jassijs.ui.Image} component
      */
-    _makeDraggable(component) {
+    /*_makeDraggable(component) {
         var helper = undefined;
 
 
@@ -124,16 +125,15 @@ export class ComponentPalette extends Panel {
                 return helper._position.dom;
             }
         });
-    }
+    }*/
     _makeDraggable2(component) {
         var helper = undefined;
-
         var cl = classes.getClass(component.createFromType);
         if (cl === undefined) {
             classes.loadClass(component.createFromType);//for later
             cl = Panel;
         }
-
+              
         /*   var img = new Image();
            (<any>img).native=true;
            img.src = component.src;

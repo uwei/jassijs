@@ -30,7 +30,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Classes_1, tabulator_tables_1, DateTimeConverter_1, Numberformatter_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter", "jassijs/ui/UIComponents"], function (require, exports, Registry_1, DataComponent_1, Property_1, Textbox_1, Classes_1, tabulator_tables_1, DateTimeConverter_1, Numberformatter_1, UIComponents_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -626,7 +626,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "bindItems2", null);
     Table = __decorate([
-        (0, Component_1.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
         (0, Registry_1.$Class)("jassijs.ui.Table"),
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
         __metadata("design:paramtypes", [Object])

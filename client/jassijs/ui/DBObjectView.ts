@@ -2,7 +2,7 @@ import { Button } from "jassijs/ui/Button";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel, PanelProperties } from "jassijs/ui/Panel";
-import { $UIComponent, ComponentProperties, jc } from "jassijs/ui/Component";
+import { jc } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { DBObject } from "jassijs/remote/DBObject";
@@ -54,7 +54,7 @@ export interface DBObjectViewProperties<T> extends PanelProperties {
 //@$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh", "me.databinder"] })
 @$Class("jassijs/ui/DBObjectView")
 //see export function $DBObjectView =>@$Property({name:"value", type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewProperties<P> = DBObjectViewProperties<P>> extends Panel<T> implements Omit<Panel, "isAbsolute"> {
+export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewProperties<P> = DBObjectViewProperties<P>> extends Panel<T>{
 
 
     constructor(props: T = <any>{}) {

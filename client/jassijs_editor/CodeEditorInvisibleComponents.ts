@@ -6,7 +6,6 @@ import registry from "jassijs/remote/Registry";
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
 import { Button } from "jassijs/ui/Button";
 import { classes } from "jassijs/remote/Classes";
-import { Component, $UIComponent, UIComponentProperties } from "jassijs/ui/Component";
 //import {CodeEditor} from "jassijs_editor/CodeEditor";//could be removed
 
 

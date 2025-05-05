@@ -1,9 +1,10 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Component, $UIComponent } from "jassijs/ui/Component";
+import { Component, nextID } from "jassijs/ui/Component";
 import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
 import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
 import registry from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
+import { $UIComponent } from "jassijs/ui/UIComponent";
 
 export interface TextboxProperties extends DataComponentProperties {
     domProperties?:React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
@@ -224,7 +225,7 @@ export class Textbox<T extends TextboxProperties = TextboxProperties> extends Da
             });
         }
         if (list === undefined || list === null) {
-            list = "j" + registry.nextID();
+            list = "j" + nextID();
             this._autocompleter = Component.createHTMLElement('<datalist id="' + list + '"/>');
             this.domWrapper.appendChild(this._autocompleter);
             this.dom.setAttribute("list", list);

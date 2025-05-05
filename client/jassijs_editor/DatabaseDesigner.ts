@@ -81,8 +81,8 @@ export class DatabaseDesigner extends Panel {
                 }
             });
         me.select = new Select();
-        me.databinder = new Databinder();
-        this.add(me.databinder);
+        //me.databinder = new Databinder();
+        //this.add(me.databinder);
         me.table.width = 565;
         me.table.height = "300";
         me.table.onchange(function (event?: JQueryEventObject, data?: any/*Tabulator.RowComponent*/) {

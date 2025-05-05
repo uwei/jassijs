@@ -1,7 +1,7 @@
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { TextComponent } from "jassijs/ui/Component";
 import { Checkbox } from "jassijs/ui/Checkbox";
-import { Component,ComponentProperties,createComponent,HTMLComponent,React,Ref } from "jassijs/ui/Component";
+import { Component,ComponentProperties,createComponent,HTMLComponent,React } from "jassijs/ui/Component";
 import { Panel } from "jassijs/ui/Panel";
 import { Button } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
@@ -11,7 +11,7 @@ interface Props {
 function KK(props: Props) {
     return <div>
         <Panel>
-        ddddd
+            ddddd
         </Panel>
         <HTMLPanel value="dfgdfg"></HTMLPanel>
         sdfsdf
@@ -32,36 +32,47 @@ function KK(props: Props) {
 
         <br />
         <div></div>
-
+aa
 
         <table>
 
-            <tr height={15}>
+            <tr>
 
-                <td>ljkvbnvbdnvbnj</td>
+                <td>ljkv
+                    bnvbdnvbnj</td>
                 <td>lj</td>
-                <td>
-                </td>
+                <td>g4</td>
             </tr>
             <tr>
-                <td>vvv
-                </td>
+                <td>vvv       </td>
                 <td>  sad</td>
                 <td>g4</td>
             </tr>
             <tr>
-                <td>vvv
-                </td>
+                <td>vvv   </td>
                 <td>  sad</td>
                 <td></td>
             </tr>
 
 
-        </table>ghgd b
-        ggggg
-        f
-        dddsdf
-        ddd
+        </table>
+        bb
+        ghgd b ggggg f d
+        dd
+
+        s
+
+        df d
+        d
+        s
+        d
+        d
+        <Panel>
+        </Panel>
+        d
+        <Panel>
+        </Panel>
+
     </div>;
 }
 export function test() {

@@ -651,13 +651,13 @@ export class CodeEditor extends Panel {
             (<any>islocaldb).destroyConnection();
         }
         //@ts-ignore
-        if (data.test !== undefined || window.reportdesign) {
+        if (data?.test !== undefined || window.reportdesign) {
             //capure created Components
 
             try {
                 Component.onComponentCreated(this.hookComponents);
                 var ret;
-                if (data.test) {
+                if (data?.test) {
                     ret = await data.test(new Test());
                 } else {
                     //@ts-ignore

@@ -5,13 +5,14 @@ declare var Split;
 
 import { Panel, PanelProperties} from "jassijs/ui/Panel";
 import { $Class } from "jassijs/remote/Registry";
-import { $UIComponent } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";
 //@ts-ignore
 //import Split from "jassijs/ext/split";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Container, ContainerProperties } from "./Container";
+import { $UIComponent } from "jassijs/ui/UIComponent";
+
 
 export interface BoxPanelProperties extends PanelProperties {
 
@@ -39,7 +40,7 @@ export class BoxPanel<T extends BoxPanelProperties=BoxPanelProperties> extends P
     * @param {boolean} [properties.useSpan] -  use span not div
     *
     */
-    constructor(properties:BoxPanelProperties={}) {
+    constructor(properties:T=<any>{}) {
         super(properties);
         this.domWrapper.classList.add('BoxPanel')
         this.domWrapper.classList.remove('Panel');

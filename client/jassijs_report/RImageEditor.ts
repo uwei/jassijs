@@ -2,24 +2,22 @@ import "jassijs/ext/jquerylib";
 import { Upload } from "jassijs/ui/Upload";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Image } from "jassijs/ui/Image";
-import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Button } from "jassijs/ui/Button";
-import { Repeater } from "jassijs/ui/Repeater";
 import { $Class } from "jassijs/remote/Registry";
-import { Panel } from "jassijs/ui/Panel";
+import { Panel, PanelProperties } from "jassijs/ui/Panel";
 import { $PropertyEditor, Editor } from "jassijs/ui/PropertyEditors/Editor";
-import { $Action } from "jassijs/base/Actions";
 import { RImage } from "jassijs_report/RImage";
 import { RComponent } from "jassijs_report/RComponent";
-import { StateDatabinder } from "jassijs/ui/StateBinder";
+import { jc } from "jassijs/ui/Component";
+import { States, ccs } from "jassijs/ui/State";
 type Me = {
-    repeater1?: Repeater;
+    //  repeater1?: Repeater;
     panel1?: Panel;
     image1?: Image;
     itile?: Textbox;
     remove?: Button;
     upload1?: Upload;
-    databinder1?: StateDatabinder;
+    //  databinder1?: StateDatabinder;
 };
 @$PropertyEditor(["rimage"])
 @$Class("jassi_report/RImagePropertyEditor")
@@ -95,108 +93,130 @@ export class RImageEditor extends Editor {
             var report = RComponent.findReport(image);
             if (report?.images)
                 this.dialog.items = report.images;
-            
-            $(this.dialog.__dom).dialog({ height: "400", width: "400",
+
+            $(this.dialog.__dom).dialog({
+                height: "400", width: "400",
                 close: () => {
                     if (report)
                         report.images = _this.dialog.items;
                     _this._onchange();
-                } });
+                }
+            });
             this.dialog.onpictureselected((val) => {
-                
+
                 _this._textbox.value = val;
                 if (report)
                     report.images = _this.dialog.items;
                 _this._onchange();
                 $(this.dialog.__dom).dialog("close");
             });
-        }else{
-             $(this.dialog.__dom).dialog("open");
+        } else {
+            $(this.dialog.__dom).dialog("open");
         }
     }
 }
-export class RImageChooser extends Panel {
+interface DetailProperties{
+    value:{ name: string, data: string};
+    chooser:RImageChooser;
+}
+function Details(props:DetailProperties,stat:States<DetailProperties>){
+     
+    return jc(Panel,{
+        children:[    
+            jc(Textbox,{bind:stat.value.bind.name}),
+             jc(Button,{
+                icon : "mdi mdi-delete-forever-outline",
+                onclick:(event)=>{
+                    var ob = stat.value.current;
+                    let pos = props.chooser.state.items.current.indexOf(ob);
+                    props.chooser.state.items.current.splice(pos, 1);
+                    props.chooser.state.items.current=[...props.chooser.state.items.current]
+                }
+            }),
+            jc("br"),
+            jc(Image,{ height:75,bind:stat.value.bind.data,
+                onclick:(ev)=>{
+                    props.chooser.value=stat.value.current.name;
+//                     var ob = me.itile._databinder.value;
+  //                _this.value = ob.name;
+                  props.chooser.callEvent("pictureselected", stat.value.current.name);
+                }
+            
+            }),
+           
+            jc(Image)
+        ]
+    })
+}
+interface RImageChooserProperties extends PanelProperties{
+    items?: {
+        name: string;
+        data: string;
+    }[];
+    value?: string;
+}
+
+export class RImageChooser extends Panel<RImageChooserProperties> {
     me: Me;
     //active image;
     value: string;
-    _items: {
+   /* _items: {
         name: string;
         data: string;
-    }[] = [];
-    constructor() {
-        super();
+    }[] = [];*/
+    constructor(props={items:[]}) {
+        super(props);
         this.me = {};
-        this.layout(this.me);
+        //this.layout(this.me);
     }
     set items(val) {
-        this._items.splice(0, this._items.length);
+        this.state.items.current.splice(0, this.state.items.current.length);
         for (var key in val) {
-            this._items.push({ name: key, data: val[key] });
+            this.state.items.current.push({ name: key, data: val[key] });
         }
-        this.me.repeater1.value = this._items;
+        // this.me.repeater1.value = this._items;
+        this.state.items.current=this.state.items.current;
     }
     get items() {
         var ret = {};
-        for (var x = 0; x < this._items.length; x++) {
-            ret[this._items[x].name] = this._items[x].data;
+        for (var x = 0; x < this.state.items.current.length; x++) {
+            ret[this.state.items.current[x].name] = this.state.items.current[x].data;
         }
         return ret;
     }
     onpictureselected(func) {
         this.addEvent("pictureselected", func);
     }
-    layout(me: Me) {
+    render() {
         var _this = this;
-        me.repeater1 = new Repeater();
-        me.databinder1 = new Databinder();
-        me.databinder1.value = this;
-        me.repeater1.value = this._items;
-        me.upload1 = new Upload();
-        me.upload1.onuploaded((data) => {
-            for (var key in data) {
-                _this._items.push({ name: key.split(".")[0], data: data[key] });
-            }
-            _this.items = _this.items;
-        });
-        me.upload1.readAs = "DataUrl";
-        this.add(me.upload1);
-        this.add(me.repeater1);
-        me.repeater1.createRepeatingComponent(function (me: Me) {
-            me.panel1 = new Panel();
-            me.image1 = new Image();
-            me.itile = new Textbox();
-            me.remove = new Button();
-            me.repeater1.design.add(me.panel1);
-            me.panel1.add(me.itile);
-            me.panel1.add(me.remove);
-            me.panel1.add(me.image1);
-            me.image1.height = "75";
-            me.remove.text = "";
-            me.remove.icon = "mdi mdi-delete-forever-outline";
-            me.itile.bind=[me.repeater1.design.databinder, "name"];
-            me.itile.onchange(function(event){
-                var ob = me.itile._databinder.value;
-                ob.name=me.itile.value;
-                _this.items = _this.items;
-            });
-            me.image1.bind=[me.repeater1.design.databinder, "data"];
-            me.remove.onclick(function (event) {
-                var ob = me.itile._databinder.value;
-                let pos = _this._items.indexOf(ob);
-                _this._items.splice(pos, 1);
-                _this.items = _this.items;
-            });
-            me.image1.onclick(function (event) {
-                var ob = me.itile._databinder.value;
-                _this.value = ob.name;
-                _this.callEvent("pictureselected", ob.name);
-            });
-           
-        });
+
+        return jc(Panel, {
+            children: [
+                jc(Upload, {
+                    multiple:true,
+                    onuploaded:(data) => {
+                        for (var key in data) {
+                            _this.state.items.current.push({ name: key.split(".")[0], data: data[key] });
+                        }
+                        this.state.items.current=[...this.state.items.current];
+                        //_this.items = _this.items;
+
+                    },
+                    readAs: "DataUrl"
+                }),
+                jc("span",{
+                    children:ccs(()=> this.state.items.current.map(item => jc(Details, {
+                            value:item,
+                            chooser:this
+                              })), this.state.items)
+                })
+            ]
+        })
     }
+   
 }
 export async function test() {
     var ret = new RImageChooser();
-    
+
     return ret;
 }

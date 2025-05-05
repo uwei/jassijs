@@ -1,7 +1,7 @@
 import { MenuItem } from "jassijs/ui/MenuItem";
 import { Menu } from "jassijs/ui/Menu";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
-import { $UIComponent,Component,ComponentProperties,HTMLComponent,createComponent } from "jassijs/ui/Component";
+import { createComponent } from "jassijs/ui/Component";
 import { TextComponent } from "jassijs/ui/Component";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";

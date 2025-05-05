@@ -3,13 +3,14 @@ import "jquery.contextMenu";
 import { $Class } from "jassijs/remote/Registry";
 import { Menu } from "jassijs/ui/Menu";
 import { InvisibleComponent, InvisibleComponentProperties } from "jassijs/ui/InvisibleComponent";
-import { Component, $UIComponent, ComponentProperties } from "jassijs/ui/Component";
+import { Component,  ComponentProperties } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { $Property } from "jassijs/ui/Property";
 import { Actions, Action } from "jassijs/base/Actions";
 import { MenuItem } from "jassijs/ui/MenuItem";
 import { Container } from "jassijs/ui/Container";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 
 jassijs.includeCSSFile("contextMenu.css");
 declare global {
@@ -109,7 +110,7 @@ export class ContextMenu<T extends ContextMenuProperties=ContextMenuProperties> 
 
 
     config(config: T): ContextMenu {
-        if(super.config(config))
+        if(super.config(config))//@ts-ignore
             Container.prototype.createChildren.bind(this)(config);
         return this;
     }

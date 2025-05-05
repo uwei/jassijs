@@ -1,7 +1,7 @@
 
 import { $Class } from "jassijs/remote/Registry";
 
-import ts from "typescript";
+//import "typescript";
 
 import { Tests } from "jassijs_editor/util/Tests";
 import { Test } from "jassijs/remote/Test";
@@ -751,7 +751,9 @@ export class Parser {
 
     private removePos(node: ts.Node) {
         var _this = this;
+        //@ts-ignore
         node.pos = -1;
+        //@ts-ignore
         node.end = -1;
         node.forEachChild((ch) => _this.removePos(ch));
     }
@@ -844,6 +846,7 @@ export class Parser {
             throw Error(node.getFullText() + "could not be removed");
     }
     renameVariable(oldName: string, newName: string) {
+        debugger;
         var autoName = false;
         var className = this.data[oldName]["_new_"][0].className
         if (newName === "") {
@@ -855,7 +858,8 @@ export class Parser {
         this.data[newName] = this.data[oldName];
         delete this.data[oldName];
         var prefix = "this.refs.";
-        if (this.data.refs)
+        if (this.code.indexOf("var refs=")!==-1||this.code.indexOf("var refs ")!==-1||this.code.indexOf("var refs:")!==-1||
+            this.code.indexOf("let refs=")!==-1||this.code.indexOf("let refs ")!==-1||this.code.indexOf("let refs:")!==-1)
             prefix = "refs.";
         if (autoName)
             this.removePropertyInCode("ref", undefined, newName)
@@ -864,13 +868,13 @@ export class Parser {
 
         if (this.refs[oldName])
             this.removeNode(this.refs[oldName].node);
-        this.addImportIfNeeded("Ref", "jassijs/ui/Component");
+     //   this.addImportIfNeeded("Ref", "jassijs/ui/Component");
         if (!autoName) {
-            if (className.startsWith("\"")) {
+            if (className.startsWith("\"")||this.data[newName].tag!==undefined) {
                 this.addImportIfNeeded("HTMLComponent", "jassijs/ui/Component");
-                this.addRef(newName, "Ref<HTMLComponent>");
+                this.addRef(newName, "HTMLComponent");
             } else
-                this.addRef(newName, "Ref<" + className + ">");
+                this.addRef(newName,  className );
         }
         return newName;
     }
@@ -1717,7 +1721,7 @@ export class Parser {
             var st = this.createNode(prefix + varname + "=new " + type + "();", true);
             // var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
             statements.splice(x, 0, st);//ts.factory.createStatement(ass));
-            if (useMe)
+           // if (useMe)
                 this.addRef(varname, type);
         }
         return (useMe ? "me." : "") + varname;
@@ -1773,10 +1777,11 @@ export async function test() {
     var parser = new Parser();
     var scope = undefined;// [{ classname: "Dialog2", methodname: "layout" }];
     parser.parse(code, scope, false);
-
+    debugger;
+    parser.addVariableInCode("Component",[{ classname: undefined, methodname: "test" }]);
     //parser.addImportIfNeeded("table2", "jassijs/ui/Table2");
     //parser.setPropertyInCode("me.button2","pp","hallo",scope);
-
+    
     // var j=parser.addVariableInCode("jassijs.ui.Button",[{classname:"Dialog",methodname:"layout"  }]);
     console.log(parser.getModifiedCode());
 

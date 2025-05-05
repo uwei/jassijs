@@ -592,12 +592,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 islocaldb.destroyConnection();
             }
             //@ts-ignore
-            if (data.test !== undefined || window.reportdesign) {
+            if ((data === null || data === void 0 ? void 0 : data.test) !== undefined || window.reportdesign) {
                 //capure created Components
                 try {
                     Component_1.Component.onComponentCreated(this.hookComponents);
                     var ret;
-                    if (data.test) {
+                    if (data === null || data === void 0 ? void 0 : data.test) {
                         ret = await data.test(new Test_1.Test());
                     }
                     else {

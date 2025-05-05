@@ -1,8 +1,10 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Property } from "jassijs/ui/Property";
-import { Component, UIComponentProperties } from "jassijs/ui/Component";
+import { Component } from "jassijs/ui/Component";
 import { classes } from "jassijs/remote/Classes";
 import registry from "jassijs/remote/Registry";
+import { $UIComponent, UIComponentProperties } from "jassijs/ui/UIComponent";
+
 
 @$Class("jassijs.ui.ComponentDescriptor")
 export class ComponentDescriptor {

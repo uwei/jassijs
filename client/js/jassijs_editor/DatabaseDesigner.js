@@ -60,8 +60,8 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
                 }
             });
             me.select = new Select_1.Select();
-            me.databinder = new Databinder();
-            this.add(me.databinder);
+            //me.databinder = new Databinder();
+            //this.add(me.databinder);
             me.table.width = 565;
             me.table.height = "300";
             me.table.onchange(function (event, data /*Tabulator.RowComponent*/) {

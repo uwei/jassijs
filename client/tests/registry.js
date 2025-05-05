@@ -142,14 +142,14 @@ define("tests/registry",["require"], function(require) {
 		"date": 1684512328000
 	},
 	"tests/ServerTests.ts": {
-		"date": 1656077954000
+		"date": 1740653473235.656
 	},
 	"tests/TestDialog.ts": {
 		"date": 1656079688000,
 		"tests/TestDialog": {}
 	},
 	"tests/TestRepeating.ts": {
-		"date": 1740069952455.7803
+		"date": 1740651316696.5154
 	}
 }
  }

@@ -166,7 +166,7 @@ export class JsonEditor extends Editor {
     private async getInitialPropertyValue(code) {
         var newvalue = undefined;
         if (this.property.componentType) {
-            let newclass = classes.getClass(this.property.componentType);
+            let newclass = await classes.loadClass(this.property.componentType);
             newvalue = new newclass();
         } else {
             newvalue = {};

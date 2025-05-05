@@ -1,9 +1,10 @@
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-import { $UIComponent, Component, ComponentProperties } from "jassijs/ui/Component";
+import {  Component, ComponentProperties } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 
 import { CSSProperties } from "jassijs/ui/CSSProperties";
+import { $UIComponent } from "jassijs/ui/UIComponents";
 
 export interface StyleConfig extends ComponentProperties {
   /**
@@ -73,10 +74,7 @@ export function test() {
         filter: "drop-shadow(16px 16px 20px blue)"
     };
     jassijs.includeCSS("mytest2id", {
-        ".Panel": css,
-        ".jinlinecomponent":{
-        	color:"red"
-        }
+        ".Panel": css
     });
     setTimeout(()=>{
     	jassijs.includeCSS("mytest2id",undefined);//remove

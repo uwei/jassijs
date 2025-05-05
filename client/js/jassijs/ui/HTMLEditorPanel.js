@@ -10,12 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_1, HTMLPanel_1, Button_1, Registry_1, tinymce_1, Registry_2) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ext/tinymce", "jassijs/ui/Component"], function (require, exports, Panel_1, HTMLPanel_1, Button_1, Registry_1, tinymce_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.te = exports.HTMLEditorPanel = void 0;
     tinymce_1 = __importDefault(tinymce_1);
-    Registry_2 = __importDefault(Registry_2);
     class Me {
     }
     let HTMLEditorPanel = class HTMLEditorPanel extends Panel_1.Panel {
@@ -30,7 +29,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassi
             this.add(me.IDHtml);
             this.add(me.IDChange);
             //me.IDHtml.text="Hallo";
-            var randclass = "ed" + Registry_2.default.nextID();
+            var randclass = "ed" + (0, Component_1.nextID)();
             me.IDHtml.dom.classList.add(randclass);
             me.IDChange.text = "OK";
             me.IDChange.onclick(function (event) {

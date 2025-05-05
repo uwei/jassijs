@@ -81,7 +81,7 @@ define(["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Regis
         extensionCalled(action) {
             if (action.componentDesignerSetDesignMode) {
                 this.activeComponentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
-                return this._setDesignMode(action.componentDesignerSetDesignMode.enable);
+                return action.componentDesignerSetDesignMode.enable;
             }
             super.extensionCalled(action);
         }
