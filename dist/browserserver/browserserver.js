@@ -16,11 +16,12 @@ class BrowserServer {
         else {
             let registrations = await navigator.serviceWorker.getRegistrations();
             for (const registration of registrations) {
-                if (registration.scope.indexOf("/app/" + name) !== -1)
+                if (registration.scope.indexOf("/apps/" + name) !== -1)
                     await registration.unregister();
             }
             let swfile = (this.isAppScope() ? "../.." : ".") + "/service-worker-scope.js?" + new Date().getTime();
-            var reg = await navigator.serviceWorker.register(swfile, { scope: ("/browserserver/apps/" + name) });
+            let scope = location.pathname.split("/apps/")[0] + "/apps/" + name;
+            var reg = await navigator.serviceWorker.register(swfile, { scope });
         }
         //activate worker
         /* var started = await new Promise((resolve) => {

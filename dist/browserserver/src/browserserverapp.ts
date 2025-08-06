@@ -244,9 +244,7 @@ class BrowserServerAppClass {
         relativePath = relativePath.replaceAll("\`", "");//prevent injection
         var newPath = _this.resolve(relativePath, parentPath);
         if (newPath.indexOf("//") !== -1)
-            debugger;
-        if (newPath === './node_modules/isomorphic-git/web/index.cjs')
-            debugger;
+            newPath=newPath.replace("//","/");
 
         if (!nocache && this.modulecache[newPath])
             return this.modulecache[newPath];
