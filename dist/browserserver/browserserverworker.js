@@ -3,7 +3,6 @@ var browserserverworker = {
     runningApps: []
     // modulecache : []
 };
-debugger;
 //@ts-ignore
 var baseroot = self.location.href.substring(0, self.location.href.lastIndexOf("/"));
 if (baseroot.indexOf("/apps/") !== -1)
@@ -11,7 +10,6 @@ if (baseroot.indexOf("/apps/") !== -1)
 //if(baseroot.endsWith("/")){
 //  baseroot=baseroot.substring(0,baseroot.length-1);
 //}
-debugger;
 console.log("browserserverworker started:" + new Date().toString());
 importScripts('./Npm.js');
 importScripts('./PatchHTTP.js');
