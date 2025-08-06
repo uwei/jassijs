@@ -38,7 +38,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
     var ServerReport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ServerReport = void 0;
-<<<<<<< HEAD
     let ServerReport = ServerReport_1 = class ServerReport {
         static async getDesign(path, parameter) {
             //@ts-ignore
@@ -58,42 +57,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             //@ts-ignore 
             var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); }).then(__importStar)).DoServerreport;
             return await new DoServerreport().getBase64FromData(res);
-=======
-    let ServerReport = ServerReport_1 = class ServerReport extends RemoteObject_1.RemoteObject {
-        static async getDesign(path, parameter, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_1.call(this.getDesign, path, parameter, context);
-            }
-            else {
-                //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_1, reject_1) => { require(["jassijs_report/server/DoServerreport"], resolve_1, reject_1); }).then(__importStar)).DoServerreport;
-                ServerReport_1.cacheLastParameter[path] = parameter;
-                return await new DoServerreport().getDesign(path, parameter);
-            }
-        }
-        static async getBase64(path, parameter, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_1.call(this.getBase64, path, parameter, context);
-            }
-            else {
-                //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/server/DoServerreport"], resolve_2, reject_2); }).then(__importStar)).DoServerreport;
-                if (parameter == "useLastCachedParameter")
-                    parameter = ServerReport_1.cacheLastParameter[path];
-                return await new DoServerreport().getBase64(path, parameter);
-            }
-        }
-        static async getBase64FromFile(file, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_1.call(this.getBase64FromFile, file, context);
-            }
-            else {
-                var res = await new Server_1.Server().testServersideFile(file.substring(0, file.length - 3), context);
-                //@ts-ignore 
-                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); }).then(__importStar)).DoServerreport;
-                return await new DoServerreport().getBase64FromData(res);
-            }
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     };
     ServerReport.cacheLastParameter = {};

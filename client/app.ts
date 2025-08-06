@@ -10,7 +10,6 @@ import { ActionNodeMenu } from "jassijs/ui/ActionNodeMenu";
 //import { testDB, testJSSQL, testLocalServer, testWebpack } from "jassijs/server/Testlocalserver";
 
 async function test() {
-<<<<<<< HEAD
     //debugger;
     //testNPM();
 
@@ -24,9 +23,6 @@ async function test() {
     //await testJSSQL();
     //testDB(); 
   
-=======
-
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
   //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
     var body = new Panel();//{ id: "body" });
     document.body.appendChild(body.dom); 

@@ -13,11 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-<<<<<<< HEAD
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator", "./DBObject"], function (require, exports, Registry_1, Registry_2, RemoteObject_1, Setting_1, Server_1, Serverservice_1, Validator_1, DBObject_1) {
-=======
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_1, Registry_2, RemoteObject_1, Setting_1, Server_1, Serverservice_1, Validator_1) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var Settings_1;
     var _a, _b;

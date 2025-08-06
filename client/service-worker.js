@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-=======
-var RUNTIME = 'runtime59';
-
-var nextid = 0;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 var tempFiles = {};
 //index db deliver files
 var filesdb;
@@ -181,18 +175,7 @@ async function handleEvent(event) {
       await new Promise((res) => setTimeout(() => res(), 100));//wait until file is placed
     }
   }
-<<<<<<< HEAD
   var filename = event.request.url;
-=======
-  if(event.request.url.endsWith("/tsWorker.js")){
-    
-    while(tempFiles[event.request.url]===undefined){
-      await new Promise((res)=>setTimeout(()=>res(),100));//wait until file is placed
-    }
-  }
-  //let cache = await caches.open(RUNTIME)
-  var filename = event.request.url;  
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
   if (tempFiles[filename]) {//we deliver tempFiles
     console.log("deliver " + filename + tempFiles[filename].substring(0, 50));
     return new Response(tempFiles[filename], {

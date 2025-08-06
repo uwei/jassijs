@@ -47,7 +47,6 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/r
             this.strasse = "";
             this.nummer = 0;
         }
-<<<<<<< HEAD
         static async myfind(options = undefined) {
             //@ts-ignore
             var Brackets = (await new Promise((resolve_1, reject_1) => { require(["typeorm"], resolve_1, reject_1); }).then(__importStar)).Brackets;
@@ -73,38 +72,6 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/r
             })).
                 getMany();
             return ret;
-=======
-        static async myfind(options = undefined, context = undefined) {
-            if (!jassijs.isServer) {
-                return await this.call(this.myfind, options, context);
-            }
-            else {
-                //@ts-ignore
-                var Brackets = (await new Promise((resolve_1, reject_1) => { require(["typeorm"], resolve_1, reject_1); }).then(__importStar)).Brackets;
-                //@ts-ignore
-                var man = await Serverservice_1.serverservices.db;
-                var man2 = man;
-                var ret = await man.connection().manager.createQueryBuilder().
-                    select("me").from(AR_1, "me").
-                    leftJoinAndSelect("me.kunde", ",me.kunde").
-                    where("me.kunde=:id", { id: 5 }).getMany();
-                var ret2 = await man.connection().manager.createQueryBuilder().
-                    select("me").from(ARZeile_1.ARZeile, "me").
-                    leftJoin("me.ar", "me_ar").
-                    leftJoin("me_ar.kunde", "me_ar_kunde").
-                    where("me_ar_kunde.id>:id", { id: 0 }).
-                    andWhere(new Brackets(qp => {
-                    qp.where("me_ar.id>=:p1 and me_ar.id<=:p2", { p1: 1, p2: 90 }).
-                        orWhere("me_ar.id>=:p3 and me_ar.id<=:p4", { p3: 500, p4: 1000 });
-                })).
-                    andWhere(new Brackets(qp => {
-                    qp.where("me_ar_kunde.id>=:von and me_ar_kunde.id<=:bis", { von: 1, bis: 90 }).
-                        orWhere("me_ar_kunde.id>=:von and me_ar_kunde.id<=:bis", { von: 1, bis: 90 });
-                })).
-                    getMany();
-                return ret;
-            }
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
         async sample() {
             var all = AR_1.myfind();

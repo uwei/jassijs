@@ -107,11 +107,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-<<<<<<< HEAD
                 "date": 1750578071755.4602,
-=======
-                "date": 1721688634922.4763,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
@@ -280,11 +276,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
-<<<<<<< HEAD
                 "date": 1750536480531.7024,
-=======
-                "date": 1722531390341.5852,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.Orders": {
                     "$DBObject": [],
                     "@members": {
@@ -737,11 +729,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
                         options = {};
                     options = { relations: ["ReportsTo"] };
                 }
-<<<<<<< HEAD
                 var ret = await RemoteObject_1.RemoteObject.docall(this, this.find, ...arguments);
-=======
-                var ret = await this.call(this.find, options, context);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 return ret;
             }
             else {
@@ -877,7 +865,6 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
 define("northwind/remote/MyTest", ["require", "exports", "northwind/remote/Products", "jassijs/remote/Transaction"], function (require, exports, Products_2, Transaction_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-<<<<<<< HEAD
     exports.test = test;
     async function test() {
         var p = await Products_2.Products.findOne();
@@ -901,8 +888,6 @@ define("northwind/remote/MyTest", ["require", "exports", "northwind/remote/Produ
 define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_3, Orders_1, DBObject_4, Registry_4, DatabaseSchema_4, Validator_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     exports.OrderDetails = void 0;
     exports.test = test;
     let OrderDetails = class OrderDetails extends DBObject_4.DBObject {
@@ -922,15 +907,9 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
         __metadata("design:type", Orders_1.Orders)
     ], OrderDetails.prototype, "Order", void 0);
     __decorate([
-<<<<<<< HEAD
         (0, Validator_4.ValidateIsInstanceOf)({ type: type => Products_3.Products }),
         (0, DatabaseSchema_4.ManyToOne)(type => Products_3.Products),
         __metadata("design:type", Products_3.Products)
-=======
-        (0, Validator_4.ValidateIsInstanceOf)({ type: type => Products_2.Products }),
-        (0, DatabaseSchema_4.ManyToOne)(type => Products_2.Products),
-        __metadata("design:type", Products_2.Products)
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], OrderDetails.prototype, "Product", void 0);
     __decorate([
         (0, Validator_4.ValidateIsNumber)(),
@@ -967,13 +946,8 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Order
         constructor() {
             super();
         }
-<<<<<<< HEAD
         static async findAllWithDetails(context) {
             return await Orders_2.find({ relations: ["*"] }, context);
-=======
-        static async findAllWithDetails() {
-            return await Orders_2.find({ relations: ["*"] });
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     };
     exports.Orders = Orders;
@@ -1142,10 +1116,6 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
                return ret;
            });*/
     }
-<<<<<<< HEAD
-=======
-    ;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 });
 define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_7, Registry_7, DatabaseSchema_7, Validator_7) {
     "use strict";

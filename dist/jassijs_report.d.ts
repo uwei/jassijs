@@ -17,10 +17,7 @@ declare module "jassijs_report/designer/ReportDesigner" {
         mainLayout: string;
         constructor();
         set codeEditor(value: any);
-<<<<<<< HEAD
         protected changeText(node: Node, text: string, deleteNodeIfEmpty?: boolean): Node;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         createTextComponent(text: any, par: any, before: any): Component;
         protected wrapTextNodeIfNeeded(found: Node): any;
         connectParser(parser: any): void;
@@ -86,10 +83,6 @@ declare module "jassijs_report/modul" {
             };
             shim: {
                 'pdfjs-dist/build/pdf': {};
-<<<<<<< HEAD
-=======
-                vfs_fonts: {};
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             };
         };
     };
@@ -553,76 +546,6 @@ declare module "jassijs_report/PDFReport" {
 declare module "jassijs_report/PDFViewer" {
     import { Button } from "jassijs/ui/Button";
     import { Component } from "jassijs/ui/Component";
-<<<<<<< HEAD
-=======
-    import { Panel } from "jassijs/ui/Panel";
-    import { BoxPanel } from "jassijs/ui/BoxPanel";
-    import { PDFReport } from "jassijs_report/PDFReport";
-    class Canavas extends Component {
-        constructor();
-        render(): any;
-    }
-    type Me = {
-        toolbar?: BoxPanel;
-        plus?: Button;
-        minus?: Button;
-        download?: Button;
-        mainpanel?: Panel;
-    };
-    export class PDFViewer extends Panel {
-        pdfjsLib: any;
-        pdfDoc: any;
-        pageNum: number;
-        pageRendering: boolean;
-        pageNumPending: any;
-        scale: number;
-        allcanvas: HTMLCanvasElement[];
-        canavasPanels: Canavas[];
-        _data: any;
-        me: Me;
-        report: PDFReport;
-        constructor();
-        layout(me: Me): void;
-        renderPages(num: any): void;
-        private updatePages;
-        /**
-         * @member {data} - the caption of the button
-         */
-        set value(value: any);
-        get value(): any;
-    }
-    export function test(): unknown;
-}
-declare module "jassijs_report/RColumns" {
-    import { RComponent } from "jassijs_report/RComponent";
-    export class RColumns extends RComponent {
-        reporttype: string;
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties?: any);
-        /**
-       * adds a component to the container before an other component
-       * @param {jassijs.ui.Component} component - the component to add
-       * @param {jassijs.ui.Component} before - the component before then component to add
-       */
-        addBefore(component: any, before: any): any;
-        /**
-      * adds a component to the container
-      * @param {jassijs.ui.Component} component - the component to add
-      */
-        add(component: any): any;
-        toJSON(): any;
-        fromJSON(ob: any): any;
-    }
-}
-declare module "jassijs_report/RComponent" {
-    import { UIComponentProperties } from "jassijs/ui/Component";
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     import { Panel } from "jassijs/ui/Panel";
     import { BoxPanel } from "jassijs/ui/BoxPanel";
     import { PDFReport } from "jassijs_report/PDFReport";
@@ -823,28 +746,16 @@ declare module "jassijs_report/remote/pdfmakejassi" {
     export function test(): void;
 }
 declare module "jassijs_report/remote/ServerReport" {
-<<<<<<< HEAD
     import { Context } from "jassijs/remote/RemoteObject";
     export class ServerReport {
         static cacheLastParameter: {};
         static getDesign(path: string, parameter: any): unknown;
         static getBase64(path: string, parameter: any): unknown;
-=======
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    export class ServerReport extends RemoteObject {
-        static cacheLastParameter: {};
-        static getDesign(path: string, parameter: any, context?: Context): unknown;
-        static getBase64(path: string, parameter: any, context?: Context): unknown;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         static getBase64FromFile(file: string, context?: Context): unknown;
     }
     export function test(): unknown;
 }
 declare module "jassijs_report/Report" {
-<<<<<<< HEAD
-=======
-    import { RemoteObject } from "jassijs/remote/RemoteObject";
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export class ReportProperties {
         /**
          * full path to classifiy the UIComponent e.g common/TopComponent
@@ -855,11 +766,7 @@ declare module "jassijs_report/Report" {
         actionname?: string;
     }
     export function $Report(properties: ReportProperties): Function;
-<<<<<<< HEAD
     export class Report {
-=======
-    export class Report extends RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         fill(): unknown;
         getParameter(): {};
         getBase64(): unknown;
@@ -943,10 +850,7 @@ declare module "jassijs_report/ReportDesign" {
         static fromJSON(ob: any, target?: ReportDesign): any;
         private create;
         private static linkStyles;
-<<<<<<< HEAD
         private removeEmpty;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         toJSON(): any;
         private pageSized;
     }
@@ -1042,27 +946,14 @@ declare module "jassijs_report/RImageEditor" {
     import { Textbox } from "jassijs/ui/Textbox";
     import { Image } from "jassijs/ui/Image";
     import { Button } from "jassijs/ui/Button";
-<<<<<<< HEAD
     import { Panel, PanelProperties } from "jassijs/ui/Panel";
     import { Editor } from "jassijs/ui/PropertyEditors/Editor";
     type Me = {
-=======
-    import { Repeater } from "jassijs/ui/Repeater";
-    import { Panel } from "jassijs/ui/Panel";
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { StateDatabinder } from "jassijs/ui/StateBinder";
-    type Me = {
-        repeater1?: Repeater;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         panel1?: Panel;
         image1?: Image;
         itile?: Textbox;
         remove?: Button;
         upload1?: Upload;
-<<<<<<< HEAD
-=======
-        databinder1?: StateDatabinder;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     };
     export class RImageEditor extends Editor {
         _textbox: Textbox;
@@ -1091,7 +982,6 @@ declare module "jassijs_report/RImageEditor" {
         _onchange(param?: any): void;
         showDialog(onlytest?: any): any;
     }
-<<<<<<< HEAD
     interface RImageChooserProperties extends PanelProperties {
         items?: {
             name: string;
@@ -1109,20 +999,6 @@ declare module "jassijs_report/RImageEditor" {
         get items(): {};
         onpictureselected(func: any): void;
         render(): any;
-=======
-    export class RImageChooser extends Panel {
-        me: Me;
-        value: string;
-        _items: {
-            name: string;
-            data: string;
-        }[];
-        constructor();
-        set items(val: {});
-        get items(): {};
-        onpictureselected(func: any): void;
-        layout(me: Me): void;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     }
     export function test(): unknown;
 }

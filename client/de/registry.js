@@ -2,12 +2,6 @@
 define("de/registry",["require"], function(require) {
  return {
   default: {
-<<<<<<< HEAD
-=======
-	"de/aa.ts": {
-		"date": 1682369482000
-	},
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	"de/Dialog2.ts": {
 		"date": 1697206950609.826,
 		"de/Dialog2": {}

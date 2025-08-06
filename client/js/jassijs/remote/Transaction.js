@@ -27,12 +27,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-<<<<<<< HEAD
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_1, RemoteObject_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -124,7 +121,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return ret;
             }
             else {
-<<<<<<< HEAD
                 var servertransaction = new GenericTransaction();
                 var all = [];
                 var _execute = (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DoRemoteProtocol"], resolve_1, reject_1); }).then(__importStar))._execute;
@@ -140,25 +136,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                     contextneu.transaction = servertransaction;
                     var res = _execute(st, context.request, contextneu);
                     all.push(res);
-=======
-                //@ts-ignore
-                //@ts-ignore
-                var ObjectTransaction = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/ObjectTransaction"], resolve_1, reject_1); }).then(__importStar)).ObjectTransaction;
-                var ot = new ObjectTransaction();
-                ot.statements = [];
-                let ret = [];
-                for (let x = 0; x < this.statements.length; x++) {
-                    var stat = {
-                        result: "**unresolved**"
-                    };
-                    ot.statements.push(stat);
-                }
-                for (let x = 0; x < this.statements.length; x++) {
-                    ret.push(this.doServerStatement(this.statements, ot, x, context));
-                }
-                for (let x = 0; x < ret.length; x++) {
-                    ret[x] = await ret[x];
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 }
                 await servertransaction.wait(); //await Promise.all(all)
                 ret = await Promise.all(all);
@@ -168,7 +145,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return ret;
             }
         }
-<<<<<<< HEAD
         //runs the transaction
         async execute(context = undefined) {
             //  return this.context.register("transaction", this, async () => {
@@ -185,19 +161,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             }
             var ret = await this.wait(); //Promise.all(allPromises);
             return ret;
-=======
-        async doServerStatement(statements, ot /*:ObjectTransaction*/, num, context) {
-            //@ts-ignore
-            var _execute = (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/DoRemoteProtocol"], resolve_2, reject_2); }).then(__importStar))._execute;
-            var _this = this;
-            var newcontext = {};
-            Object.assign(newcontext, context);
-            newcontext.objecttransaction = ot;
-            newcontext.objecttransactionitem = ot.statements[num];
-            //@ts-ignore
-            ot.statements[num].result = _execute(_this.statements[num], context.request, newcontext);
-            return ot.statements[num].result;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
         //add a transaction
         add(obj, method, ...params) {

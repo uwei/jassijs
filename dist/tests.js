@@ -424,7 +424,6 @@ define("tests/registry", ["require"], function (require) {
                 "tests/TestDialog": {}
             },
             "tests/TestRepeating.ts": {
-<<<<<<< HEAD
                 "date": 1740651316696.5154
             },
             "tests/remote/T.ts": {
@@ -440,9 +439,6 @@ define("tests/registry", ["require"], function (require) {
                         }
                     }
                 }
-=======
-                "date": 1740069952455.7803
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
         }
     };
@@ -675,11 +671,7 @@ define("tests/RemoteModulTests", ["require", "exports", "jassijs/remote/FileNode
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = test;
-<<<<<<< HEAD
     Registry_7 = __importDefault(Registry_7);
-=======
-    Registry_6 = __importDefault(Registry_6);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     async function test(teste) {
         try {
             await new Server_3.Server().createModule("testrmodul");
@@ -741,10 +733,6 @@ define("tests/ServerTests", ["require", "exports", "jassijs/remote/Server"], fun
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = test;
-<<<<<<< HEAD
-=======
-    Registry_7 = __importDefault(Registry_7);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     async function test(tests) {
         var text = "export class Hallo{};export function test(){return " + 1 + "};";
         await new Server_4.Server().saveFile("$serverside/Hallo.ts", text);
@@ -781,26 +769,16 @@ define("tests/TestDialog", ["require", "exports", "jassijs/ui/Button", "jassijs/
         return ret;
     }
 });
-<<<<<<< HEAD
 define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/State", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Component_1, Textbox_1, State_1, Button_2, Table_1) {
-=======
-define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Component_1, Textbox_1, Button_2, Table_1) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = test;
     var data = [
         { id: 1, name: "Max", childs: [{ name: "Anna" }, { name: "Aria" }] },
         { id: 2, name: "Moritz", childs: [{ name: "Clara" }, { name: "Heidi" }] },
-<<<<<<< HEAD
         { id: 3, name: "Heinz", childs: [{ name: "Rosa" }, { name: "Luise" }] }
     ];
     function DetailComponent(props, state) {
-=======
-        { id: 3, name: "Heinz", childs: [{ name: "Rosa" }, { name: "Luise" }] },
-    ];
-    function DetailComponent(props, state = {}) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         var ret = (0, Component_1.jc)("div", {
             children: [
                 (0, Component_1.jc)(Textbox_1.Textbox, {
@@ -818,11 +796,7 @@ define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "ja
                 (0, Component_1.jc)(Textbox_1.Textbox, {
                     bind: state.activeChild.bind.name
                 }),
-<<<<<<< HEAD
                 (0, Component_1.jc)(Button_2.Button, { text: "name of selected Child", onclick: () => {
-=======
-                (0, Component_1.jc)(Button_2.Button, { text: "erter", onclick: () => {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         alert(state.activeChild.current.name);
                     } }),
                 (0, Component_1.jc)("br")
@@ -831,7 +805,6 @@ define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "ja
         return ret;
     }
     function MainComponent(props, state) {
-<<<<<<< HEAD
         //var ch = props.items.map(item => jc(DetailComponent, { value: item }));
         var ret = (0, Component_1.jc)("span", {
             children: (0, State_1.ccs)(() => state.items.current.map(item => (0, Component_1.jc)(DetailComponent, { value: item })), state.items)
@@ -851,17 +824,6 @@ define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "ja
             ];
             pan.config({ items: data2 });
         }, 1000);
-=======
-        var ch = props.items.map(item => (0, Component_1.jc)(DetailComponent, { value: item }));
-        var ret = (0, Component_1.jc)("span", {
-            children: ch
-        });
-        return ret;
-    }
-    async function test() {
-        var j = (0, Component_1.jc)(MainComponent, { items: data });
-        var pan = (0, Component_1.createComponent)(j);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         return pan;
     }
 });
@@ -1010,7 +972,6 @@ define("tests/registry", ["require"], function (require) {
                 "tests/TestDialog": {}
             },
             "tests/TestRepeating.ts": {
-<<<<<<< HEAD
                 "date": 1740651316696.5154
             },
             "tests/remote/T.ts": {
@@ -1026,9 +987,6 @@ define("tests/registry", ["require"], function (require) {
                         }
                     }
                 }
-=======
-                "date": 1740069952455.7803
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
         }
     };

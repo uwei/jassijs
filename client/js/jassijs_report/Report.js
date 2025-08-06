@@ -33,11 +33,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-<<<<<<< HEAD
 define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ext/pdfmake", "jassijs/base/Windows", "jassijs/remote/Classes", "jassijs_report/remote/ServerReport", "jassijs_report/PDFReport", "jassijs/base/Actions"], function (require, exports, Registry_1, pdfmake_1, Windows_1, Classes_1, ServerReport_1, PDFReport_1, Actions_1) {
-=======
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs_report/ext/pdfmake", "jassijs/base/Windows", "jassijs/remote/Classes", "jassijs_report/remote/ServerReport", "jassijs_report/PDFReport", "jassijs/base/Actions"], function (require, exports, Registry_1, RemoteObject_1, pdfmake_1, Windows_1, Classes_1, ServerReport_1, PDFReport_1, Actions_1) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var Report_1;
     Object.defineProperty(exports, "__esModule", { value: true });

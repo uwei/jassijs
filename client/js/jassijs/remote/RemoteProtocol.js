@@ -121,19 +121,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
                 ret = await this.exec(config, this._this);
             }
             catch (ex) {
-<<<<<<< HEAD
                 if (ex.status === 401 || ex.status === 500 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                     await (await new Promise((resolve_3, reject_3) => { require(["jassijs/base/LoginDialog"], resolve_3, reject_3); }).then(__importStar)).login();
                     return await this.call();
-=======
-                if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
-                    redirect = new Promise((resolve) => {
-                        //@ts-ignore
-                        new Promise((resolve_3, reject_3) => { require(["jassijs/base/LoginDialog"], resolve_3, reject_3); }).then(__importStar).then((lib) => {
-                            lib.doAfterLogin(resolve, _this);
-                        });
-                    });
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 }
                 else {
                     throw ex;

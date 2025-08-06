@@ -4,7 +4,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-<<<<<<< HEAD
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
@@ -29,26 +28,5 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         (0, Registry_1.$Class)("testrmodul.remote.TestRModul")
     ], TestRModul);
     exports.TestRModul = TestRModul;
-=======
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_1, RemoteObject_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TestRModul = void 0;
-    let TestRModul = class TestRModul extends RemoteObject_1.RemoteObject {
-        //this is a sample remote function
-        async sayHello(name, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this, this.sayHello, name, context);
-            }
-            else {
-                return "Hello " + name; //this would be execute on server  
-            }
-        }
-    };
-    exports.TestRModul = TestRModul;
-    exports.TestRModul = TestRModul = __decorate([
-        (0, Registry_1.$Class)("testrmodul.remote.TestRModul")
-    ], TestRModul);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 });
 //# sourceMappingURL=TestRModul.js.map

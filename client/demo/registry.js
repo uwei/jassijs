@@ -5,7 +5,6 @@ define("demo/registry",["require"], function(require) {
 	"demo/DelTest.ts": {
 		"date": 1681563014000
 	},
-<<<<<<< HEAD
 	"demo/Dialog1.ts": {
 		"date": 1750071788221.012,
 		"demo/Dialog1": {}
@@ -57,8 +56,6 @@ define("demo/registry",["require"], function(require) {
 	"demo/hallo6.tsx": {
 		"date": 1740744395569.9814
 	},
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	"demo/LargeReport.ts": {
 		"date": 1634240084000
 	},
@@ -170,72 +167,6 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/_test1.ts": {
 		"date": 1670673960000
-	},
-	"demo/Dialog7.ts": {
-		"date": 1740651060516.4475,
-		"demo/M1": {
-			"$UIComponent": [
-				{
-					"fullPath": "common/M1"
-				}
-			],
-			"$Property": [
-				{
-					"name": "text",
-					"type": "string"
-				}
-			]
-		},
-		"demo/Dialog7": {}
-	},
-	"demo/Dialog8.ts": {
-		"date": 1740651364663.8745
-	},
-	"demo/TestStatebinder.ts": {
-		"date": 1740069816818.0576
-	},
-	"demo/hallo.tsx": {
-		"date": 1740575668495.1196
-	},
-	"demo/hallo2.tsx": {
-		"date": 1720092336379.0627
-	},
-	"demo/hallo3.tsx": {
-		"date": 1740490301824.4006
-	},
-	"demo/hallo4.tsx": {
-		"date": 1740921953482.349
-	},
-	"demo/hallo5.tsx": {
-		"date": 1740490330935.17
-	},
-	"demo/hallo6.tsx": {
-		"date": 1740744395569.9814
-	},
-	"demo/TestJSX.tsx": {
-		"date": 1719778647927.916
-	},
-	"demo/TestComputedState.tsx": {
-		"date": 1740490457021.1514
-	},
-	"demo/ExistsIfTest.ts": {
-		"date": 1740651376709.344
-	},
-	"demo/ExistsIfTest2.tsx": {
-		"date": 1740490173291.3179
-	},
-	"demo/TestContextmenu2.tsx": {
-		"date": 1740312744239.8494
-	},
-	"demo/Dialog1.ts": {
-		"date": 1740595660483.8047,
-		"demo/Dialog1": {}
-	},
-	"demo/Dialog2.tsx": {
-		"date": 1740732548116.1436
-	},
-	"demo/Testreport.ts": {
-		"date": 1740920946369.223
 	}
 }
  }

@@ -29,11 +29,7 @@ let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
                     options = {};
                 options = { relations: ["ReportsTo"] };
             }
-<<<<<<< HEAD
             var ret = await RemoteObject_1.RemoteObject.docall(this, this.find, ...arguments);
-=======
-            var ret = await this.call(this.find, options, context);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             return ret;
         }
         else {

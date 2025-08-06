@@ -5,11 +5,8 @@ define(["require", "exports", "jassijs_editor/FileExplorer", "jassijs/base/Windo
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     Windows_1 = __importDefault(Windows_1);
-<<<<<<< HEAD
     //import { testNPM } from "jassijs/remote/Npm";
     //import { testDB, testJSSQL, testLocalServer, testWebpack } from "jassijs/server/Testlocalserver";
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     async function test() {
         //debugger;
         //testNPM();

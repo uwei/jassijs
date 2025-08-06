@@ -252,11 +252,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Employees.ts": {
-<<<<<<< HEAD
 		"date": 1750578071755.4602,
-=======
-		"date": 1721688634922.4763,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 		"northwind.Employees": {
 			"$DBObject": [],
 			"@members": {
@@ -425,11 +421,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Orders.ts": {
-<<<<<<< HEAD
 		"date": 1750536480531.7024,
-=======
-		"date": 1722531390341.5852,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 		"northwind.Orders": {
 			"$DBObject": [],
 			"@members": {

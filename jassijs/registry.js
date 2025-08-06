@@ -65,11 +65,7 @@ exports.default={
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-<<<<<<< HEAD
 		"date": 1753729243466.9514
-=======
-		"date": 1721754483315.839
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1750788682336.6975,
@@ -345,11 +341,7 @@ exports.default={
 		"date": 1750544362041.928
 	},
 	"jassijs/server/Compile.ts": {
-<<<<<<< HEAD
 		"date": 1749969355673.02
-=======
-		"date": 1720553680038.0745
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	},
 	"jassijs/server/Cookies.ts": {
 		"date": 1682364420000
@@ -384,11 +376,7 @@ exports.default={
 		"date": 1657714030000
 	},
 	"jassijs/server/Filesystem.ts": {
-<<<<<<< HEAD
 		"date": 1753961284581.5793,
-=======
-		"date": 1719332352671.4578,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{

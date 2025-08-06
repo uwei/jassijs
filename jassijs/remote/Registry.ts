@@ -3,11 +3,7 @@ import { config } from "jassijs/remote/Config";
 import "reflect-metadata";
 
 
-<<<<<<< HEAD
 export function $Class(longclassname: string,target=undefined): Function {
-=======
-export function $Class(longclassname: string): Function {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     return function (pclass) {
         if(target){
             pclass.target=target;
@@ -293,11 +289,7 @@ export class Registry {
         var _this = this;
         var modultext = "";
         //@ts-ignore
-<<<<<<< HEAD
         if (window?.document === undefined||globalThis.BrowserFS!=undefined) { //on server
-=======
-        if (window?.document === undefined) { //on server
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 
             //@ts-ignore 
             var fs = await import('fs');
@@ -513,11 +505,7 @@ var registry = new Registry();
 export default registry;
 export function migrateModul(oldModul, newModul) {
     if (newModul.registry) {
-<<<<<<< HEAD
         //newModul.registry._nextID = oldModul.registry._nextID;
-=======
-        newModul.registry._nextID = oldModul.registry._nextID;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         newModul.registry.entries = oldModul.registry.entries;
     }
 }

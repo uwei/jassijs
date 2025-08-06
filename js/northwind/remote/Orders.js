@@ -23,13 +23,8 @@ let Orders = Orders_1 = class Orders extends DBObject_1.DBObject {
     constructor() {
         super();
     }
-<<<<<<< HEAD
     static async findAllWithDetails(context) {
         return await Orders_1.find({ relations: ["*"] }, context);
-=======
-    static async findAllWithDetails() {
-        return await Orders_1.find({ relations: ["*"] });
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     }
 };
 __decorate([

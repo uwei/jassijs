@@ -608,11 +608,7 @@ define("jassijs_report/modul", ["require", "exports"], function (require, export
             paths: {
                 'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
                 'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-<<<<<<< HEAD
                 //     'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts',// '../../lib/vfs_fonts',
-=======
-                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts', // '../../lib/vfs_fonts',
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 'pdfMakelib': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/pdfmake' //'../../lib/pdfmake'
             },
             shim: {
@@ -1895,11 +1891,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
-<<<<<<< HEAD
                 "date": 1740651480533.2957,
-=======
-                "date": 1721763160019.909,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RColumns": {
                     "$ReportComponent": [
                         {
@@ -1924,11 +1916,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RDatatable.ts": {
-<<<<<<< HEAD
                 "date": 1740517964873.3306,
-=======
-                "date": 1740077551782.498,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -1978,11 +1966,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-<<<<<<< HEAD
                 "date": 1740829003560.1116,
-=======
-                "date": 1740076933424.2107,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.InfoProperties": {
                     "@members": {}
                 },
@@ -2050,11 +2034,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImage.ts": {
-<<<<<<< HEAD
                 "date": 1740651449053.1838,
-=======
-                "date": 1719588998709.0293,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RImage": {
                     "$ReportComponent": [
                         {
@@ -2066,11 +2046,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImageEditor.ts": {
-<<<<<<< HEAD
                 "date": 1740517877014.1611,
-=======
-                "date": 1739905991130.4978,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassi_report/RImagePropertyEditor": {
                     "$PropertyEditor": [
                         [
@@ -2080,11 +2056,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ROList.ts": {
-<<<<<<< HEAD
                 "date": 1740920075609.8777,
-=======
-                "date": 1721763181480.2773,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.ROList": {
                     "$ReportComponent": [
                         {
@@ -2099,11 +2071,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-<<<<<<< HEAD
                 "date": 1740651412497.7878,
-=======
-                "date": 1740076986120.5095,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -2138,11 +2106,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-<<<<<<< HEAD
                 "date": 1740743008073.473,
-=======
-                "date": 1721763274507.0127,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -2163,11 +2127,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-<<<<<<< HEAD
                 "date": 1740651401589.1736,
-=======
-                "date": 1740077542230.021,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -2198,11 +2158,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTextGroup.ts": {
-<<<<<<< HEAD
                 "date": 1740651393373.7566,
-=======
-                "date": 1721763243509.179,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RTextGroup": {
                     "$ReportComponent": [
                         {
@@ -2216,11 +2172,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUList.ts": {
-<<<<<<< HEAD
                 "date": 1740651385821.8801,
-=======
-                "date": 1721763248473.9978,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RUList": {
                     "$ReportComponent": [
                         {
@@ -2911,7 +2863,6 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
 define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Server", "jassijs/remote/Validator"], function (require, exports, Registry_9, RemoteObject_1, Server_1, Validator_1) {
     "use strict";
     var ServerReport_2;
-<<<<<<< HEAD
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ServerReport = void 0;
@@ -2935,55 +2886,12 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
             //@ts-ignore 
             var DoServerreport = (await new Promise((resolve_4, reject_4) => { require(["jassijs_report/server/DoServerreport"], resolve_4, reject_4); }).then(__importStar)).DoServerreport;
             return await new DoServerreport().getBase64FromData(res);
-=======
-    var _a, _b;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ServerReport = void 0;
-    exports.test = test;
-    let ServerReport = ServerReport_2 = class ServerReport extends RemoteObject_1.RemoteObject {
-        static async getDesign(path, parameter, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_2.call(this.getDesign, path, parameter, context);
-            }
-            else {
-                //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/server/DoServerreport"], resolve_2, reject_2); }).then(__importStar)).DoServerreport;
-                ServerReport_2.cacheLastParameter[path] = parameter;
-                return await new DoServerreport().getDesign(path, parameter);
-            }
-        }
-        static async getBase64(path, parameter, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_2.call(this.getBase64, path, parameter, context);
-            }
-            else {
-                //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); }).then(__importStar)).DoServerreport;
-                if (parameter == "useLastCachedParameter")
-                    parameter = ServerReport_2.cacheLastParameter[path];
-                return await new DoServerreport().getBase64(path, parameter);
-            }
-        }
-        static async getBase64FromFile(file, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_2.call(this.getBase64FromFile, file, context);
-            }
-            else {
-                var res = await new Server_1.Server().testServersideFile(file.substring(0, file.length - 3), context);
-                //@ts-ignore 
-                var DoServerreport = (await new Promise((resolve_4, reject_4) => { require(["jassijs_report/server/DoServerreport"], resolve_4, reject_4); }).then(__importStar)).DoServerreport;
-                return await new DoServerreport().getBase64FromData(res);
-            }
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     };
     exports.ServerReport = ServerReport;
     ServerReport.cacheLastParameter = {};
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_1.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -2991,25 +2899,19 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
         __metadata("design:returntype", Promise)
     ], ServerReport, "getDesign", null);
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_1.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getBase64", null);
-<<<<<<< HEAD
     __decorate([
         (0, RemoteObject_1.UseServer)(),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, typeof (_a = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _a : Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getBase64FromFile", null);
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     exports.ServerReport = ServerReport = ServerReport_2 = __decorate([
         (0, Registry_9.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);
@@ -3039,11 +2941,7 @@ define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry"
             Registry_10.default.register("$Report", pclass, properties);
         };
     }
-<<<<<<< HEAD
     let Report = Report_1 = class Report {
-=======
-    let Report = Report_1 = class Report extends RemoteObject_2.RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //this is a sample remote function
         async fill() {
             var clname = Classes_3.classes.getClassName(this);
@@ -3604,42 +3502,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
                 for (var x = 0; x < this.styleContainer._components.length; x++) {
                     r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
                 }
-                //var _this = this;
-                if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
-                    r.background = this.backgroundPanel.toJSON();
-                }
-                if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
-                    r.header = this.headerPanel.toJSON();
-                }
-                if (!(this.footerPanel._components.length === 0 || (this.footerPanel._designMode && this.footerPanel._components.length === 1))) {
-                    r.footer = this.footerPanel.toJSON();
-                }
-                r.content = this.contentPanel.toJSON();
-                if (this.pageOrientation) {
-                    r.pageOrientation = this.pageOrientation;
-                }
-                if (this.pageMargins)
-                    r.pageMargins = this.pageMargins;
-                if (this.pageSize)
-                    r.pageSize = this.pageSize;
-                if (this.info)
-                    r.info = this.info;
-                if (this.compress)
-                    r.compress = this.compress;
-                if (this.userPassword)
-                    r.userPassword = this.userPassword;
-                if (this.ownerPassword)
-                    r.ownerPassword = this.ownerPassword;
-                if (this.permissions)
-                    r.permissions = this.permissions;
-                if (this.images) {
-                    r.images = this.images;
-                }
-                Object.assign(r, this["otherProperties"]);
-                //delete r.data;
-                return r;
             }
-<<<<<<< HEAD
             //var _this = this;
             if (!(this.backgroundPanel._components.length === 0)) { // || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
                 r.background = this.removeEmpty(this.backgroundPanel.toJSON());
@@ -3674,8 +3537,6 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             Object.assign(r, this["otherProperties"]);
             //delete r.data;
             return r;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     };
     exports.ReportDesign = ReportDesign;
@@ -4090,11 +3951,7 @@ define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:paramtypes", [Object])
     ], RImage);
 });
-<<<<<<< HEAD
 define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ui/Component", "jassijs/ui/State", "jassijs/ext/jquerylib"], function (require, exports, Upload_1, Textbox_1, Image_1, Button_2, Registry_16, Panel_6, Editor_1, RComponent_6, Component_2, State_1) {
-=======
-define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Upload_1, Textbox_1, Image_1, Button_2, Repeater_1, Registry_16, Panel_6, Editor_1, RComponent_6) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RImageChooser = exports.RImageEditor = void 0;
@@ -4195,7 +4052,6 @@ define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Upload"
         (0, Registry_16.$Class)("jassi_report/RImagePropertyEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], RImageEditor);
-<<<<<<< HEAD
     function Details(props, stat) {
         return (0, Component_2.jc)(Panel_6.Panel, {
             children: [
@@ -4222,8 +4078,6 @@ define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Upload"
             ]
         });
     }
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     class RImageChooser extends Panel_6.Panel {
         /* _items: {
              name: string;
@@ -4254,7 +4108,6 @@ define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Upload"
         }
         render() {
             var _this = this;
-<<<<<<< HEAD
             return (0, Component_2.jc)(Panel_6.Panel, {
                 children: [
                     (0, Component_2.jc)(Upload_1.Upload, {
@@ -4275,52 +4128,6 @@ define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Upload"
                         })), this.state.items)
                     })
                 ]
-=======
-            me.repeater1 = new Repeater_1.Repeater();
-            me.databinder1 = new Databinder();
-            me.databinder1.value = this;
-            me.repeater1.value = this._items;
-            me.upload1 = new Upload_1.Upload();
-            me.upload1.onuploaded((data) => {
-                for (var key in data) {
-                    _this._items.push({ name: key.split(".")[0], data: data[key] });
-                }
-                _this.items = _this.items;
-            });
-            me.upload1.readAs = "DataUrl";
-            this.add(me.upload1);
-            this.add(me.repeater1);
-            me.repeater1.createRepeatingComponent(function (me) {
-                me.panel1 = new Panel_6.Panel();
-                me.image1 = new Image_1.Image();
-                me.itile = new Textbox_1.Textbox();
-                me.remove = new Button_2.Button();
-                me.repeater1.design.add(me.panel1);
-                me.panel1.add(me.itile);
-                me.panel1.add(me.remove);
-                me.panel1.add(me.image1);
-                me.image1.height = "75";
-                me.remove.text = "";
-                me.remove.icon = "mdi mdi-delete-forever-outline";
-                me.itile.bind = [me.repeater1.design.databinder, "name"];
-                me.itile.onchange(function (event) {
-                    var ob = me.itile._databinder.value;
-                    ob.name = me.itile.value;
-                    _this.items = _this.items;
-                });
-                me.image1.bind = [me.repeater1.design.databinder, "data"];
-                me.remove.onclick(function (event) {
-                    var ob = me.itile._databinder.value;
-                    let pos = _this._items.indexOf(ob);
-                    _this._items.splice(pos, 1);
-                    _this.items = _this.items;
-                });
-                me.image1.onclick(function (event) {
-                    var ob = me.itile._databinder.value;
-                    _this.value = ob.name;
-                    _this.callEvent("pictureselected", ob.name);
-                });
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             });
         }
     }
@@ -6685,11 +6492,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
-<<<<<<< HEAD
                 "date": 1740651480533.2957,
-=======
-                "date": 1721763160019.909,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RColumns": {
                     "$ReportComponent": [
                         {
@@ -6714,11 +6517,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RDatatable.ts": {
-<<<<<<< HEAD
                 "date": 1740517964873.3306,
-=======
-                "date": 1740077551782.498,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -6768,11 +6567,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-<<<<<<< HEAD
                 "date": 1740829003560.1116,
-=======
-                "date": 1740076933424.2107,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.InfoProperties": {
                     "@members": {}
                 },
@@ -6840,11 +6635,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImage.ts": {
-<<<<<<< HEAD
                 "date": 1740651449053.1838,
-=======
-                "date": 1719588998709.0293,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RImage": {
                     "$ReportComponent": [
                         {
@@ -6856,11 +6647,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImageEditor.ts": {
-<<<<<<< HEAD
                 "date": 1740517877014.1611,
-=======
-                "date": 1739905991130.4978,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassi_report/RImagePropertyEditor": {
                     "$PropertyEditor": [
                         [
@@ -6870,11 +6657,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ROList.ts": {
-<<<<<<< HEAD
                 "date": 1740920075609.8777,
-=======
-                "date": 1721763181480.2773,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.ROList": {
                     "$ReportComponent": [
                         {
@@ -6889,11 +6672,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-<<<<<<< HEAD
                 "date": 1740651412497.7878,
-=======
-                "date": 1740076986120.5095,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -6928,11 +6707,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-<<<<<<< HEAD
                 "date": 1740743008073.473,
-=======
-                "date": 1721763274507.0127,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -6953,11 +6728,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-<<<<<<< HEAD
                 "date": 1740651401589.1736,
-=======
-                "date": 1740077542230.021,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -6988,11 +6759,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTextGroup.ts": {
-<<<<<<< HEAD
                 "date": 1740651393373.7566,
-=======
-                "date": 1721763243509.179,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RTextGroup": {
                     "$ReportComponent": [
                         {
@@ -7006,11 +6773,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUList.ts": {
-<<<<<<< HEAD
                 "date": 1740651385821.8801,
-=======
-                "date": 1721763248473.9978,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_report.RUList": {
                     "$ReportComponent": [
                         {

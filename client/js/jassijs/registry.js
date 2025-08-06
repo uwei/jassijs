@@ -112,11 +112,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1682799476000
 	},
 	"jassijs/remote/Registry.ts": {
-<<<<<<< HEAD
 		"date": 1753729243466.9514
-=======
-		"date": 1740653326948.786
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1750788682336.6975,
@@ -511,11 +507,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/server/Compile.ts": {
-<<<<<<< HEAD
 		"date": 1749969355673.02
-=======
-		"date": 1740494387231.2197
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	},
 	"jassijs/server/DatabaseSchema.ts": {
 		"date": 1682241710000
@@ -544,11 +536,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1657714030000
 	},
 	"jassijs/server/Filesystem.ts": {
-<<<<<<< HEAD
 		"date": 1753961284581.5793,
-=======
-		"date": 1719332352671.4578,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -1529,7 +1517,6 @@ define("jassijs/registry",["require"], function(require) {
 				}
 			]
 		}
-<<<<<<< HEAD
 	},
 	"jassijs/remote/RemoteTest.ts": {
 		"date": 1750787386563.1096,
@@ -1567,8 +1554,6 @@ define("jassijs/registry",["require"], function(require) {
 	},
 	"jassijs/remote/PatchTTP.ts": {
 		"date": 1753968322370.392
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	}
 }
  }

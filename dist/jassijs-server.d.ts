@@ -63,7 +63,6 @@ declare module "jassijs/remote/Config" {
     var config: Config;
     export { config };
 }
-<<<<<<< HEAD
 declare module "jassijs/remote/Context" {
     export function useStackContextTest<T = any, R = any>(context: T, fn: (...args: any[]) => R, ...args: any[]): R;
     export function useStackContext<T = any, R = any>(context: T, fn: (...args: any[]) => R | Promise<R>, ...args: any[]): Promise<R>;
@@ -75,8 +74,6 @@ declare module "jassijs/remote/Context" {
 declare module "jassijs/remote/Context2" {
     export function test(): any;
 }
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/remote/Database" {
     export class TypeDef {
         fields: {
@@ -102,13 +99,8 @@ declare module "jassijs/remote/Database" {
     export { db };
 }
 declare module "jassijs/remote/DatabaseTools" {
-<<<<<<< HEAD
     import { Context } from "jassijs/remote/RemoteObject";
     export class DatabaseTools {
-=======
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    export class DatabaseTools extends RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         static runSQL(sql: string, parameter?: any[], context?: Context): unknown;
         static dropTables(tables: string[]): Promise<string>;
     }
@@ -144,11 +136,7 @@ declare module "jassijs/remote/DBArray" {
     }
 }
 declare module "jassijs/remote/DBObject" {
-<<<<<<< HEAD
     import { Context } from "jassijs/remote/RemoteObject";
-=======
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     import { EntityOptions } from "jassijs/util/DatabaseSchema";
     import { ValidationError } from "jassijs/remote/Validator";
     export function $DBObject(options?: EntityOptions): Function;
@@ -184,19 +172,11 @@ declare module "jassijs/remote/DBObject" {
     * all objects which use the jassijs.db must implement this
     * @class DBObject
     */
-<<<<<<< HEAD
     export class DBObject {
-=======
-    export class DBObject extends RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         id: number | string;
         private static cache;
         private static _init;
         private static _initFunc;
-<<<<<<< HEAD
-=======
-        constructor();
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         isAutoId(): boolean;
         static getFromCache(classname: string, id: number | string): DBObject;
         validate(options?: any, throwError?: boolean): Promise<ValidationError[]>;
@@ -355,7 +335,6 @@ declare module "jassijs/remote/Modules" {
     var modules: Modules;
     export { modules };
 }
-<<<<<<< HEAD
 declare class Npm {
     files: {};
     static textExt: {};
@@ -399,8 +378,6 @@ declare var TarReader: {
     };
 };
 declare function testNPM(): any;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/remote/ObjectTransaction" {
     import { Context } from "jassijs/remote/RemoteObject";
     import { TransactionItem } from "jassijs/remote/Transaction";
@@ -414,16 +391,10 @@ declare module "jassijs/remote/ObjectTransaction" {
         finally(): any;
     }
 }
-<<<<<<< HEAD
 declare function patchHTTP(ob: any): void;
 declare module "jassijs/remote/Registry" {
     import "reflect-metadata";
     export function $Class(longclassname: string, target?: any): Function;
-=======
-declare module "jassijs/remote/Registry" {
-    import "reflect-metadata";
-    export function $Class(longclassname: string): Function;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export function $register(servicename: string, ...params: {}): Function;
     class DataEntry {
         oclass: new (...args: any[]) => any;
@@ -441,10 +412,6 @@ declare module "jassijs/remote/Registry" {
     * @class jassijs.base.Registry
     */
     export class Registry {
-<<<<<<< HEAD
-=======
-        private _nextID;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         jsondata: {
             [service: string]: {
                 [classname: string]: JSONDataEntry;
@@ -482,11 +449,7 @@ declare module "jassijs/remote/Registry" {
          * Important: this function should only used from an annotation, because the annotation is saved in
          *            index.json and could be read without loading the class
          **/
-<<<<<<< HEAD
         register(service: string, aclass: new (...args: any[]) => any, ...params: {}): void;
-=======
-        register(service: string, oclass: new (...args: any[]) => any, ...params: {}): void;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         getMemberData(service: string): {
             [classname: string]: {
                 [membername: string]: any[];
@@ -501,19 +464,11 @@ declare module "jassijs/remote/Registry" {
          * register an anotation
          * Important: this function should only used from an annotation
          **/
-<<<<<<< HEAD
         registerMember(service: string, aclass: any, membername: string, ...params: {}): void;
-=======
-        registerMember(service: string, oclass: any, membername: string, ...params: {}): void;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
         * with every call a new id is generated - used to create a free id for the dom
         * @returns {number} - the id
         */
-<<<<<<< HEAD
-=======
-        nextID(): any;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
         * Load text with Ajax synchronously: takes path to file and optional MIME type
         * @param {string} filePath - the url
@@ -556,7 +511,6 @@ declare module "jassijs/remote/RemoteObject" {
         isServer: boolean;
         [key: string]: any;
     }
-<<<<<<< HEAD
     export function useContext<R = any>(context: Context, fn: (...args: any[]) => R, ...args: any[]): R;
     export function getContext(): Context;
     export function UseServer(): Function;
@@ -567,12 +521,6 @@ declare module "jassijs/remote/RemoteObject" {
         static docallWithReplaceThis(replaceThis: any, _this: any, method: (...ars: any) => any, ...parameter: {}): unknown;
     }
     export function test(): any;
-=======
-    export class RemoteObject {
-        static call(method: (...ars: any) => any, ...parameter: {}): unknown;
-        call(_this: any, method: (...ars: any) => any, ...parameter: {}): unknown;
-    }
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 }
 declare module "jassijs/remote/RemoteProtocol" {
     export class RemoteProtocol {
@@ -593,11 +541,7 @@ declare module "jassijs/remote/RemoteProtocol" {
         /**
        * call the server
        */
-<<<<<<< HEAD
         call(): any;
-=======
-        call(): unknown;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
          * converts jsonstring to an object
          */
@@ -605,7 +549,6 @@ declare module "jassijs/remote/RemoteProtocol" {
         test(): any;
     }
 }
-<<<<<<< HEAD
 declare module "jassijs/remote/RemoteTest" {
     import { Context } from "jassijs/remote/RemoteObject";
     export class RemoteTest {
@@ -678,8 +621,6 @@ declare function writeIndexDB(dbName: any, storeName: any, key: any, value: any)
 declare function readIndexDB(dbName: any, storeName: any, key: any): unknown;
 declare function runLocalServerIfNeeded(): any;
 declare function test(): any;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/remote/security/Group" {
     import { DBObject } from "jassijs/remote/DBObject";
     import { ParentRight } from "jassijs/remote/security/ParentRight";
@@ -717,11 +658,7 @@ declare module "jassijs/remote/security/Right" {
     }
 }
 declare module "jassijs/remote/security/Rights" {
-<<<<<<< HEAD
     import { Context } from "jassijs/remote/RemoteObject";
-=======
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export class RightProperties {
         name: string;
         description?: string;
@@ -737,11 +674,7 @@ declare module "jassijs/remote/security/Rights" {
     export function $Rights(rights: RightProperties[]): Function;
     export function $ParentRights(rights: [ParentRightProperties]): Function;
     export function $CheckParentRight(): Function;
-<<<<<<< HEAD
     export class Rights {
-=======
-    export class Rights extends RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         private _isAdmin;
         isAdmin(context?: Context): Promise<boolean>;
     }
@@ -756,13 +689,8 @@ declare module "jassijs/remote/security/Setting" {
         constructor();
         data: string;
         save(context?: Context): any;
-<<<<<<< HEAD
         static findOne(options?: any): Promise<DBObject>;
         static find(options?: MyFindManyOptions): Promise<DBObject[]>;
-=======
-        static findOne(options?: any, context?: Context): Promise<DBObject>;
-        static find(options?: MyFindManyOptions, context?: Context): Promise<DBObject[]>;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
         * reload the object from jassijs.db
         */
@@ -791,15 +719,9 @@ declare module "jassijs/remote/security/User" {
     export function test2(): any;
 }
 declare module "jassijs/remote/Server" {
-<<<<<<< HEAD
     import { Context } from "jassijs/remote/RemoteObject";
     import { FileNode } from "jassijs/remote/FileNode";
     export class Server {
-=======
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    import { FileNode } from "jassijs/remote/FileNode";
-    export class Server extends RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         private static isonline;
         static filesInMap: {
             [name: string]: {
@@ -818,21 +740,13 @@ declare module "jassijs/remote/Server" {
         * @returns {string[]} - list of files
         */
         dir(withDate?: boolean, context?: Context): Promise<FileNode>;
-<<<<<<< HEAD
         zip(directoryname: string, serverdir?: boolean): unknown;
-=======
-        zip(directoryname: string, serverdir?: boolean, context?: Context): unknown;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
          * gets the content of a file from server
          * @param {string} fileNamew
          * @returns {string} content of the file
          */
-<<<<<<< HEAD
         loadFiles(fileNames: string[]): Promise<{
-=======
-        loadFiles(fileNames: string[], context?: Context): Promise<{
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             [id: string]: string;
         }>;
         /**
@@ -852,11 +766,7 @@ declare module "jassijs/remote/Server" {
         * @param {string} fileName - the name of the file
         * @param {string} content
         */
-<<<<<<< HEAD
         saveFile(fileName: string, content: string): Promise<string>;
-=======
-        saveFile(fileName: string, content: string, context?: Context): Promise<string>;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
        * deletes a server modul
        **/
@@ -882,11 +792,7 @@ declare module "jassijs/remote/Server" {
          **/
         createFile(filename: string, content: string, context?: Context): Promise<string>;
         /**
-<<<<<<< HEAD
         * creates a folder
-=======
-        * creates a file
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         **/
         createFolder(foldername: string, context?: Context): Promise<string>;
         createModule(modulename: string, context?: Context): Promise<string>;
@@ -911,23 +817,14 @@ declare module "jassijs/remote/Serverservice" {
     export { serverservices, doNotReloadModule, runningServerservices };
 }
 declare module "jassijs/remote/Settings" {
-<<<<<<< HEAD
     import { Context } from "jassijs/remote/RemoteObject";
     import { Test } from "./Test";
     import { DBObject } from "./DBObject";
-=======
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    import { Test } from "./Test";
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     global {
         export interface KnownSettings {
         }
     }
-<<<<<<< HEAD
     export class Settings extends DBObject {
-=======
-    export class Settings extends RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         static keys: KnownSettings;
         private static browserSettings;
         private static userSettings;
@@ -939,11 +836,7 @@ declare module "jassijs/remote/Settings" {
         static getAll(scope: "browser" | "user" | "allusers"): {};
         gets<T>(Settings_key: T): T;
         static remove(Settings_key: string, scope: "browser" | "user" | "allusers", context?: Context): any;
-<<<<<<< HEAD
         static save<T>(Settings_key: T, value: T, scope: "browser" | "user" | "allusers", context?: Context): unknown;
-=======
-        static save<T>(Settings_key: T, value: T, scope: "browser" | "user" | "allusers"): unknown;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         static saveAll(namevaluepair: {
             [key: string]: any;
         }, scope: "browser" | "user" | "allusers", removeOtherKeys?: boolean, context?: Context): unknown;
@@ -955,14 +848,11 @@ declare module "jassijs/remote/Settings" {
     export function test(t: Test): any;
     export function load(): unknown;
 }
-<<<<<<< HEAD
 declare module "jassijs/remote/StackContext" {
     export function useStackContext<T = any, R = any>(context: T, fn: (...args: any[]) => R, ...args: any[]): R;
     export function getStackContext<T = any>(): T | undefined;
     export function test(): any;
 }
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/remote/Test" {
     export class Test {
         /**
@@ -982,7 +872,6 @@ declare module "jassijs/remote/Test" {
         expectErrorAsync(func: any): any;
     }
 }
-<<<<<<< HEAD
 declare var exports: any;
 declare function testPDF(): any;
 declare function testpdfMake(): any;
@@ -1040,31 +929,6 @@ declare module "jassijs/remote/Transaction" {
         hi(num: number): number;
     }
     export function test(t: Test): any;
-=======
-declare module "jassijs/remote/Transaction" {
-    import { RemoteObject } from "jassijs/remote/RemoteObject";
-    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
-    export class TransactionItem {
-        transaction: Transaction;
-        obj: any;
-        method: (...args: {}) => any;
-        params: any[];
-        promise: Promise<any>;
-        result: any;
-        remoteProtocol: RemoteProtocol;
-        resolve: any;
-    }
-    export class Transaction extends RemoteObject {
-        private statements;
-        private ready;
-        private context;
-        execute(): Promise<any[]>;
-        wait(transactionItem: TransactionItem, prot: RemoteProtocol): Promise<any>;
-        private sendRequest;
-        private doServerStatement;
-        add(obj: any, method: (...args: {}) => any, ...params: {}): void;
-    }
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 }
 declare module "jassijs/remote/Validator" {
     import "reflect-metadata";
@@ -1260,10 +1124,7 @@ declare module "jassijs/server/DBManager" {
         find<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, conditions?: FindConditions<Entity>): Promise<Entity[]>;
         private resolveWildcharInRelations;
         createUser(context: Context, username: string, password: string): Promise<User>;
-<<<<<<< HEAD
         nologin(context: Context, user: string, password: any): unknown;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         login(context: Context, user: string, password: any): unknown;
         checkParentRight(context: Context, entityClass: any, ids: any[]): Promise<boolean>;
     }
@@ -1389,10 +1250,7 @@ declare module "jassijs/server/FS" {
     export function test(tt: Test): any;
 }
 declare module "jassijs/server/Indexer" {
-<<<<<<< HEAD
     import { ts } from "jassijs/server/NativeAdapter";
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export abstract class Indexer {
         abstract fileExists(name: any): any;
         abstract readFile(name: any): any;
@@ -1449,12 +1307,8 @@ declare module "jassijs/server/LocalProtocol" {
     export function localExec(prot: RemoteProtocol, context?: Context): unknown;
 }
 declare module "jassijs/server/NativeAdapter" {
-<<<<<<< HEAD
     export { TypescriptNamespace as ts };
     const ts: any;
-=======
-    var ts: any;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export { ts };
     var exists: any;
     var myfs: any;
@@ -1466,7 +1320,6 @@ declare module "jassijs/server/NativeAdapter" {
     var doNotReloadModule: boolean;
     export { doNotReloadModule };
 }
-<<<<<<< HEAD
 declare module "jassijs/server/NeverCallMe" {
     import * as TypeScript from 'typescript';
     global {
@@ -1474,8 +1327,6 @@ declare module "jassijs/server/NeverCallMe" {
         export import ts = TypeScript;
     }
 }
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/server/RegistryIndexer" {
     import { Indexer } from "jassijs/server/Indexer";
     export class ServerIndexer extends Indexer {
@@ -1515,15 +1366,12 @@ declare module "jassijs/server/Reloader" {
         migrateClasses(file: any, oldmodul: any, modul: any): void;
     }
 }
-<<<<<<< HEAD
 declare module "jassijs/server/testserver" {
     export {};
 }
 declare module "jassijs/server/testserver2" {
     export {};
 }
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/server/Testuser" {
     export class Testuser {
         id: number;
@@ -1651,11 +1499,8 @@ declare module "jassijs/modul" {
                 tinymcelib: string;
                 'tabulator-tables': string;
                 "reflect-metadata": string;
-<<<<<<< HEAD
                 pako: string;
                 untar: string;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             };
         };
         server: {

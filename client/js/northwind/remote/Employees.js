@@ -23,11 +23,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
                         options = {};
                     options = { relations: ["ReportsTo"] };
                 }
-<<<<<<< HEAD
                 var ret = await RemoteObject_1.RemoteObject.docall(this, this.find, ...arguments);
-=======
-                var ret = await this.call(this.find, options, context);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 return ret;
             }
             else {

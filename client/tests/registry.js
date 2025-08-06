@@ -144,7 +144,6 @@ define("tests/registry",["require"], function(require) {
 	},
 	"tests/TestRepeating.ts": {
 		"date": 1740651316696.5154
-<<<<<<< HEAD
 	},
 	"tests/remote/T.ts": {
 		"date": 1750536496065.261,
@@ -159,8 +158,6 @@ define("tests/registry",["require"], function(require) {
 				}
 			}
 		}
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	}
 }
  }

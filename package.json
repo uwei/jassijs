@@ -28,15 +28,11 @@
     "pg": "^8.6.0",
     "sql.js": "^1.13.0",
     "typeorm": "^0.2.34",
-<<<<<<< HEAD
     "typescript": "5.5.3",
     "webpack": "^5.100.0",
     "webpack-dev-middleware": "^7.4.2",
     "webpack-dev-server": "^5.2.2",
     "webpack-hot-middleware": "^2.26.1"
-=======
-    "typescript": "5.5.3"
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
   },
   "repository": {
     "type": "git",

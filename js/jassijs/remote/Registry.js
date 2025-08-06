@@ -158,7 +158,6 @@ class Registry {
      * register an anotation
      * Important: this function should only used from an annotation
      **/
-<<<<<<< HEAD
     registerMember(service, aclass /*new (...args: any[]) => any*/, membername, ...params) {
         var _a, _b, _c;
         var oclass = aclass;
@@ -172,14 +171,6 @@ class Registry {
         if (oclass.prototype !== undefined)
             m = oclass.prototype;
         var clname = (_c = (_b = oclass.prototype) === null || _b === void 0 ? void 0 : _b.constructor) === null || _c === void 0 ? void 0 : _c._classname;
-=======
-    registerMember(service, oclass /*new (...args: any[]) => any*/, membername, ...params) {
-        var _a, _b;
-        var m = oclass;
-        if (oclass.prototype !== undefined)
-            m = oclass.prototype;
-        var clname = (_b = (_a = oclass.prototype) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b._classname;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         if (clname) {
             if (this.dataMembers[service] === undefined) {
                 this.dataMembers[service] = {};

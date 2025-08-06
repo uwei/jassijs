@@ -33,20 +33,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-<<<<<<< HEAD
 define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace, Typescript_1, Registry_1, CodePanel_1, Runlater_1, Component_1) {
-=======
-define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1, Component_1) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.AcePanel = void 0;
     exports.test = test;
-<<<<<<< HEAD
-=======
-    Registry_2 = __importDefault(Registry_2);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     /// <amd-dependency path="ace/ace" name="ace"/>
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
@@ -711,11 +703,7 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassi
     };
     exports.AcePanelSimple = AcePanelSimple;
     exports.AcePanelSimple = AcePanelSimple = __decorate([
-<<<<<<< HEAD
         (0, Registry_2.$Class)("jassijs.ui.AcePanelSimple"),
-=======
-        (0, Registry_3.$Class)("jassijs.ui.AcePanelSimple"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], AcePanelSimple);
     async function test() {
@@ -926,11 +914,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
     exports.ChromeDebugger = ChromeDebugger;
     ChromeDebugger.mid = 0;
     exports.ChromeDebugger = ChromeDebugger = ChromeDebugger_1 = __decorate([
-<<<<<<< HEAD
         (0, Registry_3.$Class)("jassijs_editor.ChromeDebugger"),
-=======
-        (0, Registry_4.$Class)("jassijs_editor.ChromeDebugger"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], ChromeDebugger);
     //if connected then this instance is registred to jassijs.debugger;
@@ -946,11 +930,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodeEditor = void 0;
     exports.test = test;
-<<<<<<< HEAD
     Registry_5 = __importDefault(Registry_5);
-=======
-    Registry_6 = __importDefault(Registry_6);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     Windows_2 = __importDefault(Windows_2);
     jassijs.includeCSSFile("jassijs_editor.css");
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
@@ -965,11 +945,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
     ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
     CodeEditorSettingsDescriptor = __decorate([
         (0, Settings_1.$SettingsDescriptor)(),
-<<<<<<< HEAD
         (0, Registry_4.$Class)("jassijs_editor.CodeEditorSettingsDescriptor")
-=======
-        (0, Registry_5.$Class)("jassijs_editor.CodeEditorSettingsDescriptor")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], CodeEditorSettingsDescriptor);
     /**
      * Panel for editing sources
@@ -1809,11 +1785,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
         __metadata("design:paramtypes", [Number])
     ], CodeEditor.prototype, "line", null);
     exports.CodeEditor = CodeEditor = CodeEditor_1 = __decorate([
-<<<<<<< HEAD
         (0, Registry_4.$Class)("jassijs_editor.CodeEditor"),
-=======
-        (0, Registry_5.$Class)("jassijs_editor.CodeEditor"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], CodeEditor);
     async function test() {
@@ -1837,11 +1809,7 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodeEditorInvisibleComponents = void 0;
-<<<<<<< HEAD
     Registry_7 = __importDefault(Registry_7);
-=======
-    Registry_8 = __importDefault(Registry_8);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     //import {CodeEditor} from "jassijs_editor/CodeEditor";//could be removed
     let CodeEditorInvisibleComponents = class CodeEditorInvisibleComponents extends Panel_2.Panel {
         constructor(codeeditor) {
@@ -1937,11 +1905,7 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
     };
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents = __decorate([
-<<<<<<< HEAD
         (0, Registry_6.$Class)("jassijs_editor.CodeEditorInvisibleComponents"),
-=======
-        (0, Registry_7.$Class)("jassijs_editor.CodeEditorInvisibleComponents"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], CodeEditorInvisibleComponents);
 });
@@ -2077,26 +2041,15 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
     };
     exports.CodePanel = CodePanel;
     exports.CodePanel = CodePanel = CodePanel_4 = __decorate([
-<<<<<<< HEAD
         (0, Registry_8.$Class)("jassijs_editor.CodePanel")
     ], CodePanel);
 });
 define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/StateBinder"], function (require, exports, Registry_9, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Button_3, DragAndDropper_1, ComponentDescriptor_1, Classes_3, BoxPanel_1) {
-=======
-        (0, Registry_9.$Class)("jassijs_editor.CodePanel")
-    ], CodePanel);
-});
-define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/StateBinder"], function (require, exports, Registry_10, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Button_3, DragAndDropper_1, ComponentDescriptor_1, Classes_3, BoxPanel_1) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentDesigner = exports.ClipboardData = void 0;
     exports.test = test;
-<<<<<<< HEAD
     Registry_9 = __importStar(Registry_9);
-=======
-    Registry_10 = __importStar(Registry_10);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     //import { Parser } from "./util/Parser";
     class ClipboardData {
         constructor() {
@@ -2602,11 +2555,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.pasteButton.hidden = !enable;
             var component = this._designPlaceholder._components[0];
             //switch designmode
-<<<<<<< HEAD
             var comps = component.dom.querySelectorAll(".jeditablecomponent");
-=======
-            var comps = component.dom.querySelectorAll(".jcomponent");
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (enable)
                 comps.forEach((c) => c.classList.add("jdesignmode"));
             else
@@ -2879,10 +2828,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                         var toCreate = JSON.parse(data);
                         var cl = Classes_3.classes.getClass(toCreate.createFromType);
                         var newComponent = new cl();
-<<<<<<< HEAD
                         newComponent.createFromParam = toCreate.createFromParam;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         var beforeComponent = ev.target._this;
                         var newParent = beforeComponent._parent;
                         _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, beforeComponent); // beforeComponent);
@@ -2988,10 +2934,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                         var toCreate = JSON.parse(data);
                         var cl = Classes_3.classes.getClass(toCreate.createFromType);
                         var newComponent = new cl();
-<<<<<<< HEAD
                         newComponent.createFromParam = toCreate.createFromParam;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         let newParent = ev.target._this;
                         _this.createComponent(toCreate.createFromType, newComponent, undefined, undefined, newParent, undefined); // beforeComponent);
                     }
@@ -3097,7 +3040,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                         }
                     }
                 }
-<<<<<<< HEAD
                 if (varname && node.classList) {
                     if (!node.classList.contains("jeditablecomponent")) {
                         node.classList.add("jeditablecomponent");
@@ -3107,12 +3049,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     if (node.contentEditable !== "false")
                         node.contentEditable = "false";
                 }
-=======
-                if (!varname) {
-                    if (node.contentEditable !== "false")
-                        node.contentEditable = "false";
-                }
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 if ((fnew === null || fnew === void 0 ? void 0 : fnew.createDummyInDesigner) !== undefined) {
                     if (typeof (fnew.createDummyInDesigner) === "boolean") {
                         if (fnew.createDummyInDesigner === false)
@@ -3276,11 +3212,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this._designPlaceholder.dom.contentEditable = "false";
             //delete removed dummies
             for (var x = 0; x < this.dummyHolder.childNodes.length; x++) {
-<<<<<<< HEAD
                 if (((_b = (_a = this.dummyHolder.childNodes[x]._this.dom) === null || _a === void 0 ? void 0 : _a._this) === null || _b === void 0 ? void 0 : _b._parent) === undefined) {
-=======
-                if (this.dummyHolder.childNodes[x]._this.dom._this._parent === undefined) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     //if ((<any>this.dummyHolder.childNodes[x])._this._parent === undefined) {
                     this.dummyHolder.removeChild(this.dummyHolder.childNodes[x]);
                 }
@@ -3307,11 +3239,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
     };
     exports.ComponentDesigner = ComponentDesigner;
     exports.ComponentDesigner = ComponentDesigner = __decorate([
-<<<<<<< HEAD
         (0, Registry_9.$Class)("jassijs_editor.ComponentDesigner"),
-=======
-        (0, Registry_10.$Class)("jassijs_editor.ComponentDesigner"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], ComponentDesigner);
     async function test() {
@@ -3493,11 +3421,7 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
     };
     exports.ComponentExplorer = ComponentExplorer;
     exports.ComponentExplorer = ComponentExplorer = __decorate([
-<<<<<<< HEAD
         (0, Registry_10.$Class)("jassijs_editor.ComponentExplorer"),
-=======
-        (0, Registry_11.$Class)("jassijs_editor.ComponentExplorer"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object, typeof (_a = typeof PropertyEditor_2.PropertyEditor !== "undefined" && PropertyEditor_2.PropertyEditor) === "function" ? _a : Object])
     ], ComponentExplorer);
     async function test() {
@@ -3514,11 +3438,7 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentPalette = void 0;
     exports.test = test;
-<<<<<<< HEAD
     Registry_12 = __importDefault(Registry_12);
-=======
-    Registry_13 = __importDefault(Registry_13);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     let ComponentPalette = class ComponentPalette extends Panel_6.Panel {
         constructor() {
             super();
@@ -3535,11 +3455,7 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
             while (this._components.length > 0) {
                 this.remove(this._components[0]);
             }
-<<<<<<< HEAD
             Registry_12.default.getJSONData(this._service).then((jdata) => {
-=======
-            Registry_13.default.getJSONData(this._service).then((jdata) => {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 /*   for (var x = 0; x < jdata.length; x++) {
                        var mdata = jdata[x];
                        var data: UIComponentProperties = mdata.params[0];
@@ -3723,11 +3639,7 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
     };
     exports.ComponentPalette = ComponentPalette;
     exports.ComponentPalette = ComponentPalette = __decorate([
-<<<<<<< HEAD
         (0, Registry_11.$Class)("jassijs_editor.ComponentPalette"),
-=======
-        (0, Registry_12.$Class)("jassijs_editor.ComponentPalette"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], ComponentPalette);
     function test() {
@@ -3870,11 +3782,7 @@ define("jassijs_editor/ComponentSpy", ["require", "exports", "jassijs/remote/Reg
     ], ComponentSpy, "showDialog", null);
     exports.ComponentSpy = ComponentSpy = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
-<<<<<<< HEAD
         (0, Registry_13.$Class)("jassijs_editor.ui.ComponentSpy"),
-=======
-        (0, Registry_14.$Class)("jassijs_editor.ui.ComponentSpy"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], ComponentSpy);
     function test() {
@@ -3885,11 +3793,7 @@ define("jassijs_editor/ComponentSpy", ["require", "exports", "jassijs/remote/Reg
     }
     jassijs.componentSpy = new ComponentSpy();
 });
-<<<<<<< HEAD
 define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows", "jassijs_editor/util/DatabaseSchema"], function (require, exports, BoxPanel_3, Button_5, Select_1, Table_2, Registry_14, Panel_8, OptionDialog_2, Router_3, Actions_2, Windows_3, DatabaseSchema_1) {
-=======
-define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows", "jassijs_editor/util/DatabaseSchema"], function (require, exports, BoxPanel_3, Button_5, Select_1, Table_2, Registry_15, Panel_8, OptionDialog_2, Router_3, Actions_2, Windows_3, DatabaseSchema_1) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabaseDesigner = void 0;
@@ -3940,13 +3844,8 @@ define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/Box
                 }
             });
             me.select = new Select_1.Select();
-<<<<<<< HEAD
             //me.databinder = new Databinder();
             //this.add(me.databinder);
-=======
-            me.databinder = new Databinder();
-            this.add(me.databinder);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             me.table.width = 565;
             me.table.height = "300";
             me.table.onchange(function (event, data /*Tabulator.RowComponent*/) {
@@ -4122,11 +4021,7 @@ define("jassijs_editor/DatabaseDesigner", ["require", "exports", "jassijs/ui/Box
     ], DatabaseDesigner, "showDialog", null);
     exports.DatabaseDesigner = DatabaseDesigner = __decorate([
         (0, Actions_2.$ActionProvider)("jassijs.base.ActionNode"),
-<<<<<<< HEAD
         (0, Registry_14.$Class)("jassijs_editor/DatabaseDesigner"),
-=======
-        (0, Registry_15.$Class)("jassijs_editor/DatabaseDesigner"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], DatabaseDesigner);
     async function test() {
@@ -4268,11 +4163,7 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Registr
     };
     exports.Debugger = Debugger;
     exports.Debugger = Debugger = __decorate([
-<<<<<<< HEAD
         (0, Registry_15.$Class)("jassijs_editor.Debugger"),
-=======
-        (0, Registry_16.$Class)("jassijs_editor.Debugger"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], Debugger);
     if (jassijs.debugger === undefined)
@@ -4496,11 +4387,7 @@ define("jassijs_editor/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "
     ], ErrorPanel, "showDialog", null);
     exports.ErrorPanel = ErrorPanel = __decorate([
         (0, Actions_3.$ActionProvider)("jassijs.base.ActionNode"),
-<<<<<<< HEAD
         (0, Registry_16.$Class)("jassijs_editor.ui.ErrorPanel"),
-=======
-        (0, Registry_17.$Class)("jassijs_editor.ui.ErrorPanel"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object, Object, Object])
     ], ErrorPanel);
     function test2() {
@@ -4568,17 +4455,6 @@ define("jassijs_editor/ext/monaco2", ["require", "exports", "jassijs_editor/modu
         }, [channel.port2]);
     }
     test();
-<<<<<<< HEAD
-=======
-});
-define("jassijs_editor/ext/typescriptservices", ["require", "exports", "vs/language/typescript/tsWorker"], function (require, exports, tsWorker) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /// <amd-dependency path="vs/language/typescript/tsWorker" name="tsWorker"/>
-    //// <amd-module name="jassijs_editor_ext_typescriptservices"/>
-    var ts = window["ts"];
-    exports.default = ts;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 });
 define("jassijs_editor/ext/typescriptservices", ["require", "exports", "vs/language/typescript/tsWorker"], function (require, exports, tsWorker) {
     "use strict";
@@ -4887,11 +4763,7 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
     ], FileActions, "open", null);
     exports.FileActions = FileActions = FileActions_1 = __decorate([
         (0, Actions_4.$ActionProvider)("jassijs.remote.FileNode"),
-<<<<<<< HEAD
         (0, Registry_17.$Class)("jassijs_editor.ui.FileActions")
-=======
-        (0, Registry_18.$Class)("jassijs_editor.ui.FileActions")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], FileActions);
     let FileExplorer = FileExplorer_1 = class FileExplorer extends Panel_10.Panel {
         constructor() {
@@ -4987,11 +4859,7 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
     ], FileExplorer, "show", null);
     exports.FileExplorer = FileExplorer = FileExplorer_1 = __decorate([
         (0, Actions_4.$ActionProvider)("jassijs.base.ActionNode"),
-<<<<<<< HEAD
         (0, Registry_17.$Class)("jassijs.ui.FileExplorer"),
-=======
-        (0, Registry_18.$Class)("jassijs.ui.FileExplorer"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], FileExplorer);
     function test() {
@@ -5000,11 +4868,7 @@ define("jassijs_editor/FileExplorer", ["require", "exports", "jassijs/remote/Reg
         return exp;
     }
 });
-<<<<<<< HEAD
 define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Button", "jassijs/util/Tools", "jassijs/ui/Textbox", "jassijs/ui/ComponentDescriptor", "jassijs/ext/spectrum"], function (require, exports, ComponentDesigner_1, Registry_18, Component_5, Classes_7, Button_7, Tools_1, Textbox_2, ComponentDescriptor_3) {
-=======
-define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/ComponentDesigner", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Button", "jassijs/util/Tools", "jassijs/ui/Textbox", "jassijs/ui/ComponentDescriptor", "jassijs/ext/spectrum"], function (require, exports, ComponentDesigner_1, Registry_19, Component_5, Classes_7, Button_7, Tools_1, Textbox_2, ComponentDescriptor_3) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HtmlDesigner = void 0;
@@ -5877,7 +5741,6 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                         var before = undefined;
                         // if (anchorNode.childNodes.length > anchorOffset) {
                         before = anchorNode._this;
-<<<<<<< HEAD
                         var testpos = before._parent._components.indexOf(before);
                         if (testpos > 1 && before._parent._components[testpos - 1] instanceof Component_5.TextComponent) {
                             anchorOffset = 0;
@@ -5904,19 +5767,6 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
                             neu = e.key;
                         }
                         //}
-=======
-                        //}
-                        anchorOffset = 0;
-                        anchorNode = this.createTextComponent(e.key, anchorNode._this._parent, before).dom;
-                        neu = e.key;
-                    }
-                    else if (dummyPre === false) {
-                        var container = this.lastSelectedDummy.component;
-                        //}
-                        anchorOffset = 0;
-                        anchorNode = this.createTextComponent(e.key, container, undefined).dom;
-                        neu = e.key;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     }
                     else { //insert in Container
                         var desc = ComponentDescriptor_3.ComponentDescriptor.describe(anchorNode._this.constructor);
@@ -5941,11 +5791,7 @@ define("jassijs_editor/HtmlDesigner", ["require", "exports", "jassijs_editor/Com
     };
     exports.HtmlDesigner = HtmlDesigner;
     exports.HtmlDesigner = HtmlDesigner = __decorate([
-<<<<<<< HEAD
         (0, Registry_18.$Class)("jassijs_editor.HtmlDesigner"),
-=======
-        (0, Registry_19.$Class)("jassijs_editor.HtmlDesigner"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], HtmlDesigner);
     function test() {
@@ -6295,11 +6141,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
     };
     exports.MonacoPanel = MonacoPanel;
     exports.MonacoPanel = MonacoPanel = __decorate([
-<<<<<<< HEAD
         (0, Registry_19.$Class)("jassijs_editor.MonacoPanel"),
-=======
-        (0, Registry_20.$Class)("jassijs_editor.MonacoPanel"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], MonacoPanel);
     async function test() {
@@ -6327,11 +6169,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-<<<<<<< HEAD
                 "date": 1740653429301.0798,
-=======
-                "date": 1720101244987.3042,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
@@ -6343,11 +6181,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-<<<<<<< HEAD
                 "date": 1740761803088.7715,
-=======
-                "date": 1739909138880.0374,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -6357,11 +6191,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-<<<<<<< HEAD
                 "date": 1740651512713.9685,
-=======
-                "date": 1719757407652.6265,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
@@ -6369,7 +6199,6 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-<<<<<<< HEAD
                 "date": 1740828811263.884,
                 "jassijs_editor.ComponentDesigner": {}
             },
@@ -6383,21 +6212,6 @@ define("jassijs_editor/registry", ["require"], function (require) {
             },
             "jassijs_editor/ComponentSpy.ts": {
                 "date": 1740510338564.4038,
-=======
-                "date": 1740075940067.0588,
-                "jassijs_editor.ComponentDesigner": {}
-            },
-            "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1739999267632.0261,
-                "jassijs_editor.ComponentExplorer": {}
-            },
-            "jassijs_editor/ComponentPalette.ts": {
-                "date": 1721754620068.305,
-                "jassijs_editor.ComponentPalette": {}
-            },
-            "jassijs_editor/ComponentSpy.ts": {
-                "date": 1719755727631.165,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -6423,11 +6237,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-<<<<<<< HEAD
                 "date": 1740518198514.8262,
-=======
-                "date": 1739905972951.1553,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -6579,11 +6389,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-<<<<<<< HEAD
                 "date": 1740742771963.561,
-=======
-                "date": 1739909679697.9824,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -6701,19 +6507,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-<<<<<<< HEAD
                 "date": 1740570775364.1863,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
                 "date": 1740742895352.4688,
-=======
-                "date": 1722105568121.3489,
-                "jassijs_editor.util.Parser": {}
-            },
-            "jassijs_editor/util/Resizer.ts": {
-                "date": 1739999435244.1797,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
@@ -6738,11 +6536,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-<<<<<<< HEAD
                 "date": 1750449152303.9917,
-=======
-                "date": 1720115012657.7117,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/template/TemplateEmptyTSXDialog.ts": {
@@ -6766,11 +6560,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
         }
     };
 });
-<<<<<<< HEAD
 define("jassijs_editor/SearchExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Registry_20, Tree_3, Panel_11, Textbox_3, Router_7, Actions_5, Windows_5) {
-=======
-define("jassijs_editor/SearchExplorer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Registry_21, Tree_3, Panel_11, Textbox_3, Router_7, Actions_5, Windows_5) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var SearchExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6874,11 +6664,7 @@ define("jassijs_editor/SearchExplorer", ["require", "exports", "jassijs/remote/R
     ], SearchExplorer, "show", null);
     exports.SearchExplorer = SearchExplorer = SearchExplorer_1 = __decorate([
         (0, Actions_5.$ActionProvider)("jassijs.base.ActionNode"),
-<<<<<<< HEAD
         (0, Registry_20.$Class)("jassijs_editor.ui.SearchExplorer"),
-=======
-        (0, Registry_21.$Class)("jassijs_editor.ui.SearchExplorer"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], SearchExplorer);
     function test() {
@@ -6916,11 +6702,7 @@ define("jassijs_editor/template/TemplateDBDialog", ["require", "exports", "jassi
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateDBDialog = exports.TemplateDBDialogProperties = void 0;
-<<<<<<< HEAD
     Registry_21 = __importStar(Registry_21);
-=======
-    Registry_22 = __importStar(Registry_22);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     const code = `
 import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 import { Textbox } from "jassijs/ui/Textbox";
@@ -6964,11 +6746,7 @@ export async function test(){
         __metadata("design:type", typeof (_a = typeof DBObject_1.DBObject !== "undefined" && DBObject_1.DBObject) === "function" ? _a : Object)
     ], TemplateDBDialogProperties.prototype, "dbobject", void 0);
     exports.TemplateDBDialogProperties = TemplateDBDialogProperties = __decorate([
-<<<<<<< HEAD
         (0, Registry_21.$Class)("jassijs_editor.template.TemplateDBDialogProperties")
-=======
-        (0, Registry_22.$Class)("jassijs_editor.template.TemplateDBDialogProperties")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TemplateDBDialogProperties);
     let TemplateDBDialog = class TemplateDBDialog {
         static async newFile(all) {
@@ -7003,11 +6781,7 @@ export async function test(){
     ], TemplateDBDialog, "newFile", null);
     exports.TemplateDBDialog = TemplateDBDialog = __decorate([
         (0, Actions_6.$ActionProvider)("jassijs.remote.FileNode"),
-<<<<<<< HEAD
         (0, Registry_21.$Class)("jassijs.template.TemplateDBDialog")
-=======
-        (0, Registry_22.$Class)("jassijs.template.TemplateDBDialog")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TemplateDBDialog);
 });
 define("jassijs_editor/template/TemplateDBObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs_editor/FileExplorer"], function (require, exports, Registry_22, Property_3, Actions_7, OptionDialog_5, FileExplorer_4) {
@@ -7049,11 +6823,7 @@ export async function test() {
         __metadata("design:type", String)
     ], TemplateDBObjectProperties.prototype, "autogeneratedid", void 0);
     exports.TemplateDBObjectProperties = TemplateDBObjectProperties = __decorate([
-<<<<<<< HEAD
         (0, Registry_22.$Class)("jassijs_editor.template.TemplateDBObjectProperties")
-=======
-        (0, Registry_23.$Class)("jassijs_editor.template.TemplateDBObjectProperties")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TemplateDBObjectProperties);
     let TemplateDBObject = TemplateDBObject_1 = class TemplateDBObject {
         static async newFile(all) {
@@ -7085,11 +6855,7 @@ export async function test() {
     ], TemplateDBObject, "newFile", null);
     exports.TemplateDBObject = TemplateDBObject = TemplateDBObject_1 = __decorate([
         (0, Actions_7.$ActionProvider)("jassijs.remote.FileNode"),
-<<<<<<< HEAD
         (0, Registry_22.$Class)("jassijs.template.TemplateDBObject")
-=======
-        (0, Registry_23.$Class)("jassijs.template.TemplateDBObject")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TemplateDBObject);
 });
 define("jassijs_editor/template/TemplateEmptyDialog", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs_editor/FileExplorer"], function (require, exports, Actions_8, Registry_23, OptionDialog_6, FileExplorer_5) {
@@ -7132,11 +6898,7 @@ export async function test() {
     TemplateEmptyDialog.code = code;
     __decorate([
         (0, Actions_8.$Action)({
-<<<<<<< HEAD
             name: "New/Dialog.ts",
-=======
-            name: "New/Dialog",
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             isEnabled: function (all) {
                 return all[0].isDirectory();
             }
@@ -7147,11 +6909,7 @@ export async function test() {
     ], TemplateEmptyDialog, "newFile", null);
     exports.TemplateEmptyDialog = TemplateEmptyDialog = __decorate([
         (0, Actions_8.$ActionProvider)("jassijs.remote.FileNode"),
-<<<<<<< HEAD
         (0, Registry_23.$Class)("jassijs_editor.template.TemplateEmptyDialog")
-=======
-        (0, Registry_24.$Class)("jassijs_editor.template.TemplateEmptyDialog")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TemplateEmptyDialog);
 });
 define("jassijs_editor/template/TemplateEmptyTSXDialog", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs_editor/FileExplorer"], function (require, exports, Actions_9, Registry_24, OptionDialog_7, FileExplorer_6) {
@@ -7252,11 +7010,7 @@ export async function test(){
     exports.TemplateRemoteObject = TemplateRemoteObject;
     TemplateRemoteObject.code = code;
     __decorate([
-<<<<<<< HEAD
         (0, Actions_10.$Action)({
-=======
-        (0, Actions_9.$Action)({
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             name: "New/RemoteObject",
             isEnabled: function (all) {
                 return all[0].isDirectory() && all[0].fullpath.split("/").length > 1 && all[0].fullpath.split("/")[1] === "remote";
@@ -7267,11 +7021,7 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateRemoteObject, "newFile", null);
     exports.TemplateRemoteObject = TemplateRemoteObject = __decorate([
-<<<<<<< HEAD
         (0, Actions_10.$ActionProvider)("jassijs.remote.FileNode"),
-=======
-        (0, Actions_9.$ActionProvider)("jassijs.remote.FileNode"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Registry_25.$Class)("jassijs_editor.template.TemplateRemoteObject")
     ], TemplateRemoteObject);
 });
@@ -8097,20 +7847,12 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
         __metadata("design:paramtypes", [])
     ], DragAndDropper);
 });
-<<<<<<< HEAD
 define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs_editor/util/Typescript"], function (require, exports, Registry_29, Classes_9, Typescript_5) {
-=======
-define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "typescript", "jassijs/remote/Classes", "jassijs_editor/util/Typescript"], function (require, exports, Registry_29, typescript_1, Classes_9, Typescript_5) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Parser = exports.ParsedClass = void 0;
     exports.tests = tests;
     exports.test = test;
-<<<<<<< HEAD
-=======
-    typescript_1 = __importDefault(typescript_1);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     class ParsedDecorator {
         constructor() {
             this.parsedParameter = [];
@@ -8146,15 +7888,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             /** {[string]} - all code lines*/
         }
         getModifiedCode() {
-<<<<<<< HEAD
             const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
             const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, /*setParentNodes*/ false, this.isJSX ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
             var result = printer.printNode(ts.EmitHint.Unspecified, this.sourceFile, resultFile);
-=======
-            const printer = typescript_1.default.createPrinter({ newLine: typescript_1.default.NewLineKind.LineFeed });
-            const resultFile = typescript_1.default.createSourceFile("dummy.ts", "", typescript_1.default.ScriptTarget.Latest, /*setParentNodes*/ false, this.isJSX ? typescript_1.default.ScriptKind.TSX : typescript_1.default.ScriptKind.TS);
-            var result = printer.printNode(typescript_1.default.EmitHint.Unspecified, this.sourceFile, resultFile);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             result = this.reformatCode(result);
             return result;
         }
@@ -8166,21 +7902,17 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 getScriptFileNames: () => [],
                 getScriptVersion: fileName => "1.0",
                 getScriptSnapshot: fileName => {
-                    return typescript_1.default.ScriptSnapshot.fromString(code);
+                    return ts.ScriptSnapshot.fromString(code);
                 },
                 getCurrentDirectory: () => "",
                 getCompilationSettings: () => ({}),
-                getDefaultLibFileName: options => typescript_1.default.getDefaultLibFilePath(options),
+                getDefaultLibFileName: options => ts.getDefaultLibFilePath(options),
                 fileExists: (a) => false,
                 readFile: (a) => code,
                 readDirectory: (a) => []
             };
             var file = this.variabelStack ? "tempdoc.tsx" : "tempdoc.ts";
-<<<<<<< HEAD
             const languageService = ts.createLanguageService(serviceHost, ts.createDocumentRegistry());
-=======
-            const languageService = typescript_1.default.createLanguageService(serviceHost, typescript_1.default.createDocumentRegistry());
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             const textChanges = languageService.getFormattingEditsForDocument(file, {
                 convertTabsToSpaces: true,
                 //  indentMultiLineObjectLiteralBeginningOnBlankLine:true,
@@ -8189,7 +7921,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 //  insertSpaceAfterKeywordsInControlFlowStatements: true,
                 // insertSpaceBeforeAndAfterBinaryOperators: true,
                 newLineCharacter: "\n",
-                indentStyle: typescript_1.default.IndentStyle.Smart,
+                indentStyle: ts.IndentStyle.Smart,
                 indentSize: 4,
                 tabSize: 4
             });
@@ -8259,13 +7991,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         addRef(name, type) {
             if (!this.refsNode)
                 return;
-<<<<<<< HEAD
             var tp = ts.factory.createTypeReferenceNode(type, []);
             var newnode = ts.factory.createPropertySignature(undefined, name + "?", undefined, tp);
-=======
-            var tp = typescript_1.default.factory.createTypeReferenceNode(type, []);
-            var newnode = typescript_1.default.factory.createPropertySignature(undefined, name + "?", undefined, tp);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             //@ts-ignore
             newnode.parent = this.refsNode;
             this.refs[name] = { node: newnode, value: type, isFunction: false };
@@ -8280,19 +8007,14 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             if (this.imports[name] === undefined) {
                 //@ts-ignore
                 //            var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
-<<<<<<< HEAD
                 const importNode = ts.factory.createImportDeclaration(undefined, ts.factory.createImportClause(false, ts.factory.createIdentifier("{" + name + "}"), undefined), ts.factory.createIdentifier("\"" + file + "\""));
                 this.sourceFile = ts.factory.updateSourceFile(this.sourceFile, [importNode, ...this.sourceFile.statements]);
-=======
-                const importNode = typescript_1.default.factory.createImportDeclaration(undefined, typescript_1.default.factory.createImportClause(false, typescript_1.default.factory.createIdentifier("{" + name + "}"), undefined), typescript_1.default.factory.createIdentifier("\"" + file + "\""));
-                this.sourceFile = typescript_1.default.factory.updateSourceFile(this.sourceFile, [importNode, ...this.sourceFile.statements]);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 this.imports[name] = file;
             }
         }
         parseRefsNode(node) {
             var _this = this;
-            if (node.kind === typescript_1.default.SyntaxKind.TypeLiteral) {
+            if (node.kind === ts.SyntaxKind.TypeLiteral) {
                 if (node["members"])
                     this.refsNode = node;
                 node["members"].forEach(function (tnode) {
@@ -8309,7 +8031,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         convertArgument(arg) {
             if (arg === undefined)
                 return undefined;
-            if (arg.kind === typescript_1.default.SyntaxKind.ObjectLiteralExpression) {
+            if (arg.kind === ts.SyntaxKind.ObjectLiteralExpression) {
                 var ret = {};
                 var props = arg.properties;
                 if (props !== undefined) {
@@ -8319,29 +8041,29 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 }
                 return ret;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.StringLiteral) {
+            else if (arg.kind === ts.SyntaxKind.StringLiteral) {
                 return arg.text;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.ArrayLiteralExpression) {
+            else if (arg.kind === ts.SyntaxKind.ArrayLiteralExpression) {
                 let ret = [];
                 for (var p = 0; p < arg.elements.length; p++) {
                     ret.push(this.convertArgument(arg.elements[p]));
                 }
                 return ret;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.Identifier) {
+            else if (arg.kind === ts.SyntaxKind.Identifier) {
                 return arg.text;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.TrueKeyword) {
+            else if (arg.kind === ts.SyntaxKind.TrueKeyword) {
                 return true;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.FalseKeyword) {
+            else if (arg.kind === ts.SyntaxKind.FalseKeyword) {
                 return false;
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.NumericLiteral) {
+            else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
                 return Number(arg.text);
             }
-            else if (arg.kind === typescript_1.default.SyntaxKind.ArrowFunction || arg.kind === typescript_1.default.SyntaxKind.FunctionExpression) {
+            else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
                 return arg.getText();
             }
             throw new Classes_9.JassiError("Error type not found");
@@ -8364,7 +8086,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             return ret;
         }
         parseClass(node) {
-            if (node.kind === typescript_1.default.SyntaxKind.ClassDeclaration) {
+            if (node.kind === ts.SyntaxKind.ClassDeclaration) {
                 var parsedClass = new ParsedClass();
                 parsedClass.parent = this;
                 parsedClass.name = node.name.getText();
@@ -8373,11 +8095,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (node["modifiers"] !== undefined) {
                     for (var m = 0; m < node["modifiers"].length; m++) {
                         var nd = node["modifiers"][m];
-<<<<<<< HEAD
                         if (nd.kind === ts.SyntaxKind.Decorator) {
-=======
-                        if (nd.kind === typescript_1.default.SyntaxKind.Decorator) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                             var parsedDec = this.parseDecorator(nd);
                             parsedClass.decorator[parsedDec.name] = parsedDec;
                             if (parsedClass.decorator["$Class"] && parsedDec.parameter.length > 0)
@@ -8512,11 +8230,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if ((_c = children === null || children === void 0 ? void 0 : children.initializer) === null || _c === void 0 ? void 0 : _c.elements) {
                     for (var x = 0; x < children.initializer.elements.length; x++) {
                         var ch = children.initializer.elements[x];
-<<<<<<< HEAD
                         if (ch.kind === ts.SyntaxKind.StringLiteral) {
-=======
-                        if (ch.kind === typescript_1.default.SyntaxKind.StringLiteral) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                             var varname = this.getNextVariableNameForType("text", "text");
                             this.variabelStack[varname] = {
                                 component: jsx.component.dom.childNodes[x]._this
@@ -8600,11 +8314,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (nd.children) {
                     for (var x = 0; x < nd.children.length; x++) {
                         var ch = nd.children[x];
-<<<<<<< HEAD
                         if (ch.kind === ts.SyntaxKind.JsxText) {
-=======
-                        if (ch.kind === typescript_1.default.SyntaxKind.JsxText) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                             if (ch.containsOnlyTriviaWhiteSpaces) {
                                 counttrivial++;
                             }
@@ -8644,21 +8354,21 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         }
         parseProperties(node) {
             var _this = this;
-            if (typescript_1.default.isVariableDeclaration(node)) {
+            if (ts.isVariableDeclaration(node)) {
                 var name = node.name.getText();
                 if (node.initializer !== undefined) {
                     var value = node.initializer.getText();
                     this.add(name, "_new_", value, node.parent.parent);
                 }
             }
-            if ((typescript_1.default.isBinaryExpression(node) && node.operatorToken.kind === typescript_1.default.SyntaxKind.EqualsToken) ||
-                typescript_1.default.isCallExpression(node)) {
+            if ((ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) ||
+                ts.isCallExpression(node)) {
                 var node1;
                 var node2;
                 var left;
                 var value;
                 var isFunction = false;
-                if (typescript_1.default.isBinaryExpression(node)) {
+                if (ts.isBinaryExpression(node)) {
                     node1 = node.left;
                     node2 = node.right;
                     left = node1.getText(); // this.code.substring(node1.pos, node1.end).trim();
@@ -8666,7 +8376,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     if (value.startsWith("new "))
                         this.add(left, "_new_", value, node.parent);
                 }
-                if (typescript_1.default.isCallExpression(node)) {
+                if (ts.isCallExpression(node)) {
                     node1 = node.expression;
                     node2 = node.arguments;
                     isFunction = true;
@@ -8717,10 +8427,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         }
         visitNode(node, consumeProperties = undefined) {
             var _this = this;
-            if (node.kind === typescript_1.default.SyntaxKind.VariableDeclaration) {
+            if (node.kind === ts.SyntaxKind.VariableDeclaration) {
                 this.variables[node["name"].text] = node;
             }
-            if (node.kind === typescript_1.default.SyntaxKind.ImportDeclaration) {
+            if (node.kind === ts.SyntaxKind.ImportDeclaration) {
                 var nd = node;
                 var file = nd.moduleSpecifier.text;
                 if (nd.importClause && nd.importClause.namedBindings) {
@@ -8731,19 +8441,15 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 }
                 return;
             }
-<<<<<<< HEAD
             if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Refs") {
-=======
-            if (node.kind == typescript_1.default.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Refs") {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 this.parseRefsNode(node);
                 return;
             }
-            else if (node.kind === typescript_1.default.SyntaxKind.ClassDeclaration) {
+            else if (node.kind === ts.SyntaxKind.ClassDeclaration) {
                 this.parseClass(node);
                 return;
             }
-            else if (node && node.kind === typescript_1.default.SyntaxKind.FunctionDeclaration) { //functions out of class
+            else if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
                 this.functions[node["name"].text] = node;
                 if (this.classScope) {
                     for (let x = 0; x < this.classScope.length; x++) {
@@ -8755,7 +8461,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 else if (this.variabelStack === undefined)
                     consumeProperties = true;
             }
-            if (node.kind === typescript_1.default.SyntaxKind.JsxElement) {
+            if (node.kind === ts.SyntaxKind.JsxElement) {
                 _this.parseJSX(_this, node);
                 return;
             }
@@ -8770,7 +8476,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         }
         visitNodeJSX(node, consumeProperties = undefined) {
             var _this = this;
-            if (node.kind === typescript_1.default.SyntaxKind.ImportDeclaration) {
+            if (node.kind === ts.SyntaxKind.ImportDeclaration) {
                 var nd = node;
                 var file = nd.moduleSpecifier.text;
                 if (nd.importClause && nd.importClause.namedBindings) {
@@ -8781,23 +8487,15 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 }
                 return;
             }
-<<<<<<< HEAD
             if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Refs") {
                 this.parseRefsNode(node);
                 return;
             }
             if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
-=======
-            if (node.kind == typescript_1.default.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Refs") {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 this.parseRefsNode(node);
                 return;
             }
-            if (node.kind == typescript_1.default.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
-                this.parseRefsNode(node);
-                return;
-            }
-            if (node.kind === typescript_1.default.SyntaxKind.JsxElement || node.kind === typescript_1.default.SyntaxKind.JsxSelfClosingElement) {
+            if (node.kind === ts.SyntaxKind.JsxElement || node.kind === ts.SyntaxKind.JsxSelfClosingElement) {
                 _this.parseJSX(_this, node);
                 return;
             }
@@ -8808,13 +8506,13 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
               }*/
         }
         searchClassnode(node, pos) {
-            if (typescript_1.default.isMethodDeclaration(node)) {
+            if (ts.isMethodDeclaration(node)) {
                 return {
                     classname: node.parent["name"]["text"],
                     methodname: node.name["text"]
                 };
             }
-            if (node && node.kind === typescript_1.default.SyntaxKind.FunctionDeclaration) { //functions out of class
+            if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
                 var funcname = node["name"].text;
                 return {
                     classname: undefined,
@@ -8836,11 +8534,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         getClassScopeFromPosition(code, pos) {
             this.data = {};
             this.code = code;
-<<<<<<< HEAD
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, this.isJSX ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
-=======
-            this.sourceFile = typescript_1.default.createSourceFile('dummy.ts', code, typescript_1.default.ScriptTarget.ES5, true, this.isJSX ? typescript_1.default.ScriptKind.TSX : typescript_1.default.ScriptKind.TS);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             return this.searchClassnode(this.sourceFile, pos);
             //return this.parseold(code,onlyfunction);
         }
@@ -8853,11 +8547,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             node.forEachChild((ch) => _this.removePos(ch));
         }
         createNode(code, completeStatement = false) {
-<<<<<<< HEAD
             var ret = ts.createSourceFile('dummytemp.ts', code, ts.ScriptTarget.ES5, true, this.isJSX ? ts.ScriptKind.TSX : undefined);
-=======
-            var ret = typescript_1.default.createSourceFile('dummytemp.ts', code, typescript_1.default.ScriptTarget.ES5, true, this.isJSX ? typescript_1.default.ScriptKind.TSX : undefined);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (completeStatement)
                 return ret.statements[0];
             var node = ret.statements[0].expression;
@@ -8893,11 +8583,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 this.classScope = classScope;
             else
                 classScope = this.classScope;
-<<<<<<< HEAD
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true, isJSX ? ts.ScriptKind.TSX : undefined);
-=======
-            this.sourceFile = typescript_1.default.createSourceFile('dummy.ts', code, typescript_1.default.ScriptTarget.ES5, true, isJSX ? typescript_1.default.ScriptKind.TSX : undefined);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (variabelStack)
                 this.initvariabelStack(variabelStack);
             if (isJSX) {
@@ -8939,7 +8625,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (pos >= 0)
                     node.parent["elements"].splice(pos, 1);
             }
-            else if (node.parent.kind === typescript_1.default.SyntaxKind.ExpressionStatement) {
+            else if (node.parent.kind === ts.SyntaxKind.ExpressionStatement) {
                 var pos = node.parent.parent["statements"].indexOf(node.parent);
                 if (pos >= 0)
                     node.parent.parent["statements"].splice(pos, 1);
@@ -8953,10 +8639,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 throw Error(node.getFullText() + "could not be removed");
         }
         renameVariable(oldName, newName) {
-<<<<<<< HEAD
             debugger;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var autoName = false;
             var className = this.data[oldName]["_new_"][0].className;
             if (newName === "") {
@@ -8968,12 +8651,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             this.data[newName] = this.data[oldName];
             delete this.data[oldName];
             var prefix = "this.refs.";
-<<<<<<< HEAD
             if (this.code.indexOf("var refs=") !== -1 || this.code.indexOf("var refs ") !== -1 || this.code.indexOf("var refs:") !== -1 ||
                 this.code.indexOf("let refs=") !== -1 || this.code.indexOf("let refs ") !== -1 || this.code.indexOf("let refs:") !== -1)
-=======
-            if (this.data.refs)
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 prefix = "refs.";
             if (autoName)
                 this.removePropertyInCode("ref", undefined, newName);
@@ -8981,7 +8660,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 this.setPropertyInCode(newName, "ref", prefix + newName, this.classScope);
             if (this.refs[oldName])
                 this.removeNode(this.refs[oldName].node);
-<<<<<<< HEAD
             //   this.addImportIfNeeded("Ref", "jassijs/ui/Component");
             if (!autoName) {
                 if (className.startsWith("\"") || this.data[newName].tag !== undefined) {
@@ -8990,16 +8668,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 }
                 else
                     this.addRef(newName, className);
-=======
-            this.addImportIfNeeded("Ref", "jassijs/ui/Component");
-            if (!autoName) {
-                if (className.startsWith("\"")) {
-                    this.addImportIfNeeded("HTMLComponent", "jassijs/ui/Component");
-                    this.addRef(newName, "Ref<HTMLComponent>");
-                }
-                else
-                    this.addRef(newName, "Ref<" + className + ">");
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
             return newName;
         }
@@ -9020,7 +8688,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 if (dec.parameter) {
                     params = [];
                     for (var i = 0; i < dec.parameter.length; i++) {
-<<<<<<< HEAD
                         params.push(ts.factory.createIdentifier(dec.parameter[i]));
                     }
                 }
@@ -9029,16 +8696,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             }
             //var type=ts.createTy
             var newmember = ts.factory.createPropertyDeclaration(newdec, member.name, undefined, ts.factory.createTypeReferenceNode(member.type, []), undefined);
-=======
-                        params.push(typescript_1.default.factory.createIdentifier(dec.parameter[i]));
-                    }
-                }
-                var call = typescript_1.default.factory.createCallExpression(typescript_1.default.factory.createIdentifier(dec.name), undefined, params);
-                newdec.push(typescript_1.default.factory.createDecorator(call));
-            }
-            //var type=ts.createTy
-            var newmember = typescript_1.default.factory.createPropertyDeclaration(newdec, member.name, undefined, typescript_1.default.factory.createTypeReferenceNode(member.type, []), undefined);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var node = undefined;
             for (var key in pclass.members) {
                 if (key === member.name)
@@ -9239,11 +8896,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                             prop.pos = -1;
                             prop.len = -1;
                         }
-<<<<<<< HEAD
                         node.parent["arguments"][0] = ts.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
-=======
-                        node.parent["arguments"][0] = typescript_1.default.factory.createObjectLiteralExpression(node.parent["arguments"][0].properties, true);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     }
                 }
             }
@@ -9251,7 +8904,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             }
         }
         setPropertyInConfig(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
-<<<<<<< HEAD
             var svalue = typeof value === "string" ? ts.factory.createIdentifier(value) : value;
             var config = this.data[variableName]["config"][0].node;
             config = config.arguments[0];
@@ -9261,17 +8913,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 svalue = typeof value === "string" ? ts.factory.createIdentifier(value + ".config({})") : value;
                 if (this.data[variableName]["children"] == undefined) { //
                     newExpression = ts.factory.createPropertyAssignment(property, ts.factory.createArrayLiteralExpression([svalue], true));
-=======
-            var svalue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value) : value;
-            var config = this.data[variableName]["config"][0].node;
-            config = config.arguments[0];
-            var newExpression = typescript_1.default.factory.createPropertyAssignment(property, svalue);
-            if (property === "add" && replace === false) {
-                property = "children";
-                svalue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value + ".config({})") : value;
-                if (this.data[variableName]["children"] == undefined) { //
-                    newExpression = typescript_1.default.factory.createPropertyAssignment(property, typescript_1.default.factory.createArrayLiteralExpression([svalue], true));
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     config.properties.push(newExpression);
                 }
                 else {
@@ -9316,13 +8957,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             //  node.parent["statements"].splice(pos, 1);
         }
         setPropertyInJC(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
-<<<<<<< HEAD
             var svalue = typeof value === "string" ? ts.factory.createIdentifier(value) : value;
             if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.StringLiteral && property === "text") {
-=======
-            var svalue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value) : value;
-            if (this.data[variableName]["_new_"][0].node.kind === typescript_1.default.SyntaxKind.StringLiteral && property === "text") {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 this.data[variableName]["_new_"][0].value = value;
                 //@ts-ignore
                 this.data[variableName]["_new_"][0].node.text = value.toString().substring(1, value.toString().length - 1);
@@ -9338,19 +8974,11 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 config = config.right;
                 this.data[variableName]["_new_"][0].node["arguments"].push(config);
             }
-<<<<<<< HEAD
             var newExpression = ts.factory.createPropertyAssignment(property, svalue);
             var jname;
             if (property === "add") { //transfer a child to another
                 if (this.data[variableName]["add"] === undefined) {
                     newExpression = ts.factory.createPropertyAssignment("children", ts.factory.createArrayLiteralExpression([], true));
-=======
-            var newExpression = typescript_1.default.factory.createPropertyAssignment(property, svalue);
-            var jname;
-            if (property === "add") { //transfer a child to another
-                if (this.data[variableName]["add"] === undefined) {
-                    newExpression = typescript_1.default.factory.createPropertyAssignment("children", typescript_1.default.factory.createArrayLiteralExpression([], true));
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     config.properties.push(newExpression);
                     this.data[variableName]["add"] = [{ node: newExpression, value: [], isFunction: false }];
                 }
@@ -9362,11 +8990,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         classname = "\"" + prop.tag + "\"";
                     var node;
                     if (classname === "text") {
-<<<<<<< HEAD
                         node = ts.factory.createStringLiteral("\"" + value + "\"");
-=======
-                        node = typescript_1.default.factory.createStringLiteral("\"" + value + "\"");
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         //this.add(value, "text", <string>"", node);
                     }
                     else {
@@ -9448,11 +9072,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     if (property === "tag") { //jc("div" => jc("span"
                         //  this.data[variableName][property][0].value = value;
                         var sval = value.substring(1, value.length - 1);
-<<<<<<< HEAD
                         this.data[variableName]["_new_"][0].node["arguments"][0] = ts.factory.createStringLiteral(sval);
-=======
-                        this.data[variableName]["_new_"][0].node["arguments"][0] = typescript_1.default.factory.createStringLiteral(sval);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     }
                     else {
                         let node = this.data[variableName][property][0].node;
@@ -9482,19 +9102,11 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             //    this.data[variableName] = {};
             var newValue;
             if (typeof value === "string")
-<<<<<<< HEAD
                 newValue = value.startsWith('"') ? ts.factory.createIdentifier(value) : ts.factory.createIdentifier("{" + value + "}");
             else
                 newValue = value;
             ;
             var newExpression = newExpression = ts.factory.createJsxAttribute(ts.factory.createIdentifier(property), newValue);
-=======
-                newValue = value.startsWith('"') ? typescript_1.default.factory.createIdentifier(value) : typescript_1.default.factory.createIdentifier("{" + value + "}");
-            else
-                newValue = value;
-            ;
-            var newExpression = newExpression = typescript_1.default.factory.createJsxAttribute(typescript_1.default.factory.createIdentifier(property), newValue);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             ;
             if (property === "new") { //me.panel1=new Panel({});
                 /*       let prop = this.data[variableName]["_new_"][0];//.substring(3)];
@@ -9525,11 +9137,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         classname = prop.tag;
                     var node;
                     if (classname === "text") {
-<<<<<<< HEAD
                         node = ts.factory.createJsxText("", false);
-=======
-                        node = typescript_1.default.factory.createJsxText("", false);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         this.add(value, "text", "", node);
                     }
                     else {
@@ -9570,11 +9178,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     }
                     var pos = parent["children"].indexOf(found);
                     parent["children"].splice(pos, 0, node);
-<<<<<<< HEAD
                     parent["children"].splice(pos + 1, 0, ts.factory.createJsxText("\n", true));
-=======
-                    parent["children"].splice(pos + 1, 0, typescript_1.default.factory.createJsxText("\n", true));
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     this.data[variableName]["add"].splice(ofound, 0, {
                         node: node,
                         value: jname,
@@ -9586,20 +9190,12 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     if (parent["children"] === undefined)
                         debugger;
                     parent["children"].push(node);
-<<<<<<< HEAD
                     parent["children"].push(ts.factory.createJsxText("\n", true));
-=======
-                    parent["children"].push(typescript_1.default.factory.createJsxText("\n", true));
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     this.add(variableName, "add", value, node);
                 }
                 return;
             }
-<<<<<<< HEAD
             if (this.data[variableName]["_new_"][0].node.kind === ts.SyntaxKind.JsxText) {
-=======
-            if (this.data[variableName]["_new_"][0].node.kind === typescript_1.default.SyntaxKind.JsxText) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 if (property === "text") {
                     var svalue = value;
                     var old = this.data[variableName][property][0].node.text; //getText() throw error if created manuell
@@ -9616,13 +9212,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             }
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined && typeof value === "string") { //edit existing
                 if (property === "tag") {
-<<<<<<< HEAD
                     this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.factory.createIdentifier(value.substring(1, value.length - 1));
                     this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.factory.createIdentifier(value.substring(1, value.length - 1));
-=======
-                    this.data[variableName]["_new_"][0].node.openingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
-                    this.data[variableName]["_new_"][0].node.closingElement.tagName = typescript_1.default.factory.createIdentifier(value.substring(1, value.length - 1));
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     this.data[variableName][property][0].value = value;
                     this.data[variableName]["_new_"][0].node["jname"] = value.replaceAll('"', "");
                     return;
@@ -9665,11 +9256,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         var tagname = value.substring(1, value.length - 1);
                         this.data[variableName]["_new_"][0].node["jname"] = value.replaceAll('"', "");
                         if (this.data[variableName]["_new_"][0].node.attributes) {
-<<<<<<< HEAD
                             this.data[variableName]["_new_"][0].node.tagName = ts.factory.createIdentifier(tagname);
-=======
-                            this.data[variableName]["_new_"][0].node.tagName = typescript_1.default.factory.createIdentifier(tagname);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         }
                         else {
                             if (tagname.toLowerCase() === "br") { //br is created as <br></br> ==> correct
@@ -9680,13 +9267,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                                 this.data[variableName]["_new_"][0].node = newnode;
                             }
                             else {
-<<<<<<< HEAD
                                 this.data[variableName]["_new_"][0].node.openingElement.tagName = ts.factory.createIdentifier(tagname);
                                 this.data[variableName]["_new_"][0].node.closingElement.tagName = ts.factory.createIdentifier(tagname);
-=======
-                                this.data[variableName]["_new_"][0].node.openingElement.tagName = typescript_1.default.factory.createIdentifier(tagname);
-                                this.data[variableName]["_new_"][0].node.closingElement.tagName = typescript_1.default.factory.createIdentifier(tagname);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                             }
                         }
                     }
@@ -9739,11 +9321,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
                 return;
             }
-<<<<<<< HEAD
             var newValue = typeof value === "string" ? ts.factory.createIdentifier(value) : value;
-=======
-            var newValue = typeof value === "string" ? typescript_1.default.factory.createIdentifier(value) : value;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var statements = scope["body"] ? scope["body"].statements : scope["statements"];
             if (property === "new") { //me.panel1=new Panel({});
                 let prop = this.data[variableName]["_new_"][0]; //.substring(3)];
@@ -9753,7 +9331,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 var left = prop.node.getText();
                 left = left.substring(0, left.indexOf("=") - 1);
                 property = "_new_";
-<<<<<<< HEAD
                 newExpression = ts.factory.createExpressionStatement(ts.factory.createAssignment(ts.factory.createIdentifier(left), newValue));
             }
             else if (isFunction) {
@@ -9762,16 +9339,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             }
             else
                 newExpression = ts.factory.createExpressionStatement(ts.factory.createAssignment(ts.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
-=======
-                newExpression = typescript_1.default.factory.createExpressionStatement(typescript_1.default.factory.createAssignment(typescript_1.default.factory.createIdentifier(left), newValue));
-            }
-            else if (isFunction) {
-                //           newExpression=this.createNode(property === "" ? variableName : (variableName + "." + property)+"("+newValue.text+")",true);
-                newExpression = typescript_1.default.factory.createExpressionStatement(typescript_1.default.factory.createCallExpression(typescript_1.default.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
-            }
-            else
-                newExpression = typescript_1.default.factory.createExpressionStatement(typescript_1.default.factory.createAssignment(typescript_1.default.factory.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
                 let node = this.data[variableName][property][0].node;
                 var pos = node.parent["statements"].indexOf(node);
@@ -9912,13 +9479,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 var st = this.createNode(prefix + varname + "=new " + type + "();", true);
                 // var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
                 statements.splice(x, 0, st); //ts.factory.createStatement(ass));
-<<<<<<< HEAD
                 // if (useMe)
                 this.addRef(varname, type);
-=======
-                if (useMe)
-                    this.addRef(varname, type);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
             return (useMe ? "me." : "") + varname;
         }
@@ -9962,22 +9524,15 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         t.expectEqual(clean(parser.getModifiedCode()) === "var myclass=new MyClass();myclass.a=9;");
     }
     async function test() {
-<<<<<<< HEAD
         var h = ts;
-=======
-        var h = typescript_1.default;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //tests(new Test());
         await Typescript_5.mytypescript.waitForInited;
         var code = Typescript_5.mytypescript.getCode("demo/hallo.tsx");
         var parser = new Parser();
         var scope = undefined; // [{ classname: "Dialog2", methodname: "layout" }];
         parser.parse(code, scope, false);
-<<<<<<< HEAD
         debugger;
         parser.addVariableInCode("Component", [{ classname: undefined, methodname: "test" }]);
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //parser.addImportIfNeeded("table2", "jassijs/ui/Table2");
         //parser.setPropertyInCode("me.button2","pp","hallo",scope);
         // var j=parser.addVariableInCode("jassijs.ui.Button",[{classname:"Dialog",methodname:"layout"  }]);
@@ -10370,11 +9925,7 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
         __metadata("design:paramtypes", [])
     ], Resizer);
 });
-<<<<<<< HEAD
 define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/ui/Component", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs_editor/ErrorPanel", "jassijs/remote/Test"], function (require, exports, Registry_31, Actions_11, Component_6, BoxPanel_4, Windows_8, HTMLPanel_1, Errors_2, ErrorPanel_3, Test_2) {
-=======
-define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/ui/Component", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs_editor/ErrorPanel", "jassijs/remote/Test"], function (require, exports, Registry_31, Actions_10, Component_6, BoxPanel_4, Windows_8, HTMLPanel_1, Errors_2, ErrorPanel_3, Test_2) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var TestAction_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -10484,11 +10035,7 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
     };
     exports.TestAction = TestAction;
     __decorate([
-<<<<<<< HEAD
         (0, Actions_11.$Action)({
-=======
-        (0, Actions_10.$Action)({
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             name: "Run Tests"
         }),
         __metadata("design:type", Function),
@@ -10496,11 +10043,7 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
         __metadata("design:returntype", Promise)
     ], TestAction, "testNode", null);
     exports.TestAction = TestAction = TestAction_1 = __decorate([
-<<<<<<< HEAD
         (0, Actions_11.$ActionProvider)("jassijs.remote.FileNode"),
-=======
-        (0, Actions_10.$ActionProvider)("jassijs.remote.FileNode"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Registry_31.$Class)("jassijs_editor.ui.TestAction")
     ], TestAction);
     class Tests {
@@ -10515,19 +10058,11 @@ define("jassijs_editor/util/Tests", ["require", "exports", "jassijs/remote/Regis
         });
     }
 });
-<<<<<<< HEAD
 define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Registry", "jassijs/remote/Config", "typescript"], function (require, exports, sourcemap_1, Server_5, Registry_32, Config_3, typescript_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TSSourceMap = void 0;
     typescript_1 = __importDefault(typescript_1);
-=======
-define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Registry", "jassijs/remote/Config", "typescript"], function (require, exports, sourcemap_1, Server_5, Registry_32, Config_3, typescript_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TSSourceMap = void 0;
-    typescript_2 = __importDefault(typescript_2);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     //var sourceMap=window["sourceMap"];
     let TSSourceMap = class TSSourceMap {
         async getCode(file) {
@@ -10554,11 +10089,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
                 var pos = jscode.indexOf("//" + "# sourceMappingURL=");
                 if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
                     var b64 = jscode.substring(pos + 50);
-<<<<<<< HEAD
                     mapcode = typescript_1.default["base64decode"](undefined, b64);
-=======
-                    mapcode = typescript_2.default["base64decode"](undefined, b64);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     //mapcode = decodeURIComponent(escape((b64)));
                 }
                 else {
@@ -10639,20 +10170,12 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
         (0, Registry_32.$Class)("jassijs_editor.util.TSSourceMap")
     ], TSSourceMap);
 });
-<<<<<<< HEAD
 define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "typescript", "jassijs_editor/ext/monaco2", "jassijs_editor/ext/monaco"], function (require, exports, Registry_33, Server_6, Config_4, typescript_2) {
-=======
-define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/remote/Config", "typescript", "jassijs_editor/ext/monaco2", "jassijs_editor/ext/monaco"], function (require, exports, Registry_33, Server_6, Config_4, typescript_3) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var Typescript_6;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.mytypescript = exports.Typescript = void 0;
-<<<<<<< HEAD
     typescript_2 = __importDefault(typescript_2);
-=======
-    typescript_3 = __importDefault(typescript_3);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     //import "jassijs_editor/ext/monaco";
     let Typescript = Typescript_6 = class Typescript {
         isInited(file) {
@@ -10679,11 +10202,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                     fileName: prefix + fileName,
                 };
                 //@ts-ignore
-<<<<<<< HEAD
                 var comp = typescript_2.default.transpileModule(content, opt);
-=======
-                var comp = typescript_3.default.transpileModule(content, opt);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 var extlen = 3;
                 if (fileName.toLowerCase().endsWith(".tsx"))
                     extlen = 4;
@@ -10747,19 +10266,11 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 Typescript_6.initMonaco();
                 //@ts-ignore
                 //  import("jassijs/ext/typescript").then(async function(ts1) {
-<<<<<<< HEAD
                 Typescript_6.ts = typescript_2.default;
                 var tsfactory = window.tsfactory;
                 for (var key in tsfactory) {
                     if (typescript_2.default[key] === undefined)
                         typescript_2.default[key] = tsfactory[key];
-=======
-                Typescript_6.ts = typescript_3.default;
-                var tsfactory = window.tsfactory;
-                for (var key in tsfactory) {
-                    if (typescript_3.default[key] === undefined)
-                        typescript_3.default[key] = tsfactory[key];
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 }
                 var _this = this;
                 var f = (await new Server_6.Server().dir(true)).resolveChilds();
@@ -10989,11 +10500,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 insertSpaceAfterKeywordsInControlFlowStatements: true,
                 insertSpaceBeforeAndAfterBinaryOperators: true,
                 newLineCharacter: "\n",
-<<<<<<< HEAD
                 indentStyle: typescript_2.default.IndentStyle.Smart,
-=======
-                indentStyle: typescript_3.default.IndentStyle.Smart,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 indentSize: 4,
                 tabSize: 4
             });
@@ -11113,11 +10620,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-<<<<<<< HEAD
                 "date": 1740653429301.0798,
-=======
-                "date": 1720101244987.3042,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
@@ -11129,11 +10632,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-<<<<<<< HEAD
                 "date": 1740761803088.7715,
-=======
-                "date": 1739909138880.0374,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}
@@ -11143,11 +10642,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-<<<<<<< HEAD
                 "date": 1740651512713.9685,
-=======
-                "date": 1719757407652.6265,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
@@ -11155,7 +10650,6 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-<<<<<<< HEAD
                 "date": 1740828811263.884,
                 "jassijs_editor.ComponentDesigner": {}
             },
@@ -11169,21 +10663,6 @@ define("jassijs_editor/registry", ["require"], function (require) {
             },
             "jassijs_editor/ComponentSpy.ts": {
                 "date": 1740510338564.4038,
-=======
-                "date": 1740075940067.0588,
-                "jassijs_editor.ComponentDesigner": {}
-            },
-            "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1739999267632.0261,
-                "jassijs_editor.ComponentExplorer": {}
-            },
-            "jassijs_editor/ComponentPalette.ts": {
-                "date": 1721754620068.305,
-                "jassijs_editor.ComponentPalette": {}
-            },
-            "jassijs_editor/ComponentSpy.ts": {
-                "date": 1719755727631.165,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -11209,11 +10688,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/DatabaseDesigner.ts": {
-<<<<<<< HEAD
                 "date": 1740518198514.8262,
-=======
-                "date": 1739905972951.1553,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -11365,11 +10840,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/HtmlDesigner.ts": {
-<<<<<<< HEAD
                 "date": 1740742771963.561,
-=======
-                "date": 1739909679697.9824,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.HtmlDesigner": {}
             },
             "jassijs_editor/modul.ts": {
@@ -11487,19 +10958,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-<<<<<<< HEAD
                 "date": 1740570775364.1863,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
                 "date": 1740742895352.4688,
-=======
-                "date": 1722105568121.3489,
-                "jassijs_editor.util.Parser": {}
-            },
-            "jassijs_editor/util/Resizer.ts": {
-                "date": 1739999435244.1797,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/Tests.ts": {
@@ -11524,11 +10987,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-<<<<<<< HEAD
                 "date": 1750449152303.9917,
-=======
-                "date": 1720115012657.7117,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/template/TemplateEmptyTSXDialog.ts": {

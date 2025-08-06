@@ -1,9 +1,5 @@
 declare module "jassijs/base/ActionNode" {
     export class ActionNode {
-<<<<<<< HEAD
-    }
-    export function test(): any;
-=======
     }
     export function test(): any;
 }
@@ -39,795 +35,6 @@ declare module "jassijs/base/Actions" {
         call: (objects: any[], params?: any) => void;
         description?: string;
     }
-    export class Actions {
-        static getActionsFor(vdata: any[]): Promise<Action[]>;
-    }
-    export function test(): any;
-}
-declare module "jassijs/base/CurrentSettings" {
-    import "async!jassijs/remote/Settings:load";
-    var currentsettings: any;
-    export { currentsettings };
-}
-declare module "jassijs/base/Errors" {
-    export class Errors {
-        static errors: Errors;
-        items: any;
-        handler: any;
-        private static _randomID;
-        /**
-        * Error handling.
-        * @class jassijs.base.Error
-        */
-        constructor();
-        addError(err: any): void;
-        /**
-         * raise if error is thrown
-         * @param {function} func - callback function
-         * @param {string} [id] - the id of the component that registers the error
-         */
-        onerror(func: any, id: any): any;
-        /**
-         * delete the error handler
-         * @param {function} func - callback function
-         * @param {string} [id] - the id of the component that registers the error
-         */
-        offerror(id: any): void;
-    }
-    var errors: Errors;
-    export { errors };
-}
-declare module "jassijs/base/Extensions" {
-    export class Extensions {
-        items: any;
-        constructor();
-        /**
-         * extend the class
-         * @param {class} type - extend the type - add functions
-         */
-        extend(classname: any, classdef: any): void;
-        forFile(file: any): unknown;
-        /**
-         * init the Extensions
-         */
-        init(): void;
-        /**
-         * extend an existing class
-         * all methods and property where copied
-         * @param {string} - the name of the class to extend
-         * @param {class} - the class
-         */
-        register(name: any, extClass: any, alias: any): void;
-    }
-    var extensions: any;
-    export default extensions;
-}
-declare module "jassijs/base/LoginDialog" {
-    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
-    import "jassijs/ext/jquerylib";
-    export function doAfterLogin(resolve: any, prot: RemoteProtocol): void;
-    export function login(): unknown;
-    export function test(): void;
-}
-declare module "jassijs/base/PropertyEditorService" {
-    import { PropertyEditor } from "jassijs/ui/PropertyEditor";
-    import { Editor } from "jassijs/ui/PropertyEditors/Editor";
-    import { Property } from "jassijs/ui/Property";
-    export class PropertyEditorService {
-        data: any;
-        private funcRegister;
-        /**
-        * manage all PropertyEditors
-        * @class jassijs.ui.PropertyEditorService
-        */
-        constructor();
-        reset(): void;
-        destroy(): void;
-        private loadType;
-        /**
-         * creates PropertyEditor for type
-         *
-         * @param {string} variablename - the name of the variable
-         * @param {jassijs.ui.Property} property - name of the type
-         * @param {jassijs.ui.PropertyEditor} propertyEditor - the PropertyEditor instance
-         */
-        createFor(property: Property, propertyEditor: PropertyEditor): Editor | Promise<any>;
-        private register;
-    }
-    var propertyeditor: PropertyEditorService;
-    export { propertyeditor };
-}
-declare module "jassijs/base/Router" {
-    export class Router {
-        constructor();
-        /**
-         * registers a database class
-         * @param {string} - the name of the class
-         * @param {class} - the class
-         */
-        register(name: any, data: any): void;
-        /**
-         * resolve the url
-         * @param {string} hash - the hash to resolve
-         */
-        resolve(hash: any): void;
-        /**
-         * generate a URL from the component
-         * @param {jassijs.ui.Component} component - the component to inspect
-         */
-        getURLFromComponent(component: any): void;
-        /**
-         *
-         * @param {string} hash - the hash to navigate
-         */
-        navigate(hash: any): void;
-    }
-    let router: Router;
-    export { router };
-}
-declare module "jassijs/base/Windows" {
-    import { Panel } from "jassijs/ui/Panel";
-    export class Windows {
-        _myLayout: any;
-        _counter: number;
-        _id: string;
-        dom: any;
-        _desktop: Panel;
-        components: any[];
-        inited: boolean;
-        private _noRestore;
-        /**
-         * the window system -> jassijs.windows
-         * @class jassijs.base.Windows
-         */
-        constructor();
-        /**
-         * inits the component
-         */
-        _init(): void;
-        /**
-         * search a window
-         * @param {object|undefined} parent - the parent window
-         * @param {type} name - name of the window
-         * @returns {object} - the founded window
-         */
-        _findDeep(parent: any, name: any): any;
-        /**
-         * true if there a window with that name
-         * @param {string} name
-         * @returns {boolean}
-         */
-        contains(name: any): boolean;
-        /**
-         * activate the window
-         * @param {string} name - the neme of the window
-         * @returns {objet} - the window
-         */
-        show(name: any): any;
-        /**
-         * finds the component for the name
-         * @param {string} name - the name of the window
-         * @returns {jassijs.ui.Component} - the found dom element
-         */
-        findComponent(name: any): any;
-        /**
-         * adds a window to the side (left - area)
-         * @param {dom|jassijs.ui.Component} component - the component to add
-         * @param {string} title - the title
-         */
-        addLeft(component: any, title: any): void;
-        /**
-        * adds a window to the side (left - area)
-        * @param {dom|jassijs.ui.Component} component - the component to add
-        * @param {string} title - the title
-        */
-        addRight(component: any, title: any): void;
-        add(component: any, title: any, name?: any): void;
-        /**
-         * add a window to the main area
-         * @param {dom|jassijs.ui.Component} component - the component to add
-         * @param {string} title - the title
-         * @param {string} [id] - the name (id) - =title if undefined
-         */
-        _add(parent: any, component: any, title: any, name?: any): void;
-        test(): void;
-        /**
-         * gets the url for the given component
-         * @param {jassijs.ui.component} comp - the component to read
-         */
-        getUrlFromComponent(comp: any): string;
-        restoreWindows(): void;
-        saveWindows(): void;
-        /**
-         * fired if component is closing
-         * @param {dom|jassijs.UI.Component} component - the component to register this event
-         * @param {function} func
-         */
-        onclose(component: any, func: any): void;
-    }
-    var windows: Windows;
-    export default windows;
-}
-declare module "jassijs/ext/fancytree" {
-    export {};
-}
-/// <amd-dependency name="goldenlayout" path="goldenlayout" />
-declare module "jassijs/ext/goldenlayout" {
-    var goldenlayout: any;
-    export default goldenlayout;
-}
-declare var def: {};
-declare module "jassijs/ext/jquerylib" {
-    import "jquery";
-    import "jquery.ui";
-    import "jquery.ui.touch";
-}
-/// <amd-dependency name="Papa" path="papaparse" />
-declare module "jassijs/ext/papaparse" {
-    var Papa: any;
-    export default Papa;
-}
-/// <amd-dependency name="spectrum" path="spectrum" />
-declare module "jassijs/ext/spectrum" { }
-/// <amd-module name="tabulator-tables" />
-/// <amd-dependency name="tabulator" path="tabulatorlib" />
-declare module "tabulator-tables" {
-    var Tabulator: any;
-    export { Tabulator };
-}
-/// <amd-dependency name="tinymce" path="tinymcelib" />
-declare module "jassijs/ext/tinymce" {
-    var tinymce: any;
-    export default tinymce;
-}
-declare module "jassijs/modul" {
-    const _default: {
-        css: {
-            "jassijs.css": string;
-            "materialdesignicons.min.css": string;
-            "jquery-ui.css": string;
-            "chosen.css": string;
-            "goldenlayout-base.css": string;
-            "goldenlayout-light-theme.css": string;
-            "contextMenu.css": string;
-        };
-        types: {
-            "node_modules/jquery/JQuery.d.ts": string;
-            "node_modules/jquery/JQueryStatic.d.ts": string;
-            "node_modules/jquery/legacy.d.ts": string;
-            "node_modules/jquery/misc.d.ts": string;
-            "node_modules/jqueryui/index.d.ts": string;
-            "node_modules/chosen-js/index.d.ts": string;
-            "node_modules/jquery.fancytree/index.d.ts": string;
-            "node_modules/requirejs/index.d.ts": string;
-            "node_modules/sizzle/index.d.ts": string;
-            "tabulator-tables.ts": string;
-        };
-        require: {
-            shim: {
-                goldenlayout: {};
-                "jquery.choosen": {};
-                "jquery.contextMenu": {};
-                'jquery.fancytree': {};
-                'jquery.fancytree.dnd': {};
-                'jquery.ui': {};
-                'jquery.notify': {};
-                'jquery.ui.touch': {};
-                spectrum: {};
-            };
-            paths: {
-                'intersection-observer': string;
-                goldenlayout: string;
-                'jquery.choosen': string;
-                'jquery.contextMenu': string;
-                'jquery.fancytree': string;
-                "jquery.fancytree.ui-deps": string;
-                'jquery.fancytree.filter': string;
-                'jquery.fancytree.multi': string;
-                'jquery.fancytree.dnd': string;
-                jquery: string;
-                'jquery.ui': string;
-                'jquery.ui.touch': string;
-                'jquery.notify': string;
-                'jquery.language': string;
-                'js-cookie': string;
-                lodash: string;
-                luxon: string;
-                papaparse: string;
-                'source.map': string;
-                spectrum: string;
-                splitlib: string;
-                tabulatorlib: string;
-                tinymcelib: string;
-                'tabulator-tables': string;
-                "reflect-metadata": string;
-            };
-        };
-        server: {
-            require: {
-                shim: {};
-                paths: {
-                    'js-cookie': string;
-                    "reflect-metadata": string;
-                    jszip: string;
-                    "js-sql-parser": string;
-                    typeorm: string;
-                    typeormbrowser: string;
-                    "window.SQL": string;
-                };
-            };
-            loadbeforestart: {};
-        };
-    };
-    export default _default;
-}
-declare module "jassijs/remote/Classes" {
-    export class JassiError extends Error {
-        constructor(msg: string);
-    }
-    /**
-    * manage all registered classes ->jassijs.register("classes")
-    * @class jassijs.base.Classes
-    */
-    export class Classes {
-        private _cache;
-        private funcRegister;
-        constructor();
-        destroy(): void;
-        /**
-         * load the a class
-         * @param classname - the class to load
-         */
-        loadClass(classname: string): unknown;
-        /**
-        * get the class of the given classname
-        * @param {string} - the classname
-        * @returns {class} - the class
-        */
-        getClass(classname: string): new (...args: any[]) => any;
-        /**
-        * get the name of the given class
-        * @param {class} _class - the class (prototype)
-        * @returns {string} name of the class
-        */
-        getClassName(_class: any): string;
-        register(data: new (...args: any[]) => any, name: string): void;
-    }
-    let classes: Classes;
-    export { classes };
-    export function test(t: any): any;
-}
-declare module "jassijs/remote/ClientError" {
-    export class ClientError extends Error {
-        constructor(msg: string);
-    }
-}
-declare module "jassijs/remote/Config" {
-    export class Config {
-        name: string;
-        isLocalFolderMapped: boolean;
-        isServer: boolean;
-        modules: {
-            [modul: string]: string;
-        };
-        server: {
-            modules: {
-                [modul: string]: string;
-            };
-        };
-        jsonData: any;
-        clientrequire: any;
-        serverrequire: any;
-        constructor();
-        init(configtext: string, name?: any): void;
-        reload(): any;
-        saveJSON(): any;
-    }
-    var config: Config;
-    export { config };
-}
-declare module "jassijs/remote/Database" {
-    export class TypeDef {
-        fields: {
-            [fieldname: string]: {
-                [decorater: string]: any[];
-            };
-        };
-        getRelation(fieldname: any): {
-            type: string;
-            oclass: any;
-        };
-    }
-    export class Database {
-        private constructor();
-        typeDef: Map<object, TypeDef>;
-        decoratorCalls: Map<object, any[]>;
-        private removeOld;
-        _setMetadata(constructor: any, field: string, decoratername: string, fieldprops: any[], decoraterprops: any[], delegate: any): void;
-        fillDecorators(): void;
-        getMetadata(sclass: any): TypeDef;
-    }
-    var db: Database;
-    export { db };
-}
-declare module "jassijs/remote/DatabaseTools" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    export class DatabaseTools extends RemoteObject {
-        static runSQL(sql: string, parameter?: any[], context?: Context): unknown;
-        static dropTables(tables: string[]): Promise<string>;
-    }
-    export function test(): any;
-}
-declare module "jassijs/remote/DBArray" {
-    export class DBArray
-    /**
-    * Array for jassijs.base.DBObject's
-    * can be saved to db
-    * @class jassijs.base.DBArray
-    */
-     extends Array {
-        constructor(...args: {});
-        private _parentObject;
-        private _parentObjectMember;
-        /**
-         * adds an object
-         * if the object is linked to an other object then update this
-         * @param {object} ob - the object to add
-         */
-        add(ob: any): void;
-        /**
-         * for compatibility
-         */
-        resolve(): unknown;
-        /**
-         * remove an object
-         * if the object is linked to an other object then update this
-         * @param {object} ob - the object to remove
-         */
-        remove(ob: any): void;
-    }
-}
-declare module "jassijs/remote/DBObject" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    import { EntityOptions } from "jassijs/util/DatabaseSchema";
-    import { ValidationError } from "jassijs/remote/Validator";
-    export function $DBObject(options?: EntityOptions): Function;
-    export class MyFindManyOptions {
-        relations?: string[];
-        [sampleproperty: string]: any;
-        /**
-         *
-         * where e.g. id>5
-         */
-        where?: string;
-        /**
-         * e.g. where:"id>:param" ,whereParams:{param:5}
-         */
-        whereParams?: any;
-        /**
-       * Offset (paginated) where from entities should be taken.
-       */
-        skip?: number;
-        /**
-         * Limit (paginated) - max number of entities should be taken.
-         */
-        take?: number;
-        /**
-        * Order, in which entities should be ordered.
-        */
-        order?: {
-            [field: string]: "ASC" | "DESC" | 1 | -1;
-        };
-    }
-    /**
-    * base class for all database entfities
-    * all objects which use the jassijs.db must implement this
-    * @class DBObject
-    */
-    export class DBObject extends RemoteObject {
-        id: number | string;
-        private static cache;
-        private static _init;
-        private static _initFunc;
-        constructor();
-        isAutoId(): boolean;
-        static getFromCache(classname: string, id: number | string): DBObject;
-        validate(options?: any, throwError?: boolean): Promise<ValidationError[]>;
-        private static addToCache;
-        static clearCache(classname: string): void;
-        removeFromCache(): void;
-        static _createObject(ob: any): DBObject;
-        /**
-         * replace all childs objects with {id:}
-         */
-        private _replaceObjectWithId;
-        /**
-        * save the object to jassijs.db
-        */
-        save(context?: Context): unknown;
-        _createObjectInDB(context?: Context): unknown;
-        static findOne(options?: any, context?: Context): Promise<DBObject>;
-        static find(options?: MyFindManyOptions, context?: Context): Promise<DBObject[]>;
-        /**
-        * reload the object from jassijs.db
-        */
-        remove(context?: Context): unknown;
-        _getObjectProperty(dummy: any): void;
-        _setObjectProperty(dummy: any, dumm1: any): void;
-    }
-    export function test(): any;
-}
-declare module "jassijs/remote/DBObjectQuery" {
-    import { DBObject } from "jassijs/remote/DBObject";
-    export class DBObjectQueryProperties {
-        name: string;
-        description?: string;
-    }
-    export function $DBObjectQuery(property: DBObjectQueryProperties): Function;
-    export class DBObjectQuery {
-        classname: string;
-        name: string;
-        description: string;
-        _function: any;
-        execute(): Promise<DBObject>;
-        static getQueries(classname: string): Promise<DBObjectQuery[]>;
-    }
-    export function test(): any;
-}
-declare module "jassijs/remote/Extensions" {
-    export function $Extension(forclass: any): Function;
-    class ExtensionTarget {
-        oclass: any;
-        addFunction(name: string, func: (...any: {}) => any, ifExists: "replace" | "append" | "prepend"): void;
-        addMember(name: string): void;
-        annotateMember(member: any, type: any, ...annotations: {}): void;
-    }
-    export interface ExtensionProvider {
-        initExtensions(extend: ExtensionTarget): any;
-    }
-    export class Extensions {
-        constructor();
-        private funcRegister;
-        destroy(): void;
-        annotate(oclass: any, ...annotations: {}): void;
-        register(extensionclass: new (...args: any[]) => any, forclass: any): void;
-        annotateMember(classname: any, member: any, type: any, ...annotations: {}): void;
-    }
-    var extensions: Extensions;
-    export { extensions };
-}
-declare module "jassijs/remote/FileNode" {
-    export class FileNode {
-        name: string;
-        fullpath?: string;
-        parent?: FileNode;
-        files?: FileNode[];
-        date?: any;
-        flag?: string;
-        constructor(fullpath?: string);
-        isDirectory?(): boolean;
-        resolveChilds?(all?: {
-            [path: string]: FileNode;
-        }): {
-            [path: string]: FileNode;
-        };
-    }
-}
-declare module "jassijs/remote/hallo" {
-    export class OO {
-        hallo: string;
-        static test(): void;
-    }
-}
-declare module "jassijs/remote/Jassi" {
-    global {
-        export interface ExtensionAction {
-            componentDesignerSetDesignMode?: {
-                enable: boolean;
-                componentDesigner: any;
-            };
-            componentDesignerComponentCreated?: {
-                newParent: any;
-            };
-            componentDesignerInvisibleComponentClicked?: {
-                codeEditor: any;
-                designButton: any;
-            };
-        }
-    }
-    global {
-        interface String {
-            replaceAll: any;
-        }
-    }
-    /**
-    * main class for jassi
-    * @class Jassi
-    */
-    export class Jassi {
-        [key: string]: any;
-        base: {
-            [k: string]: any;
-        };
-        options: any;
-        isServer: boolean;
-        cssFiles: {
-            [key: string]: string;
-        };
-        constructor();
-        includeCSSFile(modulkey: string): void;
-        /**
-         * include a global stylesheet
-         * @id - the given id - important for update
-         * @data - the css data to insert
-         **/
-        includeCSS(id: string, data: {
-            [cssselector: string]: any;
-        }): void;
-        /**
-        * include a js or a css file
-        * @param {string|string[]} href - url(s) of the js or css file(s)
-        * @param {function} [param] - would be added with? to the url
-        */
-        myRequire(href: any, event?: any, param?: any): void;
-    }
-    global {
-        class JassiStatic extends Jassi {
-        }
-    }
-}
-declare var jassijs: JassiStatic;
-declare module "jassijs/remote/Modules" {
-    class Modules {
-        modules: {
-            [modul: string]: string;
-        };
-        server: Modules;
-        constructor();
-    }
-    var modules: Modules;
-    export { modules };
-}
-declare module "jassijs/remote/ObjectTransaction" {
-    import { Context } from "jassijs/remote/RemoteObject";
-    import { TransactionItem } from "jassijs/remote/Transaction";
-    export class ObjectTransaction {
-        statements: TransactionItem[];
-        saveresolve: any[];
-        private functionsFinally;
-        transactionResolved(context: Context): void;
-        addFunctionFinally(functionToAdd: () => any): void;
-        checkFinally(): void;
-        finally(): any;
-    }
-}
-declare module "jassijs/remote/Registry" {
-    import "reflect-metadata";
-    export function $Class(longclassname: string): Function;
-    export function $register(servicename: string, ...params: {}): Function;
-    class DataEntry {
-        oclass: new (...args: any[]) => any;
-        params: any[];
-    }
-    class JSONDataEntry {
-        classname: string;
-        params: any[];
-        filename: string;
-    }
-    /**
-    * Manage all known data registered by jassijs.register
-    * the data is downloaded by /registry.json
-    * registry.json is updated by the server on code upload
-    * @class jassijs.base.Registry
-    */
-    export class Registry {
-        private _nextID;
-        jsondata: {
-            [service: string]: {
-                [classname: string]: JSONDataEntry;
-            };
-        };
-        data: {
-            [service: string]: {
-                [classname: string]: DataEntry;
-            };
-        };
-        dataMembers: {
-            [service: string]: {
-                [classname: string]: {
-                    [membername: string]: any[];
-                };
-            };
-        };
-        jsondataMembers: {
-            [service: string]: {
-                [classname: string]: {
-                    [membername: string]: any[];
-                };
-            };
-        };
-        private isLoading;
-        _eventHandler: {
-            [service: string]: any[];
-        };
-        constructor();
-        getData(service: string, classname?: string): DataEntry[];
-        onregister(service: string, callback: (oclass: new (...args: any[]) => any, ...params: {}) => void): (oclass: new (...args: any[]) => any, ...params: {}) => void;
-        offregister(service: string, callback: (oclass: new (...args: any[]) => any, ...params: {}) => void): void;
-        /**
-         * register an anotation
-         * Important: this function should only used from an annotation, because the annotation is saved in
-         *            index.json and could be read without loading the class
-         **/
-        register(service: string, oclass: new (...args: any[]) => any, ...params: {}): void;
-        getMemberData(service: string): {
-            [classname: string]: {
-                [membername: string]: any[];
-            };
-        };
-        getJSONMemberData(service: string): {
-            [classname: string]: {
-                [membername: string]: any[];
-            };
-        };
-        /**
-         * register an anotation
-         * Important: this function should only used from an annotation
-         **/
-        registerMember(service: string, oclass: any, membername: string, ...params: {}): void;
-        /**
-        * with every call a new id is generated - used to create a free id for the dom
-        * @returns {number} - the id
-        */
-        nextID(): any;
-        /**
-        * Load text with Ajax synchronously: takes path to file and optional MIME type
-        * @param {string} filePath - the url
-        * @returns {string} content
-        */ private loadText;
-        /**
-         * reload the registry
-         */
-        reload(): any;
-        /**
-        * loads entries from json string
-        * @param {string} json - jsondata
-        */
-        initJSONData(json: any): void;
-        /**
-         *
-         * @param service - the service for which we want informations
-         */
-        getJSONData(service: string, classname?: string): Promise<JSONDataEntry[]>;
-        getAllFilesForService(service: string, classname?: string): string[];
-        loadAllFilesForEntries(entries: JSONDataEntry[]): any;
-        /**
-         * load all files that registered the service
-         * @param {string} service - name of the service
-         * @param {function} callback - called when loading is finished
-         */
-        loadAllFilesForService(service: string): any;
-        /**
-         * load all files
-         * @param {string} files - the files to load
-         */
-        loadAllFiles(files: string[]): unknown;
-    }
-    var registry: Registry;
-    export default registry;
-    export function migrateModul(oldModul: any, newModul: any): void;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
-}
-declare module "jassijs/remote/RemoteObject" {
-    export class Context {
-        isServer: boolean;
-        [key: string]: any;
-    }
-    export class RemoteObject {
-        static call(method: (...ars: any) => any, ...parameter: {}): unknown;
-        call(_this: any, method: (...ars: any) => any, ...parameter: {}): unknown;
-    }
-<<<<<<< HEAD
     export class Actions {
         static getActionsFor(vdata: any[]): Promise<Action[]>;
     }
@@ -1674,9 +881,6 @@ declare module "jassijs/remote/RemoteObject" {
     }
     export function test(): any;
 }
-=======
-}
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/remote/RemoteProtocol" {
     export class RemoteProtocol {
         static counter: number;
@@ -1696,11 +900,7 @@ declare module "jassijs/remote/RemoteProtocol" {
         /**
        * call the server
        */
-<<<<<<< HEAD
         call(): any;
-=======
-        call(): unknown;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
          * converts jsonstring to an object
          */
@@ -1708,7 +908,6 @@ declare module "jassijs/remote/RemoteProtocol" {
         test(): any;
     }
 }
-<<<<<<< HEAD
 declare module "jassijs/remote/RemoteTest" {
     import { Context } from "jassijs/remote/RemoteObject";
     export class RemoteTest {
@@ -1781,8 +980,6 @@ declare function writeIndexDB(dbName: any, storeName: any, key: any, value: any)
 declare function readIndexDB(dbName: any, storeName: any, key: any): unknown;
 declare function runLocalServerIfNeeded(): any;
 declare function test(): any;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/remote/security/Group" {
     import { DBObject } from "jassijs/remote/DBObject";
     import { ParentRight } from "jassijs/remote/security/ParentRight";
@@ -1851,13 +1048,8 @@ declare module "jassijs/remote/security/Setting" {
         constructor();
         data: string;
         save(context?: Context): any;
-<<<<<<< HEAD
         static findOne(options?: any): Promise<DBObject>;
         static find(options?: MyFindManyOptions): Promise<DBObject[]>;
-=======
-        static findOne(options?: any, context?: Context): Promise<DBObject>;
-        static find(options?: MyFindManyOptions, context?: Context): Promise<DBObject[]>;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
         * reload the object from jassijs.db
         */
@@ -1886,15 +1078,9 @@ declare module "jassijs/remote/security/User" {
     export function test2(): any;
 }
 declare module "jassijs/remote/Server" {
-<<<<<<< HEAD
     import { Context } from "jassijs/remote/RemoteObject";
     import { FileNode } from "jassijs/remote/FileNode";
     export class Server {
-=======
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    import { FileNode } from "jassijs/remote/FileNode";
-    export class Server extends RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         private static isonline;
         static filesInMap: {
             [name: string]: {
@@ -1913,21 +1099,13 @@ declare module "jassijs/remote/Server" {
         * @returns {string[]} - list of files
         */
         dir(withDate?: boolean, context?: Context): Promise<FileNode>;
-<<<<<<< HEAD
         zip(directoryname: string, serverdir?: boolean): unknown;
-=======
-        zip(directoryname: string, serverdir?: boolean, context?: Context): unknown;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
          * gets the content of a file from server
          * @param {string} fileNamew
          * @returns {string} content of the file
          */
-<<<<<<< HEAD
         loadFiles(fileNames: string[]): Promise<{
-=======
-        loadFiles(fileNames: string[], context?: Context): Promise<{
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             [id: string]: string;
         }>;
         /**
@@ -1947,11 +1125,7 @@ declare module "jassijs/remote/Server" {
         * @param {string} fileName - the name of the file
         * @param {string} content
         */
-<<<<<<< HEAD
         saveFile(fileName: string, content: string): Promise<string>;
-=======
-        saveFile(fileName: string, content: string, context?: Context): Promise<string>;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
        * deletes a server modul
        **/
@@ -1977,11 +1151,7 @@ declare module "jassijs/remote/Server" {
          **/
         createFile(filename: string, content: string, context?: Context): Promise<string>;
         /**
-<<<<<<< HEAD
         * creates a folder
-=======
-        * creates a file
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         **/
         createFolder(foldername: string, context?: Context): Promise<string>;
         createModule(modulename: string, context?: Context): Promise<string>;
@@ -1996,347 +1166,8 @@ declare module "jassijs/remote/Serverservice" {
     }
     var runningServerservices: {};
     export function beforeServiceLoad(func: (name: string, props: ServerserviceProperties) => void): void;
-<<<<<<< HEAD
     global {
         interface Serverservice {
-=======
-    global {
-        interface Serverservice {
-        }
-    }
-    var serverservices: Serverservice;
-    export function $Serverservice(properties: ServerserviceProperties): Function;
-    var doNotReloadModule: boolean;
-    export { serverservices, doNotReloadModule, runningServerservices };
-}
-declare module "jassijs/remote/Settings" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    import { Test } from "./Test";
-    global {
-        export interface KnownSettings {
-        }
-    }
-    export class Settings extends RemoteObject {
-        static keys: KnownSettings;
-        private static browserSettings;
-        private static userSettings;
-        private static allusersSettings;
-        /**
-        * loads the settings
-        */
-        static load(context?: Context): unknown;
-        static getAll(scope: "browser" | "user" | "allusers"): {};
-        gets<T>(Settings_key: T): T;
-        static remove(Settings_key: string, scope: "browser" | "user" | "allusers", context?: Context): any;
-        static save<T>(Settings_key: T, value: T, scope: "browser" | "user" | "allusers"): unknown;
-        static saveAll(namevaluepair: {
-            [key: string]: any;
-        }, scope: "browser" | "user" | "allusers", removeOtherKeys?: boolean, context?: Context): unknown;
-    }
-    var settings: Settings;
-    export { settings };
-    export function $SettingsDescriptor(): Function;
-    export function autostart(): any;
-    export function test(t: Test): any;
-    export function load(): unknown;
-}
-declare module "jassijs/remote/Test" {
-    export class Test {
-        /**
-         * fails if the condition is false
-         * @parameter condition
-         **/
-        expectEqual(condition: boolean): void;
-        /**
-         * fails if the func does not throw an error
-         * @parameter func - the function that should failed
-         **/
-        expectError(func: any): void;
-        /**
-        * fails if the func does not throw an error
-        * @parameter func - the function that should failed
-        **/
-        expectErrorAsync(func: any): any;
-    }
-}
-declare module "jassijs/remote/Transaction" {
-    import { RemoteObject } from "jassijs/remote/RemoteObject";
-    import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
-    export class TransactionItem {
-        transaction: Transaction;
-        obj: any;
-        method: (...args: {}) => any;
-        params: any[];
-        promise: Promise<any>;
-        result: any;
-        remoteProtocol: RemoteProtocol;
-        resolve: any;
-    }
-    export class Transaction extends RemoteObject {
-        private statements;
-        private ready;
-        private context;
-        execute(): Promise<any[]>;
-        wait(transactionItem: TransactionItem, prot: RemoteProtocol): Promise<any>;
-        private sendRequest;
-        private doServerStatement;
-        add(obj: any, method: (...args: {}) => any, ...params: {}): void;
-    }
-}
-declare module "jassijs/remote/Validator" {
-    import "reflect-metadata";
-    import { Test } from "jassijs/remote/Test";
-    export class ValidationOptions {
-        message?: string;
-    }
-    export function registerValidation(name: string, options: ValidationOptions, func: (target: any, propertyName: string, value: any, options: any) => string): (target: any, propertyKey: string, parameterIndex: number) => void;
-    export class ValidationError {
-        value: object;
-        target: object;
-        property: string;
-        message: string;
-        constructor(value: any, target: any, property: string, message: string);
-    }
-    class ValidateOptions {
-        /**
-         * e.g. {ValidateInt:{optional:false}} delegates optional:false to all ValidateInt rules
-         * e.g. {ALL:{optional:false}} delegates optional:false to all Validators rules}
-         */
-        delegateOptions?: {
-            [ValidatorClassName: string]: any;
-        };
-    }
-    export function validate(obj: any, options?: ValidateOptions, raiseError?: boolean): ValidationError[];
-    export class ValidationIsArrayOptions extends ValidationOptions {
-        optional?: boolean;
-        type?: (type?: any) => any;
-        alternativeJsonProperties?: string[];
-    }
-    export function ValidateIsArray(options?: ValidationIsArrayOptions): Function;
-    export class ValidationIsBooleanOptions extends ValidationOptions {
-        optional?: boolean;
-        type?: any;
-    }
-    export function ValidateIsBoolean(options?: ValidationIsBooleanOptions): Function;
-    export class ValidationIsDateOptions extends ValidationOptions {
-        optional?: boolean;
-    }
-    export function ValidateIsDate(options?: ValidationIsDateOptions): Function;
-    export function ValidateFunctionParameter(): Function;
-    export class ValidationIsInOptions extends ValidationOptions {
-        optional?: boolean;
-        in: any[];
-    }
-    export function ValidateIsIn(options?: ValidationIsInOptions): Function;
-    export class ValidationIsInstanceOfOptions extends ValidationOptions {
-        optional?: boolean;
-        type: (type?: any) => any;
-        /**
-         * ["id"] means an object {id:9} is also a valid type
-         */
-        alternativeJsonProperties?: string[];
-    }
-    export function ValidateIsInstanceOf(options?: ValidationIsInstanceOfOptions): Function;
-    export class ValidationIsIntOptions extends ValidationOptions {
-        optional?: boolean;
-    }
-    export function ValidateIsInt(options?: ValidationIsIntOptions): Function;
-    export class ValidationMaxOptions extends ValidationOptions {
-        max: number;
-    }
-    export function ValidateMax(options: ValidationMaxOptions): Function;
-    export class ValidationMinOptions extends ValidationOptions {
-        min: number;
-    }
-    export function ValidateMin(options: ValidationMinOptions): Function;
-    export class ValidationIsNumberOptions extends ValidationOptions {
-        optional?: boolean;
-    }
-    export function ValidateIsNumber(options?: ValidationIsNumberOptions): Function;
-    export class ValidationIsStringOptions extends ValidationOptions {
-        optional?: boolean;
-    }
-    export function ValidateIsString(options?: ValidationIsIntOptions): Function;
-    export function test(test: Test): any;
-}
-declare module "jassijs/security/GroupView" {
-    import { Group } from "jassijs/remote/security/Group";
-    import { DBObjectView } from "jassijs/ui/DBObjectView";
-    export class GroupView extends DBObjectView<Group> {
-        get title(): string;
-        render(): any;
-    }
-    export function test(): unknown;
-}
-declare module "jassijs/security/UserView" {
-    import { User } from "jassijs/remote/security/User";
-    import { DBObjectView, DBObjectViewProperties } from "jassijs/ui/DBObjectView";
-    import { Group } from "jassijs/remote/security/Group";
-    interface UserViewProperties extends DBObjectViewProperties<User> {
-        items?: Group[];
-    }
-    export class UserView extends DBObjectView<User, UserViewProperties> {
-        get title(): string;
-        render(): any;
-        createObject(): any;
-    }
-    export function test(): unknown;
-}
-declare module "jassijs/ui/ActionNodeMenu" {
-    import { Menu } from "jassijs/ui/Menu";
-    import { Panel, PanelProperties } from "jassijs/ui/Panel";
-    type Me = {
-        menu?: Menu;
-    };
-    export class ActionNodeMenuProperties {
-    }
-    export class ActionNodeMenu<T extends ActionNodeMenuProperties = {}> extends Panel<ActionNodeMenuProperties> {
-        me: Me;
-        constructor(props?: ActionNodeMenuProperties);
-        config(config: PanelProperties): ActionNodeMenu;
-        layout(me: Me): void;
-        fillActions(): any;
-    }
-    export function test(): unknown;
-}
-/// <amd-dependency name="Split" path="splitlib" />
-declare module "jassijs/ui/BoxPanel" {
-    import { Panel, PanelProperties } from "jassijs/ui/Panel";
-    export interface BoxPanelProperties extends PanelProperties {
-        /**
-         * @member {boolean} - if true then the components are composed horizontally
-         **/
-        horizontal?: boolean;
-        /**
-          * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
-          */
-        spliter?: number[];
-    }
-    export class BoxPanel<T extends BoxPanelProperties = BoxPanelProperties> extends Panel<T> implements BoxPanelProperties {
-        _horizontal: boolean;
-        private _spliter;
-        private _splitcomponent;
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties?: BoxPanelProperties);
-        config(config: T): BoxPanel;
-        set horizontal(value: boolean);
-        get horizontal(): boolean;
-        /**
-        * adds a component to the container
-        * @param {jassijs.ui.Component} component - the component to add
-        */
-        add(component: any): void;
-        /**
-        * adds a component to the container before an other component
-        * @param {jassijs.ui.Component} component - the component to add
-        * @param {jassijs.ui.Component} before - the component before then component to add
-        */
-        addBefore(component: any, before: any): void;
-        set spliter(size: number[]);
-        get spliter(): number[];
-        updateSpliter(): void;
-    }
-    export function test(): unknown;
-}
-declare module "jassijs/ui/Button" {
-    import { Component, ComponentProperties } from "jassijs/ui/Component";
-    export interface ButtonProperties extends ComponentProperties {
-        domProperties?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-        /**
-      * register an event if the button is clicked
-      * @param {function} handler - the function that is called on change
-      */
-        onclick?(handler: any, removeOldHandler: boolean): any;
-        /**
-       * @member {string} - the icon of the button
-       */
-        icon?: string;
-        /**
-     * @member {string} - the caption of the button
-     */
-        text?: string;
-    }
-    export class Button<T extends ButtonProperties = ButtonProperties> extends Component<T> implements ButtonProperties {
-        constructor(properties?: ButtonProperties);
-        config(config: T, forceRender?: boolean): Button<T>;
-        get dom(): HTMLButtonElement;
-        set dom(value: HTMLButtonElement);
-        render(): any;
-        onclick(handler: any, removeOldHandler?: boolean): any;
-        set icon(icon: string);
-        get icon(): string;
-        set text(value: string);
-        get text(): string;
-        toggle(setDown?: any): any;
-        destroy(): void;
-    }
-    export function test(): unknown;
-}
-declare module "jassijs/ui/Calendar" {
-    import "jassijs/ext/jquerylib";
-    import { Textbox, TextboxProperties } from "jassijs/ui/Textbox";
-    export interface CalendarProperties extends TextboxProperties {
-        /**
-        * @member  - the date
-        */
-        value?: any;
-    }
-    export class Calendar<T extends CalendarProperties = TextboxProperties> extends Textbox<T> implements CalendarProperties {
-        constructor(properties?: any);
-        config(config: T): Calendar;
-        get value(): any;
-        set value(val: any);
-        static parseDate(date: string, format?: any, settings?: any): any;
-        static formatDate(date: Date, format?: any, settings?: any): any;
-    }
-    export function test(): Calendar<TextboxProperties>;
-}
-declare module "jassijs/ui/Checkbox" {
-    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
-    export interface CheckboxProperties extends DataComponentProperties {
-        domProperties?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-        /**
-      * register an event if the button is clicked
-      * @param {function} handler - the function that is called on change
-      */
-        onclick?(handler: any): any;
-        /**
-         * @member - true or "true" if selected
-         */
-        value?: string | boolean;
-        /**
-        * @member {string} - the caption of the button
-        */
-        text?: string;
-    }
-    export class Checkbox<T extends CheckboxProperties = CheckboxProperties> extends DataComponent<T> implements CheckboxProperties {
-        private checkbox;
-        constructor(properties?: CheckboxProperties);
-        componentDidMount(): void;
-        render(): any;
-        config(config: T): Checkbox;
-        onclick(handler: any): void;
-        set value(value: string | boolean);
-        get value(): string | boolean;
-        set text(value: string);
-        get text(): string;
-    }
-    export function test(): Checkbox<CheckboxProperties>;
-}
-declare module "jassijs/ui/Component" {
-    import { States } from "jassijs/ui/State";
-    global {
-        interface Element {
-            _this: Component<any>;
-            _id?: string;
-            _thisOther: Component<any>[];
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     }
     var serverservices: Serverservice;
@@ -2692,7 +1523,6 @@ declare module "jassijs/ui/Checkbox" {
         */
         text?: string;
     }
-<<<<<<< HEAD
     export class Checkbox<T extends CheckboxProperties = CheckboxProperties> extends DataComponent<T> implements CheckboxProperties {
         private checkbox;
         constructor(properties?: CheckboxProperties);
@@ -2723,9 +1553,6 @@ declare module "jassijs/ui/Component" {
     }
     export interface SimpleComponentProperties extends Omit<ComponentProperties, "height" | "hidden" | "label" | "replaceNode" | "style" | "styles" | "tooltip" | "contextMenu" | "useWrapper" | "width" | "x" | "y" | "onblur" | "onfocus"> {
     }
-=======
-    export function $UIComponent(properties: UIComponentProperties): Function;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export interface ComponentProperties {
         exists?: boolean;
         /**
@@ -2790,10 +1617,7 @@ declare module "jassijs/ui/Component" {
         namespace React {
             interface ClassAttributes<T> extends React.RefAttributes<T> {
                 exists?: boolean;
-<<<<<<< HEAD
                 label?: string;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
             interface Component<P = {}, S = {}, SS = any> {
                 context?: never;
@@ -2825,14 +1649,6 @@ declare module "jassijs/ui/Component" {
     export function jc<P extends {}>(type: React.FunctionComponent<P> | React.ComponentClass<P> | string, props?: React.Attributes & P | null, ...children: React.ReactNode[]): React.ReactElement<P>;
     export function createComponent<T>(node: React.FunctionComponentElement<T>): FunctionComponent<T>;
     export function createComponent<T>(node: React.ReactElement<T>): T;
-<<<<<<< HEAD
-=======
-    export function createRef<T>(val?: T): Ref<T>;
-    export type Ref<T> = {
-        current: T;
-    };
-    export function createRefs<T>(): T;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export class Component<T extends ComponentProperties = {}> implements React.Component<T> {
         refs: any;
         props: T;
@@ -2944,10 +1760,7 @@ declare module "jassijs/ui/Component" {
         constructor(properties: T);
         config(config: T, forceRender?: boolean): FunctionComponent<T>;
         render(): any;
-<<<<<<< HEAD
         set connectComponents(value: any);
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
         * adds a component to the container
         * @param {jassijs.ui.Component} component - the component to add
@@ -3025,10 +1838,7 @@ declare module "jassijs/ui/Component" {
         get text(): string;
         set text(value: string);
     }
-<<<<<<< HEAD
     export function migrateModul(oldModul: any, newModul: any): void;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 }
 declare module "jassijs/ui/ComponentDescriptor" {
     import { Property } from "jassijs/ui/Property";
@@ -3071,11 +1881,8 @@ declare module "jassijs/ui/ComponentDescriptor" {
 }
 declare module "jassijs/ui/Container" {
     import { Component, ComponentProperties } from "jassijs/ui/Component";
-<<<<<<< HEAD
     export interface SimpleContainerProperties extends Omit<ComponentProperties, "children"> {
     }
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export interface ContainerProperties extends ComponentProperties {
         /**
          * child components
@@ -3505,11 +2312,7 @@ declare module "jassijs/ui/DBObjectView" {
         ondeleted?(handler: (obj: DBObject) => void): any;
         value?: T;
     }
-<<<<<<< HEAD
     export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewProperties<P> = DBObjectViewProperties<P>> extends Panel<T> {
-=======
-    export class DBObjectView<P extends DBObject = DBObject, T extends DBObjectViewProperties<P> = DBObjectViewProperties<P>> extends Panel<T> implements Omit<Panel, "isAbsolute"> {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         constructor(props?: T);
         config(config: T): DBObjectView;
         set value(value: P);
@@ -3920,11 +2723,8 @@ declare module "jassijs/ui/OptionDialog" {
 declare module "jassijs/ui/Panel" {
     import { Container, ContainerProperties } from "jassijs/ui/Container";
     import { Component } from "jassijs/ui/Component";
-<<<<<<< HEAD
     export interface SimplePanelProperties extends Omit<PanelProperties, "isAbsolute" | "useSpan" | "domProperties"> {
     }
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export interface PanelProperties extends ContainerProperties {
         /**
           * @param {boolean} the elements are ordered absolute
@@ -4810,42 +3610,6 @@ declare module "jassijs/ui/PropertyEditors/TableColumnImport" {
     }
     export function test(): unknown;
 }
-<<<<<<< HEAD
-=======
-declare module "jassijs/ui/Repeater" {
-    import "jassijs/ext/jquerylib";
-    import "jquery.choosen";
-    import { Component } from "jassijs/ui/Component";
-    import { DataComponent, DataComponentProperties } from "jassijs/ui/DataComponent";
-    import { BoundProperty } from "jassijs/ui/State";
-    export interface RepeaterProperties extends DataComponentProperties {
-        items?: any[];
-        value?: any;
-        children?: any;
-    }
-    export class Repeater<T extends RepeaterProperties = RepeaterProperties> extends DataComponent<T> {
-        _components: {};
-        _items: any;
-        _bindItems?: BoundProperty;
-        constructor(properties?: RepeaterProperties);
-        render(): any;
-        onchange(handler: any): void;
-        set value(value: any);
-        get value(): any;
-        set items(value: any);
-        get items(): any;
-        private duplicateChildren;
-        private createRepeatingItem;
-        config(config: T, forceRender?: boolean): Repeater;
-        add(component: any): void;
-        addBefore(component: Component, before: Component): void;
-        remove(component: any, destroy?: boolean): void;
-        removeAll(destroy?: any): void;
-        destroy(): void;
-    }
-    export function test(): unknown;
-}
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/ui/Select" {
     import "jassijs/ext/jquerylib";
     import "jquery.choosen";
@@ -4906,11 +3670,7 @@ declare module "jassijs/ui/Select" {
         get display(): string | Function;
         set items(value: any);
         get items(): any;
-<<<<<<< HEAD
         set width(value: string | number);
-=======
-        set width(value: number);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         set value(sel: any);
         get value(): any;
         /**
@@ -4981,28 +3741,20 @@ declare module "jassijs/ui/State" {
     export function foreach(stateWithArray: {
         current: any[];
     }, func: (ob: any) => any): State<React.ReactElement>;
-<<<<<<< HEAD
     export function createRef<T>(val?: T): Ref<T>;
     export type Ref<T> = {
         current: T;
     };
     export function createRefs<T>(): T;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     export type States<T> = {
         [Property in keyof T]: States<T[Property]> & {
             bind?: BoundProperty<T[Property]>;
         };
     } & {
         current: T;
-<<<<<<< HEAD
         self: any;
         _used?: string[];
         _onStateChanged?: (handler: (value: any, state: State) => void) => void;
-=======
-        _used?: string[];
-        _onStateChanged?: (handler: (value: any) => void) => void;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     };
     export function createStates<T>(initialValues?: T, propertyname?: string): States<T>;
     export type OnlyType<T, D> = {
@@ -5636,7 +4388,6 @@ declare module "jassijs/ui/Tree" {
     }
     export function test(): unknown;
 }
-<<<<<<< HEAD
 declare module "jassijs/ui/UIComponent" {
     export class UIComponentProperties {
         /**
@@ -5658,8 +4409,6 @@ declare module "jassijs/ui/UIComponent" {
     }
     export function $UIComponent(properties: UIComponentProperties): Function;
 }
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs/ui/Upload" {
     import { Component, ComponentProperties } from "jassijs/ui/Component";
     export interface UploadProperties extends ComponentProperties {
@@ -5670,21 +4419,14 @@ declare module "jassijs/ui/Upload" {
     }
     export class Upload<T extends UploadProperties = UploadProperties> extends Component<T> implements UploadProperties {
         constructor(props?: UploadProperties);
-<<<<<<< HEAD
         private downloaded;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         render(): any;
         config(config: T): Upload;
         componentDidMount(): void;
         get dom(): HTMLInputElement;
         set dom(value: HTMLInputElement);
-<<<<<<< HEAD
         get readAs(): "Text" | "DataUrl" | "ArrayBuffer" | "BinaryString";
         set readAs(value: "Text" | "DataUrl" | "ArrayBuffer" | "BinaryString");
-=======
-        readAs: "Text" | "DataUrl" | "ArrayBuffer" | "BinaryString";
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         get accept(): string;
         /**
          * which file types are accepted e.g ".txt,.csv"
@@ -5695,10 +4437,7 @@ declare module "jassijs/ui/Upload" {
          * multiple files can be uploaded
          **/
         set multiple(value: boolean);
-<<<<<<< HEAD
         private handleDownload;
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         private readUpload;
         /**
          * register handler to get the uploaded data

@@ -370,11 +370,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-<<<<<<< HEAD
 		"date": 1750449152303.9917,
-=======
-		"date": 1720115012657.7117,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 		"jassijs_editor.util.Typescript": {}
 	},
 	"jassijs_editor/template/TemplateEmptyTSXDialog.ts": {

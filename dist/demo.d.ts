@@ -1,7 +1,6 @@
 declare module "demo/DelTest" {
     export function test(): any;
 }
-<<<<<<< HEAD
 declare module "demo/Dialog1" {
     import { HTMLComponent } from "jassijs/ui/Component";
     import { Component, SimpleComponentProperties } from "jassijs/ui/Component";
@@ -20,27 +19,6 @@ declare module "demo/Dialog1" {
 }
 declare module "demo/Dialog2" {
     export function test(): any;
-=======
-declare module "demo/Dialog2" {
-    import { Button } from "jassijs/ui/Button";
-    import { Table } from "jassijs/ui/Table";
-    import { Textbox } from "jassijs/ui/Textbox";
-    import { Panel } from "jassijs/ui/Panel";
-    type Me = {
-        boxpanel?: Panel;
-        button?: Button;
-        button2?: Button;
-        textbox?: Textbox;
-        table?: Table;
-    };
-    export class Dialog2 extends Panel {
-        me: Me;
-        data: string;
-        constructor(data: any);
-        layout(me: Me): void;
-    }
-    export function test(): unknown;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 }
 declare module "demo/Dialog7" {
     import { Panel } from "jassijs/ui/Panel";
@@ -54,56 +32,6 @@ declare module "demo/Dialog8" {
     import { Panel } from "jassijs/ui/Panel";
     export class Dialog7 extends Panel {
         render(): any;
-    }
-    export function test(): unknown;
-}
-declare module "demo/ExistsIfTest" {
-    import { Component } from "jassijs/ui/Component";
-    export class PlaceholderComponentNotExists extends Component {
-        inactiveNode: React.ReactNode;
-        constructor(properties: any);
-        render(): any;
-    }
-    export function test(): unknown;
-}
-<<<<<<< HEAD
-declare module "demo/ExistsIfTest2" {
-    export function test(): any;
-=======
-declare module "demo/Dialog6" {
-    import { Panel } from "jassijs/ui/Panel";
-    type Me = {};
-    export class Dialog6 extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
-    }
-    export function test(): unknown;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
-}
-declare module "demo/Dialog7" {
-    import { Panel } from "jassijs/ui/Panel";
-    export class Dialog7 extends Panel {
-        constructor();
-        render(): any;
-    }
-    export function test(): unknown;
-}
-declare module "demo/Dialog8" {
-    import { Panel } from "jassijs/ui/Panel";
-    export class Dialog7 extends Panel {
-        render(): any;
-    }
-    export function test(): unknown;
-}
-declare module "demo/Dialog9" {
-    import { Panel } from "jassijs/ui/Panel";
-    type Me = {};
-    export class Dialog9 extends Panel {
-        me: Me;
-        constructor();
-        render(): any;
-        layout(me: Me): void;
     }
     export function test(): unknown;
 }
@@ -120,12 +48,6 @@ declare module "demo/ExistsIfTest2" {
     export function test(): any;
 }
 declare module "demo/hallo" {
-    import { States } from "jassijs/ui/State";
-    export interface MyCompProp {
-        mycolor?: string;
-        mytext?: string;
-    }
-    export function MyComp(props: MyCompProp, states?: States<MyCompProp>): any;
     export function test(): any;
 }
 declare module "demo/hallo2" {

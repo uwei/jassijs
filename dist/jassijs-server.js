@@ -110,11 +110,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985414000
             },
             "jassijs/remote/Registry.ts": {
-<<<<<<< HEAD
                 "date": 1753729243466.9514
-=======
-                "date": 1721754483315.839
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1750788682336.6975,
@@ -430,11 +426,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1753968322370.392
             },
             "jassijs/server/Compile.ts": {
-<<<<<<< HEAD
                 "date": 1749969355673.02
-=======
-                "date": 1720553680038.0745
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             },
             "jassijs/server/DatabaseSchema.ts": {
                 "date": 1682241710000
@@ -463,11 +455,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657714030000
             },
             "jassijs/server/Filesystem.ts": {
-<<<<<<< HEAD
                 "date": 1753961284581.5793,
-=======
-                "date": 1719332352671.4578,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.server.Filesystem": {
                     "$Serverservice": [
                         {
@@ -934,11 +922,7 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Re
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabaseTools = void 0;
     exports.test = test;
-<<<<<<< HEAD
     let DatabaseTools = DatabaseTools_1 = class DatabaseTools {
-=======
-    let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1.RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //this is a sample remote function
         static async runSQL(sql, parameter = undefined, context = undefined) {
             if (!context.request.user.isAdmin)
@@ -959,10 +943,7 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Re
     };
     exports.DatabaseTools = DatabaseTools;
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_1.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __param(1, (0, Validator_1.ValidateIsArray)({ optional: true })),
@@ -1093,19 +1074,12 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
     * all objects which use the jassijs.db must implement this
     * @class DBObject
     */
-<<<<<<< HEAD
     let DBObject = DBObject_1 = class DBObject {
-=======
-    let DBObject = DBObject_1 = class DBObject extends RemoteObject_2.RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //clear cache on reload
         static _initFunc() {
             Registry_7.default.onregister("$Class", (data, name) => {
                 delete DBObject_1.cache[name];
             });
-        }
-        constructor() {
-            super();
         }
         isAutoId() {
             var _a;
@@ -1301,12 +1275,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
     DBObject.cache = {};
     DBObject._init = DBObject_1._initFunc();
     exports.DBObject = DBObject = DBObject_1 = __decorate([
-<<<<<<< HEAD
         (0, Registry_6.$Class)("jassijs.remote.DBObject")
-=======
-        (0, Registry_6.$Class)("jassijs.remote.DBObject"),
-        __metadata("design:paramtypes", [])
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], DBObject);
     async function test() {
         var h = Database_1.db.getMetadata(Classes_4.classes.getClass("de.Kunde"));
@@ -2647,11 +2616,7 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
     exports.$Class = $Class;
     exports.$register = $register;
     exports.migrateModul = migrateModul;
-<<<<<<< HEAD
     function $Class(longclassname, target = undefined) {
-=======
-    function $Class(longclassname) {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         return function (pclass) {
             if (target) {
                 pclass.target = target;
@@ -2804,7 +2769,6 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
          * register an anotation
          * Important: this function should only used from an annotation
          **/
-<<<<<<< HEAD
         registerMember(service, aclass /*new (...args: any[]) => any*/, membername, ...params) {
             var _a, _b, _c;
             var oclass = aclass;
@@ -2818,14 +2782,6 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
             if (oclass.prototype !== undefined)
                 m = oclass.prototype;
             var clname = (_c = (_b = oclass.prototype) === null || _b === void 0 ? void 0 : _b.constructor) === null || _c === void 0 ? void 0 : _c._classname;
-=======
-        registerMember(service, oclass /*new (...args: any[]) => any*/, membername, ...params) {
-            var _a, _b;
-            var m = oclass;
-            if (oclass.prototype !== undefined)
-                m = oclass.prototype;
-            var clname = (_b = (_a = oclass.prototype) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b._classname;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (clname) {
                 if (this.dataMembers[service] === undefined) {
                     this.dataMembers[service] = {};
@@ -2918,13 +2874,8 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
             //@ts-ignore
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined || globalThis.BrowserFS != undefined) { //on server
                 //@ts-ignore 
-<<<<<<< HEAD
                 var fs = await new Promise((resolve_8, reject_8) => { require(['fs'], resolve_8, reject_8); }).then(__importStar);
                 var Filesystem = await new Promise((resolve_9, reject_9) => { require(["jassijs/server/Filesystem"], resolve_9, reject_9); }).then(__importStar);
-=======
-                var fs = await new Promise((resolve_6, reject_6) => { require(['fs'], resolve_6, reject_6); }).then(__importStar);
-                var Filesystem = await new Promise((resolve_7, reject_7) => { require(["jassijs/server/Filesystem"], resolve_7, reject_7); }).then(__importStar);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 var modules = Config_1.config.server.modules;
                 for (let modul in modules) {
                     try {
@@ -3276,7 +3227,6 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Reg
         }
     };
     exports.RemoteObject = RemoteObject;
-<<<<<<< HEAD
     exports.RemoteObject = RemoteObject = RemoteObject_3 = __decorate([
         (0, Registry_11.$Class)("jassijs.remote.RemoteObject")
     ], RemoteObject);
@@ -3291,11 +3241,6 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Reg
         });
         console.log(hallo);
     }
-=======
-    exports.RemoteObject = RemoteObject = __decorate([
-        (0, Registry_11.$Class)("jassijs.remote.RemoteObject")
-    ], RemoteObject);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 });
 define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_12, Classes_7) {
     "use strict";
@@ -3335,20 +3280,12 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
             });
         }
         static async simulateUser(user = undefined, password = undefined) {
-<<<<<<< HEAD
             var rights = (await new Promise((resolve_10, reject_10) => { require(["jassijs/remote/security/Rights"], resolve_10, reject_10); }).then(__importStar)).default;
-=======
-            var rights = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/security/Rights"], resolve_8, reject_8); }).then(__importStar)).default;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             //	if(await rights.isAdmin()){
             //		throw new Error("not an admin")
             //	}
             //@ts-ignore
-<<<<<<< HEAD
             var Cookies = (await new Promise((resolve_11, reject_11) => { require(["jassijs/util/Cookies"], resolve_11, reject_11); }).then(__importStar)).Cookies;
-=======
-            var Cookies = (await new Promise((resolve_9, reject_9) => { require(["jassijs/util/Cookies"], resolve_9, reject_9); }).then(__importStar)).Cookies;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (user === undefined) {
                 Cookies.remove("simulateUser", {});
                 Cookies.remove("simulateUserPassword", {});
@@ -3399,19 +3336,9 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                 ret = await this.exec(config, this._this);
             }
             catch (ex) {
-<<<<<<< HEAD
                 if (ex.status === 401 || ex.status === 500 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                     await (await new Promise((resolve_12, reject_12) => { require(["jassijs/base/LoginDialog"], resolve_12, reject_12); }).then(__importStar)).login();
                     return await this.call();
-=======
-                if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
-                    redirect = new Promise((resolve) => {
-                        //@ts-ignore
-                        new Promise((resolve_10, reject_10) => { require(["jassijs/base/LoginDialog"], resolve_10, reject_10); }).then(__importStar).then((lib) => {
-                            lib.doAfterLogin(resolve, _this);
-                        });
-                    });
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 }
                 else {
                     throw ex;
@@ -4546,11 +4473,7 @@ define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/D
     ], Group.prototype, "users", void 0);
     exports.Group = Group = __decorate([
         (0, DBObject_2.$DBObject)({ name: "jassijs_group" }),
-<<<<<<< HEAD
         (0, Registry_14.$Class)("jassijs.security.Group")
-=======
-        (0, Registry_13.$Class)("jassijs.security.Group")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Group);
 });
 define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_15, DatabaseSchema_3, Group_1, Validator_4) {
@@ -4603,11 +4526,7 @@ define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/re
     ], ParentRight.prototype, "groups", void 0);
     exports.ParentRight = ParentRight = __decorate([
         (0, DBObject_3.$DBObject)({ name: "jassijs_parentright" }),
-<<<<<<< HEAD
         (0, Registry_15.$Class)("jassijs.security.ParentRight")
-=======
-        (0, Registry_14.$Class)("jassijs.security.ParentRight")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], ParentRight);
 });
 define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_4, Registry_16, DatabaseSchema_4, Group_2, Validator_5) {
@@ -4635,11 +4554,7 @@ define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/D
     ], Right.prototype, "groups", void 0);
     exports.Right = Right = __decorate([
         (0, DBObject_4.$DBObject)({ name: "jassijs_right" }),
-<<<<<<< HEAD
         (0, Registry_16.$Class)("jassijs.security.Right")
-=======
-        (0, Registry_15.$Class)("jassijs.security.Right")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Right);
 });
 define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry"], function (require, exports, Registry_17, Registry_18) {
@@ -4649,11 +4564,7 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
     exports.$Rights = $Rights;
     exports.$ParentRights = $ParentRights;
     exports.$CheckParentRight = $CheckParentRight;
-<<<<<<< HEAD
     Registry_18 = __importDefault(Registry_18);
-=======
-    Registry_17 = __importDefault(Registry_17);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     class RightProperties {
     }
     exports.RightProperties = RightProperties;
@@ -4675,11 +4586,7 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
             Registry_18.default.registerMember("$CheckParentRight", target, propertyKey, undefined);
         };
     }
-<<<<<<< HEAD
     let Rights = class Rights {
-=======
-    let Rights = class Rights extends RemoteObject_3.RemoteObject {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         async isAdmin(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 if (this._isAdmin !== undefined)
@@ -4695,11 +4602,7 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
     };
     exports.Rights = Rights;
     exports.Rights = Rights = __decorate([
-<<<<<<< HEAD
         (0, Registry_17.$Class)("jassijs.security.Rights")
-=======
-        (0, Registry_16.$Class)("jassijs.security.Rights")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Rights);
     var rights = new Rights();
     exports.default = rights;
@@ -4742,11 +4645,7 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
     ], Setting.prototype, "data", void 0);
     exports.Setting = Setting = __decorate([
         (0, DBObject_5.$DBObject)({ name: "jassijs_setting" }),
-<<<<<<< HEAD
         (0, Registry_19.$Class)("jassijs.security.Setting"),
-=======
-        (0, Registry_18.$Class)("jassijs.security.Setting"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], Setting);
     async function test() {
@@ -4807,11 +4706,7 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
     ], User.prototype, "isAdmin", void 0);
     exports.User = User = __decorate([
         (0, DBObject_6.$DBObject)({ name: "jassijs_user" }),
-<<<<<<< HEAD
         (0, Registry_20.$Class)("jassijs.security.User")
-=======
-        (0, Registry_19.$Class)("jassijs.security.User")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], User);
     async function test() {
         var gps = await (Group_3.Group.find({}));
@@ -5066,11 +4961,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 var res = await RemoteObject_5.RemoteObject.docall(this, this.saveFiles, ...arguments);
                 if (res === "") {
                     //@ts-ignore
-<<<<<<< HEAD
                     new Promise((resolve_13, reject_13) => { require(["jassijs/ui/Notify"], resolve_13, reject_13); }).then(__importStar).then((el) => {
-=======
-                    new Promise((resolve_11, reject_11) => { require(["jassijs/ui/Notify"], resolve_11, reject_11); }).then(__importStar).then((el) => {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         el.notify(fileName + " saved", "info", { position: "bottom right" });
                     });
                     //if (!fromServerdirectory) {
@@ -5081,11 +4972,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 }
                 else {
                     //@ts-ignore
-<<<<<<< HEAD
                     new Promise((resolve_14, reject_14) => { require(["jassijs/ui/Notify"], resolve_14, reject_14); }).then(__importStar).then((el) => {
-=======
-                    new Promise((resolve_12, reject_12) => { require(["jassijs/ui/Notify"], resolve_12, reject_12); }).then(__importStar).then((el) => {
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         el.notify(fileName + " not saved", "error", { position: "bottom right" });
                     });
                     throw new Classes_9.JassiError(res);
@@ -5130,11 +5017,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     throw new Classes_9.JassiError("only admins can delete");
                 }
                 //@ts-ignore
-<<<<<<< HEAD
                 var test = (await new Promise((resolve_15, reject_15) => { require([name.replaceAll("$serverside/", "")], resolve_15, reject_15); }).then(__importStar)).test;
-=======
-                var test = (await new Promise((resolve_13, reject_13) => { require([name.replaceAll("$serverside/", "")], resolve_13, reject_13); }).then(__importStar)).test;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 var ret;
                 if (test)
                     ret = await test();
@@ -5239,10 +5122,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
     ], Server.prototype, "dir", null);
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_5.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __param(1, (0, Validator_8.ValidateIsBoolean)({ optional: true })),
@@ -5251,10 +5131,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:returntype", Promise)
     ], Server.prototype, "zip", null);
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_5.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsArray)({ type: tp => String })),
         __metadata("design:type", Function),
@@ -5292,10 +5169,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
     ], Server.prototype, "testServersideFile", null);
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_5.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -5303,10 +5177,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
     ], Server.prototype, "removeServerModul", null);
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_5.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -5314,10 +5185,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
     ], Server.prototype, "delete", null);
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_5.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __param(1, (0, Validator_8.ValidateIsString)()),
@@ -5326,10 +5194,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
     ], Server.prototype, "rename", null);
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_5.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -5337,10 +5202,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
     ], Server.prototype, "createFile", null);
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_5.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -5354,7 +5216,6 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         __metadata("design:paramtypes", [String, RemoteObject_5.Context]),
         __metadata("design:returntype", typeof (_m = typeof Promise !== "undefined" && Promise) === "function" ? _m : Object)
     ], Server.prototype, "createModule", null);
-<<<<<<< HEAD
     __decorate([
         (0, Validator_8.ValidateFunctionParameter)(),
         __metadata("design:type", Function),
@@ -5363,10 +5224,6 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
     ], Server, "mytest", null);
     exports.Server = Server = Server_1 = __decorate([
         (0, Registry_21.$Class)("jassijs.remote.Server"),
-=======
-    exports.Server = Server = Server_1 = __decorate([
-        (0, Registry_20.$Class)("jassijs.remote.Server"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], Server);
 });
@@ -5377,11 +5234,7 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
     exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.ServerserviceProperties = void 0;
     exports.beforeServiceLoad = beforeServiceLoad;
     exports.$Serverservice = $Serverservice;
-<<<<<<< HEAD
     Registry_22 = __importDefault(Registry_22);
-=======
-    Registry_21 = __importDefault(Registry_21);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     class ServerserviceProperties {
     }
     exports.ServerserviceProperties = ServerserviceProperties;
@@ -5391,7 +5244,6 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
     function beforeServiceLoad(func) {
         beforeServiceLoadHandler.push(func);
     }
-<<<<<<< HEAD
     async function resolve(target, prop, receiver) {
         var khsdf = runningServerservices;
         if (target[prop]) {
@@ -5431,8 +5283,6 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
         }
         throw new Error("serverservice not found:" + prop);
     }
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     var serverservices = new Proxy(runningServerservices, {
         get(target, prop, receiver) {
             return resolve(target, prop, receiver);
@@ -5461,11 +5311,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
     exports.autostart = autostart;
     exports.test = test;
     exports.load = load;
-<<<<<<< HEAD
     Registry_24 = __importDefault(Registry_24);
-=======
-    Registry_23 = __importDefault(Registry_23);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;
@@ -5651,11 +5497,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
         __metadata("design:returntype", Promise)
     ], Settings, "saveAll", null);
     exports.Settings = Settings = Settings_1 = __decorate([
-<<<<<<< HEAD
         (0, Registry_23.$Class)("jassijs.remote.Settings")
-=======
-        (0, Registry_22.$Class)("jassijs.remote.Settings")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Settings);
     var settings = new Settings();
     exports.settings = settings;
@@ -5833,11 +5675,7 @@ define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Registry"],
     };
     exports.Test = Test;
     exports.Test = Test = __decorate([
-<<<<<<< HEAD
         (0, Registry_25.$Class)("jassijs.remote.Test")
-=======
-        (0, Registry_24.$Class)("jassijs.remote.Test")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Test);
 });
 var exports = typeof exports !== 'undefined' ? exports : {};
@@ -6136,7 +5974,6 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
                 return ret;
             }
             else {
-<<<<<<< HEAD
                 var servertransaction = new GenericTransaction();
                 var all = [];
                 var _execute = (await new Promise((resolve_16, reject_16) => { require(["jassijs/server/DoRemoteProtocol"], resolve_16, reject_16); }).then(__importStar))._execute;
@@ -6152,25 +5989,6 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
                     contextneu.transaction = servertransaction;
                     var res = _execute(st, context.request, contextneu);
                     all.push(res);
-=======
-                //@ts-ignore
-                //@ts-ignore
-                var ObjectTransaction = (await new Promise((resolve_14, reject_14) => { require(["jassijs/remote/ObjectTransaction"], resolve_14, reject_14); }).then(__importStar)).ObjectTransaction;
-                var ot = new ObjectTransaction();
-                ot.statements = [];
-                let ret = [];
-                for (let x = 0; x < this.statements.length; x++) {
-                    var stat = {
-                        result: "**unresolved**"
-                    };
-                    ot.statements.push(stat);
-                }
-                for (let x = 0; x < this.statements.length; x++) {
-                    ret.push(this.doServerStatement(this.statements, ot, x, context));
-                }
-                for (let x = 0; x < ret.length; x++) {
-                    ret[x] = await ret[x];
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 }
                 await servertransaction.wait(); //await Promise.all(all)
                 ret = await Promise.all(all);
@@ -6180,7 +5998,6 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
                 return ret;
             }
         }
-<<<<<<< HEAD
         //runs the transaction
         async execute(context = undefined) {
             //  return this.context.register("transaction", this, async () => {
@@ -6197,19 +6014,6 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
             }
             var ret = await this.wait(); //Promise.all(allPromises);
             return ret;
-=======
-        async doServerStatement(statements, ot /*:ObjectTransaction*/, num, context) {
-            //@ts-ignore
-            var _execute = (await new Promise((resolve_15, reject_15) => { require(["jassijs/server/DoRemoteProtocol"], resolve_15, reject_15); }).then(__importStar))._execute;
-            var _this = this;
-            var newcontext = {};
-            Object.assign(newcontext, context);
-            newcontext.objecttransaction = ot;
-            newcontext.objecttransactionitem = ot.statements[num];
-            //@ts-ignore
-            ot.statements[num].result = _execute(_this.statements[num], context.request, newcontext);
-            return ot.statements[num].result;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
         //add a transaction
         add(obj, method, ...params) {
@@ -6223,7 +6027,6 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
     };
     exports.Transaction = Transaction;
     exports.Transaction = Transaction = __decorate([
-<<<<<<< HEAD
         (0, Registry_26.$Class)("jassijs.remote.Transaction")
     ], Transaction);
     let TransactionTest = class TransactionTest {
@@ -6250,10 +6053,6 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
         var all = await trans.execute();
         t.expectEqual(all.join() === "10000,10001,10002");
     }
-=======
-        (0, Registry_25.$Class)("jassijs.remote.Transaction")
-    ], Transaction);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 });
 define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], function (require, exports) {
     "use strict";
@@ -6930,7 +6729,6 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBManager = void 0;
-<<<<<<< HEAD
     Registry_27 = __importDefault(Registry_27);
     const parser = require('js-sql-parser');
     const passwordIteration = 10000;
@@ -7059,12 +6857,6 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
         }
     }
-=======
-    Registry_26 = __importDefault(Registry_26);
-    const parser = require('js-sql-parser');
-    const passwordIteration = 10000;
-    var _instance = undefined;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     let DBManager = DBManager_1 = class DBManager {
         static async getConOpts() {
             var stype; //: string = "postgres";
@@ -7213,11 +7005,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined) {
                 try {
                     //@ts-ignore
-<<<<<<< HEAD
                     var types = (await new Promise((resolve_17, reject_17) => { require(['pg'], resolve_17, reject_17); }).then(__importStar)).types;
-=======
-                    var types = (await new Promise((resolve_16, reject_16) => { require(['pg'], resolve_16, reject_16); }).then(__importStar)).types;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     types.setTypeParser(1700, function (val) {
                         return parseFloat(val);
                     });
@@ -7230,11 +7018,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
         async mySync() {
             var con = (0, typeorm_3.getConnection)();
             //@ts-ignore
-<<<<<<< HEAD
             var schem = await new Promise((resolve_18, reject_18) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_18, reject_18); }).then(__importStar);
-=======
-            var schem = await new Promise((resolve_17, reject_17) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_17, reject_17); }).then(__importStar);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
             schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"] = async function () {
                 //try{
@@ -7386,13 +7170,6 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
                 //   if(this.connection().subscribers)
                 //    this.connection().subscribers.forEach((e)=>new e().afterUpdate(undefined));
             }
-<<<<<<< HEAD
-=======
-            var ret = await this.connection().manager.save(entity, options);
-            //delete entity.password;
-            //delete ret["password"];
-            //@ts-ignore
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             return ret === null || ret === void 0 ? void 0 : ret.id;
         }
         async _checkParentRightsForSave(context, entity) {
@@ -7650,11 +7427,7 @@ define("jassijs/server/DBManager", ["require", "exports", "typeorm", "jassijs/re
     exports.DBManager = DBManager;
     exports.DBManager = DBManager = DBManager_1 = __decorate([
         (0, Serverservice_5.$Serverservice)({ name: "db", getInstance: async () => { return DBManager._get(); } }),
-<<<<<<< HEAD
         (0, Registry_28.$Class)("jassijs/server/DBManager"),
-=======
-        (0, Registry_27.$Class)("jassijs/server/DBManager"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], DBManager);
     class RelationInfo {
@@ -7963,11 +7736,7 @@ define("jassijs/server/DBManagerExt", ["require", "exports", "jassijs/remote/Cla
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.extendDBManager = extendDBManager;
-<<<<<<< HEAD
     Registry_29 = __importDefault(Registry_29);
-=======
-    Registry_28 = __importDefault(Registry_28);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     function extendDBManager() {
         //create Admin User if doesn't a user exists 
         DBManager_2.DBManager.prototype["hasLoaded"] = async function () {
@@ -8048,20 +7817,12 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.remoteProtocol = remoteProtocol;
     exports._execute = _execute;
-<<<<<<< HEAD
     Registry_30 = __importDefault(Registry_30);
-=======
-    Registry_29 = __importDefault(Registry_29);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     function remoteProtocol(request, response) {
         execute(request, response);
     }
     async function checkSimulateUser(context, request) {
-<<<<<<< HEAD
         var rights = (await new Promise((resolve_19, reject_19) => { require(["jassijs/remote/security/Rights"], resolve_19, reject_19); }).then(__importStar)).default;
-=======
-        var rights = (await new Promise((resolve_18, reject_18) => { require(["jassijs/remote/security/Rights"], resolve_18, reject_18); }).then(__importStar)).default;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         var test = request.cookies["simulateUser"];
         if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
             var db = await Serverservice_6.serverservices.db;
@@ -8077,11 +7838,7 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
         }
     }
     async function execute(request, res) {
-<<<<<<< HEAD
         var RemoteProtocol = (await new Promise((resolve_20, reject_20) => { require(["jassijs/remote/RemoteProtocol"], resolve_20, reject_20); }).then(__importStar)).RemoteProtocol;
-=======
-        var RemoteProtocol = (await new Promise((resolve_19, reject_19) => { require(["jassijs/remote/RemoteProtocol"], resolve_19, reject_19); }).then(__importStar)).RemoteProtocol;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         var context = {
             isServer: true,
             request: request
@@ -8095,11 +7852,7 @@ define("jassijs/server/DoRemoteProtocol", ["require", "exports", "jassijs/remote
     async function _execute(protext, request, context) {
         // await new Promise((resolve)=>{docls(request,response,resolve)});
         var h = Config_4.config;
-<<<<<<< HEAD
         var RemoteProtocol = (await new Promise((resolve_21, reject_21) => { require(["jassijs/remote/RemoteProtocol"], resolve_21, reject_21); }).then(__importStar)).RemoteProtocol;
-=======
-        var RemoteProtocol = (await new Promise((resolve_20, reject_20) => { require(["jassijs/remote/RemoteProtocol"], resolve_20, reject_20); }).then(__importStar)).RemoteProtocol;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         var prot = new RemoteProtocol();
         var vdata = await prot.parse(protext);
         Object.assign(prot, vdata);
@@ -8233,11 +7986,7 @@ define("typeorm", ["typeorm/index", "typeorm/platform/PlatformTools", "window.SQ
 define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", "jassijs/remote/Registry", "../remote/Serverservice", "./NativeAdapter", "jassijs/remote/Config", "./Compile"], function (require, exports, RegistryIndexer_1, Registry_31, Serverservice_7, NativeAdapter_3, Config_5, Compile_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-<<<<<<< HEAD
     Registry_31 = __importStar(Registry_31);
-=======
-    Registry_30 = __importStar(Registry_30);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
     let Filesystem = class Filesystem {
         constructor() {
@@ -8679,11 +8428,7 @@ define("jassijs/server/Filesystem", ["require", "exports", "./RegistryIndexer", 
     Filesystem.allModules = {};
     Filesystem = __decorate([
         (0, Serverservice_7.$Serverservice)({ name: "filesystem", getInstance: async () => { return new Filesystem(); } }),
-<<<<<<< HEAD
         (0, Registry_31.$Class)("jassijs.server.Filesystem")
-=======
-        (0, Registry_30.$Class)("jassijs.server.Filesystem")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Filesystem);
     exports.default = Filesystem;
 });
@@ -9214,11 +8959,7 @@ define("jassijs/server/Installserver", ["require", "exports", "jassijs/remote/Se
     });
     (0, Serverservice_9.beforeServiceLoad)(async (name, service) => {
         if (name === "db") {
-<<<<<<< HEAD
             var man = (await new Promise((resolve_22, reject_22) => { require(["jassijs/server/DBManagerExt"], resolve_22, reject_22); }).then(__importStar));
-=======
-            var man = (await new Promise((resolve_21, reject_21) => { require(["jassijs/server/DBManagerExt"], resolve_21, reject_21); }).then(__importStar));
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             man.extendDBManager();
         }
     });
@@ -9689,11 +9430,7 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
         return ret;
     }*/
     async function localExec(prot, context = undefined) {
-<<<<<<< HEAD
         var classes = (await new Promise((resolve_23, reject_23) => { require(["jassijs/remote/Classes"], resolve_23, reject_23); }).then(__importStar)).classes;
-=======
-        var classes = (await new Promise((resolve_22, reject_22) => { require(["jassijs/remote/Classes"], resolve_22, reject_22); }).then(__importStar)).classes;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         var p = new RemoteProtocol_2.RemoteProtocol();
         var C = await classes.loadClass(prot.classname);
         if (context === undefined) {
@@ -9706,11 +9443,7 @@ define("jassijs/server/LocalProtocol", ["require", "exports", "jassijs/remote/Re
                     }
                 }
             };
-<<<<<<< HEAD
             var Cookies = (await new Promise((resolve_24, reject_24) => { require(["jassijs/util/Cookies"], resolve_24, reject_24); }).then(__importStar)).Cookies;
-=======
-            var Cookies = (await new Promise((resolve_23, reject_23) => { require(["jassijs/util/Cookies"], resolve_23, reject_23); }).then(__importStar)).Cookies;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
                 var man = await Serverservice_10.serverservices.db;
                 var user = await man.login(context, Cookies.get("simulateUser"), Cookies.get("simulateUserPassword"));
@@ -9800,11 +9533,7 @@ define("jassijs/server/NativeAdapter", ["require", "exports", "jassijs/remote/Co
     }
     async function dozip(directoryname, serverdir = undefined) {
         //@ts-ignore
-<<<<<<< HEAD
         var JSZip = (await new Promise((resolve_25, reject_25) => { require(["jassijs/server/ext/jszip"], resolve_25, reject_25); }).then(__importStar)).default;
-=======
-        var JSZip = (await new Promise((resolve_24, reject_24) => { require(["jassijs/server/ext/jszip"], resolve_24, reject_24); }).then(__importStar)).default;
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         if (serverdir)
             throw new Error("serverdir is unsupported on localserver");
         var zip = new JSZip();
@@ -9912,11 +9641,7 @@ define("jassijs/server/Reloader", ["require", "exports", "jassijs/remote/Config"
     var Reloader_2;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Reloader = void 0;
-<<<<<<< HEAD
     Registry_33 = __importDefault(Registry_33);
-=======
-    Registry_32 = __importDefault(Registry_32);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     let Reloader = Reloader_2 = class Reloader {
         /**
          * reloads Code
@@ -10169,11 +9894,7 @@ define("jassijs/server/Reloader", ["require", "exports", "jassijs/remote/Config"
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_2();
     exports.Reloader = Reloader = Reloader_2 = __decorate([
-<<<<<<< HEAD
         (0, Registry_32.$Class)("jassijs.server.Reloader"),
-=======
-        (0, Registry_31.$Class)("jassijs.server.Reloader"),
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], Reloader);
 });
@@ -10227,13 +9948,8 @@ define("jassijs/server/Testuser", ["require", "exports", "jassijs/util/DatabaseS
         __metadata("design:type", String)
     ], Testuser.prototype, "lastname", void 0);
     exports.Testuser = Testuser = __decorate([
-<<<<<<< HEAD
         (0, DBObject_8.$DBObject)(),
         (0, Registry_34.$Class)("Testuser")
-=======
-        (0, DBObject_7.$DBObject)(),
-        (0, Registry_33.$Class)("Testuser")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Testuser);
 });
 define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "./NativeAdapter"], function (require, exports, Registry_35, typeorm_5, NativeAdapter_6) {
@@ -10352,11 +10068,7 @@ define("jassijs/server/TypeORMListener", ["require", "exports", "jassijs/remote/
     exports.TypeORMListener = TypeORMListener;
     exports.TypeORMListener = TypeORMListener = __decorate([
         (0, typeorm_5.EventSubscriber)(),
-<<<<<<< HEAD
         (0, Registry_35.$Class)("jassijs.server.TypeORMListener")
-=======
-        (0, Registry_34.$Class)("jassijs.server.TypeORMListener")
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TypeORMListener);
 });
 define("jassijs/modul", ["require", "exports"], function (require, exports) {

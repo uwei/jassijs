@@ -681,7 +681,6 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
 define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Server", "jassijs/remote/Validator"], function (require, exports, Registry_1, RemoteObject_1, Server_1, Validator_1) {
     "use strict";
     var ServerReport_1;
-<<<<<<< HEAD
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ServerReport = void 0;
@@ -705,55 +704,12 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
             //@ts-ignore 
             var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); }).then(__importStar)).DoServerreport;
             return await new DoServerreport().getBase64FromData(res);
-=======
-    var _a, _b;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ServerReport = void 0;
-    exports.test = test;
-    let ServerReport = ServerReport_1 = class ServerReport extends RemoteObject_1.RemoteObject {
-        static async getDesign(path, parameter, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_1.call(this.getDesign, path, parameter, context);
-            }
-            else {
-                //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_1, reject_1) => { require(["jassijs_report/server/DoServerreport"], resolve_1, reject_1); }).then(__importStar)).DoServerreport;
-                ServerReport_1.cacheLastParameter[path] = parameter;
-                return await new DoServerreport().getDesign(path, parameter);
-            }
-        }
-        static async getBase64(path, parameter, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_1.call(this.getBase64, path, parameter, context);
-            }
-            else {
-                //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/server/DoServerreport"], resolve_2, reject_2); }).then(__importStar)).DoServerreport;
-                if (parameter == "useLastCachedParameter")
-                    parameter = ServerReport_1.cacheLastParameter[path];
-                return await new DoServerreport().getBase64(path, parameter);
-            }
-        }
-        static async getBase64FromFile(file, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_1.call(this.getBase64FromFile, file, context);
-            }
-            else {
-                var res = await new Server_1.Server().testServersideFile(file.substring(0, file.length - 3), context);
-                //@ts-ignore 
-                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); }).then(__importStar)).DoServerreport;
-                return await new DoServerreport().getBase64FromData(res);
-            }
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     };
     exports.ServerReport = ServerReport;
     ServerReport.cacheLastParameter = {};
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_1.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -761,25 +717,19 @@ define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/rem
         __metadata("design:returntype", Promise)
     ], ServerReport, "getDesign", null);
     __decorate([
-<<<<<<< HEAD
         (0, RemoteObject_1.UseServer)(),
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getBase64", null);
-<<<<<<< HEAD
     __decorate([
         (0, RemoteObject_1.UseServer)(),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [String, typeof (_a = typeof RemoteObject_1.Context !== "undefined" && RemoteObject_1.Context) === "function" ? _a : Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getBase64FromFile", null);
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     exports.ServerReport = ServerReport = ServerReport_1 = __decorate([
         (0, Registry_1.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);
@@ -881,11 +831,7 @@ define("jassijs_report/modul", ["require", "exports"], function (require, export
             paths: {
                 'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
                 'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-<<<<<<< HEAD
                 //     'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts',// '../../lib/vfs_fonts',
-=======
-                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts', // '../../lib/vfs_fonts',
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 'pdfMakelib': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/pdfmake' //'../../lib/pdfmake'
             },
             shim: {

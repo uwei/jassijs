@@ -1,5 +1,1 @@
-<<<<<<< HEAD
 {"version":3,"file":"registry.js","sourceRoot":"","sources":["../../testrmodul/registry.js"],"names":[],"mappings":"AAAA,yCAAyC;AACzC,MAAM,CAAC,qBAAqB,EAAC,CAAC,SAAS,CAAC,EAAE,UAAS,OAAO;IACzD,OAAO;QACN,OAAO,EAAE;YACV,qBAAqB,EAAE;gBACtB,MAAM,EAAE,gBAAgB;aACxB;YACD,iCAAiC,EAAE;gBAClC,MAAM,EAAE,kBAAkB;gBAC1B,8BAA8B,EAAE;oBAC/B,UAAU,EAAE;wBACX,UAAU,EAAE;4BACX,WAAW,EAAE,EAAE;yBACf;qBACD;iBACD;aACD;SACD;KACC,CAAA;AACF,CAAC,CAAC,CAAC"}
-=======
-{"version":3,"file":"registry.js","sourceRoot":"","sources":["../../testrmodul/registry.js"],"names":[],"mappings":"AAAA,MAAM,CAAC,qBAAqB,EAAC,CAAC,SAAS,CAAC,EAAE,UAAS,OAAO,IAAG,OAAO,EAAG,OAAO,EAAE,EAAG,EAAE,CAAA,CAAC,CAAC,CAAE,CAAC"}
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279

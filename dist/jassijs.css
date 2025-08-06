@@ -1,27 +1,4 @@
-<<<<<<< HEAD
 
-=======
-br2.jdesignmode { 
-  content: "";
-}
-br2.jdesignmode::after{
-  content: "\A.";
-   white-space: pre;
-
-}
-
-.dummyselected{
-  background-color: lightgoldenrodyellow;
-}
-.brafter::after {
-            content: "\A";
-            white-space: pre;
-        }
-.jeditablecontainer{
-  min-width: 20px;
-  min-height: 20px;
-}
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 .lm_content{
   background-color:white;  
 }
