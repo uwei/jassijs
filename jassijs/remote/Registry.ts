@@ -3,9 +3,17 @@ import { config } from "jassijs/remote/Config";
 import "reflect-metadata";
 
 
+<<<<<<< HEAD
+export function $Class(longclassname: string,target=undefined): Function {
+=======
 export function $Class(longclassname: string): Function {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     return function (pclass) {
-        registry.register("$Class", pclass, longclassname);
+        if(target){
+            pclass.target=target;
+            registry.register("$Class", target, longclassname);
+        }else
+            registry.register("$Class", pclass, longclassname);
     }
 }
 export function $register(servicename: string, ...params): Function {
@@ -54,7 +62,7 @@ class JSONDataEntry {
 * @class jassijs.base.Registry 
 */
 export class Registry {
-    private _nextID: number;
+    
 
     public jsondata: { [service: string]: { [classname: string]: JSONDataEntry } } = undefined;
     public data: { [service: string]: { [classname: string]: DataEntry } } = {};
@@ -63,7 +71,7 @@ export class Registry {
     private isLoading: any;
     _eventHandler: { [service: string]: any[] } = {};
     constructor() {
-        this._nextID = 10;
+       //this._nextID = 10;
         this.isLoading = this.reload();
     }
     getData(service: string, classname: string = undefined): DataEntry[] {
@@ -108,7 +116,11 @@ export class Registry {
      * Important: this function should only used from an annotation, because the annotation is saved in
      *            index.json and could be read without loading the class
      **/
-    register(service: string, oclass: new (...args: any[]) => any, ...params) {
+    register(service: string, aclass: new (...args: any[]) => any, ...params) {
+        var oclass=aclass;
+        if(oclass["target"]) {
+            oclass=oclass["target"];
+        }
         var sclass = oclass.prototype.constructor._classname;
         if (sclass === undefined && service !== "$Class") {
             throw new Error("@$Class member is missing or must be set at last");
@@ -176,7 +188,14 @@ export class Registry {
      * register an anotation
      * Important: this function should only used from an annotation
      **/
-    registerMember(service: string, oclass: any/*new (...args: any[]) => any*/, membername: string, ...params) {
+    registerMember(service: string, aclass: any/*new (...args: any[]) => any*/, membername: string, ...params) {
+        var oclass=aclass;
+        if(oclass["target"]) {
+            oclass=oclass["target"];
+        }
+        if(oclass?.constructor?.target){
+            oclass=oclass.constructor.target
+        }
         var m = oclass;
         if (oclass.prototype !== undefined)
             m = oclass.prototype;
@@ -213,10 +232,10 @@ export class Registry {
     * with every call a new id is generated - used to create a free id for the dom
     * @returns {number} - the id
     */
-    nextID() {
+    /*nextID() {
         this._nextID = this._nextID + 1;
         return this._nextID.toString();
-    }
+    }*/
     /**
     * Load text with Ajax synchronously: takes path to file and optional MIME type
     * @param {string} filePath - the url
@@ -268,12 +287,17 @@ export class Registry {
      * reload the registry
      */
     async reload() {
+       
         this.jsondata = { $Class: {} };
         this.jsondataMembers = {};
         var _this = this;
         var modultext = "";
         //@ts-ignore
+<<<<<<< HEAD
+        if (window?.document === undefined||globalThis.BrowserFS!=undefined) { //on server
+=======
         if (window?.document === undefined) { //on server
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 
             //@ts-ignore 
             var fs = await import('fs');
@@ -489,7 +513,11 @@ var registry = new Registry();
 export default registry;
 export function migrateModul(oldModul, newModul) {
     if (newModul.registry) {
+<<<<<<< HEAD
+        //newModul.registry._nextID = oldModul.registry._nextID;
+=======
         newModul.registry._nextID = oldModul.registry._nextID;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         newModul.registry.entries = oldModul.registry.entries;
     }
 }

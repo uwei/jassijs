@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "amd",
+    "target": "es2021",
+    "outDir": "./",               // JS-Dateien im Root
+    "rootDir": "./src",           // TS-Dateien im src/
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["*.js", "node_modules"] // JS-Dateien im Root ausschließen
+}

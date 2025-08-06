@@ -5,7 +5,23 @@ define(["require", "exports", "jassijs_editor/FileExplorer", "jassijs/base/Windo
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     Windows_1 = __importDefault(Windows_1);
+<<<<<<< HEAD
+    //import { testNPM } from "jassijs/remote/Npm";
+    //import { testDB, testJSSQL, testLocalServer, testWebpack } from "jassijs/server/Testlocalserver";
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     async function test() {
+        //debugger;
+        //testNPM();
+        /* setTimeout(() => {
+             console.log("load script");
+             const script = document.createElement('script');
+             script.src = "http://localhost:4000/bundle.js";
+             document.head.appendChild(script);
+         }, 15000);*/
+        // await testWebpack();
+        //await testJSSQL();
+        //testDB(); 
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
         var body = new Panel_1.Panel(); //{ id: "body" });
         document.body.appendChild(body.dom);

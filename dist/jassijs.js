@@ -36,6 +36,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 define("jassijs/base/ActionNode", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -104,37 +111,47 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
                 var entr = allclasses[x];
                 var mem = Registry_2.default.getJSONMemberData("$Action")[entr.classname];
                 for (let name in mem) {
-                    let ac = mem[name][0][0];
-                    if (ac.isEnabled !== undefined || ac.run !== undefined) { //we musst load the class
-                        await Classes_1.classes.loadClass(entr.classname);
-                        ac = Registry_2.default.getMemberData("$Action")[entr.classname][name][0][0];
-                    }
-                    if (ac.isEnabled !== undefined) {
-                        if ((await ac.isEnabled(vdata)) === false)
-                            continue;
-                    }
-                    let sclassname = entr.classname;
-                    let sname = name;
-                    ret.push({
-                        name: ac.name,
-                        icon: ac.icon,
-                        call: ac.run ? ac.run : async (...param) => {
-                            (await Classes_1.classes.loadClass(sclassname))[sname](...param);
+                    try {
+                        let ac = mem[name][0][0];
+                        if (ac.isEnabled !== undefined || ac.run !== undefined) { //we musst load the class
+                            await Classes_1.classes.loadClass(entr.classname);
+                            ac = Registry_2.default.getMemberData("$Action")[entr.classname][name][0][0];
                         }
-                    });
-                }
-                mem = Registry_2.default.getJSONMemberData("$Actions")[entr.classname];
-                for (let name in mem) {
-                    let acs = await (await Classes_1.classes.loadClass(entr.classname))[name]();
-                    for (let x = 0; x < acs.length; x++) {
-                        let ac = acs[x];
-                        if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
-                            continue;
+                        if (ac.isEnabled !== undefined) {
+                            if ((await ac.isEnabled(vdata)) === false)
+                                continue;
+                        }
+                        let sclassname = entr.classname;
+                        let sname = name;
                         ret.push({
                             name: ac.name,
                             icon: ac.icon,
-                            call: ac.run
+                            call: ac.run ? ac.run : async (...param) => {
+                                (await Classes_1.classes.loadClass(sclassname))[sname](...param);
+                            }
                         });
+                    }
+                    catch (err) {
+                        console.error("Action konnte nicht geladen werden:" + name + err);
+                    }
+                }
+                mem = Registry_2.default.getJSONMemberData("$Actions")[entr.classname];
+                for (let name in mem) {
+                    try {
+                        let acs = await (await Classes_1.classes.loadClass(entr.classname))[name]();
+                        for (let x = 0; x < acs.length; x++) {
+                            let ac = acs[x];
+                            if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
+                                continue;
+                            ret.push({
+                                name: ac.name,
+                                icon: ac.icon,
+                                call: ac.run
+                            });
+                        }
+                    }
+                    catch (err) {
+                        console.error("Fehler Action " + entr.classname + "." + name);
                     }
                 }
             }
@@ -325,6 +342,14 @@ define("jassijs/base/Extensions", ["require", "exports", "jassijs/remote/Registr
 define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ui/Component", "jassijs/ext/jquerylib"], function (require, exports, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+<<<<<<< HEAD
+    exports.login = login;
+    exports.test = test;
+    var queueResolve = [];
+    /*export function doAfterLogin(resolve, prot: RemoteProtocol) {
+        queue.push([resolve, prot]);
+    }*/
+=======
     exports.doAfterLogin = doAfterLogin;
     exports.login = login;
     exports.test = test;
@@ -332,6 +357,7 @@ define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ui/Component"
     function doAfterLogin(resolve, prot) {
         queue.push([resolve, prot]);
     }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     var isrunning = false;
     var y = 0;
     async function check(dialog, win) {
@@ -341,11 +367,11 @@ define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ui/Component"
             //dialog.dialog("destroy");
             document.body.removeChild(dialog);
             isrunning = false;
-            for (var x = 0; x < queue.length; x++) {
-                var data = queue[x];
-                data[0](await data[1].call());
+            for (var x = 0; x < queueResolve.length; x++) {
+                var res = queueResolve[x];
+                res();
             }
-            queue = [];
+            queueResolve = [];
             navigator.serviceWorker.controller.postMessage({
                 type: 'LOGGED_IN'
             }); //, [channel.port2]);
@@ -353,7 +379,7 @@ define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ui/Component"
         else if (test.indexOf('{"error"') !== -1) {
             //dialog.dialog("destroy");
             alert("Login failed");
-            dialog.src = "/login.html";
+            dialog.src = "./login.html";
             //document.body.removeChild(dialog);
             setTimeout(() => {
                 check(dialog, win);
@@ -368,18 +394,18 @@ define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ui/Component"
         }
     }
     async function login() {
-        if (isrunning)
-            return;
-        queue = [];
-        isrunning = true;
-        return new Promise((resolve) => {
+        var pwait = new Promise((resolve => {
+            queueResolve.push(resolve);
+        }));
+        if (!isrunning) {
+            isrunning = true;
             setTimeout(() => {
                 if (!fr.contentWindow) {
                     alert("no content window for login");
                 }
                 check(fr, fr["contentWindow"]);
             }, 100);
-            var fr = Component_1.Component.createHTMLElement('<iframe  src="/login.html" name="navigation"></iframe>');
+            var fr = Component_1.Component.createHTMLElement('<iframe  src="./login.html" name="navigation"></iframe>');
             document.body.appendChild(fr);
             fr.style.position = "absolute";
             fr.style.left = (window.innerWidth / 2 - fr.offsetWidth / 2) + "px";
@@ -390,7 +416,8 @@ define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ui/Component"
                 var _a;
                 (_a = fr.contentWindow.document.querySelector("#loginButton")) === null || _a === void 0 ? void 0 : _a.focus();
             }, 200);
-        });
+        }
+        return pwait;
     }
     function test() {
         //  login();
@@ -1106,7 +1133,10 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
                 'tabulator-tables': "jassijs/ext/tabulator",
                 //"tabulatorext":'jassijs/ext/tabulator',
                 // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
-                "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect"
+                "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect",
+                //entpacken tar from npm.org
+                "pako": "https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min",
+                "untar": "https://cdn.jsdelivr.net/npm/js-untar@2.0.0/build/dist/untar"
             }
         },
         server: {
@@ -1144,7 +1174,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.ActionNode": {}
             },
             "jassijs/base/Actions.ts": {
-                "date": 1681570168000,
+                "date": 1752163154307.8362,
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/CurrentSettings.ts": {
@@ -1157,7 +1187,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655549184000
             },
             "jassijs/base/LoginDialog.ts": {
-                "date": 1683051936000
+                "date": 1754148354777.8318
             },
             "jassijs/base/PropertyEditorService.ts": {
                 "date": 1721676432668.211,
@@ -1190,7 +1220,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657658562000
             },
             "jassijs/modul.ts": {
-                "date": 1683648574000
+                "date": 1751720657734.439
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1686759604000,
@@ -1209,7 +1239,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Database": {}
             },
             "jassijs/remote/DatabaseTools.ts": {
-                "date": 1681309882000,
+                "date": 1750577290597.1262,
                 "jassijs.remote.DatabaseTools": {
                     "@members": {
                         "runSQL": {
@@ -1223,7 +1253,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.DBArray": {}
             },
             "jassijs/remote/DBObject.ts": {
-                "date": 1697209147073.5745,
+                "date": 1752176823845.5918,
                 "jassijs.remote.DBObject": {}
             },
             "jassijs/remote/DBObjectQuery.ts": {
@@ -1248,18 +1278,19 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/remote/Modules.ts": {
                 "date": 1682799476000
             },
-            "jassijs/remote/ObjectTransaction.ts": {
-                "date": 1622985414000
-            },
             "jassijs/remote/Registry.ts": {
+<<<<<<< HEAD
+                "date": 1753729243466.9514
+=======
                 "date": 1721754483315.839
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             },
             "jassijs/remote/RemoteObject.ts": {
-                "date": 1655556866000,
+                "date": 1750788682336.6975,
                 "jassijs.remote.RemoteObject": {}
             },
             "jassijs/remote/RemoteProtocol.ts": {
-                "date": 1655556796000,
+                "date": 1753949539547.0193,
                 "jassijs.remote.RemoteProtocol": {}
             },
             "jassijs/remote/security/Group.ts": {
@@ -1449,11 +1480,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/Rights.ts": {
-                "date": 1655556796000,
+                "date": 1750088842327.8132,
                 "jassijs.security.Rights": {}
             },
             "jassijs/remote/security/Setting.ts": {
-                "date": 1681316436000,
+                "date": 1749964183518.1116,
                 "jassijs.security.Setting": {
                     "$DBObject": [
                         {
@@ -1462,19 +1493,9 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "data": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -1546,7 +1567,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1695399507170.7808,
+                "date": 1750536455548.542,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -1587,15 +1608,18 @@ define("jassijs/registry", ["require"], function (require) {
                         },
                         "createModule": {
                             "ValidateFunctionParameter": []
+                        },
+                        "mytest": {
+                            "ValidateFunctionParameter": []
                         }
                     }
                 }
             },
             "jassijs/remote/Serverservice.ts": {
-                "date": 1695999826188.6174
+                "date": 1750503957693.7708
             },
             "jassijs/remote/Settings.ts": {
-                "date": 1681315776000,
+                "date": 1750539223887.9446,
                 "jassijs.remote.Settings": {
                     "@members": {
                         "remove": {
@@ -1615,11 +1639,18 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Test": {}
             },
             "jassijs/remote/Transaction.ts": {
-                "date": 1655556866000,
-                "jassijs.remote.Transaction": {}
+                "date": 1750792975505.7617,
+                "jassijs.remote.Transaction": {},
+                "jassijs.remote.TransactionTest": {
+                    "@members": {
+                        "hi": {
+                            "UseServer": []
+                        }
+                    }
+                }
             },
             "jassijs/remote/Validator.ts": {
-                "date": 1681322648000
+                "date": 1750544362041.928
             },
             "jassijs/security/GroupView.ts": {
                 "date": 1740069816803.1128,
@@ -1647,13 +1678,17 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/server/Compile.ts": {
+<<<<<<< HEAD
+                "date": 1749969355673.02
+=======
                 "date": 1720553680038.0745
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             },
             "jassijs/server/DatabaseSchema.ts": {
                 "date": 1682241710000
             },
             "jassijs/server/DBManager.ts": {
-                "date": 1697213352571.0527,
+                "date": 1753948011624.183,
                 "jassijs/server/DBManager": {
                     "$Serverservice": [
                         {
@@ -1667,7 +1702,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1683399518000
             },
             "jassijs/server/DoRemoteProtocol.ts": {
-                "date": 1686853328000
+                "date": 1749959501763.9204
             },
             "jassijs/server/ext/EmpyDeclaration.ts": {
                 "date": 1682275348000
@@ -1676,7 +1711,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657714030000
             },
             "jassijs/server/Filesystem.ts": {
+<<<<<<< HEAD
+                "date": 1753961284581.5793,
+=======
                 "date": 1719332352671.4578,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.server.Filesystem": {
                     "$Serverservice": [
                         {
@@ -1702,13 +1741,13 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1686757420000
             },
             "jassijs/server/NativeAdapter.ts": {
-                "date": 1686927798000
+                "date": 1740494639385.6357
             },
             "jassijs/server/RegistryIndexer.ts": {
-                "date": 1682799792000
+                "date": 1753727085400.3452
             },
             "jassijs/server/Reloader.ts": {
-                "date": 1697206596099.5015,
+                "date": 1751313805967.6023,
                 "jassijs.server.Reloader": {}
             },
             "jassijs/server/Testuser.ts": {
@@ -1739,7 +1778,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
+<<<<<<< HEAD
+                "date": 1740651881360.4556,
+=======
                 "date": 1721763062471.5164,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.BoxPanel": {
                     "$UIComponent": [
                         {
@@ -1761,6 +1804,12 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
+<<<<<<< HEAD
+                "date": 1740651615686.636
+            },
+            "jassijs/ui/Calendar.ts": {
+                "date": 1740651099520.8926,
+=======
                 "date": 1722614805525.6638,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
@@ -1777,6 +1826,7 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/ui/Calendar.ts": {
                 "date": 1719769978901.3284,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Calendar": {
                     "$UIComponent": [
                         {
@@ -1793,7 +1843,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Checkbox.ts": {
+<<<<<<< HEAD
+                "date": 1740651110664.4475,
+=======
                 "date": 1720458180025.6687,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Checkbox": {
                     "$UIComponent": [
                         {
@@ -1805,6 +1859,16 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
+<<<<<<< HEAD
+                "date": 1740920030230.6099
+            },
+            "jassijs/ui/ComponentDescriptor.ts": {
+                "date": 1740651872683.1414,
+                "jassijs.ui.ComponentDescriptor": {}
+            },
+            "jassijs/ui/Container.ts": {
+                "date": 1740565176227.1602,
+=======
                 "date": 1740083076560.7507,
                 "jassijs.ui.Component": {
                     "$Property": [
@@ -1835,6 +1899,7 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/ui/Container.ts": {
                 "date": 1740077690613.9016,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Container": {
                     "$Property": [
                         {
@@ -1845,7 +1910,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ContextMenu.ts": {
+<<<<<<< HEAD
+                "date": 1740651125315.0527,
+=======
                 "date": 1740083898079.5303,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -2037,7 +2106,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
+<<<<<<< HEAD
+                "date": 1740651578634.0256,
+=======
                 "date": 1740075040179.8916,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs/ui/DBObjectView": {
                     "@members": {}
                 }
@@ -2047,7 +2120,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/HTMLEditorPanel.ts": {
-                "date": 1655641682000,
+                "date": 1740653508052.61,
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/InvisibleComponent.ts": {
@@ -2061,7 +2134,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Menu.ts": {
+<<<<<<< HEAD
+                "date": 1740651153422.6394,
+=======
                 "date": 1740075713854.7053,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Menu": {
                     "$UIComponent": [
                         {
@@ -2079,7 +2156,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655585212000
             },
             "jassijs/ui/ObjectChooser.ts": {
+<<<<<<< HEAD
+                "date": 1740651180995.632,
+=======
                 "date": 1740069816807.102,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -2100,7 +2181,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
+<<<<<<< HEAD
+                "date": 1740651821533.4785,
+=======
                 "date": 1740077265195.8843,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Panel": {
                     "$UIComponent": [
                         {
@@ -2295,7 +2380,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/JsonEditor.ts": {
+<<<<<<< HEAD
+                "date": 1740654306812.6265,
+=======
                 "date": 1721755050984.9895,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.PropertyEditors.JsonEditor": {
                     "$PropertyEditor": [
                         [
@@ -2325,7 +2414,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/PropertyEditors/TableColumnImport": {}
             },
             "jassijs/ui/Select.ts": {
+<<<<<<< HEAD
+                "date": 1740651817486.086,
+=======
                 "date": 1722606114318.6875,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Select": {
                     "$UIComponent": [
                         {
@@ -2363,7 +2456,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Style.ts": {
+<<<<<<< HEAD
+                "date": 1740742991062.1353,
+=======
                 "date": 1719755851416.894,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Style": {
                     "$UIComponent": [
                         {
@@ -2375,7 +2472,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
+<<<<<<< HEAD
+                "date": 1740651244036.1194,
+=======
                 "date": 1739905912879.3584,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -2397,7 +2498,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textarea.ts": {
+<<<<<<< HEAD
+                "date": 1740651255435.1821,
+=======
                 "date": 1739907112385.5366,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Textarea": {
                     "$UIComponent": [
                         {
@@ -2414,7 +2519,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
+<<<<<<< HEAD
+                "date": 1740653418362.317,
+=======
                 "date": 1740069816797.109,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -2426,7 +2535,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Tree.ts": {
+<<<<<<< HEAD
+                "date": 1740653437644.0461,
+=======
                 "date": 1739999095010.4412,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.TreeEditorPropertiesMulti": {
                     "@members": {}
                 },
@@ -2451,7 +2564,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Upload.ts": {
+<<<<<<< HEAD
+                "date": 1740651285912.3606,
+=======
                 "date": 1719770567272.5264,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Upload": {
                     "$UIComponent": [
                         {
@@ -2470,7 +2587,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1720099914948.8174
             },
             "jassijs/util/CSVImport.ts": {
-                "date": 1697199596581.038,
+                "date": 1750786905779.3127,
                 "jassijs.util.CSVImport": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2495,7 +2612,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1697201960827.66,
+                "date": 1751313789532.3257,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {
@@ -2507,12 +2624,20 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Tools": {}
             },
             "jassijs/ui/State.ts": {
+<<<<<<< HEAD
+                "date": 1740494728113.6765
+=======
                 "date": 1740077833527.527
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             },
             "jassijs/ui/StateBinder.ts": {
                 "date": 1739904613929.6313
             },
             "jassijs/ui/HTMLPanel.tsx": {
+<<<<<<< HEAD
+                "date": 1740651540054.6853,
+                "jassijs.ui.HTMLPanel": {
+=======
                 "date": 1740069816801.1152,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
@@ -2521,11 +2646,16 @@ define("jassijs/registry", ["require"], function (require) {
                             "icon": "mdi mdi-cloud-tags"
                         }
                     ],
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     "@members": {}
                 }
             },
             "jassijs/ui/Image.tsx": {
+<<<<<<< HEAD
+                "date": 1740651139777.7815,
+=======
                 "date": 1719770180674.2976,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Image": {
                     "$UIComponent": [
                         {
@@ -2537,7 +2667,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/MenuItem.tsx": {
+<<<<<<< HEAD
+                "date": 1740651166738.7964,
+=======
                 "date": 1740075824893.565,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.MenuItem": {
                     "$UIComponent": [
                         {
@@ -2565,16 +2699,187 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/TinymcePanel.ts": {
+<<<<<<< HEAD
+                "date": 1740651789442.6328,
+=======
                 "date": 1740077295896.0708,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.TinymcePanel": {
                     "@members": {}
                 }
             },
+<<<<<<< HEAD
+            "jassijs/server/NeverCallMe.ts": {
+                "date": 1740510111150.174
+            },
+            "jassijs/ui/UIComponent.ts": {
+                "date": 1740921301118.0347,
+                "jassijs.ui.Button": {
+                    "$UIComponent": [
+                        {
+                            "fullPath": "common/Button",
+                            "icon": "mdi mdi-gesture-tap-button",
+                            "initialize": {
+                                "text": "button"
+                            }
+                        }
+                    ],
+                    "$Property": [
+                        {
+                            "name": "text",
+                            "type": "string"
+                        },
+                        {
+                            "name": "onclick",
+                            "type": "function",
+                            "default": "function(event){\n\t\n}"
+                        },
+                        {
+                            "name": "icon",
+                            "type": "image"
+                        }
+                    ]
+                },
+                "jassijs.ui.Component": {
+                    "$Property": [
+                        {
+                            "name": "useWrapper",
+                            "type": "boolean",
+                            "description": "wraps the component with div"
+                        },
+                        {
+                            "name": "onfocus",
+                            "type": "function",
+                            "default": "function(event){\n\t\n}"
+                        },
+                        {
+                            "name": "onblur",
+                            "type": "function",
+                            "default": "function(event){\n\t\n}"
+                        },
+                        {
+                            "name": "label",
+                            "type": "string",
+                            "description": "adds a label above the component"
+                        },
+                        {
+                            "name": "tooltip",
+                            "type": "string",
+                            "description": "tooltip are displayed on mouse over"
+                        },
+                        {
+                            "name": "x",
+                            "type": "number"
+                        },
+                        {
+                            "name": "y",
+                            "type": "number"
+                        },
+                        {
+                            "name": "hidden",
+                            "type": "boolean"
+                        },
+                        {
+                            "name": "width",
+                            "type": "number"
+                        },
+                        {
+                            "name": "height",
+                            "type": "number"
+                        },
+                        {
+                            "name": "style",
+                            "type": "json",
+                            "componentType": "jassijs.ui.CSSProperties"
+                        },
+                        {
+                            "name": "styles",
+                            "type": "componentselector",
+                            "componentType": "[jassijs.ui.Style]"
+                        },
+                        {
+                            "name": "contextMenu",
+                            "type": "componentselector",
+                            "componentType": "jassijs.ui.ContextMenu"
+                        }
+                    ]
+                },
+                "jassijs.ui.HTMLComponent": {
+                    "$Property": [
+                        {
+                            "name": "children",
+                            "type": "jassijs.ui.Component",
+                            "createDummyInDesigner": "doCreateDummyForHTMLComponent"
+                        }
+                    ],
+                    "$UIComponent": [
+                        {
+                            "fullPath": "common/HTMLComponent",
+                            "icon": "mdi mdi-cloud-tags",
+                            "initialize": {
+                                "tag": "input"
+                            }
+                        }
+                    ]
+                },
+                "jassijs.ui.TextComponent": {
+                    "$Property": [
+                        {
+                            "name": "tag",
+                            "type": "string",
+                            "chooseFromStrict": true,
+                            "chooseFrom": "function"
+                        },
+                        {
+                            "name": "text",
+                            "type": "string"
+                        }
+                    ]
+                }
+            },
+            "jassijs/remote/RemoteTest.ts": {
+                "date": 1750787386563.1096,
+                "jassijs.remote.RemoteTest": {
+                    "@members": {
+                        "createFolder2": {
+                            "UseServer": []
+                        },
+                        "mytest2": {
+                            "UseServer": []
+                        }
+                    }
+                }
+            },
+            "jassijs/remote/StackContext.ts": {
+                "date": 1749958831997.4402
+            },
+            "jassijs/remote/Context.ts": {
+                "date": 1750451805597.2747
+            },
+            "jassijs/remote/Context2.ts": {
+                "date": 1749959261684.3096
+            },
+            "jassijs/remote/ObjectTransaction.ts": {
+                "date": 1622985414000
+            },
+            "jassijs/remote/Runlocalserver.ts": {
+                "date": 1753970675254.8625
+            },
+            "jassijs/remote/Testlocalserver.ts": {
+                "date": 1753729472429.9197
+            },
+            "jassijs/remote/Npm.ts": {
+                "date": 1753558429561.62
+            },
+            "jassijs/remote/PatchTTP.ts": {
+                "date": 1753968322370.392
+=======
             "jassijs/ui/Repeater.ts": {
                 "date": 1740069816810.0945,
                 "jassijs.ui.Repeater": {
                     "@members": {}
                 }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
         }
     };
@@ -2767,6 +3072,147 @@ define("jassijs/remote/Config", ["require", "exports"], function (require, expor
     var config = new Config();
     exports.config = config;
 });
+define("jassijs/remote/Context", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.useStackContextTest = useStackContextTest;
+    exports.useStackContext = useStackContext;
+    exports.useStackContextOrg = useStackContextOrg;
+    exports.getStackContext = getStackContext;
+    exports.getZoneContext = getZoneContext;
+    exports.useZoneContext = useZoneContext;
+    // StackContext.ts
+    const contextMap = new Map();
+    let functionCounter = 0;
+    function useStackContextTest(context, fn, ...args) {
+        const name = `__stackctx_${new Date().getTime() + (functionCounter++)}`;
+        // Dummy-Funktion mit Namen ins Stack setzen
+        function WrapperMarker(...innerArgs) {
+            contextMap.set(name, context);
+            const cleanup = () => contextMap.delete(name);
+            try {
+                const result = fn.apply(this, innerArgs);
+                if (result instanceof Promise) {
+                    return result.finally(cleanup);
+                }
+                cleanup();
+                return result;
+            }
+            catch (err) {
+                cleanup();
+                throw err;
+            }
+        }
+        // Rename funktion für Stack-Trace
+        Object.defineProperty(WrapperMarker, 'name', { value: name });
+        return WrapperMarker(...args);
+    }
+    async function useStackContext(context, fn, ...args) {
+        const name = `__stackctx_${Date.now() + (functionCounter++)}`;
+        // Wrapper-Funktion mit eindeutigem Namen für den Stack
+        async function wrapper(...innerArgs) {
+            contextMap.set(name, context);
+            try {
+                return await fn.apply(this, innerArgs);
+            }
+            finally {
+                contextMap.delete(name);
+            }
+        }
+        // Setze den Funktionsnamen für sauberen Stack-Zugriff
+        Object.defineProperty(wrapper, 'name', { value: name });
+        return await wrapper(...args);
+    }
+    function useStackContextOrg(context, fn, ...args) {
+        const name = `__stackctx_${new Date().getTime() + (functionCounter++)}`;
+        const wrapper = {
+            [name]: function (...args) {
+                contextMap.set(name, context);
+                const cleanup = () => contextMap.delete(name);
+                try {
+                    const result = fn.apply(this, args);
+                    if (result instanceof Promise) {
+                        return result.finally(cleanup);
+                    }
+                    cleanup();
+                    return result;
+                }
+                catch (err) {
+                    cleanup();
+                    throw err;
+                }
+            }
+        }[name];
+        return wrapper(...args);
+    }
+    function getStackContext() {
+        const err = new Error();
+        const stack = err.stack || '';
+        for (const line of stack.split('\n')) {
+            const match = line.match(/__stackctx_(\d+)/);
+            if (match) {
+                return contextMap.get(match[0]);
+            }
+        }
+        return undefined;
+    }
+    // Importiere Zone.js (falls nicht bereits in deinem Projekt vorhanden)
+    function getZoneContext() {
+        if (globalThis.Zone === undefined)
+            return undefined;
+        //@ts-ignore
+        const obj = Zone.current.get('data');
+        return obj;
+    }
+    async function useZoneContext(context, fn, ...args) {
+        if (jassijs.isServer) {
+            await new Promise((resolve_9, reject_9) => { require(["zone.js"], resolve_9, reject_9); }).then(__importStar);
+        }
+        else {
+            await new Promise((resolve_10, reject_10) => { require(["zone-js"], resolve_10, reject_10); }).then(__importStar);
+        }
+        // Erstelle eine neue Zone
+        //@ts-ignore
+        const myZone = Zone.current.fork({
+            name: `__zone_${new Date().getTime() + (functionCounter++)}`,
+            properties: { data: context },
+            onInvoke: (parentZoneDelegate, currentZone, targetZone, callback, applyThis, applyArgs, src) => {
+                // console.log('Vor der Ausführung der Funktion in der Zone');
+                const result = parentZoneDelegate.invoke(targetZone, callback, applyThis, applyArgs, src);
+                // console.log('Nach der Ausführung der Funktion in der Zone');
+                return result;
+            }
+        });
+        // Verwende die Zone
+        var ret = await myZone.run(fn);
+        return ret;
+    }
+});
+define("jassijs/remote/Context2", ["require", "exports", "jassijs/remote/Context"], function (require, exports, Context_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = test;
+    class A {
+        async h() {
+            return await this.h2();
+        }
+        async h2() {
+            var _a;
+            console.log('Aktueller StackContext:' + ((_a = (0, Context_1.getStackContext)()) === null || _a === void 0 ? void 0 : _a.sessionId));
+            return "Ok";
+        }
+    }
+    async function test2() {
+        return await new A().h();
+    }
+    async function test() {
+        const hallo = await (0, Context_1.useStackContext)({ sessionId: 'abc-124' }, async () => {
+            // await new Promise(res => setTimeout(res, 10));
+            return test2();
+        });
+        console.log(hallo);
+    }
+});
 define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Registry", "./Classes"], function (require, exports, Registry_11, Classes_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2855,17 +3301,16 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Re
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabaseTools = void 0;
     exports.test = test;
+<<<<<<< HEAD
+    let DatabaseTools = DatabaseTools_1 = class DatabaseTools {
+=======
     let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1.RemoteObject {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //this is a sample remote function
         static async runSQL(sql, parameter = undefined, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this.runSQL, sql, parameter, context);
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_6.JassiError("only admins can delete");
-                return (await Serverservice_1.serverservices.db).runSQL(context, sql, parameter);
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_6.JassiError("only admins can delete");
+            return (await Serverservice_1.serverservices.db).runSQL(context, sql, parameter);
         }
         static async dropTables(tables) {
             for (var i = 0; i < tables.length; i++) {
@@ -2881,6 +3326,10 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Re
     };
     exports.DatabaseTools = DatabaseTools;
     __decorate([
+<<<<<<< HEAD
+        (0, RemoteObject_1.UseServer)(),
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __param(1, (0, Validator_1.ValidateIsArray)({ optional: true })),
@@ -2895,7 +3344,8 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Re
         /*  var h=await DatabaseTools.runSQL('DROP TABLE :p1,:p2',[
                               {p1:"te_person2",
                                           p2:"tg_person"}]);//,"te_person2"]);*/
-        //var h=await DatabaseTools.runSQL('select * from jassijs_rights'); 
+        var all = await DatabaseTools.runSQL('select * from jassijs_group');
+        console.log(JSON.stringify(all));
     }
 });
 define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_13, Classes_7) {
@@ -3010,7 +3460,11 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
     * all objects which use the jassijs.db must implement this
     * @class DBObject
     */
+<<<<<<< HEAD
+    let DBObject = DBObject_1 = class DBObject {
+=======
     let DBObject = DBObject_1 = class DBObject extends RemoteObject_2.RemoteObject {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //clear cache on reload
         static _initFunc() {
             Registry_15.default.onregister("$Class", (data, name) => {
@@ -3099,12 +3553,20 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
         * save the object to jassijs.db
         */
         async save(context = undefined) {
-            await this.validate({
-                delegateOptions: {
-                    ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] },
-                    ValidateIsArray: { alternativeJsonProperties: ["id"] }
-                }
-            });
+            let ttest = 9992;
+            try {
+                await this.validate({
+                    delegateOptions: {
+                        ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] },
+                        ValidateIsArray: { alternativeJsonProperties: ["id"] }
+                    }
+                });
+                console.log("now");
+            }
+            catch (err) {
+                debugger;
+                console.log("error" + err);
+            }
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 if (this.id !== undefined) {
                     var cname = Classes_8.classes.getClassName(this);
@@ -3119,7 +3581,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
                         if (this.isAutoId())
                             throw new Classes_8.JassiError("autoid - load the object  before saving or remove id");
                         else
-                            return await this.call(this, this._createObjectInDB, context);
+                            return await RemoteObject_2.RemoteObject.docall(this, this._createObjectInDB, ...arguments);
                         //}//fails if the Object is saved before loading 
                     }
                     else {
@@ -3130,7 +3592,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
                     DBObject_1.addToCache(this);
                     //                cl[this.id] = this;//Update cache on save
                     var newob = this._replaceObjectWithId(this);
-                    var id = await this.call(newob, this.save, context);
+                    var id = await RemoteObject_2.RemoteObject.docallWithReplaceThis(newob, this, this.save, ...arguments);
                     this.id = id;
                     return this;
                 }
@@ -3140,7 +3602,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
                     }
                     else {
                         var newob = this._replaceObjectWithId(this);
-                        var h = await this.call(newob, this._createObjectInDB, context);
+                        var h = await RemoteObject_2.RemoteObject.docallWithReplaceThis(newob, this, this._createObjectInDB, ...arguments);
                         this.id = h;
                         DBObject_1.addToCache(this);
                         //                	 DBObject.cache[classes.getClassName(this)][this.id]=this;
@@ -3160,20 +3622,24 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
                 return (await Serverservice_2.serverservices.db).insert(context, this);
             }
         }
+        //@UseServer()
         static async findOne(options = undefined, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this.findOne, options, context);
+                return RemoteObject_2.RemoteObject.docall(this, this.findOne, ...arguments);
             }
             else {
-                return (await Serverservice_2.serverservices.db).findOne(context, this, options);
+                var db = await (Serverservice_2.serverservices.db);
+                return db.findOne(context, this, options);
             }
         }
+        // @UseServer()
         static async find(options = undefined, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this.find, options, context);
+                return RemoteObject_2.RemoteObject.docall(this, this.find, ...arguments);
             }
             else {
-                return (await Serverservice_2.serverservices.db).find(context, this, options);
+                var db = await (Serverservice_2.serverservices.db);
+                return db.find(context, this, options);
             }
         }
         /**
@@ -3186,7 +3652,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
                 if (cl !== undefined) {
                     delete cl[this.id];
                 }
-                return await this.call({ id: this.id }, this.remove, context);
+                return await RemoteObject_2.RemoteObject.docallWithReplaceThis({ id: this.id }, this, this.remove, ...arguments);
             }
             else {
                 //@ts-ignore
@@ -3202,8 +3668,12 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Registr
     DBObject.cache = {};
     DBObject._init = DBObject_1._initFunc();
     exports.DBObject = DBObject = DBObject_1 = __decorate([
+<<<<<<< HEAD
+        (0, Registry_14.$Class)("jassijs.remote.DBObject")
+=======
         (0, Registry_14.$Class)("jassijs.remote.DBObject"),
         __metadata("design:paramtypes", [])
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], DBObject);
     async function test() {
         var h = Database_1.db.getMetadata(Classes_8.classes.getClass("de.Kunde"));
@@ -3540,6 +4010,541 @@ define("jassijs/remote/Modules", ["require", "exports"], function (require, expo
     var modules = new Modules();
     exports.modules = modules;
 });
+/*class Npm {
+  registry = "https://registry.npmjs.org/";
+  constructor() {
+    fs = _require("fs", "")
+  }
+
+  async install() {
+    debugger;
+    const packageJson = this._loadPackageJson();
+    const deps = packageJson.dependencies || {};
+
+    for (const [modul, version] of Object.entries(deps)) {
+      await this._installPackage(modul, version);
+    }
+  }
+
+  async installModul(modul, version = "latest") {
+    console.log("install " + modul);
+    const pkg = this._loadPackageJson();
+    pkg.dependencies = pkg.dependencies || {};
+    pkg.dependencies[modul] = version;
+    this._savePackageJson(pkg);
+    await this._installPackage(modul, version);
+  }
+
+  async uninstallModul(modul) {
+    const pkg = this._loadPackageJson();
+    delete pkg.dependencies?.[modul];
+    this._savePackageJson(pkg);
+    this._deleteFolder(`./node_modules/${modul}`);
+  }
+
+  // 🔧 Helferfunktionen
+
+  _loadPackageJson() {
+    const content = fs.readFileSync("./package.json", "utf8");
+    return JSON.parse(content);
+  }
+
+  _savePackageJson(obj) {
+    const json = JSON.stringify(obj, null, 2);
+    fs.writeFileSync("./package.json", json, "utf8");
+  }
+
+  resolveVersion(availableVersions, range) {
+    const versions = Object.keys(availableVersions).filter(v => /^\d+\.\d+\.\d+$/.test(v));
+
+    if (range === "*" || range === "latest") {
+      return versions.sort((a, b) => this.compareVersions(b, a))[0];
+    }
+
+    const conditions = range.split(" ").filter(Boolean);
+
+    const compatible = versions.filter(v => {
+      const [major, minor, patch] = v.split(".").map(Number);
+
+      return conditions.every(cond => {
+        const match = cond.match(/(>=|<=|>|<|=|~|\^)?\s*(\d+)(?:\.(\d+))?(?:\.(\d+))?/);
+        if (!match) return false;
+
+        const [, op, maj, min = "0", pat = "0"] = match;
+        const target = [parseInt(maj), parseInt(min), parseInt(pat)];
+
+        switch (op) {
+          case ">": return this.compareVersions([major, minor, patch], target) > 0;
+          case ">=": return this.compareVersions([major, minor, patch], target) >= 0;
+          case "<": return this.compareVersions([major, minor, patch], target) < 0;
+          case "<=": return this.compareVersions([major, minor, patch], target) <= 0;
+          case "=": return this.compareVersions([major, minor, patch], target) === 0;
+          case "^":
+            return major === target[0] &&
+              (minor > target[1] || (minor === target[1] && patch >= target[2]));
+          case "~":
+            return major === target[0] &&
+              minor === target[1] &&
+              patch >= target[2];
+          default:
+            return this.compareVersions([major, minor, patch], target) === 0;
+        }
+      });
+    });
+
+    if (compatible.length === 0) return null;
+
+    compatible.sort((a, b) => this.compareVersions(b, a));
+    return compatible[0];
+  }
+
+  compareVersions(a, b) {
+    const [amaj, amin, apat] = Array.isArray(a) ? a : a.split(".").map(Number);
+    const [bmaj, bmin, bpat] = Array.isArray(b) ? b : b.split(".").map(Number);
+    if (amaj !== bmaj) return amaj - bmaj;
+    if (amin !== bmin) return amin - bmin;
+    return apat - bpat;
+  }
+  async _installPackage(name, version) {
+    console.log("install package " + name);
+    const metadata = await fetch(`${this.registry}${name}`).then(r => r.json());
+    if(version.indexOf("@")>-1)
+      version=version.split("@")[1];
+    const resolvedVersion = this.resolveVersion(metadata.versions, version);
+    if (metadata.versions[resolvedVersion]?.dist === undefined) {
+      debugger;
+
+      this.resolveVersion(metadata.versions, version);
+    }
+    const tarballUrl = metadata.versions[resolvedVersion].dist.tarball;
+
+    const destPath = `./node_modules/${name}`;
+    await this.unpacktgz(tarballUrl, destPath);
+
+    const pkgPath = `${destPath}/package.json`;
+    if (fs.existsSync(pkgPath)) {
+      const subPkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+      for (const [dep, depVersion] of Object.entries(subPkg.dependencies || {})) {
+        if (!fs.existsSync(`./node_modules/${dep}`)) {
+          await this._installPackage(dep, depVersion);
+        }
+      }
+    }
+  }
+
+  _deleteFolder(path) {
+    if (!fs.existsSync(path)) return;
+    const walk = (p) => {
+      for (const entry of fs.readdirSync(p)) {
+        const full = `${p}/${entry}`;
+        if (fs.statSync(full).isDirectory()) {
+          walk(full);
+          fs.rmdirSync(full);
+        } else {
+          fs.unlinkSync(full);
+        }
+      }
+    };
+    walk(path);
+    fs.rmdirSync(path);
+  }
+
+
+  async unpacktgz(url, pathto) {
+    const Buffer = _require("buffer", "");
+    // var url = 'https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz';
+    const response = await fetch(url);
+    const compressedData = await response.arrayBuffer();
+
+    const decompressed = pako.ungzip(new Uint8Array(compressedData));
+    const path = _require('path', "");
+    const files = await untar(decompressed.buffer);
+    for (let x = 0; x < files.length; x++) {
+      let fname = files[x].name.substring(files[x].name.indexOf("/") + 1);
+      fname = pathto + "/" + fname;
+      let dirname = path.dirname(fname);
+      if (!fs.existsSync(dirname))
+        fs.mkdirSync(dirname, { recursive: true });
+      const buffer = Buffer.from(files[x].buffer);
+      if (files[x].mode.trim() !== "000755")//directory
+        fs.writeFileSync(fname, buffer);
+    }
+
+    return;
+  }
+}
+
+function debug(rootPath) {
+  const result = {};
+
+  function scanDir(currentPath) {
+    const entries = fs.readdirSync(currentPath, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const fullPath = currentPath + "/" + entry.name;
+
+      if (entry.isDirectory()) {
+        scanDir(fullPath); // Rekursiv in Unterverzeichnis gehen
+      } else if (entry.isFile()) {
+        try {
+          const content = fs.readFileSync(fullPath);
+          const snippet = content.toString('utf8').slice(0, 10); // Erste 10 Zeichen
+          result[fullPath] = snippet;
+        } catch (err) {
+          console.warn(`Fehler beim Lesen von ${fullPath}:`, err);
+        }
+      }
+    }
+  }
+
+  scanDir(rootPath);
+  return result;
+}*/
+class Npm {
+    constructor(packagejson) {
+        this.files = {};
+        this.registry = "https://registry.npmjs.org/";
+        this.installedModules = new Set();
+        this.installingModules = new Map();
+        this.requestedVersions = new Map();
+        this.files["./package.json"] = {
+            content: JSON.stringify(packagejson)
+        };
+    }
+    async install() {
+        const packageJson = this._loadPackageJson();
+        const deps = packageJson.dependencies || {};
+        // Parallele Installation
+        await Promise.all(Object.entries(deps).map(([modul, version]) => this._installPackage(modul, version)));
+    }
+    async installModul(modul, version = "latest") {
+        console.log("install Modul" + modul);
+        const pkg = this._loadPackageJson();
+        pkg.dependencies = pkg.dependencies || {};
+        pkg.dependencies[modul] = version;
+        this._savePackageJson(pkg);
+        await this._installPackage(modul, version);
+    }
+    async uninstallModul(modul) {
+        var _a;
+        const pkg = this._loadPackageJson();
+        (_a = pkg.dependencies) === null || _a === void 0 ? true : delete _a[modul];
+        this._savePackageJson(pkg);
+        this._deleteFolder(`./node_modules/${modul}`);
+    }
+    _loadPackageJson() {
+        const file = this.files["./package.json"];
+        if (!file)
+            throw new Error("package.json fehlt");
+        return JSON.parse(file.content);
+    }
+    _savePackageJson(obj) {
+        const json = JSON.stringify(obj, null, 2);
+        this.files["./package.json"] = { content: new TextEncoder().encode(json) };
+    }
+    compareVersions(a, b) {
+        const [amaj, amin, apat] = Array.isArray(a) ? a : a.split(".").map(Number);
+        const [bmaj, bmin, bpat] = Array.isArray(b) ? b : b.split(".").map(Number);
+        if (amaj !== bmaj)
+            return amaj > bmaj ? 1 : -1;
+        if (amin !== bmin)
+            return amin > bmin ? 1 : -1;
+        if (apat !== bpat)
+            return apat > bpat ? 1 : -1;
+        return 0;
+    }
+    resolveVersion(availableVersions, range) {
+        const versions = Object.keys(availableVersions).filter(v => /^\d+\.\d+\.\d+$/.test(v));
+        if (range === "*" || range === "latest") {
+            return versions.sort((a, b) => this.compareVersions(b, a))[0];
+        }
+        const conditions = range.match(/(>=|<=|>|<|=|\^|~)?\s*\d+(?:\.\d+)?(?:\.\d+)?/g);
+        if (!conditions)
+            return null;
+        const compatible = versions.filter(v => {
+            const ver = v.split(".").map(Number);
+            return conditions.every(cond => {
+                const match = cond.match(/(>=|<=|>|<|=|\^|~)?\s*(\d+)(?:\.(\d+))?(?:\.(\d+))?/);
+                if (!match)
+                    return false;
+                let [, op, maj, min = "0", pat = "0"] = match;
+                const target = [parseInt(maj), parseInt(min), parseInt(pat)];
+                const cmp = this.compareVersions(ver, target);
+                switch (op) {
+                    case ">": return cmp > 0;
+                    case ">=": return cmp >= 0;
+                    case "<": return cmp < 0;
+                    case "<=": return cmp <= 0;
+                    case "=": return cmp === 0;
+                    case "^": return cmp >= 0 && ver[0] === target[0];
+                    case "~": return cmp >= 0 && ver[0] === target[0] && ver[1] === target[1];
+                    default: return cmp === 0;
+                }
+            });
+        });
+        if (compatible.length === 0)
+            return null;
+        compatible.sort((a, b) => this.compareVersions(b, a));
+        return compatible[0];
+    }
+    async mergeVersionRanges(name) {
+        const ranges = this.requestedVersions.get(name);
+        if (!ranges || ranges.length === 0)
+            return "latest";
+        const metadata = await fetch(`${this.registry}${name}`).then(r => r.json());
+        const available = metadata.versions;
+        // Finde gemeinsame Version
+        const compatible = Object.keys(available).filter(v => {
+            return ranges.every(range => {
+                const resolved = this.resolveVersion({ [v]: {} }, range);
+                return resolved === v;
+            });
+        });
+        if (compatible.length > 0) {
+            compatible.sort((a, b) => this.compareVersions(b, a));
+            return compatible[0];
+        }
+        // Keine gemeinsame Version → höchste angeforderte Version wählen
+        console.log(`⚠ Keine gemeinsame Version für "${name}" gefunden. Verwende höchste angeforderte Version.`);
+        const resolvedCandidates = ranges
+            .map(range => this.resolveVersion(available, range))
+            .filter(v => v !== null);
+        if (resolvedCandidates.length === 0) {
+            console.log(`❌ "${name}": Keine passende Version in Registry verfügbar.`);
+            return null;
+        }
+        resolvedCandidates.sort((a, b) => this.compareVersions(b, a));
+        return resolvedCandidates[0];
+    }
+    _isInstalledVersionCompatible(name, versionRange) {
+        const pkgPath = `./node_modules/${name}/package.json`;
+        const file = this.files[pkgPath];
+        if (!file)
+            return false;
+        const installedPkg = JSON.parse(file.content);
+        const installedVersion = installedPkg.version;
+        const compatible = this.resolveVersion({ [installedVersion]: {} }, versionRange);
+        return compatible === installedVersion;
+    }
+    async _installPackage(name, version) {
+        if (!this.requestedVersions.has(name)) {
+            this.requestedVersions.set(name, []);
+        }
+        this.requestedVersions.get(name).push(version);
+        // Wenn Installation bereits läuft
+        if (this.installingModules.has(name)) {
+            return this.installingModules.get(name);
+        }
+        const installPromise = (async () => {
+            const resolvedVersion = await this.mergeVersionRanges(name);
+            if (!resolvedVersion) {
+                console.log(`⚠ ${name}: keine gemeinsame Version gefunden`);
+                return;
+            }
+            // Prüfen, ob bereits kompatibel installiert
+            if (this._isInstalledVersionCompatible(name, resolvedVersion)) {
+                return;
+            }
+            console.log(`⬇ installiere ${name}@${resolvedVersion}`);
+            const metadata = await fetch(`${this.registry}${name}`).then(r => r.json());
+            const tarballUrl = metadata.versions[resolvedVersion].dist.tarball;
+            const destPath = `./node_modules/${name}`;
+            await this.unpacktgz(tarballUrl, destPath);
+            const pkgPath = `${destPath}/package.json`;
+            if (this.files[pkgPath]) {
+                const subPkg = JSON.parse(this.files[pkgPath].content);
+                const subDeps = subPkg.dependencies || {};
+                await Promise.all(Object.entries(subDeps).map(([dep, depVersion]) => this._installPackage(dep, depVersion)));
+            }
+            this.installedModules.add(name);
+            this.installingModules.delete(name);
+        })();
+        this.installingModules.set(name, installPromise);
+        return installPromise;
+    }
+    _deleteFolder(pathPrefix) {
+        for (const path in this.files) {
+            if (path.startsWith(pathPrefix)) {
+                delete this.files[path];
+            }
+        }
+    }
+    async unpacktgz(url, pathto) {
+        if (globalThis.pako === undefined) {
+            const pcode = await (await fetch("https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js")).text();
+            eval("var define=undefined;" + pcode);
+        }
+        const response = await fetch(url);
+        const compressedData = await response.arrayBuffer();
+        const decompressed = globalThis.pako.ungzip(new Uint8Array(compressedData));
+        const reader = new TarReader();
+        const files = reader.untar(decompressed.buffer);
+        for (const entry of files) {
+            let fname = entry.name.substring(entry.name.indexOf("/") + 1);
+            fname = `${pathto}/${fname}`;
+            if (entry.type !== "file")
+                continue;
+            let data;
+            if (Npm.textExt.some(suffix => entry.name.toLowerCase().endsWith(suffix)))
+                data = reader.getTextFile(entry.name);
+            else
+                data = reader.getFileBinary(entry.name);
+            this.files[fname] = { content: data };
+        }
+    }
+}
+Npm.textExt = ["js", "ts", "cfg", "xml", "json", "txt", "css", "map", "md", "npmignore", "nycrc", "css", "scss", "yml"];
+//https://github.com/ankitrohatgi/tarballjs/blob/master/tarball.js
+var TarReader = class {
+    constructor() {
+        this.fileInfo = [];
+    }
+    untar(buffer) {
+        this.buffer = buffer;
+        this.fileInfo = [];
+        this._readFileInfo();
+        return this.fileInfo;
+    }
+    readFile(file) {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = (event) => {
+                this.buffer = event.target.result;
+                this.fileInfo = [];
+                this._readFileInfo();
+                resolve(this.fileInfo);
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    }
+    readArrayBuffer(arrayBuffer) {
+        this.buffer = arrayBuffer;
+        this.fileInfo = [];
+        this._readFileInfo();
+        return this.fileInfo;
+    }
+    _readFileInfo() {
+        this.fileInfo = [];
+        let offset = 0;
+        let file_size = 0;
+        let file_name = "";
+        let file_type = null;
+        while (offset < this.buffer.byteLength - 512) {
+            file_name = this._readFileName(offset); // file name
+            if (file_name.length == 0) {
+                break;
+            }
+            file_type = this._readFileType(offset);
+            file_size = this._readFileSize(offset);
+            this.fileInfo.push({
+                "name": file_name,
+                "type": file_type,
+                "size": file_size,
+                "header_offset": offset
+            });
+            offset += (512 + 512 * Math.trunc(file_size / 512));
+            if (file_size % 512) {
+                offset += 512;
+            }
+        }
+    }
+    getFileInfo() {
+        return this.fileInfo;
+    }
+    _readString(str_offset, size) {
+        let strView = new Uint8Array(this.buffer, str_offset, size);
+        let i = strView.indexOf(0);
+        let td = new TextDecoder();
+        return td.decode(strView.slice(0, i));
+    }
+    _readFileName(header_offset) {
+        let name = this._readString(header_offset, 100);
+        return name;
+    }
+    _readFileType(header_offset) {
+        // offset: 156
+        let typeView = new Uint8Array(this.buffer, header_offset + 156, 1);
+        let typeStr = String.fromCharCode(typeView[0]);
+        if (typeStr == "0") {
+            return "file";
+        }
+        else if (typeStr == "5") {
+            return "directory";
+        }
+        else {
+            return typeStr;
+        }
+    }
+    _readFileSize(header_offset) {
+        // offset: 124
+        let szView = new Uint8Array(this.buffer, header_offset + 124, 12);
+        let szStr = "";
+        for (let i = 0; i < 11; i++) {
+            szStr += String.fromCharCode(szView[i]);
+        }
+        return parseInt(szStr, 8);
+    }
+    _readFileBlob(file_offset, size, mimetype) {
+        let view = new Uint8Array(this.buffer, file_offset, size);
+        let blob = new Blob([view], { "type": mimetype });
+        return blob;
+    }
+    _readFileBinary(file_offset, size) {
+        let view = new Uint8Array(this.buffer, file_offset, size);
+        return view;
+    }
+    _readTextFile(file_offset, size) {
+        let view = new Uint8Array(this.buffer, file_offset, size);
+        let td = new TextDecoder();
+        return td.decode(view);
+    }
+    getTextFile(file_name) {
+        let info = this.fileInfo.find(info => info.name == file_name);
+        if (info) {
+            return this._readTextFile(info.header_offset + 512, info.size);
+        }
+    }
+    getFileBlob(file_name, mimetype) {
+        let info = this.fileInfo.find(info => info.name == file_name);
+        if (info) {
+            return this._readFileBlob(info.header_offset + 512, info.size, mimetype);
+        }
+    }
+    getFileBinary(file_name) {
+        let info = this.fileInfo.find(info => info.name == file_name);
+        if (info) {
+            return this._readFileBinary(info.header_offset + 512, info.size);
+        }
+    }
+};
+async function testNPM() {
+    var npm = new Npm({
+        "name": "jassijsserver",
+        "version": "1.0.5",
+        "description": "jassijsserver",
+        "engines": {
+            "node": "^12.x"
+        },
+        "dependencies": {
+            "acorn-import-phases": "^1.0.4",
+            "browserfs": "^1.4.3",
+            "browserify": "^17.0.1",
+        },
+        "license": "MIT",
+        "author": "Udo Weigelt",
+    });
+    debugger;
+    //fs.writeFileSync("./package.json", pack);
+    await npm.install();
+    // console.log(debug("./test"));
+    /*
+      var pack = await new Server().loadFile("$serverside/package.json");
+      fs.writeFileSync("./package.json", pack);
+      await new Npm().install();
+    */
+    debugger;
+    //await unpacktgz('https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz', "./test");
+}
 define("jassijs/remote/ObjectTransaction", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3579,6 +4584,429 @@ define("jassijs/remote/ObjectTransaction", ["require", "exports"], function (req
     }
     exports.ObjectTransaction = ObjectTransaction;
 });
+function patchHTTP(ob) {
+    async function feedRequestBody(requestSW, requestNodes) {
+        if (!requestSW.body) {
+            // Kein Body vorhanden – trotzdem Events feuern
+            requestNodes.emit('data', new Uint8Array(0)); // optional
+            requestNodes.emit('end');
+            return;
+        }
+        const reader = requestSW.body.getReader();
+        try {
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done)
+                    break;
+                /* todo
+                function isProbablyText(contentType: string | null): boolean {
+                if (!contentType) return false;
+
+                const lower = contentType.toLowerCase();
+                return lower.startsWith("text/") ||
+                    lower.includes("json") ||
+                    lower.includes("xml") ||
+                    lower.includes("yaml") ||
+                    lower.includes("csv") ||
+                    lower.includes("html") ||
+                    lower.includes("x-www-form-urlencoded");
+                }*/
+                var text = new TextDecoder().decode(value);
+                requestNodes.emit('data', text);
+            }
+            requestNodes.emit('end');
+        }
+        catch (err) {
+            requestNodes.emit('error', err);
+        }
+    }
+    function createRequest(request, server) {
+        const listeners = {};
+        var req = {};
+        req.headers = {};
+        req.method = request.method;
+        for (const [key, value] of request.headers.entries()) {
+            req.headers[key] = value;
+        }
+        req.socket = {
+            setKeepAlive() { }
+        };
+        req.removeListener = (event, listenerFn) => {
+            if (!listeners[event])
+                return;
+            listeners[event] = listeners[event].filter(fn => fn !== listenerFn);
+        };
+        req.on = (event, callback) => {
+            if (!listeners[event]) {
+                listeners[event] = [];
+            }
+            listeners[event].push(callback);
+        };
+        req.emit = (event, ...args) => {
+            const callbacks = listeners[event];
+            if (callbacks) {
+                callbacks.forEach(cb => cb(...args));
+            }
+        };
+        req.url = request.url.replace(new URL(request.url).origin, "");
+        if (req.url.startsWith("/:")) { //http://localhost:5000/:3000
+            var pos = req.url.substring(1).indexOf("/");
+            if (pos === -1)
+                req.url = "/";
+            else
+                req.url = req.url.substring(pos + 1);
+        }
+        /*  if (request.body) {
+              debugger;
+              const { Readable } = jrequire('stream-browserify');
+              const reader = request.body.getReader();
+              let started = false;
+      
+              req._readable = new Readable({
+                  read() {
+                      if (started) return;
+                      started = true;
+      
+                      const pump = () => {
+                          reader.read().then(({ done, value }) => {
+                              if (done) {
+                                  this.push(null);
+                                  req.emit('end');
+                                  return;
+                              }
+                              this.push(value);
+                              req.emit('data', value);
+                              pump();
+                          }).catch(err => {
+                              this.destroy(err);
+                              req.emit('error', err);
+                          });
+                      };
+      
+                      pump();
+                  }
+              });
+      
+              // Node-kompatibel: req ist der Stream
+              Object.setPrototypeOf(req, Object.getPrototypeOf(req._readable));
+              Object.assign(req, req._readable);
+          }*/
+        if (server === null || server === void 0 ? void 0 : server.serverCookies) {
+            //  debugger;
+            if (req.headers["cookie"] !== undefined) {
+                console.warn("not implemented migrate cookies here");
+            }
+            req.headers["cookie"] = server === null || server === void 0 ? void 0 : server.serverCookies;
+        }
+        return req;
+    }
+    class Server {
+        constructor() {
+        }
+        get(url, func) {
+            debugger;
+        }
+        //listen(port:number,hostname:string,backlog:number,callback:()=>void){
+        listen(port, callback) {
+            this.port = port;
+            //  this.hostname=hostname;
+            //this.backlog=backlog;
+            this.callback = callback;
+            var lib = jrequire("http");
+            lib.serverListening[port] = this;
+            this.registerServiceWorker();
+            if (callback)
+                callback();
+            return {};
+        }
+        /**
+         * redirect all Server request to this serverport
+         */
+        registerServiceWorker() {
+            var _this = this;
+            if (!globalThis.requestHandler)
+                globalThis.requestHandler = {};
+            globalThis.requestHandler["http://localhost:" + this.port] = async (event) => {
+                var server = this;
+                // setTimeout(() => {
+                const { Readable } = jrequire('stream');
+                // 1. Erstelle einen Node-kompatiblen Readable Stream
+                const nodeStream = new Readable({
+                    read() { } // keine automatische Push-Logik
+                });
+                // 2. Schreibe initiale Daten
+                // nodeStream.push('data: Hallo\n\n');
+                let str = new ReadableStream({
+                    async start(controller) {
+                        var _a, e_1, _b, _c;
+                        //@ts-ignore
+                        const reader = nodeStream[Symbol.asyncIterator]();
+                        try {
+                            try {
+                                for (var _d = true, reader_1 = __asyncValues(reader), reader_1_1; reader_1_1 = await reader_1.next(), _a = reader_1_1.done, !_a; _d = true) {
+                                    _c = reader_1_1.value;
+                                    _d = false;
+                                    const chunk = _c;
+                                    controller.enqueue(new TextEncoder().encode(chunk));
+                                }
+                            }
+                            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                            finally {
+                                try {
+                                    if (!_d && !_a && (_b = reader_1.return)) await _b.call(reader_1);
+                                }
+                                finally { if (e_1) throw e_1.error; }
+                            }
+                            controller.close();
+                        }
+                        catch (err) {
+                            controller.error(err);
+                        }
+                    }
+                });
+                var vres;
+                var resvalue = await new Promise((resolve) => {
+                    // const SR= http.ServerResponse;
+                    vres = new ServerResponse();
+                    vres.server = _this;
+                    let owrite = vres.write.bind(vres);
+                    let oend = vres.end.bind(vres);
+                    var data;
+                    vres.write = (chunk, encoding) => {
+                        data = chunk;
+                        nodeStream.push(chunk);
+                        resolve(1);
+                        owrite(chunk, encoding);
+                    };
+                    vres.write = vres.write.bind(vres);
+                    vres.end = ((data) => {
+                        if (data)
+                            nodeStream.push(data);
+                        nodeStream.push(null);
+                        oend();
+                        resolve(data);
+                    });
+                    vres.end = vres.end.bind(vres);
+                    let reqnew = createRequest(event.request, server);
+                    //send request
+                    server.requestListener(reqnew, vres, () => 1);
+                    feedRequestBody(event.request, reqnew);
+                });
+                //if(vres.headers['Access-Control-Allow-Origin']===undefined)  vres.headers['Access-Control-Allow-Origin']= '*';
+                //  if(vres.headers['Access-Control-Allow-Methods']===undefined)  vres.headers['Access-Control-Allow-Methods']= 'GET, POST, OPTIONS';
+                //  if(vres.headers['Access-Control-Allow-Headers']===undefined)  vres.headers['Access-Control-Allow-Headers']= 'Origin, Content-Type, Accept, Cache-Control';
+                //if(vres.headers['Access-Control-Allow-Credentials']===undefined)  vres.headers['Access-Control-Allow-Credentials']=  'true';
+                if (vres.headers["content-type"] && vres.headers["content-type"].indexOf('text/event-stream') !== -1) {
+                    str = str;
+                } /* else {
+                    var r = await str.getReader().read();
+                    str = <any>(r).value;
+                }*/
+                console.log("fin");
+                var res = new Response(str, {
+                    status: vres.statusCode,
+                    statusText: ob.STATUS_CODES[vres.statusCode],
+                    headers: vres.headers /*{
+                        'Content-Type': 'text/event-stream',
+                        'Cache-Control': 'no-cache',
+                        'Connection': 'keep-alive',
+                    }*/
+                });
+                return res;
+            };
+            globalThis.requestHandler[self.location.origin + "/:" + this.port] = globalThis.requestHandler["http://localhost:" + this.port];
+        }
+    }
+    class ServerResponse {
+        constructor() {
+            this.statusCode = 200;
+            this.headers = {};
+            this.bodyChunks = [];
+            this.finished = false;
+            this.listeners = {};
+            this.emit = (event, ...args) => {
+                const callbacks = this.listeners[event];
+                if (callbacks) {
+                    callbacks.forEach(cb => cb(...args));
+                }
+            };
+        }
+        writeHead(statusCode, maybeHeaders = {}) {
+            this.statusCode = statusCode;
+            this.headers = Object.assign(Object.assign({}, this.headers), maybeHeaders);
+        }
+        setHeader(name, value) {
+            /*   function parseCookie(cookieString) {
+                   const cookieHash = {};
+                 
+                   cookieString.split(';').forEach(part => {
+                     const [key, value] = part.trim().split('=');
+                     if (value !== undefined) {
+                       cookieHash[key] = value;
+                     }
+                   });
+                 
+                   return cookieHash;
+                 }*/
+            if (name.toLowerCase() === "set-cookie" && this.server) {
+                this.server.serverCookies = value;
+                // if(this.server.serverCookies===undefined)
+                //     this.server.serverCookies={};
+                // Object.assign(this.server.serverCookie,parseCookie(value));
+            }
+            this.headers[name.toLowerCase()] = value;
+        }
+        getHeader(name) {
+            return this.headers[name.toLowerCase()];
+        }
+        write(chunk, encoding = 'utf-8') {
+            if (this.finished)
+                throw new Error('Cannot write after end');
+            if (typeof chunk === 'string') {
+                this.bodyChunks.push(globalThis.Buffer.from(chunk, encoding).toString());
+            }
+            else if (chunk instanceof Uint8Array || globalThis.Buffer.isBuffer(chunk)) {
+                this.bodyChunks.push(chunk.toString(encoding));
+            }
+            else {
+                throw new Error('Unsupported chunk type');
+            }
+        }
+        end(chunk = '', encoding = 'utf-8') {
+            if (this.finished)
+                return;
+            if (chunk)
+                this.write(chunk, encoding);
+            this.finished = true;
+            const fullBody = this.bodyChunks.join('');
+            // console.log('📦 Full Response Body:\n' + fullBody);
+            this.emit("finish");
+            this.emit("close");
+        }
+        removeListener(event, listenerFn) {
+            if (!this.listeners[event])
+                return;
+            this.listeners[event] = this.listeners[event].filter(fn => fn !== listenerFn);
+        }
+        once(event, callback) {
+            let n = (...args) => {
+                callback(...args);
+                var pos = this.listeners[event].indexOf(n);
+                if (pos !== -1) {
+                    this.listeners[event].splice(pos, 1);
+                }
+            };
+            this.on(event, callback);
+        }
+        on(event, callback) {
+            if (!this.listeners[event]) {
+                this.listeners[event] = [];
+            }
+            this.listeners[event].push(callback);
+            /* if (event === "end")
+                 debugger;
+             if (event === 'finish') {
+                 this._onFinish = callback;
+             }*/
+        }
+    }
+    ob.ServerResponse = ServerResponse;
+    ob.serverListening = {};
+    ob.createServer = (requestListener) => {
+        var ret = new Server();
+        ret.requestListener = requestListener;
+        return ret;
+    };
+    ob.STATUS_CODES = {
+        100: 'Continue',
+        101: 'Switching Protocols',
+        102: 'Processing',
+        200: 'OK',
+        201: 'Created',
+        202: 'Accepted',
+        203: 'Non-Authoritative Information',
+        204: 'No Content',
+        205: 'Reset Content',
+        206: 'Partial Content',
+        300: 'Multiple Choices',
+        301: 'Moved Permanently',
+        302: 'Found',
+        303: 'See Other',
+        304: 'Not Modified',
+        307: 'Temporary Redirect',
+        308: 'Permanent Redirect',
+        400: 'Bad Request',
+        401: 'Unauthorized',
+        402: 'Payment Required',
+        403: 'Forbidden',
+        404: 'Not Found',
+        405: 'Method Not Allowed',
+        406: 'Not Acceptable',
+        407: 'Proxy Authentication Required',
+        408: 'Request Timeout',
+        409: 'Conflict',
+        410: 'Gone',
+        411: 'Length Required',
+        412: 'Precondition Failed',
+        413: 'Payload Too Large',
+        414: 'URI Too Long',
+        415: 'Unsupported Media Type',
+        416: 'Range Not Satisfiable',
+        417: 'Expectation Failed',
+        418: "I'm a Teapot",
+        422: 'Unprocessable Entity',
+        425: 'Too Early',
+        426: 'Upgrade Required',
+        428: 'Precondition Required',
+        429: 'Too Many Requests',
+        431: 'Request Header Fields Too Large',
+        451: 'Unavailable For Legal Reasons',
+        500: 'Internal Server Error',
+        501: 'Not Implemented',
+        502: 'Bad Gateway',
+        503: 'Service Unavailable',
+        504: 'Gateway Timeout',
+        505: 'HTTP Version Not Supported',
+        507: 'Insufficient Storage',
+        511: 'Network Authentication Required'
+    };
+    ob.METHODS = [
+        'ACL',
+        'BIND',
+        'CHECKOUT',
+        'CONNECT',
+        'COPY',
+        'DELETE',
+        'GET',
+        'HEAD',
+        'LINK',
+        'LOCK',
+        'M-SEARCH',
+        'MERGE',
+        'MKACTIVITY',
+        'MKCALENDAR',
+        'MKCOL',
+        'MOVE',
+        'NOTIFY',
+        'OPTIONS',
+        'PATCH',
+        'POST',
+        'PROPFIND',
+        'PROPPATCH',
+        'PURGE',
+        'PUT',
+        'REBIND',
+        'REPORT',
+        'SEARCH',
+        'SOURCE',
+        'SUBSCRIBE',
+        'TRACE',
+        'UNBIND',
+        'UNLINK',
+        'UNLOCK',
+        'UNSUBSCRIBE'
+    ];
+}
 define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config", "reflect-metadata"], function (require, exports, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3586,9 +5014,18 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
     exports.$Class = $Class;
     exports.$register = $register;
     exports.migrateModul = migrateModul;
+<<<<<<< HEAD
+    function $Class(longclassname, target = undefined) {
+=======
     function $Class(longclassname) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         return function (pclass) {
-            registry.register("$Class", pclass, longclassname);
+            if (target) {
+                pclass.target = target;
+                registry.register("$Class", target, longclassname);
+            }
+            else
+                registry.register("$Class", pclass, longclassname);
         };
     }
     function $register(servicename, ...params) {
@@ -3631,7 +5068,7 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
             this.dataMembers = {};
             this.jsondataMembers = {};
             this._eventHandler = {};
-            this._nextID = 10;
+            //this._nextID = 10;
             this.isLoading = this.reload();
         }
         getData(service, classname = undefined) {
@@ -3677,7 +5114,11 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
          * Important: this function should only used from an annotation, because the annotation is saved in
          *            index.json and could be read without loading the class
          **/
-        register(service, oclass, ...params) {
+        register(service, aclass, ...params) {
+            var oclass = aclass;
+            if (oclass["target"]) {
+                oclass = oclass["target"];
+            }
             var sclass = oclass.prototype.constructor._classname;
             if (sclass === undefined && service !== "$Class") {
                 throw new Error("@$Class member is missing or must be set at last");
@@ -3730,12 +5171,28 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
          * register an anotation
          * Important: this function should only used from an annotation
          **/
+<<<<<<< HEAD
+        registerMember(service, aclass /*new (...args: any[]) => any*/, membername, ...params) {
+            var _a, _b, _c;
+            var oclass = aclass;
+            if (oclass["target"]) {
+                oclass = oclass["target"];
+            }
+            if ((_a = oclass === null || oclass === void 0 ? void 0 : oclass.constructor) === null || _a === void 0 ? void 0 : _a.target) {
+                oclass = oclass.constructor.target;
+            }
+            var m = oclass;
+            if (oclass.prototype !== undefined)
+                m = oclass.prototype;
+            var clname = (_c = (_b = oclass.prototype) === null || _b === void 0 ? void 0 : _b.constructor) === null || _c === void 0 ? void 0 : _c._classname;
+=======
         registerMember(service, oclass /*new (...args: any[]) => any*/, membername, ...params) {
             var _a, _b;
             var m = oclass;
             if (oclass.prototype !== undefined)
                 m = oclass.prototype;
             var clname = (_b = (_a = oclass.prototype) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b._classname;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (clname) {
                 if (this.dataMembers[service] === undefined) {
                     this.dataMembers[service] = {};
@@ -3767,10 +5224,10 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
         * with every call a new id is generated - used to create a free id for the dom
         * @returns {number} - the id
         */
-        nextID() {
+        /*nextID() {
             this._nextID = this._nextID + 1;
             return this._nextID.toString();
-        }
+        }*/
         /**
         * Load text with Ajax synchronously: takes path to file and optional MIME type
         * @param {string} filePath - the url
@@ -3826,10 +5283,15 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
             var _this = this;
             var modultext = "";
             //@ts-ignore
-            if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
+            if ((window === null || window === void 0 ? void 0 : window.document) === undefined || globalThis.BrowserFS != undefined) { //on server
                 //@ts-ignore 
+<<<<<<< HEAD
+                var fs = await new Promise((resolve_11, reject_11) => { require(['fs'], resolve_11, reject_11); }).then(__importStar);
+                var Filesystem = await new Promise((resolve_12, reject_12) => { require(["jassijs/server/Filesystem"], resolve_12, reject_12); }).then(__importStar);
+=======
                 var fs = await new Promise((resolve_9, reject_9) => { require(['fs'], resolve_9, reject_9); }).then(__importStar);
                 var Filesystem = await new Promise((resolve_10, reject_10) => { require(["jassijs/server/Filesystem"], resolve_10, reject_10); }).then(__importStar);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 var modules = Config_1.config.server.modules;
                 for (let modul in modules) {
                     try {
@@ -4033,33 +5495,141 @@ define("jassijs/remote/Registry", ["require", "exports", "jassijs/remote/Config"
     exports.default = registry;
     function migrateModul(oldModul, newModul) {
         if (newModul.registry) {
-            newModul.registry._nextID = oldModul.registry._nextID;
+            //newModul.registry._nextID = oldModul.registry._nextID;
             newModul.registry.entries = oldModul.registry.entries;
         }
     }
 });
 //jassijs.registry=registry;
-define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, Registry_19, Classes_10, RemoteProtocol_1) {
+define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol", "jassijs/remote/Context"], function (require, exports, Registry_19, Classes_10, RemoteProtocol_1, Context_2) {
     "use strict";
+    var RemoteObject_3;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteObject = exports.Context = void 0;
+    exports.useContext = useContext;
+    exports.getContext = getContext;
+    exports.UseServer = UseServer;
+    exports.DefaultParameterValue = DefaultParameterValue;
+    exports._fillDefaultParameter = _fillDefaultParameter;
+    exports.test = test;
+    const paramMetadataKey = Symbol("paramMetadataKey");
     class Context {
     }
     exports.Context = Context;
-    let RemoteObject = class RemoteObject {
-        static async call(method, ...parameter) {
+    function useContext(context, fn, ...args) {
+        return (0, Context_2.useZoneContext)(context, fn);
+    }
+    function getContext() {
+        return (0, Context_2.getZoneContext)();
+    }
+    function UseServer() {
+        return (target, propertyName, descriptor, options) => {
+            let isstatic = target.constructor.name === "Function";
+            let method = descriptor.value;
+            let testuuu = 9;
+            const funcname = method.name;
+            let smethod = target[method.name].toString();
+            let sparam = smethod.substring(smethod.indexOf('(') + 1, smethod.indexOf(')'));
+            let paramnames = sparam.split(',');
+            if (method["__originalParams"])
+                paramnames = method["__originalParams"];
+            let posContext = undefined;
+            if (paramnames.length > 1 && paramnames[paramnames.length - 1].split('=')[0].trim() === "context")
+                posContext = paramnames.length - 1;
+            else
+                posContext = paramnames.length; //func  without context declaration
+            const { [funcname]: newfunc } = {
+                [funcname]: function (...paramnames) {
+                    let test = paramnames;
+                    let test2 = posContext;
+                    let test3 = target[method.name].toString();
+                    var context = undefined;
+                    if (posContext !== undefined && arguments.length > posContext) {
+                        context = arguments[posContext];
+                    }
+                    if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                        return RemoteObject.docall(target, method, ...arguments);
+                    }
+                    else
+                        return method.apply(this, arguments);
+                }
+            };
+            newfunc["__originalParams"] = paramnames;
+            descriptor.value = newfunc;
+        };
+    }
+    function DefaultParameterValue(value) {
+        return (target, propertyKey, parameterIndex) => {
+            //@ts-ignore
+            let params = Reflect.getOwnMetadata(paramMetadataKey, target, propertyKey) || {};
+            if (params[parameterIndex] === undefined)
+                params[parameterIndex] = {};
+            params[parameterIndex]["DefaultParameterValue"] = {
+                value,
+                index: parameterIndex
+            };
+            //@ts-ignore
+            Reflect.defineMetadata(paramMetadataKey, params, target, propertyKey);
+        };
+    }
+    function _fillDefaultParameter(_this, method, parameter, withContext = undefined) {
+        let smethod = _this[method.name].toString();
+        let sparam = smethod.substring(smethod.indexOf('(') + 1, smethod.indexOf(')'));
+        let paramnames = sparam.split(',');
+        //the method is manipulated so we dont read the original params - we saved this in @UseServer and ValidateFunctionParameter
+        if (_this[method.name]["__originalParams"])
+            paramnames = _this[method.name]["__originalParams"];
+        //remove context from parameters
+        let posContext = undefined;
+        var context = withContext;
+        if (paramnames.length > 0 && paramnames[paramnames.length - 1].split('=')[0].trim() === "context")
+            posContext = paramnames.length - 1;
+        if (parameter.length > paramnames.length) { //no parameter für context
+            context = parameter[parameter.length - 1];
+            posContext = parameter.length - 1;
+        }
+        else if (posContext !== undefined) {
+            paramnames.pop();
+            context = parameter[posContext];
+        }
+        if (posContext !== undefined && parameter.length > posContext) {
+            parameter.pop();
+        }
+        //read default parameter from @DefaultParameterValue parameter decorator
+        //@ts-ignore
+        let meta = Reflect.getOwnMetadata(paramMetadataKey, _this, method.name);
+        var defaultparams = {};
+        for (var key in meta) {
+            let entr = meta[key].DefaultParameterValue;
+            defaultparams[entr.index] = entr.value;
+        }
+        //filling function parameter so we can add context on last parameter
+        for (var x = parameter.length; x < paramnames.length; x++) {
+            if (defaultparams[x] !== undefined)
+                parameter.push(defaultparams[x]);
+            else
+                parameter.push(undefined);
+        }
+        return context;
+    }
+    let RemoteObject = RemoteObject_3 = class RemoteObject {
+        static async docall(_this, method, ...parameter) {
+            return RemoteObject_3.docallWithReplaceThis(_this, _this, method, ...parameter);
+        }
+        static async docallWithReplaceThis(replaceThis, _this, method, ...parameter) {
             if (jassijs.isServer)
                 throw new Classes_10.JassiError("should be called on client");
             var prot = new RemoteProtocol_1.RemoteProtocol();
-            var context = parameter[parameter.length - 1];
-            prot.classname = Classes_10.classes.getClassName(this);
-            prot._this = "static";
+            prot.classname = Classes_10.classes.getClassName(_this);
+            prot._this = _this.constructor.prototype[method.name] !== undefined ? replaceThis : "static";
             prot.parameter = parameter;
             prot.method = method.name;
-            prot.parameter.splice(parameter.length - 1, 1);
+            var context = _fillDefaultParameter(_this, method, parameter);
             var ret;
-            if (context === null || context === void 0 ? void 0 : context.transactionitem) {
-                ret = await context.transactionitem.transaction.wait(context.transactionitem, prot);
+            if (context === null || context === void 0 ? void 0 : context.transaction) {
+                let ccontext = context;
+                ret = await ccontext.transaction.addProtocol(prot, context);
+                //ret = await context.transactionitem.transaction.wait(context.transactionitem, prot);
                 return ret;
             }
             //let Transaction= (await import("jassijs/remote/Transaction")).Transaction;
@@ -4071,33 +5641,28 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Reg
             ret = await prot.call();
             return ret;
         }
-        async call(_this, method, ...parameter) {
-            if (jassijs.isServer)
-                throw new Classes_10.JassiError("should be called on client");
-            var prot = new RemoteProtocol_1.RemoteProtocol();
-            var context = parameter[parameter.length - 1];
-            prot.classname = Classes_10.classes.getClassName(this);
-            prot._this = _this;
-            prot.parameter = parameter;
-            prot.method = method.name;
-            prot.parameter.splice(parameter.length - 1, 1);
-            var ret;
-            //let context=(await import("jassijs/remote/Context")).Context;
-            //let Transaction= (await import("jassijs/remote/Transaction")).Transaction;
-            //var trans=Transaction.cache.get(_this);
-            //var trans=context.get("transaction");
-            if (context === null || context === void 0 ? void 0 : context.transactionitem) {
-                ret = await context.transactionitem.transaction.wait(context.transactionitem, prot);
-                return ret;
-            }
-            ret = await prot.call();
-            return ret;
-        }
     };
     exports.RemoteObject = RemoteObject;
+<<<<<<< HEAD
+    exports.RemoteObject = RemoteObject = RemoteObject_3 = __decorate([
+        (0, Registry_19.$Class)("jassijs.remote.RemoteObject")
+    ], RemoteObject);
+    function test2() {
+        console.log(JSON.stringify(getContext()));
+        return 2;
+    }
+    async function test() {
+        const hallo = await useContext({ isServer: false, hallo: "Du" }, async () => {
+            // await new Promise(res => setTimeout(res, 10));
+            return test2();
+        });
+        console.log(hallo);
+    }
+=======
     exports.RemoteObject = RemoteObject = __decorate([
         (0, Registry_19.$Class)("jassijs.remote.RemoteObject")
     ], RemoteObject);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 });
 define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_20, Classes_11) {
     "use strict";
@@ -4137,12 +5702,20 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
             });
         }
         static async simulateUser(user = undefined, password = undefined) {
+<<<<<<< HEAD
+            var rights = (await new Promise((resolve_13, reject_13) => { require(["jassijs/remote/security/Rights"], resolve_13, reject_13); }).then(__importStar)).default;
+=======
             var rights = (await new Promise((resolve_11, reject_11) => { require(["jassijs/remote/security/Rights"], resolve_11, reject_11); }).then(__importStar)).default;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             //	if(await rights.isAdmin()){
             //		throw new Error("not an admin")
             //	}
             //@ts-ignore
+<<<<<<< HEAD
+            var Cookies = (await new Promise((resolve_14, reject_14) => { require(["jassijs/util/Cookies"], resolve_14, reject_14); }).then(__importStar)).Cookies;
+=======
             var Cookies = (await new Promise((resolve_12, reject_12) => { require(["jassijs/util/Cookies"], resolve_12, reject_12); }).then(__importStar)).Cookies;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (user === undefined) {
                 Cookies.remove("simulateUser", {});
                 Cookies.remove("simulateUserPassword", {});
@@ -4161,8 +5734,9 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                 xhr.onload = function (data) {
                     if (this.status === 200)
                         resolve(this.responseText);
-                    else
+                    else {
                         reject(this);
+                    }
                 };
                 xhr.send(config.data);
                 xhr.onerror = function (data) {
@@ -4192,6 +5766,11 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                 ret = await this.exec(config, this._this);
             }
             catch (ex) {
+<<<<<<< HEAD
+                if (ex.status === 401 || ex.status === 500 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
+                    await (await new Promise((resolve_15, reject_15) => { require(["jassijs/base/LoginDialog"], resolve_15, reject_15); }).then(__importStar)).login();
+                    return await this.call();
+=======
                 if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                     redirect = new Promise((resolve) => {
                         //@ts-ignore
@@ -4199,6 +5778,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
                             lib.doAfterLogin(resolve, _this);
                         });
                     });
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 }
                 else {
                     throw ex;
@@ -4313,7 +5893,989 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/R
     }
 });
 //jassijs.register("classes", "de.B", B);
-define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right", "jassijs/remote/Validator", "../Config"], function (require, exports, DBObject_2, Registry_21, DatabaseSchema_2, ParentRight_1, User_1, Right_1, Validator_3, Config_2) {
+define("jassijs/remote/RemoteTest", ["require", "exports", "jassijs/remote/RemoteObject", "jassijs/remote/Registry"], function (require, exports, RemoteObject_4, Registry_21) {
+    "use strict";
+    var _a;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RemoteTest = void 0;
+    exports.test = test;
+    let RemoteTest = class RemoteTest {
+        async createFolder(foldername, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                //var ret = await this.call(this, this.createFolder, foldername, context);
+                var ret = await RemoteObject_4.RemoteObject.docall(this, this.createFolder, ...arguments);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                console.log("Hallo");
+                return "created " + foldername;
+            }
+        }
+        async createFolder2(foldername) {
+            console.log("Hallo2");
+            return "created2 " + foldername;
+        }
+        static async mytest(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await RemoteObject_4.RemoteObject.docall(this, this.mytest, ...arguments);
+                // return await this.call(this.mytest, context);
+            }
+            else {
+                console.log(14);
+                return 14 + 1; //this is called on server
+            }
+        }
+        static async mytest2() {
+            console.log(14);
+            return 14 + 1; //this is called on server
+        }
+    };
+    exports.RemoteTest = RemoteTest;
+    __decorate([
+        (0, RemoteObject_4.UseServer)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String]),
+        __metadata("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
+    ], RemoteTest.prototype, "createFolder2", null);
+    __decorate([
+        (0, RemoteObject_4.UseServer)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], RemoteTest, "mytest2", null);
+    exports.RemoteTest = RemoteTest = __decorate([
+        (0, Registry_21.$Class)("jassijs.remote.RemoteTest")
+    ], RemoteTest);
+    async function test() {
+        console.log(await new RemoteTest().createFolder2("Hi"));
+        console.log(await RemoteTest.mytest2());
+    }
+});
+globalThis.modulecache = {};
+const textExt = ["js", "ts", "cfg", "xml", "json", "txt", "css", "map", "md", "npmignore", "nycrc", "css", "scss", "yml"];
+var servedLocalUrls = [];
+debugger;
+importScripts('/js/jassijs/remote/Npm.js');
+importScripts('/js/jassijs/remote/PatchTTP.js'); //mache eigene lib mit export.defined
+self.addEventListener('fetch', event => {
+    // console.log("rfetch "+event.request.url);
+    if (event.request.url.startsWith(self.location.origin)) {
+        //host client files
+        var pr = handleLocalServerEvent(event);
+        event.respondWith(pr);
+        return;
+    }
+    //console.log("no answer to "+event.request.url);
+    //  event.waitUntil(pr);
+});
+//runLocalServerIfNeeded();
+async function handleLocalServerEvent(event) {
+    await runLocalServerIfNeeded();
+    /* if (globalThis.requestHandler) {
+         for (let key in globalThis.requestHandler) {
+             if (event.request.url.startsWith(key))
+                 event.respondWith(globalThis.requestHandler[key](event));
+         }
+     }*/
+    //map first server - later we have a config
+    while (globalThis.requestHandler === undefined || Object.keys(globalThis.requestHandler).length === 0) {
+        await new Promise((res) => setTimeout(res, 100));
+    }
+    var ret = globalThis.requestHandler[Object.keys(globalThis.requestHandler)[0]](event);
+    return ret;
+}
+//@ts-ignore
+function require(path) {
+    debugger;
+    //why this?
+}
+function patchNodeFunction() {
+    const originalSetInterval = globalThis.setInterval;
+    globalThis.setInterval = (...args) => {
+        var ret = new Number(originalSetInterval(...args));
+        ret.unref = () => true;
+        return ret;
+    };
+    globalThis.setImmediate = (proc, ...params) => {
+        // debugger;
+        proc();
+    };
+}
+patchNodeFunction();
+var modulesshims = {
+    // "fs": "./node_modules/browserfs/dist/shims/fs.js",
+    "buffer": "./node_modules/browserfs/dist/shims/buffer.js",
+    "bufferGlobal": "./node_modules/browserfs/dist/shims/bufferGlobal.js",
+    //"buffer": "./node_modules/buffer/index.js",
+    "path": "./node_modules/browserfs/dist/shims/path.js",
+    //  "path": "./node_modules/path-browserify/",
+    "process": "./node_modules/browserfs/dist/shims/process.js",
+    //"process": "./node_modules/process/browser.js",
+    //"readable-stream": "./node_modules/readable-stream/readable-browser.js",
+    "assert": "./node_modules/assert/assert.js",
+    //"console": "./node_modules/console-browserify/index.js",
+    "constants": "./node_modules/constants-browserify/constants.json",
+    "create-hash": "./node_modules/create-hash/browser.js",
+    "create-hmac": "./node_modules/create-hmac/browser.js",
+    "crypto": "./node_modules/crypto-browserify/index.js",
+    "domain": "./node_modules/domain-browser/constants",
+    "events": "./node_modules/events/events.js",
+    "http": "./node_modules/stream-http/index.js",
+    "https": "./node_modules/https-browserify/index.js",
+    "inhertis": "./node_modulesy/inherits/inherits_browser.js",
+    "os": "./node_modules/os-browserify/browser.js",
+    "punycode": "./node_modules/punycode/punycode.js",
+    "querystring": "./node_modules/querystring-es3/index.js",
+    "randombytes": "./node_modules/randombytes/browser.js",
+    "stream": "./node_modules/stream-browserify/index.js",
+    "_stream_duplex": "./node_modules/readable-stream/duplex.js",
+    "_stream_passthrough": "./node_modules/readable-stream/passthrough.js",
+    "_stream_readable": "./node_modules/readable-stream/readable.js",
+    "_stream_transform": "./node_modules/readable-stream/transform.js",
+    "_stream_writable": "./node_modules/readable-stream/writable.js",
+    "string_decoder": "./node_modules/string_decoder/lib/string_decoder.js",
+    "sys": "./node_modules/util/util.js",
+    "timers": "./node_modules/timers-browserify/main.js",
+    "tty": "./node_modules/tty-browserify/index.js",
+    "url": "./node_modules/url/url.js",
+    "util": "./node_modules/util/util.js",
+    "vm": "./node_modules/vm-browserify/index.js",
+    "zlib": "./node_modules/browserify-zlib/lib/index.js"
+};
+var isinited = false;
+var globalfs;
+function patchFS(fs) {
+    // Globales Array zur Sammlung aller Listener
+    var savetimer;
+    const watchListeners = {}; // 
+    fs.watch = (filename, options, listener) => {
+        let file = filename;
+        if (!file.startsWith("./") && !file.startsWith("/"))
+            file = "/" + file;
+        if (!file.startsWith("."))
+            file = "." + file;
+        // Parameter-Normalisierung
+        if (typeof options === 'function') {
+            listener = options;
+            options = {};
+        }
+        else if (typeof options === 'string') {
+            options = { encoding: options };
+        }
+        else {
+            options = options || {};
+        }
+        const persistent = options.persistent !== false;
+        const recursive = !!options.recursive;
+        const encoding = options.encoding || 'utf8';
+        // Listener-Wrapper
+        const wrappedListener = (eventType, changedFile) => {
+            let filenameToUse = changedFile;
+            if (encoding === 'buffer') {
+                filenameToUse = new TextEncoder().encode(changedFile);
+            }
+            listener === null || listener === void 0 ? void 0 : listener(eventType, filenameToUse);
+        };
+        // Listener-Objekt
+        const listenerObj = {
+            original: listener,
+            wrapped: wrappedListener,
+            recursive,
+            active: true
+        };
+        // Registrieren im Hash
+        if (!watchListeners[file]) {
+            watchListeners[file] = [];
+        }
+        watchListeners[file].push(listenerObj);
+        // Rückgabeobjekt wie FSWatcher
+        const watcher = {
+            on(event, cb) {
+                const extraListener = {
+                    original: cb,
+                    wrapped: (eventType, changedFile) => {
+                        if (eventType === event) {
+                            let filenameToUse = changedFile;
+                            if (encoding === 'buffer') {
+                                filenameToUse = new TextEncoder().encode(changedFile);
+                            }
+                            cb(filenameToUse);
+                        }
+                    },
+                    recursive,
+                    active: true
+                };
+                watchListeners[file].push(extraListener);
+                return this;
+            },
+            close() {
+                listenerObj.active = false;
+                const list = watchListeners[file];
+                if (list) {
+                    const index = list.indexOf(listenerObj);
+                    if (index !== -1)
+                        list.splice(index, 1);
+                    if (list.length === 0)
+                        delete watchListeners[file];
+                }
+            }
+        };
+        return watcher;
+    };
+    fs.fschanged = (path, event) => {
+        //after 300ms without fileacivity we save data to indexdb
+        //TODO save also if long time period - beacause if there a timer which permanent save files
+        if (savetimer) {
+            clearTimeout(savetimer);
+            savetimer = undefined;
+        }
+        savetimer = setTimeout(() => {
+            let data = fs.getRootFS().store.store;
+            console.log("save Files");
+            writeIndexDB("jassijs", "server", "files", data); //save Memory filesystem in indexdb
+        }, 300);
+        if (watchListeners) {
+            for (let key in watchListeners) {
+                if (path.startsWith(key)) {
+                    for (let x = 0; x < watchListeners[key].length; x++) {
+                        watchListeners[key][x].wrapped(event, path);
+                    }
+                }
+            }
+        }
+    };
+    var orgappendFileSync = fs.appendFileSync.bind(fs);
+    fs.appendFileSync = (file, ...params) => {
+        var ret = orgappendFileSync(file, ...params);
+        fs.fschanged(file, "change");
+        return ret;
+    };
+    var orgappendFile = fs.appendFile.bind(fs);
+    fs.appendFile = (file, data, opts, cb) => {
+        let ncb = () => {
+            if (cb)
+                cb();
+            else {
+                opts();
+            }
+            fs.fschanged(file, "change");
+        };
+        return orgappendFile(file, data, opts, ncb);
+    };
+    /*var orgcopyFile = fs.copyFile.bind(fs);
+    fs.copyFile = (file, dest, ...params) => {
+        orgcopyFile(file, dest, ...params);
+        fs.fschanged(dest, "rename");
+        fs.fschanged(dest, "change");
+    }
+
+    var orgcopyFileSync = fs.copyFileSync.bind(fs);
+    fs.copyFileSync = (file, dest, mode, cb) => {
+        let ncb = () => {
+            if (cb)
+                cb();
+            fs.fschanged(dest, "rename");
+            fs.fschanged(dest, "change");
+        }
+        orgcopyFileSync(file, dest, mode, ncb);
+    }*/
+    var orgreaddirSync = fs.readdirSync.bind(fs);
+    ;
+    fs.readdirSync = (pfad, options) => {
+        const names = orgreaddirSync(pfad, options);
+        if (options === null || options === void 0 ? void 0 : options.withFileTypes) {
+            return names.map(name => {
+                const fullPath = pfad + "/" + name;
+                const stat = fs.statSync(fullPath);
+                return {
+                    name,
+                    path: fullPath,
+                    isFile: () => stat.isFile(),
+                    isDirectory: () => stat.isDirectory()
+                };
+            });
+        }
+        else
+            return names;
+    };
+    var orgexistsSync = fs.existsSync.bind(fs);
+    ;
+    fs.existsSync = (pfad, options) => {
+        try {
+            return orgexistsSync(pfad, options);
+        }
+        catch (_a) {
+            return false;
+        }
+    };
+    var orgmkdirSync = fs.mkdirSync.bind(fs);
+    ;
+    fs.mkdirSync = (pfad, options) => {
+        if (options === null || options === void 0 ? void 0 : options.recursive) {
+            delete options.recursive;
+            var dirs = pfad.split("/");
+            var ges = "";
+            for (var x = 0; x < dirs.length; x++) {
+                if (dirs[x] === "")
+                    continue;
+                ges = ges + (ges === "" ? "" : "/") + dirs[x];
+                if (!fs.existsSync(ges)) {
+                    var ret = orgmkdirSync(ges, options);
+                    if (x === (dirs.length - 1))
+                        break;
+                }
+            }
+        }
+        fs.fschanged(pfad, "rename");
+        return ret;
+    };
+    //var orgmkdir = fs.mkdir.bind(fs);;
+    fs.mkdir = (pfad, options, callback) => {
+        if (!callback)
+            callback = options;
+        try {
+            var ret = fs.mkdirSync(pfad, options);
+            callback();
+        }
+        catch (err) {
+            callback(err);
+        }
+    };
+    const { Writable } = jrequire('stream-browserify');
+    fs.createWriteStream = function (path, options = {}) {
+        let chunks = [];
+        const writable = new Writable({
+            write(chunk, encoding, callback) {
+                const bufferChunk = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding);
+                chunks.push(bufferChunk);
+                callback();
+            }
+        });
+        const originalEnd = writable.end.bind(writable);
+        writable.end = function (...args) {
+            // Optionalen letzten Chunk schreiben
+            if (args.length === 1 || args.length === 2) {
+                const lastChunk = args[0];
+                const encoding = args[1] || 'utf8';
+                if (lastChunk != null) {
+                    this.writeSync(lastChunk, encoding);
+                }
+            }
+            const fullData = Buffer.concat(chunks);
+            try {
+                fs.writeFileSync(path, fullData);
+                console.log("📁 Datei geschrieben:", path);
+            }
+            catch (err) {
+                console.error("⚠️ Fehler beim Schreiben:", err);
+            }
+            originalEnd(...args);
+            fs.fschanged(path, "change");
+        };
+        return writable;
+    };
+    const { Readable } = jrequire('stream-browserify');
+    fs.createReadStream = function (path, options = {}) {
+        let position = 0;
+        let buffer;
+        try {
+            buffer = fs.readFileSync(path); // Datei synchron lesen
+        }
+        catch (err) {
+            console.error("⚠️ Fehler beim Lesen:", err);
+            buffer = Buffer.alloc(0); // Leerer Buffer bei Fehler
+        }
+        const readable = new Readable({
+            read(size) {
+                const chunkSize = size || 64 * 1024; // Standardgröße
+                if (position >= buffer.length) {
+                    this.push(null); // Ende des Streams
+                    return;
+                }
+                const chunk = buffer.slice(position, position + chunkSize);
+                position += chunk.length;
+                this.push(chunk);
+            }
+        });
+        return readable;
+    };
+    var orgrename = fs.rename.bind(fs);
+    fs.rename = (old, nw, cb) => {
+        let ncb = () => {
+            if (cb)
+                cb();
+            fs.fschanged(old, "rename");
+            fs.fschanged(nw, "rename");
+            fs.fschanged(nw, "change");
+        };
+        return orgrename(old, nw, ncb);
+    };
+    /* var orgrmSync = fs.rmSync.bind(fs);
+     fs.rmSync = (old, ...params) => {
+         orgrmSync(old, ...params);
+         fs.fschanged(old, "rename");
+ 
+ 
+     var orgrm = fs.rm.bind(fs);
+     fs.rm = (old, opt, cb) => {
+         let ncb = () => {
+             if (cb)
+                 cb();
+             fs.fschanged(old, "rename");
+         }
+         orgrm(old, opt, ncb);
+     }
+ 
+     var orgrmSync = fs.rmSync.bind(fs);
+     fs.rmSync = (old, ...params) => {
+         orgrmSync(old, ...params);
+         fs.fschanged(old, "rename");
+     }
+ 
+     var orgrm = fs.rm.bind(fs);
+     fs.rm = (old, opt, cb) => {
+         let ncb = () => {
+             if (cb)
+                 cb();
+             fs.fschanged(old, "rename");
+         }
+         orgrm(old, opt, ncb);
+     }
+ */
+    var orgreadFileSync = fs.readFileSync.bind(fs);
+    fs.readFileSync = (path, opts) => {
+        if (opts === null)
+            opts = undefined;
+        return orgreadFileSync(path, opts);
+    };
+    var orgreadFile = fs.readFile.bind(fs);
+    fs.readFile = (path, opts, cb) => {
+        if (opts === null)
+            opts = undefined;
+        if (cb === null)
+            cb = undefined;
+        return orgreadFile(path, opts, cb);
+    };
+    var orgrmdirSync = fs.rmdirSync.bind(fs);
+    fs.rmdirSync = (pfad, options, ...params) => {
+        //var ret = orgrmdirSync(old, ...params);
+        if (options === null || options === void 0 ? void 0 : options.recursive) {
+            delete options.recursive;
+            var files = fs.readdirSync(pfad, { withFileTypes: true });
+            for (let x = 0; x < files.length; x++) {
+                let entry = files[x];
+                if (entry.isFile())
+                    fs.unlinkSync(entry.path);
+                else
+                    fs.rmdirSync(entry.path, { recursive: true });
+            }
+        }
+        var ret = orgrmdirSync(pfad, options);
+        fs.fschanged(pfad, "rename");
+        return ret;
+    };
+    var orgrmdir = fs.rmdir.bind(fs);
+    fs.rmdir = (old, opt, cb) => {
+        let mopt = opt;
+        if (cb === undefined)
+            mopt = undefined;
+        fs.rmdirSync(old, mopt);
+        fs.fschanged(old, "rename");
+        if (cb === undefined) {
+            opt();
+        }
+        else {
+            cb();
+        }
+    };
+    fs.rm = fs.rmdir;
+    fs.rmSync = fs.rmdirSync;
+    var orgstat = fs.stat.bind(fs);
+    fs.stat = (path, opt, cb) => {
+        let mopt = opt;
+        if (cb === undefined) {
+            mopt = undefined;
+            cb = opt;
+        }
+        try {
+            var ret = fs.statSync(path, mopt);
+            cb(undefined, ret);
+        }
+        catch (err) {
+            cb(err, undefined);
+        }
+    };
+    var orgstatSync = fs.statSync.bind(fs);
+    fs.statSync = (name, opt) => {
+        var ret = orgstatSync(name, opt);
+        ret.atimeMs = ret.atime.getTime();
+        ret.ctimeMs = ret.ctime.getTime();
+        ret.mtimeMs = ret.mtime.getTime();
+        return ret;
+    };
+    var orgunlinkSync = fs.unlinkSync.bind(fs);
+    fs.unlinkSync = (old, ...params) => {
+        var ret = orgunlinkSync(old, ...params);
+        fs.fschanged(old, "rename");
+        return ret;
+    };
+    var orgunlink = fs.unlink.bind(fs);
+    fs.unlink = (old, cb) => {
+        let ncb = () => {
+            if (cb)
+                cb();
+            fs.fschanged(old, "rename");
+        };
+        return orgunlink(old, ncb);
+    };
+    var orgwriteFileSync = fs.writeFileSync.bind(fs);
+    fs.writeFileSync = (path, ...params) => {
+        var ret = orgwriteFileSync(path, ...params);
+        fs.fschanged(path, "change");
+        return ret;
+    };
+    var orgwriteFile = fs.writeFile.bind(fs);
+    fs.writeFile = (path, data, opts, cb) => {
+        let ncb = () => {
+            if (cb)
+                cb();
+            else
+                opts();
+            fs.fschanged(path, "rename");
+        };
+        if (cb === null)
+            cb = undefined;
+        if (opts === null)
+            opts = undefined;
+        return orgwriteFile(path, data, opts, ncb);
+    };
+    fs.promises = {
+        appendFile: async (...args) => fs.appendFileSync(...args),
+        link: async (...args) => fs.linkSync(...args),
+        readdir: async (...args) => fs.readdirSync(...args),
+        readFile: async (...args) => fs.readFileSync(...args),
+        rename: async (...args) => fs.renameSync(...args),
+        rmdir: async (...args) => fs.rmdirSync(...args),
+        stat: async (...args) => fs.statSync(...args),
+        unlink: async (...args) => fs.unlinkSync(...args),
+        writeFile: async (...args) => fs.writeFileSync(...args)
+    };
+}
+function getDirectory(path) {
+    const sep = Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\"));
+    return sep >= 0 ? path.slice(0, sep) : "";
+}
+function fileModule(file) {
+    var _a;
+    //let file=file.replace("./node_modules/", "/");
+    if (globalfs) {
+        if (globalfs.existsSync(file)) {
+            if (globalfs.statSync(file).isFile())
+                return globalfs.readFileSync(file);
+        }
+    }
+    //let code=servermodules[file.replace("./node_modules/", "/")];
+    //if (textExt.some(suffix => file.toLowerCase().endsWith(suffix)))
+    //  code;
+    return (_a = servermodules[file]) === null || _a === void 0 ? void 0 : _a.content;
+}
+function fileCode(file) {
+    if (globalfs === undefined)
+        return undefined;
+    if (globalfs.existsSync(file)) {
+        if (globalfs.statSync(file).isFile())
+            return globalfs.readFileSync(file);
+    }
+    return undefined; //.replace("./js/", "/")];
+}
+//resolve the relative Path against the parentPath
+function resolve(relativePath, parentPath = "") {
+    // if(relativePath==="jassijs/remote/Testlocalserver")
+    //    debugger;
+    var newPath = "";
+    if (relativePath === "." || relativePath === ".." || relativePath.startsWith("./") || relativePath.startsWith("../")) {
+        // Convert both paths into arrays
+        const parentSegments = parentPath.split("/").slice(0, -1); // Remove filename
+        const relSegments = relativePath.split("/");
+        for (const segment of relSegments) {
+            if (segment === ".")
+                continue;
+            if (segment === "..") {
+                parentSegments.pop();
+            }
+            else {
+                if (segment !== "")
+                    parentSegments.push(segment);
+            }
+        }
+        if (parentPath.startsWith("./node_modules"))
+            newPath = parentSegments.join("/");
+        else {
+            newPath = parentSegments.join("/");
+            if (!newPath.startsWith("./js/"))
+                newPath = "./js/" + newPath;
+        }
+        if (fileModule(newPath + "/index.js") !== undefined) {
+            newPath = newPath + "/index.js";
+        }
+        else if (fileModule(newPath + "index.js") !== undefined) {
+            newPath = newPath + "index.js";
+        }
+        if (fileModule(newPath + ".js") !== undefined) {
+            newPath = newPath + ".js";
+        }
+        if (fileCode(newPath + ".js") !== undefined) {
+            newPath = newPath + ".js";
+        }
+        //if(fileModule(newPath))
+        // if (!newPath.toLowerCase().endsWith(".js") && !newPath.toLowerCase().endsWith(".cjs"))
+        //    newPath += ".js";
+    }
+    else {
+        if (modulesshims[relativePath]) {
+            newPath = modulesshims[relativePath];
+        }
+        else {
+            var module = relativePath.split("/")[0];
+            var config = fileModule("./node_modules/" + relativePath + "/package.json");
+            if (config === undefined)
+                config = fileModule("./node_modules/" + relativePath + "package.json");
+            if (config && JSON.parse(config).main) {
+                newPath = "./node_modules/" + module + "/" + JSON.parse(config).main.replace("./", "");
+                if (fileModule(newPath) === undefined) {
+                    newPath = "./node_modules/" + relativePath + "/" + JSON.parse(config).main.replace("./", "");
+                }
+                if (fileModule(newPath) === undefined && fileModule(newPath + "/index.js"))
+                    newPath = newPath + "/index.js";
+                if (!newPath.toLowerCase().endsWith(".js") && !newPath.toLowerCase().endsWith(".cjs"))
+                    newPath += ".js";
+            }
+            else if (fileModule("./node_modules/" + relativePath + "/index.js")) {
+                newPath = "./node_modules/" + relativePath + "/index.js";
+            }
+            else if (fileModule("./node_modules/" + relativePath)) {
+                newPath = "./node_modules/" + relativePath;
+            }
+            else if (fileModule("./node_modules/" + relativePath + ".js")) {
+                newPath = "./node_modules/" + relativePath + ".js";
+            }
+            else if (fileCode("./js/" + relativePath + ".js")) {
+                newPath = "./js/" + relativePath + ".js";
+            }
+            else {
+                if (relativePath !== 'perf_hooks' && relativePath !== 'pg') {
+                    debugger;
+                }
+                throw new Error("module not found " + relativePath);
+            }
+        }
+    }
+    return newPath;
+}
+var testimport = {};
+/**
+ * like node require import a modul or js file
+ * @param relativePath - the module or js-File to import
+ * @param parentPath - the jsFile which ask the import
+ * @param nocache - true if the import should be cached
+ * @returns
+ */
+function jrequire(relativePath, parentPath = "", nocache = false) {
+    parentPath = parentPath.replaceAll("//", "/");
+    // if (relativePath.startsWith("./NativeAdapter"))
+    //   debugger;
+    if (relativePath === "fs")
+        return globalfs;
+    if (relativePath === 'async_hooks')
+        throw new Error("not implemented");
+    if (relativePath === 'net')
+        return { isIP() { throw new Error("not implemented"); } };
+    if (relativePath === "module") {
+        return {
+            globalPaths: ["./node_modules"],
+            Module: {
+                _nodeModulePaths: (...params) => { }
+            }
+        };
+    }
+    //console.log("req " + relativePath + " parent:" + parentPath);
+    relativePath = relativePath.replaceAll("\`", ""); //prevent injection
+    var newPath = resolve(relativePath, parentPath);
+    if (newPath.indexOf("//") !== -1)
+        debugger;
+    // if (newPath === './js/jassijs/server/NativeAdapter.js')
+    //    debugger;
+    if (!nocache && globalThis.modulecache[newPath])
+        return globalThis.modulecache[newPath];
+    // console.log("import "+newPath);
+    if (testimport[newPath])
+        debugger;
+    testimport[newPath] = newPath;
+    //console.log("load " + newPath + " parent:" + parentPath);
+    globalThis.modulecache[newPath] = {};
+    //console.log("load "+relativePath);
+    var code = fileCode(newPath);
+    if (code === undefined)
+        code = fileModule(newPath);
+    if (code === undefined) {
+        if (newPath !== './node_modules/typescript/lib/node_modules/@microsoft/typescript-etw')
+            debugger;
+        var jjj = fileCode(newPath);
+        throw Error("lib not found:" + newPath);
+    }
+    if (newPath === "./node_modules/browserfs/dist/browserfs.js") {
+        code = code.replace("resolved = this.normalize", "resolved = path.normalize"); //bug
+        // code = code.replaceAll(" if ( arg2 === void 0 ) arg2 = {};", " if ( arg2 === void 0 || arg2===null) arg2 = {};") in fs.writeFile,fsreadFile,readFileSync if (opt===null) opt=undefined
+    }
+    if (newPath.toLowerCase().endsWith(".json"))
+        ret = JSON.parse(code);
+    else {
+        var __dirname = getDirectory(newPath);
+        //var scode = `(()=>{var {window,__dirname,__filename,global,exports,module,define,require}=_jrequire("` + newPath + `");` + code + "\r\n;return module.exports;})()";
+        var scode = "/*" + newPath + "*/" + code + "\r\n;return module.exports;";
+        //  if(scode.indexOf("normalizeOptions")>-1)
+        //  scode = `(()=>{debugger;var {window,__dirname,__filename,global,exports,module,define,require}=_jrequire("` + newPath + `");` + code + "\r\n;return module.exports;})()";
+        //scode=scode.replace(" if ( arg2 === void 0 ) arg2 = {};"," if ( arg2 === void 0 || args2===null) arg2 = {};")
+        var ret;
+        let req = (path) => globalThis.jrequire(path, newPath);
+        req.resolve = (relpath) => { resolve(relpath, newPath); };
+        req.cache = globalThis.modulecache;
+        req.main = {
+            require: (path) => globalThis.jrequire(path, "")
+        };
+        let module = { get exports() { return globalThis.modulecache[newPath]; }, set exports(val) { globalThis.modulecache[newPath] = val; } };
+        let sdir = getDirectory(newPath);
+        try {
+            var fname = relativePath.replaceAll("/", "_").replaceAll(".", "_");
+            var ob = {
+                [fname]: new Function("window", "__dirname", "__filename", "global", "exports", "module", "define", "require", scode)
+            };
+            var ret = ob[fname](globalThis, sdir, newPath, globalThis, globalThis.modulecache[newPath], module, undefined, req); //so we we have the filename in debugging
+        }
+        catch (err) {
+            console.log("error " + newPath + " parent:" + parentPath);
+            //console.log(scode); 
+            console.log(err);
+            console.log(err.stack);
+            debugger;
+            globalThis.modulecache[newPath] = {};
+            var ret = ob[fname](globalThis, sdir, newPath, globalThis, globalThis.modulecache[newPath], module, undefined, req); //so we we have the filename in debugging
+            throw err;
+        }
+    }
+    globalThis.modulecache[newPath] = ret;
+    //Object.assign(modulecache[newPath], ret);
+    //modulecache[newPath] = ret;//wegen constructor
+    if (relativePath === "util") {
+        function inherits(ctor, superCtor) {
+            ctor.super_ = superCtor;
+            ctor.prototype = Object.create(superCtor.prototype, {
+                constructor: {
+                    value: ctor,
+                    enumerable: false,
+                    writable: true,
+                    configurable: true
+                }
+            });
+            ;
+        }
+        globalThis.modulecache[newPath].inherits = inherits;
+        //globalThis.modulecache[newPath].inherits=_jrequire("inherits");
+    }
+    if (relativePath === "http") {
+        patchHTTP(globalThis.modulecache[newPath]);
+    }
+    if (relativePath === "process") {
+        globalThis.modulecache[newPath].version = "v19.2.0";
+        globalThis.modulecache[newPath].env = {};
+    }
+    return globalThis.modulecache[newPath];
+}
+globalThis.jrequire = jrequire;
+var servercode;
+var servermodules;
+// Helper function to open (or create) an IndexedDB database and object store
+function openDB(dbName, storeName) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(dbName);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+            resolve(request.result);
+        };
+        // If database is newly created or version upgraded, create object store
+        request.onupgradeneeded = event => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+                db.createObjectStore(storeName);
+            }
+        };
+    });
+}
+// Async function to write a key-value pair to IndexedDB
+async function writeIndexDB(dbName, storeName, key, value) {
+    const db = await openDB(dbName, storeName);
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(storeName, 'readwrite');
+        const store = transaction.objectStore(storeName);
+        const request = store.put(value, key);
+        request.onsuccess = () => resolve(true);
+        request.onerror = () => reject(request.error);
+    });
+}
+// Async function to read a value by key from IndexedDB
+async function readIndexDB(dbName, storeName, key) {
+    const db = await openDB(dbName, storeName);
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(storeName, 'readonly');
+        const store = transaction.objectStore(storeName);
+        const request = store.get(key);
+        request.onsuccess = () => {
+            resolve(request.result);
+        };
+        request.onerror = () => reject(request.error);
+    });
+}
+/*function getCodeFile(fsdata, file) {//read from BrowserFS.data
+    let paths = file.split("/");
+    var cur = { ".": "/" };
+    for (let x = 0; x < paths.length; x++) {
+        var folderid = cur[paths[x]];
+        var id = new TextDecoder("utf-8").decode(fsdata[folderid]);
+        id = id.substring(id.length - 36);
+        if (x === paths.length - 1)
+            return new TextDecoder("utf-8").decode(fsdata[id]);
+        else
+            cur = JSON.parse(new TextDecoder('utf8').decode(fsdata[id]));
+    }
+    return undefined;
+}*/
+async function runLocalServerIfNeeded() {
+    //await new Promise(resolve => setTimeout(resolve, 10000));
+    if (isinited)
+        return;
+    try {
+        servermodules = await readIndexDB("jassijs", "server", "kernel");
+    }
+    catch (err) {
+        console.log(err);
+    }
+    if (servermodules === undefined) {
+        var npm = new Npm({
+            "name": "jassijsserver",
+            "version": "1.0.5",
+            "description": "jassijsserver",
+            "engines": {
+                "node": "^12.x"
+            },
+            "dependencies": {
+                "acorn-import-phases": "^1.0.4",
+                "browserfs": "^1.4.3",
+                "browserify": "^17.0.1",
+            },
+            "license": "MIT",
+            "author": "Udo Weigelt",
+        });
+        //fs.writeFileSync("./package.json", pack);
+        await npm.install();
+        await writeIndexDB("jassijs", "server", "kernel", npm.files);
+        servermodules = npm.files;
+    }
+    var code = JSON.parse(await (await fetch("http://localhost:4000/getcodechanges?2025-07-28T18:26:17.567Z")).text());
+    // servercode = JSON.parse(await (await fetch("./jassijs/server/servercode.json")).text());
+    /*let text = await (await fetch("./js/jassijs/remote/Testlocalserver.js")).text();
+    servercode["js/jassijs/remote/Testlocalserver.js"] = text;
+    text = await (await fetch("./js/jassijs/remote/Runlocalserver.js")).text();
+    servercode["js/jassijs/remote/Runlocalserver.js"] = text;
+    */
+    var initialData = await readIndexDB("jassijs", "server", "files");
+    var BrowserFS = await new Promise((resolve) => {
+        const BrowserFS = jrequire("browserfs");
+        globalThis.BrowserFS = BrowserFS;
+        globalThis.Buffer = BrowserFS.BFSRequire('buffer').Buffer;
+        const path = jrequire('path');
+        BrowserFS.configure({
+            fs: "InMemory"
+        }, function (err) {
+            if (err)
+                return console.error("Fehler beim Initialisieren:", err);
+            console.log("init10");
+            //writeIndexDB("jassijsservermodules","serverfiles",);
+            globalThis.Buffer = BrowserFS.BFSRequire('buffer').Buffer;
+            globalThis.process = jrequire("process");
+            const fs = BrowserFS.BFSRequire('fs');
+            //initialize data 
+            var vdata = fs.getRootFS().store.store;
+            if (initialData) {
+                Object.keys(vdata).forEach(key => delete vdata[key]);
+                for (let key in initialData) {
+                    var buf2 = globalThis.Buffer.from(initialData[key].buffer, initialData[key].byteOffset, initialData[key].byteLength);
+                    initialData[key].buffer = buf2;
+                    vdata[key] = buf2;
+                }
+            }
+            globalfs = fs;
+            patchFS(fs);
+            for (let key in code) {
+                let filepath = key;
+                if (filepath.startsWith("."))
+                    filepath = filepath.substring(1);
+                if (filepath.startsWith("/"))
+                    filepath = filepath.substring(1);
+                filepath = "/" + filepath;
+                let coding = 'utf8';
+                if (code[key].coding)
+                    coding = code[key].coding;
+                /// if (textExt.some(suffix => filepath.toLowerCase().endsWith(suffix)))
+                //coding = "utf8";
+                const dir = path.dirname(filepath);
+                // Ordner erstellen, falls nicht vorhanden
+                if (!fs.existsSync(dir)) {
+                    try {
+                        fs.mkdirSync(dir, { recursive: true }); // Unterstützt verschachtelte Ordner
+                    }
+                    catch (err) {
+                        console.log("error create folder " + dir, err);
+                    }
+                }
+                try {
+                    fs.writeFileSync(filepath, code[key].content, coding);
+                }
+                catch (err) {
+                    console.log("error write file " + dir, err);
+                }
+            }
+            //writeIndexDB("jassijs", "server", "files", vdata);
+            // Test
+            // debugger;
+            if (fs.existsSync("./node_modules/pg"))
+                fs.rmSync("./node_modules/pg", { recursive: true, force: true });
+            if (fs.existsSync("./node_modules/pg"))
+                debugger;
+            // debugger;
+            resolve(BrowserFS);
+        });
+    });
+    isinited = true;
+    console.log("virtual filesystem inited");
+    console.log("run local server");
+    var test = jrequire("jassijs/remote/Testlocalserver");
+    //await test.testJSSQL();
+    //await test.testExpress2();
+    await test.test();
+}
+async function test() {
+    await runLocalServerIfNeeded();
+    return;
+    var fs = jrequire("fs", "");
+    //fs.writeFileSync("./test.js","var h=1;");
+    var n = fs.readFileSync("./test.js", "utf8");
+    //var scode = `var require=(path)=>_require(path,"servertest/run.js");` + code.content;
+    //eval(scode);
+    debugger;
+}
+define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right", "jassijs/remote/Validator", "../Config"], function (require, exports, DBObject_2, Registry_22, DatabaseSchema_2, ParentRight_1, User_1, Right_1, Validator_3, Config_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Group = void 0;
@@ -4351,10 +6913,14 @@ define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/D
     ], Group.prototype, "users", void 0);
     exports.Group = Group = __decorate([
         (0, DBObject_2.$DBObject)({ name: "jassijs_group" }),
+<<<<<<< HEAD
+        (0, Registry_22.$Class)("jassijs.security.Group")
+=======
         (0, Registry_21.$Class)("jassijs.security.Group")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Group);
 });
-define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_22, DatabaseSchema_3, Group_1, Validator_4) {
+define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_23, DatabaseSchema_3, Group_1, Validator_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ParentRight = void 0;
@@ -4404,10 +6970,14 @@ define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/re
     ], ParentRight.prototype, "groups", void 0);
     exports.ParentRight = ParentRight = __decorate([
         (0, DBObject_3.$DBObject)({ name: "jassijs_parentright" }),
+<<<<<<< HEAD
+        (0, Registry_23.$Class)("jassijs.security.ParentRight")
+=======
         (0, Registry_22.$Class)("jassijs.security.ParentRight")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], ParentRight);
 });
-define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_4, Registry_23, DatabaseSchema_4, Group_2, Validator_5) {
+define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/Validator"], function (require, exports, DBObject_4, Registry_24, DatabaseSchema_4, Group_2, Validator_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Right = void 0;
@@ -4432,17 +7002,25 @@ define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/D
     ], Right.prototype, "groups", void 0);
     exports.Right = Right = __decorate([
         (0, DBObject_4.$DBObject)({ name: "jassijs_right" }),
+<<<<<<< HEAD
+        (0, Registry_24.$Class)("jassijs.security.Right")
+=======
         (0, Registry_23.$Class)("jassijs.security.Right")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Right);
 });
-define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_24, Registry_25, RemoteObject_3) {
+define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry"], function (require, exports, Registry_25, Registry_26) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Rights = exports.ParentRightProperties = exports.RightProperties = void 0;
     exports.$Rights = $Rights;
     exports.$ParentRights = $ParentRights;
     exports.$CheckParentRight = $CheckParentRight;
+<<<<<<< HEAD
+    Registry_26 = __importDefault(Registry_26);
+=======
     Registry_25 = __importDefault(Registry_25);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     class RightProperties {
     }
     exports.RightProperties = RightProperties;
@@ -4451,20 +7029,24 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
     exports.ParentRightProperties = ParentRightProperties;
     function $Rights(rights) {
         return function (pclass) {
-            Registry_25.default.register("$Rights", pclass, rights);
+            Registry_26.default.register("$Rights", pclass, rights);
         };
     }
     function $ParentRights(rights) {
         return function (pclass) {
-            Registry_25.default.register("$ParentRights", pclass, rights);
+            Registry_26.default.register("$ParentRights", pclass, rights);
         };
     }
     function $CheckParentRight() {
         return function (target, propertyKey, descriptor) {
-            Registry_25.default.registerMember("$CheckParentRight", target, propertyKey, undefined);
+            Registry_26.default.registerMember("$CheckParentRight", target, propertyKey, undefined);
         };
     }
+<<<<<<< HEAD
+    let Rights = class Rights {
+=======
     let Rights = class Rights extends RemoteObject_3.RemoteObject {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         async isAdmin(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 if (this._isAdmin !== undefined)
@@ -4480,12 +7062,16 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
     };
     exports.Rights = Rights;
     exports.Rights = Rights = __decorate([
+<<<<<<< HEAD
+        (0, Registry_25.$Class)("jassijs.security.Rights")
+=======
         (0, Registry_24.$Class)("jassijs.security.Rights")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Rights);
     var rights = new Rights();
     exports.default = rights;
 });
-define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "../Classes", "jassijs/remote/Validator"], function (require, exports, DBObject_5, Registry_26, DatabaseSchema_5, Classes_12, Validator_6) {
+define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "../Classes", "jassijs/remote/Validator"], function (require, exports, DBObject_5, Registry_27, DatabaseSchema_5, Classes_12, Validator_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Setting = void 0;
@@ -4497,10 +7083,10 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
         async save(context = undefined) {
             throw new Classes_12.JassiError("not suported");
         }
-        static async findOne(options = undefined, context = undefined) {
+        static async findOne(options = undefined) {
             throw new Classes_12.JassiError("not suported");
         }
-        static async find(options = undefined, context = undefined) {
+        static async find(options = undefined) {
             throw new Classes_12.JassiError("not suported");
         }
         /**
@@ -4523,14 +7109,18 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
     ], Setting.prototype, "data", void 0);
     exports.Setting = Setting = __decorate([
         (0, DBObject_5.$DBObject)({ name: "jassijs_setting" }),
+<<<<<<< HEAD
+        (0, Registry_27.$Class)("jassijs.security.Setting"),
+=======
         (0, Registry_26.$Class)("jassijs.security.Setting"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], Setting);
     async function test() {
     }
     ;
 });
-define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight", "jassijs/remote/Validator"], function (require, exports, DBObject_6, Registry_27, DatabaseSchema_6, Group_3, ParentRight_2, Validator_7) {
+define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight", "jassijs/remote/Validator"], function (require, exports, DBObject_6, Registry_28, DatabaseSchema_6, Group_3, ParentRight_2, Validator_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.User = void 0;
@@ -4584,7 +7174,11 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
     ], User.prototype, "isAdmin", void 0);
     exports.User = User = __decorate([
         (0, DBObject_6.$DBObject)({ name: "jassijs_user" }),
+<<<<<<< HEAD
+        (0, Registry_28.$Class)("jassijs.security.User")
+=======
         (0, Registry_27.$Class)("jassijs.security.User")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], User);
     async function test() {
         var gps = await (Group_3.Group.find({}));
@@ -4622,15 +7216,18 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
         await user.save();
     }
 });
-define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes", "./Serverservice", "jassijs/remote/Validator", "./Config"], function (require, exports, Registry_28, RemoteObject_4, FileNode_1, Classes_13, Serverservice_3, Validator_8, Config_3) {
+define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes", "./Serverservice", "jassijs/remote/Validator", "./Config"], function (require, exports, Registry_29, RemoteObject_5, FileNode_1, Classes_13, Serverservice_3, Validator_8, Config_3) {
     "use strict";
     var Server_1;
+<<<<<<< HEAD
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y;
+=======
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Server = void 0;
-    let Server = Server_1 = class Server extends RemoteObject_4.RemoteObject {
+    let Server = Server_1 = class Server {
         constructor() {
-            super();
         }
         _convertFileNode(node) {
             var ret = new FileNode_1.FileNode();
@@ -4730,8 +7327,8 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         async dir(withDate = false, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 var ret;
-                if ((await Server_1.isOnline(context)) === true)
-                    ret = await this.call(this, this.dir, withDate, context);
+                if ((await Server_1.isOnline()) === true)
+                    ret = await RemoteObject_5.RemoteObject.docall(this, this.dir, ...arguments);
                 else
                     ret = { name: "", files: [] };
                 await this.addFilesFromMap(ret);
@@ -4745,28 +7342,17 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
-        async zip(directoryname, serverdir = undefined, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this, this.zip, directoryname, serverdir, context);
-            }
-            else {
-                return (await Serverservice_3.serverservices.filesystem).zip(directoryname, serverdir);
-                // return ["jassijs/base/ChromeDebugger.ts"];
-            }
+        async zip(directoryname, serverdir = undefined) {
+            return (await Serverservice_3.serverservices.filesystem).zip(directoryname, serverdir);
+            // return ["jassijs/base/ChromeDebugger.ts"];
         }
         /**
          * gets the content of a file from server
          * @param {string} fileNamew
          * @returns {string} content of the file
          */
-        async loadFiles(fileNames, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this, this.loadFiles, fileNames, context);
-            }
-            else {
-                return (await Serverservice_3.serverservices.filesystem).loadFiles(fileNames);
-                // return ["jassijs/base/ChromeDebugger.ts"];
-            }
+        async loadFiles(fileNames) {
+            return (await Serverservice_3.serverservices.filesystem).loadFiles(fileNames);
         }
         /**
          * gets the content of a file from server
@@ -4802,13 +7388,13 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                             mapname = Config_3.config.server.modules[found.modul].split("?")[0] + ".map";
                         if (Config_3.config.modules[found.modul].indexOf(".js?") > -1)
                             mapname = mapname + "?" + Config_3.config.modules[found.modul].split("?")[1];
-                        var code = await this.loadFile(mapname, context);
+                        var code = await this.loadFile(mapname);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;
                     }
                 }
                 if (fromServerdirectory) {
-                    return await this.call(this, this.loadFile, fileName, context);
+                    return await RemoteObject_5.RemoteObject.docall(this, this.loadFile, ...arguments);
                 }
                 else
                     return $.ajax({ url: fileName, dataType: "text" });
@@ -4848,10 +7434,14 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                         allcontents.push(content);
                     }
                 }
-                var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
+                var res = await RemoteObject_5.RemoteObject.docall(this, this.saveFiles, ...arguments);
                 if (res === "") {
                     //@ts-ignore
+<<<<<<< HEAD
+                    new Promise((resolve_16, reject_16) => { require(["jassijs/ui/Notify"], resolve_16, reject_16); }).then(__importStar).then((el) => {
+=======
                     new Promise((resolve_14, reject_14) => { require(["jassijs/ui/Notify"], resolve_14, reject_14); }).then(__importStar).then((el) => {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         el.notify(fileName + " saved", "info", { position: "bottom right" });
                     });
                     //if (!fromServerdirectory) {
@@ -4862,7 +7452,11 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 }
                 else {
                     //@ts-ignore
+<<<<<<< HEAD
+                    new Promise((resolve_17, reject_17) => { require(["jassijs/ui/Notify"], resolve_17, reject_17); }).then(__importStar).then((el) => {
+=======
                     new Promise((resolve_15, reject_15) => { require(["jassijs/ui/Notify"], resolve_15, reject_15); }).then(__importStar).then((el) => {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         el.notify(fileName + " not saved", "error", { position: "bottom right" });
                     });
                     throw new Classes_13.JassiError(res);
@@ -4881,14 +7475,14 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         * @param {string} fileName - the name of the file
         * @param {string} content
         */
-        async saveFile(fileName, content, context = undefined) {
+        async saveFile(fileName, content) {
             /*await this.fillFilesInMapIfNeeded();
             if (Server.filesInMap[fileName]) {
                 //@ts-ignore
                  notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
                 return;
             }*/
-            return await this.saveFiles([fileName], [content], context);
+            return await this.saveFiles([fileName], [content]);
         }
         /**
        * deletes a server modul
@@ -4897,7 +7491,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             if (!name.startsWith("$serverside/"))
                 throw new Classes_13.JassiError(name + " is not a serverside file");
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.testServersideFile, name, context);
+                var ret = await RemoteObject_5.RemoteObject.docall(this, this.testServersideFile, ...arguments);
                 //@ts-ignore
                 //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
                 return ret;
@@ -4907,7 +7501,11 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     throw new Classes_13.JassiError("only admins can delete");
                 }
                 //@ts-ignore
+<<<<<<< HEAD
+                var test = (await new Promise((resolve_18, reject_18) => { require([name.replaceAll("$serverside/", "")], resolve_18, reject_18); }).then(__importStar)).test;
+=======
                 var test = (await new Promise((resolve_16, reject_16) => { require([name.replaceAll("$serverside/", "")], resolve_16, reject_16); }).then(__importStar)).test;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 var ret;
                 if (test)
                     ret = await test();
@@ -4918,50 +7516,26 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
        * deletes a server modul
        **/
         async removeServerModul(name, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.removeServerModul, name, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_13.JassiError("only admins can delete");
-                return (await Serverservice_3.serverservices.filesystem).removeServerModul(name);
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_13.JassiError("only admins can delete");
+            return (await Serverservice_3.serverservices.filesystem).removeServerModul(name);
         }
         /**
         * deletes a file or directory
         **/
         async delete(name, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.delete, name, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_13.JassiError("only admins can delete");
-                return (await Serverservice_3.serverservices.filesystem).remove(name);
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_13.JassiError("only admins can delete");
+            return (await Serverservice_3.serverservices.filesystem).remove(name);
         }
         /**
          * renames a file or directory
          **/
         async rename(oldname, newname, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.rename, oldname, newname, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_13.JassiError("only admins can rename");
-                return (await Serverservice_3.serverservices.filesystem).rename(oldname, newname);
-                ;
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_13.JassiError("only admins can rename");
+            return (await Serverservice_3.serverservices.filesystem).rename(oldname, newname);
+            ;
         }
         /**
         * is the nodes server running
@@ -4974,7 +7548,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                     return false;
                 try {
                     if (this.isonline === undefined)
-                        Server_1.isonline = await this.call(this.isOnline, context);
+                        Server_1.isonline = await RemoteObject_5.RemoteObject.docall(this, this.isOnline, ...arguments);
                     return await Server_1.isonline;
                 }
                 catch (_a) {
@@ -4991,37 +7565,21 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
          * creates a file
          **/
         async createFile(filename, content, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createFile, filename, content, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_13.JassiError("only admins can createFile");
-                return (await Serverservice_3.serverservices.filesystem).createFile(filename, content);
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_13.JassiError("only admins can createFile");
+            return (await Serverservice_3.serverservices.filesystem).createFile(filename, content);
         }
         /**
-        * creates a file
+        * creates a folder
         **/
         async createFolder(foldername, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createFolder, foldername, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_13.JassiError("only admins can createFolder");
-                return (await Serverservice_3.serverservices.filesystem).createFolder(foldername);
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_13.JassiError("only admins can createFolder");
+            return (await Serverservice_3.serverservices.filesystem).createFolder(foldername);
         }
         async createModule(modulename, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createModule, modulename, context);
+                var ret = await RemoteObject_5.RemoteObject.docall(this, this.createModule, ...arguments);
                 if (!Config_3.config.modules[modulename]) {
                     //config.jsonData.modules[modulename] = modulename;
                     await Config_3.config.reload();
@@ -5037,11 +7595,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
             }
         }
         static async mytest(context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this.mytest, context);
-            }
-            else
-                return 14; //this is called on server
+            return 14; //this is called on server
         }
     };
     exports.Server = Server;
@@ -5052,110 +7606,153 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsBoolean)({ optional: true })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Boolean, typeof (_a = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _a : Object]),
+        __metadata("design:paramtypes", [Boolean, typeof (_a = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _a : Object]),
         __metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
     ], Server.prototype, "dir", null);
     __decorate([
+<<<<<<< HEAD
+        (0, RemoteObject_5.UseServer)(),
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __param(1, (0, Validator_8.ValidateIsBoolean)({ optional: true })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, Boolean, typeof (_c = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _c : Object]),
+        __metadata("design:paramtypes", [String, Boolean]),
         __metadata("design:returntype", Promise)
     ], Server.prototype, "zip", null);
     __decorate([
+<<<<<<< HEAD
+        (0, RemoteObject_5.UseServer)(),
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsArray)({ type: tp => String })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Array, typeof (_d = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _d : Object]),
-        __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+        __metadata("design:paramtypes", [Array]),
+        __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
     ], Server.prototype, "loadFiles", null);
     __decorate([
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, typeof (_f = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _f : Object]),
-        __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+        __metadata("design:paramtypes", [String, typeof (_d = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _d : Object]),
+        __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
     ], Server.prototype, "loadFile", null);
     __decorate([
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsArray)({ type: type => String })),
         __param(1, (0, Validator_8.ValidateIsArray)({ type: type => String })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Array, Array, typeof (_h = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _h : Object]),
-        __metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
+        __metadata("design:paramtypes", [Array, Array, typeof (_f = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _f : Object]),
+        __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
     ], Server.prototype, "saveFiles", null);
     __decorate([
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __param(1, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, String, typeof (_k = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _k : Object]),
-        __metadata("design:returntype", typeof (_l = typeof Promise !== "undefined" && Promise) === "function" ? _l : Object)
+        __metadata("design:paramtypes", [String, String]),
+        __metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
     ], Server.prototype, "saveFile", null);
     __decorate([
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, typeof (_m = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _m : Object]),
-        __metadata("design:returntype", typeof (_o = typeof Promise !== "undefined" && Promise) === "function" ? _o : Object)
+        __metadata("design:paramtypes", [String, typeof (_j = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _j : Object]),
+        __metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
     ], Server.prototype, "testServersideFile", null);
     __decorate([
+<<<<<<< HEAD
+        (0, RemoteObject_5.UseServer)(),
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, typeof (_p = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _p : Object]),
-        __metadata("design:returntype", typeof (_q = typeof Promise !== "undefined" && Promise) === "function" ? _q : Object)
+        __metadata("design:paramtypes", [String, typeof (_l = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _l : Object]),
+        __metadata("design:returntype", typeof (_m = typeof Promise !== "undefined" && Promise) === "function" ? _m : Object)
     ], Server.prototype, "removeServerModul", null);
     __decorate([
+<<<<<<< HEAD
+        (0, RemoteObject_5.UseServer)(),
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, typeof (_r = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _r : Object]),
-        __metadata("design:returntype", typeof (_s = typeof Promise !== "undefined" && Promise) === "function" ? _s : Object)
+        __metadata("design:paramtypes", [String, typeof (_o = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _o : Object]),
+        __metadata("design:returntype", typeof (_p = typeof Promise !== "undefined" && Promise) === "function" ? _p : Object)
     ], Server.prototype, "delete", null);
     __decorate([
+<<<<<<< HEAD
+        (0, RemoteObject_5.UseServer)(),
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __param(1, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, String, typeof (_t = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _t : Object]),
-        __metadata("design:returntype", typeof (_u = typeof Promise !== "undefined" && Promise) === "function" ? _u : Object)
+        __metadata("design:paramtypes", [String, String, typeof (_q = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _q : Object]),
+        __metadata("design:returntype", typeof (_r = typeof Promise !== "undefined" && Promise) === "function" ? _r : Object)
     ], Server.prototype, "rename", null);
     __decorate([
+<<<<<<< HEAD
+        (0, RemoteObject_5.UseServer)(),
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, String, typeof (_v = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _v : Object]),
-        __metadata("design:returntype", typeof (_w = typeof Promise !== "undefined" && Promise) === "function" ? _w : Object)
+        __metadata("design:paramtypes", [String, String, typeof (_s = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _s : Object]),
+        __metadata("design:returntype", typeof (_t = typeof Promise !== "undefined" && Promise) === "function" ? _t : Object)
     ], Server.prototype, "createFile", null);
     __decorate([
+<<<<<<< HEAD
+        (0, RemoteObject_5.UseServer)(),
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, typeof (_x = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _x : Object]),
-        __metadata("design:returntype", typeof (_y = typeof Promise !== "undefined" && Promise) === "function" ? _y : Object)
+        __metadata("design:paramtypes", [String, typeof (_u = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _u : Object]),
+        __metadata("design:returntype", typeof (_v = typeof Promise !== "undefined" && Promise) === "function" ? _v : Object)
     ], Server.prototype, "createFolder", null);
     __decorate([
         (0, Validator_8.ValidateFunctionParameter)(),
         __param(0, (0, Validator_8.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, typeof (_z = typeof RemoteObject_4.Context !== "undefined" && RemoteObject_4.Context) === "function" ? _z : Object]),
-        __metadata("design:returntype", typeof (_0 = typeof Promise !== "undefined" && Promise) === "function" ? _0 : Object)
+        __metadata("design:paramtypes", [String, typeof (_w = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _w : Object]),
+        __metadata("design:returntype", typeof (_x = typeof Promise !== "undefined" && Promise) === "function" ? _x : Object)
     ], Server.prototype, "createModule", null);
+<<<<<<< HEAD
+    __decorate([
+        (0, Validator_8.ValidateFunctionParameter)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [typeof (_y = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _y : Object]),
+        __metadata("design:returntype", Promise)
+    ], Server, "mytest", null);
+    exports.Server = Server = Server_1 = __decorate([
+        (0, Registry_29.$Class)("jassijs.remote.Server"),
+=======
     exports.Server = Server = Server_1 = __decorate([
         (0, Registry_28.$Class)("jassijs.remote.Server"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], Server);
 });
 //@ts-ignore
-define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Classes_14, Registry_29) {
+define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Classes_14, Registry_30) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.runningServerservices = exports.doNotReloadModule = exports.serverservices = exports.ServerserviceProperties = void 0;
     exports.beforeServiceLoad = beforeServiceLoad;
     exports.$Serverservice = $Serverservice;
+<<<<<<< HEAD
+    Registry_30 = __importDefault(Registry_30);
+=======
     Registry_29 = __importDefault(Registry_29);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     class ServerserviceProperties {
     }
     exports.ServerserviceProperties = ServerserviceProperties;
@@ -5165,76 +7762,97 @@ define("jassijs/remote/Serverservice", ["require", "exports", "jassijs/remote/Cl
     function beforeServiceLoad(func) {
         beforeServiceLoadHandler.push(func);
     }
+<<<<<<< HEAD
+    async function resolve(target, prop, receiver) {
+        var khsdf = runningServerservices;
+        if (target[prop]) {
+            return await target[prop];
+        }
+        else {
+            var all = await Registry_30.default.getJSONData("$Serverservice");
+            for (var x = 0; x < all.length; x++) {
+                var serv = all[x];
+                var name = serv.params[0].name;
+                if (name === prop) {
+                    var classname = serv.classname;
+                    var cl = await Registry_30.default.getJSONData("$Class", classname);
+                    //@ts-ignore
+                    if (require.main) { //nodes load project class from module
+                        /*for (var jfile in require.cache) {
+                            if(jfile.replaceAll("\\","/").endsWith(serv.filename.substring(0,serv.filename.length-2)+"js")){
+                                delete require.cache[jfile];
+                            }
+                        }*/
+                        //@ts-ignore
+                        var h = require.main.require(classname.replaceAll(".", "/"));
+                        // await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
+                    }
+                    else {
+                        await Classes_14.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
+                    }
+                    var props = Registry_30.default.getData("$Serverservice", classname)[0].params[0];
+                    for (var x = 0; x < beforeServiceLoadHandler.length; x++) {
+                        await beforeServiceLoadHandler[x](prop, props);
+                    }
+                    var instance = props.getInstance();
+                    target[prop] = instance;
+                    return instance;
+                }
+            }
+        }
+        throw new Error("serverservice not found:" + prop);
+    }
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     var serverservices = new Proxy(runningServerservices, {
         get(target, prop, receiver) {
-            return new Promise(async (resolve, reject) => {
-                var khsdf = runningServerservices;
-                if (target[prop]) {
-                    resolve(target[prop]);
-                    return;
-                }
-                else {
-                    var all = await Registry_29.default.getJSONData("$Serverservice");
-                    for (var x = 0; x < all.length; x++) {
-                        var serv = all[x];
-                        var name = serv.params[0].name;
-                        if (name === prop) {
-                            var classname = serv.classname;
-                            var cl = await Registry_29.default.getJSONData("$Class", classname);
-                            //@ts-ignore
-                            if (require.main) { //nodes load project class from module
-                                /*for (var jfile in require.cache) {
-                                    if(jfile.replaceAll("\\","/").endsWith(serv.filename.substring(0,serv.filename.length-2)+"js")){
-                                        delete require.cache[jfile];
-                                    }
-                                }*/
-                                //@ts-ignore
-                                await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
-                            }
-                            else {
-                                await Classes_14.classes.loadClass(classname); //await import(classname.replaceAll(".", "/"));
-                            }
-                            var props = Registry_29.default.getData("$Serverservice", classname)[0].params[0];
-                            for (var x = 0; x < beforeServiceLoadHandler.length; x++) {
-                                await beforeServiceLoadHandler[x](prop, props);
-                            }
-                            var instance = props.getInstance();
-                            target[prop] = instance;
-                            resolve(instance);
-                            return;
-                        }
-                    }
-                }
-                reject("serverservice not found:" + prop);
-            });
+            return resolve(target, prop, receiver);
+            // return new Promise(async (resolve, reject) => {
+            //     
+            //      reject("serverservice not found:" + <string>prop);
+            //  });
         }
     });
     exports.serverservices = serverservices;
     function $Serverservice(properties) {
         return function (pclass) {
-            Registry_29.default.register("$Serverservice", pclass, properties);
+            Registry_30.default.register("$Serverservice", pclass, properties);
         };
     }
     var doNotReloadModule = true;
     exports.doNotReloadModule = doNotReloadModule;
 });
-define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_30, Registry_31, RemoteObject_5, Setting_1, Server_2, Serverservice_4, Validator_9) {
+define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator", "./DBObject"], function (require, exports, Registry_31, Registry_32, RemoteObject_6, Setting_1, Server_2, Serverservice_4, Validator_9, DBObject_7) {
     "use strict";
     var Settings_2;
+<<<<<<< HEAD
+    var _a, _b, _c, _d, _e;
+=======
     var _a, _b, _c, _d;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.settings = exports.Settings = void 0;
     exports.$SettingsDescriptor = $SettingsDescriptor;
     exports.autostart = autostart;
     exports.test = test;
     exports.load = load;
+<<<<<<< HEAD
+    Registry_32 = __importDefault(Registry_32);
+=======
     Registry_31 = __importDefault(Registry_31);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;
         }
     };
-    let Settings = Settings_2 = class Settings extends RemoteObject_5.RemoteObject {
+    async function tt() {
+        return 5;
+    }
+    var h = new Proxy({ hallo: tt() }, {
+        get: (target, prop) => target[prop]
+    });
+    let Settings = Settings_2 = class Settings extends DBObject_7.DBObject {
         /**
         * loads the settings
         */
@@ -5247,7 +7865,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
                 }
                 else
                     Settings_2.browserSettings = {};
-                var all = (await Server_2.Server.isOnline() === false) ? undefined : await this.call(this.load, context);
+                var all = (await Server_2.Server.isOnline() === false) ? undefined : await RemoteObject_6.RemoteObject.docall(this, this.load, ...arguments);
                 if (all === null || all === void 0 ? void 0 : all.user) {
                     Settings_2.userSettings = JSON.parse(all.user.data);
                 }
@@ -5261,10 +7879,10 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
             }
             else {
                 //@ts-ignore
-                var man = await Serverservice_4.serverservices.db;
-                var id = context.request.user.user;
+                var man = await (Serverservice_4.serverservices.db);
+                var user = await man.findOne(context, Setting_1.Setting, { "id": 1 });
                 return {
-                    user: await man.findOne(context, Setting_1.Setting, { "id": 1 }),
+                    user: user,
                     allusers: await man.findOne(context, Setting_1.Setting, { "id": 0 }),
                 };
             }
@@ -5302,7 +7920,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
                         delete Settings_2.userSettings[Settings_key];
                     if (scope == "allusers" && Settings_2.allusersSettings)
                         delete Settings_2.allusersSettings[Settings_key];
-                    this.call(this.remove, Settings_key, scope, context);
+                    RemoteObject_6.RemoteObject.docall(this, this.remove, Settings_key, scope, context);
                 }
                 else {
                     //@ts-ignore
@@ -5319,11 +7937,11 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
                 }
             }
         }
-        static async save(Settings_key, value, scope) {
+        static async save(Settings_key, value, scope, context = undefined) {
             let ob = {};
             //@ts-ignore
             ob[Settings_key] = value;
-            return await this.saveAll(ob, scope);
+            return await this.saveAll(ob, scope, undefined, context);
         }
         static async saveAll(namevaluepair, scope, removeOtherKeys = false, context = undefined) {
             if (scope === "browser") {
@@ -5354,7 +7972,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
                             Settings_2.allusersSettings = {};
                         Object.assign(Settings_2.allusersSettings, namevaluepair);
                     }
-                    return await this.call(this.saveAll, props, scope, removeOtherKeys, context);
+                    return await RemoteObject_6.RemoteObject.docall(this, this.saveAll, props, scope, removeOtherKeys, context);
                 }
                 else {
                     //@ts-ignore
@@ -5388,7 +8006,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
         __param(0, (0, Validator_9.ValidateIsString)()),
         __param(1, (0, Validator_9.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, String, typeof (_a = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _a : Object]),
+        __metadata("design:paramtypes", [String, String, typeof (_a = typeof RemoteObject_6.Context !== "undefined" && RemoteObject_6.Context) === "function" ? _a : Object]),
         __metadata("design:returntype", Promise)
     ], Settings, "remove", null);
     __decorate([
@@ -5396,7 +8014,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
         __param(0, (0, Validator_9.ValidateIsString)()),
         __param(2, (0, Validator_9.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, typeof (_c = typeof T !== "undefined" && T) === "function" ? _c : Object, String]),
+        __metadata("design:paramtypes", [typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, typeof (_c = typeof T !== "undefined" && T) === "function" ? _c : Object, String, typeof (_d = typeof RemoteObject_6.Context !== "undefined" && RemoteObject_6.Context) === "function" ? _d : Object]),
         __metadata("design:returntype", Promise)
     ], Settings, "save", null);
     __decorate([
@@ -5404,17 +8022,21 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
         __param(1, (0, Validator_9.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
         __param(2, (0, Validator_9.ValidateIsBoolean)({ optional: true })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, String, Object, typeof (_d = typeof RemoteObject_5.Context !== "undefined" && RemoteObject_5.Context) === "function" ? _d : Object]),
+        __metadata("design:paramtypes", [Object, String, Object, typeof (_e = typeof RemoteObject_6.Context !== "undefined" && RemoteObject_6.Context) === "function" ? _e : Object]),
         __metadata("design:returntype", Promise)
     ], Settings, "saveAll", null);
     exports.Settings = Settings = Settings_2 = __decorate([
+<<<<<<< HEAD
+        (0, Registry_31.$Class)("jassijs.remote.Settings")
+=======
         (0, Registry_30.$Class)("jassijs.remote.Settings")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Settings);
     var settings = new Settings();
     exports.settings = settings;
     function $SettingsDescriptor() {
         return function (pclass) {
-            Registry_31.default.register("$SettingsDescriptor", pclass);
+            Registry_32.default.register("$SettingsDescriptor", pclass);
         };
     }
     async function autostart() {
@@ -5456,7 +8078,70 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
         return Settings.load();
     }
 });
-define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_32) {
+define("jassijs/remote/StackContext", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.useStackContext = useStackContext;
+    exports.getStackContext = getStackContext;
+    exports.test = test;
+    // StackContext.ts
+    const contextMap = new Map();
+    let functionCounter = 0;
+    function useStackContext(context, fn, ...args) {
+        const name = `__stackctx_${new Date().getDate() + (functionCounter++)}`;
+        const wrapper = {
+            [name]: function (...args) {
+                contextMap.set(name, context);
+                const cleanup = () => contextMap.delete(name);
+                try {
+                    const result = fn.apply(this, args);
+                    if (result instanceof Promise) {
+                        return result.finally(cleanup);
+                    }
+                    cleanup();
+                    return result;
+                }
+                catch (err) {
+                    cleanup();
+                    throw err;
+                }
+            }
+        }[name];
+        return wrapper(...args);
+    }
+    function getStackContext() {
+        const err = new Error();
+        const stack = err.stack || '';
+        for (const line of stack.split('\n')) {
+            const match = line.match(/__stackctx_(\d+)/);
+            if (match) {
+                return contextMap.get(match[0]);
+            }
+        }
+        return undefined;
+    }
+    class A {
+        async h() {
+            return await this.h2();
+        }
+        async h2() {
+            var _a;
+            console.log('Aktueller StackContext:' + ((_a = getStackContext()) === null || _a === void 0 ? void 0 : _a.sessionId));
+            return "Ok";
+        }
+    }
+    async function test2() {
+        return await new A().h();
+    }
+    async function test() {
+        const hallo = await useStackContext({ sessionId: 'abc-124' }, async () => {
+            // await new Promise(res => setTimeout(res, 10));
+            return test2();
+        });
+        console.log(hallo);
+    }
+});
+define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_33) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -5523,96 +8208,326 @@ define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Registry"],
     };
     exports.Test = Test;
     exports.Test = Test = __decorate([
+<<<<<<< HEAD
+        (0, Registry_33.$Class)("jassijs.remote.Test")
+=======
         (0, Registry_32.$Class)("jassijs.remote.Test")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Test);
 });
-define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_33, RemoteObject_6) {
+var exports = typeof exports !== 'undefined' ? exports : {};
+exports.test = async function () {
+    await startServer();
+};
+async function testPDF() {
+    try {
+        //   debugger;
+        var u = "l";
+        var k = jrequire("./servertest/run", "", true);
+        k.erstelleZip();
+    }
+    catch (err) {
+        throw err;
+    }
+}
+exports.testPDF = testPDF;
+async function testpdfMake() {
+    try {
+        debugger;
+        var DoServerreport = jrequire("./jassijs_report/server/DoServerreport").DoServerreport;
+        var data = await new DoServerreport().getBase64("jassijs_report/server/TestServerreport", undefined);
+        debugger;
+    }
+    catch (err) {
+        debugger;
+        throw err;
+    }
+}
+exports.testpdfMake = testpdfMake;
+async function testWebpack() {
+    try {
+        var startWebpack = jrequire("./servertest/startwebpack").startWebpack;
+        var data = await startWebpack();
+        if (globalThis.requestHandler === undefined)
+            globalThis.requestHandler = {};
+        //globalThis.requestHandler["http://localhost:3000/__webpack_hmr"]=async (event)=>{
+        globalThis.requestHandler["http://localhost:5000/events"] = async (event) => {
+            const { Readable } = jrequire('stream');
+            // 1. Erstelle einen Node-kompatiblen Readable Stream
+            const nodeStream = new Readable({
+                read() { } // keine automatische Push-Logik
+            });
+            // 2. Schreibe initiale Daten
+            nodeStream.push('data: Hallo\n\n');
+            setTimeout(() => {
+                nodeStream.push('data: Nach 1 Sekunde\n\n');
+                //nodeStream.push(null); // optional: Stream beenden
+            }, 1000);
+            const str = new ReadableStream({
+                start(controller) {
+                    const reader = nodeStream[Symbol.asyncIterator]();
+                    async function pump() {
+                        var _a, e_2, _b, _c;
+                        try {
+                            for (var _d = true, reader_2 = __asyncValues(reader), reader_2_1; reader_2_1 = await reader_2.next(), _a = reader_2_1.done, !_a; _d = true) {
+                                _c = reader_2_1.value;
+                                _d = false;
+                                const chunk = _c;
+                                controller.enqueue(new TextEncoder().encode(chunk));
+                            }
+                        }
+                        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                        finally {
+                            try {
+                                if (!_d && !_a && (_b = reader_2.return)) await _b.call(reader_2);
+                            }
+                            finally { if (e_2) throw e_2.error; }
+                        }
+                    }
+                    pump();
+                }
+            });
+            /*var str=new ReadableStream({
+                start(controller) {
+                  controller.enqueue(new TextEncoder().encode('data: Hallo\n\n'));
+                  // Kein close() aufrufen, damit die Verbindung offen bleibt
+                }
+              });
+              */
+            var res = new Response(str, {
+                headers: {
+                    'Content-Type': 'text/event-stream',
+                    'Cache-Control': 'no-cache',
+                    'Connection': 'keep-alive',
+                }
+            });
+            event.respondWith(res);
+        };
+    }
+    catch (err) {
+        debugger;
+        throw err;
+    }
+    setInterval(() => {
+        const fs = jrequire("fs");
+        var tm = new Date().toString();
+        console.log("Update Code" + tm);
+        fs.writeFileSync("./servertest/print.js", `import { aa } from "./print2";
+
+        export default function printMe() { 
+            console.log('Code has changed: ${tm} ! ');  
+          }
+        
+          export function bb(){ 
+            aa();   
+}
+`);
+    }, 10000);
+}
+exports.testWebpack = testWebpack;
+async function testExpress2() {
+    const express = require('express');
+    const path = require('path');
+    const app = express();
+    const PORT = 3000;
+    var countges = 0;
+    app.get('/events', (req, res) => {
+        res.set({
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+        });
+        res.write(`data: start`);
+        let count = 0;
+        const interval = setInterval(() => {
+            res.write(`data: Nachricht- #${++count}/${++countges}\n\n`);
+            if (count >= 5) {
+                clearInterval(interval);
+                res.write('event: end\ndata: 👋 Stream beendet\n\n');
+                res.end();
+            }
+        }, 1000);
+        // Verbindung geschlossen?
+        req.on('close', () => {
+            clearInterval(interval);
+            res.end();
+        });
+    });
+    // Optional: eigene Route
+    app.get('/index.html', (req, res) => {
+        try {
+            debugger;
+            res.send('Hallo Welt von Express!');
+        }
+        catch (err) {
+            debugger;
+        }
+    });
+    app.listen(PORT, () => {
+        console.log(`🚀 Server läuft unter http://localhost:${PORT} ` + new Date().toString());
+    });
+}
+exports.testExpress2 = testExpress2;
+async function testLocalServer() {
+    await runLocalServerIfNeeded();
+    try {
+        var testExpress = jrequire("./servertest/run").testExpress;
+        var data = await testExpress();
+        var http = jrequire("http");
+        var server = http.serverListening[5001];
+        setTimeout(() => {
+            var hh = server.requestListener({ url: "/index.html", method: "get" }, new http.ServerResponse(), () => 1);
+        }, 3000);
+    }
+    catch (err) {
+        debugger;
+        throw err;
+    }
+}
+exports.testLocalServer = testLocalServer;
+async function testJSSQL() {
+    try {
+        var jssql = jrequire("./servertest/run").jssql;
+        var data = await jssql();
+    }
+    catch (err) {
+        debugger;
+        throw err;
+    }
+}
+exports.testJSSQL = testJSSQL;
+async function testDB() {
+    try {
+        var testDB = jrequire("./servertest/run").testDB;
+        var data = await testDB();
+        debugger;
+    }
+    catch (err) {
+        debugger;
+        throw err;
+    }
+}
+exports.testDB = testDB;
+async function startServer() {
+    try {
+        var JassiServer = jrequire("./jassijs/server/JassiServer").default;
+        await JassiServer();
+    }
+    catch (err) {
+        debugger;
+        throw err;
+    }
+}
+exports.startServer = startServer;
+define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_34, RemoteObject_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Transaction = exports.TransactionItem = void 0;
+    exports.TransactionTest = exports.Transaction = exports.TransactionContext = exports.TransactionItem = exports.GenericTransactionItem = void 0;
+    exports.test = test;
     //var serversession;
-    class TransactionItem {
-        constructor() {
-            this.result = "**unresolved**";
-        }
+    class GenericTransactionItem {
+    }
+    exports.GenericTransactionItem = GenericTransactionItem;
+    class TransactionItem extends GenericTransactionItem {
     }
     exports.TransactionItem = TransactionItem;
-    let Transaction = class Transaction extends RemoteObject_6.RemoteObject {
+    class TransactionContext extends RemoteObject_7.Context {
+    }
+    exports.TransactionContext = TransactionContext;
+    class GenericTransaction {
         constructor() {
-            super(...arguments);
-            this.statements = [];
-            this.context = new RemoteObject_6.Context();
+            this.finalizer = {};
+            this.allPromises = [];
+            this.filledTransactions = [];
+            this.finalized = 0;
+            this.transactions = [];
+            this.registerdTransactions = {};
         }
-        async execute() {
-            //  return this.context.register("transaction", this, async () => {
-            for (var x = 0; x < this.statements.length; x++) {
-                var it = this.statements[x];
-                var context = {
-                    isServer: false,
-                    transaction: this,
-                    transactionitem: it
-                };
-                it.promise = it.obj[it.method.name](...it.params, context);
-                it.promise.then((val) => {
-                    it.result = val; //promise returned or resolved out of Transaction
-                });
-            }
-            let _this = this;
-            await new Promise((res) => {
-                _this.ready = res;
-            });
-            var ret = [];
-            for (let x = 0; x < this.statements.length; x++) {
-                var res = await this.statements[x].promise;
-                ret.push(res);
-            }
-            return ret;
-            //  });
+        registerAction(name, userdata, finalize, config) {
+            this.finalizer[name] = finalize;
+            if (this.registerdTransactions[name] === undefined)
+                this.registerdTransactions[name] = [];
+            var it = config.transactionItem;
+            if (this.registerdTransactions[name].indexOf(it) < 0)
+                this.registerdTransactions[name].push(it);
+            var pr = new Promise((res) => { it.resolve = res; });
+            it.promise = pr;
+            it.userData = userdata;
+            if (this.finalized < 1 && this.filledTransactions.indexOf(it) === -1)
+                this.filledTransactions.push(it);
+            this.tryFinalize();
+            return it.promise;
         }
-        async wait(transactionItem, prot) {
-            transactionItem.remoteProtocol = prot;
-            //if all transactions are placed then do the request
-            var foundUnplaced = false;
-            for (let x = 0; x < this.statements.length; x++) {
-                let it = this.statements[x];
-                if (it.result === "**unresolved**" && it.remoteProtocol === undefined)
-                    foundUnplaced = true;
+        tryFinalize() {
+            if (this.finalized === 0 && this.filledTransactions.length === this.transactions.length) {
+                if (this.resolveFinalizer)
+                    this.resolveFinalizer();
             }
-            if (foundUnplaced === false) {
-                this.sendRequest();
-            }
-            let _this = this;
-            return new Promise((res) => {
-                transactionItem.resolve = res;
-            }); //await this.statements[id].result;//wait for result - comes with Request
         }
-        async sendRequest(context = undefined) {
+        async finalize() {
+            if (this.finalized)
+                return;
+            this.finalized = 1;
+            for (var key in this.finalizer) {
+                if (this.registerdTransactions[key] === undefined) {
+                    continue;
+                }
+                var trans = this.registerdTransactions[key];
+                var alluserdata = [];
+                await trans.forEach((o) => alluserdata.push(o.userData));
+                var results = await this.finalizer[key](alluserdata);
+                for (var x = 0; x < trans.length; x++) {
+                    var tran = trans[x];
+                    tran.resolve(await results[x]);
+                }
+            }
+        }
+        async wait() {
+            var _this = this;
+            var pp = new Promise((res) => { _this.resolveFinalizer = res; });
+            //  this.tryFinalize();
+            await pp;
+            await this.finalize();
+            return await Promise.all(this.allPromises);
+        }
+    }
+    let Transaction = class Transaction extends GenericTransaction {
+        addProtocol(prot, config) {
+            return super.registerAction("transaction", prot, this.sendRequest.bind(this), config);
+        }
+        async sendRequest(userData, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 var prots = [];
-                for (let x = 0; x < this.statements.length; x++) {
-                    let st = this.statements[x];
-                    if (st.result !== "**unresolved**")
-                        prots.push(undefined);
-                    else
-                        prots.push(st.remoteProtocol.stringify(st.remoteProtocol));
+                for (let x = 0; x < userData.length; x++) {
+                    let st = userData[x];
+                    // if (st.result !== "**unresolved**")
+                    //     prots.push(undefined);
+                    // else
+                    prots.push(st.stringify(st));
                 }
-                var sic = this.statements;
-                this.statements = prots;
-                var ret = await this.call(this, this.sendRequest, context);
-                this.statements = sic;
-                for (let x = 0; x < this.statements.length; x++) {
-                    this.statements[x].resolve(ret[x]);
-                }
-                this.ready();
-                //ret is not what we want - perhaps there is a modification
-                /* let ret2=[];
-                 for(let x=0;x<this.statements.length;x++){
-                     ret2.push(await this.statements[x].promise);
-                 }
-                 this.resolve(ret);*/
-                return true;
+                if (context)
+                    delete context.transaction;
+                var ret = await RemoteObject_7.RemoteObject.docallWithReplaceThis({}, this, this.sendRequest, prots, context); //WithReplaceThis({userData:prots}, this, this.sendRequest);
+                return ret;
             }
             else {
+<<<<<<< HEAD
+                var servertransaction = new GenericTransaction();
+                var all = [];
+                var _execute = (await new Promise((resolve_19, reject_19) => { require(["jassijs/server/DoRemoteProtocol"], resolve_19, reject_19); }).then(__importStar))._execute;
+                //try {
+                for (let x = 0; x < userData.length; x++) {
+                    var item = new TransactionItem();
+                    var st = userData[x];
+                    item.transaction = servertransaction;
+                    var contextneu = { isServer: true };
+                    Object.assign(contextneu, context);
+                    contextneu.transactionItem = item;
+                    servertransaction.transactions.push(item);
+                    contextneu.transaction = servertransaction;
+                    var res = _execute(st, context.request, contextneu);
+                    all.push(res);
+=======
                 //@ts-ignore
                 //@ts-ignore
                 var ObjectTransaction = (await new Promise((resolve_17, reject_17) => { require(["jassijs/remote/ObjectTransaction"], resolve_17, reject_17); }).then(__importStar)).ObjectTransaction;
@@ -5630,10 +8545,34 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
                 }
                 for (let x = 0; x < ret.length; x++) {
                     ret[x] = await ret[x];
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 }
+                await servertransaction.wait(); //await Promise.all(all)
+                ret = await Promise.all(all);
+                // } catch (err) {
+                //    throw err;
+                //} 
                 return ret;
             }
         }
+<<<<<<< HEAD
+        //runs the transaction
+        async execute(context = undefined) {
+            //  return this.context.register("transaction", this, async () => {
+            var allPromises = [];
+            for (var x = 0; x < this.transactions.length; x++) {
+                var it = this.transactions[x];
+                var newcontext = context ? context : { isServer: false };
+                newcontext.transaction = this;
+                newcontext.transactionItem = it;
+                (0, RemoteObject_7._fillDefaultParameter)(it.obj, it.method, it.params, newcontext);
+                var pr = it.obj[it.method.name](...it.params, newcontext);
+                // RemoteObject.docall(it.obj,it.method,...it.params,newcontext);
+                allPromises.push(pr);
+            }
+            var ret = await this.wait(); //Promise.all(allPromises);
+            return ret;
+=======
         async doServerStatement(statements, ot /*:ObjectTransaction*/, num, context) {
             //@ts-ignore
             var _execute = (await new Promise((resolve_18, reject_18) => { require(["jassijs/server/DoRemoteProtocol"], resolve_18, reject_18); }).then(__importStar))._execute;
@@ -5645,20 +8584,51 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
             //@ts-ignore
             ot.statements[num].result = _execute(_this.statements[num], context.request, newcontext);
             return ot.statements[num].result;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
+        //add a transaction
         add(obj, method, ...params) {
             var ti = new TransactionItem();
             ti.method = method;
             ti.obj = obj;
             ti.params = params;
             ti.transaction = this;
-            this.statements.push(ti);
+            this.transactions.push(ti);
         }
     };
     exports.Transaction = Transaction;
     exports.Transaction = Transaction = __decorate([
+<<<<<<< HEAD
+        (0, Registry_34.$Class)("jassijs.remote.Transaction")
+    ], Transaction);
+    let TransactionTest = class TransactionTest {
+        hi(num) {
+            return num + 10000;
+        }
+    };
+    exports.TransactionTest = TransactionTest;
+    __decorate([
+        (0, RemoteObject_7.UseServer)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Number]),
+        __metadata("design:returntype", void 0)
+    ], TransactionTest.prototype, "hi", null);
+    exports.TransactionTest = TransactionTest = __decorate([
+        (0, Registry_34.$Class)("jassijs.remote.TransactionTest")
+    ], TransactionTest);
+    async function test(t) {
+        var trans = new Transaction();
+        for (var x = 0; x < 3; x++) {
+            var tr = new TransactionTest();
+            trans.add(tr, tr.hi, x);
+        }
+        var all = await trans.execute();
+        t.expectEqual(all.join() === "10000,10001,10002");
+    }
+=======
         (0, Registry_33.$Class)("jassijs.remote.Transaction")
     ], Transaction);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 });
 define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], function (require, exports) {
     "use strict";
@@ -5815,6 +8785,12 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
             if (method === undefined)
                 throw new Error("sdfgsdfgsfd");
             const funcname = method.name;
+            let smethod = target[method.name].toString();
+            //save params for MyRemoteObject
+            let sparam = smethod.substring(smethod.indexOf('(') + 1, smethod.indexOf(')'));
+            let paramnames = sparam.split(',');
+            if (method["__originalParams"])
+                paramnames = method["__originalParams"];
             const { [funcname]: newfunc } = {
                 [funcname]: function () {
                     //@ts-ignore
@@ -5837,6 +8813,7 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
                     return method.apply(this, arguments);
                 }
             };
+            newfunc["__originalParams"] = paramnames;
             descriptor.value = newfunc;
         };
     }
@@ -6035,7 +9012,11 @@ define("jassijs/remote/Validator", ["require", "exports", "reflect-metadata"], f
     }
     var l;
 });
+<<<<<<< HEAD
+define("jassijs/security/GroupView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/security/Group", "jassijs/ui/DBObjectView", "jassijs/ui/Component"], function (require, exports, NumberConverter_1, Textbox_1, Registry_35, Panel_2, Group_4, DBObjectView_1, Component_3) {
+=======
 define("jassijs/security/GroupView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/security/Group", "jassijs/ui/DBObjectView", "jassijs/ui/Component"], function (require, exports, NumberConverter_1, Textbox_1, Registry_34, Panel_2, Group_4, DBObjectView_1, Component_3) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.GroupView = void 0;
@@ -6057,7 +9038,11 @@ define("jassijs/security/GroupView", ["require", "exports", "jassijs/ui/converte
     exports.GroupView = GroupView;
     exports.GroupView = GroupView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "jassijs.security.Group", icon: "mdi mdi-account-group", actionname: "Administration/Security/Groups" }),
+<<<<<<< HEAD
+        (0, Registry_35.$Class)("jassijs/security/GroupView")
+=======
         (0, Registry_34.$Class)("jassijs/security/GroupView")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], GroupView);
     async function test() {
         var gr = await Group_4.Group.findOne();
@@ -6065,7 +9050,11 @@ define("jassijs/security/GroupView", ["require", "exports", "jassijs/ui/converte
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/security/User", "jassijs/ui/DBObjectView", "jassijs/ui/Notify", "jassijs/remote/security/Group", "jassijs/ui/Component"], function (require, exports, Select_1, Checkbox_1, NumberConverter_2, Textbox_2, Registry_36, Panel_3, User_2, DBObjectView_2, Notify_1, Group_5, Component_4) {
+=======
 define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/security/User", "jassijs/ui/DBObjectView", "jassijs/ui/Notify", "jassijs/remote/security/Group", "jassijs/ui/Component"], function (require, exports, Select_1, Checkbox_1, NumberConverter_2, Textbox_2, Registry_35, Panel_3, User_2, DBObjectView_2, Notify_1, Group_5, Component_4) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.UserView = void 0;
@@ -6103,7 +9092,11 @@ define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/Select", 
     exports.UserView = UserView;
     exports.UserView = UserView = __decorate([
         (0, DBObjectView_2.$DBObjectView)({ classname: "jassijs.security.User", actionname: "Administration/Security/Users", icon: "mdi mdi-account-key-outline", queryname: "findWithRelations" }),
+<<<<<<< HEAD
+        (0, Registry_36.$Class)("jassijs/security/UserView")
+=======
         (0, Registry_35.$Class)("jassijs/security/UserView")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], UserView);
     async function test() {
         var u = (await User_2.User.findWithRelations())[0];
@@ -6113,7 +9106,11 @@ define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/Select", 
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/ActionNode", "jassijs/ui/MenuItem"], function (require, exports, Menu_1, Registry_37, Panel_4, Actions_1, ActionNode_1, MenuItem_1) {
+=======
 define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/ActionNode", "jassijs/ui/MenuItem"], function (require, exports, Menu_1, Registry_36, Panel_4, Actions_1, ActionNode_1, MenuItem_1) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ActionNodeMenu = exports.ActionNodeMenuProperties = void 0;
@@ -6180,7 +9177,11 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
     };
     exports.ActionNodeMenu = ActionNodeMenu;
     exports.ActionNodeMenu = ActionNodeMenu = __decorate([
+<<<<<<< HEAD
+        (0, Registry_37.$Class)("jassijs/ui/ActionNodeMenu"),
+=======
         (0, Registry_36.$Class)("jassijs/ui/ActionNodeMenu"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [ActionNodeMenuProperties])
     ], ActionNodeMenu);
     async function test() {
@@ -6188,7 +9189,11 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ui/UIComponent"], function (require, exports, Split, Panel_5, Registry_38, Property_1, Classes_15, UIComponent_1) {
+=======
 define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Split, Panel_5, Registry_37, Component_5, Property_1, Classes_15) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BoxPanel = void 0;
@@ -6283,8 +9288,13 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Pan
         __metadata("design:paramtypes", [Array])
     ], BoxPanel.prototype, "spliter", null);
     exports.BoxPanel = BoxPanel = __decorate([
+<<<<<<< HEAD
+        (0, UIComponent_1.$UIComponent)({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        (0, Registry_38.$Class)("jassijs.ui.BoxPanel"),
+=======
         (0, Component_5.$UIComponent)({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
         (0, Registry_37.$Class)("jassijs.ui.BoxPanel"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Property_1.$Property)({ name: "isAbsolute", hide: true, type: "boolean" }),
         __metadata("design:paramtypes", [Object])
     ], BoxPanel);
@@ -6308,12 +9318,22 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Pan
     }
     ;
 });
+<<<<<<< HEAD
+define("jassijs/ui/Button", ["require", "exports", "jassijs/ui/Component"], function (require, exports, Component_5) {
+=======
 define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_38, Component_6, Property_2) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Button = void 0;
     exports.test = test;
+<<<<<<< HEAD
+    //@$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
+    //@$Class("jassijs.ui.Button")
+    class Button extends Component_5.Component {
+=======
     let Button = class Button extends Component_6.Component {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         constructor(properties = {}) {
             super(properties);
         }
@@ -6337,6 +9357,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
                 className: "buttontext"
             })));
         }
+        //@$Property({ default: "function(event){\n\t\n}" })
         onclick(handler, removeOldHandler = true) {
             if (removeOldHandler) {
                 this.off("click");
@@ -6362,6 +9383,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
                 this.dom.querySelector(".buttonimg").setAttribute("src", icon);
             }
         }
+        //@$Property({type:"image"})
         get icon() {
             var ret = this.dom.querySelector(".buttonimg").getAttribute("src");
             if (ret === "") {
@@ -6372,6 +9394,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
         set text(value) {
             this.dom.querySelector(".buttontext").innerText = value === undefined ? "" : value;
         }
+        //@$Property()
         get text() {
             var ret = this.dom.querySelector(".buttontext").innerText;
             if (ret === undefined)
@@ -6394,6 +9417,12 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
         destroy() {
             super.destroy();
         }
+<<<<<<< HEAD
+    }
+    exports.Button = Button;
+    async function test() {
+        var Panel = (await (new Promise((resolve_20, reject_20) => { require(["jassijs/ui/Panel"], resolve_20, reject_20); }).then(__importStar))).Panel;
+=======
     };
     exports.Button = Button;
     __decorate([
@@ -6419,6 +9448,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
     ], Button);
     async function test() {
         var Panel = (await (new Promise((resolve_19, reject_19) => { require(["jassijs/ui/Panel"], resolve_19, reject_19); }).then(__importStar))).Panel;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         var pan = new Panel();
         var but = new Button();
         but.text = "Hallo";
@@ -6431,7 +9461,11 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
         return pan;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/UIComponents", "jassijs/ext/jquerylib"], function (require, exports, Textbox_3, Registry_39, Property_2, UIComponents_1) {
+=======
 define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ext/jquerylib"], function (require, exports, Textbox_3, Component_7, Registry_39, Property_3) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Calendar = void 0;
@@ -6468,9 +9502,15 @@ define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jass
     };
     exports.Calendar = Calendar;
     exports.Calendar = Calendar = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_1.$UIComponent)({ fullPath: "common/Calendar", icon: "mdi mdi-calendar-month" }),
+        (0, Registry_39.$Class)("jassijs.ui.Calendar"),
+        (0, Property_2.$Property)({ name: "new", type: "string" }),
+=======
         (0, Component_7.$UIComponent)({ fullPath: "common/Calendar", icon: "mdi mdi-calendar-month" }),
         (0, Registry_39.$Class)("jassijs.ui.Calendar"),
         (0, Property_3.$Property)({ name: "new", type: "string" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], Calendar);
     function test() {
@@ -6483,7 +9523,11 @@ define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jass
         return cal;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/DataComponent", "jassijs/ui/UIComponents"], function (require, exports, Registry_40, Property_3, DataComponent_1, UIComponents_2) {
+=======
 define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Registry_40, Component_8, Property_4, DataComponent_1) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Checkbox = void 0;
@@ -6536,23 +9580,39 @@ define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Registry", 
     };
     exports.Checkbox = Checkbox;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_3.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_4.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Checkbox.prototype, "onclick", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_3.$Property)({ type: "boolean" }),
+=======
         (0, Property_4.$Property)({ type: "boolean" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Checkbox.prototype, "value", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_3.$Property)(),
+=======
         (0, Property_4.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Checkbox.prototype, "text", null);
     exports.Checkbox = Checkbox = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_2.$UIComponent)({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
+=======
         (0, Component_8.$UIComponent)({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         (0, Registry_40.$Class)("jassijs.ui.Checkbox"),
         __metadata("design:paramtypes", [Object])
     ], Checkbox);
@@ -6563,6 +9623,25 @@ define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Registry", 
         return cb;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/Component", ["require", "exports", "jassijs/ui/State"], function (require, exports, State_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TextComponent = exports.HTMLComponent = exports.FunctionComponent = exports.Component = exports.React = void 0;
+    exports.nextID = nextID;
+    exports.jc = jc;
+    exports.createComponent = createComponent;
+    exports.migrateModul = migrateModul;
+    let _nextID = 10;
+    /**
+    * with every call a new id is generated - used to create a free id for the dom
+    * @returns {number} - the id
+    */
+    function nextID() {
+        _nextID = _nextID + 1;
+        return _nextID.toString();
+    }
+=======
 define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties", "jassijs/ui/State"], function (require, exports, Registry_41, Property_5, Registry_42, Classes_16, CSSProperties_1, State_1) {
     "use strict";
     var Component_9;
@@ -6589,6 +9668,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             Registry_42.default.register("$UIComponent", pclass, properties);
         };
     }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     var React = {
         createElement(type, props, ...children) {
             if (props === undefined || props === null) //TODO is this right?
@@ -6659,6 +9739,11 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         }
         return ret;
     }
+<<<<<<< HEAD
+    //class TC <Prop>extends React.Component<Prop,{}>{
+    //@$Class("jassijs.ui.Component")
+    class Component {
+=======
     function createRef(val = undefined) {
         var ret = { current: val };
         return ret;
@@ -6697,6 +9782,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
               }
               this._domWrapper=element;
           }*/
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
          * base class for each Component
          * @class jassijs.ui.Component
@@ -6708,7 +9794,11 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             // super(properties, undefined);
             // if(properties===undefined)
             // properties={};
+<<<<<<< HEAD
+            this.refs = (0, State_1.createRefs)();
+=======
             this.refs = createRefs();
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             this.state = (0, State_1.createStates)(properties);
             this.props = properties;
             (0, State_1.resolveState)(this, this.props);
@@ -6871,10 +9961,14 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             /** @member {dom} - the dom-element*/
             /** @member {numer}  - the id of the element */
             if (this.dom.classList) { //Textnode!
-                this.dom.classList.add("jinlinecomponent");
+                //            this.dom.classList.add("jinlinecomponent");
                 this.dom.classList.add("jresizeable");
                 if (domalt !== undefined && domalt.classList) {
+<<<<<<< HEAD
+                    //    domalt.classList.remove("jinlinecomponent");
+=======
                     domalt.classList.remove("jinlinecomponent");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     domalt.classList.remove("jresizeable");
                 }
             }
@@ -6903,20 +9997,41 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                 this.__dom._this = undefined;
             }
             //notify Hook
+<<<<<<< HEAD
+            for (var x = 0; x < Component._componentHook.length; x++) {
+                Component._componentHook[x]("precreate", this);
+=======
             for (var x = 0; x < Component_9._componentHook.length; x++) {
                 Component_9._componentHook[x]("precreate", this);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
             //allready watched?
             // if (jassijs.componentSpy !== undefined) {
             //   jassijs.componentSpy.unwatch(this);
             // }
             this.dom = dom;
+<<<<<<< HEAD
+            this._id = (olddom === null || olddom === void 0 ? void 0 : olddom.id) ? olddom.id : ("j" + nextID());
+=======
             this._id = (olddom === null || olddom === void 0 ? void 0 : olddom.id) ? olddom.id : ("j" + Registry_42.default.nextID());
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             if (this.dom.setAttribute !== undefined) //Textnode
                 this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
+<<<<<<< HEAD
+            var lid = (oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.id) ? oldwrapper.id : ("j" + nextID());
+            /*  var st = 'style="display: inline-block"';
+              if (this instanceof classes.getClass("jassijs.ui.Container")) {
+                  st = "";
+              }*/
+            if (this.props !== undefined && this.props.useWrapper === true) {
+                /** @member {dom} - the dom element for label*/
+                let strdom = '<div class="jwrapper" id="' + lid + /*st +*/ '"></div>';
+                //let strdom = '<div id="' + lid + '" class ="jcomponent"' + /*st +*/ '></div>';
+                this.domWrapper = Component.createHTMLElement(strdom);
+=======
             var lid = (oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.id) ? oldwrapper.id : ("j" + Registry_42.default.nextID());
             var st = 'style="display: inline-block"';
             if (this instanceof Classes_16.classes.getClass("jassijs.ui.Container")) {
@@ -6926,6 +10041,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                 /** @member {dom} - the dom element for label*/
                 let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
                 this.domWrapper = Component_9.createHTMLElement(strdom);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 this.domWrapper._this = this;
                 this.domWrapper._id = lid;
                 this.domWrapper.appendChild(dom);
@@ -6933,20 +10049,34 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             else {
                 this.domWrapper = this.dom;
                 this.domWrapper._id = this._id;
+<<<<<<< HEAD
+                // if (this.domWrapper.classList !== undefined)
+                //     this.domWrapper.classList.add("jcomponent");
+=======
                 if (this.domWrapper.classList !== undefined)
                     this.domWrapper.classList.add("jcomponent");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
             if ((oldwrapper === null || oldwrapper === void 0 ? void 0 : oldwrapper.parentNode) !== undefined) {
                 oldwrapper.parentNode.replaceChild(this.domWrapper, oldwrapper); //removeChild(this.domWrapper);
             }
             //append temporary so new elements must not added immediately
             if (document.getElementById("jassitemp") === null) {
+<<<<<<< HEAD
+                var temp = Component.createHTMLElement('<template id="jassitemp"></template>');
+                document.body.appendChild(temp);
+            }
+            //notify Hook
+            for (var x = 0; x < Component._componentHook.length; x++) {
+                Component._componentHook[x]("create", this);
+=======
                 var temp = Component_9.createHTMLElement('<template id="jassitemp"></template>');
                 document.body.appendChild(temp);
             }
             //notify Hook
             for (var x = 0; x < Component_9._componentHook.length; x++) {
                 Component_9._componentHook[x]("create", this);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
             //for profilling save code pos
             //if (jassijs.componentSpy !== undefined) {
@@ -6955,6 +10085,19 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             if (!oldwrapper)
                 document.getElementById("jassitemp").appendChild(this.domWrapper);
         }
+<<<<<<< HEAD
+        //@$Property({ description: "wraps the component with div" })
+        set useWrapper(value) {
+            if (value === true && this.dom === this.domWrapper) { //wrap
+                var lid = "j" + nextID();
+                var st = ""; /*'style="display: inline-block"';
+                if (this instanceof classes.getClass("jassijs.ui.Container")) {
+                    st = "";
+                }*/
+                /** @member {dom} - the dom element for label*/
+                let strdom = '<div class="jwrapper" id="' + lid + '"' + st + '></div>';
+                this.domWrapper = Component.createHTMLElement(strdom);
+=======
         set useWrapper(value) {
             if (value === true && this.dom === this.domWrapper) { //wrap
                 var lid = "j" + Registry_42.default.nextID();
@@ -6965,6 +10108,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                 /** @member {dom} - the dom element for label*/
                 let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
                 this.domWrapper = Component_9.createHTMLElement(strdom);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 this.domWrapper._this = this;
                 this.domWrapper._id = lid;
                 if (this.dom.parentNode)
@@ -6976,13 +10120,22 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                     this.domWrapper.parentNode.replaceChild(this.dom, this.domWrapper); //removeChild(this.domWrapper);
                 this.domWrapper = this.dom;
                 this.domWrapper._id = this._id;
+<<<<<<< HEAD
+                //if (this.domWrapper.classList !== undefined)
+                //this.domWrapper.classList.add("jcomponent");
+            }
+        }
+        //@$Property({ default: "function(event){\n\t\n}" })
+=======
                 if (this.domWrapper.classList !== undefined)
                     this.domWrapper.classList.add("jcomponent");
             }
         }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         onfocus(handler) {
             return this.on("focus", handler);
         }
+        //@$Property({ default: "function(event){\n\t\n}" })
         onblur(handler) {
             return this.on("blur", handler);
         }
@@ -7044,6 +10197,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             if (this.dom.setAttribute && olddom.getAttribute)
                 this.dom.setAttribute("id", olddom.getAttribute("id"));
         }
+        //@$Property({ description: "adds a label above the component" })
         set label(value) {
             this.state.label.current = value;
             if (value !== undefined)
@@ -7056,7 +10210,11 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             else {
                 //CHECK children(0)-> first() 
                 if (!this.domWrapper.querySelector(".jlabel")) {
+<<<<<<< HEAD
+                    let lab = Component.createHTMLElement('<label class="jlabel" for="' + this._id + '"></label>'); //
+=======
                     let lab = Component_9.createHTMLElement('<label class="jlabel" for="' + this._id + '"></label>'); //
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     this.domWrapper.prepend(lab);
                 }
                 this.domWrapper.querySelector(".jlabel").innerHTML = value;
@@ -7065,12 +10223,14 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         get label() {
             return this.state.label.current; //this.domWrapper.querySelector(".jlabel")?.innerHTML;
         }
+        //@$Property({ description: "tooltip are displayed on mouse over" })
         get tooltip() {
             return this.dom.getAttribute("title");
         }
         set tooltip(value) {
             this.dom.setAttribute("title", value);
         }
+        //@$Property()
         get x() {
             return Number(this.domWrapper.style.left.replace("px", ""));
         }
@@ -7079,6 +10239,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             this.domWrapper.style.position = "absolute";
             this.state.x.current = value;
         }
+        //@$Property()
         get y() {
             return Number(this.domWrapper.style.top.replace("px", ""));
         }
@@ -7087,6 +10248,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             this.domWrapper.style.position = "absolute";
             this.state.y.current = value;
         }
+        //@$Property()
         get hidden() {
             return (this.dom.getAttribute("hidden") === "");
         }
@@ -7114,6 +10276,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             this.state.width.current = value;
             //  
         }
+        //@$Property({ type: "number" })
         get width() {
             if (this.domWrapper.style.width !== undefined)
                 return this.domWrapper.style.width;
@@ -7136,6 +10299,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             }
             this.state.height.current = value;
         }
+        //@$Property({ type: "number" })
         get height() {
             if (this.domWrapper.style.height !== undefined)
                 return this.domWrapper.style.height;
@@ -7143,8 +10307,9 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                 return undefined;
             return this.dom.style.height.replace("px", "");
         }
+        //@$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
         set style(properties) {
-            var prop = CSSProperties_1.CSSProperties.applyTo(properties, this);
+            var prop = properties; //CSSProperties.applyTo(properties, this);
             for (let key in prop) {
                 this.dom.style[key] = prop[key];
             }
@@ -7165,6 +10330,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             this.dom.style.width = "calc(100% - 2px)";
             this.dom.style.height = "calc(100% - 2px)";
         }
+        //@$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" })
         get styles() {
             return this._styles;
         }
@@ -7186,13 +10352,21 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                     this.dom.classList.add(st);
             });
         }
+        //@$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" })
         get contextMenu() {
-            return this._contextMenu;
+            return this.state.contextMenu.current;
         }
         set contextMenu(value) {
-            if (this._contextMenu !== undefined)
-                this._contextMenu.unregisterComponent(this);
+            if (this.contextMenu !== undefined)
+                this.contextMenu.unregisterComponent(this);
             if (value !== undefined) {
+<<<<<<< HEAD
+                // var ContextMenu = classes.getClass("jassijs.ui.ContextMenu");
+                // if ((<any>value) instanceof ContextMenu === false) {
+                //     throw new Error("value is not of type jassijs.ui.ContextMenu");
+                // }
+                this.state.contextMenu.current = value;
+=======
                 if (value.current)
                     value = value.current;
                 var ContextMenu = Classes_16.classes.getClass("jassijs.ui.ContextMenu");
@@ -7200,18 +10374,24 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
                     throw new Error("value is not of type jassijs.ui.ContextMenu");
                 }
                 this._contextMenu = value;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 value.registerComponent(this);
             }
             else
-                this._contextMenu = undefined;
+                this.state.contextMenu.current = undefined;
         }
         destroy() {
             if (this.contextMenu !== undefined) {
                 this.contextMenu.destroy();
             }
             //notify Hook
+<<<<<<< HEAD
+            for (var x = 0; x < Component._componentHook.length; x++) {
+                Component._componentHook[x]("destroy", this);
+=======
             for (var x = 0; x < Component_9._componentHook.length; x++) {
                 Component_9._componentHook[x]("destroy", this);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
             // if (jassijs.componentSpy !== undefined) {
             //    jassijs.componentSpy.unwatch(this);
@@ -7235,6 +10415,14 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         }
         extensionCalled(action) {
         }
+<<<<<<< HEAD
+    }
+    exports.Component = Component;
+    Component._componentHook = [];
+    class FunctionComponent extends Component {
+        constructor(properties) {
+            super(properties);
+=======
     };
     exports.Component = Component;
     Component._componentHook = [];
@@ -7321,6 +10509,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         constructor(properties) {
             super(properties);
             this._components = [];
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
         config(config, forceRender = false) {
             super.config(config);
@@ -7328,235 +10517,38 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         }
         render() {
             var Rend = this.props.renderFunc;
+<<<<<<< HEAD
+            var p = this.props;
+            if (p === undefined)
+                p = {};
+            p.connectComponents = 1;
+            var ret = new Rend(p, this.state);
+=======
             var ret = new Rend(this.props, this.state);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             return ret;
         }
-        /**
-        * adds a component to the container
-        * @param {jassijs.ui.Component} component - the component to add
-        */
-        add(component) {
-            if (component._parent !== undefined) {
-                component._parent.remove(component);
-            }
-            component._parent = this;
-            component.domWrapper._parent = this;
-            this._components.push(component);
-            this.dom.appendChild(component.domWrapper);
-        }
-        /**
-         * adds a component to the container before an other component
-         * @param {jassijs.ui.Component} component - the component to add
-         * @param {jassijs.ui.Component} before - the component before then component to add
-         */
-        addBefore(component, before) {
-            if (component._parent !== undefined) {
-                component._parent.remove(component);
-            }
-            component._parent = this;
-            component.domWrapper["_parent"] = this;
-            var index = this._components.indexOf(before);
-            if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
-                component.domWrapper.parentNode.removeChild(component.domWrapper);
-            }
-            this._components.splice(index, 0, component);
-            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
-        }
-        /**
-        * remove the component
-        * @param {jassijs.ui.Component} component - the component to remove
-        * @param {boolean} destroy - if true the component would be destroyed
-        */
-        remove(component, destroy = false) {
-            if (destroy)
-                component.destroy();
-            component._parent = undefined;
-            if (component.domWrapper !== undefined)
-                component.domWrapper._parent = undefined;
-            if (this._components) {
-                var pos = this._components.indexOf(component);
-                if (pos >= 0)
-                    this._components.splice(pos, 1);
-            }
-            try {
-                this.dom.removeChild(component.domWrapper);
-            }
-            catch (ex) {
-            }
-        }
-        /**
-        * remove all component
-        * @param {boolean} destroy - if true the component would be destroyed
-        */
-        removeAll(destroy = undefined) {
-            while (this._components.length > 0) {
-                this.remove(this._components[0], destroy);
-            }
-        }
-        destroy() {
-            if (this._components !== undefined) {
-                var tmp = [].concat(this._components);
-                for (var k = 0; k < tmp.length; k++) {
-                    tmp[k].destroy();
-                }
-                this._components = [];
-            }
-            super.destroy();
-        }
-    }
-    exports.FunctionComponent = FunctionComponent;
-    function doCreateDummyForHTMLComponent(component, isPreDummy) {
-        var disabledBoth = ["tr", "td", "th"];
-        var enabledPost = ["div"];
-        var disabledPre = [];
-        var tag = component === null || component === void 0 ? void 0 : component.tag;
-        if (tag === undefined)
-            return false;
-        if (disabledBoth.indexOf(tag.toLowerCase()) !== -1) {
-            return false;
-        }
-        else if (isPreDummy && disabledPre.indexOf(tag.toLowerCase()) !== -1) {
-            return false;
-        }
-        else if (!isPreDummy && enabledPost.indexOf(tag.toLowerCase()) !== -1) {
-            return true;
-        }
-        return isPreDummy; //prodummy is enabled at default / postdummy is disabled 
-    }
-    // ret.tag = atype;
-    //        var newdom = document.createElement(atype);
-    let HTMLComponent = class HTMLComponent extends Component {
-        constructor(prop = {}) {
-            super(prop);
+        //add dom children to _components
+        set connectComponents(value) {
             this._components = [];
-            //this.init(document.createElement(tag), { noWrapper: true });
-        }
-        render() {
-            var _a, _b, _c, _d;
-            var ret;
-            var tag = ((_a = this.props) === null || _a === void 0 ? void 0 : _a.tag) === undefined ? "span" : (_b = this.props) === null || _b === void 0 ? void 0 : _b.tag;
-            if (((_c = this.props) === null || _c === void 0 ? void 0 : _c.tag) !== this.tag.toLowerCase()) {
-                var childs = (_d = this.dom) === null || _d === void 0 ? void 0 : _d.childNodes;
-                ret = document.createElement(tag);
-                //this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
-                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
-                    ret.append(...childs);
+            var nodes = this.dom.childNodes;
+            for (var x = 0; x < nodes.length; x++) {
+                //@ts-ignore
+                this._components.push(nodes[x]._this);
             }
-            return ret;
-        }
-        createChildren(props) {
-            if (props === null || props === void 0 ? void 0 : props.children) {
-                this.removeAll(false);
-                this._components = [];
-                for (var x = 0; x < props.children.length; x++) {
-                    var child = props.children[x];
-                    var cchild;
-                    if (typeof child === "string") {
-                        cchild = new TextComponent();
-                        cchild.tag = "";
-                        cchild.text = child;
-                    }
-                    else if (child === null || child === void 0 ? void 0 : child._$isState$_) {
-                        cchild = new TextComponent();
-                        cchild.tag = "";
-                        child === null || child === void 0 ? void 0 : child._observe_(cchild, "text", "property");
-                        cchild.text = child.current;
-                    }
-                    else {
-                        cchild = createComponent(child);
-                    }
-                    this.add(cchild);
-                }
-                delete props.children;
-            }
-        }
-        config(props) {
-            var _a;
-            if (!super.config(props))
-                return;
-            this.createChildren(props);
-            var tag = (props === null || props === void 0 ? void 0 : props.tag) === undefined ? "span" : props === null || props === void 0 ? void 0 : props.tag;
-            if ((props === null || props === void 0 ? void 0 : props.tag) !== undefined && (props === null || props === void 0 ? void 0 : props.tag) !== this.tag.toLowerCase()) {
-                var childs = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.childNodes;
-                this.replaceDom(document.createElement(tag));
-                //            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
-                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
-                    this.dom.append(...childs);
-            }
-            for (var prop in props) {
-                var val = props[prop];
-                if (prop === "style") {
-                    for (var key in props.style) {
-                        val = props.style[key];
-                        this.dom.style[key] = val;
-                    }
-                }
-                else if (prop in this.dom) {
-                    Reflect.set(this.dom, prop, val);
-                    //Reflect.set(this.dom, prop, [val])
-                }
-                else if (prop.toLocaleLowerCase() in this.dom) {
-                    Reflect.set(this.dom, prop.toLocaleLowerCase(), val);
-                }
-                else if (prop in this.dom) {
-                    if (val === null || val === void 0 ? void 0 : val._$isState$_) {
-                        val === null || val === void 0 ? void 0 : val._observe_(this, prop, "attribute");
-                        val = val.current;
-                    }
-                    this.dom.setAttribute(prop, val);
-                }
-                // }
-            }
-            if (props === null || props === void 0 ? void 0 : props.children) {
-                if ((props === null || props === void 0 ? void 0 : props.children.length) > 0 && (props === null || props === void 0 ? void 0 : props.children[0]) instanceof Component) {
-                    this.removeAll(false);
-                    for (var x = 0; x < props.children.length; x++) {
-                        this.add(props.children[x]);
-                    }
-                    delete props.children;
-                }
-            }
-            return this;
-        }
-        set tag(value) {
-            var tag = value == undefined ? "span" : value;
-            if (tag.toLowerCase() !== this.tag.toLowerCase()) {
-                this.props.tag = value;
-                this.config(this.props);
-                /*
-                var childs = this.dom?.childNodes;
-                this.init(document.createElement(value), { replaceNode: this.dom, noWrapper: true });
-                if (childs?.length > 0)
-                    this.dom.append(...<any>childs);
-                */
-            }
-        }
-        get tag() {
-            var _a;
-            var ret = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.tagName;
-            if (ret === null || ret === undefined)
-                return "";
-            return ret;
         }
         /**
         * adds a component to the container
         * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
-            var _a, _b;
-            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.state) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
-                return;
-            }
+            if (this._components === undefined)
+                this._components = [];
             if (component._parent !== undefined) {
                 component._parent.remove(component);
             }
             component._parent = this;
             component.domWrapper._parent = this;
-            /* component._parent=this;
-             component.domWrapper._parent=this;
-             if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
-                  component.domWrapper.parentNode.removeChild(component.domWrapper);
-             }*/
             this._components.push(component);
             this.dom.appendChild(component.domWrapper);
         }
@@ -7566,6 +10558,8 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
          * @param {jassijs.ui.Component} before - the component before then component to add
          */
         addBefore(component, before) {
+            if (this._components === undefined)
+                this._components = [];
             if (component._parent !== undefined) {
                 component._parent.remove(component);
             }
@@ -7620,6 +10614,294 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             }
             super.destroy();
         }
+    }
+    exports.FunctionComponent = FunctionComponent;
+<<<<<<< HEAD
+    // ret.tag = atype;
+    //        var newdom = document.createElement(atype);
+    //@$UIComponent({ fullPath: "common/HTMLComponent", icon: "mdi mdi-cloud-tags" , initialize:{tag:"input"},} )
+    //@$Class("jassijs.ui.HTMLComponent")
+    //@$Property({ name: "children", type: "jassijs.ui.Component", createDummyInDesigner: doCreateDummyForHTMLComponent })
+    class HTMLComponent extends Component {
+        constructor(prop = {}) {
+            super(prop);
+=======
+    function doCreateDummyForHTMLComponent(component, isPreDummy) {
+        var disabledBoth = ["tr", "td", "th"];
+        var enabledPost = ["div"];
+        var disabledPre = [];
+        var tag = component === null || component === void 0 ? void 0 : component.tag;
+        if (tag === undefined)
+            return false;
+        if (disabledBoth.indexOf(tag.toLowerCase()) !== -1) {
+            return false;
+        }
+        else if (isPreDummy && disabledPre.indexOf(tag.toLowerCase()) !== -1) {
+            return false;
+        }
+        else if (!isPreDummy && enabledPost.indexOf(tag.toLowerCase()) !== -1) {
+            return true;
+        }
+        return isPreDummy; //prodummy is enabled at default / postdummy is disabled 
+    }
+    // ret.tag = atype;
+    //        var newdom = document.createElement(atype);
+    let HTMLComponent = class HTMLComponent extends Component {
+        constructor(prop = {}) {
+            super(prop);
+            this._components = [];
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
+            //this.init(document.createElement(tag), { noWrapper: true });
+        }
+        render() {
+            var _a, _b, _c, _d;
+            var ret;
+            var tag = ((_a = this.props) === null || _a === void 0 ? void 0 : _a.tag) === undefined ? "span" : (_b = this.props) === null || _b === void 0 ? void 0 : _b.tag;
+            if (((_c = this.props) === null || _c === void 0 ? void 0 : _c.tag) !== this.tag.toLowerCase()) {
+                var childs = (_d = this.dom) === null || _d === void 0 ? void 0 : _d.childNodes;
+                ret = document.createElement(tag);
+                //this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
+                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
+                    ret.append(...childs);
+            }
+            return ret;
+        }
+        createChildren(props) {
+            if (props === null || props === void 0 ? void 0 : props.children) {
+                this.removeAll(false);
+                this._components = [];
+                for (var x = 0; x < props.children.length; x++) {
+                    var child = props.children[x];
+                    var cchild;
+                    if (typeof child === "string") {
+                        cchild = new TextComponent();
+                        cchild.tag = "";
+                        cchild.text = child;
+                    }
+                    else if (child === null || child === void 0 ? void 0 : child._$isState$_) {
+                        cchild = new TextComponent();
+                        cchild.tag = "";
+                        child === null || child === void 0 ? void 0 : child._observe_(cchild, "text", "property");
+                        cchild.text = child.current;
+                    }
+                    else {
+                        cchild = createComponent(child);
+                    }
+                    this.add(cchild);
+                }
+                delete props.children;
+            }
+        }
+        config(props) {
+<<<<<<< HEAD
+            if (!super.config(props))
+                return;
+            this.createChildren(props);
+=======
+            var _a;
+            if (!super.config(props))
+                return;
+            this.createChildren(props);
+            var tag = (props === null || props === void 0 ? void 0 : props.tag) === undefined ? "span" : props === null || props === void 0 ? void 0 : props.tag;
+            if ((props === null || props === void 0 ? void 0 : props.tag) !== undefined && (props === null || props === void 0 ? void 0 : props.tag) !== this.tag.toLowerCase()) {
+                var childs = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.childNodes;
+                this.replaceDom(document.createElement(tag));
+                //            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
+                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
+                    this.dom.append(...childs);
+            }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
+            for (var prop in props) {
+                var val = props[prop];
+                if (prop === "style") {
+                    for (var key in props.style) {
+                        val = props.style[key];
+                        this.dom.style[key] = val;
+                    }
+                }
+                else if (prop in this.dom) {
+                    Reflect.set(this.dom, prop, val);
+                    //Reflect.set(this.dom, prop, [val])
+                }
+                else if (prop.toLocaleLowerCase() in this.dom) {
+                    Reflect.set(this.dom, prop.toLocaleLowerCase(), val);
+                }
+                else if (prop in this.dom) {
+                    if (val === null || val === void 0 ? void 0 : val._$isState$_) {
+                        val === null || val === void 0 ? void 0 : val._observe_(this, prop, "attribute");
+                        val = val.current;
+                    }
+                    this.dom.setAttribute(prop, val);
+                }
+                // }
+            }
+<<<<<<< HEAD
+            /*  if (props?.children) {
+                  if (props?.children.length > 0 && props?.children[0] instanceof Component) {
+                      this.removeAll(false);
+                      for (var x = 0; x < props.children.length; x++) {
+                          this.add(props.children[x]);
+                      }
+                      delete props.children;
+                  }
+              }*/
+            return this;
+        }
+        set tag(value) {
+            var _a, _b;
+            var tag = value == undefined ? "span" : value;
+            if (tag !== ((_a = this.state.tag.current) === null || _a === void 0 ? void 0 : _a.toLowerCase())) {
+                var childs = (_b = this.dom) === null || _b === void 0 ? void 0 : _b.childNodes;
+                this.replaceDom(document.createElement(tag));
+                //            this.init(document.createElement(tag), { replaceNode: this.dom, noWrapper: true });
+                if ((childs === null || childs === void 0 ? void 0 : childs.length) > 0)
+                    this.dom.append(...childs);
+            }
+            this.state.tag.current = value;
+        }
+        /* @$Property({
+             chooseFromStrict: true,
+             chooseFrom: (comp) => {
+                 const allElements = <any>document.body.getElementsByTagName('*');
+                 const uniqueTags = new Set();
+     
+                 for (let element of allElements) {
+                     uniqueTags.add(element.tagName.toLowerCase());
+                 }
+                 return Array.from(uniqueTags).sort();
+             }
+         })*/
+=======
+            if (props === null || props === void 0 ? void 0 : props.children) {
+                if ((props === null || props === void 0 ? void 0 : props.children.length) > 0 && (props === null || props === void 0 ? void 0 : props.children[0]) instanceof Component) {
+                    this.removeAll(false);
+                    for (var x = 0; x < props.children.length; x++) {
+                        this.add(props.children[x]);
+                    }
+                    delete props.children;
+                }
+            }
+            return this;
+        }
+        set tag(value) {
+            var tag = value == undefined ? "span" : value;
+            if (tag.toLowerCase() !== this.tag.toLowerCase()) {
+                this.props.tag = value;
+                this.config(this.props);
+                /*
+                var childs = this.dom?.childNodes;
+                this.init(document.createElement(value), { replaceNode: this.dom, noWrapper: true });
+                if (childs?.length > 0)
+                    this.dom.append(...<any>childs);
+                */
+            }
+        }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
+        get tag() {
+            var _a;
+            var ret = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.tagName;
+            if (ret === null || ret === undefined)
+                return "";
+            return ret;
+        }
+        /**
+        * adds a component to the container
+        * @param {jassijs.ui.Component} component - the component to add
+        */
+        add(component) {
+            var _a, _b;
+<<<<<<< HEAD
+            if (this._components === undefined)
+                this._components = [];
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
+            if (((_b = (_a = this === null || this === void 0 ? void 0 : this.state) === null || _a === void 0 ? void 0 : _a.exists) === null || _b === void 0 ? void 0 : _b.current) === false) {
+                return;
+            }
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper._parent = this;
+            /* component._parent=this;
+             component.domWrapper._parent=this;
+             if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
+                  component.domWrapper.parentNode.removeChild(component.domWrapper);
+             }*/
+            this._components.push(component);
+            this.dom.appendChild(component.domWrapper);
+        }
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component, before) {
+<<<<<<< HEAD
+            if (this._components === undefined)
+                this._components = [];
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
+            component._parent = this;
+            component.domWrapper["_parent"] = this;
+            var index = this._components.indexOf(before);
+            if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
+                component.domWrapper.parentNode.removeChild(component.domWrapper);
+            }
+            this._components.splice(index, 0, component);
+            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
+        }
+        /**
+        * remove the component
+        * @param {jassijs.ui.Component} component - the component to remove
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        remove(component, destroy = false) {
+            if (destroy)
+                component.destroy();
+            component._parent = undefined;
+            if (component.domWrapper !== undefined)
+                component.domWrapper._parent = undefined;
+            if (this._components) {
+                var pos = this._components.indexOf(component);
+                if (pos >= 0)
+                    this._components.splice(pos, 1);
+            }
+            try {
+                this.dom.removeChild(component.domWrapper);
+            }
+            catch (ex) {
+            }
+        }
+        /**
+        * remove all component
+        * @param {boolean} destroy - if true the component would be destroyed
+        */
+        removeAll(destroy = undefined) {
+            var _a;
+            while (((_a = this._components) === null || _a === void 0 ? void 0 : _a.length) > 0) {
+                this.remove(this._components[0], destroy);
+            }
+        }
+        destroy() {
+            if (this._components !== undefined) {
+                var tmp = [].concat(this._components);
+                for (var k = 0; k < tmp.length; k++) {
+                    tmp[k].destroy();
+                }
+                this._components = [];
+            }
+            super.destroy();
+        }
+<<<<<<< HEAD
+    }
+    exports.HTMLComponent = HTMLComponent;
+    //@$Class("jassijs.ui.TextComponent")
+    class TextComponent extends Component {
+=======
     };
     exports.HTMLComponent = HTMLComponent;
     __decorate([
@@ -7633,6 +10915,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [Object])
     ], HTMLComponent);
     let TextComponent = class TextComponent extends Component {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         constructor(props = {}) {
             super(props);
         }
@@ -7671,6 +10954,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             super.config(props);
             return this;
         }
+        //@$Property()
         get text() {
             var _a;
             return (_a = this.dom) === null || _a === void 0 ? void 0 : _a.textContent;
@@ -7681,6 +10965,17 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
             this.dom.textContent = value;
         }
         ;
+<<<<<<< HEAD
+    }
+    exports.TextComponent = TextComponent;
+    function migrateModul(oldModul, newModul) {
+        if (newModul) {
+            newModul._nextID = oldModul._nextID;
+        }
+    }
+});
+define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_41, Property_4, Classes_16, Registry_42) {
+=======
     };
     exports.TextComponent = TextComponent;
     __decorate([
@@ -7694,11 +10989,16 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     ], TextComponent);
 });
 define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_43, Property_6, Classes_17, Registry_44) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var ComponentDescriptor_3;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentDescriptor = void 0;
+<<<<<<< HEAD
+    Registry_42 = __importDefault(Registry_42);
+=======
     Registry_44 = __importDefault(Registry_44);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     let ComponentDescriptor = ComponentDescriptor_3 = class ComponentDescriptor {
         /**
         * describes a Component
@@ -7743,10 +11043,10 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
                     var hideBaseClassProperties = false;
                     do {
                         family.push(type);
-                        var sclass = Classes_17.classes.getClassName(type);
-                        if (Registry_44.default.getMemberData("$Property") === undefined)
+                        var sclass = Classes_16.classes.getClassName(type);
+                        if (Registry_42.default.getMemberData("$Property") === undefined)
                             return cache;
-                        var props = Registry_44.default.getMemberData("$Property")[sclass];
+                        var props = Registry_42.default.getMemberData("$Property")[sclass];
                         /*if(props?.new){
                             var clname=props.new[0][0].componentType;
                             if(classes.getClass(clname)){
@@ -7756,7 +11056,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
                             }
                         }*/
                         if (props !== undefined) {
-                            var info = Registry_44.default.getMemberData("design:type")[sclass];
+                            var info = Registry_42.default.getMemberData("design:type")[sclass];
                             for (var key in props) {
                                 var data = props[key];
                                 for (let x = 0; x < data.length; x++) {
@@ -7764,7 +11064,11 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
                                         hideBaseClassProperties = data[x][0].hideBaseClassProperties;
                                         continue;
                                     }
+<<<<<<< HEAD
+                                    var prop = new Property_4.Property(key);
+=======
                                     var prop = new Property_6.Property(key);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                                     Object.assign(prop, data[x][0]);
                                     if (prop.type === undefined) {
                                         if (info !== undefined && info[key] !== undefined) {
@@ -7778,7 +11082,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
                                             else if (tp.name === "Function")
                                                 prop.type = "function";
                                             else
-                                                prop.type = Classes_17.classes.getClassName(tp);
+                                                prop.type = Classes_16.classes.getClassName(tp);
                                         }
                                     }
                                     if (prop.type === undefined && prop.hide !== true)
@@ -7812,10 +11116,10 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
          **/
         static getEditableComponents(component, idFromLabel, includeFrozenContainer, flag) {
             var ret = "";
-            var sclass = Classes_17.classes.getClassName(component);
-            var props = Registry_44.default.getData("$UIComponent")[sclass];
+            var sclass = Classes_16.classes.getClassName(component);
+            var props = Registry_42.default.getData("$UIComponent")[sclass];
             if (!props) {
-                props = props = Registry_44.default.getData("$ReportComponent")[sclass];
+                props = props = Registry_42.default.getData("$ReportComponent")[sclass];
             }
             if (!props === undefined)
                 return ret;
@@ -7846,21 +11150,21 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
             var type;
             if (ret === undefined) {
                 ret = {};
-                sclass = Classes_17.classes.getClassName(ob);
+                sclass = Classes_16.classes.getClassName(ob);
                 type = ob.constructor;
             }
             else {
-                sclass = Classes_17.classes.getClassName(type);
+                sclass = Classes_16.classes.getClassName(type);
             }
             var found = false;
-            if (Registry_44.default.getData("$UIComponent", sclass) !== undefined && Registry_44.default.getData("$UIComponent", sclass)[0] !== undefined) {
-                var props = Registry_44.default.getData("$UIComponent", sclass)[0].params[0];
+            if (Registry_42.default.getData("$UIComponent", sclass) !== undefined && Registry_42.default.getData("$UIComponent", sclass)[0] !== undefined) {
+                var props = Registry_42.default.getData("$UIComponent", sclass)[0].params[0];
                 this.editableComponents = props.editableChildComponents;
                 if (props.editableChildComponents !== undefined)
                     found = true;
             }
-            if (Registry_44.default.getData("$ReportComponent", sclass) !== undefined && Registry_44.default.getData("$ReportComponent", sclass)[0] !== undefined) {
-                var props = Registry_44.default.getData("$ReportComponent", sclass)[0].params[0];
+            if (Registry_42.default.getData("$ReportComponent", sclass) !== undefined && Registry_42.default.getData("$ReportComponent", sclass)[0] !== undefined) {
+                var props = Registry_42.default.getData("$ReportComponent", sclass)[0].params[0];
                 this.editableComponents = props.editableChildComponents;
                 if (props.editableChildComponents !== undefined)
                     found = true;
@@ -7929,6 +11233,17 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
     };
     exports.ComponentDescriptor = ComponentDescriptor;
     exports.ComponentDescriptor = ComponentDescriptor = ComponentDescriptor_3 = __decorate([
+<<<<<<< HEAD
+        (0, Registry_41.$Class)("jassijs.ui.ComponentDescriptor"),
+        __metadata("design:paramtypes", [])
+    ], ComponentDescriptor);
+});
+define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_43, Component_6, Property_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Container = void 0;
+    let Container = class Container extends Component_6.Component {
+=======
         (0, Registry_43.$Class)("jassijs.ui.ComponentDescriptor"),
         __metadata("design:paramtypes", [])
     ], ComponentDescriptor);
@@ -7938,6 +11253,7 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Container = void 0;
     let Container = class Container extends Component_10.Component {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
          *
          * @param {object} properties - properties to init
@@ -7960,18 +11276,30 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
                     var child = props.children[x];
                     var cchild;
                     if (typeof child === "string") {
+<<<<<<< HEAD
+                        cchild = new Component_6.TextComponent();
+=======
                         cchild = new Component_10.TextComponent();
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         cchild.tag = "";
                         cchild.text = child;
                     }
                     else if (child === null || child === void 0 ? void 0 : child._$isState$_) {
+<<<<<<< HEAD
+                        cchild = new Component_6.TextComponent();
+=======
                         cchild = new Component_10.TextComponent();
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         cchild.tag = "";
                         child === null || child === void 0 ? void 0 : child._observe_(cchild, "text", "property");
                         cchild.text = child.current;
                     }
                     else {
+<<<<<<< HEAD
+                        cchild = (0, Component_6.createComponent)(child);
+=======
                         cchild = (0, Component_10.createComponent)(child);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     }
                     this.add(cchild);
                 }
@@ -8099,12 +11427,21 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
     };
     exports.Container = Container;
     exports.Container = Container = __decorate([
+<<<<<<< HEAD
+        (0, Registry_43.$Class)("jassijs.ui.Container"),
+        (0, Property_5.$Property)({ name: "children", type: "jassijs.ui.Component" }),
+        __metadata("design:paramtypes", [Object])
+    ], Container);
+});
+define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ui/Container", "jassijs/ui/UIComponents", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_44, Menu_2, InvisibleComponent_1, Classes_17, Property_6, Actions_2, MenuItem_2, Container_1, UIComponents_3) {
+=======
         (0, Registry_45.$Class)("jassijs.ui.Container"),
         (0, Property_7.$Property)({ name: "children", type: "jassijs.ui.Component" }),
         __metadata("design:paramtypes", [Object])
     ], Container);
 });
 define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ui/Container", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_46, Menu_2, InvisibleComponent_1, Component_11, Classes_18, Property_8, Actions_2, MenuItem_2, Container_1) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ContextMenu = void 0;
@@ -8173,7 +11510,11 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry
             });
         }
         config(config) {
+<<<<<<< HEAD
+            if (super.config(config)) //@ts-ignore
+=======
             if (super.config(config))
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 Container_1.Container.prototype.createChildren.bind(this)(config);
             return this;
         }
@@ -8353,25 +11694,38 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry
     };
     exports.ContextMenu = ContextMenu;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_6.$Property)(),
+        __metadata("design:type", Boolean)
+    ], ContextMenu.prototype, "includeClassActions", void 0);
+    __decorate([
+        (0, Property_6.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_8.$Property)(),
         __metadata("design:type", Boolean)
     ], ContextMenu.prototype, "includeClassActions", void 0);
     __decorate([
         (0, Property_8.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], ContextMenu.prototype, "onbeforeshow", null);
     exports.ContextMenu = ContextMenu = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_3.$UIComponent)({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
+        (0, Registry_44.$Class)("jassijs.ui.ContextMenu"),
+=======
         (0, Component_11.$UIComponent)({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
         (0, Registry_46.$Class)("jassijs.ui.ContextMenu"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], ContextMenu);
     async function test() {
-        var Panel = Classes_18.classes.getClass("jassijs.ui.Panel");
-        var Button = Classes_18.classes.getClass("jassijs.ui.Button");
-        var MenuItem = Classes_18.classes.getClass("jassijs.ui.MenuItem");
-        var FileNode = Classes_18.classes.getClass("jassijs.remote.FileNode");
+        var Panel = Classes_17.classes.getClass("jassijs.ui.Panel");
+        var Button = Classes_17.classes.getClass("jassijs.ui.Button");
+        var MenuItem = Classes_17.classes.getClass("jassijs.ui.MenuItem");
+        var FileNode = Classes_17.classes.getClass("jassijs.remote.FileNode");
         var bt = new Button();
         var cmen = new ContextMenu();
         var men = new MenuItem();
@@ -8399,7 +11753,11 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry
         return bt;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "luxon"], function (require, exports, DefaultConverter_1, Registry_45, Property_7, Textbox_4) {
+=======
 define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "luxon"], function (require, exports, DefaultConverter_1, Registry_47, Property_9, Textbox_4) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DateTimeConverter = void 0;
@@ -8407,11 +11765,19 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
     let DateTimeConverterProperties = class DateTimeConverterProperties {
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_7.$Property)({ type: "string", chooseFrom: ["DATE_SHORT", "TIME_SIMPLE", "DATETIME_SHORT", "TIME_WITH_SECONDS", "DATETIME_SHORT_WITH_SECONDS"] }),
+        __metadata("design:type", String)
+    ], DateTimeConverterProperties.prototype, "type", void 0);
+    DateTimeConverterProperties = __decorate([
+        (0, Registry_45.$Class)("jassijs.ui.converters.DateTimeConverterProperies")
+=======
         (0, Property_9.$Property)({ type: "string", chooseFrom: ["DATE_SHORT", "TIME_SIMPLE", "DATETIME_SHORT", "TIME_WITH_SECONDS", "DATETIME_SHORT_WITH_SECONDS"] }),
         __metadata("design:type", String)
     ], DateTimeConverterProperties.prototype, "type", void 0);
     DateTimeConverterProperties = __decorate([
         (0, Registry_47.$Class)("jassijs.ui.converters.DateTimeConverterProperies")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], DateTimeConverterProperties);
     let DateTimeConverter = class DateTimeConverter extends DefaultConverter_1.DefaultConverter {
         constructor(props) {
@@ -8513,13 +11879,22 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
     };
     exports.DateTimeConverter = DateTimeConverter;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_7.$Property)({ type: "string", chooseFrom: ["DATE_SHORT", "TIME_SIMPLE", "DATETIME_SHORT", "TIME_WITH_SECONDS", "DATETIME_SHORT_WITH_SECONDS"] }),
+=======
         (0, Property_9.$Property)({ type: "string", chooseFrom: ["DATE_SHORT", "TIME_SIMPLE", "DATETIME_SHORT", "TIME_WITH_SECONDS", "DATETIME_SHORT_WITH_SECONDS"] }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String)
     ], DateTimeConverter.prototype, "type", void 0);
     exports.DateTimeConverter = DateTimeConverter = __decorate([
         (0, DefaultConverter_1.$Converter)({ name: "datetime" }),
+<<<<<<< HEAD
+        (0, Registry_45.$Class)("jassijs.ui.converters.DateTimeConverter"),
+        (0, Property_7.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DateTimeConverterProperties" }),
+=======
         (0, Registry_47.$Class)("jassijs.ui.converters.DateTimeConverter"),
         (0, Property_9.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DateTimeConverterProperties" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [DateTimeConverterProperties])
     ], DateTimeConverter);
     function test() {
@@ -8533,18 +11908,26 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
         //    return tb;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_46, Registry_47, Property_8) {
+=======
 define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_48, Registry_49, Property_10) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DefaultConverter = exports.$ConverterProperties = void 0;
     exports.$Converter = $Converter;
+<<<<<<< HEAD
+    Registry_47 = __importDefault(Registry_47);
+=======
     Registry_49 = __importDefault(Registry_49);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     class $ConverterProperties {
     }
     exports.$ConverterProperties = $ConverterProperties;
     function $Converter(param) {
         return function (pclass) {
-            Registry_49.default.register("$Converter", pclass, param);
+            Registry_47.default.register("$Converter", pclass, param);
         };
     }
     let DefaultConverterProperties = class DefaultConverterProperties {
@@ -8552,13 +11935,21 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
         }
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_8.$Property)({ default: "function(ob){}" }),
+=======
         (0, Property_10.$Property)({ default: "function(ob){}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], DefaultConverterProperties.prototype, "stringToObject", null);
     DefaultConverterProperties = __decorate([
+<<<<<<< HEAD
+        (0, Registry_46.$Class)("jassijs.ui.converters.DefaultConverterProperties")
+=======
         (0, Registry_48.$Class)("jassijs.ui.converters.DefaultConverterProperties")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], DefaultConverterProperties);
     let DefaultConverter = class DefaultConverter {
         constructor() {
@@ -8595,14 +11986,23 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
     exports.DefaultConverter = DefaultConverter;
     exports.DefaultConverter = DefaultConverter = __decorate([
         $Converter({ name: "custom" }),
+<<<<<<< HEAD
+        (0, Registry_46.$Class)("jassijs.ui.converters.DefaultConverter"),
+        (0, Property_8.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
+=======
         (0, Registry_48.$Class)("jassijs.ui.converters.DefaultConverter"),
         (0, Property_10.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
         ,
         __metadata("design:paramtypes", [])
     ], DefaultConverter);
 });
+<<<<<<< HEAD
+define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_2, Registry_48, Property_9, Numberformatter_1) {
+=======
 define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_2, Registry_50, Property_11, Numberformatter_1) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NumberConverter = void 0;
@@ -8630,6 +12030,21 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
     let NumberConverterProperties = class NumberConverterProperties {
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_9.$Property)(),
+        __metadata("design:type", Number)
+    ], NumberConverterProperties.prototype, "min", void 0);
+    __decorate([
+        (0, Property_9.$Property)(),
+        __metadata("design:type", Number)
+    ], NumberConverterProperties.prototype, "max", void 0);
+    __decorate([
+        (0, Property_9.$Property)({ type: "string", chooseFrom: allFormats }),
+        __metadata("design:type", String)
+    ], NumberConverterProperties.prototype, "format", void 0);
+    NumberConverterProperties = __decorate([
+        (0, Registry_48.$Class)("jassijs.ui.converters.NumberConverterProperies")
+=======
         (0, Property_11.$Property)(),
         __metadata("design:type", Number)
     ], NumberConverterProperties.prototype, "min", void 0);
@@ -8643,6 +12058,7 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
     ], NumberConverterProperties.prototype, "format", void 0);
     NumberConverterProperties = __decorate([
         (0, Registry_50.$Class)("jassijs.ui.converters.NumberConverterProperies")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], NumberConverterProperties);
     let NumberConverter = class NumberConverter extends DefaultConverter_2.DefaultConverter {
         constructor(props) {
@@ -8677,18 +12093,38 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
     exports.NumberConverter = NumberConverter;
     exports.NumberConverter = NumberConverter = __decorate([
         (0, DefaultConverter_2.$Converter)({ name: "number" }),
+<<<<<<< HEAD
+        (0, Registry_48.$Class)("jassijs.ui.converters.NumberConverter"),
+        (0, Property_9.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.NumberConverterProperies" }),
+        __metadata("design:paramtypes", [NumberConverterProperties])
+    ], NumberConverter);
+});
+define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, DefaultConverter_3, Registry_49, Property_10) {
+=======
         (0, Registry_50.$Class)("jassijs.ui.converters.NumberConverter"),
         (0, Property_11.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.NumberConverterProperies" }),
         __metadata("design:paramtypes", [NumberConverterProperties])
     ], NumberConverter);
 });
 define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, DefaultConverter_3, Registry_51, Property_12) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StringConverter = void 0;
     let StringConverterProperties = class StringConverterProperties {
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_10.$Property)(),
+        __metadata("design:type", Number)
+    ], StringConverterProperties.prototype, "minChars", void 0);
+    __decorate([
+        (0, Property_10.$Property)(),
+        __metadata("design:type", Number)
+    ], StringConverterProperties.prototype, "maxChars", void 0);
+    StringConverterProperties = __decorate([
+        (0, Registry_49.$Class)("jassijs.ui.converters.StringConverterProperies")
+=======
         (0, Property_12.$Property)(),
         __metadata("design:type", Number)
     ], StringConverterProperties.prototype, "minChars", void 0);
@@ -8698,6 +12134,7 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     ], StringConverterProperties.prototype, "maxChars", void 0);
     StringConverterProperties = __decorate([
         (0, Registry_51.$Class)("jassijs.ui.converters.StringConverterProperies")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], StringConverterProperties);
     let StringConverter = class StringConverter extends DefaultConverter_3.DefaultConverter {
         constructor(props) {
@@ -8724,15 +12161,24 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     exports.StringConverter = StringConverter;
     exports.StringConverter = StringConverter = __decorate([
         (0, DefaultConverter_3.$Converter)({ name: "string" }),
+<<<<<<< HEAD
+        (0, Registry_49.$Class)("jassijs.ui.converters.StringConverter"),
+        (0, Property_10.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.StringConverterProperies" })
+=======
         (0, Registry_51.$Class)("jassijs.ui.converters.StringConverter"),
         (0, Property_12.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.StringConverterProperies" })
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //@$Property({ name: "new/minChars", type: "number", default: undefined })
         //@$Property({ name: "new/maxChars", type: "number", default: undefined })
         ,
         __metadata("design:paramtypes", [StringConverterProperties])
     ], StringConverter);
 });
+<<<<<<< HEAD
+define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_50, Property_11) {
+=======
 define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_52, Property_13) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CSSProperties = void 0;
@@ -8769,6 +12215,144 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Regist
     };
     exports.CSSProperties = CSSProperties;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_11.$Property)({ type: "color" }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "backgroundColor", void 0);
+    __decorate([
+        (0, Property_11.$Property)(),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "backgroundImage", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ type: "color" }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "borderColor", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "borderStyle", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["thin", "medium", "thick", "2px", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "borderWidth", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ type: "color" }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "color", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["auto", "default", "none", "context-menu", "help", "pointer", "progress", "wait", "cell", "crosshair", "text", "vertical-text", "alias", "copy", "move", "no-drop", "not-allowed", "grab", "grabbing", "all-scroll", "col-resize", "row-resize", "n-resize", "e-resize", "s-resize", "w-resize", "ne-resize", "nw-resize", "se-resize", "sw-resize", "ew-resize", "ns-resize", "nesw-resize", "nwse-resize", "zoom-in", "zoom-out", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "cursor", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["blur(5px)", "brightness(0.4)", "contrast(200%)", "drop-shadow(16px 16px 20px blue)", "grayscale(50%)", "hue-rotate(90deg)", "invert(75%)", "opacity(25%)", "saturate(30%)", "sepia(60%)", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "filter", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["left", "right", "none", "inline-start", "inline-end", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "float", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ type: "font" }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "fontFamily", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["12px", "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large", "larger", "smaller", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "fontSize", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["normal", "small-caps", "small-caps slashed-zero", "common-ligatures tabular-nums", "no-common-ligatures proportional-nums", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "fontVariant", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["normal", "bold", "lighter", "bolder", "100", "900", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "fontWeight", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["normal", "1px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "letterSpacing", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["normal", "32px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "lineHeight", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["3px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "marginBottom", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["3px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "marginLeft", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["3px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "marginRight", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["3px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "marginTop", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["visible", "hidden", "clip", "scroll", "auto", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "overflow", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["3px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "paddingBottom", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["3px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "paddingLeft", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["3px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "paddingRight", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["3px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "paddingTop", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["static", "relative", "absolute", "sticky", "fixed", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "position", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["start", "end", "left", "right", "center", "justify", "match-parent", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "textAlign", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ type: "color" }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "textDecorationColor", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["none", "underline", "overline", "line-through", "blink", "spelling-error", "grammar-error", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "textDecorationLine", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["solid", "double", "dotted", "dashed", "wavy", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "textDecorationStyle", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["3px"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "textDecorationThickness", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["none", "capitalize", "uppercase", "lowercase", "full-width", "full-size-kana", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "textTransform", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["baseline", "sub", "super", "text-top", "text-bottom", "middle", "top", "bottom", "3px", "inherit", "initial", "unset"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "verticalAlign", void 0);
+    __decorate([
+        (0, Property_11.$Property)({ chooseFrom: ["1", "2", "auto"] }),
+        __metadata("design:type", String)
+    ], CSSProperties.prototype, "zIndex", void 0);
+    exports.CSSProperties = CSSProperties = __decorate([
+        (0, Registry_50.$Class)("jassijs.ui.CSSProperties")
+    ], CSSProperties);
+});
+define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/ui/State"], function (require, exports, Component_7, Property_12, Registry_51, State_2) {
+=======
         (0, Property_13.$Property)({ type: "color" }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "backgroundColor", void 0);
@@ -8905,12 +12489,17 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Regist
     ], CSSProperties);
 });
 define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/ui/State"], function (require, exports, Component_12, Property_14, Registry_53, State_2) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DataComponent = void 0;
     var tmpDatabinder = undefined;
+<<<<<<< HEAD
+    let DataComponent = class DataComponent extends Component_7.Component {
+=======
     let DataComponent = class DataComponent extends Component_12.Component {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
         * base class for each Component
         * @class jassijs.ui.Component
@@ -8965,28 +12554,48 @@ define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component"
     };
     exports.DataComponent = DataComponent;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_12.$Property)({ type: "databinder" }),
+=======
         (0, Property_14.$Property)({ type: "databinder" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], DataComponent.prototype, "autocommit", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_12.$Property)({ type: "databinder" }),
+=======
         (0, Property_14.$Property)({ type: "databinder" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", typeof (_a = typeof State_2.BoundProperty !== "undefined" && State_2.BoundProperty) === "function" ? _a : Object),
         __metadata("design:paramtypes", [typeof (_b = typeof State_2.BoundProperty !== "undefined" && State_2.BoundProperty) === "function" ? _b : Object])
     ], DataComponent.prototype, "bind", null);
     exports.DataComponent = DataComponent = __decorate([
+<<<<<<< HEAD
+        (0, Registry_51.$Class)("jassijs.ui.DataComponent"),
+        __metadata("design:paramtypes", [Object])
+    ], DataComponent);
+});
+define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, Registry_52, Panel_6, Registry_53, Classes_18, BoxPanel_1, Actions_3, Windows_2) {
+=======
         (0, Registry_53.$Class)("jassijs.ui.DataComponent"),
         __metadata("design:paramtypes", [Object])
     ], DataComponent);
 });
 define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, Registry_54, Panel_6, Registry_55, Classes_19, BoxPanel_1, Actions_3, Windows_2) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var DBObjectDialog_1;
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectDialog = void 0;
     exports.test = test;
+<<<<<<< HEAD
+    Registry_53 = __importDefault(Registry_53);
+=======
     Registry_55 = __importDefault(Registry_55);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     Windows_2 = __importDefault(Windows_2);
     let DBObjectDialog = DBObjectDialog_1 = class DBObjectDialog extends Panel_6.Panel {
         //data: DBObject[];
@@ -9023,17 +12632,21 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
         }
         async update() {
             //DBTable
-            var cl = await Classes_19.classes.loadClass(this._dbclassname);
+            var cl = await Classes_18.classes.loadClass(this._dbclassname);
             var _this = this;
             //@ts-ignore
             // this.data = await cl.find();
             //this.me.table1.items = this.data;
             //DBView
+<<<<<<< HEAD
+            var data = await Registry_53.default.getJSONData("$DBObjectView");
+=======
             var data = await Registry_55.default.getJSONData("$DBObjectView");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             for (var x = 0; x < data.length; x++) {
                 var param = data[x].params[0];
                 if (param.classname === this.dbclassname) {
-                    var cl = await Classes_19.classes.loadClass(data[x].classname);
+                    var cl = await Classes_18.classes.loadClass(data[x].classname);
                     this.me.IDDBView.removeAll();
                     this.view = new cl();
                     this.me.table1.options = {
@@ -9102,7 +12715,11 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
          */
         static async createActions() {
             var ret = [];
+<<<<<<< HEAD
+            var data = await Registry_53.default.getJSONData("$DBObjectView");
+=======
             var data = await Registry_55.default.getJSONData("$DBObjectView");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             for (var x = 0; x < data.length; x++) {
                 var param = data[x].params[0];
                 if (param.actionname) {
@@ -9135,7 +12752,11 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
     ], DBObjectDialog, "createActions", null);
     exports.DBObjectDialog = DBObjectDialog = DBObjectDialog_1 = __decorate([
         (0, Actions_3.$ActionProvider)("jassijs.base.ActionNode"),
+<<<<<<< HEAD
+        (0, Registry_52.$Class)("jassijs.ui.DBObjectDialog"),
+=======
         (0, Registry_54.$Class)("jassijs.ui.DBObjectDialog"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], DBObjectDialog);
     async function test() {
@@ -9144,23 +12765,39 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs/ui/DBObjectDialog", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Registry_54, Actions_4, Panel_7, Registry_55, Router_1, DBObjectDialog_2, Windows_3) {
+=======
 define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs/ui/DBObjectDialog", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Registry_56, Actions_4, Panel_7, Registry_57, Router_1, DBObjectDialog_2, Windows_3) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var DBObjectExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectExplorer = exports.DBObjectActions = exports.DBFileActions = exports.DBObjectNode = void 0;
     exports.test = test;
+<<<<<<< HEAD
+    Registry_55 = __importDefault(Registry_55);
+=======
     Registry_57 = __importDefault(Registry_57);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     Windows_3 = __importDefault(Windows_3);
     let DBObjectNode = class DBObjectNode {
     };
     exports.DBObjectNode = DBObjectNode;
     exports.DBObjectNode = DBObjectNode = __decorate([
+<<<<<<< HEAD
+        (0, Registry_54.$Class)("jassijs.ui.DBObjectNode")
+    ], DBObjectNode);
+    let DBFileActions = class DBFileActions {
+        static async ViewData(all) {
+            var entrys = await Registry_55.default.getJSONData("$DBObject");
+=======
         (0, Registry_56.$Class)("jassijs.ui.DBObjectNode")
     ], DBObjectNode);
     let DBFileActions = class DBFileActions {
         static async ViewData(all) {
             var entrys = await Registry_57.default.getJSONData("$DBObject");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             for (var x = 0; x < entrys.length; x++) {
                 if (all[0].fullpath === entrys[x].filename) {
                     var h = new DBObjectNode();
@@ -9179,7 +12816,11 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
                 if (all[0].isDirectory())
                     return false;
                 //console.log("TODO make isEnabled this async")
+<<<<<<< HEAD
+                var entrys = await Registry_55.default.getJSONData("$DBObject");
+=======
                 var entrys = await Registry_57.default.getJSONData("$DBObject");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 for (var x = 0; x < entrys.length; x++) {
                     if (all[0].fullpath === entrys[x].filename)
                         return true;
@@ -9193,7 +12834,11 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     ], DBFileActions, "ViewData", null);
     exports.DBFileActions = DBFileActions = __decorate([
         (0, Actions_4.$ActionProvider)("jassijs.remote.FileNode"),
+<<<<<<< HEAD
+        (0, Registry_54.$Class)("jassijs.ui.DBFileActions")
+=======
         (0, Registry_56.$Class)("jassijs.ui.DBFileActions")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], DBFileActions);
     let DBObjectActions = class DBObjectActions {
         static async ViewData(all) {
@@ -9221,7 +12866,11 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     ], DBObjectActions, "OpenCode", null);
     exports.DBObjectActions = DBObjectActions = __decorate([
         (0, Actions_4.$ActionProvider)("jassijs.ui.DBObjectNode"),
+<<<<<<< HEAD
+        (0, Registry_54.$Class)("jassijs.ui.DBObjectActions")
+=======
         (0, Registry_56.$Class)("jassijs.ui.DBObjectActions")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], DBObjectActions);
     let DBObjectExplorer = DBObjectExplorer_1 = class DBObjectExplorer extends Panel_7.Panel {
         constructor() {
@@ -9256,7 +12905,11 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
                 Windows_3.default.addLeft(new DBObjectExplorer_1(), "DBObjects");
         }
         async update() {
+<<<<<<< HEAD
+            var entrys = await Registry_55.default.getJSONData("$DBObject");
+=======
             var entrys = await Registry_57.default.getJSONData("$DBObject");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var all = [];
             entrys.forEach((entry) => {
                 var h = new DBObjectNode();
@@ -9298,7 +12951,11 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     ], DBObjectExplorer, "show", null);
     exports.DBObjectExplorer = DBObjectExplorer = DBObjectExplorer_1 = __decorate([
         (0, Actions_4.$ActionProvider)("jassijs.base.ActionNode"),
+<<<<<<< HEAD
+        (0, Registry_54.$Class)("jassijs.ui.DBObjectExplorer"),
+=======
         (0, Registry_56.$Class)("jassijs.ui.DBObjectExplorer"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], DBObjectExplorer);
     async function test() {
@@ -9307,21 +12964,35 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ui/Notify"], function (require, exports, Button_1, BoxPanel_2, Registry_56, Panel_8, Component_8, Registry_57, Classes_19, Property_13, Notify_2) {
+=======
 define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ui/Notify"], function (require, exports, Button_1, BoxPanel_2, Registry_58, Panel_8, Component_13, Registry_59, Classes_20, Property_15, Notify_2) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectViewToolbar = exports.DBObjectView = exports.$DBObjectViewProperties = void 0;
     exports.$DBObjectView = $DBObjectView;
     exports.test = test;
+<<<<<<< HEAD
+    Registry_57 = __importDefault(Registry_57);
+=======
     Registry_59 = __importDefault(Registry_59);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     class $DBObjectViewProperties {
     }
     exports.$DBObjectViewProperties = $DBObjectViewProperties;
     function $DBObjectView(properties) {
         return function (pclass) {
+<<<<<<< HEAD
+            Registry_57.default.register("$DBObjectView", pclass, properties);
+            var p = { name: "value", componentType: properties.classname, type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" };
+            Registry_57.default.registerMember("$Property", pclass, undefined, p);
+=======
             Registry_59.default.register("$DBObjectView", pclass, properties);
             var p = { name: "value", componentType: properties.classname, type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" };
             Registry_59.default.registerMember("$Property", pclass, undefined, p);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         };
     }
     //@$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh", "me.databinder"] })
@@ -9347,8 +13018,13 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
          * create a new object
          */
         createObject() {
+<<<<<<< HEAD
+            var clname = Registry_57.default.getData("$DBObjectView", Classes_19.classes.getClassName(this))[0].params[0].classname;
+            var cl = Classes_19.classes.getClass(clname);
+=======
             var clname = Registry_59.default.getData("$DBObjectView", Classes_20.classes.getClassName(this))[0].params[0].classname;
             var cl = Classes_20.classes.getClass(clname);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             this["value"] = new cl();
             this.callEvent("created", this["value"]);
             return this["value"];
@@ -9393,8 +13069,13 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
                 return;
             ob.remove();
             //set obj to null
+<<<<<<< HEAD
+            var clname = Registry_57.default.getData("$DBObjectView", Classes_19.classes.getClassName(this))[0].params[0].classname;
+            var cl = Classes_19.classes.getClass(clname);
+=======
             var clname = Registry_59.default.getData("$DBObjectView", Classes_20.classes.getClassName(this))[0].params[0].classname;
             var cl = Classes_20.classes.getClass(clname);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             this["value"] = new cl();
             this.callEvent("deleted", ob);
         }
@@ -9404,31 +13085,51 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
     };
     exports.DBObjectView = DBObjectView;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_13.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+=======
         (0, Property_15.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "oncreated", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_13.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+=======
         (0, Property_15.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "onsaved", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_13.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+=======
         (0, Property_15.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "onrefreshed", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_13.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+=======
         (0, Property_15.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "ondeleted", null);
     exports.DBObjectView = DBObjectView = __decorate([
+<<<<<<< HEAD
+        (0, Registry_56.$Class)("jassijs/ui/DBObjectView")
+=======
         (0, Registry_58.$Class)("jassijs/ui/DBObjectView")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //see export function $DBObjectView =>@$Property({name:"value", type: "DBObject", isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
         ,
         __metadata("design:paramtypes", [Object])
@@ -9443,10 +13144,17 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
             super(props);
         }
         render() {
+<<<<<<< HEAD
+            return (0, Component_8.jc)(BoxPanel_2.BoxPanel, {
+                horizontal: true,
+                children: [
+                    (0, Component_8.jc)(Button_1.Button, {
+=======
             return (0, Component_13.jc)(BoxPanel_2.BoxPanel, {
                 horizontal: true,
                 children: [
                     (0, Component_13.jc)(Button_1.Button, {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         text: "",
                         tooltip: "save",
                         icon: "mdi mdi-content-save",
@@ -9454,7 +13162,11 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
                             this.props.view.saveObject();
                         }
                     }),
+<<<<<<< HEAD
+                    (0, Component_8.jc)(Button_1.Button, {
+=======
                     (0, Component_13.jc)(Button_1.Button, {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         text: "",
                         tooltip: "remove",
                         icon: "mdi mdi-delete",
@@ -9462,7 +13174,11 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
                             this.props.view.deleteObject();
                         }
                     }),
+<<<<<<< HEAD
+                    (0, Component_8.jc)(Button_1.Button, {
+=======
                     (0, Component_13.jc)(Button_1.Button, {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         text: "",
                         tooltip: "refresh",
                         icon: "mdi mdi-refresh",
@@ -9470,7 +13186,11 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
                             this.props.view.refreshObject();
                         }
                     }),
+<<<<<<< HEAD
+                    (0, Component_8.jc)(Button_1.Button, {
+=======
                     (0, Component_13.jc)(Button_1.Button, {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         text: "",
                         tooltip: "new",
                         icon: "mdi mdi-tooltip-plus-outline",
@@ -9484,7 +13204,11 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
     }
     exports.DBObjectViewToolbar = DBObjectViewToolbar;
 });
+<<<<<<< HEAD
+define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ext/jquerylib", "jassijs/ext/intersection-observer"], function (require, exports, goldenlayout_2, Registry_58, Container_2, Button_2, Textbox_5) {
+=======
 define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ext/jquerylib", "jassijs/ext/intersection-observer"], function (require, exports, goldenlayout_2, Registry_60, Container_2, Button_2, Textbox_5) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DockingContainer = void 0;
@@ -9806,7 +13530,11 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
     };
     exports.DockingContainer = DockingContainer;
     exports.DockingContainer = DockingContainer = __decorate([
+<<<<<<< HEAD
+        (0, Registry_58.$Class)("jassijs.ui.DockingContainer"),
+=======
         (0, Registry_60.$Class)("jassijs.ui.DockingContainer"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], DockingContainer);
     function test() {
@@ -9827,13 +13555,20 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
         return dock;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ext/tinymce", "jassijs/ui/Component"], function (require, exports, Panel_9, HTMLPanel_1, Button_3, Registry_59, tinymce_1, Component_9) {
+=======
 define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_9, HTMLPanel_1, Button_3, Registry_61, tinymce_1, Registry_62) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLEditorPanel = void 0;
     exports.te = te;
     tinymce_1 = __importDefault(tinymce_1);
+<<<<<<< HEAD
+=======
     Registry_62 = __importDefault(Registry_62);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     class Me {
     }
     let HTMLEditorPanel = class HTMLEditorPanel extends Panel_9.Panel {
@@ -9848,7 +13583,11 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
             this.add(me.IDHtml);
             this.add(me.IDChange);
             //me.IDHtml.text="Hallo";
+<<<<<<< HEAD
+            var randclass = "ed" + (0, Component_9.nextID)();
+=======
             var randclass = "ed" + Registry_62.default.nextID();
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             me.IDHtml.dom.classList.add(randclass);
             me.IDChange.text = "OK";
             me.IDChange.onclick(function (event) {
@@ -9901,7 +13640,11 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
     };
     exports.HTMLEditorPanel = HTMLEditorPanel;
     exports.HTMLEditorPanel = HTMLEditorPanel = __decorate([
+<<<<<<< HEAD
+        (0, Registry_59.$Class)("jassijs.ui.HTMLEditorPanel"),
+=======
         (0, Registry_61.$Class)("jassijs.ui.HTMLEditorPanel"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], HTMLEditorPanel);
     function te() {
@@ -9912,12 +13655,20 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
     }
 });
 // return CodeEditor.constructor;
+<<<<<<< HEAD
+define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Registry_60, Property_14, DataComponent_2) {
+=======
 define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_14, Registry_63, Property_16, DataComponent_2) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLPanel = void 0;
     exports.test = test;
     var bugtinymce = undefined;
+<<<<<<< HEAD
+    //@$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ })
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     let HTMLPanel = class HTMLPanel extends DataComponent_2.DataComponent {
         constructor(properties = {}) {
             super(properties);
@@ -9989,23 +13740,39 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
     };
     exports.HTMLPanel = HTMLPanel;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_14.$Property)({ description: "line break after element", default: false }),
+=======
         (0, Property_16.$Property)({ description: "line break after element", default: false }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel.prototype, "newlineafter", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_14.$Property)({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' }),
+=======
         (0, Property_16.$Property)({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], HTMLPanel.prototype, "template", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_14.$Property)(),
+=======
         (0, Property_16.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], HTMLPanel.prototype, "value", null);
     exports.HTMLPanel = HTMLPanel = __decorate([
+<<<<<<< HEAD
+        (0, Registry_60.$Class)("jassijs.ui.HTMLPanel"),
+=======
         (0, Component_14.$UIComponent)({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
         (0, Registry_63.$Class)("jassijs.ui.HTMLPanel"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel);
     function test() {
@@ -10016,7 +13783,11 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/UIComponents"], function (require, exports, Property_15, Registry_61, DataComponent_3, UIComponents_4) {
+=======
 define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/ui/DataComponent"], function (require, exports, Component_15, Property_17, Registry_64, DataComponent_3) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Image = void 0;
@@ -10091,25 +13862,43 @@ define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassi
     };
     exports.Image = Image;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_15.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_17.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Image.prototype, "onclick", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_15.$Property)({ type: "string" }),
+=======
         (0, Property_17.$Property)({ type: "string" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Image.prototype, "value", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_15.$Property)({ type: "image" }),
+=======
         (0, Property_17.$Property)({ type: "image" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Image.prototype, "src", null);
     exports.Image = Image = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_4.$UIComponent)({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
+        ,
+        (0, Registry_61.$Class)("jassijs.ui.Image"),
+=======
         (0, Component_15.$UIComponent)({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
         ,
         (0, Registry_64.$Class)("jassijs.ui.Image"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], Image);
     function test() {
@@ -10117,14 +13906,22 @@ define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassi
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Component_10, Registry_62, Property_16) {
+=======
 define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Component_16, Registry_65, Property_18) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InvisibleComponent = void 0;
     /**
      * invivisible Component
      **/
+<<<<<<< HEAD
+    let InvisibleComponent = class InvisibleComponent extends Component_10.Component {
+=======
     let InvisibleComponent = class InvisibleComponent extends Component_16.Component {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         constructor(properties = {}) {
             super(properties);
             this.$isInivisibleComponent = true;
@@ -10132,7 +13929,11 @@ define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Compo
     };
     exports.InvisibleComponent = InvisibleComponent;
     exports.InvisibleComponent = InvisibleComponent = __decorate([
+<<<<<<< HEAD
+        (0, Registry_62.$Class)("jassijs.ui.InvisibleComponent")
+=======
         (0, Registry_65.$Class)("jassijs.ui.InvisibleComponent")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /*@$Property({name:"label",hide:true})
         @$Property({name:"icon",hide:true})
         @$Property({name:"tooltip",hide:true})
@@ -10145,11 +13946,19 @@ define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Compo
         @$Property({name:"hidden",hide:true})
         @$Property({name:"styles",hide:true})*/
         ,
+<<<<<<< HEAD
+        (0, Property_16.$Property)({ hideBaseClassProperties: true }),
+        __metadata("design:paramtypes", [Object])
+    ], InvisibleComponent);
+});
+define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/UIComponents", "jassijs/ext/jquerylib"], function (require, exports, Container_3, Property_17, MenuItem_3, Registry_63, Component_11, UIComponents_5) {
+=======
         (0, Property_18.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], InvisibleComponent);
 });
 define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ext/jquerylib"], function (require, exports, Container_3, Property_19, MenuItem_3, Registry_66, Component_17) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Menu = void 0;
@@ -10240,12 +14049,36 @@ define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassij
     };
     exports.Menu = Menu;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_17.$Property)({ name: "onclick", type: "function", default: "function(event){\n\t\n}" }),
+=======
         (0, Property_19.$Property)({ name: "onclick", type: "function", default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Menu.prototype, "onclick", null);
     exports.Menu = Menu = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_5.$UIComponent)({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
+        (0, Registry_63.$Class)("jassijs.ui.Menu"),
+        __metadata("design:paramtypes", [Object])
+    ], Menu);
+    function test() {
+        var men = (0, Component_11.jc)(Menu, {
+            children: [
+                (0, Component_11.jc)(MenuItem_3.MenuItem, {
+                    text: "Hallodd",
+                    children: []
+                }),
+                (0, Component_11.jc)(MenuItem_3.MenuItem, { text: "sdfsdf" })
+            ]
+        });
+        return (0, Component_11.createComponent)(men);
+    }
+});
+define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Menu", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/UIComponents", "jassijs/ext/jquerylib"], function (require, exports, Menu_3, Property_18, Registry_64, Container_4, UIComponents_6) {
+=======
         (0, Component_17.$UIComponent)({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
         (0, Registry_66.$Class)("jassijs.ui.Menu"),
         __metadata("design:paramtypes", [Object])
@@ -10264,6 +14097,7 @@ define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassij
     }
 });
 define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ext/jquerylib"], function (require, exports, Component_18, Menu_3, Property_20, Registry_67, Container_4) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MenuItem = void 0;
@@ -10376,24 +14210,41 @@ define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "ja
     };
     exports.MenuItem = MenuItem;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_18.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_20.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], MenuItem.prototype, "onclick", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_18.$Property)(),
+=======
         (0, Property_20.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], MenuItem.prototype, "icon", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_18.$Property)(),
+=======
         (0, Property_20.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], MenuItem.prototype, "text", null);
     exports.MenuItem = MenuItem = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_6.$UIComponent)({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] }),
+        (0, Registry_64.$Class)("jassijs.ui.MenuItem"),
+=======
         (0, Component_18.$UIComponent)({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] }),
         (0, Registry_67.$Class)("jassijs.ui.MenuItem"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], MenuItem);
     async function test() {
@@ -10431,7 +14282,11 @@ define("jassijs/ui/Notify", ["require", "exports", "jquery", "jquery.notify"], f
         $.notify.addStyle(style, options);
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ui/State", "jassijs/ui/UIComponents", "jassijs/ext/jquerylib"], function (require, exports, Registry_65, Table_2, Panel_10, Button_4, Textbox_6, Property_19, Classes_20, State_3, UIComponents_7) {
+=======
 define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/State", "jassijs/ext/jquerylib"], function (require, exports, Registry_68, Table_2, Panel_10, Button_4, Textbox_6, Property_21, Component_19, Classes_21, State_3) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -10550,7 +14405,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
             return this.state.value.current;
         }
         async loadObjects(classname) {
-            var cl = await Classes_21.classes.loadClass(classname);
+            var cl = await Classes_20.classes.loadClass(classname);
             return await cl.find();
         }
         set items(value) {
@@ -10595,6 +14450,17 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
     };
     exports.ObjectChooser = ObjectChooser;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_19.$Property)({ default: 450 }),
+        __metadata("design:type", Number)
+    ], ObjectChooser.prototype, "dialogHeight", void 0);
+    __decorate([
+        (0, Property_19.$Property)({ default: 300 }),
+        __metadata("design:type", Number)
+    ], ObjectChooser.prototype, "dialogWidth", void 0);
+    __decorate([
+        (0, Property_19.$Property)({ type: "string", description: "the classname for to choose" }),
+=======
         (0, Property_21.$Property)({ default: 450 }),
         __metadata("design:type", Number)
     ], ObjectChooser.prototype, "dialogHeight", void 0);
@@ -10604,33 +14470,55 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
     ], ObjectChooser.prototype, "dialogWidth", void 0);
     __decorate([
         (0, Property_21.$Property)({ type: "string", description: "the classname for to choose" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], ObjectChooser.prototype, "items", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_19.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_21.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], ObjectChooser.prototype, "onchange", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_19.$Property)(),
+=======
         (0, Property_21.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], ObjectChooser.prototype, "autocommit", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_19.$Property)({ type: "databinder" }),
+=======
         (0, Property_21.$Property)({ type: "databinder" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", typeof (_a = typeof State_3.BoundProperty !== "undefined" && State_3.BoundProperty) === "function" ? _a : Object),
         __metadata("design:paramtypes", [typeof (_b = typeof State_3.BoundProperty !== "undefined" && State_3.BoundProperty) === "function" ? _b : Object])
     ], ObjectChooser.prototype, "bind", null);
     exports.ObjectChooser = ObjectChooser = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_7.$UIComponent)({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
+        (0, Registry_65.$Class)("jassijs.ui.ObjectChooser"),
+=======
         (0, Component_19.$UIComponent)({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
         (0, Registry_68.$Class)("jassijs.ui.ObjectChooser"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], ObjectChooser);
     async function test() {
         // kk.o=0;
+<<<<<<< HEAD
+        var User = (await new Promise((resolve_21, reject_21) => { require(["jassijs/remote/security/User"], resolve_21, reject_21); }).then(__importStar)).User;
+=======
         var User = (await new Promise((resolve_20, reject_20) => { require(["jassijs/remote/security/User"], resolve_20, reject_20); }).then(__importStar)).User;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         var dlg = new ObjectChooser();
         dlg.items = "jassijs.security.User";
         dlg.value = (await User.findOne());
@@ -10651,7 +14539,11 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
          return dlg;*/
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Panel_11, BoxPanel_3, HTMLPanel_2, Button_5, Registry_66, Property_20, Textbox_7, Classes_21) {
+=======
 define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Panel_11, BoxPanel_3, HTMLPanel_2, Button_5, Registry_69, Property_22, Textbox_7, Classes_22) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var OptionDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -10729,7 +14621,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
             ret.options = options;
             ret.layout();
             if (properties !== undefined) {
-                var PropertyEditor = await Classes_22.classes.loadClass("jassijs.ui.PropertyEditor");
+                var PropertyEditor = await Classes_21.classes.loadClass("jassijs.ui.PropertyEditor");
                 ret.me.propertyEditor = new PropertyEditor(undefined);
                 ret.me.propertyEditor.width = "100%";
                 ret.me.propertyEditor.height = "100%";
@@ -10761,16 +14653,35 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
     };
     exports.OptionDialog = OptionDialog;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_20.$Property)(),
+        __metadata("design:type", String)
+    ], OptionDialog.prototype, "text", void 0);
+    exports.OptionDialog = OptionDialog = OptionDialog_1 = __decorate([
+        (0, Registry_66.$Class)("jassijs.ui.OptionDialog"),
+=======
         (0, Property_22.$Property)(),
         __metadata("design:type", String)
     ], OptionDialog.prototype, "text", void 0);
     exports.OptionDialog = OptionDialog = OptionDialog_1 = __decorate([
         (0, Registry_69.$Class)("jassijs.ui.OptionDialog"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], OptionDialog);
     let Testprop = class Testprop {
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_20.$Property)(),
+        __metadata("design:type", Boolean)
+    ], Testprop.prototype, "visible", void 0);
+    __decorate([
+        (0, Property_20.$Property)(),
+        __metadata("design:type", String)
+    ], Testprop.prototype, "text", void 0);
+    Testprop = __decorate([
+        (0, Registry_66.$Class)("jassijs.ui.OptionDialogTestProp")
+=======
         (0, Property_22.$Property)(),
         __metadata("design:type", Boolean)
     ], Testprop.prototype, "visible", void 0);
@@ -10780,6 +14691,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
     ], Testprop.prototype, "text", void 0);
     Testprop = __decorate([
         (0, Registry_69.$Class)("jassijs.ui.OptionDialogTestProp")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Testprop);
     async function test2() {
         var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
@@ -10795,7 +14707,11 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
     }
     ;
 });
+<<<<<<< HEAD
+define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/UIComponent"], function (require, exports, Registry_67, Container_5, Property_21, UIComponent_2) {
+=======
 define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_70, Container_5, Component_20, Property_23) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Panel = void 0;
@@ -10872,11 +14788,25 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Registry", "ja
     };
     exports.Panel = Panel;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_21.$Property)(),
+=======
         (0, Property_23.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Panel.prototype, "isAbsolute", null);
     exports.Panel = Panel = __decorate([
+<<<<<<< HEAD
+        (0, UIComponent_2.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
+        (0, Registry_67.$Class)("jassijs.ui.Panel"),
+        (0, Property_21.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" }),
+        (0, Property_21.$Property)({ name: "new/useSpan", type: "boolean", default: false }),
+        __metadata("design:paramtypes", [Object])
+    ], Panel);
+});
+define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_68, Registry_69, Classes_22) {
+=======
         (0, Component_20.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
         (0, Registry_70.$Class)("jassijs.ui.Panel"),
         (0, Property_23.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelProperties" }),
@@ -10885,19 +14815,30 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Registry", "ja
     ], Panel);
 });
 define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_71, Registry_72, Classes_23) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Property = void 0;
     exports.$Property = $Property;
+<<<<<<< HEAD
+    Registry_69 = __importDefault(Registry_69);
+=======
     Registry_72 = __importDefault(Registry_72);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     function $Property(property = undefined) {
         return function (target, propertyKey, descriptor) {
             //debugger;
-            var test = Classes_23.classes.getClassName(target);
+            var test = Classes_22.classes.getClassName(target);
             if (propertyKey === undefined)
+<<<<<<< HEAD
+                Registry_69.default.registerMember("$Property", target.prototype, "new", property); //allow registerMember in class definition
+            else
+                Registry_69.default.registerMember("$Property", target, propertyKey, property);
+=======
                 Registry_72.default.registerMember("$Property", target.prototype, "new", property); //allow registerMember in class definition
             else
                 Registry_72.default.registerMember("$Property", target, propertyKey, property);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         };
     }
     let Property = class Property {
@@ -10912,11 +14853,19 @@ define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Registry", 
     };
     exports.Property = Property;
     exports.Property = Property = __decorate([
+<<<<<<< HEAD
+        (0, Registry_68.$Class)("jassijs.ui.Property"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], Property);
+});
+define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ext/jquerylib", "jassijs/base/PropertyEditorService"], function (require, exports, Registry_70, Panel_12, Button_6, Image_1, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_22, Component_12) {
+=======
         (0, Registry_71.$Class)("jassijs.ui.Property"),
         __metadata("design:paramtypes", [Object, Object])
     ], Property);
 });
 define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ext/jquerylib", "jassijs/base/PropertyEditorService"], function (require, exports, Registry_73, Panel_12, Button_6, Image_1, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_24, Component_21) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var PropertyEditor_1;
     var _a;
@@ -10931,7 +14880,11 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
             super();
             this.readPropertyValueFromDesign = false;
             this.codeChanges = {};
+<<<<<<< HEAD
+            this.table = (0, Component_12.createComponent)(this.createTable());
+=======
             this.table = (0, Component_21.createComponent)(this.createTable());
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             this.toolbar = new Panel_12.Panel();
             this.parser = parser;
             this.add(this.toolbar);
@@ -10976,7 +14929,11 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
             var component = editor.getComponent();
             //dont work
             //var row =Component.createHTMLElement('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>');
+<<<<<<< HEAD
+            var row = Component_12.Component.createHTMLElement('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>');
+=======
             var row = Component_21.Component.createHTMLElement('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>');
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             //var row=$('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>')[0];
             var deletebutton = new Image_1.Image();
             deletebutton.src = "mdi mdi-delete-forever-outline";
@@ -11183,7 +15140,11 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
             var parent = first._parent;
             var ifirst = parent._components.indexOf(first);
             var isecond = parent._components.indexOf(second);
+<<<<<<< HEAD
+            var dummy = Component_12.Component.createHTMLElement("<div/>");
+=======
             var dummy = Component_21.Component.createHTMLElement("<div/>");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             parent._components[ifirst] = second;
             parent._components[isecond] = first;
             first.domWrapper.replaceWith(dummy);
@@ -11712,7 +15673,11 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
     };
     exports.PropertyEditor = PropertyEditor;
     exports.PropertyEditor = PropertyEditor = PropertyEditor_1 = __decorate([
+<<<<<<< HEAD
+        (0, Registry_70.$Class)("jassijs.ui.PropertyEditor"),
+=======
         (0, Registry_73.$Class)("jassijs.ui.PropertyEditor"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object, Object])
     ], PropertyEditor);
     let PropertyEditorTestSubProperties = class PropertyEditorTestSubProperties {
@@ -11723,6 +15688,17 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
     };
     exports.PropertyEditorTestSubProperties = PropertyEditorTestSubProperties;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_22.$Property)(),
+        __metadata("design:type", Number)
+    ], PropertyEditorTestSubProperties.prototype, "num", void 0);
+    __decorate([
+        (0, Property_22.$Property)(),
+        __metadata("design:type", String)
+    ], PropertyEditorTestSubProperties.prototype, "text", void 0);
+    exports.PropertyEditorTestSubProperties = PropertyEditorTestSubProperties = __decorate([
+        (0, Registry_70.$Class)("jassijs.ui.PropertyEditorTestSubProperties")
+=======
         (0, Property_24.$Property)(),
         __metadata("design:type", Number)
     ], PropertyEditorTestSubProperties.prototype, "num", void 0);
@@ -11732,6 +15708,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
     ], PropertyEditorTestSubProperties.prototype, "text", void 0);
     exports.PropertyEditorTestSubProperties = PropertyEditorTestSubProperties = __decorate([
         (0, Registry_73.$Class)("jassijs.ui.PropertyEditorTestSubProperties")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], PropertyEditorTestSubProperties);
     let TestProperties = class TestProperties {
         constructor() {
@@ -11742,6 +15719,41 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
         ;
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_22.$Property)({ decription: "name of the dialog" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "dialogname", void 0);
+    __decorate([
+        (0, Property_22.$Property)(),
+        __metadata("design:type", Boolean)
+    ], TestProperties.prototype, "checked", void 0);
+    __decorate([
+        (0, Property_22.$Property)({ type: "color" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "color", void 0);
+    __decorate([
+        (0, Property_22.$Property)({ type: "componentselector", componentType: "jassi.ui.Component" }),
+        __metadata("design:type", typeof (_a = typeof Component_12.Component !== "undefined" && Component_12.Component) === "function" ? _a : Object)
+    ], TestProperties.prototype, "component", void 0);
+    __decorate([
+        (0, Property_22.$Property)({ type: "databinder" }),
+        __metadata("design:type", Object)
+    ], TestProperties.prototype, "databinder", void 0);
+    __decorate([
+        (0, Property_22.$Property)({ type: "dbobject", componentType: "de.Kunde" }),
+        __metadata("design:type", Object)
+    ], TestProperties.prototype, "dbobject", void 0);
+    __decorate([
+        (0, Property_22.$Property)({ default: 80 }),
+        __metadata("design:type", Number)
+    ], TestProperties.prototype, "num", void 0);
+    __decorate([
+        (0, Property_22.$Property)({ type: "font" }),
+        __metadata("design:type", Number)
+    ], TestProperties.prototype, "font", void 0);
+    __decorate([
+        (0, Property_22.$Property)({ type: "function" }),
+=======
         (0, Property_24.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
@@ -11775,11 +15787,27 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
     ], TestProperties.prototype, "font", void 0);
     __decorate([
         (0, Property_24.$Property)({ type: "function" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], TestProperties.prototype, "func", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_22.$Property)({ type: "html" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "html", void 0);
+    __decorate([
+        (0, Property_22.$Property)({ type: "image" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "image", void 0);
+    __decorate([
+        (0, Property_22.$Property)({ type: "json", componentType: "jassijs.ui.PropertyEditorTestSubProperties" }),
+        __metadata("design:type", Object)
+    ], TestProperties.prototype, "json", void 0);
+    TestProperties = __decorate([
+        (0, Registry_70.$Class)("jassijs.ui.PropertyEditorTestProperties")
+=======
         (0, Property_24.$Property)({ type: "html" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "html", void 0);
@@ -11793,6 +15821,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
     ], TestProperties.prototype, "json", void 0);
     TestProperties = __decorate([
         (0, Registry_73.$Class)("jassijs.ui.PropertyEditorTestProperties")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TestProperties);
     function test() {
         var ret = new PropertyEditor();
@@ -11800,7 +15829,11 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Checkbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, Registry_71, Checkbox_2, Editor_1) {
+=======
 define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Checkbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, Registry_74, Checkbox_2, Editor_1) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BooleanEditor = void 0;
@@ -11846,6 +15879,17 @@ define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassi
     exports.BooleanEditor = BooleanEditor;
     exports.BooleanEditor = BooleanEditor = __decorate([
         (0, Editor_1.$PropertyEditor)(["boolean"]),
+<<<<<<< HEAD
+        (0, Registry_71.$Class)("jassijs.ui.PropertyEditors.BooleanEditor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], BooleanEditor);
+});
+define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_2, Editor_2, JsonEditor_1, Tools_1, StringConverter_1, Registry_72, Panel_13, Textbox_8, Registry_73, ComponentDescriptor_5, Classes_23) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ClassSelectorEditor = void 0;
+    Registry_73 = __importDefault(Registry_73);
+=======
         (0, Registry_74.$Class)("jassijs.ui.PropertyEditors.BooleanEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], BooleanEditor);
@@ -11855,6 +15899,7 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClassSelectorEditor = void 0;
     Registry_76 = __importDefault(Registry_76);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     let ClassSelectorEditor = class ClassSelectorEditor extends Editor_2.Editor {
         /**
          * Checkbox Editor for boolean values
@@ -11896,11 +15941,11 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
                 var file = converter.classname.replaceAll(".", "/");
                 var stype = file.split("/")[file.split("/").length - 1];
                 _this.propertyEditor.addImportIfNeeded(stype, file);
-                Classes_24.classes.loadClass(converter.classname).then((pclass) => {
+                Classes_23.classes.loadClass(converter.classname).then((pclass) => {
                     _this.propertyEditor.setPropertyInDesign(_this.property.name, new pclass());
                 });
             }
-            Classes_24.classes.loadClass(converter.classname).then((cl) => {
+            Classes_23.classes.loadClass(converter.classname).then((cl) => {
                 var _a;
                 var meta = (_a = ComponentDescriptor_5.ComponentDescriptor.describe(cl)) === null || _a === void 0 ? void 0 : _a.fields;
                 for (var x = 0; x < meta.length; x++) {
@@ -11922,8 +15967,13 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
         }
         initSelect() {
             var _this = this;
+<<<<<<< HEAD
+            Registry_73.default.loadAllFilesForService(this.property.service).then(function () {
+                var converters = Registry_73.default.getData(_this.property.service);
+=======
             Registry_76.default.loadAllFilesForService(this.property.service).then(function () {
                 var converters = Registry_76.default.getData(_this.property.service);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 var data = [];
                 /*data.push({
                        classname:undefined,
@@ -11931,7 +15981,7 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
                    });*/
                 for (var x = 0; x < converters.length; x++) {
                     var con = converters[x];
-                    var cname = Classes_24.classes.getClassName(con.oclass);
+                    var cname = Classes_23.classes.getClassName(con.oclass);
                     var name = cname;
                     if (con.params[0] && con.params[0].name !== undefined)
                         name = con.params[0].name;
@@ -12020,7 +16070,11 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
     exports.ClassSelectorEditor = ClassSelectorEditor;
     exports.ClassSelectorEditor = ClassSelectorEditor = __decorate([
         (0, Editor_2.$PropertyEditor)(["classselector"]),
+<<<<<<< HEAD
+        (0, Registry_72.$Class)("jassijs.ui.PropertyEditors.ClassSelectorEditor"),
+=======
         (0, Registry_75.$Class)("jassijs.ui.PropertyEditors.ClassSelectorEditor"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object, Object])
     ], ClassSelectorEditor);
     jassijs.test = function () {
@@ -12030,7 +16084,11 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
         return t.me.pan;
     };
 });
+<<<<<<< HEAD
+define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ext/jquerylib", "jassijs/ext/spectrum"], function (require, exports, PropertyEditor_2, Editor_3, Textbox_9, Registry_74, Select_3, BoxPanel_4) {
+=======
 define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ext/jquerylib", "jassijs/ext/spectrum"], function (require, exports, PropertyEditor_2, Editor_3, Textbox_9, Registry_77, Select_3, BoxPanel_4) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ColorEditor = void 0;
@@ -12136,7 +16194,11 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
     exports.ColorEditor = ColorEditor;
     exports.ColorEditor = ColorEditor = __decorate([
         (0, Editor_3.$PropertyEditor)(["color"]),
+<<<<<<< HEAD
+        (0, Registry_74.$Class)("jassijs.ui.PropertyEditors.ColorEditor")
+=======
         (0, Registry_77.$Class)("jassijs.ui.PropertyEditors.ColorEditor")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
         * Editor for color
         * used by PropertyEditor
@@ -12164,7 +16226,11 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
         return panel;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/PropertyEditors/ComponentEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox"], function (require, exports, Registry_75, Editor_4, Textbox_10) {
+=======
 define("jassijs/ui/PropertyEditors/ComponentEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox"], function (require, exports, Registry_78, Editor_4, Textbox_10) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BooleanEditor = void 0;
@@ -12210,11 +16276,19 @@ define("jassijs/ui/PropertyEditors/ComponentEditor", ["require", "exports", "jas
     exports.BooleanEditor = BooleanEditor;
     exports.BooleanEditor = BooleanEditor = __decorate([
         (0, Editor_4.$PropertyEditor)(["jassijs.ui.Component"]),
+<<<<<<< HEAD
+        (0, Registry_75.$Class)("jassijs.ui.PropertyEditors.ComponentEditor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], BooleanEditor);
+});
+define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Editor_5, Select_4, Classes_24, Registry_76) {
+=======
         (0, Registry_78.$Class)("jassijs.ui.PropertyEditors.ComponentEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], BooleanEditor);
 });
 define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Editor_5, Select_4, Classes_25, Registry_79) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentSelectorEditor = void 0;
@@ -12242,7 +16316,7 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
         set ob(ob) {
             super.ob = ob;
             var scomponentType = this.property.componentType.replace("[", "").replace("]", "");
-            var data = this.propertyEditor.getVariablesForType(Classes_25.classes.getClass(scomponentType));
+            var data = this.propertyEditor.getVariablesForType(Classes_24.classes.getClass(scomponentType));
             this.component.items = data === undefined ? [] : data;
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (this.property.componentType.indexOf("[") === 0 && value) {
@@ -12288,13 +16362,21 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
     exports.ComponentSelectorEditor = ComponentSelectorEditor;
     exports.ComponentSelectorEditor = ComponentSelectorEditor = __decorate([
         (0, Editor_5.$PropertyEditor)(["componentselector"]),
+<<<<<<< HEAD
+        (0, Registry_76.$Class)("jassijs.ui.PropertyEditors.ComponentSelectorEditor"),
+=======
         (0, Registry_79.$Class)("jassijs.ui.PropertyEditors.ComponentSelectorEditor"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object, Object])
     ], ComponentSelectorEditor);
     function test() {
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Textbox", "jassijs/ui/Component"], function (require, exports, Editor_6, Registry_77, Textbox_11, Component_13) {
+=======
 define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Textbox", "jassijs/ui/Component"], function (require, exports, Editor_6, Registry_80, Textbox_11, Component_22) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabinderEditor = void 0;
@@ -12327,14 +16409,22 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
                 if (found.indexOf(prop) === -1) {
                     found.push(prop);
                     this.foundBounds[prop] = comp.dom._this.state[prop].bind;
+<<<<<<< HEAD
+                    if (comp.dom._this instanceof Component_13.FunctionComponent)
+=======
                     if (comp.dom._this instanceof Component_22.FunctionComponent)
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         this.foundFunctionComponents[prop] = true;
                 }
                 if (ob) {
                     for (var key in ob) {
                         if (found.indexOf(prop + "." + key) === -1) {
                             found.push(prop + "." + key);
+<<<<<<< HEAD
+                            if (comp.dom._this instanceof Component_13.FunctionComponent)
+=======
                             if (comp.dom._this instanceof Component_22.FunctionComponent)
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                                 this.foundFunctionComponents[prop + "." + key] = true;
                             this.foundBounds[prop + "." + key] = comp.dom._this.state[prop].bind[key];
                         }
@@ -12416,6 +16506,17 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
     exports.DatabinderEditor = DatabinderEditor;
     exports.DatabinderEditor = DatabinderEditor = __decorate([
         (0, Editor_6.$PropertyEditor)(["databinder"]),
+<<<<<<< HEAD
+        (0, Registry_77.$Class)("jassijs.ui.PropertyEditors.DatabinderEditor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], DatabinderEditor);
+});
+define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_7, Registry_78, Panel_14, Textbox_12, ObjectChooser_1, Classes_25) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DBObjectEditor = void 0;
+    Registry_78 = __importStar(Registry_78);
+=======
         (0, Registry_80.$Class)("jassijs.ui.PropertyEditors.DatabinderEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DatabinderEditor);
@@ -12425,6 +16526,7 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectEditor = void 0;
     Registry_81 = __importStar(Registry_81);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     let DBObjectEditor = class DBObjectEditor extends Editor_7.Editor {
         /**
          * Checkbox Editor for boolean values
@@ -12462,7 +16564,11 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
         set ob(ob) {
             super.ob = ob;
             //databinder,"prop"
+<<<<<<< HEAD
+            var h = Registry_78.default;
+=======
             var h = Registry_81.default;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (value !== undefined) {
                 //jassijs.db.load("de.Kunde",9);
@@ -12488,7 +16594,7 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
             return this.component;
         }
         async loadObject(id) {
-            var tp = await Classes_26.classes.loadClass(this.property.componentType);
+            var tp = await Classes_25.classes.loadClass(this.property.componentType);
             return await tp["findOne"](parseInt(id));
         }
         /**
@@ -12524,11 +16630,19 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
     exports.DBObjectEditor = DBObjectEditor;
     exports.DBObjectEditor = DBObjectEditor = __decorate([
         (0, Editor_7.$PropertyEditor)(["dbobject"]),
+<<<<<<< HEAD
+        (0, Registry_78.$Class)("jassijs.ui.PropertyEditors.DBObjectEditor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], DBObjectEditor);
+});
+define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Select"], function (require, exports, Textbox_13, Editor_8, Registry_79, Select_5) {
+=======
         (0, Registry_81.$Class)("jassijs.ui.PropertyEditors.DBObjectEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DBObjectEditor);
 });
 define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Select"], function (require, exports, Textbox_13, Editor_8, Registry_82, Select_5) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let DefaultEditor = class DefaultEditor extends Editor_8.Editor {
@@ -12635,19 +16749,34 @@ define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassi
     };
     DefaultEditor = __decorate([
         (0, Editor_8.$PropertyEditor)(["string", "number", "number[]", "boolean[]"]),
+<<<<<<< HEAD
+        (0, Registry_79.$Class)("jassijs.ui.PropertyEditors.DefaultEditor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], DefaultEditor);
+});
+define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry"], function (require, exports, Registry_80, Registry_81) {
+=======
         (0, Registry_82.$Class)("jassijs.ui.PropertyEditors.DefaultEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DefaultEditor);
 });
 define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry"], function (require, exports, Registry_83, Registry_84) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Editor = void 0;
     exports.$PropertyEditor = $PropertyEditor;
+<<<<<<< HEAD
+    Registry_81 = __importDefault(Registry_81);
+    function $PropertyEditor(supportedtypes) {
+        return function (pclass) {
+            Registry_81.default.register("$PropertyEditor", pclass, supportedtypes);
+=======
     Registry_84 = __importDefault(Registry_84);
     function $PropertyEditor(supportedtypes) {
         return function (pclass) {
             Registry_84.default.register("$PropertyEditor", pclass, supportedtypes);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         };
     }
     let Editor = class Editor {
@@ -12733,11 +16862,19 @@ define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remo
     };
     exports.Editor = Editor;
     exports.Editor = Editor = __decorate([
+<<<<<<< HEAD
+        (0, Registry_80.$Class)("jassijs.ui.PropertyEditors.Editor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], Editor);
+});
+define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_3, Editor_9, Textbox_14, Registry_82, Select_6, CSSProperties_1) {
+=======
         (0, Registry_83.$Class)("jassijs.ui.PropertyEditors.Editor"),
         __metadata("design:paramtypes", [Object, Object])
     ], Editor);
 });
 define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_3, Editor_9, Textbox_14, Registry_85, Select_6, CSSProperties_2) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.FontEditor = void 0;
@@ -12764,7 +16901,11 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
             }
             for (let i = 0; i < googleFonts.length; i++) {
                 all.push(googleFonts[i]);
+<<<<<<< HEAD
+                (0, CSSProperties_1.loadFontIfNedded)(googleFonts[i]);
+=======
                 (0, CSSProperties_2.loadFontIfNedded)(googleFonts[i]);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
             this.component.items = all;
             //   this.component.dom=font[0];
@@ -12809,7 +16950,11 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
     exports.FontEditor = FontEditor;
     exports.FontEditor = FontEditor = __decorate([
         (0, Editor_9.$PropertyEditor)(["font"]),
+<<<<<<< HEAD
+        (0, Registry_82.$Class)("jassijs.ui.PropertyEditors.FontEditor")
+=======
         (0, Registry_85.$Class)("jassijs.ui.PropertyEditors.FontEditor")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
         * Editor for font
         * used by PropertyEditor
@@ -12827,7 +16972,11 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
         return prop.component;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/PropertyEditors/FunctionEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/remote/Registry"], function (require, exports, Editor_10, Button_7, Registry_83) {
+=======
 define("jassijs/ui/PropertyEditors/FunctionEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/remote/Registry"], function (require, exports, Editor_10, Button_7, Registry_86) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.FunctionEditor = void 0;
@@ -12893,11 +17042,19 @@ define("jassijs/ui/PropertyEditors/FunctionEditor", ["require", "exports", "jass
     exports.FunctionEditor = FunctionEditor;
     exports.FunctionEditor = FunctionEditor = __decorate([
         (0, Editor_10.$PropertyEditor)(["function"]),
+<<<<<<< HEAD
+        (0, Registry_83.$Class)("jassijs.ui.PropertyEditors.FunctionEditor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], FunctionEditor);
+});
+define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/ui/Panel"], function (require, exports, Editor_11, Registry_84, Textbox_15, ObjectChooser_2, Panel_15) {
+=======
         (0, Registry_86.$Class)("jassijs.ui.PropertyEditors.FunctionEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], FunctionEditor);
 });
 define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/ui/Panel"], function (require, exports, Editor_11, Registry_87, Textbox_15, ObjectChooser_2, Panel_15) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLEditor = void 0;
@@ -12978,11 +17135,19 @@ define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/
     exports.HTMLEditor = HTMLEditor;
     exports.HTMLEditor = HTMLEditor = __decorate([
         (0, Editor_11.$PropertyEditor)(["html"]),
+<<<<<<< HEAD
+        (0, Registry_84.$Class)("jassijs.ui.PropertyEditors.HTMLEditor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], HTMLEditor);
+});
+define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions", "jassijs/ui/Component", "jassijs/ext/jquerylib"], function (require, exports, Editor_12, Registry_85, Panel_16, Textbox_16, Button_8, Actions_5, Component_14) {
+=======
         (0, Registry_87.$Class)("jassijs.ui.PropertyEditors.HTMLEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], HTMLEditor);
 });
 define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions", "jassijs/ui/Component", "jassijs/ext/jquerylib"], function (require, exports, Editor_12, Registry_88, Panel_16, Textbox_16, Button_8, Actions_5, Component_23) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var ImageEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -13073,7 +17238,11 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
                             ic.setAttribute("style", "display:none");
                     }
                 });
+<<<<<<< HEAD
+                var file = (await new Promise((resolve_22, reject_22) => { require(["jassijs/modul"], resolve_22, reject_22); }).then(__importStar)).default.css["materialdesignicons.min.css"] + "?ooo=9";
+=======
                 var file = (await new Promise((resolve_21, reject_21) => { require(["jassijs/modul"], resolve_21, reject_21); }).then(__importStar)).default.css["materialdesignicons.min.css"] + "?ooo=9";
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 var text = await $.ajax({ method: "get", url: file, crossDomain: true, contentType: "text/plain" });
                 var all = text.split("}.");
                 var html = "";
@@ -13087,7 +17256,11 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
                     var icon = all[x].split(":")[0];
                     html = html + "<span title='" + icon + "' onclick=ImageEditorClicked('" + icon + "') class='mdi " + icon + "'></span>";
                 }
+<<<<<<< HEAD
+                var node = Component_14.Component.createHTMLElement("<span style='font-size:18pt'>" + html + "</span>");
+=======
                 var node = Component_23.Component.createHTMLElement("<span style='font-size:18pt'>" + html + "</span>");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 icons.__dom.appendChild(node);
                 if (!onlytest)
                     $(this.dialog.__dom).dialog({ height: "400", width: "400" });
@@ -13119,7 +17292,11 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
     exports.ImageEditor = ImageEditor = ImageEditor_1 = __decorate([
         (0, Actions_5.$ActionProvider)("jassijs.base.ActionNode"),
         (0, Editor_12.$PropertyEditor)(["image"]),
+<<<<<<< HEAD
+        (0, Registry_85.$Class)("jassijs.ui.PropertyEditors.ImageEditor"),
+=======
         (0, Registry_88.$Class)("jassijs.ui.PropertyEditors.ImageEditor"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object, Object])
     ], ImageEditor);
     function test() {
@@ -13128,7 +17305,11 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
         return ed.dialog;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/PropertyEditors/JsonArrayEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/PropertyEditor", "jassijs/ui/BoxPanel", "jassijs/ui/Table", "jassijs/ui/Button"], function (require, exports, Editor_13, Registry_86, Property_23, PropertyEditor_4, BoxPanel_5, Table_3, Button_9) {
+=======
 define("jassijs/ui/PropertyEditors/JsonArrayEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/PropertyEditor", "jassijs/ui/BoxPanel", "jassijs/ui/Table", "jassijs/ui/Button"], function (require, exports, Editor_13, Registry_89, Property_25, PropertyEditor_4, BoxPanel_5, Table_3, Button_9) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.JsonArrayEditor = void 0;
@@ -13193,12 +17374,27 @@ define("jassijs/ui/PropertyEditors/JsonArrayEditor", ["require", "exports", "jas
     exports.JsonArrayEditor = JsonArrayEditor;
     exports.JsonArrayEditor = JsonArrayEditor = __decorate([
         (0, Editor_13.$PropertyEditor)(["jsonarray"]),
+<<<<<<< HEAD
+        (0, Registry_86.$Class)("jassijs.ui.PropertyEditors.JsonArrayEditor"),
+=======
         (0, Registry_89.$Class)("jassijs.ui.PropertyEditors.JsonArrayEditor"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object, Object])
     ], JsonArrayEditor);
     let TestProperties = class TestProperties {
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_23.$Property)({ decription: "name of the dialog" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "name1", void 0);
+    __decorate([
+        (0, Property_23.$Property)({ decription: "name of the dialog" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "name2", void 0);
+    TestProperties = __decorate([
+        (0, Registry_86.$Class)("jassijs.ui.JsonArrayEditor.TestProperties")
+=======
         (0, Property_25.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "name1", void 0);
@@ -13208,15 +17404,24 @@ define("jassijs/ui/PropertyEditors/JsonArrayEditor", ["require", "exports", "jas
     ], TestProperties.prototype, "name2", void 0);
     TestProperties = __decorate([
         (0, Registry_89.$Class)("jassijs.ui.JsonArrayEditor.TestProperties")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TestProperties);
     let TestProperties2 = class TestProperties2 {
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_23.$Property)({ decription: "name of the dialog", type: "jsonarray", componentType: "jassijs.ui.JsonArrayEditor.TestProperties" }),
+        __metadata("design:type", Object)
+    ], TestProperties2.prototype, "ob", void 0);
+    TestProperties2 = __decorate([
+        (0, Registry_86.$Class)("jassijs.ui.JsonArrayEditor.TestProperties2")
+=======
         (0, Property_25.$Property)({ decription: "name of the dialog", type: "jsonarray", componentType: "jassijs.ui.JsonArrayEditor.TestProperties" }),
         __metadata("design:type", Object)
     ], TestProperties2.prototype, "ob", void 0);
     TestProperties2 = __decorate([
         (0, Registry_89.$Class)("jassijs.ui.JsonArrayEditor.TestProperties2")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TestProperties2);
     function test() {
         var ret = new PropertyEditor_4.PropertyEditor();
@@ -13224,7 +17429,11 @@ define("jassijs/ui/PropertyEditors/JsonArrayEditor", ["require", "exports", "jas
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ext/jquerylib"], function (require, exports, Registry_87, Editor_14, Button_10, PropertyEditor_5, Tools_2, Classes_26, Property_24) {
+=======
 define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ext/jquerylib"], function (require, exports, Registry_90, Editor_14, Button_10, PropertyEditor_5, Tools_2, Classes_27, Property_26) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.JsonEditor = void 0;
@@ -13286,7 +17495,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
                 //var str = Tools.objectToJson(propEditor.value, space);
                 var str = Tools_2.Tools.stringObjectToJson(propEditor.codeChanges, space);
                 if (_this.property.name === "new") {
-                    var shortClassname = Classes_27.classes.getClassName(_this._ob).split(".")[Classes_27.classes.getClassName(_this._ob).split(".").length - 1];
+                    var shortClassname = Classes_26.classes.getClassName(_this._ob).split(".")[Classes_26.classes.getClassName(_this._ob).split(".").length - 1];
                     str = "new " + shortClassname + "(" + str + ")";
                 }
                 if (_this.property.constructorClass !== undefined) {
@@ -13303,7 +17512,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
                 }
                 var newvalue = propEditor.value;
                 if (_this.property.constructorClass !== undefined) {
-                    var cl = Classes_27.classes.getClass(_this.property.constructorClass);
+                    var cl = Classes_26.classes.getClass(_this.property.constructorClass);
                     newvalue = new cl(propEditor.value);
                 }
                 if (typeof (_this._ob[_this.property.name]) === "function")
@@ -13371,7 +17580,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         async getInitialPropertyValue(code) {
             var newvalue = undefined;
             if (this.property.componentType) {
-                let newclass = Classes_27.classes.getClass(this.property.componentType);
+                let newclass = await Classes_26.classes.loadClass(this.property.componentType);
                 newvalue = new newclass();
             }
             else {
@@ -13436,7 +17645,11 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
     exports.JsonEditor = JsonEditor;
     exports.JsonEditor = JsonEditor = __decorate([
         (0, Editor_14.$PropertyEditor)(["json"]),
+<<<<<<< HEAD
+        (0, Registry_87.$Class)("jassijs.ui.PropertyEditors.JsonEditor"),
+=======
         (0, Registry_90.$Class)("jassijs.ui.PropertyEditors.JsonEditor"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object, Object])
     ], JsonEditor);
     var actions = [{
@@ -13448,11 +17661,19 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
     let TestProperties2 = class TestProperties2 {
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_24.$Property)(),
+        __metadata("design:type", Boolean)
+    ], TestProperties2.prototype, "hallo", void 0);
+    TestProperties2 = __decorate([
+        (0, Registry_87.$Class)("jassijs.ui.PropertyEditorTestProperties2")
+=======
         (0, Property_26.$Property)(),
         __metadata("design:type", Boolean)
     ], TestProperties2.prototype, "hallo", void 0);
     TestProperties2 = __decorate([
         (0, Registry_90.$Class)("jassijs.ui.PropertyEditorTestProperties2")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TestProperties2);
     let TestProperties = class TestProperties {
         extensionCalled(action) {
@@ -13465,17 +17686,29 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         }
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_24.$Property)({ decription: "name of the dialog" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "dialogname", void 0);
+    __decorate([
+        (0, Property_24.$Property)({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2",
+=======
         (0, Property_26.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
         (0, Property_26.$Property)({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2",
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             editoractions: actions
         }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "jo", void 0);
     TestProperties = __decorate([
+<<<<<<< HEAD
+        (0, Registry_87.$Class)("jassijs.ui.PropertyEditorTestProperties")
+=======
         (0, Registry_90.$Class)("jassijs.ui.PropertyEditorTestProperties")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TestProperties);
     function test() {
         var ret = new PropertyEditor_5.PropertyEditor();
@@ -13483,7 +17716,11 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry"], function (require, exports, Editor_15, Textbox_17, Registry_88) {
+=======
 define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry"], function (require, exports, Editor_15, Textbox_17, Registry_91) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NameEditor = void 0;
@@ -13558,11 +17795,19 @@ define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/
     exports.NameEditor = NameEditor;
     exports.NameEditor = NameEditor = __decorate([
         (0, Editor_15.$PropertyEditor)(["*name*"]),
+<<<<<<< HEAD
+        (0, Registry_88.$Class)("jassijs.ui.PropertyEditors.NameEditor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], NameEditor);
+});
+define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_89, Panel_17) {
+=======
         (0, Registry_91.$Class)("jassijs.ui.PropertyEditors.NameEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], NameEditor);
 });
 define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_92, Panel_17) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TableColumnImport = void 0;
@@ -13583,7 +17828,11 @@ define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "j
     };
     exports.TableColumnImport = TableColumnImport;
     exports.TableColumnImport = TableColumnImport = __decorate([
+<<<<<<< HEAD
+        (0, Registry_89.$Class)("jassijs/ui/PropertyEditors/TableColumnImport"),
+=======
         (0, Registry_92.$Class)("jassijs/ui/PropertyEditors/TableColumnImport"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], TableColumnImport);
     async function test() {
@@ -13591,6 +17840,9 @@ define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "j
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ui/UIComponent", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_90, Component_15, DataComponent_4, Property_25, Classes_27, UIComponent_3) {
+=======
 define("jassijs/ui/Repeater", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/State", "jassijs/ui/Button", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_93, Component_24, DataComponent_4, Property_27, Textbox_18, State_4, Button_11, Panel_18, Table_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -13850,6 +18102,7 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/remote/Registry", 
     }
 });
 define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Registry_94, Component_25, DataComponent_5, Property_28, Classes_28) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -13858,7 +18111,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "j
     jassijs.includeCSSFile("chosen.css");
     let Select = class Select extends DataComponent_5.DataComponent {
         constructor(properties = undefined) {
-            super(properties);
+            super(Object.assign({ useWrapper: true }, properties));
             // super.init('<select class="Select"><option value=""></option></select>');
             var _this = this;
             if (properties !== undefined && properties.multiple === true)
@@ -13932,6 +18185,8 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "j
             this.options = { undefined: undefined };
             if (this.refs.select.dom === undefined)
                 return;
+<<<<<<< HEAD
+=======
             //TODO console.log("dekt.memoryleak");
             /* slow
             while (this.domSelect.firstChild) {
@@ -13954,6 +18209,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "j
             }
                     this.refresh();
                     */
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var html = '<option value=""></option>';
             if (value !== undefined) {
                 for (var x = 0; x < value.length; x++) {
@@ -14062,25 +18318,39 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "j
     };
     exports.Select = Select;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_25.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_28.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Select.prototype, "onchange", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_25.$Property)({ type: "string" }),
+=======
         (0, Property_28.$Property)({ type: "string" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Select.prototype, "display", null);
     exports.Select = Select = __decorate([
+<<<<<<< HEAD
+        (0, UIComponent_3.$UIComponent)({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
+        (0, Registry_90.$Class)("jassijs.ui.Select"),
+        (0, Property_25.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.SelectProperties" }),
+=======
         (0, Component_25.$UIComponent)({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
         (0, Registry_94.$Class)("jassijs.ui.Select"),
         (0, Property_28.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.SelectProperties" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], Select);
     async function test() {
-        var Panel = Classes_28.classes.getClass("jassijs.ui.Panel");
-        var Button = Classes_28.classes.getClass("jassijs.ui.Button");
+        var Panel = Classes_27.classes.getClass("jassijs.ui.Panel");
+        var Button = Classes_27.classes.getClass("jassijs.ui.Button");
         var me = {};
         var pan = new Panel();
         var bt = new Button();
@@ -14109,13 +18379,21 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "j
           }); */
         var items = [{ name: "Achim", nachname: "<b>Wenzel</b>" },
             { name: "Anne", nachname: "Meier" }];
+<<<<<<< HEAD
+        var c = (0, Component_15.jc)(Select, {
+=======
         var c = (0, Component_25.jc)(Select, {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             items: items,
             display: "nachname",
             value: items[0],
             width: 500
         });
+<<<<<<< HEAD
+        me.sel = (0, Component_15.createComponent)(c);
+=======
         me.sel = (0, Component_25.createComponent)(c);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         //	$('#'+sel._id).data("placeholder","Select2...").chosen({width: "200px"});
         pan.add(me.sel);
         var sel2 = new Select({
@@ -14127,17 +18405,29 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Registry", "j
         return pan;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_3, Select_7, Registry_91, Panel_18, PropertyEditor_6, Button_11, Settings_3, ComponentDescriptor_6, Registry_92, Actions_6, Windows_4) {
+=======
 define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_3, Select_7, Registry_95, Panel_19, PropertyEditor_6, Button_12, Settings_3, ComponentDescriptor_6, Registry_96, Actions_6, Windows_4) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SettingsDialog = void 0;
     exports.test = test;
+<<<<<<< HEAD
+    Registry_92 = __importDefault(Registry_92);
+    Windows_4 = __importDefault(Windows_4);
+    let SettingsObject = class SettingsObject {
+        static customComponentDescriptor() {
+            var allcl = Registry_92.default.getData("$SettingsDescriptor");
+=======
     Registry_96 = __importDefault(Registry_96);
     Windows_4 = __importDefault(Windows_4);
     let SettingsObject = class SettingsObject {
         static customComponentDescriptor() {
             var allcl = Registry_96.default.getData("$SettingsDescriptor");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var ret = new ComponentDescriptor_6.ComponentDescriptor();
             ret.fields = [];
             for (var x = 0; x < allcl.length; x++) {
@@ -14151,7 +18441,11 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
         }
     };
     SettingsObject = __decorate([
+<<<<<<< HEAD
+        (0, Registry_91.$Class)("jassijs.ui.SettingsObject")
+=======
         (0, Registry_95.$Class)("jassijs.ui.SettingsObject")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], SettingsObject);
     let SettingsDialog = SettingsDialog_1 = class SettingsDialog extends Panel_19.Panel {
         constructor() {
@@ -14164,7 +18458,11 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
         }
         async update() {
             await Settings_3.Settings.load();
+<<<<<<< HEAD
+            await Registry_92.default.loadAllFilesForService("$SettingsDescriptor");
+=======
             await Registry_96.default.loadAllFilesForService("$SettingsDescriptor");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var testob = new SettingsObject();
             var scope = "browser";
             if (this.me.Scope.value === "current user") {
@@ -14235,7 +18533,11 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
     ], SettingsDialog, "show", null);
     exports.SettingsDialog = SettingsDialog = SettingsDialog_1 = __decorate([
         (0, Actions_6.$ActionProvider)("jassijs.base.ActionNode"),
+<<<<<<< HEAD
+        (0, Registry_91.$Class)("jassijs.ui.SettingsDialog"),
+=======
         (0, Registry_95.$Class)("jassijs.ui.SettingsDialog"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], SettingsDialog);
     async function test() {
@@ -14251,6 +18553,11 @@ define("jassijs/ui/State", ["require", "exports", "jassijs/ui/StateBinder"], fun
     exports.State = void 0;
     exports.resolveState = resolveState;
     exports.foreach = foreach;
+<<<<<<< HEAD
+    exports.createRef = createRef;
+    exports.createRefs = createRefs;
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     exports.createStates = createStates;
     exports.createState = createState;
     exports.ccs = ccs;
@@ -14305,16 +18612,42 @@ define("jassijs/ui/State", ["require", "exports", "jassijs/ui/StateBinder"], fun
         stateWithArray._observe_(updateOB, "value");
         return retState;
     }
+<<<<<<< HEAD
+    function createRef(val = undefined) {
+        //var ret:Ref<T>={current:val};
+        var ret = createState(val);
+        return ret;
+    }
+    function createRefs() {
+        var ret = createStates();
+        ret._onStateChanged((value, state) => {
+            //here we replace the state with real value
+            //@ts-ignore
+            ret[state._$propertyname_] = value;
+        });
+        return ret;
+    }
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     function createStates(initialValues = undefined, propertyname = undefined) {
         var data = new StateGroup(initialValues); // { _used: [], _data: initialValues };
         data._$propertyname_ = propertyname;
         return new Proxy(data, {
             get(target, key) {
+<<<<<<< HEAD
+                if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current") {
+                    var newstate = createStates(data.current !== undefined ? data.current[key] : undefined, key);
+                    target[key] = newstate;
+                    target._observe_(newstate, "_$setparentobject");
+                    newstate._listener_ = [...target._listener_];
+                    //newstate._observe_(target, "statechanged");
+=======
                 if (target[key] === undefined && key !== "data" && key !== "_comps_" && key != "_used" && key !== "bind" && key !== "current" && key !== "statechanged") {
                     var newstate = createStates(data.current !== undefined ? data.current[key] : undefined, key);
                     target[key] = newstate;
                     target._observe_(newstate, "_$setparentobject");
                     newstate._observe_(target, "statechanged");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     if (target._used.indexOf(key) === -1)
                         target._used.push(key);
                 }
@@ -14326,6 +18659,16 @@ define("jassijs/ui/State", ["require", "exports", "jassijs/ui/StateBinder"], fun
                     var propname = data._$propertyname_;
                     target.current = value[propname];
                 }
+<<<<<<< HEAD
+                else
+                    target[key] = value;
+                /*            if (key === "current") {
+                                target.current = value;
+                            }else   if (key === "_listener_") {
+                                target._listener_ = value;
+                            } else
+                                throw "not implemented " + key;*/
+=======
                 if (key === "current") {
                     target.current = value;
                 }
@@ -14334,6 +18677,7 @@ define("jassijs/ui/State", ["require", "exports", "jassijs/ui/StateBinder"], fun
                 }
                 else
                     throw "not implemented " + key;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 return true;
             }
         });
@@ -14378,6 +18722,13 @@ define("jassijs/ui/State", ["require", "exports", "jassijs/ui/StateBinder"], fun
                 else
                     c.ob[c.proppath[0]] = data;
             }
+<<<<<<< HEAD
+            var _this = this;
+            if (this._listener_.length > 0) {
+                this._listener_.forEach((e) => e(data, _this));
+            }
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     }
     exports.State = State;
@@ -14398,6 +18749,12 @@ define("jassijs/ui/State", ["require", "exports", "jassijs/ui/StateBinder"], fun
         }
     }
     class StateGroup extends State {
+<<<<<<< HEAD
+        // _stateChangedHandler = [];
+        _onStateChanged(handler) {
+            this._listener_.push(handler);
+            //this._stateChangedHandler.push(handler);
+=======
         constructor() {
             super(...arguments);
             this._stateChangedHandler = [];
@@ -14408,6 +18765,7 @@ define("jassijs/ui/State", ["require", "exports", "jassijs/ui/StateBinder"], fun
         set statechanged(value) {
             this._stateChangedHandler.forEach((e) => e(value));
             //this.stateHasChanged();
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     }
     /**
@@ -14896,7 +19254,11 @@ define("jassijs/ui/StateBinder", ["require", "exports", "jassijs/remote/Database
     exports.PropertyAccessor = PropertyAccessor;
 });
 // return CodeEditor.constructor;
+<<<<<<< HEAD
+define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/UIComponents"], function (require, exports, InvisibleComponent_2, Component_16, Registry_93, Property_26, UIComponents_8) {
+=======
 define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, InvisibleComponent_2, Component_26, Registry_97, Property_29) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -14926,7 +19288,11 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
             //never!super.css(properties,removeOldProperties);
             var style = document.getElementById(this.styleid);
             if (!document.getElementById(this.styleid)) {
+<<<<<<< HEAD
+                style = Component_16.Component.createHTMLElement('<style id=' + this.styleid + '></style>');
+=======
                 style = Component_26.Component.createHTMLElement('<style id=' + this.styleid + '></style>');
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 document.head.appendChild(style);
             }
             var prop = {};
@@ -14948,13 +19314,22 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
     };
     exports.Style = Style;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_26.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
+=======
         (0, Property_29.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", typeof (_a = typeof React !== "undefined" && React.CSSProperties) === "function" ? _a : Object),
         __metadata("design:paramtypes", [typeof (_b = typeof React !== "undefined" && React.CSSProperties) === "function" ? _b : Object])
     ], Style.prototype, "style", null);
     exports.Style = Style = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_8.$UIComponent)({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
+        (0, Registry_93.$Class)("jassijs.ui.Style")
+=======
         (0, Component_26.$UIComponent)({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
         (0, Registry_97.$Class)("jassijs.ui.Style")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /**
          * on ore mors Style can be assigned to component
          * the style is appended to the head
@@ -14967,10 +19342,7 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
             filter: "drop-shadow(16px 16px 20px blue)"
         };
         jassijs.includeCSS("mytest2id", {
-            ".Panel": css,
-            ".jinlinecomponent": {
-                color: "red"
-            }
+            ".Panel": css
         });
         setTimeout(() => {
             jassijs.includeCSS("mytest2id", undefined); //remove
@@ -14985,12 +19357,43 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
         st.destroy();
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter", "jassijs/ui/State", "jassijs/ui/UIComponents"], function (require, exports, Registry_94, DataComponent_5, Property_27, Textbox_18, Classes_28, tabulator_tables_1, DateTimeConverter_1, Numberformatter_2, State_4, UIComponents_9) {
+=======
 define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter", "jassijs/ui/State"], function (require, exports, Registry_98, DataComponent_6, Property_30, Component_27, Textbox_19, Classes_29, tabulator_tables_1, DateTimeConverter_1, Numberformatter_2, State_5) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a, _b, _c, _d;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Table = void 0;
     exports.test = test;
+<<<<<<< HEAD
+    Registry_94 = __importStar(Registry_94);
+    let TableEditorProperties = class TableEditorProperties {
+    };
+    __decorate([
+        (0, Property_27.$Property)({ default: undefined }),
+        __metadata("design:type", Number)
+    ], TableEditorProperties.prototype, "paginationSize", void 0);
+    __decorate([
+        (0, Property_27.$Property)({ default: true }),
+        __metadata("design:type", Boolean)
+    ], TableEditorProperties.prototype, "headerSort", void 0);
+    __decorate([
+        (0, Property_27.$Property)({ default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] }),
+        __metadata("design:type", String)
+    ], TableEditorProperties.prototype, "layout", void 0);
+    __decorate([
+        (0, Property_27.$Property)({ default: undefined }),
+        __metadata("design:type", Function)
+    ], TableEditorProperties.prototype, "dataTreeChildFunction", void 0);
+    __decorate([
+        (0, Property_27.$Property)({ default: false }),
+        __metadata("design:type", Boolean)
+    ], TableEditorProperties.prototype, "movableColumns", void 0);
+    TableEditorProperties = __decorate([
+        (0, Registry_94.$Class)("jassijs.ui.TableEditorProperties")
+=======
     Registry_98 = __importStar(Registry_98);
     let TableEditorProperties = class TableEditorProperties {
     };
@@ -15016,6 +19419,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
     ], TableEditorProperties.prototype, "movableColumns", void 0);
     TableEditorProperties = __decorate([
         (0, Registry_98.$Class)("jassijs.ui.TableEditorProperties")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TableEditorProperties);
     let Table = class Table extends DataComponent_6.DataComponent {
         constructor(properties) {
@@ -15137,7 +19541,11 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
             if (this._searchbox.value === undefined || this._searchbox.value === "") {
                 return undefined;
             }
+<<<<<<< HEAD
+            var fields = Registry_94.default.getMemberData("design:type")[this._lazyLoadOption.classname];
+=======
             var fields = Registry_98.default.getMemberData("design:type")[this._lazyLoadOption.classname];
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var columns = this.table.getColumns(false);
             var wheres = [];
             for (var x = 0; x < columns.length; x++) {
@@ -15168,7 +19576,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
             // debugger;
             var _this = this;
             return new Promise((resolve) => {
-                Classes_29.classes.loadClass(_this._lazyLoadOption.classname).then((cl) => {
+                Classes_28.classes.loadClass(_this._lazyLoadOption.classname).then((cl) => {
                     var newSort = undefined;
                     var tt = _this.table.getSorters();
                     if (tt) {
@@ -15548,37 +19956,71 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
     };
     exports.Table = Table;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_27.$Property)({ type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
+=======
         (0, Property_30.$Property)({ type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "options", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_27.$Property)({ default: "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}" }),
+=======
         (0, Property_30.$Property)({ default: "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], Table.prototype, "onchange", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_27.$Property)(),
+=======
         (0, Property_30.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Table.prototype, "showSearchbox", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_27.$Property)({ type: "string" }),
+=======
         (0, Property_30.$Property)({ type: "string" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "height", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_27.$Property)({ type: "string" }),
+=======
         (0, Property_30.$Property)({ type: "string" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "width", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_27.$Property)({ type: "databinder" }),
+=======
         (0, Property_30.$Property)({ type: "databinder" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "bindItems", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_27.$Property)({ type: "databinder" }),
+        __metadata("design:type", typeof (_c = typeof State_4.BoundProperty !== "undefined" && State_4.BoundProperty) === "function" ? _c : Object),
+        __metadata("design:paramtypes", [typeof (_d = typeof State_4.BoundProperty !== "undefined" && State_4.BoundProperty) === "function" ? _d : Object])
+    ], Table.prototype, "bindItems2", null);
+    exports.Table = Table = __decorate([
+        (0, UIComponents_9.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
+        (0, Registry_94.$Class)("jassijs.ui.Table"),
+        (0, Property_27.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
+=======
         (0, Property_30.$Property)({ type: "databinder" }),
         __metadata("design:type", typeof (_c = typeof State_5.BoundProperty !== "undefined" && State_5.BoundProperty) === "function" ? _c : Object),
         __metadata("design:paramtypes", [typeof (_d = typeof State_5.BoundProperty !== "undefined" && State_5.BoundProperty) === "function" ? _d : Object])
@@ -15587,6 +20029,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         (0, Component_27.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
         (0, Registry_98.$Class)("jassijs.ui.Table"),
         (0, Property_30.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], Table);
     tabulator_tables_1.Tabulator.extendModule("format", "formatters", {
@@ -15747,13 +20190,21 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         return tab;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/Textarea", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/UIComponents"], function (require, exports, Registry_95, Property_28, Textbox_19, UIComponents_10) {
+=======
 define("jassijs/ui/Textarea", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Component_28, Registry_99, Property_31, Textbox_20) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Textarea = void 0;
     exports.test = test;
+<<<<<<< HEAD
+    let Textarea = class Textarea extends Textbox_19.Textbox {
+=======
     let Textarea = class Textarea extends Textbox_20.Textbox {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         constructor(props = {}) {
             super(props);
         }
@@ -15766,10 +20217,17 @@ define("jassijs/ui/Textarea", ["require", "exports", "jassijs/ui/Component", "ja
     };
     exports.Textarea = Textarea;
     exports.Textarea = Textarea = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_10.$UIComponent)({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
+        (0, Registry_95.$Class)("jassijs.ui.Textarea"),
+        (0, Property_28.$Property)({ name: "new", type: "string" }),
+        __metadata("design:paramtypes", [typeof (_a = typeof Textbox_19.TextboxProperties !== "undefined" && Textbox_19.TextboxProperties) === "function" ? _a : Object])
+=======
         (0, Component_28.$UIComponent)({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
         (0, Registry_99.$Class)("jassijs.ui.Textarea"),
         (0, Property_31.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [typeof (_a = typeof Textbox_20.TextboxProperties !== "undefined" && Textbox_20.TextboxProperties) === "function" ? _a : Object])
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Textarea);
     function test() {
         debugger;
@@ -15777,14 +20235,22 @@ define("jassijs/ui/Textarea", ["require", "exports", "jassijs/ui/Component", "ja
         return t;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/ui/Property", "jassijs/ui/UIComponent"], function (require, exports, Registry_96, Component_17, DataComponent_6, DefaultConverter_4, Property_29, UIComponent_4) {
+=======
 define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_100, Component_29, DataComponent_7, DefaultConverter_4, Registry_101, Property_32) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Textbox = void 0;
     exports.test = test;
+<<<<<<< HEAD
+    let Textbox = class Textbox extends DataComponent_6.DataComponent {
+=======
     Registry_101 = __importDefault(Registry_101);
     let Textbox = class Textbox extends DataComponent_7.DataComponent {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         constructor(props = {}) {
             super(props);
             this._value = "";
@@ -15930,8 +20396,13 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "
                 });
             }
             if (list === undefined || list === null) {
+<<<<<<< HEAD
+                list = "j" + (0, Component_17.nextID)();
+                this._autocompleter = Component_17.Component.createHTMLElement('<datalist id="' + list + '"/>');
+=======
                 list = "j" + Registry_101.default.nextID();
                 this._autocompleter = Component_29.Component.createHTMLElement('<datalist id="' + list + '"/>');
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 this.domWrapper.appendChild(this._autocompleter);
                 this.dom.setAttribute("list", list);
             }
@@ -15964,47 +20435,80 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "
     };
     exports.Textbox = Textbox;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_29.$Property)({ type: "classselector", service: "$Converter" }),
+=======
         (0, Property_32.$Property)({ type: "classselector", service: "$Converter" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", typeof (_a = typeof DefaultConverter_4.DefaultConverter !== "undefined" && DefaultConverter_4.DefaultConverter) === "function" ? _a : Object),
         __metadata("design:paramtypes", [typeof (_b = typeof DefaultConverter_4.DefaultConverter !== "undefined" && DefaultConverter_4.DefaultConverter) === "function" ? _b : Object])
     ], Textbox.prototype, "converter", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_29.$Property)({ type: "string" }),
+=======
         (0, Property_32.$Property)({ type: "string" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Textbox.prototype, "value", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_29.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_32.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "onclick", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_29.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_32.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "onchange", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_29.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_32.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "onkeydown", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_29.$Property)({ default: "function(event){\n\t\n}" }),
+=======
         (0, Property_32.$Property)({ default: "function(event){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "oninput", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_29.$Property)(),
+=======
         (0, Property_32.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Textbox.prototype, "placeholder", null);
     exports.Textbox = Textbox = __decorate([
+<<<<<<< HEAD
+        (0, UIComponent_4.$UIComponent)({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
+        (0, Registry_96.$Class)("jassijs.ui.Textbox"),
+=======
         (0, Component_29.$UIComponent)({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
         (0, Registry_100.$Class)("jassijs.ui.Textbox"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], Textbox);
     function test() {
@@ -16016,7 +20520,11 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "
     }
 });
 // return CodeEditor.constructor;
+<<<<<<< HEAD
+define("jassijs/ui/TinymcePanel", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_18, Registry_97, Property_30, DataComponent_7) {
+=======
 define("jassijs/ui/TinymcePanel", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_30, Registry_102, Property_33, DataComponent_8) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var TinymcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -16024,7 +20532,11 @@ define("jassijs/ui/TinymcePanel", ["require", "exports", "jassijs/ui/Component",
     exports.test = test;
     var bugtinymce = undefined;
     //@$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ })
+<<<<<<< HEAD
+    let TinymcePanel = TinymcePanel_1 = class TinymcePanel extends DataComponent_7.DataComponent {
+=======
     let TinymcePanel = TinymcePanel_1 = class TinymcePanel extends DataComponent_8.DataComponent {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /*[
             'undo redo | bold italic underline | fontsizeselect', //fontselect
             'forecolor backcolor | numlist bullist outdent indent'
@@ -16041,9 +20553,15 @@ define("jassijs/ui/TinymcePanel", ["require", "exports", "jassijs/ui/Component",
             // $(this.__dom).css("min-width", "10px");
         }
         render() {
+<<<<<<< HEAD
+            return (0, Component_18.jc)("div", {
+                className: "HTMLPanel mce-content-body", tabIndex: -1, children: [
+                    (0, Component_18.jc)("div", { className: "HTMLPanelContent" })
+=======
             return (0, Component_30.jc)("div", {
                 className: "HTMLPanel mce-content-body", tabIndex: -1, children: [
                     (0, Component_30.jc)("div", { className: "HTMLPanelContent" })
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 ]
             });
         }
@@ -16243,22 +20761,38 @@ define("jassijs/ui/TinymcePanel", ["require", "exports", "jassijs/ui/Component",
     };
     exports.TinymcePanel = TinymcePanel;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_30.$Property)({ description: "line break after element", default: false }),
+=======
         (0, Property_33.$Property)({ description: "line break after element", default: false }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Object])
     ], TinymcePanel.prototype, "newlineafter", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_30.$Property)({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' }),
+=======
         (0, Property_33.$Property)({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], TinymcePanel.prototype, "template", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_30.$Property)(),
+=======
         (0, Property_33.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], TinymcePanel.prototype, "value", null);
     exports.TinymcePanel = TinymcePanel = TinymcePanel_1 = __decorate([
+<<<<<<< HEAD
+        (0, Registry_97.$Class)("jassijs.ui.TinymcePanel"),
+=======
         (0, Registry_102.$Class)("jassijs.ui.TinymcePanel"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], TinymcePanel);
     function test() {
@@ -16273,13 +20807,20 @@ define("jassijs/ui/TinymcePanel", ["require", "exports", "jassijs/ui/Component",
         return ret;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/UIComponent", "jassijs/ext/jquerylib", "jassijs/ext/fancytree"], function (require, exports, Registry_98, Component_19, Property_31, UIComponent_5) {
+=======
 define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ext/jquerylib", "jassijs/ext/fancytree"], function (require, exports, Registry_103, Component_31, Registry_104, Property_34) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Tree = void 0;
     exports.test = test;
+<<<<<<< HEAD
+=======
     Registry_104 = __importDefault(Registry_104);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     /*declare global {
         interface JQuery {
             fancytree: any;
@@ -16288,15 +20829,40 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Registry", "jas
     let TreeEditorPropertiesMulti = class TreeEditorPropertiesMulti {
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_31.$Property)({ default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" }),
+        __metadata("design:type", String)
+    ], TreeEditorPropertiesMulti.prototype, "mode", void 0);
+    TreeEditorPropertiesMulti = __decorate([
+        (0, Registry_98.$Class)("jassijs.ui.TreeEditorPropertiesMulti")
+=======
         (0, Property_34.$Property)({ default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" }),
         __metadata("design:type", String)
     ], TreeEditorPropertiesMulti.prototype, "mode", void 0);
     TreeEditorPropertiesMulti = __decorate([
         (0, Registry_103.$Class)("jassijs.ui.TreeEditorPropertiesMulti")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], TreeEditorPropertiesMulti);
     let TreeEditorProperties = class TreeEditorProperties {
     };
     __decorate([
+<<<<<<< HEAD
+        (0, Property_31.$Property)({ default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
+        __metadata("design:type", Number)
+    ], TreeEditorProperties.prototype, "selectMode", void 0);
+    __decorate([
+        (0, Property_31.$Property)({ default: false, description: "display a checkbox before the node" }),
+        __metadata("design:type", Boolean)
+    ], TreeEditorProperties.prototype, "checkbox", void 0);
+    __decorate([
+        (0, Property_31.$Property)({ type: "json", componentType: "jassijs.ui.TreeEditorPropertiesMulti" }),
+        __metadata("design:type", TreeEditorPropertiesMulti)
+    ], TreeEditorProperties.prototype, "multi", void 0);
+    TreeEditorProperties = __decorate([
+        (0, Registry_98.$Class)("jassijs.ui.TreeEditorProperties")
+    ], TreeEditorProperties);
+    let Tree = class Tree extends Component_19.Component {
+=======
         (0, Property_34.$Property)({ default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
         __metadata("design:type", Number)
     ], TreeEditorProperties.prototype, "selectMode", void 0);
@@ -16312,6 +20878,7 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Registry", "jas
         (0, Registry_103.$Class)("jassijs.ui.TreeEditorProperties")
     ], TreeEditorProperties);
     let Tree = class Tree extends Component_31.Component {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         constructor(props = {}) {
             super(props);
             this._itemToKey = new Map();
@@ -16789,16 +21356,16 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Registry", "jas
             //var node: TreeNode = undefined;
             var node = $.ui.fancytree.getNode(evt.target);
             //node = this._allNodes[evt.target.id];
-            if (this._contextMenu !== undefined) {
+            if (this.contextMenu !== undefined) {
                 if (node.data.item === undefined)
                     return;
                 var test = node.data.tree.selection;
                 //multiselect and the clicked is within the selection
                 if (test !== undefined && test.indexOf(node.data.item) !== -1) {
-                    this._contextMenu.value = test;
+                    this.contextMenu.value = test;
                 }
                 else
-                    this._contextMenu.value = [node === undefined ? undefined : node.data.item];
+                    this.contextMenu.value = [node === undefined ? undefined : node.data.item];
             }
         }
         set contextMenu(value) {
@@ -16818,30 +21385,52 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Registry", "jas
     };
     exports.Tree = Tree;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_31.$Property)({ type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
+=======
         (0, Property_34.$Property)({ type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", typeof (_a = typeof Fancytree !== "undefined" && Fancytree.FancytreeOptions) === "function" ? _a : Object),
         __metadata("design:paramtypes", [typeof (_b = typeof Fancytree !== "undefined" && Fancytree.FancytreeOptions) === "function" ? _b : Object])
     ], Tree.prototype, "options", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_31.$Property)({ type: "string", description: "the property called to get the style of the item" }),
+=======
         (0, Property_34.$Property)({ type: "string", description: "the property called to get the style of the item" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Tree.prototype, "propStyle", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_31.$Property)({ type: "string", description: "the property called to get the name of the item" }),
+=======
         (0, Property_34.$Property)({ type: "string", description: "the property called to get the name of the item" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Tree.prototype, "propDisplay", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_31.$Property)({ default: "function(event?: JQueryEventObject/*, data?:Fancytree.EventData*/){\n\t\n}" }),
+=======
         (0, Property_34.$Property)({ default: "function(event?: JQueryEventObject/*, data?:Fancytree.EventData*/){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], Tree.prototype, "onclick", null);
     exports.Tree = Tree = __decorate([
+<<<<<<< HEAD
+        (0, UIComponent_5.$UIComponent)({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" }),
+        (0, Registry_98.$Class)("jassijs.ui.Tree"),
+        (0, Property_31.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TreeEditorProperties" })
+=======
         (0, Component_31.$UIComponent)({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" }),
         (0, Registry_103.$Class)("jassijs.ui.Tree"),
         (0, Property_34.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TreeEditorProperties" })
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
         @$Property({ name: "new/checkbox", type: "boolean", default: false, description: "desplay a checkbos before the node" })
         @$Property({ name: "new/multi", type: "json" })
@@ -16855,7 +21444,11 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Registry", "jas
         constructor(tree, item, parent = undefined) {
             this.tree = tree;
             this.parent = parent;
+<<<<<<< HEAD
+            this._id = "j" + (0, Component_19.nextID)();
+=======
             this._id = "j" + Registry_104.default.nextID();
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             this.item = item;
             var title = this.tree.getTitleFromItem(this.item);
             this.key = (parent !== undefined ? parent.key + "|" : "") + (title === undefined ? "" : title).replaceAll("|", "!");
@@ -16977,12 +21570,114 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Registry", "jas
         return tree;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/UIComponent", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/ui/Property", "jassijs/ui/Component"], function (require, exports, Registry_99, Button_12, Property_32, Component_20) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.UIComponentProperties = void 0;
+    exports.$UIComponent = $UIComponent;
+    Registry_99 = __importStar(Registry_99);
+    jassijs.includeCSSFile("jassijs.css");
+    jassijs.includeCSSFile("materialdesignicons.min.css");
+    //@$UIComponent is used so this file is loaded with ComponentPalette
+    //vergleichen
+    //jeder bekommt componentid
+    //gehe durch baum wenn dom_component fehlt, dann ist kopiert und muss mit id von componentid gerenderd werden
+    class UIComponentProperties {
+    }
+    exports.UIComponentProperties = UIComponentProperties;
+    function $UIComponent(properties) {
+        return function (pclass) {
+            Registry_99.default.register("$UIComponent", pclass, properties);
+        };
+    }
+    let DummyButton = class DummyButton {
+    };
+    DummyButton = __decorate([
+        $UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
+        (0, Property_32.$Property)({ name: "text", type: "string" }),
+        (0, Property_32.$Property)({ name: "onclick", type: "function", default: "function(event){\n\t\n}" }),
+        (0, Property_32.$Property)({ name: "icon", type: "image" }),
+        (0, Registry_99.$Class)("jassijs.ui.Button", Button_12.Button)
+    ], DummyButton);
+    let DummyComponent = class DummyComponent {
+    };
+    DummyComponent = __decorate([
+        (0, Property_32.$Property)({ name: "useWrapper", type: "boolean", description: "wraps the component with div" }),
+        (0, Property_32.$Property)({ name: "onfocus", type: "function", default: "function(event){\n\t\n}" }),
+        (0, Property_32.$Property)({ name: "onblur", type: "function", default: "function(event){\n\t\n}" }),
+        (0, Property_32.$Property)({ name: "label", type: "string", description: "adds a label above the component" }),
+        (0, Property_32.$Property)({ name: "tooltip", type: "string", description: "tooltip are displayed on mouse over" }),
+        (0, Property_32.$Property)({ name: "x", type: "number" }),
+        (0, Property_32.$Property)({ name: "y", type: "number" }),
+        (0, Property_32.$Property)({ name: "hidden", type: "boolean" }),
+        (0, Property_32.$Property)({ name: "width", type: "number" }),
+        (0, Property_32.$Property)({ name: "height", type: "number" }),
+        (0, Property_32.$Property)({ name: "style", type: "json", componentType: "jassijs.ui.CSSProperties" }),
+        (0, Property_32.$Property)({ name: "styles", type: "componentselector", componentType: "[jassijs.ui.Style]" }),
+        (0, Property_32.$Property)({ name: "contextMenu", type: "componentselector", componentType: "jassijs.ui.ContextMenu" }),
+        (0, Registry_99.$Class)("jassijs.ui.Component", Component_20.Component)
+    ], DummyComponent);
+    let DummyHTMLComponent = class DummyHTMLComponent {
+    };
+    DummyHTMLComponent = __decorate([
+        (0, Property_32.$Property)({ name: "children", type: "jassijs.ui.Component", createDummyInDesigner: doCreateDummyForHTMLComponent }),
+        $UIComponent({ fullPath: "common/HTMLComponent", icon: "mdi mdi-cloud-tags", initialize: { tag: "input" }, }),
+        (0, Registry_99.$Class)("jassijs.ui.HTMLComponent", Component_20.HTMLComponent)
+    ], DummyHTMLComponent);
+    function doCreateDummyForHTMLComponent(component, isPreDummy) {
+        var disabledBoth = ["tr", "td", "th"];
+        var enabledPost = ["div", "ol", "ul"];
+        var disabledPre = [];
+        var tag = component === null || component === void 0 ? void 0 : component.tag;
+        if (tag === undefined)
+            return false;
+        if (disabledBoth.indexOf(tag.toLowerCase()) !== -1) {
+            return false;
+        }
+        else if (isPreDummy && disabledPre.indexOf(tag.toLowerCase()) !== -1) {
+            return false;
+        }
+        else if (!isPreDummy && enabledPost.indexOf(tag.toLowerCase()) !== -1) {
+            return true;
+        }
+        return isPreDummy; //prodummy is enabled at default / postdummy is disabled 
+    }
+    let DummyTextComponent = class DummyTextComponent {
+    };
+    DummyTextComponent = __decorate([
+        (0, Property_32.$Property)({
+            name: "tag",
+            type: "string",
+            chooseFromStrict: true,
+            chooseFrom: (comp) => {
+                const allElements = document.body.getElementsByTagName('*');
+                const uniqueTags = new Set();
+                for (let element of allElements) {
+                    uniqueTags.add(element.tagName.toLowerCase());
+                }
+                return Array.from(uniqueTags).sort();
+            }
+        }),
+        (0, Property_32.$Property)({ name: "text", type: "string" }),
+        (0, Registry_99.$Class)("jassijs.ui.TextComponent", Component_20.TextComponent)
+    ], DummyTextComponent);
+    ;
+});
+define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/UIComponents"], function (require, exports, Registry_100, Component_21, Property_33, UIComponents_11) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Upload = void 0;
+    exports.test = test;
+    let Upload = class Upload extends Component_21.Component {
+=======
 define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Registry_105, Component_32, Property_35) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Upload = void 0;
     exports.test = test;
     let Upload = class Upload extends Component_32.Component {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         /* get dom(){
              return this.dom;
          }*/
@@ -17010,6 +21705,12 @@ define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Registry", "j
         set dom(value) {
             super.dom = value;
         }
+        get readAs() {
+            return this.state.readAs.current;
+        }
+        set readAs(value) {
+            this.state.readAs.current = value;
+        }
         get accept() {
             return this.dom.accept;
         }
@@ -17028,21 +21729,24 @@ define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Registry", "j
         set multiple(value) {
             this.dom.multiple = value;
         }
+        handleDownload(parent, data, file, reader, files, evt) {
+            reader.addEventListener("load", function (e) {
+                data[file.name] = reader.result;
+                parent.downloaded++;
+                if (parent.downloaded == files.length) {
+                    parent.callEvent("uploaded", data, files, evt);
+                }
+            }, false);
+        }
         async readUpload(evt) {
             var files = evt.target["files"];
             var _this = this;
             var data = {};
-            var downloaded = 0;
+            this.downloaded = 0;
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 var reader = new FileReader();
-                reader.addEventListener("load", function () {
-                    data[file.name] = reader.result;
-                    downloaded++;
-                    if (downloaded == files.length) {
-                        _this.callEvent("uploaded", data, files, evt);
-                    }
-                }, false);
+                this.handleDownload(_this, data, file, reader, files, evt);
                 if (this.readAs === "DataUrl") {
                     reader.readAsDataURL(file);
                     // data[file.name]=reader.result;
@@ -17069,28 +21773,50 @@ define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Registry", "j
     };
     exports.Upload = Upload;
     __decorate([
+<<<<<<< HEAD
+        (0, Property_33.$Property)({ chooseFromStrict: true, chooseFrom: ["Text", "DataUrl", "ArrayBuffer", "BinaryString"] }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], Upload.prototype, "readAs", null);
+    __decorate([
+        (0, Property_33.$Property)(),
+=======
         (0, Property_35.$Property)({ chooseFromStrict: true, chooseFrom: ["Text", "DataUrl", "ArrayBuffer", "BinaryString"] }),
         __metadata("design:type", String)
     ], Upload.prototype, "readAs", void 0);
     __decorate([
         (0, Property_35.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Upload.prototype, "accept", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_33.$Property)(),
+=======
         (0, Property_35.$Property)(),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Upload.prototype, "multiple", null);
     __decorate([
+<<<<<<< HEAD
+        (0, Property_33.$Property)({ default: "function(data:{[file:string]:string}){\n\t\n}" }),
+=======
         (0, Property_35.$Property)({ default: "function(data:{[file:string]:string}){\n\t\n}" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], Upload.prototype, "onuploaded", null);
     exports.Upload = Upload = __decorate([
+<<<<<<< HEAD
+        (0, UIComponents_11.$UIComponent)({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
+        (0, Registry_100.$Class)("jassijs.ui.Upload"),
+=======
         (0, Component_32.$UIComponent)({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
         (0, Registry_105.$Class)("jassijs.ui.Upload"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [Object])
     ], Upload);
     /*
@@ -17101,17 +21827,25 @@ define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Registry", "j
             .addEventListener('change', dateiauswahl, false);
     });*/
     function test() {
-        var upload = new Upload();
-        upload.readAs = "DataUrl";
-        upload.multiple = true;
+        var upload = new Upload({
+            readAs: "DataUrl",
+            multiple: true
+        });
+        //    upload.readAs = "DataUrl";
+        //   upload.multiple = true;
         upload.onuploaded(function (data) {
             debugger;
+            console.log(data);
         });
         //	upload.accept=".txt,.csv";
         return upload;
     }
 });
+<<<<<<< HEAD
+define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/ComponentDescriptor"], function (require, exports, Registry_101, Panel_19, Component_22, ComponentDescriptor_7) {
+=======
 define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/ComponentDescriptor"], function (require, exports, Registry_106, Panel_20, Component_33, ComponentDescriptor_7) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.VariablePanel = void 0;
@@ -17132,7 +21866,11 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Regist
             this.debugpoints = {};
         }
         async createTable() {
+<<<<<<< HEAD
+            var Table = (await new Promise((resolve_23, reject_23) => { require(["jassijs/ui/Table"], resolve_23, reject_23); }).then(__importStar)).Table;
+=======
             var Table = (await new Promise((resolve_22, reject_22) => { require(["jassijs/ui/Table"], resolve_22, reject_22); }).then(__importStar)).Table;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             this.table = new Table({
                 options: {
                     dataTreeChildFunction: function (obj) {
@@ -17233,7 +21971,11 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Regist
             }
             var _this = this;
             function update(key, val) {
+<<<<<<< HEAD
+                if (val instanceof Component_22.Component) {
+=======
                 if (val instanceof Component_33.Component) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     var comps = undefined;
                     try {
                         comps = ComponentDescriptor_7.ComponentDescriptor.describe(val.constructor).resolveEditableComponents(val);
@@ -17483,7 +22225,11 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Regist
     };
     exports.VariablePanel = VariablePanel;
     exports.VariablePanel = VariablePanel = __decorate([
+<<<<<<< HEAD
+        (0, Registry_101.$Class)("jassijs.ui.VariablePanel"),
+=======
         (0, Registry_106.$Class)("jassijs.ui.VariablePanel"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], VariablePanel);
 });
@@ -17506,15 +22252,24 @@ define("jassijs/util/Cookies", ["require", "exports", "jassijs/ext/js-cookie"], 
     var Cookies = js_cookie_1.default.default;
     exports.Cookies = Cookies;
 });
+<<<<<<< HEAD
+define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_3, Textbox_20, BoxPanel_6, Select_8, Table_4, Registry_102, Panel_20, papaparse_1, Database_3, Registry_103, Classes_29, DBObject_8, Actions_7, Router_2, Server_3, Transaction_1) {
+=======
 define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_3, Textbox_21, BoxPanel_6, Select_8, Table_5, Registry_107, Panel_21, papaparse_1, Database_3, Registry_108, Classes_30, DBObject_7, Actions_7, Router_2, Server_3, Transaction_1) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CSVImport = void 0;
     exports.test = test;
     papaparse_1 = __importDefault(papaparse_1);
+<<<<<<< HEAD
+    Registry_103 = __importDefault(Registry_103);
+    let CSVImport = CSVImport_1 = class CSVImport extends Panel_20.Panel {
+=======
     Registry_108 = __importDefault(Registry_108);
     let CSVImport = CSVImport_1 = class CSVImport extends Panel_21.Panel {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         constructor() {
             super();
             this.me = {};
@@ -17527,7 +22282,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
             var _a;
             var _this = this;
             var html = "<option></option>";
-            var meta = (_a = Database_3.db.getMetadata(await Classes_30.classes.loadClass(this.me.select.value))) === null || _a === void 0 ? void 0 : _a.fields;
+            var meta = (_a = Database_3.db.getMetadata(await Classes_29.classes.loadClass(this.me.select.value))) === null || _a === void 0 ? void 0 : _a.fields;
             var lkeys = [];
             for (var key in meta) {
                 if (key === "this")
@@ -17549,10 +22304,15 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         async initClasses() {
             var cls = [];
             var _this = this;
+<<<<<<< HEAD
+            await Registry_103.default.loadAllFilesForService("$DBObject");
+            var data = Registry_103.default.getData("$DBObject");
+=======
             await Registry_108.default.loadAllFilesForService("$DBObject");
             var data = Registry_108.default.getData("$DBObject");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             data.forEach((entr) => {
-                cls.push(Classes_30.classes.getClassName(entr.oclass));
+                cls.push(Classes_29.classes.getClassName(entr.oclass));
             });
             this.me.select.items = cls;
             //debug
@@ -17595,7 +22355,11 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         }
         layout(me) {
             me.boxpanel1 = new BoxPanel_6.BoxPanel();
+<<<<<<< HEAD
+            me.fromLine = new Textbox_20.Textbox();
+=======
             me.fromLine = new Textbox_21.Textbox();
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             me.next = new Button_13.Button();
             me.upload = new Upload_1.Upload();
             var _this = this;
@@ -17658,7 +22422,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
                 }
             }
             imp.readData(ret);
-            var _meta = (_a = Database_3.db.getMetadata(await Classes_30.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
+            var _meta = (_a = Database_3.db.getMetadata(await Classes_29.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var meta = {};
             for (let k in _meta) {
                 meta[k.toLowerCase()] = k;
@@ -17708,11 +22472,16 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         }
         async _doimport(data, dbclass, fromLine, assignedfields, beforeSave) {
             var _a;
-            var Type = Classes_30.classes.getClass(dbclass);
+            var Type = Classes_29.classes.getClass(dbclass);
             //read objects so we can read from cache
             let nil = await Type["find"]();
+<<<<<<< HEAD
+            var meta = (_a = Database_3.db.getMetadata(await Classes_29.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
+            var members = Registry_103.default.getMemberData("design:type")[dbclass];
+=======
             var meta = (_a = Database_3.db.getMetadata(await Classes_30.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var members = Registry_108.default.getMemberData("design:type")[dbclass];
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             var allObjects = [];
             var from = fromLine;
             for (var x = from - 1; x < data.length; x++) {
@@ -17746,7 +22515,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
                         ob[fname] = val;
                     }
                 }
-                var exists = DBObject_7.DBObject.getFromCache(dbclass, ob.id);
+                var exists = DBObject_8.DBObject.getFromCache(dbclass, ob.id);
                 if (exists) {
                     Object.assign(exists, ob);
                     allObjects.push(exists);
@@ -17786,7 +22555,11 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
     ], CSVImport, "showDialog", null);
     exports.CSVImport = CSVImport = CSVImport_1 = __decorate([
         (0, Actions_7.$ActionProvider)("jassijs.base.ActionNode"),
+<<<<<<< HEAD
+        (0, Registry_102.$Class)("jassijs.util.CSVImport"),
+=======
         (0, Registry_107.$Class)("jassijs.util.CSVImport"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], CSVImport);
     async function test() {
@@ -17883,11 +22656,12 @@ WHITC,89,White Clover Markets,Karl Jablonski,Owner,305 - 14th Ave. S. Suite 3B,S
 WILMK,90,Wilman Kala,Matti Karttunen,Owner/Marketing Assistant,Keskuskatu 45,Helsinki,#NV,21240,Finland,90-224 8858,90-224 8858
 WOLZA,91,Wolski  Zajazd,Zbyszek Piestrzeniewicz,Owner,ul. Filtrowa 68,Warszawa,#NV,01-012,Poland,(26) 642-7012,(26) 642-7012
 `;
+        debugger;
         var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid", "supplier": "supplierid", "category": "categoryid" });
         console.log(s);
     }
 });
-define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Database", "jassijs/remote/Classes"], function (require, exports, Database_4, Classes_31) {
+define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Database", "jassijs/remote/Classes"], function (require, exports, Database_4, Classes_30) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Entity = Entity;
@@ -17905,7 +22679,7 @@ define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Dat
     function addDecorater(decoratername, ...args) {
         return function (...fargs) {
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
-            var clname = Classes_31.classes.getClassName(con);
+            var clname = Classes_30.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
             Database_4.db._setMetadata(con, field, decoratername, args, fargs, undefined);
         };
@@ -17941,7 +22715,11 @@ define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Dat
         return addDecorater("ManyToMany", ...any);
     }
 });
+<<<<<<< HEAD
+define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_104) {
+=======
 define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_109) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var Numberformatter_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18112,7 +22890,11 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Re
     };
     exports.Numberformatter = Numberformatter;
     exports.Numberformatter = Numberformatter = Numberformatter_3 = __decorate([
+<<<<<<< HEAD
+        (0, Registry_104.$Class)("jassijs.util.Numberformatter")
+=======
         (0, Registry_109.$Class)("jassijs.util.Numberformatter")
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], Numberformatter);
     function test() {
         console.log(Numberformatter.format("##0,00", 90.8));
@@ -18121,12 +22903,20 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Re
         console.log(Numberformatter.stringToNumber(t));
     }
 });
+<<<<<<< HEAD
+define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry", "jassijs/remote/Registry"], function (require, exports, Config_4, Registry_105, Registry_106) {
+=======
 define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry", "jassijs/remote/Registry"], function (require, exports, Config_4, Registry_110, Registry_111) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Reloader = void 0;
+<<<<<<< HEAD
+    Registry_106 = __importDefault(Registry_106);
+=======
     Registry_111 = __importDefault(Registry_111);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     let Reloader = Reloader_1 = class Reloader {
         /**
          * reloads Code
@@ -18217,7 +23007,11 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", 
                     }
                 }
                 //load all classes which are in the same filename
+<<<<<<< HEAD
+                var allclasses = await Registry_106.default.getJSONData("$Class");
+=======
                 var allclasses = await Registry_111.default.getJSONData("$Class");
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 var classesInFile = [];
                 for (var x = 0; x < allclasses.length; x++) {
                     var pclass = allclasses[x];
@@ -18299,8 +23093,9 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", 
                 //@ts-ignore
                 myrequire(allfiles, function (...ret) {
                     async function run() {
+                        var _a;
                         for (let f = 0; f < allfiles.length; f++) {
-                            if (ret && !ret[x].doNotReloadModule)
+                            if (ret && !((_a = ret[x]) === null || _a === void 0 ? void 0 : _a.doNotReloadModule))
                                 _this.migrateModul(allModules, allfiles[f], ret[f]);
                         }
                         for (let i = 0; i < _this.listener.length; i++) {
@@ -18378,11 +23173,19 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Config", 
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_1();
     exports.Reloader = Reloader = Reloader_1 = __decorate([
+<<<<<<< HEAD
+        (0, Registry_105.$Class)("jassijs.util.Reloader"),
+        __metadata("design:paramtypes", [])
+    ], Reloader);
+});
+define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_107) {
+=======
         (0, Registry_110.$Class)("jassijs.util.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
 });
 define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_112) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Runlater = void 0;
@@ -18420,11 +23223,19 @@ define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Registry"
     };
     exports.Runlater = Runlater;
     exports.Runlater = Runlater = __decorate([
+<<<<<<< HEAD
+        (0, Registry_107.$Class)("jassi.util.Runlater"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], Runlater);
+});
+define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_108) {
+=======
         (0, Registry_112.$Class)("jassi.util.Runlater"),
         __metadata("design:paramtypes", [Object, Object])
     ], Runlater);
 });
 define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_113) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var Tools_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18725,7 +23536,11 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Registry"], 
     };
     exports.Tools = Tools;
     exports.Tools = Tools = Tools_3 = __decorate([
+<<<<<<< HEAD
+        (0, Registry_108.$Class)("jassijs.util.Tools"),
+=======
         (0, Registry_113.$Class)("jassijs.util.Tools"),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         __metadata("design:paramtypes", [])
     ], Tools);
     async function test() {
@@ -18773,7 +23588,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.ActionNode": {}
             },
             "jassijs/base/Actions.ts": {
-                "date": 1681570168000,
+                "date": 1752163154307.8362,
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/CurrentSettings.ts": {
@@ -18786,7 +23601,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655549184000
             },
             "jassijs/base/LoginDialog.ts": {
-                "date": 1683051936000
+                "date": 1754148354777.8318
             },
             "jassijs/base/PropertyEditorService.ts": {
                 "date": 1721676432668.211,
@@ -18819,7 +23634,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657658562000
             },
             "jassijs/modul.ts": {
-                "date": 1683648574000
+                "date": 1751720657734.439
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1686759604000,
@@ -18838,7 +23653,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Database": {}
             },
             "jassijs/remote/DatabaseTools.ts": {
-                "date": 1681309882000,
+                "date": 1750577290597.1262,
                 "jassijs.remote.DatabaseTools": {
                     "@members": {
                         "runSQL": {
@@ -18852,7 +23667,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.DBArray": {}
             },
             "jassijs/remote/DBObject.ts": {
-                "date": 1697209147073.5745,
+                "date": 1752176823845.5918,
                 "jassijs.remote.DBObject": {}
             },
             "jassijs/remote/DBObjectQuery.ts": {
@@ -18877,18 +23692,19 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/remote/Modules.ts": {
                 "date": 1682799476000
             },
-            "jassijs/remote/ObjectTransaction.ts": {
-                "date": 1622985414000
-            },
             "jassijs/remote/Registry.ts": {
+<<<<<<< HEAD
+                "date": 1753729243466.9514
+=======
                 "date": 1721754483315.839
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             },
             "jassijs/remote/RemoteObject.ts": {
-                "date": 1655556866000,
+                "date": 1750788682336.6975,
                 "jassijs.remote.RemoteObject": {}
             },
             "jassijs/remote/RemoteProtocol.ts": {
-                "date": 1655556796000,
+                "date": 1753949539547.0193,
                 "jassijs.remote.RemoteProtocol": {}
             },
             "jassijs/remote/security/Group.ts": {
@@ -19078,11 +23894,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/Rights.ts": {
-                "date": 1655556796000,
+                "date": 1750088842327.8132,
                 "jassijs.security.Rights": {}
             },
             "jassijs/remote/security/Setting.ts": {
-                "date": 1681316436000,
+                "date": 1749964183518.1116,
                 "jassijs.security.Setting": {
                     "$DBObject": [
                         {
@@ -19091,19 +23907,9 @@ define("jassijs/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "id": {
-                            "ValidateIsInt": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "PrimaryColumn": []
                         },
                         "data": {
-                            "ValidateIsString": [
-                                {
-                                    "optional": true
-                                }
-                            ],
                             "Column": [
                                 {
                                     "nullable": true
@@ -19175,7 +23981,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1695399507170.7808,
+                "date": 1750536455548.542,
                 "jassijs.remote.Server": {
                     "@members": {
                         "dir": {
@@ -19216,15 +24022,18 @@ define("jassijs/registry", ["require"], function (require) {
                         },
                         "createModule": {
                             "ValidateFunctionParameter": []
+                        },
+                        "mytest": {
+                            "ValidateFunctionParameter": []
                         }
                     }
                 }
             },
             "jassijs/remote/Serverservice.ts": {
-                "date": 1695999826188.6174
+                "date": 1750503957693.7708
             },
             "jassijs/remote/Settings.ts": {
-                "date": 1681315776000,
+                "date": 1750539223887.9446,
                 "jassijs.remote.Settings": {
                     "@members": {
                         "remove": {
@@ -19244,11 +24053,18 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Test": {}
             },
             "jassijs/remote/Transaction.ts": {
-                "date": 1655556866000,
-                "jassijs.remote.Transaction": {}
+                "date": 1750792975505.7617,
+                "jassijs.remote.Transaction": {},
+                "jassijs.remote.TransactionTest": {
+                    "@members": {
+                        "hi": {
+                            "UseServer": []
+                        }
+                    }
+                }
             },
             "jassijs/remote/Validator.ts": {
-                "date": 1681322648000
+                "date": 1750544362041.928
             },
             "jassijs/security/GroupView.ts": {
                 "date": 1740069816803.1128,
@@ -19280,7 +24096,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
+<<<<<<< HEAD
+                "date": 1740651881360.4556,
+=======
                 "date": 1721763062471.5164,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.BoxPanel": {
                     "$UIComponent": [
                         {
@@ -19302,6 +24122,12 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
+<<<<<<< HEAD
+                "date": 1740651615686.636
+            },
+            "jassijs/ui/Calendar.ts": {
+                "date": 1740651099520.8926,
+=======
                 "date": 1722614805525.6638,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
@@ -19318,6 +24144,7 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/ui/Calendar.ts": {
                 "date": 1719769978901.3284,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Calendar": {
                     "$UIComponent": [
                         {
@@ -19334,7 +24161,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Checkbox.ts": {
+<<<<<<< HEAD
+                "date": 1740651110664.4475,
+=======
                 "date": 1720458180025.6687,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Checkbox": {
                     "$UIComponent": [
                         {
@@ -19346,6 +24177,16 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
+<<<<<<< HEAD
+                "date": 1740920030230.6099
+            },
+            "jassijs/ui/ComponentDescriptor.ts": {
+                "date": 1740651872683.1414,
+                "jassijs.ui.ComponentDescriptor": {}
+            },
+            "jassijs/ui/Container.ts": {
+                "date": 1740565176227.1602,
+=======
                 "date": 1740083076560.7507,
                 "jassijs.ui.Component": {
                     "$Property": [
@@ -19376,6 +24217,7 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/ui/Container.ts": {
                 "date": 1740077690613.9016,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Container": {
                     "$Property": [
                         {
@@ -19386,7 +24228,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ContextMenu.ts": {
+<<<<<<< HEAD
+                "date": 1740651125315.0527,
+=======
                 "date": 1740083898079.5303,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -19578,7 +24424,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
+<<<<<<< HEAD
+                "date": 1740651578634.0256,
+=======
                 "date": 1740075040179.8916,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs/ui/DBObjectView": {
                     "@members": {}
                 }
@@ -19588,7 +24438,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/HTMLEditorPanel.ts": {
-                "date": 1655641682000,
+                "date": 1740653508052.61,
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/InvisibleComponent.ts": {
@@ -19602,7 +24452,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Menu.ts": {
+<<<<<<< HEAD
+                "date": 1740651153422.6394,
+=======
                 "date": 1740075713854.7053,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Menu": {
                     "$UIComponent": [
                         {
@@ -19620,7 +24474,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655585212000
             },
             "jassijs/ui/ObjectChooser.ts": {
+<<<<<<< HEAD
+                "date": 1740651180995.632,
+=======
                 "date": 1740069816807.102,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -19641,7 +24499,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
+<<<<<<< HEAD
+                "date": 1740651821533.4785,
+=======
                 "date": 1740077265195.8843,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Panel": {
                     "$UIComponent": [
                         {
@@ -19836,7 +24698,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/JsonEditor.ts": {
+<<<<<<< HEAD
+                "date": 1740654306812.6265,
+=======
                 "date": 1721755050984.9895,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.PropertyEditors.JsonEditor": {
                     "$PropertyEditor": [
                         [
@@ -19866,7 +24732,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/PropertyEditors/TableColumnImport": {}
             },
             "jassijs/ui/Select.ts": {
+<<<<<<< HEAD
+                "date": 1740651817486.086,
+=======
                 "date": 1722606114318.6875,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Select": {
                     "$UIComponent": [
                         {
@@ -19904,7 +24774,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Style.ts": {
+<<<<<<< HEAD
+                "date": 1740742991062.1353,
+=======
                 "date": 1719755851416.894,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Style": {
                     "$UIComponent": [
                         {
@@ -19916,7 +24790,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
+<<<<<<< HEAD
+                "date": 1740651244036.1194,
+=======
                 "date": 1739905912879.3584,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -19938,7 +24816,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textarea.ts": {
+<<<<<<< HEAD
+                "date": 1740651255435.1821,
+=======
                 "date": 1739907112385.5366,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Textarea": {
                     "$UIComponent": [
                         {
@@ -19955,7 +24837,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
+<<<<<<< HEAD
+                "date": 1740653418362.317,
+=======
                 "date": 1740069816797.109,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -19967,7 +24853,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Tree.ts": {
+<<<<<<< HEAD
+                "date": 1740653437644.0461,
+=======
                 "date": 1739999095010.4412,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.TreeEditorPropertiesMulti": {
                     "@members": {}
                 },
@@ -19992,7 +24882,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Upload.ts": {
+<<<<<<< HEAD
+                "date": 1740651285912.3606,
+=======
                 "date": 1719770567272.5264,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Upload": {
                     "$UIComponent": [
                         {
@@ -20011,7 +24905,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1720099914948.8174
             },
             "jassijs/util/CSVImport.ts": {
-                "date": 1697199596581.038,
+                "date": 1750786905779.3127,
                 "jassijs.util.CSVImport": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -20036,7 +24930,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1697201960827.66,
+                "date": 1751313789532.3257,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Runlater.ts": {
@@ -20048,12 +24942,20 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Tools": {}
             },
             "jassijs/ui/State.ts": {
+<<<<<<< HEAD
+                "date": 1740494728113.6765
+=======
                 "date": 1740077833527.527
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             },
             "jassijs/ui/StateBinder.ts": {
                 "date": 1739904613929.6313
             },
             "jassijs/ui/HTMLPanel.tsx": {
+<<<<<<< HEAD
+                "date": 1740651540054.6853,
+                "jassijs.ui.HTMLPanel": {
+=======
                 "date": 1740069816801.1152,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
@@ -20062,11 +24964,16 @@ define("jassijs/registry", ["require"], function (require) {
                             "icon": "mdi mdi-cloud-tags"
                         }
                     ],
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                     "@members": {}
                 }
             },
             "jassijs/ui/Image.tsx": {
+<<<<<<< HEAD
+                "date": 1740651139777.7815,
+=======
                 "date": 1719770180674.2976,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.Image": {
                     "$UIComponent": [
                         {
@@ -20078,7 +24985,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/MenuItem.tsx": {
+<<<<<<< HEAD
+                "date": 1740651166738.7964,
+=======
                 "date": 1740075824893.565,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.MenuItem": {
                     "$UIComponent": [
                         {
@@ -20106,16 +25017,184 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/TinymcePanel.ts": {
+<<<<<<< HEAD
+                "date": 1740651789442.6328,
+=======
                 "date": 1740077295896.0708,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "jassijs.ui.TinymcePanel": {
                     "@members": {}
                 }
             },
+<<<<<<< HEAD
+            "jassijs/ui/UIComponent.ts": {
+                "date": 1740921301118.0347,
+                "jassijs.ui.Button": {
+                    "$UIComponent": [
+                        {
+                            "fullPath": "common/Button",
+                            "icon": "mdi mdi-gesture-tap-button",
+                            "initialize": {
+                                "text": "button"
+                            }
+                        }
+                    ],
+                    "$Property": [
+                        {
+                            "name": "text",
+                            "type": "string"
+                        },
+                        {
+                            "name": "onclick",
+                            "type": "function",
+                            "default": "function(event){\n\t\n}"
+                        },
+                        {
+                            "name": "icon",
+                            "type": "image"
+                        }
+                    ]
+                },
+                "jassijs.ui.Component": {
+                    "$Property": [
+                        {
+                            "name": "useWrapper",
+                            "type": "boolean",
+                            "description": "wraps the component with div"
+                        },
+                        {
+                            "name": "onfocus",
+                            "type": "function",
+                            "default": "function(event){\n\t\n}"
+                        },
+                        {
+                            "name": "onblur",
+                            "type": "function",
+                            "default": "function(event){\n\t\n}"
+                        },
+                        {
+                            "name": "label",
+                            "type": "string",
+                            "description": "adds a label above the component"
+                        },
+                        {
+                            "name": "tooltip",
+                            "type": "string",
+                            "description": "tooltip are displayed on mouse over"
+                        },
+                        {
+                            "name": "x",
+                            "type": "number"
+                        },
+                        {
+                            "name": "y",
+                            "type": "number"
+                        },
+                        {
+                            "name": "hidden",
+                            "type": "boolean"
+                        },
+                        {
+                            "name": "width",
+                            "type": "number"
+                        },
+                        {
+                            "name": "height",
+                            "type": "number"
+                        },
+                        {
+                            "name": "style",
+                            "type": "json",
+                            "componentType": "jassijs.ui.CSSProperties"
+                        },
+                        {
+                            "name": "styles",
+                            "type": "componentselector",
+                            "componentType": "[jassijs.ui.Style]"
+                        },
+                        {
+                            "name": "contextMenu",
+                            "type": "componentselector",
+                            "componentType": "jassijs.ui.ContextMenu"
+                        }
+                    ]
+                },
+                "jassijs.ui.HTMLComponent": {
+                    "$Property": [
+                        {
+                            "name": "children",
+                            "type": "jassijs.ui.Component",
+                            "createDummyInDesigner": "doCreateDummyForHTMLComponent"
+                        }
+                    ],
+                    "$UIComponent": [
+                        {
+                            "fullPath": "common/HTMLComponent",
+                            "icon": "mdi mdi-cloud-tags",
+                            "initialize": {
+                                "tag": "input"
+                            }
+                        }
+                    ]
+                },
+                "jassijs.ui.TextComponent": {
+                    "$Property": [
+                        {
+                            "name": "tag",
+                            "type": "string",
+                            "chooseFromStrict": true,
+                            "chooseFrom": "function"
+                        },
+                        {
+                            "name": "text",
+                            "type": "string"
+                        }
+                    ]
+                }
+            },
+            "jassijs/remote/RemoteTest.ts": {
+                "date": 1750787386563.1096,
+                "jassijs.remote.RemoteTest": {
+                    "@members": {
+                        "createFolder2": {
+                            "UseServer": []
+                        },
+                        "mytest2": {
+                            "UseServer": []
+                        }
+                    }
+                }
+            },
+            "jassijs/remote/StackContext.ts": {
+                "date": 1749958831997.4402
+            },
+            "jassijs/remote/Context.ts": {
+                "date": 1750451805597.2747
+            },
+            "jassijs/remote/Context2.ts": {
+                "date": 1749959261684.3096
+            },
+            "jassijs/remote/ObjectTransaction.ts": {
+                "date": 1622985414000
+            },
+            "jassijs/remote/Runlocalserver.ts": {
+                "date": 1753970675254.8625
+            },
+            "jassijs/remote/Testlocalserver.ts": {
+                "date": 1753729472429.9197
+            },
+            "jassijs/remote/Npm.ts": {
+                "date": 1753558429561.62
+            },
+            "jassijs/remote/PatchTTP.ts": {
+                "date": 1753968322370.392
+=======
             "jassijs/ui/Repeater.ts": {
                 "date": 1740069816810.0945,
                 "jassijs.ui.Repeater": {
                     "@members": {}
                 }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
         }
     };

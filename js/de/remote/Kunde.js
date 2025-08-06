@@ -17,6 +17,7 @@ const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const DBObjectQuery_1 = require("jassijs/remote/DBObjectQuery");
 const Rights_1 = require("jassijs/remote/security/Rights");
+const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
@@ -54,13 +55,8 @@ let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
     static async alleKundenNachNummer() {
         return await Kunde_1.find({ order: "id" });
     }
-    static async find(options = undefined, context = undefined) {
-        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-            return await this.call(this.find, options, context);
-        }
-        else {
-            return await (await Serverservice_1.serverservices.db).find(context, this, options);
-        }
+    static async find(options = undefined) {
+        return await (await Serverservice_1.serverservices.db).find(this, options);
     }
     static async sample() {
         var kunde1 = new Kunde_1();
@@ -130,6 +126,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], Kunde, "alleKundenNachNummer", null);
+__decorate([
+    (0, RemoteObject_1.UseServer)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], Kunde, "find", null);
 Kunde = Kunde_1 = __decorate([
     (0, Rights_1.$ParentRights)([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
             description: {

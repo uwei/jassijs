@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"tests/remote/T.ts": {
-		"date": 1681570950000,
+		"date": 1750536496065.261,
 		"tests.remote.T": {}
 	},
 	"tests/remote/TestBigData.ts": {
@@ -125,5 +125,15 @@ exports.default={
 	},
 	"tests/remote/TestServerfile.ts": {
 		"date": 1624999038000
+	},
+	"tests/remote/TestTransaction.ts": {
+		"date": 1750793006036.389,
+		"tests.remote.TransactionTest": {
+			"@members": {
+				"product": {
+					"UseServer": []
+				}
+			}
+		}
 	}
 }

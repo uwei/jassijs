@@ -4,7 +4,7 @@ import { $Class } from "jassijs/remote/Registry";
 import { PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "jassijs/util/DatabaseSchema";
 import { $CheckParentRight } from "jassijs/remote/security/Rights";
 import { AR } from "de/remote/AR";
-import { Context } from "jassijs/remote/RemoteObject";
+import { Context, UseServer } from "jassijs/remote/RemoteObject";
 import { serverservices } from "jassijs/remote/Serverservice";
 
 @$DBObject()
@@ -25,13 +25,9 @@ export class ARZeile extends DBObject {
     constructor() {
         super();
     }
-    static async find(options = undefined, context: Context = undefined): Promise<ARZeile[]> {
-        if (!jassijs.isServer) {
-            return await this.call(this.find, options, context);
-        }
-        else {
-            return (await serverservices.db).find(context, this, options);
-        }
+    @UseServer()
+    static async find(options = undefined): Promise<ARZeile[]> {
+            return (await serverservices.db).find(this, options);
     }
     get oo2() {
         var o = 12;

@@ -295,10 +295,6 @@ define("tests/registry", ["require"], function (require) {
             "tests/modul.ts": {
                 "date": 1684511830000
             },
-            "tests/remote/T.ts": {
-                "date": 1681570950000,
-                "tests.remote.T": {}
-            },
             "tests/remote/TestBigData.ts": {
                 "date": 1656620694000,
                 "tests.TestBigData": {
@@ -384,7 +380,6 @@ define("tests/registry", ["require"], function (require) {
                             "PrimaryColumn": []
                         },
                         "customer": {
-                            "$CheckParentRight": [],
                             "ManyToOne": [
                                 "function"
                             ]
@@ -407,7 +402,6 @@ define("tests/registry", ["require"], function (require) {
                             "PrimaryColumn": []
                         },
                         "Order": {
-                            "$CheckParentRight": [],
                             "ManyToOne": [
                                 "function",
                                 "function"
@@ -420,17 +414,35 @@ define("tests/registry", ["require"], function (require) {
                 "date": 1624999038000
             },
             "tests/RemoteModulTests.ts": {
-                "date": 1684512328000
+                "date": 1750089234975.0835
             },
             "tests/ServerTests.ts": {
-                "date": 1656077954000
+                "date": 1740653473235.656
             },
             "tests/TestDialog.ts": {
                 "date": 1656079688000,
                 "tests/TestDialog": {}
             },
             "tests/TestRepeating.ts": {
+<<<<<<< HEAD
+                "date": 1740651316696.5154
+            },
+            "tests/remote/T.ts": {
+                "date": 1750536496065.261,
+                "tests.remote.T": {}
+            },
+            "tests/remote/TestTransaction.ts": {
+                "date": 1750793006036.389,
+                "tests.remote.TransactionTest": {
+                    "@members": {
+                        "product": {
+                            "UseServer": []
+                        }
+                    }
+                }
+=======
                 "date": 1740069952455.7803
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
         }
     };
@@ -445,7 +457,7 @@ define("tests/remote/T", ["require", "exports", "jassijs/remote/Registry", "jass
         //this is a sample remote function
         async sayHello(name, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this, this.sayHello, name, context);
+                return await RemoteObject_1.RemoteObject.call(this, this.sayHello, name, context);
             }
             else {
                 //@ts-ignore
@@ -603,27 +615,85 @@ define("tests/remote/TestOrderDetails", ["require", "exports", "tests/remote/Tes
     }
     ;
 });
-define("tests/RemoteModulTests", ["require", "exports", "jassijs/remote/FileNode", "jassijs/remote/Server", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs_editor/DatabaseDesigner", "jassijs/remote/DBObject", "jassijs/remote/DatabaseTools"], function (require, exports, FileNode_2, Server_3, Classes_1, Registry_6, DatabaseDesigner_1, DBObject_6, DatabaseTools_1) {
+define("tests/remote/TestTransaction", ["require", "exports", "jassijs/remote/RemoteObject", "jassijs/remote/Transaction", "jassijs/remote/Registry", "northwind/remote/Products"], function (require, exports, RemoteObject_2, Transaction_2, Registry_6, Products_1) {
+    "use strict";
+    var _a;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TransactionTest = void 0;
+    exports.test = test;
+    exports.test2 = test2;
+    let TransactionTest = class TransactionTest {
+        async product(num, context = undefined) {
+            if (context.transaction) {
+                return context.transaction.registerAction("hi", num + 10000, async (nums) => {
+                    var ret = [];
+                    for (let x = 0; x < nums.length; x++) {
+                        ret.push("product:" + num * num + " (" + x + "/" + nums.length + ")");
+                    }
+                    return ret;
+                }, context);
+            }
+            return "product:" + num * num;
+        }
+    };
+    exports.TransactionTest = TransactionTest;
+    __decorate([
+        (0, RemoteObject_2.UseServer)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Number, typeof (_a = typeof Transaction_2.TransactionContext !== "undefined" && Transaction_2.TransactionContext) === "function" ? _a : Object]),
+        __metadata("design:returntype", Promise)
+    ], TransactionTest.prototype, "product", null);
+    exports.TransactionTest = TransactionTest = __decorate([
+        (0, Registry_6.$Class)("tests.remote.TransactionTest")
+    ], TransactionTest);
+    async function test(t) {
+        var trans = new Transaction_2.Transaction();
+        var cs = await Products_1.Products.findOne(1);
+        var cs2 = await Products_1.Products.findOne(2);
+        console.log(cs.UnitPrice + ":" + cs2.UnitPrice);
+        var tr = new TransactionTest();
+        cs.UnitPrice = 66;
+        trans.add(cs, cs.save);
+        cs2.UnitPrice = "jjj";
+        trans.add(cs2, cs2.save);
+        debugger;
+        var all = await trans.execute();
+    }
+    async function test2(t) {
+        let single = await new TransactionTest().product(2);
+        t.expectEqual(single === "product:4");
+        var trans = new Transaction_2.Transaction();
+        for (var x = 0; x < 3; x++) {
+            var tr = new TransactionTest();
+            trans.add(tr, tr.product, x);
+        }
+        var all = await trans.execute();
+        t.expectEqual(all.join() === 'product:4 (0/3),product:4 (1/3),product:4 (2/3)');
+    }
+});
+define("tests/RemoteModulTests", ["require", "exports", "jassijs/remote/FileNode", "jassijs/remote/Server", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs_editor/DatabaseDesigner", "jassijs/remote/DBObject", "jassijs/remote/DatabaseTools"], function (require, exports, FileNode_2, Server_3, Classes_1, Registry_7, DatabaseDesigner_1, DBObject_6, DatabaseTools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = test;
+<<<<<<< HEAD
+    Registry_7 = __importDefault(Registry_7);
+=======
     Registry_6 = __importDefault(Registry_6);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     async function test(teste) {
         try {
             await new Server_3.Server().createModule("testrmodul");
             await new Server_3.Server().createFolder("testrmodul/remote");
             await new Server_3.Server().saveFile("testrmodul/remote/TestRModul.ts", `import { $Class } from "jassijs/remote/Registry";
-import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+import { UseServer } from "jassijs/remote/RemoteObject";
 
 @$Class("testrmodul.remote.TestRModul")
-export class TestRModul extends RemoteObject{
+export class TestRModul {
     //this is a sample remote function
+    @UseServer()
     public async sayHello(name: string,context: Context = undefined) {
-        if (!context?.isServer) {
-            return await this.call(this, this.sayHello, name,context);
-        } else {
             return "Hello "+name;  //this would be execute on server  
-        }
+        
     }
 }`);
             //create new DB Object
@@ -637,7 +707,7 @@ export class TestRModul extends RemoteObject{
             }
             teste.expectEqual(sr === "");
             ret.destroy();
-            await Registry_6.default.reload();
+            await Registry_7.default.reload();
             var ro = await new (await Classes_1.classes.loadClass("testrmodul.remote.TestRModul"))().sayHello("you");
             teste.expectEqual(ro === "Hello you");
             var TestRCustomer = await Classes_1.classes.loadClass("testrmodul.TestRCustomer");
@@ -667,13 +737,16 @@ export class TestRModul extends RemoteObject{
         }
     }
 });
-define("tests/ServerTests", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"], function (require, exports, Registry_7, Server_4) {
+define("tests/ServerTests", ["require", "exports", "jassijs/remote/Server"], function (require, exports, Server_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = test;
+<<<<<<< HEAD
+=======
     Registry_7 = __importDefault(Registry_7);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     async function test(tests) {
-        var text = "export class Hallo{};export function test(){return " + Registry_7.default.nextID() + "};";
+        var text = "export class Hallo{};export function test(){return " + 1 + "};";
         await new Server_4.Server().saveFile("$serverside/Hallo.ts", text);
         var text2 = await new Server_4.Server().loadFile("$serverside/Hallo.ts");
         tests.expectEqual(text === text2);
@@ -708,16 +781,26 @@ define("tests/TestDialog", ["require", "exports", "jassijs/ui/Button", "jassijs/
         return ret;
     }
 });
+<<<<<<< HEAD
+define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/State", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Component_1, Textbox_1, State_1, Button_2, Table_1) {
+=======
 define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Table", "jassijs/ext/jquerylib", "jquery.choosen"], function (require, exports, Component_1, Textbox_1, Button_2, Table_1) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = test;
     var data = [
         { id: 1, name: "Max", childs: [{ name: "Anna" }, { name: "Aria" }] },
         { id: 2, name: "Moritz", childs: [{ name: "Clara" }, { name: "Heidi" }] },
+<<<<<<< HEAD
+        { id: 3, name: "Heinz", childs: [{ name: "Rosa" }, { name: "Luise" }] }
+    ];
+    function DetailComponent(props, state) {
+=======
         { id: 3, name: "Heinz", childs: [{ name: "Rosa" }, { name: "Luise" }] },
     ];
     function DetailComponent(props, state = {}) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         var ret = (0, Component_1.jc)("div", {
             children: [
                 (0, Component_1.jc)(Textbox_1.Textbox, {
@@ -735,7 +818,11 @@ define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "ja
                 (0, Component_1.jc)(Textbox_1.Textbox, {
                     bind: state.activeChild.bind.name
                 }),
+<<<<<<< HEAD
+                (0, Component_1.jc)(Button_2.Button, { text: "name of selected Child", onclick: () => {
+=======
                 (0, Component_1.jc)(Button_2.Button, { text: "erter", onclick: () => {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                         alert(state.activeChild.current.name);
                     } }),
                 (0, Component_1.jc)("br")
@@ -744,6 +831,27 @@ define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "ja
         return ret;
     }
     function MainComponent(props, state) {
+<<<<<<< HEAD
+        //var ch = props.items.map(item => jc(DetailComponent, { value: item }));
+        var ret = (0, Component_1.jc)("span", {
+            children: (0, State_1.ccs)(() => state.items.current.map(item => (0, Component_1.jc)(DetailComponent, { value: item })), state.items)
+        });
+        return ret;
+    }
+    function Ha() {
+        return (0, Component_1.jc)("span", { children: ["jd"] });
+    }
+    async function test() {
+        var j = (0, Component_1.jc)(MainComponent, { items: data });
+        var pan = (0, Component_1.createComponent)(j);
+        setTimeout(() => {
+            var data2 = [
+                { id: 4, name: "Axel", childs: [{ name: "Harm" }, { name: "Olaf" }] },
+                { id: 5, name: "Selter", childs: [{ name: "Oliver" }, { name: "Theo" }] }
+            ];
+            pan.config({ items: data2 });
+        }, 1000);
+=======
         var ch = props.items.map(item => (0, Component_1.jc)(DetailComponent, { value: item }));
         var ret = (0, Component_1.jc)("span", {
             children: ch
@@ -753,6 +861,7 @@ define("tests/TestRepeating", ["require", "exports", "jassijs/ui/Component", "ja
     async function test() {
         var j = (0, Component_1.jc)(MainComponent, { items: data });
         var pan = (0, Component_1.createComponent)(j);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         return pan;
     }
 });
@@ -771,10 +880,6 @@ define("tests/registry", ["require"], function (require) {
             },
             "tests/modul.ts": {
                 "date": 1684511830000
-            },
-            "tests/remote/T.ts": {
-                "date": 1681570950000,
-                "tests.remote.T": {}
             },
             "tests/remote/TestBigData.ts": {
                 "date": 1656620694000,
@@ -861,7 +966,6 @@ define("tests/registry", ["require"], function (require) {
                             "PrimaryColumn": []
                         },
                         "customer": {
-                            "$CheckParentRight": [],
                             "ManyToOne": [
                                 "function"
                             ]
@@ -884,7 +988,6 @@ define("tests/registry", ["require"], function (require) {
                             "PrimaryColumn": []
                         },
                         "Order": {
-                            "$CheckParentRight": [],
                             "ManyToOne": [
                                 "function",
                                 "function"
@@ -897,17 +1000,35 @@ define("tests/registry", ["require"], function (require) {
                 "date": 1624999038000
             },
             "tests/RemoteModulTests.ts": {
-                "date": 1684512328000
+                "date": 1750089234975.0835
             },
             "tests/ServerTests.ts": {
-                "date": 1656077954000
+                "date": 1740653473235.656
             },
             "tests/TestDialog.ts": {
                 "date": 1656079688000,
                 "tests/TestDialog": {}
             },
             "tests/TestRepeating.ts": {
+<<<<<<< HEAD
+                "date": 1740651316696.5154
+            },
+            "tests/remote/T.ts": {
+                "date": 1750536496065.261,
+                "tests.remote.T": {}
+            },
+            "tests/remote/TestTransaction.ts": {
+                "date": 1750793006036.389,
+                "tests.remote.TransactionTest": {
+                    "@members": {
+                        "product": {
+                            "UseServer": []
+                        }
+                    }
+                }
+=======
                 "date": 1740069952455.7803
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             }
         }
     };

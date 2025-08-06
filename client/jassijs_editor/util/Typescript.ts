@@ -220,7 +220,6 @@ export class Typescript {
             Typescript._isInited = true;
             return true;
         } catch (err) {
-            debugger;
             throw err;
         }
     }

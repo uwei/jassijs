@@ -72,23 +72,28 @@ class JassijsStarter {
     }
     registerServiceWorker() {
 
-        var http = new XMLHttpRequest();
-        http.open('HEAD', 'service-worker.js', false);
+       /* var http = new XMLHttpRequest();
+        http.open('HEAD', './service-worker.js', false);
         http.send();
         if (http.status === 401 || http.status === 404) {
             return;
-        }
-
+        }*/
+        //fetch('./service-worker.js').then((d)=>{debugger});
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js');
-            navigator.serviceWorker.addEventListener("message", (evt) => {
+            //navigator.serviceWorker.registedr('../../service-worker-scope.js?jassijs');
+            
+            navigator.serviceWorker.register('./service-worker.js');
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                window.location.reload(); // Seite neu laden, um neuen SW zu aktivieren
+            });
+          /*  navigator.serviceWorker.addEventListener("message", (evt) => {
                 if (evt.data === "wait for login") {
                     new Promise((resolve_1, reject_1) => { require(["jassijs/base/LoginDialog"], resolve_1, reject_1); }).then((data) => {
                         data.login();
                         //          navigator.serviceWorker.controller.postMessage("logindialog closed");
                     });
                 }
-            });
+            });*/
         }
         return this;
     }
@@ -323,8 +328,8 @@ class JassijsStarter {
             baseUrl: 'js',
             paths: {
                 //"jassijs/ext": '../../jassijs/ext',
-                "remote/jassijs/ext": '../../remote/jassijs/ext',
-
+                "remote/jassijs/ext": '../../remote/jassijs/ext'
+          
             }
         });
 

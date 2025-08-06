@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App loading...</title>
+  <script src="../../browserserver.js"> </script>
+</head>
+
+<body>
+  <h1>App is loading</h1>
+
+  <script>
+    async function start() {
+      //debugger;
+      var appname=location.href.split("/apps/")[1].split("/")[0];
+        await new BrowserServer().startApp(appname, true);
+       /* navigator.serviceWorker.addEventListener('message', event => {
+          debugger;
+          let evt = event.data.msg;
+          if (evt === "serviceworkercode has changed") {
+            resolve(false);
+          }
+          if (evt === "serviceworker has started") {
+            resolve(true);
+          }
+        });*/
+    }
+    start();
+  </script>
+  <a href="http://localhost/browserserver/apps/httpsample">httpsample</a>
+</body>
+
+</html>

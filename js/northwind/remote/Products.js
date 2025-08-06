@@ -78,8 +78,19 @@ Products = __decorate([
 ], Products);
 exports.Products = Products;
 async function test() {
-    var p = await Products.findOne();
+    // var p: Products = <Products>await Products.findOne();
+    //  var tr=new Transaction();
+    /*    var ret=await tr.useTransaction(async ()=>{
+          // var c1=new Products();
+         //  c1.id=58800;
+         //  var c2=new Products();
+         //  c2.id="aa500585";
+           var ret=[];
+          // ret.push(p.save()),
+        //    ret.push(p.save());
+         
+           return ret;
+       });*/
 }
 exports.test = test;
-;
 //# sourceMappingURL=Products.js.map

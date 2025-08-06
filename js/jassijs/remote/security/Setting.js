@@ -22,10 +22,10 @@ let Setting = class Setting extends DBObject_1.DBObject {
     async save(context = undefined) {
         throw new Classes_1.JassiError("not suported");
     }
-    static async findOne(options = undefined, context = undefined) {
+    static async findOne(options = undefined) {
         throw new Classes_1.JassiError("not suported");
     }
-    static async find(options = undefined, context = undefined) {
+    static async find(options = undefined) {
         throw new Classes_1.JassiError("not suported");
     }
     /**

@@ -19,17 +19,12 @@ const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Classes_1 = require("jassijs/remote/Classes");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 const Validator_1 = require("jassijs/remote/Validator");
-let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1.RemoteObject {
+let DatabaseTools = DatabaseTools_1 = class DatabaseTools {
     //this is a sample remote function
     static async runSQL(sql, parameter = undefined, context = undefined) {
-        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-            return await this.call(this.runSQL, sql, parameter, context);
-        }
-        else {
-            if (!context.request.user.isAdmin)
-                throw new Classes_1.JassiError("only admins can delete");
-            return (await Serverservice_1.serverservices.db).runSQL(context, sql, parameter);
-        }
+        if (!context.request.user.isAdmin)
+            throw new Classes_1.JassiError("only admins can delete");
+        return (await Serverservice_1.serverservices.db).runSQL(context, sql, parameter);
     }
     static async dropTables(tables) {
         for (var i = 0; i < tables.length; i++) {
@@ -44,6 +39,7 @@ let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1
     }
 };
 __decorate([
+    (0, RemoteObject_1.UseServer)(),
     (0, Validator_1.ValidateFunctionParameter)(),
     __param(0, (0, Validator_1.ValidateIsString)()),
     __param(1, (0, Validator_1.ValidateIsArray)({ optional: true })),
@@ -59,7 +55,8 @@ async function test() {
     /*  var h=await DatabaseTools.runSQL('DROP TABLE :p1,:p2',[
                           {p1:"te_person2",
                                       p2:"tg_person"}]);//,"te_person2"]);*/
-    //var h=await DatabaseTools.runSQL('select * from jassijs_rights'); 
+    var all = await DatabaseTools.runSQL('select * from jassijs_group');
+    console.log(JSON.stringify(all));
 }
 exports.test = test;
 //# sourceMappingURL=DatabaseTools.js.map

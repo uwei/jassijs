@@ -26,7 +26,6 @@ function copyFile(f1: string, f2: string) {
 *  each remote file on server and client should be the same
 */
 async function checkRemoteFiles() {
-
     var path = new Filesystem().path;
     var modules = config.server.modules;
     for (var m in modules) {
@@ -61,7 +60,7 @@ export function syncRemoteFiles() {
 /*await*/checkRemoteFiles();
     //server remote
     var path = new Filesystem().path;
-    fs.watch(path, { recursive: true }, (eventType, filename) => {
+    var test = fs.watch(path, { recursive: true }, (eventType, filename) => {
         if (!filename)
             return;
         var file = filename.replaceAll("\\", "/");
@@ -77,7 +76,7 @@ export function syncRemoteFiles() {
                     }
                 }
                 var f2 = "./" + file;
-                
+
                 copyFile(f1, f2);
             }, 200);
         }
@@ -107,35 +106,40 @@ export function syncRemoteFiles() {
 var modules = undefined;
 var runServerInBrowser = undefined;
 export function staticfiles(req, res, next) {
-    var path = new Filesystem().path;
+   var path = new Filesystem().path;
     var modules = config.server.modules;
     // console.log(req.path);
     let sfile = path + req.path;
-   /* if (req?.query?.server === "1") {
-        if (runServerInBrowser === undefined)
-            runServerInBrowser = JSON.parse(fs.readFileSync("./client/jassijs.json", "utf8")).runServerInBrowser;
-
-        var found = undefined;
-        for (var key in modules) {
-            if ((req.path.startsWith("/" + key + "/") || req.path.startsWith("/js/" + key)) && fs.existsSync("./" + req.path)) {
-                found = "." + req.path;
-                break;
-            }
-        }
-
-
-        if (found === undefined || runServerInBrowser !== true) {
-            console.log("not allowed");
-            next();
-            return;
-        } else
-            sfile = found;
-    }*/
+    if(req.method.toLowerCase()!=="get"){
+        next();
+        return;
+    }
+    /* if (req?.query?.server === "1") {
+         if (runServerInBrowser === undefined)
+             runServerInBrowser = JSON.parse(fs.readFileSync("./client/jassijs.json", "utf8")).runServerInBrowser;
+ 
+         var found = undefined;
+         for (var key in modules) {
+             if ((req.path.startsWith("/" + key + "/") || req.path.startsWith("/js/" + key)) && fs.existsSync("./" + req.path)) {
+                 found = "." + req.path;
+                 break;
+             }
+         }
+ 
+ 
+         if (found === undefined || runServerInBrowser !== true) {
+             console.log("not allowed");
+             next();
+             return;
+         } else
+             sfile = found;
+     }*/
 
     if (sfile.indexOf("Settings.ts") > -1) {//&&!passport.authenticate("jwt", { session: false })){
         next();
         return;
     }
+    try{
     if (!fs.existsSync(sfile) && sfile.startsWith("./client")) {
         for (var key in modules) {
             if ((sfile.startsWith("./client/" + key) || sfile.startsWith("./client/js/" + key)) && fs.existsSync("./node_modules/" + key + "/client" + req.path)) {
@@ -152,19 +156,27 @@ export function staticfiles(req, res, next) {
             res.set('X-Custom-UpToDate', 'true');
             res.send("");
         } else {
-            res.sendFile(resolve(sfile), {
+            try {
+                res.sendFile(resolve(sfile), {
 
-                headers: {
-                    'X-Custom-Date': dat.toString(),
-                    'Cache-Control': 'max-age=1',
-                    'Last-Modified': fs.statSync(sfile).mtime.toUTCString()
-                }
-            });
+                    headers: {
+                        'X-Custom-Date': dat.toString(),
+                        'Cache-Control': 'max-age=1',
+                        'Last-Modified': fs.statSync(sfile).mtime.toUTCString()
+                    }
+                });
+            } catch (err) {
+                console.log(err);
+            }
         }
     } else {
 
         next();
     }
+}catch(err){
+    debugger;
+    throw err;
+}
     var s = 1;
 }
 export function staticsecurefiles(req, res, next) {

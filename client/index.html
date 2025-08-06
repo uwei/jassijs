@@ -12,9 +12,66 @@
 <!--
  <div style="background: red;width:100%;height:96vh" > </div>
  -->
-
+<script>/*(function () {
+    const OriginalEventSource = window.EventSource;
+  
+    window.EventSource = function (...args) {
+      const instance = new OriginalEventSource(...args);
+      console.log('[EventSource] Verbindung geöffnet mit URL:', args[0]);
+  
+      // Debug: Standardnachrichten (ohne event-Typ)
+      instance.addEventListener('message', (e) => {
+        console.log('[EventSource] Nachricht:', e.data);
+      });
+  
+      // Debug: Verbindung geöffnet
+      instance.addEventListener('open', () => {
+        console.log('[EventSource] Verbindung erfolgreich geöffnet');
+      });
+  
+      // Debug: Fehler
+      instance.addEventListener('error', (e) => {
+        console.error('[EventSource] Fehler:', e);
+      });
+  
+      // Debug: Alle benannten Events abfangen
+      const originalAddEventListener = instance.addEventListener.bind(instance);
+      instance.addEventListener = function (type, listener, ...rest) {
+        console.log(`[EventSource] addEventListener für "${type}"`, listener);
+        return originalAddEventListener(type, function (event) {
+          console.log(`[EventSource] Event "${type}" empfangen:`, event.data);
+          listener(event);
+        }, ...rest);
+      };
+  
+      // Debug: onmessage Setter
+      Object.defineProperty(instance, 'onmessage', {
+        set(fn) {
+          console.log('[EventSource] onmessage gesetzt:', fn);
+          instance.addEventListener('message', fn);
+        },
+        get() {
+          return null;
+        },
+      });
+  
+      // Debug: Verbindung schließen
+      const originalClose = instance.close.bind(instance);
+      instance.close = function () {
+        console.log('[EventSource] Verbindung geschlossen');
+        return originalClose();
+      };
+  
+      return instance;
+    };
+  
+    window.EventSource.prototype = OriginalEventSource.prototype;
+  })();
+*/
+</script>
 
 <script src="./jassistart.js" data-run="app" data-config="./jassijs.json"></script>
+
 <div id="body"></div>
 <div id="errormsg"></div>
 </body>

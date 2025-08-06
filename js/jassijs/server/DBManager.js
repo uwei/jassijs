@@ -22,20 +22,147 @@ const Serverservice_1 = require("jassijs/remote/Serverservice");
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 var _instance = undefined;
+async function doDbTransactions(data) {
+    var ret = [];
+    if ((data === null || data === void 0 ? void 0 : data.length) < 1) {
+        return ret;
+    }
+    var err2;
+    await data[0].connection.transaction(async (manager) => {
+        for (var x = 0; x < data.length; x++) {
+            ret.push(await data[x].func(manager));
+        }
+    });
+    return ret;
+}
+async function replacePasswordIfNeeded(entity) {
+    if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
+        if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
+            entity.password = await new Promise((resolve) => {
+                const crypto = require('crypto');
+                const salt = crypto.randomBytes(8).toString('base64');
+                crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
+                    if (err)
+                        throw err;
+                    resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
+                });
+            });
+        }
+    }
+}
+class TypeORMListener {
+    saveDB(event) {
+        if (this.savetimer) {
+            clearTimeout(this.savetimer);
+            this.savetimer = undefined;
+        }
+        this.savetimer = setTimeout(() => {
+            var data = event.connection.driver.export();
+            const fs = require("fs");
+            const buffer = Buffer.from(data);
+            fs.writeFileSync("./__default.db", buffer);
+            console.log("save DB");
+        }, 300);
+    }
+    /**
+     * Called after entity is loaded.
+     */
+    afterLoad(entity) {
+        // console.log(`AFTER ENTITY LOADED: `, entity);
+    }
+    /**
+     * Called before post insertion.
+     */
+    beforeInsert(event /*: InsertEvent<any>*/) {
+        //console.log(`BEFORE POST INSERTED: `, event.entity);
+    }
+    /**
+     * Called after entity insertion.
+     */
+    afterInsert(event) {
+        this.saveDB(event);
+        //console.log(`AFTER ENTITY INSERTED: `, event.entity);
+    }
+    /**
+     * Called before entity update.
+     */
+    beforeUpdate(event /*: UpdateEvent<any>*/) {
+        //console.log(`BEFORE ENTITY UPDATED: `, event.entity);
+    }
+    /**
+     * Called after entity update.
+     */
+    afterUpdate(event) {
+        this.saveDB(event);
+        //console.log(`AFTER ENTITY UPDATED: `, event.entity);
+    }
+    /**
+     * Called before entity removal.
+     */
+    beforeRemove(event /*: RemoveEvent<any>*/) {
+        // console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+    }
+    /**
+     * Called after entity removal.
+     */
+    afterRemove(event) {
+        //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+        this.saveDB(event);
+    }
+    /**
+     * Called before transaction start.
+     */
+    beforeTransactionStart(event) {
+        // console.log(`BEFORE TRANSACTION STARTED: `, event);
+    }
+    /**
+     * Called after transaction start.
+     */
+    afterTransactionStart(event /*: TransactionStartEvent*/) {
+        //console.log(`AFTER TRANSACTION STARTED: `, event);
+    }
+    /**
+     * Called before transaction commit.
+     */
+    beforeTransactionCommit(event /*: TransactionCommitEvent*/) {
+        // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
+    }
+    /**
+     * Called after transaction commit.
+     */
+    afterTransactionCommit(event /*: TransactionCommitEvent*/) {
+        //console.log(`AFTER TRANSACTION COMMITTED: `, event);
+    }
+    /**
+     * Called before transaction rollback.
+     */
+    beforeTransactionRollback(event /*: TransactionRollbackEvent*/) {
+        //   console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
+    }
+    /**
+     * Called after transaction rollback.
+     */
+    afterTransactionRollback(event /*: TransactionRollbackEvent*/) {
+        // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
+    }
+}
 let DBManager = DBManager_1 = class DBManager {
     static async getConOpts() {
-        var stype = "postgres";
-        var shost = "localhost";
-        var suser = "postgres";
-        var spass = "ja$$1";
-        var iport = 5432;
-        var sdb = "jassi";
+        var stype; //: string = "postgres";
+        var shost; //; = "localhost";
+        var suser; //; = "postgres";
+        var spass; // ;= "ja$$1";
+        var iport; //; = 5432;
+        var sdb; // = "jassi";
+        var subscribers;
+        var database;
         //the default is the sqlite3
         //this is the default way: define an environment var DATABASSE_URL
         //type://user:password@hostname:port/database
         //eg: postgres://abcknhlveqwqow:polc78b98e8cd7168d35a66e392d2de6a8d5710e854c084ff47f90643lce2876@ec2-174-102-251-1.compute-1.amazonaws.com:5432/dcpqmp4rcmu182
         //@ts-ignore
-        var test = process.env.DATABASE_URL;
+        //debugger;
+        var test; //= process.env.DATABASE_URL;
         if (test !== undefined) {
             var all = test.split(":");
             stype = all[0];
@@ -47,6 +174,26 @@ let DBManager = DBManager_1 = class DBManager {
             suser = all[1].replace("//", "");
             spass = h[0];
             sdb = all[3].split("/")[1];
+        }
+        else {
+            console.log("process.env.DATABASE_URL nicht gefunden -> use sql.js");
+            //sqlite  
+            const initSqlJs = require('sql.js');
+            const SQL = await initSqlJs();
+            globalThis.SQL = SQL;
+            // Neue In-Memory-Datenbank
+            //    const db = new SQL.Database();
+            /*      const SQL = await globalThis["SQL"]({
+                    // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+                    // You can omit locateFile completely when running in node
+                    locateFile: file => `https://sql.js.org/dist/${file}`
+                  });*/
+            stype = "sqljs";
+            subscribers = [TypeORMListener];
+            const fs = require("fs");
+            if (fs.existsSync("./__default.db"))
+                sdb = fs.readFileSync("./__default.db");
+            DBManager_1.prototype["login"] = DBManager_1.prototype["nologin"];
         }
         var dbclasses = [];
         var dbobjects = await Registry_1.default.getJSONData("$DBObject");
@@ -66,7 +213,8 @@ let DBManager = DBManager_1 = class DBManager {
             "database": sdb,
             //"synchronize": true,
             "logging": false,
-            "entities": dbclasses
+            "entities": dbclasses,
+            subscribers: [TypeORMListener],
             //"js/client/remote/de/**/*.js"
             // "migrations": [
             //    "src/migration/**/*.ts"
@@ -136,6 +284,11 @@ let DBManager = DBManager_1 = class DBManager {
         }
         //wait for connection ready
         await _initrunning;
+        var con = (0, typeorm_1.getConnection)();
+        if (opts.subscribers) {
+            con.subscribers = [];
+            opts.subscribers.forEach((e) => con.subscribers.push(new e()));
+        }
         //on server we convert decimal type to Number https://github.com/brianc/node-postgres/issues/811
         //@ts-ignore
         if ((window === null || window === void 0 ? void 0 : window.document) === undefined) {
@@ -293,26 +446,19 @@ let DBManager = DBManager_1 = class DBManager {
     async save(context, entity, options) {
         await this.waitForConnection;
         await this._checkParentRightsForSave(context, entity);
-        if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
-            if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
-                entity.password = await new Promise((resolve) => {
-                    const crypto = require('crypto');
-                    const salt = crypto.randomBytes(8).toString('base64');
-                    crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
-                        if (err)
-                            throw err;
-                        resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
-                    });
-                });
-            }
+        await replacePasswordIfNeeded(entity);
+        var ret;
+        if (context.transaction) {
+            ret = await context.transaction.registerAction("db", {
+                func: async (con) => con.save(entity, options),
+                connection: this.connection()
+            }, doDbTransactions, context);
         }
-        if (context.objecttransaction && options === undefined) {
-            return this.addSaveTransaction(context, entity);
+        else {
+            ret = await this.connection().manager.save(entity, options);
+            //   if(this.connection().subscribers)
+            //    this.connection().subscribers.forEach((e)=>new e().afterUpdate(undefined));
         }
-        var ret = await this.connection().manager.save(entity, options);
-        //delete entity.password;
-        //delete ret["password"];
-        //@ts-ignore
         return ret === null || ret === void 0 ? void 0 : ret.id;
     }
     async _checkParentRightsForSave(context, entity) {
@@ -391,8 +537,7 @@ let DBManager = DBManager_1 = class DBManager {
       * Finds first entity that matches given conditions.
       */
     async find(context, entityClass, p1) {
-        //return this.connection().manager.findOne(entityClass,id,options);
-        // else
+        var _a, _b;
         await this.waitForConnection;
         var options = p1;
         var onlyColumns = options === null || options === void 0 ? void 0 : options.onlyColumns;
@@ -412,7 +557,7 @@ let DBManager = DBManager_1 = class DBManager {
         options === null || options === void 0 ? true : delete options.onlyColumns;
         ret = relations.addWhereBySample(context, options, ret);
         ret = relations.join(ret);
-        if (!context.request.user.isAdmin)
+        if (!((_b = (_a = context === null || context === void 0 ? void 0 : context.request) === null || _a === void 0 ? void 0 : _a.user) === null || _b === void 0 ? void 0 : _b.isAdmin))
             ret = await relations.addParentRightDestriction(context, ret);
         if (options === null || options === void 0 ? void 0 : options.skip) {
             ret.skip(options.skip);
@@ -475,7 +620,7 @@ let DBManager = DBManager_1 = class DBManager {
         //password is encrypted when saving
         /* await new Promise((resolve) => {
           const crypto = require('crypto');
-    
+        
           const salt = crypto.randomBytes(8).toString('base64');
           crypto.pbkdf2(password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
             if (err) throw err;
@@ -485,6 +630,33 @@ let DBManager = DBManager_1 = class DBManager {
         await this.save(context, user);
         delete user.password;
         return user;
+    }
+    async nologin(context, user, password) {
+        try {
+            var con = this.connection();
+            var us = await this.connection().manager.findOne(User_1.User);
+            if (us === undefined) { //create user of the is no one
+                us = new User_1.User();
+                us.email = "admin";
+                us.password = "j@ssi";
+                us.isAdmin = true;
+                await this.connection().manager.save(us);
+            }
+            var ret = await this.connection().manager.createQueryBuilder().
+                select("me").from(User_1.User, "me").addSelect("me.password").
+                andWhere("me.email=:email", { email: user });
+            var auser = await ret.getOne();
+            if (!auser || !password)
+                return undefined;
+            if (auser.password === password) {
+                delete auser.password;
+                return auser;
+            }
+        }
+        catch (err) {
+            err = err;
+        }
+        return undefined;
     }
     async login(context, user, password) {
         await this.waitForConnection;
@@ -498,7 +670,7 @@ let DBManager = DBManager_1 = class DBManager {
             andWhere("me.email=:email", { email: user });
         /* if (options)
            ret = relations.addWhere(<string>options.where, options.whereParams, ret);
-     
+       
          ret = relations.addWhereBySample(options, ret);
          ret = relations.join(ret);
          ret = await relations.addParentRightDestriction(ret);*/

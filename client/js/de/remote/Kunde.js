@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObjectQuery", "jassijs/remote/security/Rights", "jassijs/remote/Serverservice"], function (require, exports, DBObject_1, AR_1, Registry_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1, Serverservice_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObjectQuery", "jassijs/remote/security/Rights", "jassijs/remote/RemoteObject", "jassijs/remote/Serverservice"], function (require, exports, DBObject_1, AR_1, Registry_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1, RemoteObject_1, Serverservice_1) {
     "use strict";
     var Kunde_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -48,13 +48,8 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
         static async alleKundenNachNummer() {
             return await Kunde_1.find({ order: "id" });
         }
-        static async find(options = undefined, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this.find, options, context);
-            }
-            else {
-                return await (await Serverservice_1.serverservices.db).find(context, this, options);
-            }
+        static async find(options = undefined) {
+            return await (await Serverservice_1.serverservices.db).find(this, options);
         }
         static async sample() {
             var kunde1 = new Kunde_1();
@@ -124,6 +119,12 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], Kunde, "alleKundenNachNummer", null);
+    __decorate([
+        (0, RemoteObject_1.UseServer)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", Promise)
+    ], Kunde, "find", null);
     Kunde = Kunde_1 = __decorate([
         (0, Rights_1.$ParentRights)([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
                 description: {

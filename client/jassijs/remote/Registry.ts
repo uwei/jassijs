@@ -283,12 +283,17 @@ export class Registry {
      * reload the registry
      */
     async reload() {
+       
         this.jsondata = { $Class: {} };
         this.jsondataMembers = {};
         var _this = this;
         var modultext = "";
         //@ts-ignore
+<<<<<<< HEAD
+        if (window?.document === undefined||globalThis.BrowserFS!=undefined) { //on server
+=======
         if (window?.document === undefined) { //on server
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 
             //@ts-ignore 
             var fs = await import('fs');

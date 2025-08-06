@@ -5,6 +5,7 @@ var fpath = require('path');
  * updates serviceworker and create files in root package
  */
 export function updatePackage(){
+    debugger;
     var client_path="./client";
     var module_path="./node_modules/jassijs/client";
     if(!fs.existsSync(client_path)){

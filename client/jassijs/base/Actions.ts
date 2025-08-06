@@ -46,8 +46,8 @@ export function $ActionProvider(longclassname: string): Function {
 export interface Action {
 	name: string;
 	icon?: string;
-	call: (objects: any[],params?) => void;
-	description?:string;
+	call: (objects: any[], params?) => void;
+	description?: string;
 }
 @$Class("jassijs.base.Actions")
 export class Actions {
@@ -68,52 +68,61 @@ export class Actions {
 			var entr = allclasses[x];
 			var mem = registry.getJSONMemberData("$Action")[entr.classname];
 			for (let name in mem) {
-				let ac: ActionProperties = mem[name][0][0];
-				if (ac.isEnabled !== undefined||ac.run!==undefined){//we musst load the class
-					await classes.loadClass(entr.classname);
-					ac= registry.getMemberData("$Action")[entr.classname][name][0][0];
-				}
-				if (ac.isEnabled !== undefined){
-					if((await ac.isEnabled(vdata)) === false)
-						continue;
-				}
-				let sclassname=entr.classname;
-				let sname=name;
-				ret.push({
-					name: ac.name,
-					icon: ac.icon,
-					call: ac.run?ac.run:async(...param)=>{
-						(await classes.loadClass(sclassname))[sname](...param);
+				try {
+					let ac: ActionProperties = mem[name][0][0];
+					if (ac.isEnabled !== undefined || ac.run !== undefined) {//we musst load the class
+						await classes.loadClass(entr.classname);
+						ac = registry.getMemberData("$Action")[entr.classname][name][0][0];
 					}
-				})
-			}
-
-			
-			mem = registry.getJSONMemberData("$Actions")[entr.classname];
-			for (let name in mem) {
-				let acs: ActionProperties[] =await (await classes.loadClass(entr.classname))[name]();
-				for (let x = 0; x < acs.length; x++) {
-					let ac = acs[x];
-					if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
-						continue;
+					if (ac.isEnabled !== undefined) {
+						if ((await ac.isEnabled(vdata)) === false)
+							continue;
+					}
+					let sclassname = entr.classname;
+					let sname = name;
 					ret.push({
 						name: ac.name,
 						icon: ac.icon,
-						call: ac.run
+						call: ac.run ? ac.run : async (...param) => {
+							(await classes.loadClass(sclassname))[sname](...param);
+						}
 					})
+				} catch (err) {
+					console.error("Action konnte nicht geladen werden:" + name + err);
 				}
 			}
+
+
+			mem = registry.getJSONMemberData("$Actions")[entr.classname];
+			for (let name in mem) {
+				try {
+					let acs: ActionProperties[] = await (await classes.loadClass(entr.classname))[name]();
+					for (let x = 0; x < acs.length; x++) {
+						let ac = acs[x];
+						if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
+							continue;
+						ret.push({
+							name: ac.name,
+							icon: ac.icon,
+							call: ac.run
+						})
+					}
+				} catch (err) {
+					console.error("Fehler Action "+entr.classname+"."+name);
+				}
+			}
+
 		}
-		if(jassijs?.options?.Server?.filterActions){
-			var test=jassijs?.options?.Server?.filterActions[sclass];
-			var filterd=[];
-			if(test){
-				for(var x=0;x<ret.length;x++){
-					if(test.indexOf(ret[x].name)!==-1){
+		if (jassijs?.options?.Server?.filterActions) {
+			var test = jassijs?.options?.Server?.filterActions[sclass];
+			var filterd = [];
+			if (test) {
+				for (var x = 0; x < ret.length; x++) {
+					if (test.indexOf(ret[x].name) !== -1) {
 						filterd.push(ret[x]);
 					}
 				}
-				ret=filterd;
+				ret = filterd;
 			}
 		}
 		return ret;

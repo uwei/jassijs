@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"de/remote/AR.ts": {
-		"date": 1681557288000,
+		"date": 1750088588608.2544,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -34,7 +34,6 @@ exports.default={
 					]
 				},
 				"kunde": {
-					"$CheckParentRight": [],
 					"ManyToOne": [
 						"function",
 						"function"
@@ -45,12 +44,15 @@ exports.default={
 						"function",
 						"function"
 					]
+				},
+				"myfind": {
+					"UseServer": []
 				}
 			}
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1680947292000,
+		"date": 1749963543806.5596,
 		"de.ARZeile": {
 			"$DBObject": [],
 			"@members": {
@@ -72,11 +74,13 @@ exports.default={
 					]
 				},
 				"ar": {
-					"$CheckParentRight": [],
 					"ManyToOne": [
 						"function",
 						"function"
 					]
+				},
+				"find": {
+					"UseServer": []
 				}
 			}
 		}
@@ -85,7 +89,7 @@ exports.default={
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1684176928000,
+		"date": 1749964322573.4482,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -149,6 +153,9 @@ exports.default={
 						}
 					]
 				},
+				"find": {
+					"UseServer": []
+				},
 				"land": {
 					"Column": [
 						{
@@ -201,7 +208,7 @@ exports.default={
 		}
 	},
 	"de/remote/MyRemoteObject.ts": {
-		"date": 1683563216000,
+		"date": 1750546788159.0122,
 		"de.remote.MyRemoteObject": {
 			"@members": {
 				"sayHello": {
@@ -230,6 +237,51 @@ exports.default={
 				},
 				"age": {
 					"Column": []
+				}
+			}
+		}
+	},
+	"de/remote/DelRemoteObject.ts": {
+		"date": 1750088961591.24,
+		"de.remote.DelRemoteObject": {}
+	},
+	"de/remote/MyRemoteObject2.ts": {
+		"date": 1750547089612.7952,
+		"de.remote.MyRemoteObject2": {},
+		"de.remote.MyRemoteObject": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"sayHello2": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
+	},
+	"de/remote/Loch.ts": {
+		"date": 1750547500344.0847,
+		"de.remote.Loch": {},
+		"de.remote.MyRemoteObject": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"sayHello2": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
+	},
+	"de/remote/ll.ts": {
+		"date": 1750547610214.476,
+		"de.remote.ll": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"info": {
+					"UseServer": []
 				}
 			}
 		}

@@ -38,6 +38,27 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
     var ServerReport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ServerReport = void 0;
+<<<<<<< HEAD
+    let ServerReport = ServerReport_1 = class ServerReport {
+        static async getDesign(path, parameter) {
+            //@ts-ignore
+            var DoServerreport = (await new Promise((resolve_1, reject_1) => { require(["jassijs_report/server/DoServerreport"], resolve_1, reject_1); }).then(__importStar)).DoServerreport;
+            ServerReport_1.cacheLastParameter[path] = parameter;
+            return await new DoServerreport().getDesign(path, parameter);
+        }
+        static async getBase64(path, parameter) {
+            //@ts-ignore
+            var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/server/DoServerreport"], resolve_2, reject_2); }).then(__importStar)).DoServerreport;
+            if (parameter == "useLastCachedParameter")
+                parameter = ServerReport_1.cacheLastParameter[path];
+            return await new DoServerreport().getBase64(path, parameter);
+        }
+        static async getBase64FromFile(file, context = undefined) {
+            var res = await new Server_1.Server().testServersideFile(file.substring(0, file.length - 3), context);
+            //@ts-ignore 
+            var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); }).then(__importStar)).DoServerreport;
+            return await new DoServerreport().getBase64FromData(res);
+=======
     let ServerReport = ServerReport_1 = class ServerReport extends RemoteObject_1.RemoteObject {
         static async getDesign(path, parameter, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -72,23 +93,32 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/server/DoServerreport"], resolve_3, reject_3); }).then(__importStar)).DoServerreport;
                 return await new DoServerreport().getBase64FromData(res);
             }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     };
     ServerReport.cacheLastParameter = {};
     __decorate([
+        (0, RemoteObject_1.UseServer)(),
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, Object, RemoteObject_1.Context]),
+        __metadata("design:paramtypes", [String, Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getDesign", null);
     __decorate([
+        (0, RemoteObject_1.UseServer)(),
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, Object, RemoteObject_1.Context]),
+        __metadata("design:paramtypes", [String, Object]),
         __metadata("design:returntype", Promise)
     ], ServerReport, "getBase64", null);
+    __decorate([
+        (0, RemoteObject_1.UseServer)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
+        __metadata("design:returntype", Promise)
+    ], ServerReport, "getBase64FromFile", null);
     ServerReport = ServerReport_1 = __decorate([
         (0, Registry_1.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);

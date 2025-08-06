@@ -23,11 +23,11 @@ declare module "jassijs_report/remote/pdfmakejassi" {
     export function test(): void;
 }
 declare module "jassijs_report/remote/ServerReport" {
-    import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-    export class ServerReport extends RemoteObject {
+    import { Context } from "jassijs/remote/RemoteObject";
+    export class ServerReport {
         static cacheLastParameter: {};
-        static getDesign(path: string, parameter: any, context?: Context): unknown;
-        static getBase64(path: string, parameter: any, context?: Context): unknown;
+        static getDesign(path: string, parameter: any): unknown;
+        static getBase64(path: string, parameter: any): unknown;
         static getBase64FromFile(file: string, context?: Context): unknown;
     }
     export function test(): unknown;
@@ -53,12 +53,10 @@ declare module "jassijs_report/modul" {
             paths: {
                 'pdfjs-dist/build/pdf': string;
                 'pdfjs-dist/build/pdf.worker': string;
-                vfs_fonts: string;
                 pdfMakelib: string;
             };
             shim: {
                 'pdfjs-dist/build/pdf': {};
-                vfs_fonts: {};
             };
         };
     };

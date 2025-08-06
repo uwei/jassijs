@@ -23,10 +23,10 @@ export class Setting extends DBObject {
         throw new JassiError("not suported");
     }
     
-    static async findOne(options = undefined,context:Context=undefined): Promise<DBObject> {
+    static async findOne(options = undefined): Promise<DBObject> {
         throw new JassiError("not suported");
     }
-    static async find(options:MyFindManyOptions = undefined,context:Context=undefined): Promise<DBObject[]> {
+    static async find(options:MyFindManyOptions = undefined): Promise<DBObject[]> {
         throw new JassiError("not suported");
     }
     /**

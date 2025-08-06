@@ -52,28 +52,34 @@ let Filesystem = Filesystem_1 = class Filesystem {
                 var filename = list[xx];
                 var file = curdir + (curdir === "" ? "" : '/') + filename;
                 if (file !== "js" && file !== "tmp") { //compiled js
-                    var stat = await NativeAdapter_1.myfs.stat(parentPath + "/" + file);
-                    if (stat && stat.isDirectory()) {
-                        var newDir = { name: filename, files: [] };
-                        parent.files.push(newDir);
-                        /* Recurse into a subdirectory */
-                        if (ignore.indexOf(file) === -1)
-                            await _this.dir(file, appendDate, parentPath, newDir);
-                    }
-                    else {
-                        let dat = "";
-                        let toAdd = { name: filename };
-                        if (appendDate === true)
-                            toAdd.date = (await NativeAdapter_1.myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
-                        // if (file.toLowerCase().endsWith(".ts"))
-                        parent.files.push(toAdd);
-                        /* if (file.toLowerCase().endsWith(".js")) {
-                             if (!await exists(file.replace(".js", ".ts"))) {
-                                 parent.files.push(toAdd);
+                    try {
+                        var stat = await NativeAdapter_1.myfs.stat(parentPath + "/" + file);
+                        if (stat && stat.isDirectory()) {
+                            var newDir = { name: filename, files: [] };
+                            parent.files.push(newDir);
+                            /* Recurse into a subdirectory */
+                            if (ignore.indexOf(file) === -1)
+                                await _this.dir(file, appendDate, parentPath, newDir);
+                        }
+                        else {
+                            let dat = "";
+                            let toAdd = { name: filename };
+                            if (appendDate === true)
+                                toAdd.date = (await NativeAdapter_1.myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
+                            // if (file.toLowerCase().endsWith(".ts"))
+                            parent.files.push(toAdd);
+                            /* if (file.toLowerCase().endsWith(".js")) {
+                                 if (!await exists(file.replace(".js", ".ts"))) {
+                                     parent.files.push(toAdd);
+                                 }
                              }
-                         }
-                         if (file.toLowerCase().endsWith(".json"))
-                             parent.files.push(toAdd);*/
+                             if (file.toLowerCase().endsWith(".json"))
+                                 parent.files.push(toAdd);*/
+                        }
+                    }
+                    catch (err) {
+                        debugger;
+                        console.warn("could not dir " + file);
                     }
                 }
             }

@@ -22,7 +22,7 @@ exports.default={
 		"jassijs.remote.Database": {}
 	},
 	"jassijs/remote/DatabaseTools.ts": {
-		"date": 1681309882000,
+		"date": 1750577290597.1262,
 		"jassijs.remote.DatabaseTools": {
 			"@members": {
 				"runSQL": {
@@ -36,7 +36,7 @@ exports.default={
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1697209147073.5745,
+		"date": 1752176823845.5918,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -65,14 +65,18 @@ exports.default={
 		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
+<<<<<<< HEAD
+		"date": 1753729243466.9514
+=======
 		"date": 1721754483315.839
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	},
 	"jassijs/remote/RemoteObject.ts": {
-		"date": 1655556866000,
+		"date": 1750788682336.6975,
 		"jassijs.remote.RemoteObject": {}
 	},
 	"jassijs/remote/RemoteProtocol.ts": {
-		"date": 1655556796000,
+		"date": 1753949539547.0193,
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
@@ -191,11 +195,11 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/Rights.ts": {
-		"date": 1655556796000,
+		"date": 1750088842327.8132,
 		"jassijs.security.Rights": {}
 	},
 	"jassijs/remote/security/Setting.ts": {
-		"date": 1681316436000,
+		"date": 1749964183518.1116,
 		"jassijs.security.Setting": {
 			"$DBObject": [
 				{
@@ -255,7 +259,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1695399507170.7808,
+		"date": 1750536455548.542,
 		"jassijs.remote.Server": {
 			"@members": {
 				"dir": {
@@ -296,15 +300,18 @@ exports.default={
 				},
 				"createModule": {
 					"ValidateFunctionParameter": []
+				},
+				"mytest": {
+					"ValidateFunctionParameter": []
 				}
 			}
 		}
 	},
 	"jassijs/remote/Serverservice.ts": {
-		"date": 1695999826188.6174
+		"date": 1750503957693.7708
 	},
 	"jassijs/remote/Settings.ts": {
-		"date": 1681315776000,
+		"date": 1750539223887.9446,
 		"jassijs.remote.Settings": {
 			"@members": {
 				"remove": {
@@ -324,14 +331,25 @@ exports.default={
 		"jassijs.remote.Test": {}
 	},
 	"jassijs/remote/Transaction.ts": {
-		"date": 1655556866000,
-		"jassijs.remote.Transaction": {}
+		"date": 1750792975505.7617,
+		"jassijs.remote.Transaction": {},
+		"jassijs.remote.TransactionTest": {
+			"@members": {
+				"hi": {
+					"UseServer": []
+				}
+			}
+		}
 	},
 	"jassijs/remote/Validator.ts": {
-		"date": 1681322648000
+		"date": 1750544362041.928
 	},
 	"jassijs/server/Compile.ts": {
+<<<<<<< HEAD
+		"date": 1749969355673.02
+=======
 		"date": 1720553680038.0745
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	},
 	"jassijs/server/Cookies.ts": {
 		"date": 1682364420000
@@ -343,7 +361,7 @@ exports.default={
 		"date": 1682241710000
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1697213352571.0527,
+		"date": 1753948011624.183,
 		"jassijs/server/DBManager": {
 			"$Serverservice": [
 				{
@@ -357,7 +375,7 @@ exports.default={
 		"date": 1682717756000
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
-		"date": 1682362434000
+		"date": 1754463599103.0662
 	},
 	"jassijs/server/ext/EmpyDeclaration.ts": {
 		"date": 1682275348000
@@ -366,7 +384,11 @@ exports.default={
 		"date": 1657714030000
 	},
 	"jassijs/server/Filesystem.ts": {
+<<<<<<< HEAD
+		"date": 1753961284581.5793,
+=======
 		"date": 1719332352671.4578,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 		"jassijs.server.Filesystem": {
 			"$Serverservice": [
 				{
@@ -377,13 +399,13 @@ exports.default={
 		}
 	},
 	"jassijs/server/FileTools.ts": {
-		"date": 1697209029986.565
+		"date": 1753965873995.915
 	},
 	"jassijs/server/Indexer.ts": {
 		"date": 1722612829860.7268
 	},
 	"jassijs/server/JassiServer.ts": {
-		"date": 1697208017035.5112
+		"date": 1754140962527.3452
 	},
 	"jassijs/server/LocalProtocol.ts": {
 		"date": 1697207752396.3682
@@ -392,7 +414,7 @@ exports.default={
 		"date": 1720182392512.7004
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
-		"date": 1680946668000
+		"date": 1754463581383.8677
 	},
 	"jassijs/server/PassportSetup.ts": {
 		"date": 1680946688000
@@ -401,7 +423,7 @@ exports.default={
 		"date": 1654195782000
 	},
 	"jassijs/server/RegistryIndexer.ts": {
-		"date": 1682799792000
+		"date": 1753727085400.3452
 	},
 	"jassijs/server/Reloader.ts": {
 		"date": 1684435442000
@@ -430,7 +452,7 @@ exports.default={
 		}
 	},
 	"jassijs/server/UpdatePackage.ts": {
-		"date": 1682701332000
+		"date": 1754133064195.6643
 	},
 	"jassijs/server/Zip.ts": {
 		"date": 1622984046000
@@ -440,5 +462,45 @@ exports.default={
 	},
 	"jassijs/util/DatabaseSchema.ts": {
 		"date": 1611490792000
+	},
+	"jassijs/remote/RemoteTest.ts": {
+		"date": 1750787386563.1096,
+		"jassijs.remote.RemoteTest": {
+			"@members": {
+				"createFolder2": {
+					"UseServer": []
+				},
+				"mytest2": {
+					"UseServer": []
+				}
+			}
+		}
+	},
+	"jassijs/remote/Context.ts": {
+		"date": 1750451805597.2747
+	},
+	"jassijs/remote/Context2.ts": {
+		"date": 1749959261684.3096
+	},
+	"jassijs/remote/StackContext.ts": {
+		"date": 1749958831997.4402
+	},
+	"jassijs/server/PackServerFiles.ts": {
+		"date": 1753955421011.6997
+	},
+	"jassijs/server/Events.ts": {
+		"date": 1751803698056.834
+	},
+	"jassijs/remote/Runlocalserver.ts": {
+		"date": 1753970675254.8625
+	},
+	"jassijs/remote/Testlocalserver.ts": {
+		"date": 1753729472429.9197
+	},
+	"jassijs/remote/Npm.ts": {
+		"date": 1753558429561.62
+	},
+	"jassijs/remote/PatchTTP.ts": {
+		"date": 1753968322370.392
 	}
 }

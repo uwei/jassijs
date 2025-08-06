@@ -1,12 +1,11 @@
 define(["require", "exports", "jassijs/ui/Component", "jassijs/ext/jquerylib"], function (require, exports, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.login = exports.doAfterLogin = void 0;
-    var queue = [];
-    function doAfterLogin(resolve, prot) {
+    exports.test = exports.login = void 0;
+    var queueResolve = [];
+    /*export function doAfterLogin(resolve, prot: RemoteProtocol) {
         queue.push([resolve, prot]);
-    }
-    exports.doAfterLogin = doAfterLogin;
+    }*/
     var isrunning = false;
     var y = 0;
     async function check(dialog, win) {
@@ -16,11 +15,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ext/jquerylib"], 
             //dialog.dialog("destroy");
             document.body.removeChild(dialog);
             isrunning = false;
-            for (var x = 0; x < queue.length; x++) {
-                var data = queue[x];
-                data[0](await data[1].call());
+            for (var x = 0; x < queueResolve.length; x++) {
+                var res = queueResolve[x];
+                res();
             }
-            queue = [];
+            queueResolve = [];
             navigator.serviceWorker.controller.postMessage({
                 type: 'LOGGED_IN'
             }); //, [channel.port2]);
@@ -28,7 +27,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ext/jquerylib"], 
         else if (test.indexOf('{"error"') !== -1) {
             //dialog.dialog("destroy");
             alert("Login failed");
-            dialog.src = "/login.html";
+            dialog.src = "./login.html";
             //document.body.removeChild(dialog);
             setTimeout(() => {
                 check(dialog, win);
@@ -43,18 +42,18 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ext/jquerylib"], 
         }
     }
     async function login() {
-        if (isrunning)
-            return;
-        queue = [];
-        isrunning = true;
-        return new Promise((resolve) => {
+        var pwait = new Promise((resolve => {
+            queueResolve.push(resolve);
+        }));
+        if (!isrunning) {
+            isrunning = true;
             setTimeout(() => {
                 if (!fr.contentWindow) {
                     alert("no content window for login");
                 }
                 check(fr, fr["contentWindow"]);
             }, 100);
-            var fr = Component_1.Component.createHTMLElement('<iframe  src="/login.html" name="navigation"></iframe>');
+            var fr = Component_1.Component.createHTMLElement('<iframe  src="./login.html" name="navigation"></iframe>');
             document.body.appendChild(fr);
             fr.style.position = "absolute";
             fr.style.left = (window.innerWidth / 2 - fr.offsetWidth / 2) + "px";
@@ -65,7 +64,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ext/jquerylib"], 
                 var _a;
                 (_a = fr.contentWindow.document.querySelector("#loginButton")) === null || _a === void 0 ? void 0 : _a.focus();
             }, 200);
-        });
+        }
+        return pwait;
     }
     exports.login = login;
     function test() {

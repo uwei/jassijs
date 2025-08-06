@@ -1,6 +1,26 @@
 declare module "demo/DelTest" {
     export function test(): any;
 }
+<<<<<<< HEAD
+declare module "demo/Dialog1" {
+    import { HTMLComponent } from "jassijs/ui/Component";
+    import { Component, SimpleComponentProperties } from "jassijs/ui/Component";
+    type Refs = {
+        sdf?: HTMLComponent;
+    };
+    interface DialogProperties extends SimpleComponentProperties {
+        sampleProp?: string;
+    }
+    export class Dialog1 extends Component<DialogProperties> {
+        refs: Refs;
+        constructor(props?: DialogProperties);
+        render(): any;
+    }
+    export function test(): unknown;
+}
+declare module "demo/Dialog2" {
+    export function test(): any;
+=======
 declare module "demo/Dialog2" {
     import { Button } from "jassijs/ui/Button";
     import { Table } from "jassijs/ui/Table";
@@ -20,66 +40,36 @@ declare module "demo/Dialog2" {
         layout(me: Me): void;
     }
     export function test(): unknown;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 }
-declare module "demo/Dialog3" {
-    import { Checkbox } from "jassijs/ui/Checkbox";
+declare module "demo/Dialog7" {
     import { Panel } from "jassijs/ui/Panel";
-    import { HTMLComponent } from "jassijs/ui/Component";
-    type Me = {
-        p1?: HTMLComponent;
-        p2?: HTMLComponent;
-        p3?: HTMLComponent;
-        p4?: HTMLComponent;
-        p5?: HTMLComponent;
-        checkbox2?: Checkbox;
-    };
-    export class Dialog3 extends Panel {
-        me: Me;
+    export class Dialog7 extends Panel {
         constructor();
-        layout(me: Me): void;
+        render(): any;
     }
     export function test(): unknown;
 }
-declare module "demo/Dialog4" {
-    import { Button } from "jassijs/ui/Button";
+declare module "demo/Dialog8" {
     import { Panel } from "jassijs/ui/Panel";
-    type Me = {
-        button?: Button;
-        panel?: Panel;
-        button2?: Button;
-    };
-    export class Dialog4 extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
+    export class Dialog7 extends Panel {
+        render(): any;
     }
     export function test(): unknown;
 }
-declare module "demo/Dialog5" {
-    import { HTMLComponent, TextComponent } from "jassijs/ui/Component";
-    import { Checkbox } from "jassijs/ui/Checkbox";
-    import { Panel } from "jassijs/ui/Panel";
-    type Me = {
-        div?: HTMLComponent;
-        checkbox?: Checkbox;
-        text?: TextComponent;
-        text2?: TextComponent;
-        br?: HTMLComponent;
-        text3?: TextComponent;
-        htmlcomponent?: HTMLComponent;
-        text4?: TextComponent;
-        htmlcomponent2?: HTMLComponent;
-        htmlcomponent3?: HTMLComponent;
-        text5?: TextComponent;
-        htmlcomponent4?: HTMLComponent;
-    };
-    export class Dialog5 extends Panel {
-        me: Me;
-        constructor();
-        layout(me: Me): void;
+declare module "demo/ExistsIfTest" {
+    import { Component } from "jassijs/ui/Component";
+    export class PlaceholderComponentNotExists extends Component {
+        inactiveNode: React.ReactNode;
+        constructor(properties: any);
+        render(): any;
     }
     export function test(): unknown;
 }
+<<<<<<< HEAD
+declare module "demo/ExistsIfTest2" {
+    export function test(): any;
+=======
 declare module "demo/Dialog6" {
     import { Panel } from "jassijs/ui/Panel";
     type Me = {};
@@ -89,6 +79,7 @@ declare module "demo/Dialog6" {
         layout(me: Me): void;
     }
     export function test(): unknown;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 }
 declare module "demo/Dialog7" {
     import { Panel } from "jassijs/ui/Panel";

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Transaction_1, Serverservice_1, Validator_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/RemoteObject", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Transaction_1, RemoteObject_1, Serverservice_1, Validator_1) {
     "use strict";
     var Employees_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -23,7 +23,11 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
                         options = {};
                     options = { relations: ["ReportsTo"] };
                 }
+<<<<<<< HEAD
+                var ret = await RemoteObject_1.RemoteObject.docall(this, this.find, ...arguments);
+=======
                 var ret = await this.call(this.find, options, context);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 return ret;
             }
             else {

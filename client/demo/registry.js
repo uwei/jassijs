@@ -5,6 +5,60 @@ define("demo/registry",["require"], function(require) {
 	"demo/DelTest.ts": {
 		"date": 1681563014000
 	},
+<<<<<<< HEAD
+	"demo/Dialog1.ts": {
+		"date": 1750071788221.012,
+		"demo/Dialog1": {}
+	},
+	"demo/Dialog2.tsx": {
+		"date": 1740732548116.1436
+	},
+	"demo/Dialog7.ts": {
+		"date": 1740651060516.4475,
+		"demo/M1": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/M1"
+				}
+			],
+			"$Property": [
+				{
+					"name": "text",
+					"type": "string"
+				}
+			]
+		},
+		"demo/Dialog7": {}
+	},
+	"demo/Dialog8.ts": {
+		"date": 1740651364663.8745
+	},
+	"demo/ExistsIfTest.ts": {
+		"date": 1740651376709.344
+	},
+	"demo/ExistsIfTest2.tsx": {
+		"date": 1740490173291.3179
+	},
+	"demo/hallo.tsx": {
+		"date": 1740575668495.1196
+	},
+	"demo/hallo2.tsx": {
+		"date": 1720092336379.0627
+	},
+	"demo/hallo3.tsx": {
+		"date": 1740490301824.4006
+	},
+	"demo/hallo4.tsx": {
+		"date": 1740921953482.349
+	},
+	"demo/hallo5.tsx": {
+		"date": 1740490330935.17
+	},
+	"demo/hallo6.tsx": {
+		"date": 1740744395569.9814
+	},
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	"demo/LargeReport.ts": {
 		"date": 1634240084000
 	},
@@ -49,12 +103,18 @@ define("demo/registry",["require"], function(require) {
 			]
 		}
 	},
+	"demo/TestComputedState.tsx": {
+		"date": 1740490457021.1514
+	},
 	"demo/TestContent.ts": {
 		"date": 1695418663423.5051
 	},
 	"demo/Testcontextmenu.ts": {
 		"date": 1740079362172.345,
 		"demo.Testcontextmenu": {}
+	},
+	"demo/TestContextmenu2.tsx": {
+		"date": 1740312744239.8494
 	},
 	"demo/Testdatatable.ts": {
 		"date": 1681590288000
@@ -71,6 +131,9 @@ define("demo/registry",["require"], function(require) {
 	"demo/TestImage.ts": {
 		"date": 1633792454000
 	},
+	"demo/TestJSX.tsx": {
+		"date": 1719778647927.916
+	},
 	"demo/TestList.ts": {
 		"date": 1635803026000
 	},
@@ -80,6 +143,12 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/TestProTable.ts": {
 		"date": 1697201359946.1306
+	},
+	"demo/Testreport.ts": {
+		"date": 1740920946369.223
+	},
+	"demo/TestStatebinder.ts": {
+		"date": 1740069816818.0576
 	},
 	"demo/Testtable.ts": {
 		"date": 1681590322000

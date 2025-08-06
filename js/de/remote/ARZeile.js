@@ -17,18 +17,14 @@ const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Rights_1 = require("jassijs/remote/security/Rights");
 const AR_1 = require("de/remote/AR");
+const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 let ARZeile = ARZeile_1 = class ARZeile extends DBObject_1.DBObject {
     constructor() {
         super();
     }
-    static async find(options = undefined, context = undefined) {
-        if (!jassijs.isServer) {
-            return await this.call(this.find, options, context);
-        }
-        else {
-            return (await Serverservice_1.serverservices.db).find(context, this, options);
-        }
+    static async find(options = undefined) {
+        return (await Serverservice_1.serverservices.db).find(this, options);
     }
     get oo2() {
         var o = 12;
@@ -81,6 +77,12 @@ __decorate([
     (0, DatabaseSchema_1.ManyToOne)(type => AR_1.AR, ar => ar.zeilen),
     __metadata("design:type", AR_1.AR)
 ], ARZeile.prototype, "ar", void 0);
+__decorate([
+    (0, RemoteObject_1.UseServer)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ARZeile, "find", null);
 ARZeile = ARZeile_1 = __decorate([
     (0, DBObject_1.$DBObject)(),
     (0, Registry_1.$Class)("de.ARZeile"),

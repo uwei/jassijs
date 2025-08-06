@@ -2,13 +2,15 @@ import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
 import "jassijs/ext/jquerylib";
 import { Component } from "jassijs/ui/Component";
 
-var queue = [];
-export function doAfterLogin(resolve, prot: RemoteProtocol) {
+var queueResolve = [];
+
+
+/*export function doAfterLogin(resolve, prot: RemoteProtocol) {
     queue.push([resolve, prot]);
-}
+}*/
 var isrunning = false;
 var y = 0;
-async function check(dialog:HTMLIFrameElement, win: Window) {
+async function check(dialog: HTMLIFrameElement, win: Window) {
     //console.log("check"+(y++));
 
     var test: string = (win.document && win.document.body) ? win.document.body.innerHTML : "";
@@ -17,47 +19,47 @@ async function check(dialog:HTMLIFrameElement, win: Window) {
         document.body.removeChild(dialog);
         isrunning = false;
 
-        for (var x = 0; x < queue.length; x++) {
-            var data = queue[x];
-            data[0](await data[1].call());
+        for (var x = 0; x < queueResolve.length; x++) {
+            var res = queueResolve[x];
+            res();
         }
-        queue = [];
+        queueResolve = [];
 
         navigator.serviceWorker.controller.postMessage({
             type: 'LOGGED_IN'
         });//, [channel.port2]);
-    }else if(test.indexOf('{"error"') !== -1) {
-            //dialog.dialog("destroy");
-          alert("Login failed");  
-          dialog.src="/login.html";
-          //document.body.removeChild(dialog);
-          setTimeout(() => {
+    } else if (test.indexOf('{"error"') !== -1) {
+        //dialog.dialog("destroy");
+        alert("Login failed");
+        dialog.src = "./login.html";
+
+        //document.body.removeChild(dialog);
+        setTimeout(() => {
             check(dialog, win);
         }, 400);
-     
-    }else {
-      //  if (!dialog.isClosed) {
-            setTimeout(() => {
-                check(dialog, win);
-            }, 200);
-       // }
+
+    } else {
+        //  if (!dialog.isClosed) {
+        setTimeout(() => {
+            check(dialog, win);
+        }, 200);
+        // }
     }
 }
 export async function login() {
-    if (isrunning)
-        return;
-    queue = [];
-    isrunning = true;
-    return new Promise((resolve) => {
-
-
+    var pwait=new Promise((resolve=>{
+        queueResolve.push(resolve);
+    }))
+    
+    if(!isrunning){
+        isrunning = true;
         setTimeout(() => {
             if (!fr.contentWindow) {
                 alert("no content window for login");
             }
             check(fr, fr["contentWindow"]);
         }, 100);
-        var fr: HTMLIFrameElement = <any>Component.createHTMLElement('<iframe  src="/login.html" name="navigation"></iframe>');
+        var fr: HTMLIFrameElement = <any>Component.createHTMLElement('<iframe  src="./login.html" name="navigation"></iframe>');
         document.body.appendChild(fr);
         fr.style.position = "absolute";
         fr.style.left = (window.innerWidth / 2 - fr.offsetWidth / 2) + "px";
@@ -67,10 +69,14 @@ export async function login() {
         setTimeout(() => {
             (<HTMLElement>fr.contentWindow.document.querySelector("#loginButton"))?.focus();
         }, 200);
-    })
+    
+    }
+ 
+
+    return pwait;
 }
 
 export function test() {
-  //  login();
+    //  login();
 
 }

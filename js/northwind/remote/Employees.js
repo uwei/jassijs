@@ -15,6 +15,7 @@ const DBObject_1 = require("jassijs/remote/DBObject");
 const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Transaction_1 = require("jassijs/remote/Transaction");
+const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 const Validator_1 = require("jassijs/remote/Validator");
 let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
@@ -28,7 +29,11 @@ let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
                     options = {};
                 options = { relations: ["ReportsTo"] };
             }
+<<<<<<< HEAD
+            var ret = await RemoteObject_1.RemoteObject.docall(this, this.find, ...arguments);
+=======
             var ret = await this.call(this.find, options, context);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             return ret;
         }
         else {

@@ -1,18 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const JassiServer_1 = require("./jassijs/server/JassiServer");
-const Compile_1 = require("jassijs/server/Compile");
-//import { compilePackage } from "./jassijs/server/CreatePackage";
-new Compile_1.Compile().transpileModul("jassijs", true);
-new Compile_1.Compile().transpileModul("jassijs", false);
-new Compile_1.Compile().transpileModul("jassijs_editor", false);
-new Compile_1.Compile().transpileModul("jassijs_report", true);
-new Compile_1.Compile().transpileModul("jassijs_report", false);
-new Compile_1.Compile().transpileModul("demoreports", false);
-new Compile_1.Compile().transpileModul("northwind", true);
-new Compile_1.Compile().transpileModul("northwind", false);
-new Compile_1.Compile().transpileModul("tests", false);
-new Compile_1.Compile().transpileModul("tests", true);
-new Compile_1.Compile().transpileModul("demo", false);
+const PackServerFiles_1 = require("./jassijs/server/PackServerFiles");
+if (require("fs").existsSync("./private"))
+    (0, PackServerFiles_1.startCodeServer)();
 (0, JassiServer_1.default)();
+/*new Compile().transpileModul("jassijs", true);
+new Compile().transpileModul("jassijs", false);
+new Compile().transpileModul("jassijs_editor", false);
+new Compile().transpileModul("jassijs_report", true);
+new Compile().transpileModul("jassijs_report", false);
+new Compile().transpileModul("demoreports", false);
+new Compile().transpileModul("northwind", true);
+new Compile().transpileModul("northwind", false);
+new Compile().transpileModul("tests", false);
+new Compile().transpileModul("tests", true);
+new Compile().transpileModul("demo", false);
+*/
 //# sourceMappingURL=main.js.map

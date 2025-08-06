@@ -188,8 +188,9 @@ define(["require", "exports", "jassijs/remote/Config", "jassijs/remote/Registry"
                 //@ts-ignore
                 myrequire(allfiles, function (...ret) {
                     async function run() {
+                        var _a;
                         for (let f = 0; f < allfiles.length; f++) {
-                            if (ret && !ret[x].doNotReloadModule)
+                            if (ret && !((_a = ret[x]) === null || _a === void 0 ? void 0 : _a.doNotReloadModule))
                                 _this.migrateModul(allModules, allfiles[f], ret[f]);
                         }
                         for (let i = 0; i < _this.listener.length; i++) {

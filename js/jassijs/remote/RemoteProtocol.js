@@ -67,8 +67,9 @@ let RemoteProtocol = class RemoteProtocol {
             xhr.onload = function (data) {
                 if (this.status === 200)
                     resolve(this.responseText);
-                else
+                else {
                     reject(this);
+                }
             };
             xhr.send(config.data);
             xhr.onerror = function (data) {
@@ -98,13 +99,9 @@ let RemoteProtocol = class RemoteProtocol {
             ret = await this.exec(config, this._this);
         }
         catch (ex) {
-            if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
-                redirect = new Promise((resolve) => {
-                    //@ts-ignore
-                    Promise.resolve().then(() => require("jassijs/base/LoginDialog")).then((lib) => {
-                        lib.doAfterLogin(resolve, _this);
-                    });
-                });
+            if (ex.status === 401 || ex.status === 500 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
+                await (await Promise.resolve().then(() => require("jassijs/base/LoginDialog"))).login();
+                return await this.call();
             }
             else {
                 throw ex;

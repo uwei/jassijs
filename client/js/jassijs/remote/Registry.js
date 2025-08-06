@@ -283,7 +283,7 @@ define(["require", "exports", "jassijs/remote/Config", "reflect-metadata"], func
             var _this = this;
             var modultext = "";
             //@ts-ignore
-            if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
+            if ((window === null || window === void 0 ? void 0 : window.document) === undefined || globalThis.BrowserFS != undefined) { //on server
                 //@ts-ignore 
                 var fs = await new Promise((resolve_1, reject_1) => { require(['fs'], resolve_1, reject_1); }).then(__importStar);
                 var Filesystem = await new Promise((resolve_2, reject_2) => { require(["jassijs/server/Filesystem"], resolve_2, reject_2); }).then(__importStar);

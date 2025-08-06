@@ -22,12 +22,19 @@ const Setting_1 = require("jassijs/remote/security/Setting");
 const Server_1 = require("./Server");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 const Validator_1 = require("jassijs/remote/Validator");
+const DBObject_1 = require("./DBObject");
 const proxyhandler = {
     get: function (target, prop, receiver) {
         return prop;
     }
 };
-let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
+async function tt() {
+    return 5;
+}
+var h = new Proxy({ hallo: tt() }, {
+    get: (target, prop) => target[prop]
+});
+let Settings = Settings_1 = class Settings extends DBObject_1.DBObject {
     /**
     * loads the settings
     */
@@ -40,7 +47,7 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
             }
             else
                 Settings_1.browserSettings = {};
-            var all = (await Server_1.Server.isOnline() === false) ? undefined : await this.call(this.load, context);
+            var all = (await Server_1.Server.isOnline() === false) ? undefined : await RemoteObject_1.RemoteObject.docall(this, this.load, ...arguments);
             if (all === null || all === void 0 ? void 0 : all.user) {
                 Settings_1.userSettings = JSON.parse(all.user.data);
             }
@@ -54,10 +61,10 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
         }
         else {
             //@ts-ignore
-            var man = await Serverservice_1.serverservices.db;
-            var id = context.request.user.user;
+            var man = await (Serverservice_1.serverservices.db);
+            var user = await man.findOne(context, Setting_1.Setting, { "id": 1 });
             return {
-                user: await man.findOne(context, Setting_1.Setting, { "id": 1 }),
+                user: user,
                 allusers: await man.findOne(context, Setting_1.Setting, { "id": 0 }),
             };
         }
@@ -95,7 +102,7 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
                     delete Settings_1.userSettings[Settings_key];
                 if (scope == "allusers" && Settings_1.allusersSettings)
                     delete Settings_1.allusersSettings[Settings_key];
-                this.call(this.remove, Settings_key, scope, context);
+                RemoteObject_1.RemoteObject.docall(this, this.remove, Settings_key, scope, context);
             }
             else {
                 //@ts-ignore
@@ -112,11 +119,11 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
             }
         }
     }
-    static async save(Settings_key, value, scope) {
+    static async save(Settings_key, value, scope, context = undefined) {
         let ob = {};
         //@ts-ignore
         ob[Settings_key] = value;
-        return await this.saveAll(ob, scope);
+        return await this.saveAll(ob, scope, undefined, context);
     }
     static async saveAll(namevaluepair, scope, removeOtherKeys = false, context = undefined) {
         if (scope === "browser") {
@@ -147,7 +154,7 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
                         Settings_1.allusersSettings = {};
                     Object.assign(Settings_1.allusersSettings, namevaluepair);
                 }
-                return await this.call(this.saveAll, props, scope, removeOtherKeys, context);
+                return await RemoteObject_1.RemoteObject.docall(this, this.saveAll, props, scope, removeOtherKeys, context);
             }
             else {
                 //@ts-ignore
@@ -188,7 +195,7 @@ __decorate([
     __param(0, (0, Validator_1.ValidateIsString)()),
     __param(2, (0, Validator_1.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_a = typeof T !== "undefined" && T) === "function" ? _a : Object, typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, String]),
+    __metadata("design:paramtypes", [typeof (_a = typeof T !== "undefined" && T) === "function" ? _a : Object, typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, String, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], Settings, "save", null);
 __decorate([

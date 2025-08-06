@@ -50,6 +50,15 @@ declare module "tests/remote/TestOrderDetails" {
     }
     export function test(): any;
 }
+declare module "tests/remote/TestTransaction" {
+    import { Test } from "jassijs/remote/Test";
+    import { TransactionContext } from "jassijs/remote/Transaction";
+    export class TransactionTest {
+        product(num: number, context?: TransactionContext): unknown;
+    }
+    export function test(t: Test): any;
+    export function test2(t: Test): any;
+}
 declare module "tests/modul" {
     const _default: {
         require: {};

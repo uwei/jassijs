@@ -35,7 +35,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         //this is a sample remote function
         async sayHello(name, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this, this.sayHello, name, context);
+                return await RemoteObject_1.RemoteObject.call(this, this.sayHello, name, context);
             }
             else {
                 //@ts-ignore

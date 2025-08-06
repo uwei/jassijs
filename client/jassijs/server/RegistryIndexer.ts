@@ -1,7 +1,7 @@
 //synchronize-server-client
 import { Indexer } from "jassijs/server/Indexer";
 import { serverservices } from "jassijs/remote/Serverservice";
-import { exists, myfs } from "jassijs/server//NativeAdapter";
+import { exists, myfs } from "jassijs/server/NativeAdapter";
 import { config } from "jassijs/remote/Config";
 
 

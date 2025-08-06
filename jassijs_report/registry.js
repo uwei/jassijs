@@ -6,7 +6,7 @@ exports.default={
 		"date": 1634336644000
 	},
 	"jassijs_report/remote/ServerReport.ts": {
-		"date": 1684441134000,
+		"date": 1750088189565.3828,
 		"jassijs_report.remote.ServerReport": {
 			"@members": {
 				"getDesign": {
@@ -14,6 +14,9 @@ exports.default={
 				},
 				"getBase64": {
 					"ValidateFunctionParameter": []
+				},
+				"getBase64FromFile": {
+					"UseServer": []
 				}
 			}
 		}

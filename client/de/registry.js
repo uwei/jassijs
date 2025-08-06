@@ -2,9 +2,12 @@
 define("de/registry",["require"], function(require) {
  return {
   default: {
+<<<<<<< HEAD
+=======
 	"de/aa.ts": {
 		"date": 1682369482000
 	},
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	"de/Dialog2.ts": {
 		"date": 1697206950609.826,
 		"de/Dialog2": {}
@@ -49,7 +52,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1655740312000
 	},
 	"de/remote/AR.ts": {
-		"date": 1681557288000,
+		"date": 1750088588608.2544,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -80,7 +83,6 @@ define("de/registry",["require"], function(require) {
 					]
 				},
 				"kunde": {
-					"$CheckParentRight": [],
 					"ManyToOne": [
 						"function",
 						"function"
@@ -91,12 +93,15 @@ define("de/registry",["require"], function(require) {
 						"function",
 						"function"
 					]
+				},
+				"myfind": {
+					"UseServer": []
 				}
 			}
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1680947292000,
+		"date": 1749963543806.5596,
 		"de.ARZeile": {
 			"$DBObject": [],
 			"@members": {
@@ -118,11 +123,13 @@ define("de/registry",["require"], function(require) {
 					]
 				},
 				"ar": {
-					"$CheckParentRight": [],
 					"ManyToOne": [
 						"function",
 						"function"
 					]
+				},
+				"find": {
+					"UseServer": []
 				}
 			}
 		}
@@ -131,7 +138,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1684176928000,
+		"date": 1749964322573.4482,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -195,6 +202,9 @@ define("de/registry",["require"], function(require) {
 						}
 					]
 				},
+				"find": {
+					"UseServer": []
+				},
 				"land": {
 					"Column": [
 						{
@@ -247,7 +257,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/MyRemoteObject.ts": {
-		"date": 1683563216000,
+		"date": 1750546788159.0122,
 		"de.remote.MyRemoteObject": {
 			"@members": {
 				"sayHello": {
@@ -310,6 +320,57 @@ define("de/registry",["require"], function(require) {
 	"de/TTDialog.ts": {
 		"date": 1655556796000,
 		"de/TTDialog": {}
+	},
+	"de/ab.ts": {
+		"date": 1749962018973.366
+	},
+	"de/remote/DelRemoteObject.ts": {
+		"date": 1750088961591.24,
+		"de.remote.DelRemoteObject": {}
+	},
+	"de/zz.ts": {
+		"date": 1750427245317.2957
+	},
+	"de/remote/MyRemoteObject2.ts": {
+		"date": 1750547089612.7952,
+		"de.remote.MyRemoteObject2": {},
+		"de.remote.MyRemoteObject": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"sayHello2": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
+	},
+	"de/remote/ll.ts": {
+		"date": 1750547610214.476,
+		"de.remote.ll": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"info": {
+					"UseServer": []
+				}
+			}
+		}
+	},
+	"de/remote/Loch.ts": {
+		"date": 1750547500344.0847,
+		"de.remote.Loch": {},
+		"de.remote.MyRemoteObject": {
+			"@members": {
+				"sayHello": {
+					"ValidateFunctionParameter": []
+				},
+				"sayHello2": {
+					"ValidateFunctionParameter": []
+				}
+			}
+		}
 	}
 }
  }

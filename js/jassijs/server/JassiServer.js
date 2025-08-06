@@ -16,7 +16,6 @@ require("jassijs/server/PassportSetup");
 const DoRemoteProtocol_1 = require("jassijs/server/DoRemoteProtocol");
 const RawBody_1 = require("jassijs/server/RawBody");
 const RegistryIndexer_1 = require("./RegistryIndexer");
-const UpdatePackage_1 = require("./UpdatePackage");
 const FileTools_1 = require("./FileTools");
 class JassiConnectionProperties {
 }
@@ -28,7 +27,7 @@ class JassiConnectionProperties {
  */
 function JassiServer(properties = {}, expressApp = undefined) {
     let app = expressApp;
-    (0, UpdatePackage_1.updatePackage)();
+    // updatePackage(); 
     if (app === undefined)
         app = express();
     if (properties.updeateRegistryOnStart !== false)
@@ -41,10 +40,18 @@ function JassiServer(properties = {}, expressApp = undefined) {
             console.log("could not sync remotefiles");
         }
     }
+    //registerWebpack(app);
     app.use(FileTools_1.staticfiles);
     app.use(RawBody_1.rawbody);
     app.set('etag', 'strong');
     // app.use(installGetRequest);
+    /*debugger;
+    let pp=passport.initialize();
+    let pneu=(...parameter)=>{
+      debugger;
+      pp(...parameter);
+    }
+    app.use(pneu);*/
     app.use(passport.initialize());
     app.use(cookieParser());
     app.use("/user", PassportLoginRegister_1.loginRegister);

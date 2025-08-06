@@ -4,14 +4,14 @@ import { DBObject, $DBObject } from "jassijs/remote/DBObject";
 import { $Class } from "jassijs/remote/Registry";
 import { JoinColumn, JoinTable, Entity, PrimaryColumn, Column, ManyToMany, ManyToOne, OneToMany, OneToOne } from "jassijs/util/DatabaseSchema";
 import { $CheckParentRight, $Rights } from "jassijs/remote/security/Rights";
-import { Context } from "jassijs/remote/RemoteObject";
+import { Context, UseServer } from "jassijs/remote/RemoteObject";
 import { serverservices } from "jassijs/remote/Serverservice";
 /**
 * Ausgangsrechnung
 * @class de.AR
 */
 @$Rights([{ name: "Auftragswesen/Ausgangsrechnung/festschreiben" },
-    { name: "Auftragswesen/Ausgangsrechnung/löschen" }])
+{ name: "Auftragswesen/Ausgangsrechnung/löschen" }])
 @$DBObject()
 @$Class("de.AR")
 export class AR extends DBObject {
@@ -35,36 +35,33 @@ export class AR extends DBObject {
         this.strasse = "";
         this.nummer = 0;
     }
-    static async myfind(options = undefined, context: Context = undefined): Promise<AR[]> {
-        if (!jassijs.isServer) {
-            return await this.call(this.myfind, options, context);
-        }
-        else {
-            //@ts-ignore
-            var Brackets = (await import("typeorm")).Brackets;
-            //@ts-ignore
-            var man = await serverservices.db;
-            var man2 = man;
-            var ret = await man.connection().manager.createQueryBuilder().
-                select("me").from(AR, "me").
-                leftJoinAndSelect("me.kunde", ",me.kunde").
-                where("me.kunde=:id", { id: 5 }).getMany();
-            var ret2 = await man.connection().manager.createQueryBuilder().
-                select("me").from(ARZeile, "me").
-                leftJoin("me.ar", "me_ar").
-                leftJoin("me_ar.kunde", "me_ar_kunde").
-                where("me_ar_kunde.id>:id", { id: 0 }).
-                andWhere(new Brackets(qp => {
+    @UseServer()
+    static async myfind(options = undefined): Promise<AR[]> {
+        //@ts-ignore
+        var Brackets = (await import("typeorm")).Brackets;
+        //@ts-ignore
+        var man = await serverservices.db;
+        var man2 = man;
+        var ret = await man.connection().manager.createQueryBuilder().
+            select("me").from(AR, "me").
+            leftJoinAndSelect("me.kunde", ",me.kunde").
+            where("me.kunde=:id", { id: 5 }).getMany();
+        var ret2 = await man.connection().manager.createQueryBuilder().
+            select("me").from(ARZeile, "me").
+            leftJoin("me.ar", "me_ar").
+            leftJoin("me_ar.kunde", "me_ar_kunde").
+            where("me_ar_kunde.id>:id", { id: 0 }).
+            andWhere(new Brackets(qp => {
                 qp.where("me_ar.id>=:p1 and me_ar.id<=:p2", { p1: 1, p2: 90 }).
                     orWhere("me_ar.id>=:p3 and me_ar.id<=:p4", { p3: 500, p4: 1000 });
             })).
-                andWhere(new Brackets(qp => {
+            andWhere(new Brackets(qp => {
                 qp.where("me_ar_kunde.id>=:von and me_ar_kunde.id<=:bis", { von: 1, bis: 90 }).
                     orWhere("me_ar_kunde.id>=:von and me_ar_kunde.id<=:bis", { von: 1, bis: 90 });
             })).
-                getMany();
-            return ret;
-        }
+            getMany();
+        return ret;
+
     }
     async sample() {
         var all = AR.myfind();

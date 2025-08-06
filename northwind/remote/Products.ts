@@ -5,6 +5,7 @@ import { $Class } from "jassijs/remote/Registry";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, JoinColumn, JoinTable } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { ValidateIsBoolean, ValidateIsInstanceOf, ValidateIsInt, ValidateIsNumber, ValidateIsString } from "jassijs/remote/Validator";
+import { Transaction } from "jassijs/remote/Transaction";
 @$DBObject()
 @$Class("northwind.Products")
 export class Products extends DBObject {
@@ -51,7 +52,20 @@ export class Products extends DBObject {
     Discontinued: boolean;
 }
 export async function test() {
-    var p: Products = <Products>await Products.findOne();
+   // var p: Products = <Products>await Products.findOne();
+   //  var tr=new Transaction();
+ /*    var ret=await tr.useTransaction(async ()=>{
+       // var c1=new Products();
+      //  c1.id=58800;
+      //  var c2=new Products();
+      //  c2.id="aa500585";
+        var ret=[];
+       // ret.push(p.save()),
+     //    ret.push(p.save());
+      
+        return ret;
+    });*/
+    
    
 }
-;
+

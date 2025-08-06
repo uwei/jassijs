@@ -189,6 +189,12 @@ declare module "northwind/remote/Employees" {
     export function test(): any;
     export function test2(): any;
 }
+<<<<<<< HEAD
+declare module "northwind/remote/MyTest" {
+    export function test(): any;
+}
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "northwind/remote/OrderDetails" {
     import { Products } from "northwind/remote/Products";
     import { Orders } from "northwind/remote/Orders";
@@ -210,6 +216,7 @@ declare module "northwind/remote/Orders" {
     import { Customer } from "northwind/remote/Customer";
     import { DBObject } from "jassijs/remote/DBObject";
     import { Shippers } from "northwind/remote/Shippers";
+    import { Context } from "jassijs/remote/RemoteObject";
     export class Orders extends DBObject {
         id: number;
         constructor();
@@ -227,7 +234,11 @@ declare module "northwind/remote/Orders" {
         ShipPostalCode: string;
         ShipCountry: string;
         Details: OrderDetails[];
+<<<<<<< HEAD
+        static findAllWithDetails(context: Context): Promise<Orders[]>;
+=======
         static findAllWithDetails(): Promise<Orders[]>;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     }
     export function test(): any;
 }

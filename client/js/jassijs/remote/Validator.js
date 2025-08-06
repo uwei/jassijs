@@ -156,6 +156,12 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
             if (method === undefined)
                 throw new Error("sdfgsdfgsfd");
             const funcname = method.name;
+            let smethod = target[method.name].toString();
+            //save params for MyRemoteObject
+            let sparam = smethod.substring(smethod.indexOf('(') + 1, smethod.indexOf(')'));
+            let paramnames = sparam.split(',');
+            if (method["__originalParams"])
+                paramnames = method["__originalParams"];
             const { [funcname]: newfunc } = {
                 [funcname]: function () {
                     //@ts-ignore
@@ -178,6 +184,7 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
                     return method.apply(this, arguments);
                 }
             };
+            newfunc["__originalParams"] = paramnames;
             descriptor.value = newfunc;
         };
     }

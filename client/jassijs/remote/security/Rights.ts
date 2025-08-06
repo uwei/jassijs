@@ -32,7 +32,7 @@ export function $CheckParentRight():Function{
 }
 
 @$Class("jassijs.security.Rights")
-export class Rights extends RemoteObject{
+export class Rights{
     private _isAdmin:boolean;
     async isAdmin(context:Context=undefined):Promise<boolean>{
         

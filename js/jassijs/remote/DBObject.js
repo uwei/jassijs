@@ -5,9 +5,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 var DBObject_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.DBObject = exports.MyFindManyOptions = exports.$DBObject = void 0;
@@ -41,15 +38,12 @@ exports.MyFindManyOptions = MyFindManyOptions;
 * all objects which use the jassijs.db must implement this
 * @class DBObject
 */
-let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
+let DBObject = DBObject_1 = class DBObject {
     //clear cache on reload
     static _initFunc() {
         Registry_2.default.onregister("$Class", (data, name) => {
             delete DBObject_1.cache[name];
         });
-    }
-    constructor() {
-        super();
     }
     isAutoId() {
         var _a;
@@ -130,12 +124,20 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
     * save the object to jassijs.db
     */
     async save(context = undefined) {
-        await this.validate({
-            delegateOptions: {
-                ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] },
-                ValidateIsArray: { alternativeJsonProperties: ["id"] }
-            }
-        });
+        let ttest = 9992;
+        try {
+            await this.validate({
+                delegateOptions: {
+                    ValidateIsInstanceOf: { alternativeJsonProperties: ["id"] },
+                    ValidateIsArray: { alternativeJsonProperties: ["id"] }
+                }
+            });
+            console.log("now");
+        }
+        catch (err) {
+            debugger;
+            console.log("error" + err);
+        }
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             if (this.id !== undefined) {
                 var cname = Classes_1.classes.getClassName(this);
@@ -150,7 +152,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
                     if (this.isAutoId())
                         throw new Classes_1.JassiError("autoid - load the object  before saving or remove id");
                     else
-                        return await this.call(this, this._createObjectInDB, context);
+                        return await RemoteObject_1.RemoteObject.docall(this, this._createObjectInDB, ...arguments);
                     //}//fails if the Object is saved before loading 
                 }
                 else {
@@ -161,7 +163,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
                 DBObject_1.addToCache(this);
                 //                cl[this.id] = this;//Update cache on save
                 var newob = this._replaceObjectWithId(this);
-                var id = await this.call(newob, this.save, context);
+                var id = await RemoteObject_1.RemoteObject.docallWithReplaceThis(newob, this, this.save, ...arguments);
                 this.id = id;
                 return this;
             }
@@ -171,7 +173,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
                 }
                 else {
                     var newob = this._replaceObjectWithId(this);
-                    var h = await this.call(newob, this._createObjectInDB, context);
+                    var h = await RemoteObject_1.RemoteObject.docallWithReplaceThis(newob, this, this._createObjectInDB, ...arguments);
                     this.id = h;
                     DBObject_1.addToCache(this);
                     //                	 DBObject.cache[classes.getClassName(this)][this.id]=this;
@@ -191,20 +193,24 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
             return (await Serverservice_1.serverservices.db).insert(context, this);
         }
     }
+    //@UseServer()
     static async findOne(options = undefined, context = undefined) {
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-            return await this.call(this.findOne, options, context);
+            return RemoteObject_1.RemoteObject.docall(this, this.findOne, ...arguments);
         }
         else {
-            return (await Serverservice_1.serverservices.db).findOne(context, this, options);
+            var db = await (Serverservice_1.serverservices.db);
+            return db.findOne(context, this, options);
         }
     }
+    // @UseServer()
     static async find(options = undefined, context = undefined) {
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-            return await this.call(this.find, options, context);
+            return RemoteObject_1.RemoteObject.docall(this, this.find, ...arguments);
         }
         else {
-            return (await Serverservice_1.serverservices.db).find(context, this, options);
+            var db = await (Serverservice_1.serverservices.db);
+            return db.find(context, this, options);
         }
     }
     /**
@@ -217,7 +223,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
             if (cl !== undefined) {
                 delete cl[this.id];
             }
-            return await this.call({ id: this.id }, this.remove, context);
+            return await RemoteObject_1.RemoteObject.docallWithReplaceThis({ id: this.id }, this, this.remove, ...arguments);
         }
         else {
             //@ts-ignore
@@ -232,8 +238,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
 DBObject.cache = {};
 DBObject._init = DBObject_1._initFunc();
 DBObject = DBObject_1 = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.DBObject"),
-    __metadata("design:paramtypes", [])
+    (0, Registry_1.$Class)("jassijs.remote.DBObject")
 ], DBObject);
 exports.DBObject = DBObject;
 async function test() {

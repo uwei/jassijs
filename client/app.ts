@@ -6,17 +6,35 @@ import { router } from "jassijs/base/Router";
 import {SearchExplorer} from "jassijs_editor/SearchExplorer";
 import { DBObjectExplorer } from "jassijs/ui/DBObjectExplorer";
 import { ActionNodeMenu } from "jassijs/ui/ActionNodeMenu";
+//import { testNPM } from "jassijs/remote/Npm";
+//import { testDB, testJSSQL, testLocalServer, testWebpack } from "jassijs/server/Testlocalserver";
 
 async function test() {
+<<<<<<< HEAD
+    //debugger;
+    //testNPM();
 
+   /* setTimeout(() => {
+        console.log("load script");
+        const script = document.createElement('script');
+        script.src = "http://localhost:4000/bundle.js";
+        document.head.appendChild(script);
+    }, 15000);*/
+   // await testWebpack();
+    //await testJSSQL();
+    //testDB(); 
+  
+=======
+
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
   //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
     var body = new Panel();//{ id: "body" });
-    document.body.appendChild(body.dom);
-    body.max();
+    document.body.appendChild(body.dom); 
+    body.max(); 
     windows.addLeft(new DBObjectExplorer(), "DBObjects");
     windows.addLeft(new SearchExplorer(), "Search");
     windows.addLeft(new FileExplorer(), "Files");
-    var bt=new Button();
+    var bt=new Button(); 
     windows._desktop.add(bt);
     bt.icon="mdi mdi-refresh";
     var am=new ActionNodeMenu();
@@ -25,7 +43,7 @@ async function test() {
         am=new ActionNodeMenu()
         windows._desktop.add(am);
     });
-    windows._desktop.add(am);
+    windows._desktop.add(am);  
 	
     
  /*   var bts = new Button();

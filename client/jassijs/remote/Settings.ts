@@ -8,12 +8,13 @@ import { Server } from "./Server";
 import { Test } from "./Test";
 import { serverservices } from "jassijs/remote/Serverservice";
 import { ValidateFunctionParameter, ValidateIsBoolean, ValidateIsIn, ValidateIsString } from "jassijs/remote/Validator";
- 
+import { DBObject } from "./DBObject";
+
 
 
 declare global {
     export interface KnownSettings {
- 
+
     }
 }
 const proxyhandler = {
@@ -21,9 +22,14 @@ const proxyhandler = {
         return prop;
     }
 };
-
+async function tt() {
+    return 5;
+}
+var h = new Proxy({ hallo: tt() }, {
+    get: (target, prop) => target[prop]
+});
 @$Class("jassijs.remote.Settings")
-export class Settings extends RemoteObject {
+export class Settings extends DBObject {
     public static keys: KnownSettings = new Proxy({}, proxyhandler);//the Proxy allwas give the key back
     private static browserSettings = undefined;
     private static userSettings = undefined;
@@ -32,17 +38,16 @@ export class Settings extends RemoteObject {
     * loads the settings
     */
     static async load(context: Context = undefined) {
-
         if (!context?.isServer) {
-            
+
             //browser
             let entr = window.localStorage.getItem("jassijs.settings");
             if (entr) {
                 Settings.browserSettings = JSON.parse(entr);
             } else
                 Settings.browserSettings = {};
-           
-            var all =(await Server.isOnline()===false) ?undefined: await this.call(this.load, context);
+
+            var all = (await Server.isOnline() === false) ? undefined : await RemoteObject.docall(this, this.load, ...arguments);
             if (all?.user) {
                 Settings.userSettings = JSON.parse(all.user.data);
             } else
@@ -54,10 +59,10 @@ export class Settings extends RemoteObject {
 
         } else {
             //@ts-ignore
-            var man = await serverservices.db;
-            var id = context.request.user.user;
+            var man = await (serverservices.db);
+            var user = await man.findOne(context, Setting, { "id": 1 })
             return {
-                user: await man.findOne(context, Setting, { "id": 1 }),
+                user: user,
                 allusers: await man.findOne(context, Setting, { "id": 0 }),
             }
         }
@@ -85,7 +90,7 @@ export class Settings extends RemoteObject {
         return undefined;
     }
     @ValidateFunctionParameter()
-    static async remove(@ValidateIsString() Settings_key: string,@ValidateIsIn({in:["browser" , "user" , "allusers"]})  scope: "browser" | "user" | "allusers", context: Context = undefined) {
+    static async remove(@ValidateIsString() Settings_key: string, @ValidateIsIn({ in: ["browser", "user", "allusers"] }) scope: "browser" | "user" | "allusers", context: Context = undefined) {
         if (scope === "browser") {
             delete Settings.browserSettings[Settings_key];
             window.localStorage.setItem("jassijs.settings", JSON.stringify(Settings.browserSettings));
@@ -96,14 +101,14 @@ export class Settings extends RemoteObject {
                     delete Settings.userSettings[Settings_key];
                 if (scope == "allusers" && Settings.allusersSettings)
                     delete Settings.allusersSettings[Settings_key];
-                this.call(this.remove, Settings_key, scope, context);
+                RemoteObject.docall(this, this.remove, Settings_key, scope, context);
 
             } else {
                 //@ts-ignore
-                var man =  await serverservices.db;
+                var man = await serverservices.db;
                 var id = context.request.user.user;
                 //first load
-                let entr = await man.findOne(context, Setting, { "id": (scope === "user" ? id : 0) });
+                let entr = await man.findOne(context,Setting, { "id": (scope === "user" ? id : 0) });
 
                 if (entr !== undefined) {
                     var data = JSON.parse(entr.data);
@@ -115,14 +120,14 @@ export class Settings extends RemoteObject {
         }
     }
     @ValidateFunctionParameter()
-    static async save<T>(@ValidateIsString()Settings_key: T, value: T, @ValidateIsIn({in:["browser" , "user" , "allusers"]}) scope: "browser" | "user" | "allusers") {
+    static async save<T>(@ValidateIsString() Settings_key: T, value: T, @ValidateIsIn({ in: ["browser", "user", "allusers"] }) scope: "browser" | "user" | "allusers",context:Context=undefined) {
         let ob = {};
         //@ts-ignore
         ob[Settings_key] = value;
-        return await this.saveAll(ob, scope);
+        return await this.saveAll(ob, scope,undefined,context);
     }
     @ValidateFunctionParameter()
-    static async saveAll(namevaluepair: { [key: string]: any }, @ValidateIsIn({in:["browser" , "user" , "allusers"]}) scope: "browser" | "user" | "allusers", @ValidateIsBoolean({optional:true}) removeOtherKeys = false, context: Context = undefined) {
+    static async saveAll(namevaluepair: { [key: string]: any }, @ValidateIsIn({ in: ["browser", "user", "allusers"] }) scope: "browser" | "user" | "allusers", @ValidateIsBoolean({ optional: true }) removeOtherKeys = false,context:Context=undefined) {
         if (scope === "browser") {
             let entr = window.localStorage.getItem("jassijs.settings");
             var data = namevaluepair;
@@ -152,13 +157,13 @@ export class Settings extends RemoteObject {
                         Settings.allusersSettings = {};
                     Object.assign(Settings.allusersSettings, namevaluepair);
                 }
-                return await this.call(this.saveAll, props, scope, removeOtherKeys, context);
+                return await RemoteObject.docall(this, this.saveAll, props, scope, removeOtherKeys,context);
             } else {
                 //@ts-ignore
                 var man = await serverservices.db;
                 var id = context.request.user.user;
                 //first load
-                let entr = await man.findOne(context, Setting, { "id": (scope === "user" ? id : 0) });
+                let entr = await man.findOne(context,Setting, { "id": (scope === "user" ? id : 0) });
                 var data = namevaluepair;
                 if (removeOtherKeys !== true) {
                     if (entr !== undefined) {
@@ -191,11 +196,11 @@ export async function autostart() {
 export async function test(t: Test) {
     try {
         await Settings.load();
-        var settings=new Settings();
+        var settings = new Settings();
         await Settings.remove("antestsetting", "user");
         await Settings.remove("antestsetting", "browser");
         await Settings.remove("antestsetting", "allusers");
-          t.expectEqual(settings.gets("antestsetting") === undefined);
+        t.expectEqual(settings.gets("antestsetting") === undefined);
         await Settings.load();
         t.expectEqual(settings.gets("antestsetting") === undefined);
 
@@ -214,7 +219,7 @@ export async function test(t: Test) {
         await Settings.load();
         t.expectEqual(<string>settings.gets("antestsetting") === "3");
     } catch (ex) {
-      
+
 
         throw ex;
     } finally {
@@ -224,6 +229,6 @@ export async function test(t: Test) {
     }
 
 }
-export async function load(){
+export async function load() {
     return Settings.load();
 }

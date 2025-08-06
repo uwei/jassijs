@@ -4,7 +4,7 @@ exports.ServerIndexer = void 0;
 //synchronize-server-client
 const Indexer_1 = require("jassijs/server/Indexer");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
-const NativeAdapter_1 = require("jassijs/server//NativeAdapter");
+const NativeAdapter_1 = require("jassijs/server/NativeAdapter");
 const Config_1 = require("jassijs/remote/Config");
 class ServerIndexer extends Indexer_1.Indexer {
     async updateRegistry() {

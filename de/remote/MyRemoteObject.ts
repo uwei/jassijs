@@ -1,36 +1,32 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
-import { serverservices } from "jassijs/remote/Serverservice";
+import { Context, DefaultParameterValue, UseServer } from "jassijs/remote/RemoteObject";
 import { ValidateFunctionParameter, ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
 
 @$Class("de.remote.MyRemoteObject")
-export class MyRemoteObject extends RemoteObject{
+export class MyRemoteObject{
     //this is a sample remote function
     async tt(@ValidateIsString() name){
         return "oo";
     }
+    @UseServer()
     @ValidateFunctionParameter()
-    public async sayHello(@ValidateIsString() name: string,context: Context = undefined) {
-
-        console.log(this.sayHello.name);
-        
-        if (!context?.isServer) {
-            return await this.call(this, this.sayHello, name,context);
-        } else {
+    public async sayHello( @ValidateIsString() name: string, @DefaultParameterValue(9) age:number=9,context?:Context) {
             console.log(await this.tt("hallo"));
-            return "Hello3 "+name;  //this would be execute on server  
-        }
+            console.log(context.isServer)
+            return "Hello3 "+name+"("+age+")";  //this would be execute on server  
     }
+    @UseServer()
     @ValidateFunctionParameter()
-    public static async sayHello2(@ValidateIsString() name: string,context: Context = undefined) {
-        if (!context?.isServer) {
-            return await this.call( this.sayHello2, name,context);
-        } else {
-            return "Hello static "+name;  //this would be execute on server  
-        }
+    public static async sayHello2(@ValidateIsString() name: string) {
+            try{
+                return "Hello static "+name+" from "+(`Node.js version: ${process.version}`);  //this would be execute on server  
+            }catch{
+                return "Hello static "+name+" from Browser";
+            }
     }
 }
 export async function test(){
     console.log(await new MyRemoteObject().sayHello("Kurtt"));
-   // console.log(await MyRemoteObject.sayHello2("5"));
+    console.log(await MyRemoteObject.sayHello2("5"));
+
 }

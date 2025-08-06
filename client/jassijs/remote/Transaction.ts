@@ -1,151 +1,178 @@
 import { $Class } from "jassijs/remote/Registry";
-import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+import { Context, RemoteObject, UseServer, _fillDefaultParameter, getContext, useContext } from "jassijs/remote/RemoteObject";
 import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
-
-
-
+import { Test } from "jassijs/remote/Test";
 //var serversession;
 
 
-
-export class TransactionItem {
-    transaction:Transaction;
+export class GenericTransactionItem {
+    transaction: GenericTransaction;
+    userData;
+    promise: Promise<any>;
+    resolve;
+    reject;
+}
+export class TransactionItem extends GenericTransactionItem {
     obj: any;
     method: (...args) => any;
     params: any[];
-    promise: Promise<any>;
-    result: any = "**unresolved**";
     remoteProtocol: RemoteProtocol;
-    resolve;
+}
+
+export class TransactionContext extends Context {
+    transaction?: GenericTransaction;
+    transactionItem?: GenericTransactionItem;
+}
+class GenericTransaction {
+    protected finalizer: { [key: string]: (any) => any } = {}
+    protected allPromises: Promise<any>[] = [];
+    protected filledTransactions: GenericTransactionItem[] = [];
+    protected finalized: number = 0;
+    public transactions: GenericTransactionItem[] = [];
+    protected registerdTransactions: { [name: string]: GenericTransactionItem[] } = {};
+    private resolveFinalizer;
+    public registerAction<T>(name: string, userdata: T, finalize: (alluserdata: T[]) => Promise<any[]>, config: TransactionContext): Promise<any> {
+        this.finalizer[name] = finalize;
+        if (this.registerdTransactions[name] === undefined)
+            this.registerdTransactions[name] = [];
+        var it = config.transactionItem;
+        if (this.registerdTransactions[name].indexOf(it) < 0)
+            this.registerdTransactions[name].push(it);
+        var pr = new Promise((res) => { it.resolve = res });
+        it.promise = pr;
+        it.userData = userdata;
+        if (this.finalized < 1 && this.filledTransactions.indexOf(it) === -1)
+            this.filledTransactions.push(it);
+        this.tryFinalize();
+        return it.promise;
+    }
+    tryFinalize() {
+        if (this.finalized === 0 && this.filledTransactions.length === this.transactions.length) {
+            if (this.resolveFinalizer)
+                this.resolveFinalizer();
+        }
+    }
+    protected async finalize() {
+        if (this.finalized)
+            return;
+        this.finalized = 1;
+        for (var key in this.finalizer) {
+            if (this.registerdTransactions[key] === undefined) {
+                continue;
+            }
+            var trans = this.registerdTransactions[key];
+            var alluserdata = [];
+            await trans.forEach((o) => alluserdata.push(o.userData));
+            var results = await this.finalizer[key](alluserdata);
+
+            for (var x = 0; x < trans.length; x++) {
+                var tran = trans[x];
+                tran.resolve(await results[x]);
+            }
+        }
+    }
+    protected async wait() {
+        var _this = this;
+        var pp = new Promise((res) => { _this.resolveFinalizer = res });
+        //  this.tryFinalize();
+        await pp;
+        await this.finalize();
+        return await Promise.all(this.allPromises);
+    }
 }
 @$Class("jassijs.remote.Transaction")
-export class Transaction extends RemoteObject {
-    private statements: TransactionItem[] = [];
-    private ready;
-    private context = new Context();
-  
-    async execute(): Promise<any[]> {
-        //  return this.context.register("transaction", this, async () => {
-        for (var x = 0; x < this.statements.length; x++) {
-            var it = this.statements[x];
-            var context:Context={
-                isServer:false,
-                transaction:this,
-                transactionitem:it
-            }
-            it.promise = it.obj[it.method.name](...it.params,context);
-            it.promise.then((val) => {
-                it.result = val;//promise returned or resolved out of Transaction
-            })
-        }
-        let _this = this;
-        await new Promise((res) => {
-            _this.ready = res;
-        })
-        var ret = [];
-        for (let x = 0; x < this.statements.length; x++) {
-            var res = await this.statements[x].promise;
-            ret.push(res);
-        }
-        return ret;
-        //  });
+export class Transaction extends GenericTransaction {
 
+    addProtocol(prot: RemoteProtocol, config: TransactionContext) {
+        return super.registerAction("transaction", prot, this.sendRequest.bind(this), config);
     }
-    async wait(transactionItem:TransactionItem,prot: RemoteProtocol): Promise<any> {
-        transactionItem.remoteProtocol = prot;
-        //if all transactions are placed then do the request
-        var foundUnplaced = false;
-        for (let x = 0; x < this.statements.length; x++) {
-            let it = this.statements[x];
-            if (it.result === "**unresolved**" && it.remoteProtocol === undefined)
-                foundUnplaced = true;
-        }
-        if (foundUnplaced === false) {
-            this.sendRequest();
-        }
-        let _this = this;
-        return new Promise((res) => {
 
-            transactionItem.resolve = res;
-        });//await this.statements[id].result;//wait for result - comes with Request
-    }
-  
-    private async sendRequest(context: Context = undefined) {
+    private async sendRequest(userData: RemoteProtocol[], context: Context = undefined) {
+
         if (!context?.isServer) {
             var prots = [];
-            for (let x = 0; x < this.statements.length; x++) {
-                let st = this.statements[x];
-                if (st.result !== "**unresolved**")
-                    prots.push(undefined);
-                else
-                    prots.push(st.remoteProtocol.stringify(st.remoteProtocol));
+            for (let x = 0; x < userData.length; x++) {
+                let st = userData[x];
+                // if (st.result !== "**unresolved**")
+                //     prots.push(undefined);
+                // else
+                prots.push(st.stringify(st));
             }
-            var sic = this.statements;
-            this.statements = prots;
-            var ret = await this.call(this, this.sendRequest, context);
-            this.statements = sic;
-            for (let x = 0; x < this.statements.length; x++) {
-                this.statements[x].resolve(ret[x]);
-            }
-            this.ready();
-            //ret is not what we want - perhaps there is a modification
-            /* let ret2=[];
-             for(let x=0;x<this.statements.length;x++){
-                 ret2.push(await this.statements[x].promise);
-             }
-             this.resolve(ret);*/
-            return true;
-        } else {
-            //@ts-ignore
-
-
-            //@ts-ignore
-            var ObjectTransaction = (await import("jassijs/remote/ObjectTransaction")).ObjectTransaction;
-            var ot = new ObjectTransaction();
-            ot.statements = [];
-            let ret = [];
-            for (let x = 0; x < this.statements.length; x++) {
-                var stat: any = {
-                    result: "**unresolved**"
-
-                }
-                ot.statements.push(stat);
-            }
-            for (let x = 0; x < this.statements.length; x++) {
-                ret.push( this.doServerStatement(this.statements, ot, x, context));
-            }
-            for(let x=0;x<ret.length;x++){
-                ret[x]=await ret[x];
-            }
+            if (context)
+                delete context.transaction;
+            var ret = await RemoteObject.docallWithReplaceThis({}, this, this.sendRequest, prots, context);//WithReplaceThis({userData:prots}, this, this.sendRequest);
 
             return ret;
+        } else {
+            var servertransaction = new GenericTransaction();
+            var all = [];
+            var _execute = (await import("jassijs/server/DoRemoteProtocol"))._execute;
+            //try {
+            for (let x = 0; x < userData.length; x++) {
+                var item = new TransactionItem();
+                var st = userData[x];
+                item.transaction = servertransaction;
+                var contextneu: TransactionContext = { isServer: true };
+                Object.assign(contextneu, context);
+                contextneu.transactionItem = item;
+                servertransaction.transactions.push(item);
+                contextneu.transaction = servertransaction;
+                var res = _execute(<any>st, context.request, contextneu);
+                all.push(res);
+            }
+            await servertransaction.wait(); //await Promise.all(all)
+            ret = await Promise.all(all);
+            // } catch (err) {
+            //    throw err;
+            //} 
+            return ret;
         }
-
-
     }
-    private async doServerStatement(statements, ot/*:ObjectTransaction*/, num: number, context) {
-        //@ts-ignore
-        var _execute = (await import("jassijs/server/DoRemoteProtocol"))._execute;
-        var _this = this;
-        var newcontext: any = {};
-        Object.assign(newcontext, context);
-        newcontext.objecttransaction = ot;
-        newcontext.objecttransactionitem = ot.statements[num];
-        //@ts-ignore
-        ot.statements[num].result = _execute(<string>_this.statements[num], context.request, newcontext);
-
-        return ot.statements[num].result;
-
+    //runs the transaction
+    async execute(context: TransactionContext = undefined): Promise<any[]> {
+        //  return this.context.register("transaction", this, async () => {
+        var allPromises = [];
+        for (var x = 0; x < this.transactions.length; x++) {
+            var it: TransactionItem = <any>this.transactions[x];
+            var newcontext = context ? context : <TransactionContext>{ isServer: false };
+            newcontext.transaction = this;
+            newcontext.transactionItem = it;
+            _fillDefaultParameter(it.obj, it.method, it.params, newcontext);
+            var pr = it.obj[it.method.name](...it.params, newcontext);
+            // RemoteObject.docall(it.obj,it.method,...it.params,newcontext);
+            allPromises.push(pr);
+        }
+        var ret = await this.wait();//Promise.all(allPromises);
+        return ret;
     }
+    //add a transaction
     public add(obj: any, method: (...args) => any, ...params) {
 
         var ti = new TransactionItem();
         ti.method = method;
         ti.obj = obj;
         ti.params = params;
-        ti.transaction=this;
-        
-        this.statements.push(ti);
+        ti.transaction = this;
+        this.transactions.push(ti);
     }
 
 }
+
+
+
+@$Class("jassijs.remote.TransactionTest")
+export class TransactionTest {
+    @UseServer()
+    hi(num: number) {
+        return num + 10000;
+    }
+}
+export async function test(t: Test) {
+    var trans = new Transaction();
+    for (var x = 0; x < 3; x++) {
+        var tr = new TransactionTest();
+        trans.add(tr, tr.hi, x);
+    }
+    var all = await trans.execute();
+    t.expectEqual(all.join() === "10000,10001,10002")
+} 

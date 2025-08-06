@@ -79,6 +79,8 @@ class Compile {
         else {
             text = text.substring(text.indexOf("default=") + 8);
         }
+        if (text === "")
+            return undefined;
         var index = JSON.parse(text);
         return index;
     }

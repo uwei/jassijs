@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+
+=======
 br2.jdesignmode { 
   content: "";
 }
@@ -18,6 +21,7 @@ br2.jdesignmode::after{
   min-width: 20px;
   min-height: 20px;
 }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 .lm_content{
   background-color:white;  
 }
@@ -28,44 +32,10 @@ body .lm_content{
     overflow: auto;
 }
 
-.mce-content-body.HTMLPanel{
-	min-width:12px;
-	min-height:12px;
-	border:1px solid #ccc;
-} 
-.mce-content-body>p{
-  margin-top:0px;
-  margin-bottom:0px;
+
+.jwrapper:not(.jcontainer):not(tr):not(li){
+  display: inline-block;
 }
-.mce-content-body.RText{
-	min-width:12px;
-	min-height:12px;
-	border:1px solid #ccc;
-} 
-
-
-br[data-mce-bogus="1"] {
-  display:none;
-}
-.jdesignmode > .Panel {
-  border: 1px solid #ccc;
-}
-.jinlinecomponent.invalid{
-  border: 1px solid red;
-}
-
-.ui-state-highlight> .jinlinecomponent{
-  border: 1px solid #dad55e;
-  background: #fffa90;
-  color: #777620;
-}
-
-
-.jselected{
-  border: 1px solid rgb(70, 54, 214);
-}
-
-
 
 .jabsolutelayout{
   position:relative;

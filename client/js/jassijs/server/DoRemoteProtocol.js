@@ -79,6 +79,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
         file = file.replace(".ts", "");
         //var ret = await import(file);
         var C = await Classes_1.classes.loadClass(prot.classname);
+        prot.method.toString();
         ///await Promise.resolve().then(() => require.main.require(file));
         //var C = classes.getClass(prot.classname);
         if (prot._this === "static") {

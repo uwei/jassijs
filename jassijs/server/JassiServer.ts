@@ -24,6 +24,7 @@ import { rawbody } from "jassijs/server/RawBody";
 import { ServerIndexer } from "./RegistryIndexer";
 import { updatePackage } from "./UpdatePackage";
 import { staticfiles, staticsecurefiles, syncRemoteFiles } from "./FileTools";
+import { registerWebpack } from "servertest/startwebpack";
 
 
 
@@ -49,7 +50,7 @@ class JassiConnectionProperties {
 export default function JassiServer(properties: JassiConnectionProperties = {}, expressApp = undefined) {
 
   let app = expressApp;
-  updatePackage(); 
+ // updatePackage(); 
   if (app === undefined)
     app = express();
   if (properties.updeateRegistryOnStart !== false)
@@ -61,10 +62,18 @@ export default function JassiServer(properties: JassiConnectionProperties = {}, 
       console.log("could not sync remotefiles");
     }
   }
+  //registerWebpack(app);
   app.use(staticfiles);
   app.use(rawbody);
   app.set('etag', 'strong');
   // app.use(installGetRequest);
+  /*debugger;
+  let pp=passport.initialize();
+  let pneu=(...parameter)=>{
+    debugger;
+    pp(...parameter);
+  }
+  app.use(pneu);*/
   app.use(passport.initialize());
 
   app.use(cookieParser());

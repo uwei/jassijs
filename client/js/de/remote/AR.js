@@ -30,7 +30,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "jassijs/remote/Serverservice"], function (require, exports, ARZeile_1, Kunde_1, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1, Serverservice_1) {
+define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "jassijs/remote/RemoteObject", "jassijs/remote/Serverservice"], function (require, exports, ARZeile_1, Kunde_1, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1, RemoteObject_1, Serverservice_1) {
     "use strict";
     var AR_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -47,6 +47,33 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/r
             this.strasse = "";
             this.nummer = 0;
         }
+<<<<<<< HEAD
+        static async myfind(options = undefined) {
+            //@ts-ignore
+            var Brackets = (await new Promise((resolve_1, reject_1) => { require(["typeorm"], resolve_1, reject_1); }).then(__importStar)).Brackets;
+            //@ts-ignore
+            var man = await Serverservice_1.serverservices.db;
+            var man2 = man;
+            var ret = await man.connection().manager.createQueryBuilder().
+                select("me").from(AR_1, "me").
+                leftJoinAndSelect("me.kunde", ",me.kunde").
+                where("me.kunde=:id", { id: 5 }).getMany();
+            var ret2 = await man.connection().manager.createQueryBuilder().
+                select("me").from(ARZeile_1.ARZeile, "me").
+                leftJoin("me.ar", "me_ar").
+                leftJoin("me_ar.kunde", "me_ar_kunde").
+                where("me_ar_kunde.id>:id", { id: 0 }).
+                andWhere(new Brackets(qp => {
+                qp.where("me_ar.id>=:p1 and me_ar.id<=:p2", { p1: 1, p2: 90 }).
+                    orWhere("me_ar.id>=:p3 and me_ar.id<=:p4", { p3: 500, p4: 1000 });
+            })).
+                andWhere(new Brackets(qp => {
+                qp.where("me_ar_kunde.id>=:von and me_ar_kunde.id<=:bis", { von: 1, bis: 90 }).
+                    orWhere("me_ar_kunde.id>=:von and me_ar_kunde.id<=:bis", { von: 1, bis: 90 });
+            })).
+                getMany();
+            return ret;
+=======
         static async myfind(options = undefined, context = undefined) {
             if (!jassijs.isServer) {
                 return await this.call(this.myfind, options, context);
@@ -77,6 +104,7 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/r
                     getMany();
                 return ret;
             }
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
         async sample() {
             var all = AR_1.myfind();
@@ -124,6 +152,12 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/r
         (0, DatabaseSchema_1.OneToMany)(type => ARZeile_1.ARZeile, zeile => zeile.ar),
         __metadata("design:type", Array)
     ], AR.prototype, "zeilen", void 0);
+    __decorate([
+        (0, RemoteObject_1.UseServer)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", Promise)
+    ], AR, "myfind", null);
     AR = AR_1 = __decorate([
         (0, Rights_1.$Rights)([{ name: "Auftragswesen/Ausgangsrechnung/festschreiben" },
             { name: "Auftragswesen/Ausgangsrechnung/löschen" }]),

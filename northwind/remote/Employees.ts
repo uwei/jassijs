@@ -3,7 +3,7 @@ import { $Class } from "jassijs/remote/Registry";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, JoinColumn, JoinTable } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { Transaction } from "jassijs/remote/Transaction";
-import { Context } from "jassijs/remote/RemoteObject";
+import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { serverservices } from "jassijs/remote/Serverservice";
 import { ValidateIsDate, ValidateIsInstanceOf, ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
 @$DBObject()
@@ -88,7 +88,11 @@ export class Employees extends DBObject {
                     options={};
                 options={relations:["ReportsTo"]}
             }
+<<<<<<< HEAD
+            var ret=await RemoteObject.docall(this,this.find, ...arguments);
+=======
             var ret=await this.call(this.find, options,context);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             return ret;
         }
         else {
@@ -110,7 +114,7 @@ export async function test2() {
 
     var em = new Employees();
     em.id = getRandomInt(100000);
-    var em2 = new Employees();
+    var em2 = new Employees(); 
     em2.id = getRandomInt(100000);
     var trans = new Transaction();
     console.log(em.id + " " + em2.id);

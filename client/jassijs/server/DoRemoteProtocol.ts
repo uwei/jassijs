@@ -59,7 +59,7 @@ export async function _execute(protext: string, request, context: Context): Prom
     var prot = new RemoteProtocol();
     var vdata = await prot.parse(protext);
     Object.assign(prot, vdata);
-
+   
     var files = registry.getAllFilesForService("$Class", prot.classname);
 
     if (files === undefined || files.length === 0) {
@@ -72,6 +72,7 @@ export async function _execute(protext: string, request, context: Context): Prom
     file = file.replace(".ts", "");
     //var ret = await import(file);
     var C= await classes.loadClass(prot.classname);
+    prot.method.toString()
     ///await Promise.resolve().then(() => require.main.require(file));
     //var C = classes.getClass(prot.classname);
     if (prot._this === "static") {

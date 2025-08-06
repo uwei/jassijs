@@ -17,7 +17,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1657714352000
 	},
 	"jassijs_report/modul.ts": {
-		"date": 1655329710000
+		"date": 1751825750826.97
 	},
 	"jassijs_report/pdfMake-interface.ts": {
 		"date": 1681513962000
@@ -77,7 +77,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1634336644000
 	},
 	"jassijs_report/remote/ServerReport.ts": {
-		"date": 1684441134000,
+		"date": 1750088189565.3828,
 		"jassijs_report.remote.ServerReport": {
 			"@members": {
 				"getDesign": {
@@ -85,12 +85,15 @@ define("jassijs_report/registry",["require"], function(require) {
 				},
 				"getBase64": {
 					"ValidateFunctionParameter": []
+				},
+				"getBase64FromFile": {
+					"UseServer": []
 				}
 			}
 		}
 	},
 	"jassijs_report/Report.ts": {
-		"date": 1656501702000,
+		"date": 1753960724586.7295,
 		"jassijs_report.remote.Report": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

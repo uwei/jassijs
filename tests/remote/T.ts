@@ -5,9 +5,9 @@ import { Server } from "jassijs/remote/Server";
 @$Class("tests.remote.T")
 export class T extends RemoteObject{
     //this is a sample remote function
-    public async sayHello(name: string,context: Context = undefined) {
+    public async sayHello(name: string,context: Context = undefined) { 
         if (!context?.isServer) {
-            return await this.call(this, this.sayHello, name,context);
+            return await RemoteObject.call(this, this.sayHello, name,context);
         } else {
             //@ts-ignore
             var H=await import("Hallo");

@@ -38,9 +38,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
     var Server_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Server = void 0;
-    let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
+    let Server = Server_1 = class Server {
         constructor() {
-            super();
         }
         _convertFileNode(node) {
             var ret = new FileNode_1.FileNode();
@@ -140,8 +139,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         async dir(withDate = false, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 var ret;
-                if ((await Server_1.isOnline(context)) === true)
-                    ret = await this.call(this, this.dir, withDate, context);
+                if ((await Server_1.isOnline()) === true)
+                    ret = await RemoteObject_1.RemoteObject.docall(this, this.dir, ...arguments);
                 else
                     ret = { name: "", files: [] };
                 await this.addFilesFromMap(ret);
@@ -155,28 +154,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
-        async zip(directoryname, serverdir = undefined, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this, this.zip, directoryname, serverdir, context);
-            }
-            else {
-                return (await Serverservice_1.serverservices.filesystem).zip(directoryname, serverdir);
-                // return ["jassijs/base/ChromeDebugger.ts"];
-            }
+        async zip(directoryname, serverdir = undefined) {
+            return (await Serverservice_1.serverservices.filesystem).zip(directoryname, serverdir);
+            // return ["jassijs/base/ChromeDebugger.ts"];
         }
         /**
          * gets the content of a file from server
          * @param {string} fileNamew
          * @returns {string} content of the file
          */
-        async loadFiles(fileNames, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this, this.loadFiles, fileNames, context);
-            }
-            else {
-                return (await Serverservice_1.serverservices.filesystem).loadFiles(fileNames);
-                // return ["jassijs/base/ChromeDebugger.ts"];
-            }
+        async loadFiles(fileNames) {
+            return (await Serverservice_1.serverservices.filesystem).loadFiles(fileNames);
         }
         /**
          * gets the content of a file from server
@@ -212,13 +200,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                             mapname = Config_1.config.server.modules[found.modul].split("?")[0] + ".map";
                         if (Config_1.config.modules[found.modul].indexOf(".js?") > -1)
                             mapname = mapname + "?" + Config_1.config.modules[found.modul].split("?")[1];
-                        var code = await this.loadFile(mapname, context);
+                        var code = await this.loadFile(mapname);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;
                     }
                 }
                 if (fromServerdirectory) {
-                    return await this.call(this, this.loadFile, fileName, context);
+                    return await RemoteObject_1.RemoteObject.docall(this, this.loadFile, ...arguments);
                 }
                 else
                     return $.ajax({ url: fileName, dataType: "text" });
@@ -258,7 +246,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                         allcontents.push(content);
                     }
                 }
-                var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
+                var res = await RemoteObject_1.RemoteObject.docall(this, this.saveFiles, ...arguments);
                 if (res === "") {
                     //@ts-ignore
                     new Promise((resolve_1, reject_1) => { require(["jassijs/ui/Notify"], resolve_1, reject_1); }).then(__importStar).then((el) => {
@@ -291,14 +279,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         * @param {string} fileName - the name of the file
         * @param {string} content
         */
-        async saveFile(fileName, content, context = undefined) {
+        async saveFile(fileName, content) {
             /*await this.fillFilesInMapIfNeeded();
             if (Server.filesInMap[fileName]) {
                 //@ts-ignore
                  notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
                 return;
             }*/
-            return await this.saveFiles([fileName], [content], context);
+            return await this.saveFiles([fileName], [content]);
         }
         /**
        * deletes a server modul
@@ -307,7 +295,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             if (!name.startsWith("$serverside/"))
                 throw new Classes_1.JassiError(name + " is not a serverside file");
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.testServersideFile, name, context);
+                var ret = await RemoteObject_1.RemoteObject.docall(this, this.testServersideFile, ...arguments);
                 //@ts-ignore
                 //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
                 return ret;
@@ -328,50 +316,26 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
        * deletes a server modul
        **/
         async removeServerModul(name, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.removeServerModul, name, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_1.JassiError("only admins can delete");
-                return (await Serverservice_1.serverservices.filesystem).removeServerModul(name);
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_1.JassiError("only admins can delete");
+            return (await Serverservice_1.serverservices.filesystem).removeServerModul(name);
         }
         /**
         * deletes a file or directory
         **/
         async delete(name, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.delete, name, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_1.JassiError("only admins can delete");
-                return (await Serverservice_1.serverservices.filesystem).remove(name);
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_1.JassiError("only admins can delete");
+            return (await Serverservice_1.serverservices.filesystem).remove(name);
         }
         /**
          * renames a file or directory
          **/
         async rename(oldname, newname, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.rename, oldname, newname, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_1.JassiError("only admins can rename");
-                return (await Serverservice_1.serverservices.filesystem).rename(oldname, newname);
-                ;
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_1.JassiError("only admins can rename");
+            return (await Serverservice_1.serverservices.filesystem).rename(oldname, newname);
+            ;
         }
         /**
         * is the nodes server running
@@ -384,7 +348,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                     return false;
                 try {
                     if (this.isonline === undefined)
-                        Server_1.isonline = await this.call(this.isOnline, context);
+                        Server_1.isonline = await RemoteObject_1.RemoteObject.docall(this, this.isOnline, ...arguments);
                     return await Server_1.isonline;
                 }
                 catch (_a) {
@@ -401,37 +365,21 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
          * creates a file
          **/
         async createFile(filename, content, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createFile, filename, content, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_1.JassiError("only admins can createFile");
-                return (await Serverservice_1.serverservices.filesystem).createFile(filename, content);
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_1.JassiError("only admins can createFile");
+            return (await Serverservice_1.serverservices.filesystem).createFile(filename, content);
         }
         /**
-        * creates a file
+        * creates a folder
         **/
         async createFolder(foldername, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createFolder, foldername, context);
-                //@ts-ignore
-                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
-                return ret;
-            }
-            else {
-                if (!context.request.user.isAdmin)
-                    throw new Classes_1.JassiError("only admins can createFolder");
-                return (await Serverservice_1.serverservices.filesystem).createFolder(foldername);
-            }
+            if (!context.request.user.isAdmin)
+                throw new Classes_1.JassiError("only admins can createFolder");
+            return (await Serverservice_1.serverservices.filesystem).createFolder(foldername);
         }
         async createModule(modulename, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                var ret = await this.call(this, this.createModule, modulename, context);
+                var ret = await RemoteObject_1.RemoteObject.docall(this, this.createModule, ...arguments);
                 if (!Config_1.config.modules[modulename]) {
                     //config.jsonData.modules[modulename] = modulename;
                     await Config_1.config.reload();
@@ -447,11 +395,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             }
         }
         static async mytest(context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this.mytest, context);
-            }
-            else
-                return 14; //this is called on server
+            return 14; //this is called on server
         }
     };
     Server.isonline = undefined;
@@ -465,18 +409,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         __metadata("design:returntype", Promise)
     ], Server.prototype, "dir", null);
     __decorate([
+        (0, RemoteObject_1.UseServer)(),
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __param(1, (0, Validator_1.ValidateIsBoolean)({ optional: true })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, Boolean, RemoteObject_1.Context]),
+        __metadata("design:paramtypes", [String, Boolean]),
         __metadata("design:returntype", Promise)
     ], Server.prototype, "zip", null);
     __decorate([
+        (0, RemoteObject_1.UseServer)(),
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsArray)({ type: tp => String })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Array, RemoteObject_1.Context]),
+        __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], Server.prototype, "loadFiles", null);
     __decorate([
@@ -499,7 +445,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         __param(0, (0, Validator_1.ValidateIsString)()),
         __param(1, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [String, String, RemoteObject_1.Context]),
+        __metadata("design:paramtypes", [String, String]),
         __metadata("design:returntype", Promise)
     ], Server.prototype, "saveFile", null);
     __decorate([
@@ -510,6 +456,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         __metadata("design:returntype", Promise)
     ], Server.prototype, "testServersideFile", null);
     __decorate([
+        (0, RemoteObject_1.UseServer)(),
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -517,6 +464,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         __metadata("design:returntype", Promise)
     ], Server.prototype, "removeServerModul", null);
     __decorate([
+        (0, RemoteObject_1.UseServer)(),
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -524,6 +472,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         __metadata("design:returntype", Promise)
     ], Server.prototype, "delete", null);
     __decorate([
+        (0, RemoteObject_1.UseServer)(),
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __param(1, (0, Validator_1.ValidateIsString)()),
@@ -532,6 +481,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         __metadata("design:returntype", Promise)
     ], Server.prototype, "rename", null);
     __decorate([
+        (0, RemoteObject_1.UseServer)(),
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -539,6 +489,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         __metadata("design:returntype", Promise)
     ], Server.prototype, "createFile", null);
     __decorate([
+        (0, RemoteObject_1.UseServer)(),
         (0, Validator_1.ValidateFunctionParameter)(),
         __param(0, (0, Validator_1.ValidateIsString)()),
         __metadata("design:type", Function),
@@ -552,6 +503,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
         __metadata("design:returntype", Promise)
     ], Server.prototype, "createModule", null);
+    __decorate([
+        (0, Validator_1.ValidateFunctionParameter)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [RemoteObject_1.Context]),
+        __metadata("design:returntype", Promise)
+    ], Server, "mytest", null);
     Server = Server_1 = __decorate([
         (0, Registry_1.$Class)("jassijs.remote.Server"),
         __metadata("design:paramtypes", [])

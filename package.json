@@ -9,10 +9,15 @@
   "dependencies": {
     "@types/express": "^4.17.11",
     "@types/node": "^12.12.14",
+    "acorn-import-phases": "^1.0.4",
     "app-module-path": "^2.2.0",
     "body-parser": "^1.19.0",
+    "browserfs": "^1.4.3",
+    "browserify": "^17.0.1",
+    "chalk": "^4.1.2",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "html-webpack-plugin": "^5.6.3",
     "js-sql-parser": "^1.4.1",
     "jsonwebtoken": "^8.5.1",
     "jszip": "^3.6.0",
@@ -21,14 +26,22 @@
     "passport-local": "^1.0.0",
     "pdfmake": "^0.2.5",
     "pg": "^8.6.0",
+    "sql.js": "^1.13.0",
     "typeorm": "^0.2.34",
+<<<<<<< HEAD
+    "typescript": "5.5.3",
+    "webpack": "^5.100.0",
+    "webpack-dev-middleware": "^7.4.2",
+    "webpack-dev-server": "^5.2.2",
+    "webpack-hot-middleware": "^2.26.1"
+=======
     "typescript": "5.5.3"
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/uwei/jassijs"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "node js/main.js",
     "build": "npm install",
@@ -40,5 +53,8 @@
     "express"
   ],
   "license": "MIT",
-  "author": "Udo Weigelt"
+  "author": "Udo Weigelt",
+  "devDependencies": {
+    "webpack-cli": "^6.0.1"
+  }
 }

@@ -2,25 +2,39 @@ import { $ActionProvider, $Action } from "jassijs/base/Actions";
 import { $Class } from "jassijs/remote/Registry";
 import { FileNode } from "jassijs/remote/FileNode";
 import { OptionDialog } from "jassijs/ui/OptionDialog";
-import { FileExplorer, FileActions } from "jassijs_editor/FileExplorer";
-import { Server } from "jassijs/remote/Server";
-import { router } from "jassijs/base/Router";
+import {  FileActions } from "jassijs_editor/FileExplorer";
+
 const code=`import { $Class } from "jassijs/remote/Registry";
-import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+import { Context, DefaultParameterValue, UseServer } from "jassijs/remote/RemoteObject";
+import { ValidateFunctionParameter, ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
 
 @$Class("{{fullclassname}}")
-export class {{name}} extends RemoteObject{
-    //this is a sample remote function
-    public async sayHello(name: string,context: Context = undefined) {
-        if (!context?.isServer) {
-            return await this.call(this, this.sayHello, name,context);
-        } else {
-            return "Hello "+name;  //this would be execute on server  
-        }
+export class {{name}}{
+
+    @UseServer()
+    @ValidateFunctionParameter() 
+    // name must be a string - validated on client and server
+    // if age is missing set 9 as default value
+    public async sayHello( @ValidateIsString() name: string, @DefaultParameterValue(9) age:number=9,context?:Context) {
+            //this runs serverside
+            return "Hello3 "+name+"("+age+")";  //this would be execute on server  
+    }
+
+    @UseServer()
+    public static async info() {
+            //this runs serverside
+            try{
+                return "static server runs on "+(\`Node.js version: \${process.version}\`);  //this would be execute on server  
+            }catch{
+                return "static server runs on browser";
+            }
     }
 }
 export async function test(){
-    console.log(await new {{name}}().sayHello("Kurt"));
+    console.log(await new {{name}}().sayHello("Kurtt"));
+    console.log(await new {{name}}().sayHello("Kurtt",10));
+    console.log(await {{name}}.info());
+
 }
 `;
 

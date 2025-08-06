@@ -630,7 +630,11 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/Dat
                                     (0, Component_6.jc)(HTMLPanel_4.HTMLPanel, { bind: this.state.value.bind.Employee, template: "{{id}} {{FirstName}} {{LastName}}", width: 260, label: "Employee", height: 20 }),
                                     (0, Component_6.jc)(ObjectChooser_3.ObjectChooser, { items: "northwind.Employees", bind: this.state.value.bind.Employee }),
                                     (0, Component_6.jc)("br", {}),
+<<<<<<< HEAD
+                                    (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.state.value.bind.OrderDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Oder Date", width: 95 }),
+=======
                                     (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.state.value.bind.OrderDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Oder Date", width: 95, text: "Oder Date" }),
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                                     (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.state.value.bind.RequiredDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Required Date", width: 95 }),
                                     (0, Component_6.jc)(Textbox_4.Textbox, { bind: this.state.value.bind.ShippedDate, converter: new DateTimeConverter_2.DateTimeConverter(), label: "Shipped Date", width: 95 })
                                 ]
@@ -854,7 +858,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerPhoneList.ts": {
+<<<<<<< HEAD
+                "date": 1740306592806.8901,
+=======
                 "date": 1721666518282.6287,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind/CustomerPhoneList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -872,7 +880,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
+<<<<<<< HEAD
+                "date": 1740518262796.011,
+=======
                 "date": 1740069816828.1345,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.CustomerView": {
                     "$DBObjectView": [
                         {
@@ -884,7 +896,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
+<<<<<<< HEAD
+                "date": 1740518268456.369,
+=======
                 "date": 1740069921944.0195,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -896,7 +912,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ImportData.ts": {
-                "date": 1656501506000,
+                "date": 1750090577404.1477,
                 "northwind.ImportData": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -925,7 +941,11 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
+<<<<<<< HEAD
+                "date": 1740306641064.8445,
+=======
                 "date": 1740069931533.627,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -968,7 +988,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1681228126000,
+                "date": 1750351685504.8457,
                 "northwind.Categories": {
                     "$DBObject": [],
                     "@members": {
@@ -1002,7 +1022,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Customer.ts": {
-                "date": 1681125124000,
+                "date": 1750338951067.7498,
                 "northwind.Customer": {
                     "$DBObject": [],
                     "@members": {
@@ -1063,7 +1083,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
+<<<<<<< HEAD
+                "date": 1750578071755.4602,
+=======
                 "date": 1721688634922.4763,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
@@ -1232,7 +1256,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
+<<<<<<< HEAD
+                "date": 1750536480531.7024,
+=======
                 "date": 1722531390341.5852,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.Orders": {
                     "$DBObject": [],
                     "@members": {
@@ -1335,7 +1363,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Products.ts": {
-                "date": 1681322712000,
+                "date": 1750351726665.7576,
                 "northwind.Products": {
                     "$DBObject": [],
                     "@members": {
@@ -1567,6 +1595,9 @@ define("northwind/registry", ["require"], function (require) {
                         }
                     ]
                 }
+            },
+            "northwind/remote/MyTest.ts": {
+                "date": 1750352881481.6614
             }
         }
     };
@@ -1711,7 +1742,11 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
     }
     ;
 });
+<<<<<<< HEAD
+define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/RemoteObject", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_12, DatabaseSchema_3, Transaction_2, RemoteObject_1, Serverservice_1, Validator_3) {
+=======
 define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, DBObject_3, Registry_12, DatabaseSchema_3, Transaction_2, Serverservice_1, Validator_3) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1729,7 +1764,11 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
                         options = {};
                     options = { relations: ["ReportsTo"] };
                 }
+<<<<<<< HEAD
+                var ret = await RemoteObject_1.RemoteObject.docall(this, this.find, ...arguments);
+=======
                 var ret = await this.call(this.find, options, context);
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 return ret;
             }
             else {
@@ -1862,7 +1901,34 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
     }
     ;
 });
+<<<<<<< HEAD
+define("northwind/remote/MyTest", ["require", "exports", "northwind/remote/Products", "jassijs/remote/Transaction"], function (require, exports, Products_4, Transaction_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = test;
+    async function test() {
+        var p = await Products_4.Products.findOne();
+        var tr = new Transaction_3.Transaction();
+        await tr.useTransaction(async () => {
+            return [p.save()];
+        });
+    }
+});
+//  var tr=new Transaction();
+//    var ret=await tr.useTransaction(async ()=>{
+// var c1=new Products();
+//  c1.id=58800;
+//  var c2=new Products();
+//  c2.id="aa500585";
+//        var ret=[];
+//      ret.push(p.save()),
+//    ret.push(p.save());
+//   return ret;
+// });
+define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_5, Orders_3, DBObject_4, Registry_13, DatabaseSchema_4, Validator_4) {
+=======
 define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, Products_4, Orders_3, DBObject_4, Registry_13, DatabaseSchema_4, Validator_4) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1885,9 +1951,15 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
         __metadata("design:type", typeof (_a = typeof Orders_3.Orders !== "undefined" && Orders_3.Orders) === "function" ? _a : Object)
     ], OrderDetails.prototype, "Order", void 0);
     __decorate([
+<<<<<<< HEAD
+        (0, Validator_4.ValidateIsInstanceOf)({ type: type => Products_5.Products }),
+        (0, DatabaseSchema_4.ManyToOne)(type => Products_5.Products),
+        __metadata("design:type", typeof (_b = typeof Products_5.Products !== "undefined" && Products_5.Products) === "function" ? _b : Object)
+=======
         (0, Validator_4.ValidateIsInstanceOf)({ type: type => Products_4.Products }),
         (0, DatabaseSchema_4.ManyToOne)(type => Products_4.Products),
         __metadata("design:type", typeof (_b = typeof Products_4.Products !== "undefined" && Products_4.Products) === "function" ? _b : Object)
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     ], OrderDetails.prototype, "Product", void 0);
     __decorate([
         (0, Validator_4.ValidateIsNumber)(),
@@ -1924,8 +1996,13 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Order
         constructor() {
             super();
         }
+<<<<<<< HEAD
+        static async findAllWithDetails(context) {
+            return await Orders_4.find({ relations: ["*"] }, context);
+=======
         static async findAllWithDetails() {
             return await Orders_4.find({ relations: ["*"] });
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         }
     };
     exports.Orders = Orders;
@@ -2081,9 +2158,24 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
         __metadata("design:paramtypes", [])
     ], Products);
     async function test() {
-        var p = await Products.findOne();
+        // var p: Products = <Products>await Products.findOne();
+        //  var tr=new Transaction();
+        /*    var ret=await tr.useTransaction(async ()=>{
+              // var c1=new Products();
+             //  c1.id=58800;
+             //  var c2=new Products();
+             //  c2.id="aa500585";
+               var ret=[];
+              // ret.push(p.save()),
+            //    ret.push(p.save());
+             
+               return ret;
+           });*/
     }
+<<<<<<< HEAD
+=======
     ;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 });
 define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Validator"], function (require, exports, DBObject_7, Registry_16, DatabaseSchema_7, Validator_7) {
     "use strict";
@@ -2425,7 +2517,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerPhoneList.ts": {
+<<<<<<< HEAD
+                "date": 1740306592806.8901,
+=======
                 "date": 1721666518282.6287,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind/CustomerPhoneList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2443,7 +2539,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
+<<<<<<< HEAD
+                "date": 1740518262796.011,
+=======
                 "date": 1740069816828.1345,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.CustomerView": {
                     "$DBObjectView": [
                         {
@@ -2455,7 +2555,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
+<<<<<<< HEAD
+                "date": 1740518268456.369,
+=======
                 "date": 1740069921944.0195,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -2467,7 +2571,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ImportData.ts": {
-                "date": 1656501506000,
+                "date": 1750090577404.1477,
                 "northwind.ImportData": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2496,7 +2600,11 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
+<<<<<<< HEAD
+                "date": 1740306641064.8445,
+=======
                 "date": 1740069931533.627,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -2539,7 +2647,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1681228126000,
+                "date": 1750351685504.8457,
                 "northwind.Categories": {
                     "$DBObject": [],
                     "@members": {
@@ -2573,7 +2681,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Customer.ts": {
-                "date": 1681125124000,
+                "date": 1750338951067.7498,
                 "northwind.Customer": {
                     "$DBObject": [],
                     "@members": {
@@ -2634,7 +2742,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
+<<<<<<< HEAD
+                "date": 1750578071755.4602,
+=======
                 "date": 1721688634922.4763,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
@@ -2803,7 +2915,11 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
+<<<<<<< HEAD
+                "date": 1750536480531.7024,
+=======
                 "date": 1722531390341.5852,
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
                 "northwind.Orders": {
                     "$DBObject": [],
                     "@members": {
@@ -2906,7 +3022,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Products.ts": {
-                "date": 1681322712000,
+                "date": 1750351726665.7576,
                 "northwind.Products": {
                     "$DBObject": [],
                     "@members": {
@@ -3138,6 +3254,9 @@ define("northwind/registry", ["require"], function (require) {
                         }
                     ]
                 }
+            },
+            "northwind/remote/MyTest.ts": {
+                "date": 1750352881481.6614
             }
         }
     };

@@ -4,6 +4,8 @@ import { $Class } from "jassijs/remote/Registry";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { ValidateIsInt, ValidateIsString } from "jassijs/remote/Validator";
+import { Transaction } from "jassijs/remote/Transaction";
+import { Products } from "northwind/remote/Products";
 @$DBObject()
 @$Class("northwind.Customer")
 export class Customer extends DBObject {
@@ -71,7 +73,7 @@ export class Customer extends DBObject {
 }
 export async function test() {
     var all=await Customer.find();
-
+  
     
     //var cus2=<Customer>await Customer.findOne();
     //debugger;

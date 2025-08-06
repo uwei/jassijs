@@ -35,7 +35,7 @@ define("tests/registry", ["require"], function (require) {
     return {
         default: {
             "tests/remote/T.ts": {
-                "date": 1681570950000,
+                "date": 1750536496065.261,
                 "tests.remote.T": {}
             },
             "tests/remote/TestBigData.ts": {
@@ -157,6 +157,16 @@ define("tests/registry", ["require"], function (require) {
             },
             "tests/remote/TestServerfile.ts": {
                 "date": 1624999038000
+            },
+            "tests/remote/TestTransaction.ts": {
+                "date": 1750793006036.389,
+                "tests.remote.TransactionTest": {
+                    "@members": {
+                        "product": {
+                            "UseServer": []
+                        }
+                    }
+                }
             }
         }
     };
@@ -171,7 +181,7 @@ define("tests/remote/T", ["require", "exports", "jassijs/remote/Registry", "jass
         //this is a sample remote function
         async sayHello(name, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this, this.sayHello, name, context);
+                return await RemoteObject_1.RemoteObject.call(this, this.sayHello, name, context);
             }
             else {
                 //@ts-ignore
@@ -326,6 +336,62 @@ define("tests/remote/TestOrderDetails", ["require", "exports", "tests/remote/Tes
     async function test() {
     }
     ;
+});
+define("tests/remote/TestTransaction", ["require", "exports", "jassijs/remote/RemoteObject", "jassijs/remote/Transaction", "jassijs/remote/Registry", "northwind/remote/Products"], function (require, exports, RemoteObject_2, Transaction_1, Registry_6, Products_1) {
+    "use strict";
+    var _a;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TransactionTest = void 0;
+    exports.test = test;
+    exports.test2 = test2;
+    let TransactionTest = class TransactionTest {
+        async product(num, context = undefined) {
+            if (context.transaction) {
+                return context.transaction.registerAction("hi", num + 10000, async (nums) => {
+                    var ret = [];
+                    for (let x = 0; x < nums.length; x++) {
+                        ret.push("product:" + num * num + " (" + x + "/" + nums.length + ")");
+                    }
+                    return ret;
+                }, context);
+            }
+            return "product:" + num * num;
+        }
+    };
+    exports.TransactionTest = TransactionTest;
+    __decorate([
+        (0, RemoteObject_2.UseServer)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Number, typeof (_a = typeof Transaction_1.TransactionContext !== "undefined" && Transaction_1.TransactionContext) === "function" ? _a : Object]),
+        __metadata("design:returntype", Promise)
+    ], TransactionTest.prototype, "product", null);
+    exports.TransactionTest = TransactionTest = __decorate([
+        (0, Registry_6.$Class)("tests.remote.TransactionTest")
+    ], TransactionTest);
+    async function test(t) {
+        var trans = new Transaction_1.Transaction();
+        var cs = await Products_1.Products.findOne(1);
+        var cs2 = await Products_1.Products.findOne(2);
+        console.log(cs.UnitPrice + ":" + cs2.UnitPrice);
+        var tr = new TransactionTest();
+        cs.UnitPrice = 66;
+        trans.add(cs, cs.save);
+        cs2.UnitPrice = "jjj";
+        trans.add(cs2, cs2.save);
+        debugger;
+        var all = await trans.execute();
+    }
+    async function test2(t) {
+        let single = await new TransactionTest().product(2);
+        t.expectEqual(single === "product:4");
+        var trans = new Transaction_1.Transaction();
+        for (var x = 0; x < 3; x++) {
+            var tr = new TransactionTest();
+            trans.add(tr, tr.product, x);
+        }
+        var all = await trans.execute();
+        t.expectEqual(all.join() === 'product:4 (0/3),product:4 (1/3),product:4 (2/3)');
+    }
 });
 define("tests/modul", ["require", "exports"], function (require, exports) {
     "use strict";

@@ -679,7 +679,10 @@ declare module "jassijs_editor/ComponentPalette" {
          * install the draggable
          * @param {jassijs.ui.Image} component
          */
+<<<<<<< HEAD
+=======
         _makeDraggable(component: any): void;
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
         _makeDraggable2(component: any): void;
         destroy(): void;
     }
@@ -1106,6 +1109,16 @@ declare module "jassijs_editor/template/TemplateEmptyDialog" {
         static newFile(all: FileNode[]): any;
     }
 }
+<<<<<<< HEAD
+declare module "jassijs_editor/template/TemplateEmptyTSXDialog" {
+    import { FileNode } from "jassijs/remote/FileNode";
+    export class TemplateEmptyTSXDialog {
+        static code: string;
+        static newFile(all: FileNode[]): any;
+    }
+}
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 declare module "jassijs_editor/template/TemplateRemoteObject" {
     import { FileNode } from "jassijs/remote/FileNode";
     export class TemplateRemoteObject {

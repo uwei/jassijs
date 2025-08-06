@@ -43,6 +43,7 @@ export default {
             //            'jquery.doubletap': ["jquery"],
             //  'jassijs/jassi': ['jquery', 'jquery.ui', /*'jquery.ui.touch'*/],
             "spectrum": ["jquery"]
+         
         },
         "paths": {
             'intersection-observer': '//cdn.jsdelivr.net/npm/intersection-observer@0.7.0/intersection-observer.js',
@@ -73,7 +74,10 @@ export default {
             'tabulator-tables': "jassijs/ext/tabulator",
             //"tabulatorext":'jassijs/ext/tabulator',
             // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
-            "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect"
+            "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect",
+            //entpacken tar from npm.org
+            "pako":"https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min",
+            "untar":"https://cdn.jsdelivr.net/npm/js-untar@2.0.0/build/dist/untar"
         }
     },
     server: {

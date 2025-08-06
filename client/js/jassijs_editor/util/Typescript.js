@@ -210,7 +210,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 return true;
             }
             catch (err) {
-                debugger;
                 throw err;
             }
         }

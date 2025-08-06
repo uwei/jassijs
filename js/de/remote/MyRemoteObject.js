@@ -16,27 +16,22 @@ exports.test = exports.MyRemoteObject = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Validator_1 = require("jassijs/remote/Validator");
-let MyRemoteObject = class MyRemoteObject extends RemoteObject_1.RemoteObject {
+let MyRemoteObject = class MyRemoteObject {
     //this is a sample remote function
     async tt(name) {
         return "oo";
     }
-    async sayHello(name, context = undefined) {
-        console.log(this.sayHello.name);
-        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-            return await this.call(this, this.sayHello, name, context);
-        }
-        else {
-            console.log(await this.tt("hallo"));
-            return "Hello3 " + name; //this would be execute on server  
-        }
+    async sayHello(name, age = 9, context) {
+        console.log(await this.tt("hallo"));
+        console.log(context.isServer);
+        return "Hello3 " + name + "(" + age + ")"; //this would be execute on server  
     }
-    static async sayHello2(name, context = undefined) {
-        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-            return await this.call(this.sayHello2, name, context);
+    static async sayHello2(name) {
+        try {
+            return "Hello static " + name + " from " + (`Node.js version: ${process.version}`); //this would be execute on server  
         }
-        else {
-            return "Hello static " + name; //this would be execute on server  
+        catch (_a) {
+            return "Hello static " + name + " from Browser";
         }
     }
 };
@@ -47,17 +42,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MyRemoteObject.prototype, "tt", null);
 __decorate([
+    (0, RemoteObject_1.UseServer)(),
     (0, Validator_1.ValidateFunctionParameter)(),
     __param(0, (0, Validator_1.ValidateIsString)()),
+    __param(1, (0, RemoteObject_1.DefaultParameterValue)(9)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
+    __metadata("design:paramtypes", [String, Number, RemoteObject_1.Context]),
     __metadata("design:returntype", Promise)
 ], MyRemoteObject.prototype, "sayHello", null);
 __decorate([
+    (0, RemoteObject_1.UseServer)(),
     (0, Validator_1.ValidateFunctionParameter)(),
     __param(0, (0, Validator_1.ValidateIsString)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, RemoteObject_1.Context]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], MyRemoteObject, "sayHello2", null);
 MyRemoteObject = __decorate([
@@ -66,7 +64,7 @@ MyRemoteObject = __decorate([
 exports.MyRemoteObject = MyRemoteObject;
 async function test() {
     console.log(await new MyRemoteObject().sayHello("Kurtt"));
-    // console.log(await MyRemoteObject.sayHello2("5"));
+    console.log(await MyRemoteObject.sayHello2("5"));
 }
 exports.test = test;
 //# sourceMappingURL=MyRemoteObject.js.map

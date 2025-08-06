@@ -163,6 +163,13 @@ export function ValidateFunctionParameter(): Function {
         if (method === undefined)
             throw new Error("sdfgsdfgsfd");
         const funcname = method.name;
+        let smethod: string = target[method.name].toString();
+		//save params for MyRemoteObject
+        let sparam = smethod.substring(smethod.indexOf('(') + 1, smethod.indexOf(')'));
+		let paramnames = sparam.split(',');
+		if (method["__originalParams"]) 
+			paramnames=method["__originalParams"] 
+
         const { [funcname]: newfunc } = {//we need named function!
             [funcname]: function () {
                 //@ts-ignore
@@ -185,6 +192,7 @@ export function ValidateFunctionParameter(): Function {
                 return method.apply(this, arguments);
             }
         }
+        newfunc["__originalParams"]=paramnames;
         descriptor.value = newfunc;
     };
 }

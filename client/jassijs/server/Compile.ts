@@ -81,9 +81,11 @@ export class Compile {
       text = text.substring(text.indexOf("default:") + 8);
       text = text.substring(0, text.lastIndexOf("}") - 1);
       text = text.substring(0, text.lastIndexOf("}") - 1);
-    } else {
+    } else { 
       text = text.substring(text.indexOf("default=") + 8);
     }
+    if(text==="")
+      return undefined;
     var index = JSON.parse(text);
     return index;
   }

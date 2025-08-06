@@ -14,10 +14,6 @@ define("tests/registry",["require"], function(require) {
 	"tests/modul.ts": {
 		"date": 1684511830000
 	},
-	"tests/remote/T.ts": {
-		"date": 1681570950000,
-		"tests.remote.T": {}
-	},
 	"tests/remote/TestBigData.ts": {
 		"date": 1656620694000,
 		"tests.TestBigData": {
@@ -103,7 +99,6 @@ define("tests/registry",["require"], function(require) {
 					"PrimaryColumn": []
 				},
 				"customer": {
-					"$CheckParentRight": [],
 					"ManyToOne": [
 						"function"
 					]
@@ -126,7 +121,6 @@ define("tests/registry",["require"], function(require) {
 					"PrimaryColumn": []
 				},
 				"Order": {
-					"$CheckParentRight": [],
 					"ManyToOne": [
 						"function",
 						"function"
@@ -139,7 +133,7 @@ define("tests/registry",["require"], function(require) {
 		"date": 1624999038000
 	},
 	"tests/RemoteModulTests.ts": {
-		"date": 1684512328000
+		"date": 1750089234975.0835
 	},
 	"tests/ServerTests.ts": {
 		"date": 1740653473235.656
@@ -150,6 +144,23 @@ define("tests/registry",["require"], function(require) {
 	},
 	"tests/TestRepeating.ts": {
 		"date": 1740651316696.5154
+<<<<<<< HEAD
+	},
+	"tests/remote/T.ts": {
+		"date": 1750536496065.261,
+		"tests.remote.T": {}
+	},
+	"tests/remote/TestTransaction.ts": {
+		"date": 1750793006036.389,
+		"tests.remote.TransactionTest": {
+			"@members": {
+				"product": {
+					"UseServer": []
+				}
+			}
+		}
+=======
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 	}
 }
  }

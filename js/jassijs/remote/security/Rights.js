@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rights = exports.$CheckParentRight = exports.$ParentRights = exports.$Rights = exports.ParentRightProperties = exports.RightProperties = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
 const Registry_2 = require("jassijs/remote/Registry");
-const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 class RightProperties {
 }
 exports.RightProperties = RightProperties;
@@ -34,7 +33,7 @@ function $CheckParentRight() {
     };
 }
 exports.$CheckParentRight = $CheckParentRight;
-let Rights = class Rights extends RemoteObject_1.RemoteObject {
+let Rights = class Rights {
     async isAdmin(context = undefined) {
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             if (this._isAdmin !== undefined)

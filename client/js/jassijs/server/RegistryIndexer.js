@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/server/Indexer", "jassijs/remote/Serverservice", "jassijs/server//NativeAdapter", "jassijs/remote/Config"], function (require, exports, Indexer_1, Serverservice_1, NativeAdapter_1, Config_1) {
+define(["require", "exports", "jassijs/server/Indexer", "jassijs/remote/Serverservice", "jassijs/server/NativeAdapter", "jassijs/remote/Config"], function (require, exports, Indexer_1, Serverservice_1, NativeAdapter_1, Config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ServerIndexer = void 0;

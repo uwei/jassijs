@@ -29,7 +29,7 @@ export function $Report(properties: ReportProperties): Function {
 }
 @$ActionProvider("jassijs.base.ActionNode")
 @$Class("jassijs_report.remote.Report")
-export class Report extends RemoteObject {
+export class Report {
 
 
     //this is a sample remote function
@@ -130,6 +130,8 @@ export class Report extends RemoteObject {
     */
     @$Actions()
     private static async createActions(): Promise<ActionProperties[]> {
+        console.log("TODO repair Actions")
+        return[];
         var ret: ActionProperties[] = [];
         var data = await registry.getJSONData("$Report");
         for (var x = 0; x < data.length; x++) {

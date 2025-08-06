@@ -13,7 +13,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+<<<<<<< HEAD
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator", "./DBObject"], function (require, exports, Registry_1, Registry_2, RemoteObject_1, Setting_1, Server_1, Serverservice_1, Validator_1, DBObject_1) {
+=======
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server", "jassijs/remote/Serverservice", "jassijs/remote/Validator"], function (require, exports, Registry_1, Registry_2, RemoteObject_1, Setting_1, Server_1, Serverservice_1, Validator_1) {
+>>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     "use strict";
     var Settings_1;
     var _a, _b;
@@ -25,7 +29,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
             return prop;
         }
     };
-    let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
+    async function tt() {
+        return 5;
+    }
+    var h = new Proxy({ hallo: tt() }, {
+        get: (target, prop) => target[prop]
+    });
+    let Settings = Settings_1 = class Settings extends DBObject_1.DBObject {
         /**
         * loads the settings
         */
@@ -38,7 +48,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                 }
                 else
                     Settings_1.browserSettings = {};
-                var all = (await Server_1.Server.isOnline() === false) ? undefined : await this.call(this.load, context);
+                var all = (await Server_1.Server.isOnline() === false) ? undefined : await RemoteObject_1.RemoteObject.docall(this, this.load, ...arguments);
                 if (all === null || all === void 0 ? void 0 : all.user) {
                     Settings_1.userSettings = JSON.parse(all.user.data);
                 }
@@ -52,10 +62,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
             }
             else {
                 //@ts-ignore
-                var man = await Serverservice_1.serverservices.db;
-                var id = context.request.user.user;
+                var man = await (Serverservice_1.serverservices.db);
+                var user = await man.findOne(context, Setting_1.Setting, { "id": 1 });
                 return {
-                    user: await man.findOne(context, Setting_1.Setting, { "id": 1 }),
+                    user: user,
                     allusers: await man.findOne(context, Setting_1.Setting, { "id": 0 }),
                 };
             }
@@ -93,7 +103,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                         delete Settings_1.userSettings[Settings_key];
                     if (scope == "allusers" && Settings_1.allusersSettings)
                         delete Settings_1.allusersSettings[Settings_key];
-                    this.call(this.remove, Settings_key, scope, context);
+                    RemoteObject_1.RemoteObject.docall(this, this.remove, Settings_key, scope, context);
                 }
                 else {
                     //@ts-ignore
@@ -110,11 +120,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                 }
             }
         }
-        static async save(Settings_key, value, scope) {
+        static async save(Settings_key, value, scope, context = undefined) {
             let ob = {};
             //@ts-ignore
             ob[Settings_key] = value;
-            return await this.saveAll(ob, scope);
+            return await this.saveAll(ob, scope, undefined, context);
         }
         static async saveAll(namevaluepair, scope, removeOtherKeys = false, context = undefined) {
             if (scope === "browser") {
@@ -145,7 +155,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                             Settings_1.allusersSettings = {};
                         Object.assign(Settings_1.allusersSettings, namevaluepair);
                     }
-                    return await this.call(this.saveAll, props, scope, removeOtherKeys, context);
+                    return await RemoteObject_1.RemoteObject.docall(this, this.saveAll, props, scope, removeOtherKeys, context);
                 }
                 else {
                     //@ts-ignore
@@ -186,7 +196,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
         __param(0, (0, Validator_1.ValidateIsString)()),
         __param(2, (0, Validator_1.ValidateIsIn)({ in: ["browser", "user", "allusers"] })),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [typeof (_a = typeof T !== "undefined" && T) === "function" ? _a : Object, typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, String]),
+        __metadata("design:paramtypes", [typeof (_a = typeof T !== "undefined" && T) === "function" ? _a : Object, typeof (_b = typeof T !== "undefined" && T) === "function" ? _b : Object, String, RemoteObject_1.Context]),
         __metadata("design:returntype", Promise)
     ], Settings, "save", null);
     __decorate([

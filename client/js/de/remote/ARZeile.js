@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "de/remote/AR", "jassijs/remote/Serverservice"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1, AR_1, Serverservice_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "de/remote/AR", "jassijs/remote/RemoteObject", "jassijs/remote/Serverservice"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1, AR_1, RemoteObject_1, Serverservice_1) {
     "use strict";
     var ARZeile_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -16,13 +16,8 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
         constructor() {
             super();
         }
-        static async find(options = undefined, context = undefined) {
-            if (!jassijs.isServer) {
-                return await this.call(this.find, options, context);
-            }
-            else {
-                return (await Serverservice_1.serverservices.db).find(context, this, options);
-            }
+        static async find(options = undefined) {
+            return (await Serverservice_1.serverservices.db).find(this, options);
         }
         get oo2() {
             var o = 12;
@@ -75,6 +70,12 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
         (0, DatabaseSchema_1.ManyToOne)(type => AR_1.AR, ar => ar.zeilen),
         __metadata("design:type", AR_1.AR)
     ], ARZeile.prototype, "ar", void 0);
+    __decorate([
+        (0, RemoteObject_1.UseServer)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", Promise)
+    ], ARZeile, "find", null);
     ARZeile = ARZeile_1 = __decorate([
         (0, DBObject_1.$DBObject)(),
         (0, Registry_1.$Class)("de.ARZeile"),

@@ -56,28 +56,32 @@ export default class Filesystem {
                 var filename = list[xx];
                 var file = curdir + (curdir === "" ? "" : '/') + filename;
                 if (file !== "js" && file !== "tmp") {//compiled js
-
-                    var stat = await myfs.stat(parentPath + "/" + file);
-                    if (stat && stat.isDirectory()) {
-                        var newDir = { name: filename, files: [] };
-                        parent.files.push(newDir)
-                        /* Recurse into a subdirectory */
-                        if (ignore.indexOf(file) === -1)
-                            await _this.dir(file, appendDate, parentPath, newDir);
-                    } else {
-                        let dat = "";
-                        let toAdd: FileNode = { name: filename };
-                        if (appendDate === true)
-                            toAdd.date = (await myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
-                        // if (file.toLowerCase().endsWith(".ts"))
-                        parent.files.push(toAdd);
-                        /* if (file.toLowerCase().endsWith(".js")) {
-                             if (!await exists(file.replace(".js", ".ts"))) {
-                                 parent.files.push(toAdd);
+                    try {
+                        var stat = await myfs.stat(parentPath + "/" + file);
+                        if (stat && stat.isDirectory()) {
+                            var newDir = { name: filename, files: [] };
+                            parent.files.push(newDir)
+                            /* Recurse into a subdirectory */
+                            if (ignore.indexOf(file) === -1)
+                                await _this.dir(file, appendDate, parentPath, newDir);
+                        } else {
+                            let dat = "";
+                            let toAdd: FileNode = { name: filename };
+                            if (appendDate === true)
+                                toAdd.date = (await myfs.stat(parentPath + "/" + file)).mtimeMs.toString();
+                            // if (file.toLowerCase().endsWith(".ts"))
+                            parent.files.push(toAdd);
+                            /* if (file.toLowerCase().endsWith(".js")) {
+                                 if (!await exists(file.replace(".js", ".ts"))) {
+                                     parent.files.push(toAdd);
+                                 }
                              }
-                         }
-                         if (file.toLowerCase().endsWith(".json"))
-                             parent.files.push(toAdd);*/
+                             if (file.toLowerCase().endsWith(".json"))
+                                 parent.files.push(toAdd);*/
+                        }
+                    } catch (err){
+                        debugger;
+                        console.warn("could not dir "+file); 
                     }
                 }
             };

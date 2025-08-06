@@ -31,6 +31,7 @@ router.post('/register', async (req, res) => {
     }
 });
 router.post('/login', (req, res) => {
+    //debugger;
     var username = decodeURIComponent(req.rawBody.split("&")[0].split("=")[1]);
     var password = decodeURIComponent(req.rawBody.split("&")[1].split("=")[1]);
     req.body = {
@@ -56,7 +57,6 @@ router.post('/login', (req, res) => {
             const token = jwt.sign(JSON.stringify(payload), UserModel_1.UserModel.secret);
             /** assign our jwt to the cookie */
             res.cookie('jwt', token, { httpOnly: true /*, secure: true */ });
-            console.log("enable secure login");
             res.status(200).send({ username: user.username });
         });
     })(req, res);

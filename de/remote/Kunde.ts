@@ -5,7 +5,7 @@ import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMa
 import { ExtensionProvider } from "jassijs/remote/Extensions";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { $ParentRights } from "jassijs/remote/security/Rights";
-import { Context } from "jassijs/remote/RemoteObject";
+import { Context, UseServer } from "jassijs/remote/RemoteObject";
 import { ValidateIsInt } from "jassijs/remote/Validator";
 import { serverservices } from "jassijs/remote/Serverservice";
 //import "jassijs/ext/enableExtension.js?de.Kunde";
@@ -70,13 +70,9 @@ export class Kunde extends DBObject implements ExtensionProvider {
     static async alleKundenNachNummer(): Promise<any[]> {
         return await Kunde.find({ order: "id" });
     }
-    static async find(options = undefined, context: Context = undefined): Promise<any[]> {
-        if (!context?.isServer) {
-            return await this.call(this.find, options, context);
-        }
-        else {
-            return await (await serverservices.db).find(context, this, options);
-        }
+    @UseServer()
+    static async find(options = undefined): Promise<any[]> {
+            return await (await serverservices.db).find(this, options);
     }
     static async sample() {
         var kunde1 = new Kunde();

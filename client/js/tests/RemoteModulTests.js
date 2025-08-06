@@ -11,17 +11,15 @@ define(["require", "exports", "jassijs/remote/FileNode", "jassijs/remote/Server"
             await new Server_1.Server().createModule("testrmodul");
             await new Server_1.Server().createFolder("testrmodul/remote");
             await new Server_1.Server().saveFile("testrmodul/remote/TestRModul.ts", `import { $Class } from "jassijs/remote/Registry";
-import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+import { UseServer } from "jassijs/remote/RemoteObject";
 
 @$Class("testrmodul.remote.TestRModul")
-export class TestRModul extends RemoteObject{
+export class TestRModul {
     //this is a sample remote function
+    @UseServer()
     public async sayHello(name: string,context: Context = undefined) {
-        if (!context?.isServer) {
-            return await this.call(this, this.sayHello, name,context);
-        } else {
             return "Hello "+name;  //this would be execute on server  
-        }
+        
     }
 }`);
             //create new DB Object

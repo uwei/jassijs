@@ -61,7 +61,7 @@ function syncRemoteFiles() {
     /*await*/ checkRemoteFiles();
     //server remote
     var path = new Filesystem_1.default().path;
-    fs.watch(path, { recursive: true }, (eventType, filename) => {
+    var test = fs.watch(path, { recursive: true }, (eventType, filename) => {
         if (!filename)
             return;
         var file = filename.replaceAll("\\", "/");
@@ -111,6 +111,10 @@ function staticfiles(req, res, next) {
     var modules = Config_1.config.server.modules;
     // console.log(req.path);
     let sfile = path + req.path;
+    if (req.method.toLowerCase() !== "get") {
+        next();
+        return;
+    }
     /* if (req?.query?.server === "1") {
          if (runServerInBrowser === undefined)
              runServerInBrowser = JSON.parse(fs.readFileSync("./client/jassijs.json", "utf8")).runServerInBrowser;
@@ -135,34 +139,45 @@ function staticfiles(req, res, next) {
         next();
         return;
     }
-    if (!fs.existsSync(sfile) && sfile.startsWith("./client")) {
-        for (var key in modules) {
-            if ((sfile.startsWith("./client/" + key) || sfile.startsWith("./client/js/" + key)) && fs.existsSync("./node_modules/" + key + "/client" + req.path)) {
-                sfile = "./node_modules/" + key + "/client" + req.path;
-                break;
+    try {
+        if (!fs.existsSync(sfile) && sfile.startsWith("./client")) {
+            for (var key in modules) {
+                if ((sfile.startsWith("./client/" + key) || sfile.startsWith("./client/js/" + key)) && fs.existsSync("./node_modules/" + key + "/client" + req.path)) {
+                    sfile = "./node_modules/" + key + "/client" + req.path;
+                    break;
+                }
+            }
+            //sfile="./node_modules/_uw/"+req.path;
+        }
+        if (fs.existsSync(sfile)) {
+            // let code=fs.readFileSync(this.path+"/"+req.path);
+            let dat = fs.statSync(sfile).mtime.getTime();
+            if (req.query.lastcachedate === dat.toString()) {
+                res.set('X-Custom-UpToDate', 'true');
+                res.send("");
+            }
+            else {
+                try {
+                    res.sendFile(resolve(sfile), {
+                        headers: {
+                            'X-Custom-Date': dat.toString(),
+                            'Cache-Control': 'max-age=1',
+                            'Last-Modified': fs.statSync(sfile).mtime.toUTCString()
+                        }
+                    });
+                }
+                catch (err) {
+                    console.log(err);
+                }
             }
         }
-        //sfile="./node_modules/_uw/"+req.path;
-    }
-    if (fs.existsSync(sfile)) {
-        // let code=fs.readFileSync(this.path+"/"+req.path);
-        let dat = fs.statSync(sfile).mtime.getTime();
-        if (req.query.lastcachedate === dat.toString()) {
-            res.set('X-Custom-UpToDate', 'true');
-            res.send("");
-        }
         else {
-            res.sendFile(resolve(sfile), {
-                headers: {
-                    'X-Custom-Date': dat.toString(),
-                    'Cache-Control': 'max-age=1',
-                    'Last-Modified': fs.statSync(sfile).mtime.toUTCString()
-                }
-            });
+            next();
         }
     }
-    else {
-        next();
+    catch (err) {
+        debugger;
+        throw err;
     }
     var s = 1;
 }

@@ -5,7 +5,6 @@ import { JWT_EXPIRATION_MS } from "./PassportSetup";
 import { UserModel } from "jassijs/UserModel";
 import { Context } from "jassijs/remote/RemoteObject";
 import { serverservices } from "jassijs/remote/Serverservice";
-
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
@@ -42,6 +41,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', (req, res) => {
+    //debugger;
     var username = decodeURIComponent(req.rawBody.split("&")[0].split("=")[1]);
     var password = decodeURIComponent(req.rawBody.split("&")[1].split("=")[1]);
 
@@ -76,7 +76,6 @@ router.post('/login', (req, res) => {
 
                 /** assign our jwt to the cookie */
                 res.cookie('jwt', token, { httpOnly: true/*, secure: true */ });
-                 console.log("enable secure login");
                 res.status(200).send({ username: user.username });
             });
         },

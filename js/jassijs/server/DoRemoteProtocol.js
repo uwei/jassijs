@@ -5,6 +5,7 @@ const Registry_1 = require("jassijs/remote/Registry");
 const Classes_1 = require("jassijs/remote/Classes");
 const Serverservice_1 = require("jassijs/remote/Serverservice");
 function remoteProtocol(request, response) {
+    //debugger;
     execute(request, response);
 }
 exports.remoteProtocol = remoteProtocol;
@@ -59,9 +60,9 @@ async function _execute(protext, request, context) {
         try {
             await checkSimulateUser(context, request);
             if (prot.parameter === undefined)
-                ret = await (C[prot.method](context));
+                ret = await C[prot.method](context);
             else
-                ret = await (C[prot.method](...prot.parameter, context));
+                ret = await C[prot.method](...prot.parameter, context);
         }
         catch (ex) {
             console.error(ex.stack);
@@ -84,9 +85,9 @@ async function _execute(protext, request, context) {
         try {
             await checkSimulateUser(context, request);
             if (prot.parameter === undefined)
-                ret = await (obj[prot.method](context));
+                ret = await obj[prot.method](context);
             else
-                ret = await (obj[prot.method](...prot.parameter, context));
+                ret = await obj[prot.method](...prot.parameter, context);
         }
         catch (ex) {
             if (!(ex instanceof Classes_1.JassiError)) {
