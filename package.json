@@ -27,7 +27,7 @@
     "pdfmake": "^0.2.5",
     "pg": "^8.6.0",
     "sql.js": "^1.13.0",
-    "typeorm": "^0.2.34",
+    "typeorm": "0.2.34",
     "typescript": "5.5.3",
     "webpack": "^5.100.0",
     "webpack-dev-middleware": "^7.4.2",
