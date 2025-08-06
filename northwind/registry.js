@@ -98,11 +98,7 @@ exports.default={
 		}
 	},
 	"northwind/remote/Employees.ts": {
-<<<<<<< HEAD
-		"date": 1750578071755.4602,
-=======
-		"date": 1721688634922.4763,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
+		"date": 1754472061744.1357,
 		"northwind.Employees": {
 			"$DBObject": [],
 			"@members": {
@@ -229,6 +225,9 @@ exports.default={
 			}
 		}
 	},
+	"northwind/remote/MyTest.ts": {
+		"date": 1750352881481.6614
+	},
 	"northwind/remote/OrderDetails.ts": {
 		"date": 1722528161852.004,
 		"northwind.OrderDetails": {
@@ -271,11 +270,7 @@ exports.default={
 		}
 	},
 	"northwind/remote/Orders.ts": {
-<<<<<<< HEAD
-		"date": 1750536480531.7024,
-=======
-		"date": 1722531390341.5852,
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
+		"date": 1754471816096.733,
 		"northwind.Orders": {
 			"$DBObject": [],
 			"@members": {
@@ -564,8 +559,5 @@ exports.default={
 	},
 	"northwind/SampleServerReport.ts": {
 		"date": 1624805092000
-	},
-	"northwind/remote/MyTest.ts": {
-		"date": 1750352881481.6614
 	}
 }

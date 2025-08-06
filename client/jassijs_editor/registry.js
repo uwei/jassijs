@@ -390,6 +390,9 @@ define("jassijs_editor/registry",["require"], function(require) {
 				}
 			}
 		}
+	},
+	"jassijs_editor/ext/Monaco.ts": {
+		"date": 1720105252684.6934
 	}
 }
  }

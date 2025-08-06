@@ -421,7 +421,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Orders.ts": {
-		"date": 1750536480531.7024,
+		"date": 1754472189081.625,
 		"northwind.Orders": {
 			"$DBObject": [],
 			"@members": {

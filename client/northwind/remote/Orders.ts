@@ -7,10 +7,7 @@ import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMa
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { Shippers } from "northwind/remote/Shippers";
 import { ValidateIsArray, ValidateIsDate, ValidateIsInstanceOf, ValidateIsNumber, ValidateIsString } from "jassijs/remote/Validator";
-<<<<<<< HEAD
 import { Context } from "jassijs/remote/RemoteObject";
-=======
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
 
 @$DBObject()
 @$Class("northwind.Orders")
@@ -77,13 +74,8 @@ export class Orders extends DBObject {
     @ValidateIsArray({ type: type => OrderDetails })
     @OneToMany(type => OrderDetails, e => e.Order)
     Details: OrderDetails[];
-<<<<<<< HEAD
     static async findAllWithDetails(context:Context): Promise<Orders[]> { 
         return <any>await Orders.find({ relations: ["*"] },context);
-=======
-    static async findAllWithDetails(): Promise<Orders[]> {
-        return <any>await Orders.find({ relations: ["*"] });
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
     }
 
 }

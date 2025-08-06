@@ -88,11 +88,7 @@ export class Employees extends DBObject {
                     options={};
                 options={relations:["ReportsTo"]}
             }
-<<<<<<< HEAD
             var ret=await RemoteObject.docall(this,this.find, ...arguments);
-=======
-            var ret=await this.call(this.find, options,context);
->>>>>>> d240df83ceb960d653afe75fc93bccd1c67e9279
             return ret;
         }
         else {
@@ -129,6 +125,6 @@ export async function test2() {
       var emp2 = new Employees();
       emp2.id = 200000;
       emp2.ReportsTo = emp;
-      //await emp2.save();*/
+      //await emp2.save();*/ 
 }
 ;
