@@ -200,19 +200,21 @@ class Npm {
             content: JSON.stringify(packagejson)
         };
     }
-    async install() {
+    async install(app) {
         const packageJson = this._loadPackageJson();
         const deps = packageJson.dependencies || {};
         // Parallele Installation
-        await Promise.all(Object.entries(deps).map(([modul, version]) => this._installPackage(modul, version)));
+        await Promise.all(Object.entries(deps).map(([modul, version]) => this._installPackage(modul, version, app)));
     }
-    async installModul(modul, version = "latest") {
+    async installModul(modul, version = "latest", app) {
         console.log("install Modul" + modul);
+        if (app)
+            app.sendToClients("npm " + modul);
         const pkg = this._loadPackageJson();
         pkg.dependencies = pkg.dependencies || {};
         pkg.dependencies[modul] = version;
         this._savePackageJson(pkg);
-        await this._installPackage(modul, version);
+        await this._installPackage(modul, version, app);
     }
     async uninstallModul(modul) {
         const pkg = this._loadPackageJson();
@@ -314,7 +316,7 @@ class Npm {
         const compatible = this.resolveVersion({ [installedVersion]: {} }, versionRange);
         return compatible === installedVersion;
     }
-    async _installPackage(name, version) {
+    async _installPackage(name, version, app) {
         if (!this.requestedVersions.has(name)) {
             this.requestedVersions.set(name, []);
         }
@@ -333,7 +335,9 @@ class Npm {
             if (this._isInstalledVersionCompatible(name, resolvedVersion)) {
                 return;
             }
-            console.log(`⬇ installiere ${name}@${resolvedVersion}`);
+            if (app)
+                app.sendToClients(`npm install ${name}@${resolvedVersion}`);
+            console.log(`installiere ${name}@${resolvedVersion}`);
             const metadata = await fetch(`${this.registry}${name}`).then(r => r.json());
             const tarballUrl = metadata.versions[resolvedVersion].dist.tarball;
             const destPath = `./node_modules/${name}`;
@@ -342,7 +346,7 @@ class Npm {
             if (this.files[pkgPath]) {
                 const subPkg = JSON.parse(this.files[pkgPath].content);
                 const subDeps = subPkg.dependencies || {};
-                await Promise.all(Object.entries(subDeps).map(([dep, depVersion]) => this._installPackage(dep, depVersion)));
+                await Promise.all(Object.entries(subDeps).map(([dep, depVersion]) => this._installPackage(dep, depVersion, app)));
             }
             this.installedModules.add(name);
             this.installingModules.delete(name);

@@ -97,6 +97,18 @@ class BrowserServerAppClass {
         await git.clone({ fs: fsneu, http, dir: ".", url, ref, singleBranch: true, depth: 1, corsProxy: 'https://cors.isomorphic-git.org' });
         //await git.log({fs,dir:"./",depth:3});
     }
+    async gitExistsUpdate(url, ref) {
+        const fs = this.jrequire("fs");
+        const path = this.jrequire("path");
+        const git = this.jrequire("isomorphic-git");
+        const http = this.jrequire("isomorphic-git/http/node");
+        const localOid = await git.resolveRef({ fs, dir: ".", ref: `refs/heads/${ref}` });
+        const remoteRefs = await git.listServerRefs({ http, url, corsProxy: 'https://cors.isomorphic-git.org' });
+        const remoteBranch = remoteRefs.find((r) => r.ref === `refs/heads/${ref}`);
+        const remoteOid = remoteBranch?.oid;
+        let ret = remoteOid === undefined || remoteOid !== localOid;
+        return ret;
+    }
     async gitCheckout(url, ref) {
         const fs = this.jrequire("fs");
         const path = this.jrequire("path");
@@ -110,14 +122,22 @@ class BrowserServerAppClass {
         try {
             if (this.config.giturl === undefined)
                 return;
+            this.sendToClients("git " + this.config.giturl);
             //var ii=8;
             const fs = this.jrequire("fs");
             if (!fs.existsSync("./.git")) {
                 await this.gitClone(this.config.giturl, this.config.gitref || "main");
             }
             else {
-                await this.gitCheckout(this.config.giturl, this.config.gitref || "main");
+                if (await this.gitExistsUpdate(this.config.giturl, this.config.gitref || "main")) {
+                    this.sendToClients("git checkout");
+                    await this.gitCheckout(this.config.giturl, this.config.gitref || "main");
+                }
+                else {
+                    this.sendToClients("git is uptodate");
+                }
             }
+            this.sendToClients("git abgeschlossen");
         }
         catch (err) {
             console.error(err);
@@ -370,13 +390,14 @@ class BrowserServerAppClass {
                     "author": "Udo Weigelt",
                 });
                 //fs.writeFileSync("./package.json", pack);
-                await npm.install();
+                await npm.install(this);
                 await browserserverworker.writeIndexDB("browserserver", "[system]", "kernel", npm.files);
                 browserserverworker.kernelmodules = npm.files;
             }
         }
     }
     async npminstall(modul = undefined, packageHasChanged = true) {
+        this.sendToClients("npm install");
         const fs = this.jrequire("fs");
         const path = this.jrequire('path');
         let pack = undefined;
@@ -411,7 +432,7 @@ class BrowserServerAppClass {
                 }
             }
         }
-        await npm.install();
+        await npm.install(this);
         if (modul) {
             await npm.installModul(modul);
         }
@@ -439,6 +460,7 @@ class BrowserServerAppClass {
     async _checkHasModified() {
         //@ts-ignore
         if (this.config.hasModified) {
+            this.sendToClients("serverfiles changed");
             let path = this.jrequire('path');
             let fs = this.jrequire('fs');
             var oldpackagecode = undefined;
@@ -455,6 +477,7 @@ class BrowserServerAppClass {
             }
             if (this.config.initialfiles) {
                 if (typeof this.config.initialfiles === "string") {
+                    this.sendToClients("read initial files from " + this.config.initialfiles);
                     this.config.initialfiles = JSON.parse(await (await fetch(this.config.initialfiles)).text());
                 }
                 let code = this.config.initialfiles;
@@ -527,7 +550,8 @@ class BrowserServerAppClass {
         return true;
     }
     async sendToClients(msg) {
-        var clients = await self.clients.matchAll();
+        var clients = await self.clients.matchAll({ includeUncontrolled: true });
+        //  await self.clients.matchAll({ includeUncontrolled: true });
         clients.forEach((client) => {
             client.postMessage({ msg: msg });
         });
@@ -540,6 +564,7 @@ class BrowserServerAppClass {
         //await new Promise(resolve => setTimeout(resolve, 10000));
         if (this.isinited)
             return await this.isinited;
+        this.sendToClients("run local server");
         let resolve = undefined;
         this.isinited = new Promise((res) => resolve = res);
         await this.loadKerlenModulesIfNeeded();
@@ -573,6 +598,7 @@ server.listen(PORT, () => {
             globalThis.BrowserFS = BrowserFS;
             globalThis.Buffer = BrowserFS.BFSRequire('buffer').Buffer;
             const path = _this.jrequire('path');
+            this.sendToClients("start virtual filesystem");
             BrowserFS.configure({
                 fs: "InMemory"
             }, function (err) {
@@ -606,7 +632,7 @@ server.listen(PORT, () => {
             });
         });
         await _this._checkHasModified();
-        console.log("virtual filesystem inited");
+        console.log("virtual filesystem startet");
         // let startserver=true;
         if (this.config?.serviceworkerfile) {
             const fs = this.globalfs;

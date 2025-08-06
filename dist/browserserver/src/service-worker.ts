@@ -1,9 +1,8 @@
 var k={};
 k.a=9;
 importScripts('./browserserverworker.js'); 
-eval(`self.addEventListener('activate', event => {
-    console.log("test activated");
+self.addEventListener('activate', event => {
     event.waitUntil(self.clients.claim()); // Übernimmt Kontrolle über alle Seiten
   });
-` );
+;
 //a

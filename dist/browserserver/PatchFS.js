@@ -87,7 +87,7 @@ browserserverworker.patchFS = (fs, jrequire, app) => {
         savetimer = setTimeout(() => {
             let data = fs.getRootFS().store.store;
             browserserverworker.writeIndexDB("browserserver", app.name, "files", data); //save Memory filesystem in indexdb
-            console.log("save Files");
+            // console.log("save Files");
         }, 300);
         if (watchListeners) {
             for (let key in watchListeners) {

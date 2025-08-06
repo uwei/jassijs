@@ -163,15 +163,14 @@ self.addEventListener('message', function (evt) {
   }
   else if (evt.data && evt.data.type === "LOGGED_IN") {
     console.log("logged in");
-  }else
+  } else
     console.log('postMessage received', evt);
 
 });
 
 async function handleEvent(event) {
-  console.log("sw get " + event.request.url);
   if (event.request.url.endsWith("/tsWorker.js")) {
-  while (tempFiles[event.request.url] === undefined) {
+    while (tempFiles[event.request.url] === undefined) {
       await new Promise((res) => setTimeout(() => res(), 100));//wait until file is placed
     }
   }

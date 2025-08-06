@@ -89,6 +89,7 @@ class BrowserServerAppClass {
         }
         return undefined;//.replace("./js/", "/")];
     }
+
     async gitClone(url: string, ref: string) {
         const fs = this.jrequire("fs");
         const fsneu = Object.assign({}, fs.promises);
@@ -104,6 +105,18 @@ class BrowserServerAppClass {
         await git.clone({ fs: fsneu, http, dir: ".", url, ref, singleBranch: true, depth: 1, corsProxy: 'https://cors.isomorphic-git.org' });
         //await git.log({fs,dir:"./",depth:3});
     }
+    async gitExistsUpdate(url: string, ref: string) {
+        const fs = this.jrequire("fs");
+        const path = this.jrequire("path");
+        const git = this.jrequire("isomorphic-git");
+        const http = this.jrequire("isomorphic-git/http/node");
+        const localOid = await git.resolveRef({ fs, dir: ".", ref: `refs/heads/${ref}` });
+        const remoteRefs = await git.listServerRefs({ http, url ,corsProxy: 'https://cors.isomorphic-git.org'});
+        const remoteBranch = remoteRefs.find((r: any) => r.ref === `refs/heads/${ref}`);
+        const remoteOid = remoteBranch?.oid;
+        let ret = remoteOid === undefined || remoteOid !== localOid;
+        return ret;
+    }
     async gitCheckout(url: string, ref: string) {
         const fs = this.jrequire("fs");
         const path = this.jrequire("path");
@@ -117,13 +130,20 @@ class BrowserServerAppClass {
         try {
             if (this.config.giturl === undefined)
                 return;
+            this.sendToClients("git " + this.config.giturl);
             //var ii=8;
             const fs = this.jrequire("fs");
             if (!fs.existsSync("./.git")) {
                 await this.gitClone(this.config.giturl, this.config.gitref || "main")
             } else {
-                await this.gitCheckout(this.config.giturl, this.config.gitref || "main")
+                if (await this.gitExistsUpdate(this.config.giturl, this.config.gitref || "main")) {
+                    this.sendToClients("git checkout");
+                    await this.gitCheckout(this.config.giturl, this.config.gitref || "main")
+                }else{
+                    this.sendToClients("git is uptodate");
+                }
             }
+            this.sendToClients("git abgeschlossen");
         } catch (err) {
             console.error(err);
             throw err;
@@ -244,7 +264,7 @@ class BrowserServerAppClass {
         relativePath = relativePath.replaceAll("\`", "");//prevent injection
         var newPath = _this.resolve(relativePath, parentPath);
         if (newPath.indexOf("//") !== -1)
-            newPath=newPath.replace("//","/");
+            newPath = newPath.replace("//", "/");
 
         if (!nocache && this.modulecache[newPath])
             return this.modulecache[newPath];
@@ -358,6 +378,7 @@ class BrowserServerAppClass {
     }
 
     async loadKerlenModulesIfNeeded() {
+
         if (browserserverworker.kernelmodules === undefined) {
             try {
                 browserserverworker.kernelmodules = <any>await browserserverworker.readIndexDB("browserserver", "[system]", "kernel");
@@ -385,13 +406,14 @@ class BrowserServerAppClass {
 
                 });
                 //fs.writeFileSync("./package.json", pack);
-                await npm.install();
+                await npm.install(this);
                 await browserserverworker.writeIndexDB("browserserver", "[system]", "kernel", npm.files);
                 browserserverworker.kernelmodules = npm.files;
             }
         }
     }
     async npminstall(modul: string | undefined = undefined, packageHasChanged = true) {
+        this.sendToClients("npm install");
         const fs = this.jrequire("fs");
         const path = this.jrequire('path');
         let pack = undefined;
@@ -428,7 +450,7 @@ class BrowserServerAppClass {
                 }
             }
         }
-        await npm.install();
+        await npm.install(this);
         if (modul) {
             await npm.installModul(modul)
         }
@@ -458,15 +480,15 @@ class BrowserServerAppClass {
     async _checkHasModified() {
         //@ts-ignore
         if (this.config.hasModified) {
-         
-             let path = this.jrequire('path');
+            this.sendToClients("serverfiles changed");
+            let path = this.jrequire('path');
             let fs = this.jrequire('fs');
-            var oldpackagecode=undefined;
+            var oldpackagecode = undefined;
             if (!fs.existsSync("./package.json")) {
-                try{
+                try {
                     oldpackagecode = JSON.stringify(JSON.parse(fs.readFileSync("./package.json", "utf8")));
-                }catch{
-                    oldpackagecode="old changed";
+                } catch {
+                    oldpackagecode = "old changed";
                 }
             }
             if (this.config.giturl) {
@@ -474,6 +496,7 @@ class BrowserServerAppClass {
             }
             if (this.config.initialfiles) {
                 if (typeof this.config.initialfiles === "string") {
+                    this.sendToClients("read initial files from " + this.config.initialfiles);
                     this.config.initialfiles = JSON.parse(await (await fetch(this.config.initialfiles)).text())
                 }
 
@@ -489,20 +512,20 @@ class BrowserServerAppClass {
                     if (code[key].coding)
                         coding = code[key].coding
 
-                   /* if (filepath === "./package.json") {
-                        if (!fs.existsSync(filepath)) {
-                            try {
-                                let s1 = JSON.stringify(JSON.parse(fs.readFileSync(filepath, "utf8")));
-                                let s2 = JSON.stringify(JSON.parse(code[key].content));
-                                if (s1 !== s2) {
-                                    packageHasChanged = true;
-                                }
-                            } catch (err) {
-                                console.log(err);
-                                packageHasChanged = true;
-                            }
-                        }
-                    }*/
+                    /* if (filepath === "./package.json") {
+                         if (!fs.existsSync(filepath)) {
+                             try {
+                                 let s1 = JSON.stringify(JSON.parse(fs.readFileSync(filepath, "utf8")));
+                                 let s2 = JSON.stringify(JSON.parse(code[key].content));
+                                 if (s1 !== s2) {
+                                     packageHasChanged = true;
+                                 }
+                             } catch (err) {
+                                 console.log(err);
+                                 packageHasChanged = true;
+                             }
+                         }
+                     }*/
                     /// if (textExt.some(suffix => filepath.toLowerCase().endsWith(suffix)))
                     //coding = "utf8";
 
@@ -533,16 +556,16 @@ class BrowserServerAppClass {
                 this.saveFiles();
                 //trigger save
             }
-            var newpackagecode; 
+            var newpackagecode;
             if (!fs.existsSync("./package.json")) {
-                try{
-                     newpackagecode = JSON.stringify(JSON.parse(fs.readFileSync("./package.json", "utf8")));
-                }catch{
-                    newpackagecode="new changed";
+                try {
+                    newpackagecode = JSON.stringify(JSON.parse(fs.readFileSync("./package.json", "utf8")));
+                } catch {
+                    newpackagecode = "new changed";
                 }
             }
-            var packageHasChanged=(newpackagecode!==oldpackagecode);
-            
+            var packageHasChanged = (newpackagecode !== oldpackagecode);
+
             await this.npminstall(undefined, packageHasChanged);
             //changeFileWhichRegisterServiceworker
 
@@ -550,7 +573,8 @@ class BrowserServerAppClass {
         return true;
     }
     async sendToClients(msg: string) {
-        var clients = await (<any>self).clients.matchAll();
+        var clients = await (<any>self).clients.matchAll({ includeUncontrolled: true });
+        //  await self.clients.matchAll({ includeUncontrolled: true });
         clients.forEach((client: any) => {
             client.postMessage({ msg: msg });
         });
@@ -566,6 +590,7 @@ class BrowserServerAppClass {
 
         if (this.isinited)
             return await this.isinited;
+        this.sendToClients("run local server");
         let resolve: any = undefined;
         this.isinited = new Promise((res) => resolve = res);
         await this.loadKerlenModulesIfNeeded();
@@ -600,7 +625,7 @@ server.listen(PORT, () => {
             globalThis.BrowserFS = BrowserFS;
             globalThis.Buffer = BrowserFS.BFSRequire('buffer').Buffer;
             const path = _this.jrequire('path');
-
+            this.sendToClients("start virtual filesystem");
             BrowserFS.configure({
                 fs: "InMemory"
             }, function (err: any) {
@@ -637,7 +662,7 @@ server.listen(PORT, () => {
             });
         })
         await _this._checkHasModified();
-        console.log("virtual filesystem inited");
+        console.log("virtual filesystem startet");
         // let startserver=true;
         if (this.config?.serviceworkerfile) {
             const fs = this.globalfs;

@@ -53,16 +53,13 @@
     };
     importScripts('./browserserverworker.js');
     self.addEventListener('activate', event => {
-        console.log("activate scope");
         //@ts-ignore
         event.waitUntil((async () => {
             var data = await browserserverworker.readIndexDB("browserserver", appname, "config");
-            console.log("run server from sw");
             // var fspromise = new Promise((res => {
             //app.runLocalServerIfNeeded(res);
             //  }))
             if (data.serviceworkerfile) {
-                console.log("promise reolved");
                 var initialData = await browserserverworker.readIndexDB("browserserver", appname, "files");
                 if (initialData) {
                     console.error("Serviceworker " + data.serviceworkerfile + " not found");

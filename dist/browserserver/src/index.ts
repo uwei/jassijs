@@ -178,9 +178,12 @@ async function swsample() {
 }
 
 window.addEventListener('load', async() => {
-  navigator.serviceWorker.register('service-worker.js');
+ await navigator.serviceWorker.register('service-worker.js');
   //swsample(); 
-  await jassijs();
+  setTimeout(() => {
+    jassijs();
+  }, 100);
+ 
  /* let apps=await new BrowserServer().getApps();
   let tab=document.getElementById("table");
   for(let x=0;x<apps.length;x++){

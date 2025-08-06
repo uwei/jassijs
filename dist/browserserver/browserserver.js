@@ -22,6 +22,22 @@ class BrowserServer {
             let swfile = (this.isAppScope() ? "../.." : ".") + "/service-worker-scope.js?" + new Date().getTime();
             let scope = location.pathname.split("/apps/")[0] + "/apps/" + name;
             var reg = await navigator.serviceWorker.register(swfile, { scope });
+            navigator.serviceWorker.addEventListener('message', event => {
+                let info = document.getElementById("info");
+                info?.prepend(document.createTextNode(event.data.msg));
+                info?.prepend(document.createElement('br'));
+                if (event.data.msg === "serviceworker has started") {
+                    if (doredirect) {
+                        let url = "/";
+                        if (app.redirectUrl)
+                            url = app.redirectUrl;
+                        if (url.startsWith("."))
+                            url = url.substring(1);
+                        window.location.replace((this.isAppScope() ? "../.." : ".") + '/apps/' + name + url);
+                    }
+                }
+                //console.log("log from worker: "+event.data.msg);
+            });
         }
         //activate worker
         /* var started = await new Promise((resolve) => {
@@ -43,14 +59,14 @@ class BrowserServer {
              }
              return await this.startApp(name,doredirect);
          }*/
-        if (doredirect) {
-            let url = "/";
-            if (app.redirectUrl)
-                url = app.redirectUrl;
-            if (url.startsWith("."))
-                url = url.substring(1);
-            window.location.replace((this.isAppScope() ? "../.." : ".") + '/apps/' + name + url);
-        }
+        /* if(doredirect){
+             let url="/";
+             if(app.redirectUrl)
+                 url=app.redirectUrl;
+             if(url.startsWith("."))
+                 url=url.substring(1);
+            // window.location.replace((this.isAppScope()?"../..":".")+'/apps/'+name+url);
+         }*/
         return true;
     }
     async getApp(name) {

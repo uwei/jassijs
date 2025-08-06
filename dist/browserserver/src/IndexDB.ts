@@ -93,7 +93,6 @@ browserserverworker.writeIndexDB = async (dbName: string, storeName: string, key
     await browserserverworker._openDB(dbName, storeName);
 
     return new Promise((resolve, reject) => {
-        console.log("write " + dbName + "/" + storeName + "/" + key);
         const transaction = browserserverworker.myindexdb.transaction(storeName, 'readwrite');
         const store = transaction.objectStore(storeName);
 
