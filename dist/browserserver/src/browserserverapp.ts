@@ -616,7 +616,6 @@ server.listen(PORT, () => {
 });
 `    }
         };*/
-        var oldServiceworkerCode: string | undefined = undefined;
         var _this = this;
         var initialData: any = await browserserverworker.readIndexDB("browserserver", this.name, "files");
         var BrowserFS = await new Promise((resolve) => {
@@ -632,8 +631,6 @@ server.listen(PORT, () => {
                 if (err) return console.error("Fehler beim Initialisieren:", err);
                 globalThis.process = _this.jrequire("process");
                 const fs = BrowserFS.BFSRequire('fs');
-                if (_this.config.serviceworkerfile && fs.existsSync(_this.config.serviceworkerfile))
-                    oldServiceworkerCode = fs.readFileSync(_this.config.serviceworkerfile, "utf8");
                 //initialize data 
                 var vdata = fs.getRootFS().store.store;
                 if (initialData) {
@@ -667,8 +664,14 @@ server.listen(PORT, () => {
         if (this.config?.serviceworkerfile) {
             const fs = this.globalfs;
             let code: string = fs.readFileSync(this.config?.serviceworkerfile, "utf8");
-            if (code !== oldServiceworkerCode) {
-                this.sendToClients("serviceworkercode has changed");
+            //@ts-ignore
+            if (code !==  globalThis.serviceworkercode) {
+                this.sendToClients("serviceworkercode has changed - ");
+                try{
+                eval(code);
+                }catch(err:any){
+                    this.sendToClients("serviceworkercode Error - "+err.message);
+                }
                 // startserver=false;
                 //return false;
             }

@@ -75,6 +75,8 @@
                     let code: string = <string>BrowserServerAppClass.getCodeFileIntern(initialData, data.serviceworkerfile);
                     if (code)
                         eval(code);
+                    //@ts-ignore
+                    globalThis.serviceworkercode=code;
                 }
 
             }
